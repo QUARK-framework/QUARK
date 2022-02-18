@@ -1,0 +1,30 @@
+applications.SAT.mappings.Direct.Direct
+=======================================
+
+.. currentmodule:: applications.SAT.mappings.Direct
+
+.. autoclass:: Direct
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Direct.__init__
+      ~Direct.get_available_solver_options
+      ~Direct.get_parameter_options
+      ~Direct.get_solver
+      ~Direct.map
+      ~Direct.reverse_map
+   
+   
+
+   
+   
+   

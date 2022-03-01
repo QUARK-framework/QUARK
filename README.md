@@ -8,7 +8,7 @@ It is designed to be easily extendable in all of its components (Applications, M
 Details about the motivations for the framework can be seen in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028
 
 ## Documentation
-Documentation with a tutorial and developer guidelines can be found here: **ADD READTHEDOCS LINK HERE**
+Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io
 
 ## Prerequisites
 As this framework is implemented in Python 3, you need to install Python 3 if you don`t have it already installed. 

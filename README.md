@@ -20,8 +20,6 @@ Additionally, we rely on several pip dependencies, which you can install in two 
 
 > __Note:__ Currently environment.yml is only tested for macOS users!
 
-> __Note:__ At the moment there is a conflict between qiskit-optimization and networkx when installing via environment.yml, which causes the installation to fail. This should be fixed in the next qiskit-optimization update (https://github.com/Qiskit/qiskit-optimization/pull/318).
-
    
 For exporting your environment run:
 ```

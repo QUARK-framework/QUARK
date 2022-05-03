@@ -150,6 +150,37 @@ Example for a config file:
 One handy thing to do is to use the interactive mode once to create a config file.
 Then you can change the values of this config file and use it to start the framework.
 
+
+Run as Container
+^^^^^^^^^^^^^^^^
+We also support the option to run the framework in the non-interactive mode as a container.
+First you need to build the docker image locally like:
+
+::
+
+    docker  build -t quark .
+
+And then you can run it like:
+
+::
+
+    docker run -it --rm -v $(pwd):/quark -v /Users/alice/desktop/my_config.yml:/quark/config.yml quark
+
+"/Users/alice/desktop/my_config.yml" specifies the QUARK config file on your local machine.
+
+In case you have local proxy settings you can add the following flags to the run command:
+
+::
+
+    -e http_proxy=$http_proxy -e https_proxy=$https_proxy -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY
+
+AWS credentials can be mounted to the run command like:
+
+::
+
+    -v $HOME/.aws/:/root/.aws:ro
+
+
 Summarizing multiple existing experiments
 '''''''''''''''''''''''''''''''''''''''''
 

@@ -13,10 +13,12 @@
 #  limitations under the License.
 
 from typing import TypedDict, Union
-from dwave.system.composites import EmbeddingComposite
 
-from devices.braket.DWave import DWave
+from dwave.system import FixedEmbeddingComposite
+from minorminer import find_embedding
+
 from devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler
+from devices.braket.DWave import DWave
 from solvers.Solver import *
 
 
@@ -88,20 +90,32 @@ class Annealer(Solver):
         :type config: Config
         :param kwargs:
         :type kwargs: any
-        :return: Solution and the time it took for the annealer to compute it
-        :rtype: tuple(dict, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         Q = mapped_problem['Q']
-
+        additional_solver_information = {}
         device = device_wrapper.get_device()
         start = time() * 1000
         if device_wrapper.device_name != "simulatedannealer":
             # This is for AWS
-            # TODO Improve the embedding
-            # EmbeddingComposite automatically maps the problem to the structure of the solver.
-            device = EmbeddingComposite(device)
-            response = device.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
+
+            # Embed QUBO
+            start_embedding = time() * 1000
+            __, target_edgelist, target_adjacency = device.structure
+            emb = find_embedding(Q, target_edgelist, verbose=1)
+            sampler = FixedEmbeddingComposite(device, emb)
+            additional_solver_information["embedding_time"] = round(time() * 1000 - start_embedding, 3)
+
+            additional_solver_information["logical_qubits"] = len(emb.keys())
+            additional_solver_information["physical_qubits"] = sum(len(chain) for chain in emb.values())
+            logging.info(f"Number of logical variables: {additional_solver_information['logical_qubits']}")
+            logging.info(f"Number of physical qubits used in embedding: {additional_solver_information['physical_qubits']}")
+
+            response = sampler.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
+            # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
+            additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
         else:
             # This is for D-Wave simulated Annealer
             response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
@@ -112,4 +126,4 @@ class Annealer(Solver):
         # logging.info("Result:" + str({k: v for k, v in sample.items() if v == 1}))
         logging.info(f'Annealing finished in {time_to_solve} ms.')
 
-        return sample, time_to_solve
+        return sample, time_to_solve, additional_solver_information

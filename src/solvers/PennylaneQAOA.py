@@ -11,13 +11,19 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+import inspect
+import ast
+import os
 from collections import Counter
 from typing import TypedDict, Union
+import types
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
-# from pennylane import numpy as np
+from pennylane import numpy as npqml
+import psutil
+import json
+from functools import partial, wraps
 
 from devices.braket.Ionq import Ionq
 from devices.braket.LocalSimulator import LocalSimulator
@@ -45,7 +51,9 @@ class PennylaneQAOA(Solver):
                                "braket.local.qubit",
                                "default.qubit",
                                "default.qubit.autograd",
-                               "qulacs.simulator"]
+                               "qulacs.simulator",
+                               "lightning.gpu",
+                               "lightning.qubit"]
 
     def get_device(self, device_option: str) -> Union[Ionq, SV1, TN1, Rigetti, HelperClass]:
         if device_option == "arn:aws:braket:::device/qpu/ionq/ionQdevice":
@@ -64,6 +72,10 @@ class PennylaneQAOA(Solver):
             return HelperClass("default.qubit.autograd")
         elif device_option == "qulacs.simulator":
             return HelperClass("qulacs.simulator")
+        elif device_option == "lightning.gpu":
+            return HelperClass("lightning.gpu")
+        elif device_option == "lightning.qubit":
+            return HelperClass("lightning.qubit")
         else:
             raise NotImplementedError(f"Device Option {device_option} not implemented")
 
@@ -100,7 +112,7 @@ class PennylaneQAOA(Solver):
         """
         return {
             "shots": {  # number measurements to make on circuit
-                "values": list(range(10, 500, 30)),
+                "values": [None] + list(range(10, 500, 30)),
                 "description": "How many shots do you need?"
             },
             "iterations": {  # number measurements to make on circuit
@@ -161,9 +173,9 @@ class PennylaneQAOA(Solver):
         """
         Generates pennylane cost and mixer hamiltonians from the Ising matrix J and vector t.
 
-        :param J: matrix J
+        :param J: J matrix
         :type J: any
-        :param t: vector t
+        :param t: t vector
         :type t: any
         :param scale:
         :type scale: float
@@ -187,16 +199,16 @@ class PennylaneQAOA(Solver):
         h_cost = qml.Hamiltonian([*t, *J.flatten()], [*sigz_arr, *sigzsigz_arr.flatten()],
                                  simplify=True)
 
-        # We also need to generate the mixer hamiltonian, implemented in the qml library
-        h_mixer = qml.qaoa.mixers.x_mixer(range(len(J)))
+        # definition of the mixer hamiltonian
+        h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(J)))
 
         return h_cost, h_mixer
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, float):
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, any, float):
         """
         Runs Pennylane QAOA on the Ising problem.
 
-        :param mapped_problem: dictionary with the keys 'J' and 't'
+        :param mapped_problem: Ising
         :type mapped_problem: any
         :param device_wrapper:
         :type device_wrapper: any
@@ -204,8 +216,8 @@ class PennylaneQAOA(Solver):
         :type config: Config
         :param kwargs: contains store_dir for the plot of the optimization
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(any, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         J = mapped_problem['J']
@@ -224,8 +236,10 @@ class PennylaneQAOA(Solver):
             qml.qaoa.mixer_layer(alpha, mixer_h)
 
         def circuit(params, **kwargs):
+            # circuit initialization
             for i in range(wires):
                 qml.Hadamard(wires=i)
+            # QAOA layers
             qml.layer(qaoa_layer, config['layers'], params[0], params[1])
 
         # TODO Make this interaction better with aws braket
@@ -247,9 +261,32 @@ class PennylaneQAOA(Solver):
                 poll_timeout_seconds=30,
             )
 
-        cost_function = qml.ExpvalCost(circuit, cost_h, dev, optimize=True)
+        # The adjoint differentiation method is preferred over the default best method for the lightning devices
+        diff_method = "adjoint" if device_wrapper.device == "lightning.qubit" or device_wrapper.device == "lightning.gpu" else "best"
+        @qml.qnode(dev, diff_method=diff_method)
+        def cost_function(params):
+            circuit(params)
+            return qml.expval(cost_h)
+
+        # To measure the QPU execution times we measure the timings of execute and batch_execute in the pennylane devices
+        # This is rather experimental and this has to be verified!
+        dev.init_array = types.MethodType(monkey_init_array, dev)
+        dev.init_array()
+        real_decorator = partial(_pseudo_decor, device=dev)
+        # TODO At some point validate whether execute and batch_execute are the only and best way to measure quantum
+        #  execution times
+        # TODO Check the impact of this ast.walk
+        # We do this ast walk to assess whether execute is called in batch_execute, which is the case for some simulators.
+        # This would distort the timing
+        called_functions = [c.func.attr for c in ast.walk(ast.parse(inspect.getsource(dev.batch_execute).lstrip()))
+                            if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute)]
+        dev.execute = real_decorator(dev.execute)
+        if "execute" not in called_functions:
+            dev.batch_execute = real_decorator(dev.batch_execute)
+
+        # Initialize variational parameters randomly
         rand_params = np.random.uniform(size=[2, config['layers']])
-        params = rand_params  # np.array(rand_params, requires_grad=True)
+        params = npqml.array(rand_params, requires_grad=True)
         logging.info(f"Starting params: {params}")
 
         # Optimization Loop
@@ -257,13 +294,14 @@ class PennylaneQAOA(Solver):
         optimizer = qml.MomentumOptimizer(stepsize=config['stepsize'], momentum=0.9)
         logging.info(f"Optimization start")
 
+        additional_solver_information = {}
         min_param = None
         min_cost = None
         cost_pt = []
+        params_list = []
         x = []
         run_id = round(time())
         start = time() * 1000
-
         for iteration in range(config['iterations']):
             t0 = time()
             # Evaluates the cost, then does a gradient step to new params
@@ -277,15 +315,14 @@ class PennylaneQAOA(Solver):
                 logging.info(f"Cost at step {iteration}: {cost_before}")
             # Log the current loss as a metric
             logging.info(f"Time to complete iteration {iteration + 1}: {t1 - t0} seconds")
-
             cost_pt.append(cost_before)
+            params_list.append(params)
             x.append(iteration)
 
             if min_cost is None or min_cost > cost_before:
                 min_cost = cost_before
                 min_param = params
 
-            final_cost = float(cost_function(params))
             if "store_dir" in kwargs:
                 fig = plt.figure(figsize=(6, 4))
                 plt.plot(x, cost_pt, label='global minimum')
@@ -295,30 +332,94 @@ class PennylaneQAOA(Solver):
                 plt.legend()
                 plt.savefig(f"{kwargs['store_dir']}/plot_pennylane_qaoa_cost_{run_id}_{kwargs['repetition']}.pdf",
                             dpi=300)
+                plt.clf()
 
         params = min_param
 
         logging.info(f"Final params: {params}")
         logging.info(f"Final costs: {min_cost}")
 
-        # sample measured bitstrings 10000 times
-        shots = 10000
-
         @qml.qnode(dev)
         def samples(params):
             circuit(params)
             return [qml.sample(qml.PauliZ(i)) for i in range(wires)]
 
-        s = samples([params[0], params[1]]).T
-        s = (1 - s) / 2
-        s = map(tuple, s)
+        def evaluate_params_sampling(params):
+            s = samples([params[0], params[1]]).T
+            s = (1 - s) / 2
+            s = map(tuple, s)
+            counts = Counter(s)
+            indx = np.ndindex(*[2] * wires)
+            probs = {p: counts.get(p, 0) / config['shots'] for p in indx}
+            best_bitstring = max(probs, key=probs.get)
 
-        counts = Counter(s)
-        indx = np.ndindex(*[2] * wires)
-        probs = {p: counts.get(p, 0) / shots for p in indx}
-        best_bitstring = max(probs, key=probs.get)
+            return best_bitstring, probs
+
+        @qml.qnode(dev)
+        def probability_circuit(params):
+            circuit(params)
+            return qml.probs(wires=range(wires))
+
+        def evaluate_params_probs(params):
+            probs_raw = np.array(probability_circuit([params[0], params[1]]))
+            indx = np.ndindex(*[2] * wires)
+            probs = {p: probs_raw[i] for i, p in enumerate(indx)}
+            best_bitstring = max(probs, key=probs.get)
+            return best_bitstring, probs
+
+        best_bitstring, probs = evaluate_params_probs(params) if config['shots'] is None else evaluate_params_sampling(
+            params)
+        additional_solver_information["quantum_timings"] = dev.timings
+        additional_solver_information["quantum_timings_sum"] = sum(additional_solver_information["quantum_timings"])
         logging.info(f"{best_bitstring} with {probs[best_bitstring]}")
 
         logging.info(sorted(probs, key=probs.get, reverse=True)[:5])
 
-        return best_bitstring, round(time() * 1000 - start, 3)
+        # Save the bitstring with the highest probability per iteration to bitstring_list
+        bitstring_list = []
+        for el in params_list:
+            bitstring, _ = evaluate_params_probs(el) if config['shots'] is None else evaluate_params_sampling(el)
+            bitstring_list.append(bitstring)
+
+        # Save the cost, best bitstring, variational parameters per iteration as well as the final prob. distribution
+        # TODO: Maybe this can be done more efficient, e.g. only saving the circuit and its weights?
+        json_data = {
+            'cost': cost_pt,
+            'bitstrings': bitstring_list,
+            'params': [el.tolist() for el in params_list],  # convert list of tensors to list of lists
+            'probs': {str(key): value for key, value in probs.items()}  # convert key (tuples to strings)
+        }
+        if "store_dir" in kwargs:
+            with open(f"{kwargs['store_dir']}/qaoa_details_{run_id}_{kwargs['repetition']}.json", 'w') as fp:
+                json.dump(json_data, fp)
+        additional_solver_information["run_id"] = run_id
+        return best_bitstring, round(time() * 1000 - start, 3), additional_solver_information
+
+
+def monkey_init_array(self):
+    """
+    Here we create the timings array where we later append the quantum timings
+    :param self:
+    :return:
+    """
+    self.timings = []
+
+
+def _pseudo_decor(fun, device):
+    """
+    Massive shoutout to this guy: https://stackoverflow.com/a/25827070/10456906
+    We use this decorator for measuring execute and batch_execute
+    """
+
+    # magic sauce to lift the name and doc of the function
+    @wraps(fun)
+    def ret_fun(*args, **kwargs):
+        # pre function execution stuff here
+        from time import time
+        start_timing = time() * 1000
+        returned_value = fun(*args, **kwargs)
+        # post execution stuff here
+        device.timings.append(round(time() * 1000 - start_timing, 3))
+        return returned_value
+
+    return ret_fun

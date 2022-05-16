@@ -122,8 +122,8 @@ class QAOA(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(any, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         j = mapped_problem['J']
@@ -188,7 +188,7 @@ class QAOA(Solver):
         # plt.ylabel('best classical minimum')
         # plt.show()
 
-        return tracker['optimal_bitstring'], time_to_solve
+        return tracker['optimal_bitstring'], time_to_solve, {}
 
 
 # QAOA utils (source: https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_quantum_algorithms/QAOA/utils_qaoa.py)

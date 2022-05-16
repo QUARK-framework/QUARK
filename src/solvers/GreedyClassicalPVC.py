@@ -67,8 +67,8 @@ class GreedyClassicalPVC(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(dict, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         # Need to to deep copy since we are modifying the graph in this function. Else the next repetition would work
@@ -102,4 +102,4 @@ class GreedyClassicalPVC(Solver):
 
         # Tour needs to look like {((0, 0), 1, 1, 0): 1, ((3, 1), 1, 0, 1): 1, ((2, 1), 1, 1, 2): 1, ((4, 4), 1, 1, 3): 1}
         # ((0, 0), 1, 1, 0): 1 = ((seam, node), config, tool, timestep): yes we visit this
-        return tour, round(time() * 1000 - start, 3)
+        return tour, round(time() * 1000 - start, 3), {}

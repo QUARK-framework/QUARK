@@ -9,7 +9,8 @@ dependencies:
   - pip=21.2.4
   - pip:
       - networkx==2.6.3
-      - pennylane==0.19.1
+      - pennylane==0.24.0
+      - pennylane-lightning==0.24.0
       - amazon-braket-ocean-plugin==1.0.5
       - amazon-braket-pennylane-plugin==1.5.2
       - dwave-ocean-sdk==3.5.0

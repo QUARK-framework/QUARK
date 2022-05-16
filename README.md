@@ -20,7 +20,9 @@ Additionally, we rely on several pip dependencies, which you can install in two 
 
 > __Note:__ Currently environment.yml is only tested for macOS users!
 
-   
+Some packages such as `pennylane-lightning[gpu]` are not included in this environment file as these work only on specific
+hardware! Therefore, these have to be installed manually on demand.
+
 For exporting your environment run:
 ```
 conda env export --no-builds > <environment-name>.yml

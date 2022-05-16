@@ -32,7 +32,7 @@ class Solver(ABC):
         super().__init__()
 
     @abstractmethod
-    def run(self, mapped_problem, device, config, **kwargs) -> (any, float):
+    def run(self, mapped_problem, device, config, **kwargs) -> (any, float, dict):
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 
@@ -44,8 +44,8 @@ class Solver(ABC):
         :type config: any
         :param kwargs: optional additional settings
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(any, float)
+        :return: Solution, the time it took to compute it and some optional additional information
+        :rtype: tuple(any, float, dict)
         """
         pass
 

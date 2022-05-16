@@ -279,7 +279,7 @@ class BenchmarkManager:
                                         try:
                                             logging.info(
                                                 f"Running {self.application.__class__.__name__} with config {application_config} on solver {solver.__class__.__name__} and device {device.get_device_name()} (Repetition {i}/{self.repetitions})")
-                                            solution_raw, time_to_solve = solver.run(mapped_problem, device,
+                                            solution_raw, time_to_solve, additional_solver_information = solver.run(mapped_problem, device,
                                                                                      solver_config, store_dir=path,
                                                                                      repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)
@@ -316,6 +316,7 @@ class BenchmarkManager:
                                                 "solution_quality": solution_quality,
                                                 "solution_quality_unit": self.application.get_solution_quality_unit(),
                                                 "solution_raw": str(solution_raw),
+                                                "additional_solver_information": additional_solver_information,
                                                 # TODO Revise this (I am only doing this for now since json.dumps does not like tuples as keys for dicts
                                                 "time_to_solve": time_to_solve,
                                                 "time_to_solve_unit": "ms",
@@ -377,6 +378,7 @@ class BenchmarkManager:
 
         # Since these configs are dicts it is not so nice to store them in a df/csv. But this is a workaround that works for now
         df['application_config'] = df.apply(lambda row: json.dumps(row["application_config"]), axis=1)
+        df['additional_solver_information'] = df.apply(lambda row: json.dumps(row["additional_solver_information"]), axis=1)
         df['solver_config'] = df.apply(lambda row: json.dumps(row["solver_config"]), axis=1)
         df['mapping_config'] = df.apply(lambda row: json.dumps(row["mapping_config"]), axis=1)
         df.to_csv(path_or_buf=f"{self.store_dir}/results.csv")
@@ -402,6 +404,7 @@ class BenchmarkManager:
         df = pd.concat(dfs, axis=0, ignore_index=True)
         df['application_config'] = df.apply(lambda row: json.loads(row["application_config"]), axis=1)
         df['solver_config'] = df.apply(lambda row: json.loads(row["solver_config"]), axis=1)
+        df['additional_solver_information'] = df.apply(lambda row: json.loads(row["additional_solver_information"]), axis=1)
         df['mapping_config'] = df.apply(lambda row: json.loads(row["mapping_config"]), axis=1)
 
         return df

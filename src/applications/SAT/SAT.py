@@ -25,6 +25,8 @@ from applications.SAT.mappings.Direct import Direct
 from applications.SAT.mappings.QubovertQUBO import QubovertQubo
 from applications.SAT.mappings.ChoiQUBO import ChoiQubo
 from applications.SAT.mappings.DinneenQUBO import DinneenQubo
+from applications.SAT.mappings.ChoiISING import ChoiIsing
+from applications.SAT.mappings.DinneenISING import DinneenIsing
 
 
 class SAT(Application):
@@ -41,7 +43,7 @@ class SAT(Application):
         Constructor method
         """
         super().__init__("SAT")
-        self.mapping_options = ["QubovertQubo", "Direct", "ChoiQubo", "DinneenQubo"]
+        self.mapping_options = ["QubovertQubo", "Direct", "ChoiQubo", "DinneenQubo", "ChoiIsing", "DinneenIsing"]
         self.literals = None
         self.num_tests = None
         self.num_constraints = None
@@ -50,7 +52,7 @@ class SAT(Application):
     def get_solution_quality_unit(self) -> str:
         return "Evaluation"
 
-    def get_mapping(self, mapping_option: str) -> Union[QubovertQubo, Direct, ChoiQubo, DinneenQubo]:
+    def get_mapping(self, mapping_option: str) -> Union[QubovertQubo, Direct, ChoiQubo, DinneenQubo, DinneenIsing, ChoiIsing]:
 
         if mapping_option == "QubovertQubo":
             return QubovertQubo()
@@ -58,8 +60,12 @@ class SAT(Application):
             return Direct()
         elif mapping_option == 'ChoiQubo':
             return ChoiQubo()
+        elif mapping_option == 'ChoiIsing':
+            return ChoiIsing()
         elif mapping_option == 'DinneenQubo':
             return DinneenQubo()
+        elif mapping_option == 'DinneenIsing':
+            return DinneenIsing()
         else:
             raise NotImplementedError(f"Mapping Option {mapping_option} not implemented")
 

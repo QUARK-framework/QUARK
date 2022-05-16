@@ -68,8 +68,8 @@ class ClassicalSAT(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(list, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         logging.info(
@@ -82,4 +82,4 @@ class ClassicalSAT(Solver):
         with RC2(mapped_problem) as rc2:
             sol = rc2.compute()
 
-        return sol, int(round(time() * 1000)) - start
+        return sol, int(round(time() * 1000)) - start, {}

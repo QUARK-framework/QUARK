@@ -68,8 +68,8 @@ class RandomSAT(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(list, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         logging.info(
@@ -80,4 +80,4 @@ class RandomSAT(Solver):
         start = int(round(time() * 1000))
         sol = [(i + 1) * np.random.choice([-1, 1]) for i in range(mapped_problem.nv)]
 
-        return sol, int(round(time() * 1000)) - start
+        return sol, int(round(time() * 1000)) - start, {}

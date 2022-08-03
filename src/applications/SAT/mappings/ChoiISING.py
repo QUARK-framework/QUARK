@@ -27,7 +27,6 @@ from applications.Mapping import *
 class ChoiIsing(Mapping):
     """
     Ising formulation for SAT problem using QUBO by Choi (1004.2226)
-
     """
 
     def __init__(self):
@@ -115,6 +114,7 @@ class ChoiIsing(Mapping):
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
+        Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
         :param solution: dictionary containing the solution
         :type: dict

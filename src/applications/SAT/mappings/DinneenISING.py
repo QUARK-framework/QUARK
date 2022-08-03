@@ -27,7 +27,7 @@ from applications.Mapping import *
 
 class DinneenIsing(Mapping):
     """
-    Ising formulation for SAT using Dinneen QUBO
+    Ising formulation for SAT using Dinneen QUBO.
 
     """
 
@@ -68,7 +68,7 @@ class DinneenIsing(Mapping):
 
         .. code-block:: python
 
-             lagrange_factor: float
+             lagrange: float
 
         """
         lagrange: float
@@ -106,6 +106,7 @@ class DinneenIsing(Mapping):
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
+        Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
         :param solution: dictionary containing the solution
         :type: dict

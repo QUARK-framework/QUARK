@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../src/'))
 
 project = 'QUARK'
 copyright = '2022, The QUARK Authors'
-author = 'Philipp Ross, Jernej Rudi Finžgar and Andre Luckow'
+author = 'Philipp Ross, Jernej Rudi Finžgar, Leonhard Hölscher and Andre Luckow'
 
 # The short X.Y version
 version = ''

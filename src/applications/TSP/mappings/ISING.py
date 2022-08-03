@@ -61,7 +61,7 @@ class Ising(Mapping):
                                 },
                                 "mapping": {
                                     "values": ["ocean", "qiskit", "pyqubo"],
-                                    "description": "Which Ising formulation of the TSP should be used?"
+                                    "description": "Which Ising formulation of the TSP problem should be used?"
                                 }
                             }
 
@@ -73,7 +73,7 @@ class Ising(Mapping):
             },
             "mapping": {
                 "values": ["ocean", "qiskit", "pyqubo"],
-                "description": "Which Ising formulation of the TSP should be used?"
+                "description": "Which Ising formulation of the TSP problem should be used?"
             }
         }
 
@@ -208,6 +208,7 @@ class Ising(Mapping):
             feed_dict = {'A': config["lagrange_factor"]}
 
         linear, quad, offset = model.to_ising(feed_dict=feed_dict)
+        qubo, _ = model.to_qubo(feed_dict=feed_dict)
 
         timesteps = graph.number_of_nodes()
 
@@ -228,9 +229,6 @@ class Ising(Mapping):
         # j_matrix = np.triu(j_matrix, k=1).astype(np.float64)
         # print("Number items in Ising dict: {} Number of non-zero entries in matrix: {}".\
         #       format(len(quad.items()), len(j_matrix.nonzero())))
-
-        logging.info(j_matrix)
-        logging.info(j_matrix.shape)
 
         return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, round(time() * 1000 - start, 3)
 
@@ -279,6 +277,7 @@ class Ising(Mapping):
         # j_matrix = self.convert_to_upper_triangular_form(j_matrix)
         # logging.info("Upper triangle form: ")
         # logging.info(j_matrix)
+
         return {"J": j_matrix, "t": np.array(list(t.values())), "J_dict": j}, round(time() * 1000 - start, 3)
 
     @staticmethod
@@ -387,3 +386,4 @@ class Ising(Mapping):
             return QiskitQAOA()
         else:
             raise NotImplementedError(f"Solver Option {solver_option} not implemented")
+

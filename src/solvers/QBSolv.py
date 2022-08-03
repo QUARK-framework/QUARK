@@ -110,8 +110,8 @@ class QBSolv(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(dict, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         Q = mapped_problem['Q']
@@ -136,4 +136,4 @@ class QBSolv(Solver):
         sample = response.lowest().first.sample
         logging.info("Result:" + str({k: v for k, v in sample.items() if v == 1}))
 
-        return sample, time_to_solve
+        return sample, time_to_solve, {}

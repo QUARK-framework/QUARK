@@ -146,8 +146,8 @@ class QiskitQAOA(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(any, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         J = mapped_problem['J']
@@ -176,7 +176,7 @@ class QiskitQAOA(Solver):
         # run actual optimization algorithm
         result = algorithm.compute_minimum_eigenvalue(ising_op)
         best_bitstring = self._get_best_solution(result)
-        return best_bitstring, round(time() * 1000 - start, 3)
+        return best_bitstring, round(time() * 1000 - start, 3), {}
 
     @staticmethod
     def _get_quantum_instance(device_wrapper: any) -> any:

@@ -9,6 +9,13 @@ solvers.PennylaneQAOA
 
    
    
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      monkey_init_array
+   
    
 
    

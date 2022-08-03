@@ -67,8 +67,8 @@ class ReverseGreedyClassicalTSP(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(dict, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         # Need to to deep copy since we are modifying the graph in this function. Else the next repetition would work
@@ -90,4 +90,4 @@ class ReverseGreedyClassicalTSP(Solver):
         for idx, node in enumerate(tour):
             result[(node, idx)] = 1
         # Tour needs to look like
-        return result, round(time() * 1000 - start, 3)
+        return result, round(time() * 1000 - start, 3), {}

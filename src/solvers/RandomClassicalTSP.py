@@ -68,8 +68,8 @@ class RandomTSP(Solver):
         :type config: Config
         :param kwargs: no additionally settings needed
         :type kwargs: any
-        :return: Solution and the time it took to compute it
-        :rtype: tuple(dict, float)
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(list, float, dict)
         """
 
         start = time() * 1000
@@ -93,4 +93,4 @@ class RandomTSP(Solver):
         for idx, node in enumerate(tour):
             result[(node, idx)] = 1
         # Tour needs to look like
-        return result, round(time() * 1000 - start, 3)
+        return result, round(time() * 1000 - start, 3), {}

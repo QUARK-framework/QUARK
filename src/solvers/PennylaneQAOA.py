@@ -32,7 +32,10 @@ from devices.braket.SV1 import SV1
 from devices.braket.TN1 import TN1
 from devices.HelperClass import HelperClass
 from solvers.Solver import *
-
+import logging
+logging.basicConfig(level=logging.DEBUG)
+import boto3
+boto3.set_stream_logger('boto3.resources', logging.DEBUG)
 
 class PennylaneQAOA(Solver):
     """
@@ -47,7 +50,8 @@ class PennylaneQAOA(Solver):
         self.device_options = ["arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
                                "arn:aws:braket:::device/qpu/ionq/ionQdevice",
-                               "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                               "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2",
+                               "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "braket.local.qubit",
                                "default.qubit",
                                "default.qubit.autograd",
@@ -62,8 +66,8 @@ class PennylaneQAOA(Solver):
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
         elif device_option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
-        elif device_option == "arn:aws:braket:::device/qpu/rigetti/Aspen-9":
-            return Rigetti("Rigetti", "arn:aws:braket:::device/qpu/rigetti/Aspen-9")
+        elif device_option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2":
+            return Rigetti("Rigetti", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2")
         elif device_option == "braket.local.qubit":
             return HelperClass("braket.local.qubit")
         elif device_option == "default.qubit":
@@ -92,7 +96,7 @@ class PennylaneQAOA(Solver):
                                             "description": "How many shots do you need?"
                                         },
                                         "iterations": {  # number measurements to make on circuit
-                                            "values": [10, 20, 50, 75],
+                                            "values": [1, 10, 20, 50, 75],
                                             "description": "How many iterations do you need?"
                                         },
                                         "layers": {
@@ -116,11 +120,11 @@ class PennylaneQAOA(Solver):
                 "description": "How many shots do you need?"
             },
             "iterations": {  # number measurements to make on circuit
-                "values": [10, 20, 50, 75],
+                "values": [1, 10, 20, 50, 75],
                 "description": "How many iterations do you need?"
             },
             "layers": {
-                "values": [2, 3, 4],
+                "values": [1, 2, 3, 4],
                 "description": "How many layers for QAOA do you want?"
             },
             "coeff_scale": {

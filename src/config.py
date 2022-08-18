@@ -16,6 +16,14 @@ import configparser
 from pathlib import Path
 import os
 import logging
+import datetime
+import os
+
+run_timestamp=datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+username=os.getlogin()
+bucket_name = 'amazon-braket-benchmark-framework-{}-{}'.format(run_timestamp, username)
+#bucket_name = 'quark234234'
+print(bucket_name)
 
 """
 TODO check if this file is needed in this form!
@@ -37,4 +45,4 @@ else:
 if "BRAKET" not in config:
     config["BRAKET"] = {}
     #defaults
-    config["BRAKET"]["BUCKET"] = 'amazon-braket-benchmark-framework'
+    config["BRAKET"]["BUCKET"] = bucket_name

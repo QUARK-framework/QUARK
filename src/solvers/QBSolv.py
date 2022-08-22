@@ -35,13 +35,16 @@ class QBSolv(Solver):
         """
         super().__init__()
         self.device_options = ["arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6",
-                               "arn:aws:braket:::device/qpu/d-wave/Advantage_system4"]
+                               "arn:aws:braket:::device/qpu/d-wave/Advantage_system4",
+                               "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6"]
 
     def get_device(self, device_option: str) -> DWave:
         if device_option == "arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6":
             return DWave("DW_2000Q_6", "arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6")
         if device_option == "arn:aws:braket:::device/qpu/d-wave/Advantage_system4":
             return DWave("Advantage_system4", "arn:aws:braket:::device/qpu/d-wave/Advantage_system4")
+        if device_option == "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6":
+            return DWave("Advantage_system6", "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6")
         else:
             raise NotImplementedError(f"Device Option {device_option}  not implemented")
 

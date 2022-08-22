@@ -19,7 +19,7 @@ from devices.braket.Braket import Braket
 
 class OQC(Braket):
     """
-    Class for using the Rigetti devices on Amazon Braket
+    Class for using the Oxford Quantum Circuits (OQC) devices on Amazon Braket
     """
 
     def __init__(self, device_name: str, device_arn: str = 'arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy'):

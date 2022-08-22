@@ -1,4 +1,4 @@
-devices.braket
+﻿devices.braket
 ==============
 
 .. automodule:: devices.braket
@@ -32,6 +32,7 @@ devices.braket
    devices.braket.DWave
    devices.braket.Ionq
    devices.braket.LocalSimulator
+   devices.braket.OQC
    devices.braket.Rigetti
    devices.braket.SV1
    devices.braket.TN1

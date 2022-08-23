@@ -33,10 +33,7 @@ from devices.braket.SV1 import SV1
 from devices.braket.TN1 import TN1
 from devices.HelperClass import HelperClass
 from solvers.Solver import *
-import logging
-logging.basicConfig(level=logging.DEBUG)
-#import boto3
-#boto3.set_stream_logger('boto3.resources', logging.DEBUG)
+
 
 class PennylaneQAOA(Solver):
     """

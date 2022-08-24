@@ -28,6 +28,7 @@ from functools import partial, wraps
 from devices.braket.Ionq import Ionq
 from devices.braket.LocalSimulator import LocalSimulator
 from devices.braket.Rigetti import Rigetti
+from devices.braket.OQC import OQC
 from devices.braket.SV1 import SV1
 from devices.braket.TN1 import TN1
 from devices.HelperClass import HelperClass
@@ -47,7 +48,9 @@ class PennylaneQAOA(Solver):
         self.device_options = ["arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
                                "arn:aws:braket:::device/qpu/ionq/ionQdevice",
-                               "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                               "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2",
+                               "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                               "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "braket.local.qubit",
                                "default.qubit",
                                "default.qubit.autograd",
@@ -55,15 +58,17 @@ class PennylaneQAOA(Solver):
                                "lightning.gpu",
                                "lightning.qubit"]
 
-    def get_device(self, device_option: str) -> Union[Ionq, SV1, TN1, Rigetti, HelperClass]:
+    def get_device(self, device_option: str) -> Union[Ionq, SV1, TN1, Rigetti, OQC, HelperClass]:
         if device_option == "arn:aws:braket:::device/qpu/ionq/ionQdevice":
             return Ionq("ionq", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
         elif device_option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
         elif device_option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
-        elif device_option == "arn:aws:braket:::device/qpu/rigetti/Aspen-9":
-            return Rigetti("Rigetti", "arn:aws:braket:::device/qpu/rigetti/Aspen-9")
+        elif device_option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2":
+            return Rigetti("Rigetti", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2")
+        elif device_option == "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy":
+            return OQC("OQC", "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy")
         elif device_option == "braket.local.qubit":
             return HelperClass("braket.local.qubit")
         elif device_option == "default.qubit":
@@ -92,7 +97,7 @@ class PennylaneQAOA(Solver):
                                             "description": "How many shots do you need?"
                                         },
                                         "iterations": {  # number measurements to make on circuit
-                                            "values": [10, 20, 50, 75],
+                                            "values": [1, 10, 20, 50, 75],
                                             "description": "How many iterations do you need?"
                                         },
                                         "layers": {
@@ -116,11 +121,11 @@ class PennylaneQAOA(Solver):
                 "description": "How many shots do you need?"
             },
             "iterations": {  # number measurements to make on circuit
-                "values": [10, 20, 50, 75],
+                "values": [1, 10, 20, 50, 75],
                 "description": "How many iterations do you need?"
             },
             "layers": {
-                "values": [2, 3, 4],
+                "values": [1, 2, 3, 4],
                 "description": "How many layers for QAOA do you want?"
             },
             "coeff_scale": {

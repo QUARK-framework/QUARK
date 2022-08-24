@@ -68,7 +68,7 @@ class PennylaneQAOA(Solver):
         elif device_option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2":
             return Rigetti("Rigetti", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-2")
         elif device_option == "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy":
-            return Rigetti("OQC", "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy")
+            return OQC("OQC", "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy")
         elif device_option == "braket.local.qubit":
             return HelperClass("braket.local.qubit")
         elif device_option == "default.qubit":

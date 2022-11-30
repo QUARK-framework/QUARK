@@ -172,7 +172,7 @@ class QAOA(Solver):
         time_to_solve = round(time() * 1000 - start, 3)
 
         # print execution time
-        # logging.info('Code execution time [sec]:', end - start)
+        # logging.info('Code execution time [sec]: ' + (end - start))
 
         # print optimized results
         logging.info(f"Optimal energy: {tracker['optimal_energy']}")

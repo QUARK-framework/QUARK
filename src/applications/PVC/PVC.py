@@ -180,7 +180,7 @@ class PVC(Application):
         :rtype: tuple(list, bool)
         """
         start_time = time() * 1000
-        nodes = self.application.nodes()
+        nodes = list(self.application.nodes())
         edges = self.application.edges()
         start = ((0, 0), 1, 1)
         # fill route with None values
@@ -201,11 +201,11 @@ class PVC(Application):
         if None in route:
             # get not assigned nodes
             logging.info(f"Route until now is: {route}")
-            nodes_unassigned = [(node, 1, 1) for node in list(nodes) if node[0] not in visited_seams]
+            nodes_unassigned = [(node, 1, 1) for node in nodes if node[0] not in visited_seams]
             nodes_unassigned = list(np.random.permutation(nodes_unassigned))
             logging.info(nodes_unassigned)
             logging.info(visited_seams)
-            logging.info(list(nodes))
+            logging.info(nodes)
             for idx, node in enumerate(route):
                 if node is None:
                     route[idx] = nodes_unassigned[0]

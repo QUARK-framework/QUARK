@@ -18,15 +18,10 @@ import os
 import logging
 import datetime
 import os
+import getpass
 
 run_timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-
-try:
-    username = os.getlogin()
-except Exception as e:
-    # TODO Handle this in a smarter way in case os.getlogin() fails
-    username = "unknownuser"
-
+username = getpass.getuser()
 bucket_name = 'amazon-braket-benchmark-framework-{}-{}'.format(run_timestamp, username)
 
 """

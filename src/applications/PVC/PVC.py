@@ -74,7 +74,7 @@ class PVC(Application):
                                 "seams": {
                                     "values": list(range(1, 18)),
                                     # In the current implementation the graph can only be as large as the reference input graph
-                                    "description": "How many seams does you graph need?"
+                                    "description": "How many seams does your graph need?"
                                 }
                             }
 

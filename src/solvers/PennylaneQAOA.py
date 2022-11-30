@@ -106,7 +106,7 @@ class PennylaneQAOA(Solver):
                                         },
                                         "coeff_scale": {
                                             "values": [0.01, 0.1, 1, 10],
-                                            "description": "How do you want to scale your coefficents?"
+                                            "description": "How do you want to scale your coefficients?"
                                         },
                                         "stepsize": {
                                             "values": [0.0001, 0.001, 0.01, 0.1, 1],
@@ -130,7 +130,7 @@ class PennylaneQAOA(Solver):
             },
             "coeff_scale": {
                 "values": [0.01, 0.1, 1, 10],
-                "description": "How do you want to scale your coefficents?"
+                "description": "How do you want to scale your coefficients?"
             },
             "stepsize": {
                 "values": [0.0001, 0.001, 0.01, 0.1, 1],
@@ -266,8 +266,9 @@ class PennylaneQAOA(Solver):
                 poll_timeout_seconds=30,
             )
 
-        # The adjoint differentiation method is preferred over the default best method for the lightning devices
+        # The adjoint differentiation method is preferred over the default 'best' method for the lightning devices
         diff_method = "adjoint" if device_wrapper.device == "lightning.qubit" or device_wrapper.device == "lightning.gpu" else "best"
+
         @qml.qnode(dev, diff_method=diff_method)
         def cost_function(params):
             circuit(params)
@@ -311,7 +312,7 @@ class PennylaneQAOA(Solver):
             t0 = time()
             # Evaluates the cost, then does a gradient step to new params
             params, cost_before = optimizer.step_and_cost(cost_function, params)
-            # Convert cost_before to a float so it's easier to handle
+            # Convert cost_before to a float, so it's easier to handle
             cost_before = float(cost_before)
             t1 = time()
             if iteration == 0:

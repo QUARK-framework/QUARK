@@ -71,10 +71,10 @@ class ReverseGreedyClassicalTSP(Solver):
         :rtype: tuple(list, float, dict)
         """
 
-        # Need to to deep copy since we are modifying the graph in this function. Else the next repetition would work
+        # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
         # with a different graph
         mapped_problem = mapped_problem.copy()
-        # Let's flip the edge weights so we take the worst every time instead of the best
+        # Let's flip the edge weights to take the worst node every time instead of the best
         for u, v, d in mapped_problem.edges(data=True):
             d['weight'] = -1.0 * d['weight']
         start = time() * 1000

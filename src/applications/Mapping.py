@@ -77,14 +77,14 @@ class Mapping(ABC):
         :rtype: dict
         """
         pass
-        
+
     def get_submodule(self, solver_option: str) -> any:
         """
-        If self.sub_options is not None a solver is instantiated according to the information given in sub_options.
-        Otherwise get_solver is called as fall back.
-        
-        :param mapping_option: String with the option
-        :type mapping_option: str
+        If self.sub_options is not None, a solver is instantiated according to the information given in sub_options.
+        Otherwise, get_solver is called as fall back.
+
+        :param solver_option: String with the option
+        :type solver_option: str
         :return: instance of a solver class
         :rtype: any
         """
@@ -92,7 +92,6 @@ class Mapping(ABC):
             return self.get_solver(solver_option)
         else:
             return _get_instance_with_sub_options(self.sub_options, solver_option)
-
 
     @abstractmethod
     def get_solver(self, solver_option: str) -> any:
@@ -117,4 +116,4 @@ class Mapping(ABC):
         if self.sub_options is None:
             return self.solver_options
         else:
-            return [ o["name"] for o in self.sub_options ]
+            return [o["name"] for o in self.sub_options]

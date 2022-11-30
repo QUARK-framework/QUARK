@@ -119,7 +119,7 @@ Example for an Application, which should reside under ``src/applications/myAppli
 Adding a new Mapping
 ^^^^^^^^^^^^^^^^^^^^
 
-As mappings depend highly on the application, you nearly ways need to implement a mapping for an application.
+As mappings depend highly on the application, you nearly always need to implement a mapping for an application.
 
 Mandatory:
     - :code:`map(self, problem, config)`: Maps the given problem into a specific format a solver can work with. E.g. graph to QUBO.

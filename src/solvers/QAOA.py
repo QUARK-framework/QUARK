@@ -182,7 +182,7 @@ class QAOA(Solver):
         # cycles = np.arange(1, tracker['count'])
         # optim_classical = tracker['global_energies']
 
-        ## TODO maybe save this plot
+        # TODO maybe save this plot
         # plt.plot(cycles, optim_classical)
         # plt.xlabel('optimization cycle')
         # plt.ylabel('best classical minimum')
@@ -196,7 +196,7 @@ class QAOA(Solver):
 # function to implement ZZ gate using CNOT gates
 def ZZgate(q1, q2, gamma):
     """
-    function that returns a circuit implementing exp(-i \gamma Z_i Z_j) using CNOT gates if ZZ not supported
+    function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported
     """
 
     # get a circuit
@@ -241,7 +241,7 @@ def cost_circuit(gamma, n_qubits, ising, device):
         # get interaction strength from Ising matrix
         int_strength = ising[qubit_pair[0], qubit_pair[1]]
         # for Rigetti we decompose ZZ using CNOT gates
-        if device.name == "Rigetti" or device.name == "Aspen-9":  # TODO make this more flexibel
+        if device.name == "Rigetti" or device.name == "Aspen-9":  # TODO make this more flexible
             gate = ZZgate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
             circ.add(gate)
         # classical simulators and IonQ support ZZ gate

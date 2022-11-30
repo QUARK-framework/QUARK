@@ -43,7 +43,7 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     """
     Helper function which allows to replace hard coded imports of the form
     'import MyClass from path.to.mypkg' by calling _import_class('path.to.mypkg', 'MyClass').
-    If base_dir is specified its value will be added to python search path
+    If base_dir is specified, its value will be added to the python search path
     if not already contained in it.
 
     :param module_path: python module path of the module containing the class to be imported
@@ -55,7 +55,7 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     """
 
     # make sure that base_dir is in the search path. Otherwise, the module imported here might not find its libraries.
-    if not base_dir is None and not base_dir in sys.path:
+    if base_dir is not None and base_dir not in sys.path:
         logging.info(f"Appending to sys.path: {base_dir}")
         sys.path.append(base_dir)
     logging.info(f"Importing module {module_path}")
@@ -63,22 +63,22 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     return vars(module)[class_name]
 
 
-def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -> any:
+def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
     class_name.
 
-    :param options: the section of the QUARK module configuration which is relevant here including the sub modules information.
+    :param options: the section of the QUARK module configuration which is relevant here, including the information on submodules.
     :type options: list of dict
     :param class_name: the name of the class to be initialized.
     :type class_name: str
     :param args: the list of arguments used for to the class initialization
     :type args: any
-    :return: the new instance ot the QUARK module
+    :return: the new instance of the QUARK module
     :rtype: any
     """
     for opt in options:
-        if not class_name == opt["name"]:
+        if class_name != opt["name"]:
             continue
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = None
@@ -89,9 +89,9 @@ def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -
         instance = clazz(*args)
 
         # sub_options inherits 'dir'
-        if not sub_options is None and "dir" in opt:
+        if sub_options is not None and "dir" in opt:
             for sub_opt in sub_options:
-                if not "dir" in sub_opt:
+                if "dir" not in sub_opt:
                     sub_opt["dir"] = opt["dir"]
 
         instance.sub_options = sub_options
@@ -157,7 +157,6 @@ class BenchmarkManager:
                                                    choices=self.application.get_available_mapping_options())
 
         for mapping_single_answer in mapping_answer["mapping"]:
-
             mapping = self.application.get_submodule(mapping_single_answer)
 
             mapping_config = mapping.get_parameter_options()
@@ -173,7 +172,6 @@ class BenchmarkManager:
 
             for solver_single_answer in solver_answer["solver"]:
                 solver = mapping.get_submodule(solver_single_answer)
-
                 solver_config = solver.get_parameter_options()
                 solver_config = BenchmarkManager._query_for_config(solver_config,
                                                                    f"(Option for {solver_single_answer})")
@@ -191,7 +189,7 @@ class BenchmarkManager:
 
         repetitions_answer = inquirer.prompt(
             [inquirer.Text('repetitions', message="How many repetitions do you want?",
-                           validate=lambda _, x: re.match("\d", x),
+                           validate=lambda _, x: re.match("\\d", x),
                            default=self.repetitions
                            )])
 
@@ -244,7 +242,6 @@ class BenchmarkManager:
                     solver_config = [dict(zip(keys, v)) for v in itertools.product(*values)]
                 else:
                     solver_config = [{}]
-
                 solver = mapping.get_submodule(single_solver['name'])
                 self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']] = {
                     "solver_instance": solver,
@@ -264,21 +261,19 @@ class BenchmarkManager:
         config = {}
         for key, config_answer in param_opts.items():
             if config_answer.get("if"):
-                #
                 # support parameter descriptions like
                 # "seed": {
-                #    "if": {"key":"graph_type", "in" : ["erdos-renyi"]},
-                #    ...
+                #     "if": {"key":"graph_type", "in" : ["erdos-renyi"]},
+                #     ...
                 # }
                 # meaning that 'seed' only gets displayed if graph_type has been chosen to be 'erdos-renyi'
                 # This expects that the referenced parameter has been declared before and is declared to be
                 # 'exclusive' so that its value is unique.
-                #
 
                 key_in_cond = config_answer.get("if")["key"]
                 dependency = param_opts.get(key_in_cond)
 
-                # check configuration is consistent
+                # check if configuration is consistent
                 consistent = False
                 err_msg = None
                 if dependency is None:
@@ -425,11 +420,11 @@ class BenchmarkManager:
                                         mapped_problem, time_to_mapping = mapping.map(problem, mapping_config)
                                         try:
                                             logging.info(
-                                                f"Running {self.application.__class__.__name__} with config {application_config} on solver {solver.__class__.__name__} and device {device.get_device_name()} (Repetition {i}/{self.repetitions})")
+                                                f"Running {self.application.__class__.__name__} with config "
+                                                f"{application_config} on solver {solver.__class__.__name__} and device "
+                                                f"{device.get_device_name()} (Repetition {i}/{self.repetitions})")
                                             solution_raw, time_to_solve, additional_solver_information = solver.run(
-                                                mapped_problem, device,
-                                                solver_config, store_dir=path,
-                                                repetition=i)
+                                                mapped_problem, device, solver_config, store_dir=path, repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)
                                             try:
                                                 processed_solution, time_to_process_solution = self.application.process_solution(
@@ -493,7 +488,8 @@ class BenchmarkManager:
                                             logging.error(f"Error during benchmark run: {e}", exc_info=True)
                                             with open(f"{path}/error.log", 'a') as fp:
                                                 fp.write(
-                                                    f"Solver: {solver_name}, Device: {device_name}, Error: {str(e)} (For more information take a look at logger.log)")
+                                                    f"Solver: {solver_name}, Device: {device_name}, Error: {str(e)} "
+                                                    f"(For more information take a look at logger.log)")
                                                 fp.write("\n")
 
                 with open(f"{path}/results.json", 'w') as fp:
@@ -574,9 +570,9 @@ class BenchmarkManager:
         df = self.load_results(input_dirs)
         # Deep copy, else it messes with the json.loads in save_as_csv
         self._save_as_csv(df.copy())
-        self.vizualize_results(df, self.store_dir)
+        self.visualize_results(df, self.store_dir)
 
-    def vizualize_results(self, df: pd.DataFrame, store_dir: str = None) -> None:
+    def visualize_results(self, df: pd.DataFrame, store_dir: str = None) -> None:
         """
         Generates various plots for the benchmark.
 
@@ -609,7 +605,7 @@ class BenchmarkManager:
                  sorted(row['mapping_config'].items(), key=lambda key_value_pair: key_value_pair[0])]), axis=1)
 
         df_complete = df.copy()
-        df = df.loc[df["solution_validity"] == True]
+        df = df.loc[df["solution_validity"]]  # only keep the valid solutions
 
         if df.shape[0] < 1:
             logging.warning("Not enough (valid) data to visualize results, skipping the plot generation!")
@@ -639,7 +635,7 @@ class BenchmarkManager:
                 helper_dict[key] = list(set(helper_dict[key]))
 
         for key, value in helper_dict.items():
-            # If there is more than 1 value and it is a float/int, then we can order it
+            # If there is more than 1 value, and it is a float/int, then we can order it
             if len(value) > 1:  # and isinstance(value[0], (int, float))
                 affected_keys.append(key)
 
@@ -650,7 +646,7 @@ class BenchmarkManager:
         # df.sort_values(by=["application_config"], key=custom_sort, inplace=True)
 
         if len(affected_keys) == 1:
-            # X axis name should be this and fixed parameters in parenthesis
+            # X-axis name should be this and fixed parameters in parentheses
             df['applicationConfigCombo'] = df.apply(
                 lambda row: row['application_config'][affected_keys[0]],
                 axis=1)
@@ -725,11 +721,11 @@ class BenchmarkManager:
             _barplot(
                 df.loc[df["solver"] == solver],
                 "applicationConfigCombo", "time_to_solve", hue='solverConfigCombo', order=None,
-                title=None, ax=ax[0])
+                title="", ax=ax[0])
             _barplot(
                 df.loc[df["solver"] == solver],
                 "applicationConfigCombo", "solution_quality", hue='solverConfigCombo', order=None,
-                title=None, ax=ax[1])
+                title="", ax=ax[1])
 
             ax[0].get_legend().remove()
             # ax[1].get_legend().remove()

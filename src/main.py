@@ -18,18 +18,21 @@ import json
 import yaml
 import sys
 import os
-import argparse
-from collections.abc import Iterable
-from typing import Union
 
+# add the paths before the following imports
+# 'noqa E402' tells PyCharm to ignore the pep8 violation "E402: module level import not at top of file" on these lines
 install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(install_dir)
-from BenchmarkManager import BenchmarkManager
+
+import argparse  # noqa E402
+from collections.abc import Iterable  # noqa E402
+from typing import Union  # noqa E402
+from BenchmarkManager import BenchmarkManager  # noqa E402
 
 
 def _filter_comments(f: Iterable) -> str:
     """
-    Returns the content of the filehandle f ignoring all lines starting with '#'.
+    Returns the content of the filehandle f, ignoring all lines starting with '#'.
 
     :param f: the file to be read
     :type f: Iterable
@@ -46,7 +49,7 @@ def _filter_comments(f: Iterable) -> str:
 
 def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     """
-    If the json object j contains relative paths as value of 'dir' this 
+    If the json object j contains relative paths as value of 'dir', this
     value gets replaced by joining base_dir with that path.
 
     :param j: the json to be adapted
@@ -107,7 +110,7 @@ def main() -> None:
         else:
             if args.modules:
                 logging.info(f"load application modules configuration from {args.modules}")
-                # preprocess the modules configuration:
+                # preprocess the 'modules' configuration:
                 #   + filter comment lines (lines starting with '#')
                 #   + replace relative paths by taking them relative to the location of the modules configuration file.
                 base_dir = os.path.dirname(args.modules)
@@ -124,7 +127,7 @@ def main() -> None:
 
             benchmark_manager.orchestrate_benchmark(benchmark_config, app_modules)
             df = benchmark_manager.load_results()
-            benchmark_manager.vizualize_results(df)
+            benchmark_manager.visualize_results(df)
     except Exception as e:
         logging.error(e)
         raise e

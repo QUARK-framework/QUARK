@@ -141,7 +141,7 @@ class DinneenQubo(Mapping):
         # first we add the hard constraints -- we add the lagrange parameter as weight
         for clause_ind, hard_clause in enumerate(hard):
             qubo_dict = _add_clause(qubo_dict, hard_clause, self.nr_vars + clause_ind, lagrange)
-        # next, we add the soft constraitns -- we start the enumeration at the final index corresponding to hard cons.
+        # next, we add the soft constraints -- we start the enumeration at the final index corresponding to hard cons.
         for clause_ind, soft_clause in enumerate(soft):
             qubo_dict = _add_clause(qubo_dict, soft_clause, self.nr_vars + clause_ind + len(hard), 1)
 

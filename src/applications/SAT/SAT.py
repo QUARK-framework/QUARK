@@ -31,7 +31,7 @@ from applications.SAT.mappings.DinneenISING import DinneenIsing
 
 class SAT(Application):
     """
-    Before a new vehicle model can be deployed for production, several tests have to be carried out on pre- series
+    Before a new vehicle model can be deployed for production, several tests have to be carried out on pre-series
     vehicles to ensure the feasibility and gauge the functionality of specific configurations of components.
     Naturally, the manufacturer wants to save resources and produce as few pre-series vehicles as possible while
     still performing all desired tests. Further, not all feature configurations can realistically be implemented in
@@ -168,7 +168,7 @@ class SAT(Application):
         def _generate_3sat_clauses(nr_clauses, nr_vars, satisfiable, rseed, nr_tries):
             # iterate over the desired number of attempts: we break if we find a solvable instance.
             for attempt in range(nr_tries):
-                # initialize random number generator -- we multiply the attempt so as to traverse distinct random seeds
+                # initialize random number generator -- we multiply the attempt to traverse distinct random seeds
                 # for the hard and soft constraints, respectively (since rseed of the hard and soft constraints differs
                 # by 1).
                 rng = np.random.default_rng(rseed + attempt * 2)
@@ -188,13 +188,13 @@ class SAT(Application):
                             clause.append(lit)
                     # append the generated clause to the total container
                     clause_list.append(Or(clause))
-                # we generate the conjuction of the problem, such that we can use the nnf native function and test its
+                # we generate the conjunction of the problem, such that we can use the nnf native function and test its
                 # satisfiability.
                 prob = And(clause_list)
 
                 if satisfiable and not prob.satisfiable():
                     if attempt == nr_tries - 1:
-                        logging.error("Unable to generate valid solutions. Consider increasing max_tries or decreasing"
+                        logging.error("Unable to generate valid solutions. Consider increasing max_tries or decreasing "
                                       "the clause:variable ratio.")
                         raise ValueError("Unable to generate valid solution.")
                     else:
@@ -202,8 +202,8 @@ class SAT(Application):
                 else:
                     return clause_list
 
-        # we choose a random seed -- since we try at most max_tries -times to generate a solvable instance,
-        # we space the initial random seeds by 2 * max_tries (because we need both hard an soft constraints).
+        # we choose a random seed -- since we try at most max_tries times to generate a solvable instance,
+        # we space the initial random seeds by 2 * max_tries (because we need both hard and soft constraints).
         random_seed = 2 * config['problem_set'] * max_tries
         # generate hard  & soft constraints. We make both satisfiable, but this can in principle be tuned.
         hard = And(_generate_3sat_clauses(num_constraints, self.num_variables,

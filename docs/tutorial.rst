@@ -7,7 +7,7 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3, you need to install Python 3 if you don`t have it already installed.
+As this framework is implemented in Python 3, you need to install Python 3 if you don`t already have it installed.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually
@@ -174,46 +174,46 @@ The module configuration file has to be a json file of the form:
 ::
 
     [
-      {"name":..., "module":..., "dir":..., "mappings":
-         [
-            {"name":..., "module":..., "dir":..., "solvers":
-               [
-                  {"name":..., "module":..., "dir":..., "devices":
-                     [
-                        {"name":..., "module":..., "dir":...},...
-                     ]
-                  },...
-               ]
-            },...
-
-         ]
-      },...
+       {"name":..., "module":..., "dir":..., "mappings":
+          [
+             {"name":..., "module":..., "dir":..., "solvers":
+                [
+                   {"name":..., "module":..., "dir":..., "devices":
+                      [
+                         {"name":..., "module":..., "dir":...},...
+                      ]
+                   },...
+                ]
+             },...
+          ]
+       },...
     ]
 
-``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
-has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified its
+``name`` and ``module`` are mandatory and specify the class name and python module, resp.,
+``module`` has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified, its
 value will be added to the python search path.
 
 An example for this would be:
 ::
 
     [
-      {
-        "name": "TSP",
-        "module": "applications.TSP.TSP",
-        "dir": "src",
-        "mappings": [
-          {
-            "name": "Direct",
-            "module": "applications.TSP.mappings.Direct",
-            "solvers": [
-              {
-                "name": "GreedyClassicalTSP",
-                "module": "solvers.GreedyClassicalTSP"
-              }
-            ]
-          }]
-      }
+       {
+          "name": "TSP",
+          "module": "applications.TSP.TSP",
+          "dir": "src",
+          "mappings": [
+             {
+                "name": "Direct",
+                "module": "applications.TSP.mappings.Direct",
+                "solvers": [
+                   {
+                      "name": "GreedyClassicalTSP",
+                      "module": "solvers.GreedyClassicalTSP"
+                   }
+                ]
+             }
+          ]
+       }
     ]
 
 You can save this in a JSON file and then call the framework like:
@@ -222,8 +222,8 @@ You can save this in a JSON file and then call the framework like:
 
     python src/main.py --modules tsp_example.json
 
-Exploring problem in Jupyter Notebook
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exploring a problem in Jupyter Notebook
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can also use a jupyter notebook to generate an application instance and create a concrete problem to work on.
 Especially while implementing a new mapping or solver, this can be very useful!

@@ -76,7 +76,7 @@ class Direct(Mapping):
         soft_buffer = io.StringIO()
         # dump constraints and tests to their respective buffers
         dump(hard_constraints, hard_buffer, var_labels=litdic, mode='cnf')
-        # tests have to be conjuncted, since we will add them as soft constraints.
+        # tests have to be conjoined, since we will add them as soft constraints.
         dump(And(soft_constraints), soft_buffer, var_labels=litdic, mode='cnf')
 
         # load the cnfs from the buffers:

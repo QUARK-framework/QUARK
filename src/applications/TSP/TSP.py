@@ -39,7 +39,8 @@ class TSP(Application):
     graph. Taking an undirected weighted graph, nodes correspond to the graph's nodes, with paths corresponding to the
     graph's edges, and a path's distance is the edge's weight. Typically, the graph is complete where each pair of nodes
     is connected by an edge. If no connection exists between two nodes, one can add an arbitrarily long edge to complete
-    the graph without affecting the optimal tour.\" (source: https://github.com/aws/amazon-braket-examples/blob/main/examples/quantum_annealing/Dwave_TravelingSalesmanProblem/Dwave_TravelingSalesmanProblem.ipynb)
+    the graph without affecting the optimal tour.\"
+    (source: https://github.com/aws/amazon-braket-examples/blob/main/examples/quantum_annealing/Dwave_TravelingSalesmanProblem/Dwave_TravelingSalesmanProblem.ipynb)
     """
 
     def __init__(self):
@@ -72,7 +73,7 @@ class TSP(Application):
                       return {
                                 "nodes": {
                                     "values": list([3, 4, 6, 8, 10, 14, 16]),
-                                    "description": "How many nodes does you graph need?"
+                                    "description": "How many nodes does your graph need?"
                                 }
                             }
 

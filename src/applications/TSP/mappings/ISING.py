@@ -386,4 +386,3 @@ class Ising(Mapping):
             return QiskitQAOA()
         else:
             raise NotImplementedError(f"Solver Option {solver_option} not implemented")
-

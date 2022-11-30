@@ -55,7 +55,7 @@ with open("reference_data.txt") as infile:
 
         if c_end < 3 and c_start < 3 and t_start < 2 and t_end < 2:
             # Let's reduce the number of tools and configs for now
-            graph.add_edge((s_start, n_start), (s_end, n_end), c_start=c_start, t_start=t_start, c_end=c_end, t_end=t_end,
-                           weight=duration)
+            graph.add_edge((s_start, n_start), (s_end, n_end), c_start=c_start, t_start=t_start, c_end=c_end,
+                           t_end=t_end, weight=duration)
 
 nx.write_gpickle(graph, f"reference_graph.gpickle")

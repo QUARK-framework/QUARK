@@ -43,7 +43,7 @@ elif Path(os.path.expanduser('~/local_config.ini')).is_file():
     # print("Load from ~")
     config.read(os.path.expanduser('~/local_config.ini'))
 else:
-    # we cant use logging because its not init yet
+    # we can't use logging because it's not init yet
     logging.info("No local_config file found!")
 
 if "BRAKET" not in config:

@@ -205,7 +205,7 @@ class PVC(Application):
             nodes_unassigned = list(np.random.permutation(nodes_unassigned))
             logging.info(nodes_unassigned)
             logging.info(visited_seams)
-            logging.info(node for node in list(nodes))
+            logging.info(list(nodes))
             for idx, node in enumerate(route):
                 if node is None:
                     route[idx] = nodes_unassigned[0]

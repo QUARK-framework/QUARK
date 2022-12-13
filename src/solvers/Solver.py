@@ -17,6 +17,7 @@ import logging
 from functools import wraps
 from time import time
 
+from BenchmarkManager import _get_instance_with_sub_options
 
 class Solver(ABC):
     """
@@ -29,6 +30,7 @@ class Solver(ABC):
         Constructor method
         """
         self.device_options = []
+        self.sub_options = None
         super().__init__()
 
     @abstractmethod
@@ -69,11 +71,30 @@ class Solver(ABC):
         :rtype: dict
         """
         pass
+        
+    def get_submodule(self, device_option: str) -> any:
+        """
+        If self.sub_options is not None a device is instantiated according to the information given in self.sub_options.
+        Otherwise get_device is called as fall back.
+        
+        :param mapping_option: String with the option
+        :rtype: str
+        :type mapping_option: str
+        :return: instance of the device class
+        :rtype: any
+        """
+        
+        if self.sub_options is None:
+            return self.get_device(device_option)
+        else:
+            return _get_instance_with_sub_options(self.sub_options, device_option, device_option)
+        
 
     @abstractmethod
     def get_device(self, device_option: str) -> any:
         """
-        Returns the device based on string.
+        Returns the default device based on string. This applies only if
+        self.sub_options is None. See get_submodule.
 
         :param device_option:
         :type device_option: str
@@ -89,4 +110,7 @@ class Solver(ABC):
         :return: list of devices
         :rtype: list
         """
-        return self.device_options
+        if self.sub_options is None:
+            return self.device_options
+        else:
+            return [ o["name"] for o in self.sub_options ]

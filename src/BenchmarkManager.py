@@ -370,11 +370,6 @@ class BenchmarkManager:
         self.load_config(config, app_modules)
 
         self._create_store_dir(store_dir, tag=self.application.__class__.__name__.lower())
-        logger = logging.getLogger()
-        formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
-        fh = logging.FileHandler(f"{self.store_dir}/logger.log")
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
         logging.info(f"Created Benchmark run directory {self.store_dir}")
 
         # Collect git revision number and check if there are uncommitted changes to allow user to analyze which
@@ -496,7 +491,7 @@ class BenchmarkManager:
                     json.dump(results, fp)
         # catching ctrl-c and killing network if desired
         except KeyboardInterrupt:
-            logger.info("CTRL-C detected. Still trying to create results.csv.")
+            logging.info("CTRL-C detected. Still trying to create results.csv.")
         df = self._collect_all_results()
         self._save_as_csv(df)
 

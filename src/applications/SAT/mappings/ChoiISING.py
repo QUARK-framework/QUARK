@@ -101,8 +101,8 @@ class ChoiIsing(Mapping):
 
         # Convert Ising dict to matrix
         n = (len(problem[0]) + len(problem[1])) * 3
-        t_vector = np.array([0.0] * n)
-        j_matrix = np.array([[0.0] * n for _ in range(n)])
+        t_vector = np.zeros(n, dtype=float)
+        j_matrix = np.zeros((n, n), dtype=float)
 
         for key, value in t.items():
             t_vector[key] = value

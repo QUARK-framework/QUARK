@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 import logging
-import config
 import json
 import yaml
 import sys

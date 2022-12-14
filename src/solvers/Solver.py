@@ -14,9 +14,7 @@
 
 from abc import ABC, abstractmethod
 import logging
-from functools import wraps
 from time import time
-
 from BenchmarkManager import _get_instance_with_sub_options
 
 

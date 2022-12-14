@@ -20,7 +20,7 @@ from qiskit import Aer
 from qiskit.algorithms import VQE, QAOA, NumPyMinimumEigensolver
 from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit.circuit.library import TwoLocal
-from qiskit.opflow import PauliSumOp, StateFn
+from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
 
 from devices.HelperClass import HelperClass

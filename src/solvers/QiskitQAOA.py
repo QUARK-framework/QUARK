@@ -16,6 +16,7 @@ from typing import Tuple
 from typing import TypedDict
 
 import numpy as np
+import logging
 from qiskit import Aer
 from qiskit.algorithms import VQE, QAOA, NumPyMinimumEigensolver
 from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA

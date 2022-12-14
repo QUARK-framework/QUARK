@@ -17,6 +17,7 @@ from typing import TypedDict
 from devices.Local import Local
 from solvers.Solver import *
 import numpy as np
+import logging
 from pysat.formula import WCNF
 
 

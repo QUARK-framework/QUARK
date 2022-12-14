@@ -15,6 +15,7 @@
 import datetime
 import matplotlib.pyplot as plt
 import numpy as np
+import logging
 from braket.circuits import Circuit, Observable
 from scipy.optimize import minimize
 from typing import TypedDict, Union

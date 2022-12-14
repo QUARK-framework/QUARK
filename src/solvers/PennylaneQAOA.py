@@ -23,6 +23,7 @@ import pennylane as qml
 from pennylane import numpy as npqml
 import psutil
 import json
+import logging
 from functools import partial, wraps
 
 from devices.braket.Ionq import Ionq

@@ -103,7 +103,6 @@ def main() -> None:
                             required=False)
         parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
         args = parser.parse_args()
-        benchmark_config = None
         if args.summarize:
             benchmark_manager.summarize_results(args.summarize)
         else:

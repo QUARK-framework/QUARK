@@ -171,7 +171,6 @@ class TSP(Application):
         """
         start_time = time() * 1000
         nodes = self.application.nodes()
-        edges = self.application.edges()
         start = np.min(nodes)
         # fill route with None values
         route = [None] * len(self.application)

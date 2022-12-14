@@ -435,7 +435,7 @@ class BenchmarkManager:
                                                     processed_solution)
                                                 solution_validity, time_to_validation = self.application.validate(
                                                     processed_solution)
-                                            except Exception as e:
+                                            except Exception:
                                                 logging.exception("Exception on processing the solution")
                                                 solution_validity = False
                                                 time_to_process_solution = None

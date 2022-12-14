@@ -82,8 +82,6 @@ class Qubo(Mapping):
         lagrange = None
         lagrange_factor = config['lagrange_factor']
         weight = 'weight'
-        # get corresponding QUBO step by step
-        n = graph.number_of_nodes()
 
         if lagrange is None:
             # If no lagrange parameter provided, set to 'average' tour length.

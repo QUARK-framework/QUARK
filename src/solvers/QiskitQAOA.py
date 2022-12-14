@@ -153,9 +153,7 @@ class QiskitQAOA(Solver):
         J = mapped_problem['J']
         t = mapped_problem['t']
         start = time() * 1000
-        feed_dict = {'A': 2.0}
         ising_op = self._get_pauli_op((t, J))
-        result = ""
         if config["method"] == "classic":
             algorithm = NumPyMinimumEigensolver()
         else:

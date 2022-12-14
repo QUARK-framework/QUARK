@@ -221,7 +221,6 @@ class Ising(Mapping):
         matrix_size = graph.number_of_nodes() * timesteps
         j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
 
-        index_counter = 0
         for key, value in quad.items():
             x = self._get_matrix_index(key[0], graph.number_of_nodes())
             y = self._get_matrix_index(key[1], graph.number_of_nodes())
@@ -253,7 +252,7 @@ class Ising(Mapping):
         # Convert ISING dict to matrix
         timesteps = graph.number_of_nodes()
 
-        number_of_edges = graph.number_of_edges()
+        # number_of_edges = graph.number_of_edges()
         # timesteps = len(Q)/number_of_edges
         matrix_size = graph.number_of_nodes() * timesteps
         j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
@@ -311,7 +310,6 @@ class Ising(Mapping):
             logging.info((pauli_str, coeff))
             pauli_str_list = list(pauli_str)
             index_pos_list = list(locate(pauli_str_list, lambda a: a == 'Z'))
-            matrix_to_process = None
             if len(index_pos_list) == 1:
                 # update t
                 t_matrix[index_pos_list[0]] = coeff

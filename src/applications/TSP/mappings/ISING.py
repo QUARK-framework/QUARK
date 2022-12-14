@@ -15,6 +15,7 @@
 import logging
 import re
 from typing import TypedDict, Union
+from time import time
 
 import networkx
 import networkx as nx

@@ -19,7 +19,7 @@ import logging
 from braket.circuits import Circuit, Observable
 from scipy.optimize import minimize
 from typing import TypedDict, Union
-from time import sleep
+from time import sleep, time
 
 from devices.braket.Ionq import Ionq
 from devices.braket.LocalSimulator import LocalSimulator

@@ -18,6 +18,7 @@ from nnf import And
 from applications.Mapping import *
 from solvers.Annealer import Annealer
 from itertools import combinations
+from time import time
 
 
 class DinneenQubo(Mapping):

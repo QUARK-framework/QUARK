@@ -16,6 +16,7 @@ import itertools
 import logging
 from collections import defaultdict
 from typing import TypedDict, Union
+from time import time
 
 import networkx
 

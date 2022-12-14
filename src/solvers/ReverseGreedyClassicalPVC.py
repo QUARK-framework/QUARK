@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from typing import TypedDict
+from time import time
 
 import networkx
 

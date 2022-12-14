@@ -18,6 +18,7 @@ from qubovert.sat import NOT, OR, AND
 from nnf import And
 from applications.Mapping import *
 from solvers.Annealer import Annealer
+from time import time
 
 
 class QubovertQubo(Mapping):

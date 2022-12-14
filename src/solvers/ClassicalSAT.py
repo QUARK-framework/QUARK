@@ -15,6 +15,7 @@
 import logging
 
 from typing import TypedDict
+from time import time
 
 from devices.Local import Local
 from solvers.Solver import *

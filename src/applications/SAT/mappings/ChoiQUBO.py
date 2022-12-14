@@ -18,6 +18,7 @@ from nnf import Var, And
 from applications.Mapping import *
 from solvers.Annealer import Annealer
 from itertools import combinations, product
+from time import time
 
 
 class ChoiQubo(Mapping):

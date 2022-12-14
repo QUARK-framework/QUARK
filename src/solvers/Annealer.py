@@ -16,6 +16,7 @@ import logging
 
 from typing import TypedDict, Union
 
+from time import time
 from devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler
 from solvers.Solver import *
 

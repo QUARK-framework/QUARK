@@ -14,6 +14,7 @@
 
 import logging
 from typing import TypedDict, Union
+from time import time
 
 import networkx
 import numpy as np

@@ -21,6 +21,7 @@ import io
 from nnf import And
 from nnf.dimacs import dump
 from pysat.formula import CNF, WCNF
+from time import time
 
 
 class Direct(Mapping):

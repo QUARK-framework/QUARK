@@ -19,6 +19,7 @@ from solvers.Solver import *
 import numpy as np
 import logging
 from pysat.formula import WCNF
+from time import time
 
 
 class RandomSAT(Solver):

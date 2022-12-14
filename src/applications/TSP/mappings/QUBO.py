@@ -19,6 +19,7 @@ import networkx
 
 from applications.Mapping import *
 from solvers.Annealer import Annealer
+from time import time
 
 
 class Qubo(Mapping):

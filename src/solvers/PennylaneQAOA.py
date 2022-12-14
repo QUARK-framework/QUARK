@@ -25,6 +25,7 @@ import psutil
 import json
 import logging
 from functools import partial, wraps
+from time import time
 
 from devices.braket.Ionq import Ionq
 from devices.braket.LocalSimulator import LocalSimulator

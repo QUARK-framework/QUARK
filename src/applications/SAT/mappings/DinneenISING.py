@@ -14,6 +14,7 @@
 
 import logging
 from typing import TypedDict, Union
+from time import time
 
 import numpy as np
 from dimod import qubo_to_ising

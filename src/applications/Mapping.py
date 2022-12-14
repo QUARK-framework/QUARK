@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from time import time
 from BenchmarkManager import _get_instance_with_sub_options
 
 

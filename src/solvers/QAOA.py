@@ -12,11 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import datetime
-import matplotlib.pyplot as plt
 import numpy as np
 import logging
-from braket.circuits import Circuit, Observable
+from braket.circuits import Circuit
 from scipy.optimize import minimize
 from typing import TypedDict, Union
 from time import sleep, time

@@ -14,6 +14,7 @@
 
 from abc import ABC, abstractmethod
 
+from BenchmarkManager import _get_instance_with_sub_options
 
 class Application(ABC):
     """
@@ -28,6 +29,7 @@ class Application(ABC):
         self.application_name = application_name
         self.application = None
         self.mapping_options = []
+        self.sub_options = []
         super().__init__()
 
     def get_application(self) -> any:
@@ -136,10 +138,26 @@ class Application(ABC):
         """
         pass
 
+    def get_submodule(self, mapping_option: str) -> any:
+        """
+        If self.sub_options is not None a mapping is instantiated according to the information given in self.sub_options.
+        Otherwise get_mapping is called as fall back.
+        
+        :param mapping_option: String with the option
+        :type mapping_option: str
+        :return: instance of a mapping class
+        :rtype: any
+        """
+        if self.sub_options is None:
+            return self.get_mapping(mapping_option)
+        else:
+            return _get_instance_with_sub_options(self.sub_options, mapping_option)
+
     @abstractmethod
     def get_mapping(self, mapping_option: str) -> any:
         """
-        Return a mapping for an application.
+        Return a default mapping for an application. This applies only if
+        self.sub_options is None. See get_submodule.
 
         :param mapping_option: String with the option
         :rtype: str
@@ -155,4 +173,7 @@ class Application(ABC):
         :return: list of mapping options
         :rtype: list
         """
-        return self.mapping_options
+        if self.sub_options is None:
+            return self.mapping_options
+        else:
+            return [ o["name"] for o in self.sub_options ]

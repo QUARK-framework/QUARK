@@ -1,4 +1,4 @@
-applications.SAT.mappings.DinneenISING.DinneenIsing
+﻿applications.SAT.mappings.DinneenISING.DinneenIsing
 ===================================================
 
 .. currentmodule:: applications.SAT.mappings.DinneenISING
@@ -20,6 +20,7 @@ applications.SAT.mappings.DinneenISING.DinneenIsing
       ~DinneenIsing.get_available_solver_options
       ~DinneenIsing.get_parameter_options
       ~DinneenIsing.get_solver
+      ~DinneenIsing.get_submodule
       ~DinneenIsing.map
       ~DinneenIsing.reverse_map
    

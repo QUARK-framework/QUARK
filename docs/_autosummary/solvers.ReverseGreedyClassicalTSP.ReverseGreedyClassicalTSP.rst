@@ -1,4 +1,4 @@
-solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
+﻿solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
 ===========================================================
 
 .. currentmodule:: solvers.ReverseGreedyClassicalTSP
@@ -20,6 +20,7 @@ solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
       ~ReverseGreedyClassicalTSP.get_available_device_options
       ~ReverseGreedyClassicalTSP.get_device
       ~ReverseGreedyClassicalTSP.get_parameter_options
+      ~ReverseGreedyClassicalTSP.get_submodule
       ~ReverseGreedyClassicalTSP.run
    
    

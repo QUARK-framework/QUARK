@@ -1,4 +1,4 @@
-applications.SAT.mappings.QubovertQUBO.QubovertQubo
+﻿applications.SAT.mappings.QubovertQUBO.QubovertQubo
 ===================================================
 
 .. currentmodule:: applications.SAT.mappings.QubovertQUBO
@@ -20,6 +20,7 @@ applications.SAT.mappings.QubovertQUBO.QubovertQubo
       ~QubovertQubo.get_available_solver_options
       ~QubovertQubo.get_parameter_options
       ~QubovertQubo.get_solver
+      ~QubovertQubo.get_submodule
       ~QubovertQubo.map
       ~QubovertQubo.reverse_map
    

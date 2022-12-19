@@ -1,4 +1,4 @@
-solvers.GreedyClassicalTSP.GreedyClassicalTSP
+﻿solvers.GreedyClassicalTSP.GreedyClassicalTSP
 =============================================
 
 .. currentmodule:: solvers.GreedyClassicalTSP
@@ -20,6 +20,7 @@ solvers.GreedyClassicalTSP.GreedyClassicalTSP
       ~GreedyClassicalTSP.get_available_device_options
       ~GreedyClassicalTSP.get_device
       ~GreedyClassicalTSP.get_parameter_options
+      ~GreedyClassicalTSP.get_submodule
       ~GreedyClassicalTSP.run
    
    

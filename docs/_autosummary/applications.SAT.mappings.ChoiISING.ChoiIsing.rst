@@ -1,4 +1,4 @@
-applications.SAT.mappings.ChoiISING.ChoiIsing
+﻿applications.SAT.mappings.ChoiISING.ChoiIsing
 =============================================
 
 .. currentmodule:: applications.SAT.mappings.ChoiISING
@@ -20,6 +20,7 @@ applications.SAT.mappings.ChoiISING.ChoiIsing
       ~ChoiIsing.get_available_solver_options
       ~ChoiIsing.get_parameter_options
       ~ChoiIsing.get_solver
+      ~ChoiIsing.get_submodule
       ~ChoiIsing.map
       ~ChoiIsing.reverse_map
    

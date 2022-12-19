@@ -1,4 +1,4 @@
-solvers.RandomClassicalTSP.RandomTSP
+﻿solvers.RandomClassicalTSP.RandomTSP
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalTSP
@@ -20,6 +20,7 @@ solvers.RandomClassicalTSP.RandomTSP
       ~RandomTSP.get_available_device_options
       ~RandomTSP.get_device
       ~RandomTSP.get_parameter_options
+      ~RandomTSP.get_submodule
       ~RandomTSP.run
    
    

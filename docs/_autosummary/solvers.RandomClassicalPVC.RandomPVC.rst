@@ -1,4 +1,4 @@
-solvers.RandomClassicalPVC.RandomPVC
+﻿solvers.RandomClassicalPVC.RandomPVC
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalPVC
@@ -20,6 +20,7 @@ solvers.RandomClassicalPVC.RandomPVC
       ~RandomPVC.get_available_device_options
       ~RandomPVC.get_device
       ~RandomPVC.get_parameter_options
+      ~RandomPVC.get_submodule
       ~RandomPVC.run
    
    

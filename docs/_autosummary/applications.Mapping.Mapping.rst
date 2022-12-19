@@ -1,4 +1,4 @@
-applications.Mapping.Mapping
+﻿applications.Mapping.Mapping
 ============================
 
 .. currentmodule:: applications.Mapping
@@ -20,6 +20,7 @@ applications.Mapping.Mapping
       ~Mapping.get_available_solver_options
       ~Mapping.get_parameter_options
       ~Mapping.get_solver
+      ~Mapping.get_submodule
       ~Mapping.map
       ~Mapping.reverse_map
    

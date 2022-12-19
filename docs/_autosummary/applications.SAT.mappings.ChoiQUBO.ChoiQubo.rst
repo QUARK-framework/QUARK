@@ -1,4 +1,4 @@
-applications.SAT.mappings.ChoiQUBO.ChoiQubo
+﻿applications.SAT.mappings.ChoiQUBO.ChoiQubo
 ===========================================
 
 .. currentmodule:: applications.SAT.mappings.ChoiQUBO
@@ -20,6 +20,7 @@ applications.SAT.mappings.ChoiQUBO.ChoiQubo
       ~ChoiQubo.get_available_solver_options
       ~ChoiQubo.get_parameter_options
       ~ChoiQubo.get_solver
+      ~ChoiQubo.get_submodule
       ~ChoiQubo.map
       ~ChoiQubo.reverse_map
    

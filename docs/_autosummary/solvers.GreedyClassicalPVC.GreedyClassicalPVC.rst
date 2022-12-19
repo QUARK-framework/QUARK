@@ -1,4 +1,4 @@
-solvers.GreedyClassicalPVC.GreedyClassicalPVC
+﻿solvers.GreedyClassicalPVC.GreedyClassicalPVC
 =============================================
 
 .. currentmodule:: solvers.GreedyClassicalPVC
@@ -20,6 +20,7 @@ solvers.GreedyClassicalPVC.GreedyClassicalPVC
       ~GreedyClassicalPVC.get_available_device_options
       ~GreedyClassicalPVC.get_device
       ~GreedyClassicalPVC.get_parameter_options
+      ~GreedyClassicalPVC.get_submodule
       ~GreedyClassicalPVC.run
    
    

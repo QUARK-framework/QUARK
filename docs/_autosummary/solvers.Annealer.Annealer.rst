@@ -1,4 +1,4 @@
-solvers.Annealer.Annealer
+﻿solvers.Annealer.Annealer
 =========================
 
 .. currentmodule:: solvers.Annealer
@@ -20,6 +20,7 @@ solvers.Annealer.Annealer
       ~Annealer.get_available_device_options
       ~Annealer.get_device
       ~Annealer.get_parameter_options
+      ~Annealer.get_submodule
       ~Annealer.run
    
    

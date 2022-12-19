@@ -1,4 +1,4 @@
-applications.PVC.mappings.Direct.Direct
+﻿applications.PVC.mappings.Direct.Direct
 =======================================
 
 .. currentmodule:: applications.PVC.mappings.Direct
@@ -20,6 +20,7 @@ applications.PVC.mappings.Direct.Direct
       ~Direct.get_available_solver_options
       ~Direct.get_parameter_options
       ~Direct.get_solver
+      ~Direct.get_submodule
       ~Direct.map
       ~Direct.reverse_map
    

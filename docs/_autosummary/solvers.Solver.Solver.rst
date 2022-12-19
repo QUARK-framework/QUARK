@@ -1,4 +1,4 @@
-solvers.Solver.Solver
+﻿solvers.Solver.Solver
 =====================
 
 .. currentmodule:: solvers.Solver
@@ -20,6 +20,7 @@ solvers.Solver.Solver
       ~Solver.get_available_device_options
       ~Solver.get_device
       ~Solver.get_parameter_options
+      ~Solver.get_submodule
       ~Solver.run
    
    

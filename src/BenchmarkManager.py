@@ -509,11 +509,14 @@ class BenchmarkManager:
 
         df, eval_axis_name = self._compute_application_config_combo(df)
 
+        # The sorting is necessary to ensure that the solverConfigCombo is created in a consistent manner
         df['solverConfigCombo'] = df.apply(
             lambda row: '/\n'.join(
-                ['%s: %s' % (key, value) for (key, value) in row['solver_config'].items()]) +
+                ['%s: %s' % (key, value) for (key, value) in
+                 sorted(row['solver_config'].items(), key=lambda key_value_pair: key_value_pair[0])]) +
                         "\ndevice:" + row['device'] + "\nmapping:" + '/\n'.join(
-                ['%s: %s' % (key, value) for (key, value) in row['mapping_config'].items()]), axis=1)
+                ['%s: %s' % (key, value) for (key, value) in
+                 sorted(row['mapping_config'].items(), key=lambda key_value_pair: key_value_pair[0])]), axis=1)
 
         df_complete = df.copy()
         df = df.loc[df["solution_validity"] == True]
@@ -565,8 +568,9 @@ class BenchmarkManager:
                 helper_dict.keys()) == 1 else f"{affected_keys[0]} with {','.join(['%s %s' % (value[0], key) for (key, value) in helper_dict.items() if key not in affected_keys])}"
 
         else:
+            # The sorting is necessary to ensure that the solverConfigCombo is created in a consistent manner
             df['applicationConfigCombo'] = df.apply(
-                lambda row: '/\n'.join(['%s: %s' % (key, value) for (key, value) in row['application_config'].items() if
+                lambda row: '/\n'.join(['%s: %s' % (key, value) for (key, value) in sorted(row['application_config'].items(), key=lambda key_value_pair: key_value_pair[0]) if
                                         key in affected_keys]), axis=1)
 
             axis_name = None

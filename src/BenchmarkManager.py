@@ -17,6 +17,7 @@ import itertools
 import importlib
 import json
 import logging
+import os
 import os.path
 import re
 import sys
@@ -29,6 +30,7 @@ from collections import defaultdict
 import pandas as pd
 import seaborn as sns
 import yaml
+import subprocess
 
 
 matplotlib.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
@@ -53,13 +55,13 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     """
 
     #make sure that base_dir is in the search path. Otherwise
-    #the module imported here might not find its libraries.    
+    #the module imported here might not find its libraries.
     if not base_dir is None and not base_dir in sys.path:
         logging.info(f"append to sys.path: {base_dir}")
         sys.path.append(base_dir)
-    logging.info(f"import module {module_path}")    
+    logging.info(f"import module {module_path}")
     module = importlib.import_module(module_path)
-    return vars(module)[class_name]    
+    return vars(module)[class_name]
 
 def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -> any:
     """
@@ -84,7 +86,7 @@ def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -
                 sub_options = opt[key]
                 break
         instance = clazz(*args)
-        
+
         #sub_options inherits 'dir'
         if not sub_options is None and "dir" in opt:
             for sub_opt in sub_options:
@@ -132,10 +134,10 @@ class BenchmarkManager:
                                                             choices=[ m["name"] for m in app_modules],
                                                             default='PVC',
                                                             )])
-                                                            
+
         app_name = application_answer["application"]
         self.application = _get_instance_with_sub_options(app_modules, app_name)
-        
+
 
         application_config = self.application.get_parameter_options()
 
@@ -157,7 +159,7 @@ class BenchmarkManager:
                                                             )])
 
         for mapping_single_answer in mapping_answer["mapping"]:
-            
+
             mapping = self.application.get_submodule(mapping_single_answer)
 
             mapping_config = mapping.get_parameter_options()
@@ -173,9 +175,9 @@ class BenchmarkManager:
             }
 
             for solver_single_answer in solver_answer["solver"]:
-            
+
                 solver = mapping.get_submodule(solver_single_answer)
-            
+
                 solver_config = solver.get_parameter_options()
                 solver_config = BenchmarkManager._query_for_config(solver_config,
                                                                    f"(Option for {solver_single_answer})")
@@ -215,7 +217,7 @@ class BenchmarkManager:
         """
 
         logging.info(config)
-        
+
         app_name = config["application"]["name"]
         self.application = _get_instance_with_sub_options(app_modules, app_name)
 
@@ -247,7 +249,7 @@ class BenchmarkManager:
                     solver_config = [dict(zip(keys, v)) for v in itertools.product(*values)]
                 else:
                     solver_config = [{}]
-                    
+
                 solver = mapping.get_submodule(single_solver['name'])
                 self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']] = {
                     "solver_instance": solver,
@@ -300,7 +302,7 @@ class BenchmarkManager:
         :param config: valid config file
         :type config: dict
         :param app_modules: the list of application modules as specified in the application modules configuration.
-        :type app_modules: list of dict        
+        :type app_modules: list of dict
         :param store_dir: target directory to store the results of the benchmark (if you decided to store it)
         :type store_dir: str
         :rtype: None
@@ -316,6 +318,24 @@ class BenchmarkManager:
         fh.setFormatter(formatter)
         logger.addHandler(fh)
         logging.info(f"Created Benchmark run directory {self.store_dir}")
+
+        # Collect git revision number and check if there are uncommitted changes to allow user to analyze which
+        # codebase was used for benchmark runs
+        try:
+            # TODO: Does it work with windows?
+            # '-C', git_dir ensures that the following commands also work when QUARK is started from other working
+            # directories
+            git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
+            git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode('ascii').strip()
+            git_uncommitted_changes = True if subprocess.check_output(
+                ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode('ascii').strip() else False
+
+            logging.info(f"Codebase is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
+        except Exception as e:
+            logging.warning(f"Logging of git revision number not possible because of: {e}")
+            git_revision_number = "unknown"
+            git_uncommitted_changes = "unknown"
+
         with open(f"{self.store_dir}/config.yml", 'w') as fp:
             yaml.dump(config, fp)
         try:
@@ -395,7 +415,9 @@ class BenchmarkManager:
                                                 "mapping": mapping.__class__.__name__,
                                                 "solver": solver.__class__.__name__,
                                                 "device_class": device.__class__.__name__,
-                                                "device": device.get_device_name()
+                                                "device": device.get_device_name(),
+                                                "git_revision_number": git_revision_number,
+                                                "git_uncommitted_changes ": git_uncommitted_changes
                                             })
                                             with open(f"{path}/results.json", 'w') as fp:
                                                 json.dump(results, fp)

@@ -19,8 +19,14 @@ import logging
 import datetime
 import os
 
-run_timestamp=datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-username=os.getlogin()
+run_timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+
+try:
+    username = os.getlogin()
+except Exception as e:
+    # TODO Handle this in a smarter way in case os.getlogin() fails
+    username = "unknownuser"
+
 bucket_name = 'amazon-braket-benchmark-framework-{}-{}'.format(run_timestamp, username)
 
 """
@@ -31,16 +37,16 @@ config = configparser.ConfigParser()
 
 # check for file
 if Path('local_config.ini').is_file():
-    #print("Load local")
+    # print("Load local")
     config.read('local_config.ini')
 elif Path(os.path.expanduser('~/local_config.ini')).is_file():
-    #print("Load from ~")
+    # print("Load from ~")
     config.read(os.path.expanduser('~/local_config.ini'))
 else:
     # we cant use logging because its not init yet
-     logging.info("No local_config file found!")
+    logging.info("No local_config file found!")
 
 if "BRAKET" not in config:
     config["BRAKET"] = {}
-    #defaults
+    # defaults
     config["BRAKET"]["BUCKET"] = bucket_name

@@ -1,4 +1,4 @@
-solvers.QAOA.QAOA
+﻿solvers.QAOA.QAOA
 =================
 
 .. currentmodule:: solvers.QAOA
@@ -20,6 +20,7 @@ solvers.QAOA.QAOA
       ~QAOA.get_available_device_options
       ~QAOA.get_device
       ~QAOA.get_parameter_options
+      ~QAOA.get_submodule
       ~QAOA.run
    
    

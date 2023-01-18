@@ -1,4 +1,4 @@
-solvers.QBSolv.QBSolv
+﻿solvers.QBSolv.QBSolv
 =====================
 
 .. currentmodule:: solvers.QBSolv
@@ -20,6 +20,7 @@ solvers.QBSolv.QBSolv
       ~QBSolv.get_available_device_options
       ~QBSolv.get_device
       ~QBSolv.get_parameter_options
+      ~QBSolv.get_submodule
       ~QBSolv.run
    
    

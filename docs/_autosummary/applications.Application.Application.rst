@@ -1,4 +1,4 @@
-applications.Application.Application
+﻿applications.Application.Application
 ====================================
 
 .. currentmodule:: applications.Application
@@ -24,6 +24,7 @@ applications.Application.Application
       ~Application.get_mapping
       ~Application.get_parameter_options
       ~Application.get_solution_quality_unit
+      ~Application.get_submodule
       ~Application.process_solution
       ~Application.save
       ~Application.validate

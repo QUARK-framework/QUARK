@@ -1,4 +1,4 @@
-applications.SAT.mappings.DinneenQUBO.DinneenQubo
+﻿applications.SAT.mappings.DinneenQUBO.DinneenQubo
 =================================================
 
 .. currentmodule:: applications.SAT.mappings.DinneenQUBO
@@ -20,6 +20,7 @@ applications.SAT.mappings.DinneenQUBO.DinneenQubo
       ~DinneenQubo.get_available_solver_options
       ~DinneenQubo.get_parameter_options
       ~DinneenQubo.get_solver
+      ~DinneenQubo.get_submodule
       ~DinneenQubo.map
       ~DinneenQubo.reverse_map
    

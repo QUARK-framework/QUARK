@@ -1,4 +1,4 @@
-applications.PVC.mappings.QUBO.Qubo
+﻿applications.PVC.mappings.QUBO.Qubo
 ===================================
 
 .. currentmodule:: applications.PVC.mappings.QUBO
@@ -20,6 +20,7 @@ applications.PVC.mappings.QUBO.Qubo
       ~Qubo.get_available_solver_options
       ~Qubo.get_parameter_options
       ~Qubo.get_solver
+      ~Qubo.get_submodule
       ~Qubo.map
       ~Qubo.reverse_map
    

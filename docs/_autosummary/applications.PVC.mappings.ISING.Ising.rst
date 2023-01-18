@@ -1,4 +1,4 @@
-applications.PVC.mappings.ISING.Ising
+﻿applications.PVC.mappings.ISING.Ising
 =====================================
 
 .. currentmodule:: applications.PVC.mappings.ISING
@@ -20,6 +20,7 @@ applications.PVC.mappings.ISING.Ising
       ~Ising.get_available_solver_options
       ~Ising.get_parameter_options
       ~Ising.get_solver
+      ~Ising.get_submodule
       ~Ising.map
       ~Ising.reverse_map
    

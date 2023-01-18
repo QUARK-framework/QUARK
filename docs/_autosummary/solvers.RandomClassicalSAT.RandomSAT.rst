@@ -1,4 +1,4 @@
-solvers.RandomClassicalSAT.RandomSAT
+﻿solvers.RandomClassicalSAT.RandomSAT
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalSAT
@@ -20,6 +20,7 @@ solvers.RandomClassicalSAT.RandomSAT
       ~RandomSAT.get_available_device_options
       ~RandomSAT.get_device
       ~RandomSAT.get_parameter_options
+      ~RandomSAT.get_submodule
       ~RandomSAT.run
    
    

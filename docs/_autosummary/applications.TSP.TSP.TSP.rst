@@ -1,4 +1,4 @@
-applications.TSP.TSP.TSP
+﻿applications.TSP.TSP.TSP
 ========================
 
 .. currentmodule:: applications.TSP.TSP
@@ -24,6 +24,7 @@ applications.TSP.TSP.TSP
       ~TSP.get_mapping
       ~TSP.get_parameter_options
       ~TSP.get_solution_quality_unit
+      ~TSP.get_submodule
       ~TSP.process_solution
       ~TSP.save
       ~TSP.validate

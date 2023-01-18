@@ -1,7 +1,7 @@
 Getting Started
 ================
 
-Let's see how to run the framework. You can try out the framework without having a quantum computer as you disposal by
+Let's see how to run the framework. You can try out the framework without having a quantum computer at your disposal by
 relying on simulators.
 
 Prerequisites
@@ -24,6 +24,9 @@ For exporting your environment run:
 ::
 
    conda env export --no-builds > <environment-name>.yml
+
+In case you don't want to install all the packages needed by the different applications, mapping, devices or solvers you
+can also use the dynamic import feature. More information about that can be found in the ``Dynamic Imports``  section below.
 
 Running a Benchmark
 ~~~~~~~~~~~~~~~~~~~~
@@ -157,6 +160,67 @@ You can also summarize multiple existing experiments like this:
    python src/main.py --summarize quark/benchmark_runs/2021-09-21-15-03-53 quark/benchmark_runs/2021-09-21-15-23-01
 
 This allows you to generate plots from multiple experiments.
+
+
+Dynamic Imports
+~~~~~~~~~~~~~~~
+
+You can specify the applications, mappers, solvers and devices that the benchmark manager should work with by
+specifying a module configuration file with the option ``-m | --modules``. This way you can add new modules without
+changing the benchmark manager. This also implies that new library dependencies introduced by your modules are
+needed only if these modules are listed in the module configuration file.
+
+The module configuration file has to be a json file of the form:
+::
+
+    [
+      {"name":..., "module":..., "dir":..., "mappings":
+         [
+            {"name":..., "module":..., "dir":..., "solvers":
+               [
+                  {"name":..., "module":..., "dir":..., "devices":
+                     [
+                        {"name":..., "module":..., "dir":...},...
+                     ]
+                  },...
+               ]
+            },...
+
+         ]
+      },...
+    ]
+
+``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
+has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified its
+value will be added to the python search path.
+
+An example for this would be:
+::
+
+    [
+      {
+        "name": "TSP",
+        "module": "applications.TSP.TSP",
+        "dir": "src",
+        "mappings": [
+          {
+            "name": "Direct",
+            "module": "applications.TSP.mappings.Direct",
+            "solvers": [
+              {
+                "name": "GreedyClassicalTSP",
+                "module": "solvers.GreedyClassicalTSP"
+              }
+            ]
+          }]
+      }
+    ]
+
+You can save this in a JSON file and then call the framework like:
+
+::
+
+    python src/main.py --modules tsp_example.json
 
 Exploring problem in Jupyter Notebook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,4 +1,4 @@
-applications.TSP.mappings.ISING.Ising
+﻿applications.TSP.mappings.ISING.Ising
 =====================================
 
 .. currentmodule:: applications.TSP.mappings.ISING
@@ -20,6 +20,7 @@ applications.TSP.mappings.ISING.Ising
       ~Ising.get_available_solver_options
       ~Ising.get_parameter_options
       ~Ising.get_solver
+      ~Ising.get_submodule
       ~Ising.map
       ~Ising.reverse_map
    

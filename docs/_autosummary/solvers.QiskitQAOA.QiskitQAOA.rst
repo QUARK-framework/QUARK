@@ -1,4 +1,4 @@
-solvers.QiskitQAOA.QiskitQAOA
+﻿solvers.QiskitQAOA.QiskitQAOA
 =============================
 
 .. currentmodule:: solvers.QiskitQAOA
@@ -20,6 +20,7 @@ solvers.QiskitQAOA.QiskitQAOA
       ~QiskitQAOA.get_available_device_options
       ~QiskitQAOA.get_device
       ~QiskitQAOA.get_parameter_options
+      ~QiskitQAOA.get_submodule
       ~QiskitQAOA.normalize_data
       ~QiskitQAOA.run
    

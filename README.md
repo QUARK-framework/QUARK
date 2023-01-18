@@ -113,7 +113,7 @@ It is also possible to start the script with a config file instead of using the 
 
 #### Using your own modules
 You can specify the applications, mappers, solvers and devices that the benchmark manager should work with by
-specifying a module configuration file with the option '-m|--modules'. This way you can add new modules without
+specifying a module configuration file with the option '-m | --modules'. This way you can add new modules without
 changing the benchmark manager. This also implies that new library dependencies introduced by your modules are
 needed only if these modules are listed in the module configuration file.
  

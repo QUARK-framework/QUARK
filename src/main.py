@@ -30,6 +30,7 @@ from BenchmarkManager import BenchmarkManager
 def _filter_comments(f: Iterable) -> str:
     """
     Returns the content of the filehandle f ignoring all lines starting with '#'.
+
     :param f: the file to be read
     :type f: Iterable
     :return: the file content without comment lines
@@ -43,10 +44,11 @@ def _filter_comments(f: Iterable) -> str:
     return "".join(lines)
 
 
-def _expand_paths(j: Union[dict,list], base_dir: str) -> Union[dict,list]:
+def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     """
     If the json object j contains relative paths as value of 'dir' this 
     value gets replaced by joining base_dir with that path.
+
     :param j: the json to be adapted
     :type j: dict|list
     :param base_dir: the base directory to be used for path expansion
@@ -65,8 +67,9 @@ def _expand_paths(j: Union[dict,list], base_dir: str) -> Union[dict,list]:
             elif attr == "dir":
                 p = j[attr]
                 if not os.path.isabs(p):
-                    j[attr] = os.path.join(base_dir,p)
+                    j[attr] = os.path.join(base_dir, p)
     return j
+
 
 def main() -> None:
     """
@@ -82,12 +85,12 @@ def main() -> None:
         ]
     )
 
-    #May be overridden by using the -m|--modules option
+    # May be overridden by using the -m|--modules option
     app_modules = [
-       {"name": "PVC", "module": "applications.PVC.PVC"},
-       {"name": "SAT", "module": "applications.SAT.SAT"},
-       {"name": "TSP", "module": "applications.TSP.TSP"}
-       ]
+        {"name": "PVC", "module": "applications.PVC.PVC"},
+        {"name": "SAT", "module": "applications.SAT.SAT"},
+        {"name": "TSP", "module": "applications.TSP.TSP"}
+    ]
 
     try:
         benchmark_manager = BenchmarkManager()
@@ -104,7 +107,7 @@ def main() -> None:
         else:
             if args.modules:
                 logging.info(f"load application modules configuration from {args.modules}")
-                #preprocess the modules configuration:
+                # preprocess the modules configuration:
                 #   + filter comment lines (lines starting with '#')
                 #   + replace relative paths by taking them relative to the location of the modules configuration file.
                 base_dir = os.path.dirname(args.modules)

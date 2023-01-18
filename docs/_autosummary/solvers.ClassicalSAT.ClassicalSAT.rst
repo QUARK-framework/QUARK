@@ -1,4 +1,4 @@
-solvers.ClassicalSAT.ClassicalSAT
+﻿solvers.ClassicalSAT.ClassicalSAT
 =================================
 
 .. currentmodule:: solvers.ClassicalSAT
@@ -20,6 +20,7 @@ solvers.ClassicalSAT.ClassicalSAT
       ~ClassicalSAT.get_available_device_options
       ~ClassicalSAT.get_device
       ~ClassicalSAT.get_parameter_options
+      ~ClassicalSAT.get_submodule
       ~ClassicalSAT.run
    
    

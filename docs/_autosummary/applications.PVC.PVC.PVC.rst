@@ -1,4 +1,4 @@
-applications.PVC.PVC.PVC
+﻿applications.PVC.PVC.PVC
 ========================
 
 .. currentmodule:: applications.PVC.PVC
@@ -24,6 +24,7 @@ applications.PVC.PVC.PVC
       ~PVC.get_mapping
       ~PVC.get_parameter_options
       ~PVC.get_solution_quality_unit
+      ~PVC.get_submodule
       ~PVC.process_solution
       ~PVC.save
       ~PVC.validate

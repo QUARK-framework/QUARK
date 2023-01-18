@@ -32,7 +32,6 @@ import seaborn as sns
 import yaml
 import subprocess
 
-
 matplotlib.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 matplotlib.rc('font', family='serif')
 matplotlib.rcParams['savefig.dpi'] = 300
@@ -46,6 +45,7 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     'import MyClass from path.to.mypkg' by calling _import_class('path.to.mypkg', 'MyClass').
     If base_dir is specified its value will be added to python search path
     if not already contained in it.
+
     :param module_path: python module path of the module containing the class to be imported
     :type module_path: str
     :param class_name: the name of the class to be imported
@@ -54,19 +54,20 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     :rtype: type
     """
 
-    #make sure that base_dir is in the search path. Otherwise
-    #the module imported here might not find its libraries.
+    # make sure that base_dir is in the search path. Otherwise, the module imported here might not find its libraries.
     if not base_dir is None and not base_dir in sys.path:
-        logging.info(f"append to sys.path: {base_dir}")
+        logging.info(f"Appending to sys.path: {base_dir}")
         sys.path.append(base_dir)
-    logging.info(f"import module {module_path}")
+    logging.info(f"Importing module {module_path}")
     module = importlib.import_module(module_path)
     return vars(module)[class_name]
+
 
 def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
     class_name.
+
     :param options: the section of the QUARK module configuration which is relevant here including the sub modules information.
     :type options: list of dict
     :param class_name: the name of the class to be initialized.
@@ -81,13 +82,13 @@ def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -
             continue
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = None
-        for key in ["mappings","solvers","devices"]:
+        for key in ["mappings", "solvers", "devices"]:
             if key in opt:
                 sub_options = opt[key]
                 break
         instance = clazz(*args)
 
-        #sub_options inherits 'dir'
+        # sub_options inherits 'dir'
         if not sub_options is None and "dir" in opt:
             for sub_opt in sub_options:
                 if not "dir" in sub_opt:
@@ -119,7 +120,7 @@ class BenchmarkManager:
         self.repetitions = 1
         self.store_dir = None
 
-    def generate_benchmark_configs(self, app_modules : list) -> dict:
+    def generate_benchmark_configs(self, app_modules: list) -> dict:
         """
         Queries the user to get all needed information about application, solver, mapping, device and general settings
         to run the benchmark.
@@ -131,13 +132,13 @@ class BenchmarkManager:
         """
         application_answer = inquirer.prompt([inquirer.List('application',
                                                             message="What application do you want?",
-                                                            choices=[ m["name"] for m in app_modules],
+                                                            choices=[m["name"] for m in app_modules],
                                                             default='PVC',
                                                             )])
 
         app_name = application_answer["application"]
         self.application = _get_instance_with_sub_options(app_modules, app_name)
-
+        
 
         application_config = self.application.get_parameter_options()
 
@@ -361,9 +362,10 @@ class BenchmarkManager:
                                         try:
                                             logging.info(
                                                 f"Running {self.application.__class__.__name__} with config {application_config} on solver {solver.__class__.__name__} and device {device.get_device_name()} (Repetition {i}/{self.repetitions})")
-                                            solution_raw, time_to_solve, additional_solver_information = solver.run(mapped_problem, device,
-                                                                                     solver_config, store_dir=path,
-                                                                                     repetition=i)
+                                            solution_raw, time_to_solve, additional_solver_information = solver.run(
+                                                mapped_problem, device,
+                                                solver_config, store_dir=path,
+                                                repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)
                                             try:
                                                 processed_solution, time_to_process_solution = self.application.process_solution(
@@ -463,7 +465,8 @@ class BenchmarkManager:
 
         # Since these configs are dicts it is not so nice to store them in a df/csv. But this is a workaround that works for now
         df['application_config'] = df.apply(lambda row: json.dumps(row["application_config"]), axis=1)
-        df['additional_solver_information'] = df.apply(lambda row: json.dumps(row["additional_solver_information"]), axis=1)
+        df['additional_solver_information'] = df.apply(lambda row: json.dumps(row["additional_solver_information"]),
+                                                       axis=1)
         df['solver_config'] = df.apply(lambda row: json.dumps(row["solver_config"]), axis=1)
         df['mapping_config'] = df.apply(lambda row: json.dumps(row["mapping_config"]), axis=1)
         df.to_csv(path_or_buf=f"{self.store_dir}/results.csv")
@@ -489,7 +492,8 @@ class BenchmarkManager:
         df = pd.concat(dfs, axis=0, ignore_index=True)
         df['application_config'] = df.apply(lambda row: json.loads(row["application_config"]), axis=1)
         df['solver_config'] = df.apply(lambda row: json.loads(row["solver_config"]), axis=1)
-        df['additional_solver_information'] = df.apply(lambda row: json.loads(row["additional_solver_information"]), axis=1)
+        df['additional_solver_information'] = df.apply(lambda row: json.loads(row["additional_solver_information"]),
+                                                       axis=1)
         df['mapping_config'] = df.apply(lambda row: json.loads(row["mapping_config"]), axis=1)
 
         return df
@@ -592,7 +596,9 @@ class BenchmarkManager:
         else:
             # The sorting is necessary to ensure that the solverConfigCombo is created in a consistent manner
             df['applicationConfigCombo'] = df.apply(
-                lambda row: '/\n'.join(['%s: %s' % (key, value) for (key, value) in sorted(row['application_config'].items(), key=lambda key_value_pair: key_value_pair[0]) if
+                lambda row: '/\n'.join(['%s: %s' % (key, value) for (key, value) in
+                                        sorted(row['application_config'].items(),
+                                               key=lambda key_value_pair: key_value_pair[0]) if
                                         key in affected_keys]), axis=1)
 
             axis_name = None

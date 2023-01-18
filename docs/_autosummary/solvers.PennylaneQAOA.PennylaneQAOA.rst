@@ -1,4 +1,4 @@
-solvers.PennylaneQAOA.PennylaneQAOA
+﻿solvers.PennylaneQAOA.PennylaneQAOA
 ===================================
 
 .. currentmodule:: solvers.PennylaneQAOA
@@ -20,6 +20,7 @@ solvers.PennylaneQAOA.PennylaneQAOA
       ~PennylaneQAOA.get_available_device_options
       ~PennylaneQAOA.get_device
       ~PennylaneQAOA.get_parameter_options
+      ~PennylaneQAOA.get_submodule
       ~PennylaneQAOA.normalize_data
       ~PennylaneQAOA.qaoa_operators_from_ising
       ~PennylaneQAOA.run

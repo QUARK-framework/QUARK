@@ -140,7 +140,7 @@ class SAT(Application):
         problem_set: int
         max_tries: int
 
-    def generate_problem(self, config: Config) -> (nnf.And, list):
+    def generate_problem(self, config: Config, iter_count: int) -> (nnf.And, list):
         """
         Generates a vehicle configuration problem out of a given config. Returns buildability constraints (hard
         constraints) and tests (soft constraints), the successful evaluation of which we try to maximize. Both
@@ -148,6 +148,8 @@ class SAT(Application):
 
         :param config: config with the parameters specified in Config class
         :type config: Config
+        :param iter_count: the iteration count
+        :type iter_count: int
         :return:
         :rtype: tuple(nnf.And, list)
         """
@@ -265,7 +267,7 @@ class SAT(Application):
 
         return ratio_satisfied, round(time() * 1000 - start, 3)
 
-    def save(self, path: str) -> None:
+    def save(self, path: str, iter_count: int) -> None:
         with open(f"{path}/constraints.cnf", 'w') as f_cons:
             dump(
                 obj=self.application['constraints'], fp=f_cons,

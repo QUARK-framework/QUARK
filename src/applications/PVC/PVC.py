@@ -98,12 +98,14 @@ class PVC(Application):
         """
         seams: int
 
-    def generate_problem(self, config: Config) -> networkx.Graph:
+    def generate_problem(self, config: Config, iter_count: int) -> networkx.Graph:
         """
         Uses the reference graph to generate a problem for a given config.
 
         :param config: Config specifying the number of seams for the problem
         :type config: Config
+        :param iter_count: the iteration count
+        :type iter_count: int
         :return: networkx graph representing the problem
         :rtype: networkx.Graph
         """
@@ -276,5 +278,5 @@ class PVC(Application):
 
         return distance, round(time() * 1000 - start, 3)
 
-    def save(self, path: str) -> None:
+    def save(self, path: str, iter_count: int) -> None:
         nx.write_gpickle(self.application, f"{path}/graph.gpickle")

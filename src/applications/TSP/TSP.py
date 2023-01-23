@@ -114,12 +114,14 @@ class TSP(Application):
                 matrix[j[0] - 1][i[0] - 1] = matrix[i[0] - 1][j[0] - 1]
         return matrix
 
-    def generate_problem(self, config: Config) -> networkx.Graph:
+    def generate_problem(self, config: Config, iter_count: int) -> networkx.Graph:
         """
         Uses the reference graph to generate a problem for a given config.
 
         :param config:
         :type config: Config
+        :param iter_count: the iteration count
+        :type iter_count: int
         :return: graph with the problem
         :rtype: networkx.Graph
         """
@@ -270,5 +272,5 @@ class TSP(Application):
 
         return distance_with_return, round(time() * 1000 - start, 3)
 
-    def save(self, path: str) -> None:
+    def save(self, path: str, iter_count: int) -> None:
         nx.write_gpickle(self.application, f"{path}/graph.gpickle")

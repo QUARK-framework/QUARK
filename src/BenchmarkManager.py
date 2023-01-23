@@ -341,14 +341,12 @@ class BenchmarkManager:
             yaml.dump(config, fp)
         try:
             for idx, application_config in enumerate(self.application_configs):
-                problem = self.application.generate_problem(application_config)
                 results = []
 
                 path = f"{self.store_dir}/application_config_{idx}"
                 Path(path).mkdir(parents=True, exist_ok=True)
                 with open(f"{path}/application_config.json", 'w') as fp:
                     json.dump(application_config, fp)
-                self.application.save(path)
                 for mapping_name, mapping_value in self.mapping_solver_device_combinations.items():
                     mapping = mapping_value["mapping_instance"]
                     for mapping_config in mapping_value['mapping_config']:
@@ -358,6 +356,7 @@ class BenchmarkManager:
                                 for device_name, device_value in solver_value["devices"].items():
                                     device = device_value
                                     for i in range(1, self.repetitions + 1):
+                                        problem = self.application.init_problem(application_config, idx, i, path)
                                         mapped_problem, time_to_mapping = mapping.map(problem, mapping_config)
                                         try:
                                             logging.info(

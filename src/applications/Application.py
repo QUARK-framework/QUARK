@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
+from typing import final
 
 from BenchmarkManager import _get_instance_with_sub_options
 
@@ -30,6 +31,11 @@ class Application(ABC):
         self.application = None
         self.mapping_options = []
         self.sub_options = []
+
+        self.problem = None
+        self.problems = {}
+        self.conf_idx = None
+        
         super().__init__()
 
     def get_application(self) -> any:
@@ -75,13 +81,63 @@ class Application(ABC):
         """
         pass
 
+    def regenerate_on_iteration(self, config: dict) -> bool:
+        """Overwrite this to return True if the problem should be newly generated
+        on every iteration. Typically this will be the case if the problem is taken
+        from a statistical ensemble e.g. an erdos-renyi graph.
+        :param config: the application configuration
+        :type config: dict
+        :return: whether the problem should be recreated on every iteration. Returns False if not overwritten.
+        :rtype: bool
+        """
+        return False
+
+    @final
+    def init_problem(self, config, conf_idx: int, iter_count: int, path):
+        """
+        This method is called on every iteration and calls generate_problem if necessary.
+        conf_idx identifies the application configuration.
+        Note that when there are several mappings, solvers or devices this method is
+        called several times with the same conf_idx and rep_count. In this case
+        the problem will be the same if conf_idx and rep_count are both the same.
+
+        The implementation assumes that the loop over the rep_count is within the loop
+        over the different application configurations (conf_idx).
+
+        :param config: the application configuration
+        :type config: dict
+        :param conf_idx: the index of the application configuration
+        :conf_idx: int
+        :param iter_count: the repetition count (starting with 1)
+        :type iter_count: int
+        :param path: the path used to save each newly generated problem instance
+        :type path: str
+        :return: the current problem instance
+        :rtype: any
+        """
+
+        if conf_idx != self.conf_idx:
+            self.problems = {}
+            self.conf_idx = conf_idx
+            
+        key = iter_count if self.regenerate_on_iteration(config) else "dummy"
+        if key in self.problems:
+            self.problem = self.problems[key]
+        else:
+            self.problem = self.generate_problem(config, iter_count)
+            self.problems[key] = self.problem
+            self.save(path, iter_count)
+        return self.problem
+
     @abstractmethod
-    def generate_problem(self, config) -> any:
+    def generate_problem(self, config: dict, iter_count: int) -> any:
         """
         Depending on the config this method creates a concrete problem and returns it.
 
         :param config:
         :type config: dict
+        :param iter_count: the iteration count
+        :type iter_count: int
         :return:
         :rtype: any
         """
@@ -127,12 +183,14 @@ class Application(ABC):
         pass
 
     @abstractmethod
-    def save(self, path) -> None:
+    def save(self, path: str, iter_count: int) -> None:
         """
         Function to save the concrete problem.
 
         :param path: path of the experiment directory for this run
         :type path: str
+        :param iter_count: the iteration count
+        :type iter_count: int
         :return:
         :rtype: None
         """

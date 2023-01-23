@@ -85,7 +85,7 @@ class Application(ABC):
         """Overwrite this to return True if the problem should be newly generated
         on every iteration. Typically this will be the case if the problem is taken
         from a statistical ensemble e.g. an erdos-renyi graph.
-        :param config:
+        :param config: the application configuration
         :type config: dict
         :return: whether the problem should be recreated on every iteration. Returns False if not overwritten.
         :rtype: bool

@@ -20,8 +20,7 @@ Adding a new Application
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Alongside adding a new application, you should always add at least one mapping to make the application available for
-a solver. Also the new application has to be added to the functions :code:`load_config` and :code:`generate_benchmark_configs`
-in the :code:`BenchmarkManager` to be executable.
+a solver. Also the new application has to be added to the :code:`app_modules` variable in the :code:`main` function.
 
 Every application has a couple of functions that need to be implemented:
     - :code:`get_solution_quality_unit(self)`: Method to return the unit of the evaluation which is used to make the plots nicer.
@@ -36,6 +35,7 @@ Every application has a couple of functions that need to be implemented:
 Optional functions:
     - :code:`process_solution(self, solution)`: Most of the time the solution has to be processed before it can be validated and evaluated.
       This might not be necessary in all cases, so the default is to return the original solution.
+    - :code:`regenerate_on_iteration(self, config)`: In case you want to regenerate the application on every iteration this method can be used.
 
 Also, you need to specify the available mapping options :code:`mapping_options` in the constructor of the application class.
 With specifying the solvers in :code:`get_parameter_options(self)` and :code:`mapping_options` you decide which mapping is
@@ -87,7 +87,7 @@ Example for an Application, which should reside under ``src/applications/myAppli
                 size: int
 
 
-            def generate_problem(self, config: Config):
+            def generate_problem(self, config: Config, iter_count: int):
 
                 size = config['size']
 
@@ -112,7 +112,7 @@ Example for an Application, which should reside under ``src/applications/myAppli
 
                 return evaluation_metric, round(time() * 1000 - start, 3)
 
-            def save(self, path):
+            def save(self, path, iter_count):
                 save_your_application(self.application, f"{path}/application.txt")
 
 

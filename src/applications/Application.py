@@ -17,6 +17,7 @@ from typing import final
 
 from BenchmarkManager import _get_instance_with_sub_options
 
+
 class Application(ABC):
     """
     The application component defines the workload, comprising a dataset of increasing complexity, a validation, and an
@@ -35,7 +36,7 @@ class Application(ABC):
         self.problem = None
         self.problems = {}
         self.conf_idx = None
-        
+
         super().__init__()
 
     def get_application(self) -> any:
@@ -83,7 +84,7 @@ class Application(ABC):
 
     def regenerate_on_iteration(self, config: dict) -> bool:
         """Overwrite this to return True if the problem should be newly generated
-        on every iteration. Typically this will be the case if the problem is taken
+        on every iteration. Typically, this will be the case if the problem is taken
         from a statistical ensemble e.g. an erdos-renyi graph.
         :param config: the application configuration
         :type config: dict
@@ -119,7 +120,7 @@ class Application(ABC):
         if conf_idx != self.conf_idx:
             self.problems = {}
             self.conf_idx = conf_idx
-            
+
         key = iter_count if self.regenerate_on_iteration(config) else "dummy"
         if key in self.problems:
             self.problem = self.problems[key]
@@ -199,7 +200,7 @@ class Application(ABC):
     def get_submodule(self, mapping_option: str) -> any:
         """
         If self.sub_options is not None a mapping is instantiated according to the information given in self.sub_options.
-        Otherwise get_mapping is called as fall back.
+        Otherwise, get_mapping is called as fall back.
         
         :param mapping_option: String with the option
         :type mapping_option: str
@@ -234,4 +235,4 @@ class Application(ABC):
         if self.sub_options is None:
             return self.mapping_options
         else:
-            return [ o["name"] for o in self.sub_options ]
+            return [o["name"] for o in self.sub_options]

@@ -266,18 +266,66 @@ class BenchmarkManager:
                         "devices"][single_device] = device_wrapper
 
     @staticmethod
-    def _query_for_config(config: dict, prefix: str = "") -> dict:
-        for key, config_answer in config.items():
+    def _query_for_config(param_opts: dict, prefix: str = "") -> dict:
+        config = {}
+        for key, config_answer in param_opts.items():
+            if not config_answer.get("if") is None:
+                #
+                #support parameter descriptions like
+                #"seed": {
+                #    "if": {"key":"graph_type", "in" : ["erdos-renyi"]},
+                #    ...
+                #}
+                #meaning that 'seed' only gets displayed if graph_type has been chosen to be 'erdos-renyi'
+                #This expects that the referenced parameter has been declared before and is declared to be
+                #'exclusive' so that its value is unique.
+                #
+
+                key_in_cond = config_answer.get("if")["key"]
+                dependency = param_opts.get(key_in_cond)
+
+                #check configuration is consistent
+                consistent = False
+                err_msg = None
+                if dependency is None:
+                    err_msg = f"Inconsistent parameter options: condition references unknown parameter: {key_in_cond}"
+                elif not dependency.get('exclusive', False):
+                    err_msg = f"Inconsistent parameter options: condition references non exclusive parameter: {key_in_cond}"
+                else:
+                    consistent = True
+                if not consistent:
+                    raise Exception(f"{prefix} {err_msg}")
+                    
+                if not config[key_in_cond][0] in config_answer.get("if")["in"]:
+                    continue
+                    
+            values = None
             if len(config_answer['values']) == 1:
                 # When there is only 1 value to choose from skip the user input for now
-                config[key] = config_answer['values']
+                values = config_answer['values']
+                print(f"{prefix} {config_answer['description']}: {config_answer['values'][0]}")
+                
+            elif config_answer.get('exclusive', False):
+                answer = inquirer.prompt(
+                    [inquirer.List(key,
+                                   message=f"{prefix} {config_answer['description']}",
+                                   choices=config_answer['values']
+                                   )])
+                values = (answer[key],)   
             else:
                 answer = inquirer.prompt(
                     [inquirer.Checkbox(key,
                                        message=f"{prefix} {config_answer['description']}",
                                        choices=config_answer['values']
                                        )])
-                config[key] = answer[key]  # TODO support strings
+                values = answer[key]
+            
+            if not config_answer.get("postproc") is None:
+                #the value of config_answer.get("postproc") is expected to be callable
+                #with each of the user selected values as argument.
+                #Note that the stored config file will contain the processed values.
+                values = [ config_answer["postproc"](v) for v in values ]
+            config[key] = values
         return config
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:

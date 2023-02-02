@@ -299,7 +299,6 @@ class BenchmarkManager:
                 if not config[key_in_cond][0] in config_answer.get("if")["in"]:
                     continue
                     
-            values = None
             if len(config_answer['values']) == 1:
                 # When there is only 1 value to choose from skip the user input for now
                 values = config_answer['values']

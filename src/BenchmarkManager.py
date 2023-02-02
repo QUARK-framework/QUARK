@@ -320,7 +320,7 @@ class BenchmarkManager:
                                        )])
                 values = answer[key]
             
-            if not config_answer.get("postproc") is None:
+            if config_answer.get("postproc"):
                 #the value of config_answer.get("postproc") is expected to be callable
                 #with each of the user selected values as argument.
                 #Note that the stored config file will contain the processed values.

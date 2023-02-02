@@ -269,7 +269,7 @@ class BenchmarkManager:
     def _query_for_config(param_opts: dict, prefix: str = "") -> dict:
         config = {}
         for key, config_answer in param_opts.items():
-            if not config_answer.get("if") is None:
+            if config_answer.get("if"):
                 #
                 #support parameter descriptions like
                 #"seed": {

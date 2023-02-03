@@ -26,6 +26,30 @@ class Device(ABC):
         """
         self.device = None
         self.device_name = device_name
+        self.config = None
+
+    def get_parameter_options(self) -> dict:
+        """
+        Method to return the parameters to fine tune the device.
+
+        Should always be in this format:
+
+        .. code-block:: json
+
+           {
+               "parameter_name":{
+                  "values":[1, 2, 3],
+                  "description":"How many reads do you want?"
+               }
+           }
+
+        :return: Available device settings for this device
+        :rtype: dict
+        """
+        pass
+
+    def set_config(self, config):
+        self.config = config
 
     def get_device(self) -> any:
         """

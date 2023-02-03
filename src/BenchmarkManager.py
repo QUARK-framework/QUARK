@@ -215,12 +215,26 @@ class BenchmarkManager:
                                                           message=f"What Device do you want for solver {solver_single_answer}?",
                                                           choices=solver.get_available_device_options())
 
-                config["mapping"][mapping_single_answer]["solver"].append({
+                solver_config_entry = {
                     "name": solver_single_answer,
                     "config": solver_config,
-                    "device": device_answer["device"]
+                    "device":[]
+                    }
 
-                })
+                config["mapping"][mapping_single_answer]["solver"].append(solver_config_entry)
+
+                for device_single_answer in device_answer["device"]:
+                    device = solver.get_submodule(device_single_answer)
+
+                    device_config = device.get_parameter_options()
+                    device_config = BenchmarkManager._query_for_config(device_config,
+                                                                   f"(Option for {device_single_answer})")
+
+                    solver_config_entry["device"].append({
+                        "name": device_single_answer,
+                        "config": device_config
+                    })
+
 
         repetitions_answer = inquirer.prompt(
             [inquirer.Text('repetitions', message="How many repetitions do you want?",
@@ -283,13 +297,23 @@ class BenchmarkManager:
                     "solver_config": solver_config
                 }
 
+                device_list = []
                 self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']][
-                    "devices"] = {}
+                    "devices"] = device_list
 
                 for single_device in single_solver["device"]:
-                    device_wrapper = solver.get_submodule(single_device)
-                    self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']][
-                        "devices"][single_device] = device_wrapper
+                    device_name = single_device["name"]
+                    if len(single_device["config"].items()) > 0:
+                        keys, values = zip(*single_device['config'].items())
+                        device_config_list = [dict(zip(keys, v)) for v in itertools.product(*values)]
+                    else:
+                        device_config_list = [{}]
+                    #treat every device config as a separate device
+                    for device_config in device_config_list:
+                        device_wrapper = solver.get_submodule(device_name)
+                        device_wrapper.set_config(device_config)
+                        device_list.append(device_wrapper)
+
 
     @staticmethod
     def _query_for_config(param_opts: dict, prefix: str = "") -> dict:
@@ -439,8 +463,7 @@ class BenchmarkManager:
                         for solver_name, solver_value in mapping_value["solvers"].items():
                             solver = solver_value["solver_instance"]
                             for solver_config in solver_value['solver_config']:
-                                for device_name, device_value in solver_value["devices"].items():
-                                    device = device_value
+                                for device in solver_value["devices"]:
                                     for i in range(1, self.repetitions + 1):
                                         problem = self.application.init_problem(application_config, idx, i, path)
                                         mapped_problem, time_to_mapping = mapping.map(problem, mapping_config)
@@ -449,6 +472,9 @@ class BenchmarkManager:
                                                 f"Running {self.application.__class__.__name__} with config "
                                                 f"{application_config} on solver {solver.__class__.__name__} and device "
                                                 f"{device.get_device_name()} (Repetition {i}/{self.repetitions})")
+                                            logging.info(f"solver_config: {solver_config}")
+                                            if device.config:
+                                                logging.info(f"device_config: {device.config}")
                                             solution_raw, time_to_solve, additional_solver_information = solver.run(
                                                 mapped_problem, device, solver_config, store_dir=path, repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)
@@ -503,6 +529,7 @@ class BenchmarkManager:
                                                 "solver": solver.__class__.__name__,
                                                 "device_class": device.__class__.__name__,
                                                 "device": device.get_device_name(),
+                                                "device_config": device.config,
                                                 "git_revision_number": git_revision_number,
                                                 "git_uncommitted_changes ": git_uncommitted_changes
                                             })
@@ -514,7 +541,7 @@ class BenchmarkManager:
                                             logging.error(f"Error during benchmark run: {e}", exc_info=True)
                                             with open(f"{path}/error.log", 'a') as fp:
                                                 fp.write(
-                                                    f"Solver: {solver_name}, Device: {device_name}, Error: {str(e)} "
+                                                    f"Solver: {solver_name}, Device: {device.get_device_name()}, Error: {str(e)} "
                                                     f"(For more information take a look at logger.log)")
                                                 fp.write("\n")
 

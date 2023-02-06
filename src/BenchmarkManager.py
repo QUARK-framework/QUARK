@@ -227,7 +227,8 @@ class BenchmarkManager:
                     device = solver.get_submodule(device_single_answer)
 
                     device_config = device.get_parameter_options()
-                    device_config = BenchmarkManager._query_for_config(device_config,
+                    if device_config:
+                        device_config = BenchmarkManager._query_for_config(device_config,
                                                                    f"(Option for {device_single_answer})")
 
                     solver_config_entry["device"].append({
@@ -303,7 +304,7 @@ class BenchmarkManager:
 
                 for single_device in single_solver["device"]:
                     device_name = single_device["name"]
-                    if len(single_device["config"].items()) > 0:
+                    if single_device["config"] and len(single_device["config"].items()) > 0:
                         keys, values = zip(*single_device['config'].items())
                         device_config_list = [dict(zip(keys, v)) for v in itertools.product(*values)]
                     else:

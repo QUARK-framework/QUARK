@@ -1,4 +1,4 @@
-﻿applications.PVC.mappings.Direct.Direct
+applications.PVC.mappings.Direct.Direct
 =======================================
 
 .. currentmodule:: applications.PVC.mappings.Direct

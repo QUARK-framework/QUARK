@@ -14,11 +14,7 @@
 
 from typing import TypedDict, Union
 
-from dwave.system import FixedEmbeddingComposite
-from minorminer import find_embedding
-
 from devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler
-from devices.braket.DWave import DWave
 from solvers.Solver import *
 
 
@@ -32,18 +28,10 @@ class Annealer(Solver):
         Constructor method
         """
         super().__init__()
-        self.device_options = ["SimulatedAnnealer", "arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6",
-                               "arn:aws:braket:::device/qpu/d-wave/Advantage_system4",
-                               "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6"]
+        self.device_options = ["SimulatedAnnealer"]
 
-    def get_device(self, device_option: str) -> Union[DWave, SimulatedAnnealingSampler]:
-        if device_option == "arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6":
-            return DWave("DW_2000Q_6", "arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6")
-        if device_option == "arn:aws:braket:::device/qpu/d-wave/Advantage_system4":
-            return DWave("Advantage_system4", "arn:aws:braket:::device/qpu/d-wave/Advantage_system4")
-        if device_option == "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6":
-            return DWave("Advantage_system6", "arn:aws:braket:us-west-2::device/qpu/d-wave/Advantage_system6")
-        elif device_option == "SimulatedAnnealer":
+    def get_device(self, device_option: str) -> Union[SimulatedAnnealingSampler]:
+        if device_option == "SimulatedAnnealer":
             return SimulatedAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {device_option}  not implemented")
@@ -102,23 +90,25 @@ class Annealer(Solver):
         device = device_wrapper.get_device()
         start = time() * 1000
         if device_wrapper.device_name != "simulatedannealer":
-            # This is for AWS
+            logging.warning("Only Simulated Annealer available at the moment!")
+            # TODO: Check what to do with this..
+            # This section was used to leverage the D-Wave devices previously available on Amazon Braket
 
             # Embed QUBO
-            start_embedding = time() * 1000
-            __, target_edgelist, target_adjacency = device.structure
-            emb = find_embedding(Q, target_edgelist, verbose=1)
-            sampler = FixedEmbeddingComposite(device, emb)
-            additional_solver_information["embedding_time"] = round(time() * 1000 - start_embedding, 3)
-
-            additional_solver_information["logical_qubits"] = len(emb.keys())
-            additional_solver_information["physical_qubits"] = sum(len(chain) for chain in emb.values())
-            logging.info(f"Number of logical variables: {additional_solver_information['logical_qubits']}")
-            logging.info(f"Number of physical qubits used in embedding: {additional_solver_information['physical_qubits']}")
-
-            response = sampler.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
-            # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
-            additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
+            # start_embedding = time() * 1000
+            # __, target_edgelist, target_adjacency = device.structure
+            # emb = find_embedding(Q, target_edgelist, verbose=1)
+            # sampler = FixedEmbeddingComposite(device, emb)
+            # additional_solver_information["embedding_time"] = round(time() * 1000 - start_embedding, 3)
+            #
+            # additional_solver_information["logical_qubits"] = len(emb.keys())
+            # additional_solver_information["physical_qubits"] = sum(len(chain) for chain in emb.values())
+            # logging.info(f"Number of logical variables: {additional_solver_information['logical_qubits']}")
+            # logging.info(f"Number of physical qubits used in embedding: {additional_solver_information['physical_qubits']}")
+            #
+            # response = sampler.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
+            # # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
+            # additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
         else:
             # This is for D-Wave simulated Annealer
             response = device.sample_qubo(Q, num_reads=config['number_of_reads'])

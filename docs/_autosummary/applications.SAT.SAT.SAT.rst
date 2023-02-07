@@ -1,4 +1,4 @@
-﻿applications.SAT.SAT.SAT
+applications.SAT.SAT.SAT
 ========================
 
 .. currentmodule:: applications.SAT.SAT
@@ -25,7 +25,9 @@
       ~SAT.get_parameter_options
       ~SAT.get_solution_quality_unit
       ~SAT.get_submodule
+      ~SAT.init_problem
       ~SAT.process_solution
+      ~SAT.regenerate_on_iteration
       ~SAT.save
       ~SAT.validate
    

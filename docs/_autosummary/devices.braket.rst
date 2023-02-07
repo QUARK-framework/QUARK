@@ -1,4 +1,4 @@
-﻿devices.braket
+devices.braket
 ==============
 
 .. automodule:: devices.braket
@@ -29,7 +29,6 @@
    :recursive:
 
    devices.braket.Braket
-   devices.braket.DWave
    devices.braket.Ionq
    devices.braket.LocalSimulator
    devices.braket.OQC

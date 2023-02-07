@@ -1,4 +1,4 @@
-﻿applications.PVC.mappings.QUBO.Qubo
+applications.PVC.mappings.QUBO.Qubo
 ===================================
 
 .. currentmodule:: applications.PVC.mappings.QUBO

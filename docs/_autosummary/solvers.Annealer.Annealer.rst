@@ -1,4 +1,4 @@
-﻿solvers.Annealer.Annealer
+solvers.Annealer.Annealer
 =========================
 
 .. currentmodule:: solvers.Annealer

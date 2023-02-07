@@ -1,4 +1,4 @@
-﻿solvers.ReverseGreedyClassicalPVC.ReverseGreedyClassicalPVC
+solvers.ReverseGreedyClassicalPVC.ReverseGreedyClassicalPVC
 ===========================================================
 
 .. currentmodule:: solvers.ReverseGreedyClassicalPVC

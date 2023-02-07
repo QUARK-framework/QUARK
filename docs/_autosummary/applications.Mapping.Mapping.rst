@@ -1,4 +1,4 @@
-﻿applications.Mapping.Mapping
+applications.Mapping.Mapping
 ============================
 
 .. currentmodule:: applications.Mapping

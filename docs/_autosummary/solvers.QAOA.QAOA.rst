@@ -1,4 +1,4 @@
-﻿solvers.QAOA.QAOA
+solvers.QAOA.QAOA
 =================
 
 .. currentmodule:: solvers.QAOA

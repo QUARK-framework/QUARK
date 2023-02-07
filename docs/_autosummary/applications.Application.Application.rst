@@ -1,4 +1,4 @@
-﻿applications.Application.Application
+applications.Application.Application
 ====================================
 
 .. currentmodule:: applications.Application
@@ -25,7 +25,9 @@
       ~Application.get_parameter_options
       ~Application.get_solution_quality_unit
       ~Application.get_submodule
+      ~Application.init_problem
       ~Application.process_solution
+      ~Application.regenerate_on_iteration
       ~Application.save
       ~Application.validate
    

@@ -1,4 +1,4 @@
-﻿applications.TSP.mappings.QUBO.Qubo
+applications.TSP.mappings.QUBO.Qubo
 ===================================
 
 .. currentmodule:: applications.TSP.mappings.QUBO

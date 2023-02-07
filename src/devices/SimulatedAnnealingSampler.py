@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import neal
+import dwave.samplers
 
 from devices.Device import Device
 
@@ -27,4 +27,4 @@ class SimulatedAnnealingSampler(Device):
         Constructor method
         """
         super().__init__(device_name="simulatedannealer")
-        self.device = neal.SimulatedAnnealingSampler()
+        self.device = dwave.samplers.SimulatedAnnealingSampler()

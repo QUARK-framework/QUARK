@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.QubovertQUBO.QubovertQubo
+applications.SAT.mappings.QubovertQUBO.QubovertQubo
 ===================================================
 
 .. currentmodule:: applications.SAT.mappings.QubovertQUBO

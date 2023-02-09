@@ -94,7 +94,8 @@ class SAT(Application):
                                     "description": "Which problem set do you want to use?"
                                 },
                                 "max_tries": {
-                                    "values": [100]
+                                    "values": [100],
+                                    "description": "Number of maximum tries"
                                 }
                             }
 
@@ -117,7 +118,8 @@ class SAT(Application):
                 "description": "Which problem set do you want to use?"
             },
             "max_tries": {
-                "values": [100]
+                "values": [100],
+                "description": "Number of maximum tries"
             }
         }
 

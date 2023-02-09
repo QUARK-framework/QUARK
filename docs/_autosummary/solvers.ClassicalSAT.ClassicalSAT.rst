@@ -1,4 +1,4 @@
-﻿solvers.ClassicalSAT.ClassicalSAT
+solvers.ClassicalSAT.ClassicalSAT
 =================================
 
 .. currentmodule:: solvers.ClassicalSAT

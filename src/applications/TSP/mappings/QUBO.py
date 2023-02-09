@@ -19,7 +19,6 @@ import networkx
 
 from applications.Mapping import *
 from solvers.Annealer import Annealer
-from solvers.QBSolv import QBSolv
 
 
 class Qubo(Mapping):
@@ -33,7 +32,7 @@ class Qubo(Mapping):
         Constructor method
         """
         super().__init__()
-        self.solver_options = ["Annealer", "QBSolv"]
+        self.solver_options = ["Annealer"]
 
     def get_parameter_options(self) -> dict:
         """
@@ -105,11 +104,9 @@ class Qubo(Mapping):
 
         return {"Q": q}, round(time() * 1000 - start, 3)
 
-    def get_solver(self, solver_option: str) -> Union[Annealer, QBSolv]:
+    def get_solver(self, solver_option: str) -> Union[Annealer]:
 
         if solver_option == "Annealer":
             return Annealer()
-        elif solver_option == "QBSolv":
-            return QBSolv()
         else:
             raise NotImplementedError(f"Solver Option {solver_option} not implemented")

@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.DinneenISING.DinneenIsing
+applications.SAT.mappings.DinneenISING.DinneenIsing
 ===================================================
 
 .. currentmodule:: applications.SAT.mappings.DinneenISING

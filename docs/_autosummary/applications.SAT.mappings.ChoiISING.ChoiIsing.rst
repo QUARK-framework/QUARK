@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.ChoiISING.ChoiIsing
+applications.SAT.mappings.ChoiISING.ChoiIsing
 =============================================
 
 .. currentmodule:: applications.SAT.mappings.ChoiISING

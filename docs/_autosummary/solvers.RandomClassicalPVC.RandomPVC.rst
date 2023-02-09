@@ -1,4 +1,4 @@
-﻿solvers.RandomClassicalPVC.RandomPVC
+solvers.RandomClassicalPVC.RandomPVC
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalPVC

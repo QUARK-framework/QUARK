@@ -1,4 +1,4 @@
-﻿solvers.RandomClassicalTSP.RandomTSP
+solvers.RandomClassicalTSP.RandomTSP
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalTSP

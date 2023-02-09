@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.DinneenQUBO.DinneenQubo
+applications.SAT.mappings.DinneenQUBO.DinneenQubo
 =================================================
 
 .. currentmodule:: applications.SAT.mappings.DinneenQUBO

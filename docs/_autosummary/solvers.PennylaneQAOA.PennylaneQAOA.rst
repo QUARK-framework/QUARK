@@ -1,4 +1,4 @@
-﻿solvers.PennylaneQAOA.PennylaneQAOA
+solvers.PennylaneQAOA.PennylaneQAOA
 ===================================
 
 .. currentmodule:: solvers.PennylaneQAOA

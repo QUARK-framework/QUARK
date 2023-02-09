@@ -1,4 +1,4 @@
-﻿solvers.GreedyClassicalTSP.GreedyClassicalTSP
+solvers.GreedyClassicalTSP.GreedyClassicalTSP
 =============================================
 
 .. currentmodule:: solvers.GreedyClassicalTSP

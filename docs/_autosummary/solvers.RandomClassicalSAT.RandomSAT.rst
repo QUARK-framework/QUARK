@@ -1,4 +1,4 @@
-﻿solvers.RandomClassicalSAT.RandomSAT
+solvers.RandomClassicalSAT.RandomSAT
 ====================================
 
 .. currentmodule:: solvers.RandomClassicalSAT

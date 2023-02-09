@@ -1,4 +1,4 @@
-﻿applications.TSP.mappings.ISING.Ising
+applications.TSP.mappings.ISING.Ising
 =====================================
 
 .. currentmodule:: applications.TSP.mappings.ISING

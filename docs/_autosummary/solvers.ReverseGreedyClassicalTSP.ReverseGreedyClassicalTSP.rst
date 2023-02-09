@@ -1,4 +1,4 @@
-﻿solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
+solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
 ===========================================================
 
 .. currentmodule:: solvers.ReverseGreedyClassicalTSP

@@ -1,4 +1,4 @@
-﻿applications.TSP.mappings.Direct.Direct
+applications.TSP.mappings.Direct.Direct
 =======================================
 
 .. currentmodule:: applications.TSP.mappings.Direct

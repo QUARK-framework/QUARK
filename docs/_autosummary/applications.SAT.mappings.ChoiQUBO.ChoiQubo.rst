@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.ChoiQUBO.ChoiQubo
+applications.SAT.mappings.ChoiQUBO.ChoiQubo
 ===========================================
 
 .. currentmodule:: applications.SAT.mappings.ChoiQUBO

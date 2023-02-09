@@ -1,4 +1,4 @@
-﻿solvers.Solver.Solver
+solvers.Solver.Solver
 =====================
 
 .. currentmodule:: solvers.Solver

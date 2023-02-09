@@ -34,7 +34,6 @@
    solvers.GreedyClassicalTSP
    solvers.PennylaneQAOA
    solvers.QAOA
-   solvers.QBSolv
    solvers.QiskitQAOA
    solvers.RandomClassicalPVC
    solvers.RandomClassicalSAT

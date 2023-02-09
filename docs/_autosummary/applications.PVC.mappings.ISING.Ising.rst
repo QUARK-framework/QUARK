@@ -1,4 +1,4 @@
-﻿applications.PVC.mappings.ISING.Ising
+applications.PVC.mappings.ISING.Ising
 =====================================
 
 .. currentmodule:: applications.PVC.mappings.ISING

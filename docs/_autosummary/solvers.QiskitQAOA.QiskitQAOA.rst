@@ -1,4 +1,4 @@
-﻿solvers.QiskitQAOA.QiskitQAOA
+solvers.QiskitQAOA.QiskitQAOA
 =============================
 
 .. currentmodule:: solvers.QiskitQAOA

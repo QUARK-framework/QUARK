@@ -1,4 +1,4 @@
-﻿applications.SAT.mappings.Direct.Direct
+applications.SAT.mappings.Direct.Direct
 =======================================
 
 .. currentmodule:: applications.SAT.mappings.Direct

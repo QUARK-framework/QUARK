@@ -199,7 +199,7 @@ class TSP(Application):
 
         # check validity of solution
         if sum(value == 1 for value in solution.values()) > len(route):
-            logging.warning("Result is longer than route! This might be problematic! ⚠️ ")
+            logging.warning("Result is longer than route! This might be problematic!")
             return None, round(time() * 1000 - start_time, 3)
 
         # run heuristic replacing None values
@@ -219,8 +219,8 @@ class TSP(Application):
             route = route[idx:] + route[:idx]
 
         # print route
-        parsed_route = ' →\n'.join([f' Node {visit}' for visit in route])
-        logging.info(f"Route found:\n{parsed_route} 🏁")
+        parsed_route = ' ->\n'.join([f' Node {visit}' for visit in route])
+        logging.info(f"Route found:\n{parsed_route}")
         return route, round(time() * 1000 - start_time, 3)
 
     def validate(self, solution: list) -> (bool, float):
@@ -238,10 +238,10 @@ class TSP(Application):
         if solution is None:
             return False, round(time() * 1000 - start, 3)
         elif len([node for node in list(nodes) if node not in solution]) == 0:
-            logging.info(f"All {len(solution)} nodes got visited ✅ ")
+            logging.info(f"All {len(solution)} nodes got visited")
             return True, round(time() * 1000 - start, 3)
         else:
-            logging.error(f"{len([node for node in list(nodes) if node not in solution])} nodes were NOT visited ❌")
+            logging.error(f"{len([node for node in list(nodes) if node not in solution])} nodes were NOT visited")
             return False, round(time() * 1000 - start, 3)
 
     def evaluate(self, solution: list) -> (float, float):
@@ -260,7 +260,7 @@ class TSP(Application):
             dist = self.application[solution[idx + 1]][solution[idx]]
             total_dist += dist['weight']
 
-        logging.info(f"Total distance (without return): {total_dist} 📏 ")
+        logging.info(f"Total distance (without return): {total_dist}")
 
         # add distance between start and end point to complete cycle
         return_distance = self.application[solution[0]][solution[-1]]['weight']
@@ -268,7 +268,7 @@ class TSP(Application):
 
         # get distance for full cycle
         distance_with_return = total_dist + return_distance
-        logging.info(f"Total distance (including return): {distance_with_return} 📏 ")
+        logging.info(f"Total distance (including return): {distance_with_return}")
 
         return distance_with_return, round(time() * 1000 - start, 3)
 

@@ -188,7 +188,7 @@ class PVC(Application):
         visited_seams = []
         # get nodes from sample
         if sum(value == 1 for value in solution.values()) > len(route):
-            logging.warning("Result is longer than route! This might be problematic! ⚠️ ")
+            logging.warning("Result is longer than route! This might be problematic!")
         # NOTE: Prevent duplicate node entries by enforcing only one occurrence per node along route
         for (node, config, tool, timestep), val in solution.items():
             if val and (node[0] not in visited_seams):
@@ -218,9 +218,9 @@ class PVC(Application):
             route = route[idx:] + route[:idx]
 
         # print route
-        parsed_route = ' →\n'.join(
+        parsed_route = ' ->\n'.join(
             [f' Node {visit[0][1]} of Seam {visit[0][0]} using config {visit[1]} & tool {visit[2]}' for visit in route])
-        logging.info(f"Route found:\n{parsed_route} 🏁")
+        logging.info(f"Route found:\n{parsed_route}")
         return route, round(time() * 1000 - start_time, 3)
 
     def validate(self, solution: list) -> (bool, float):
@@ -238,10 +238,10 @@ class PVC(Application):
 
         if len(visited_seams) == len(solution):
             logging.info(
-                f"All {len(solution) - 1} seams and the base node got visited ✅ (We only need to visit one node per seam)")
+                f"All {len(solution) - 1} seams and the base node got visited (We only need to visit one node per seam)")
             return True, round(time() * 1000 - start, 3)
         else:
-            logging.error(f"Only {len(visited_seams) - 1} got visited ❌")
+            logging.error(f"Only {len(visited_seams) - 1} got visited")
             return False, round(time() * 1000 - start, 3)
 
     def evaluate(self, solution: list) -> (float, float):
@@ -263,7 +263,7 @@ class PVC(Application):
             dist = edge['weight']
             total_dist += dist
 
-        logging.info(f"Total distance (without return): {total_dist} 📏 ")
+        logging.info(f"Total distance (without return): {total_dist}")
 
         # add distance between start and end point to complete cycle
         return_edge = next(item for item in list(self.application[solution[0][0]][solution[-1][0]].values()) if
@@ -274,7 +274,7 @@ class PVC(Application):
 
         # get distance for full cycle
         distance = total_dist + return_distance
-        logging.info(f"Total distance (including return): {distance} 📏 ")
+        logging.info(f"Total distance (including return): {distance}")
 
         return distance, round(time() * 1000 - start, 3)
 

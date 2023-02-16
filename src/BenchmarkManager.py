@@ -138,7 +138,6 @@ class BenchmarkManager:
 
         app_name = application_answer["application"]
         self.application = _get_instance_with_sub_options(app_modules, app_name)
-        
 
         application_config = self.application.get_parameter_options()
 
@@ -153,11 +152,9 @@ class BenchmarkManager:
             "mapping": {}
         }
 
-        mapping_answer = inquirer.prompt([inquirer.Checkbox('mapping',
-                                                            message="What mapping do you want?",
-                                                            choices=self.application.get_available_mapping_options(),
-                                                            # default=[self.application.get_available_mapping_options()[0]]
-                                                            )])
+        mapping_answer = BenchmarkManager.checkbox(key='mapping',
+                                                   message="What mapping do you want?",
+                                                   choices=self.application.get_available_mapping_options())
 
         for mapping_single_answer in mapping_answer["mapping"]:
 
@@ -166,27 +163,24 @@ class BenchmarkManager:
             mapping_config = mapping.get_parameter_options()
             mapping_config = BenchmarkManager._query_for_config(mapping_config, f"(Option for {mapping_single_answer})")
 
-            solver_answer = inquirer.prompt([inquirer.Checkbox('solver',
-                                                               message=f"What Solver do you want for mapping {mapping_single_answer}?",
-                                                               choices=mapping.get_available_solver_options()
-                                                               )])
+            solver_answer = BenchmarkManager.checkbox(key='solver',
+                                                      message=f"What Solver do you want for mapping {mapping_single_answer}?",
+                                                      choices=mapping.get_available_solver_options())
             config["mapping"][mapping_single_answer] = {
                 "solver": [],
                 "config": mapping_config
             }
 
             for solver_single_answer in solver_answer["solver"]:
-
                 solver = mapping.get_submodule(solver_single_answer)
 
                 solver_config = solver.get_parameter_options()
                 solver_config = BenchmarkManager._query_for_config(solver_config,
                                                                    f"(Option for {solver_single_answer})")
 
-                device_answer = inquirer.prompt([inquirer.Checkbox('device',
-                                                                   message=f"What Device do you want for solver {solver_single_answer}?",
-                                                                   choices=solver.get_available_device_options()
-                                                                   )])
+                device_answer = BenchmarkManager.checkbox(key='device',
+                                                          message=f"What Device do you want for solver {solver_single_answer}?",
+                                                          choices=solver.get_available_device_options())
 
                 config["mapping"][mapping_single_answer]["solver"].append({
                     "name": solver_single_answer,
@@ -271,20 +265,20 @@ class BenchmarkManager:
         for key, config_answer in param_opts.items():
             if config_answer.get("if"):
                 #
-                #support parameter descriptions like
-                #"seed": {
+                # support parameter descriptions like
+                # "seed": {
                 #    "if": {"key":"graph_type", "in" : ["erdos-renyi"]},
                 #    ...
-                #}
-                #meaning that 'seed' only gets displayed if graph_type has been chosen to be 'erdos-renyi'
-                #This expects that the referenced parameter has been declared before and is declared to be
-                #'exclusive' so that its value is unique.
+                # }
+                # meaning that 'seed' only gets displayed if graph_type has been chosen to be 'erdos-renyi'
+                # This expects that the referenced parameter has been declared before and is declared to be
+                # 'exclusive' so that its value is unique.
                 #
 
                 key_in_cond = config_answer.get("if")["key"]
                 dependency = param_opts.get(key_in_cond)
 
-                #check configuration is consistent
+                # check configuration is consistent
                 consistent = False
                 err_msg = None
                 if dependency is None:
@@ -295,37 +289,58 @@ class BenchmarkManager:
                     consistent = True
                 if not consistent:
                     raise Exception(f"{prefix} {err_msg}")
-                    
+
                 if not config[key_in_cond][0] in config_answer.get("if")["in"]:
                     continue
-                    
+
             if len(config_answer['values']) == 1:
                 # When there is only 1 value to choose from skip the user input for now
                 values = config_answer['values']
                 print(f"{prefix} {config_answer['description']}: {config_answer['values'][0]}")
-                
+
             elif config_answer.get('exclusive', False):
                 answer = inquirer.prompt(
                     [inquirer.List(key,
                                    message=f"{prefix} {config_answer['description']}",
                                    choices=config_answer['values']
                                    )])
-                values = (answer[key],)   
+                values = (answer[key],)
             else:
-                answer = inquirer.prompt(
-                    [inquirer.Checkbox(key,
-                                       message=f"{prefix} {config_answer['description']}",
-                                       choices=config_answer['values']
-                                       )])
+                answer = BenchmarkManager.checkbox(key=key,
+                                                   message=f"{prefix} {config_answer['description']}",
+                                                   choices=config_answer['values'])
                 values = answer[key]
-            
+
             if config_answer.get("postproc"):
-                #the value of config_answer.get("postproc") is expected to be callable
-                #with each of the user selected values as argument.
-                #Note that the stored config file will contain the processed values.
-                values = [ config_answer["postproc"](v) for v in values ]
+                # the value of config_answer.get("postproc") is expected to be callable
+                # with each of the user selected values as argument.
+                # Note that the stored config file will contain the processed values.
+                values = [config_answer["postproc"](v) for v in values]
             config[key] = values
         return config
+
+    @staticmethod
+    def checkbox(key: str, message: str, choices: list) -> dict:
+        """
+        Wrapper method to avoid empty responses in checkbox.
+
+        :param key: Key for response dict
+        :type key: str
+        :param message: Message for the user
+        :type message: str
+        :param choices: Choices for the user
+        :type choices: list
+        :return: Dict with the response from the user
+        :rtype: dict
+        """
+
+        answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
+
+        if not answer[key]:
+            logging.warning("You need to check at least one box! Please try again!")
+            return BenchmarkManager.checkbox(key, message, choices)
+        else:
+            return answer
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:
         """
@@ -374,11 +389,14 @@ class BenchmarkManager:
             # '-C', git_dir ensures that the following commands also work when QUARK is started from other working
             # directories
             git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
-            git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode('ascii').strip()
+            git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode(
+                'ascii').strip()
             git_uncommitted_changes = True if subprocess.check_output(
-                ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode('ascii').strip() else False
+                ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode(
+                'ascii').strip() else False
 
-            logging.info(f"Codebase is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
+            logging.info(
+                f"Codebase is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
         except Exception as e:
             logging.warning(f"Logging of git revision number not possible because of: {e}")
             git_revision_number = "unknown"

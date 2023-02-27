@@ -244,7 +244,7 @@ class SAT(Application):
         ratio = nr_satisfied_hardcons / self.num_constraints
         is_valid = ratio == 1.0
         # prints the ratio of satisfied constraints and prints if all constraints are satisfied
-        logging.info(f"Ratio of satisfied constraints: {ratio}\nSuccess:{['❌', '✅'][int(is_valid)]}")
+        logging.info(f"Ratio of satisfied constraints: {ratio}\nSuccess:{['no', 'yes'][int(is_valid)]}")
         return is_valid, round(time() * 1000 - start, 3)
 
     def evaluate(self, solution: dict) -> (float, float):

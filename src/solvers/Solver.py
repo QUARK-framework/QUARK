@@ -86,7 +86,7 @@ class Solver(ABC):
         if self.sub_options is None:
             return self.get_device(device_option)
         else:
-            return _get_instance_with_sub_options(self.sub_options, device_option)
+            return _get_instance_with_sub_options(self.sub_options, device_option, device_option)
 
     @abstractmethod
     def get_device(self, device_option: str) -> any:

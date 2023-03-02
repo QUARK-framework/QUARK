@@ -134,7 +134,7 @@ class ChoiQubo(Mapping):
 
         # we connect conflicting clauses using the lit_occur dict:
         for literal, positions_dict in lit_occur.items():
-            # for every literal lit, we check its occurrences and connect the non-negated an negated occurrences.
+            # for every literal lit, we check its occurrences and connect the non-negated and negated occurrences.
             for pos_true, pos_false in product(positions_dict[True], positions_dict[False]):
                 # we ensure that we do not add a penalty for contradicting literals in the
                 if pos_true != pos_false:
@@ -186,8 +186,8 @@ class ChoiQubo(Mapping):
         """
         start = time() * 1000
         # we define the literals list, so that we can check the self-consistency of the solution. That is, we save all
-        # of the assignments proposed by the annealer, and see if there is no contradiction. (In principle a solver
-        # could mandate L3 = True and L3 = False, resulting in a contradiction.
+        # assignments proposed by the annealer, and see if there is no contradiction. (In principle a solver
+        # could mandate L3 = True and L3 = False, resulting in a contradiction.)
         literals = []
         # assignments saves the actual solution
         assignments = []

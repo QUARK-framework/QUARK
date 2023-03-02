@@ -154,7 +154,7 @@ class Qubo(Mapping):
                                         for other_seam_node in other_seam_nodes:
                                             q[((node, c_start, t_start, pos_1),
                                                (other_seam_node, c_end, t_end,
-                                                pos_2))] += 2.0 * lagrange  # penalize visting other node of same seam
+                                                pos_2))] += 2.0 * lagrange  # penalize visiting other node of same seam
 
         # Constraint to only visit a single node in a single timestep
         for pos in range(timesteps):  # for all timesteps

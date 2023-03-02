@@ -71,7 +71,7 @@ class ReverseGreedyClassicalPVC(Solver):
         :rtype: tuple(list, float, dict)
         """
 
-        # Need to to deep copy since we are modifying the graph in this function. Else the next repetition would work
+        # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
         # with a different graph
         mapped_problem = mapped_problem.copy()
         start = time() * 1000
@@ -91,7 +91,7 @@ class ReverseGreedyClassicalPVC(Solver):
                                  'weight'] != 100000], key=lambda x: x[2]['weight'])
             next_node = (next_node[1], next_node[2]["c_end"], next_node[2]["t_end"])
 
-            # Make the step - add distance to cost, add best node to tour,
+            # Make the step - add distance to cost, add the best node to tour,
             tour[next_node + (idx,)] = 1
 
             # Remove all node of that seam

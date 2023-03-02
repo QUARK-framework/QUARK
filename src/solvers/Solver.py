@@ -19,9 +19,10 @@ from time import time
 
 from BenchmarkManager import _get_instance_with_sub_options
 
+
 class Solver(ABC):
     """
-    The solver is responsible for finding feasible and high-quality solutions of the formulated problem, i. e., of the
+    The solver is responsible for finding feasible and high-quality solutions of the formulated problem, i.e., of the
     defined objective function.
     """
 
@@ -71,24 +72,21 @@ class Solver(ABC):
         :rtype: dict
         """
         pass
-        
+
     def get_submodule(self, device_option: str) -> any:
         """
-        If self.sub_options is not None a device is instantiated according to the information given in self.sub_options.
-        Otherwise get_device is called as fall back.
-        
-        :param mapping_option: String with the option
-        :rtype: str
-        :type mapping_option: str
+        If self.sub_options is not None, a device is instantiated according to the information given in self.sub_options.
+        Otherwise, get_device is called as fall back.
+
+        :param device_option: String with the option
+        :type device_option: str
         :return: instance of the device class
         :rtype: any
         """
-        
         if self.sub_options is None:
             return self.get_device(device_option)
         else:
             return _get_instance_with_sub_options(self.sub_options, device_option, device_option)
-        
 
     @abstractmethod
     def get_device(self, device_option: str) -> any:
@@ -113,4 +111,4 @@ class Solver(ABC):
         if self.sub_options is None:
             return self.device_options
         else:
-            return [ o["name"] for o in self.sub_options ]
+            return [o["name"] for o in self.sub_options]

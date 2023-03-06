@@ -46,7 +46,9 @@ class Device(ABC):
         :return: Available device settings for this device
         :rtype: dict
         """
-        pass
+        return {
+            
+        }
 
     def set_config(self, config):
         self.config = config

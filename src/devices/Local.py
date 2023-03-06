@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from devices.Device import Device
-
+from typing import TypedDict, Union
 
 class Local(Device):
     """
@@ -26,3 +26,46 @@ class Local(Device):
         """
         super().__init__(device_name="local")
         self.device = None
+
+    def get_parameter_options(self) -> dict:
+        """
+        Returns the configurable settings for this device
+
+        :return:
+                 .. code-block:: python
+
+                      return {
+                                "cores": {
+                                    "values": list([1, 2, 3, 4]),
+                                    "description": "How many CPU cores do you want to use?"
+                                },
+                                "test": {
+                                    "values": ['yes', 'no'],
+                                    "description": "Are you a robot?"
+                                }
+                            }
+
+        """
+        return {
+                "cores": {
+                    "values": list([1, 2, 3, 4]),
+                    "description": "How many CPU cores do you want to use?"
+                },
+                "test": {
+                    "values": list(["yes", "no"]),
+                    "description": "Are you a robot?"
+                }
+            }
+
+    class Config(TypedDict):
+        """
+        Attributes of a valid config
+
+        .. code-block:: python
+
+             cores: int
+             test: str
+
+        """
+        cores: int
+        test: str

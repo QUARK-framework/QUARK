@@ -654,7 +654,7 @@ class BenchmarkManager:
             lambda row: '/\n'.join(
                 ['%s: %s' % (key, value) for (key, value) in
                  sorted(row['solver_config'].items(), key=lambda key_value_pair: key_value_pair[0])]) +
-                        "\ndevice:" + row['device'] + "\nmapping:" + '/\n'.join(
+                        "\ndevice:" + row['device']+ row['device_config'] + "\nmapping:" + '/\n'.join(
                 ['%s: %s' % (key, value) for (key, value) in
                  sorted(row['mapping_config'].items(), key=lambda key_value_pair: key_value_pair[0])]), axis=1)
 

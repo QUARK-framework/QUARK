@@ -6,6 +6,7 @@ Reference
    :caption: Contents:
 
    Benchmark Manager <_autosummary/BenchmarkManager>
-   Applications <_autosummary/applications>
-   Devices <_autosummary/devices>
-   Solvers <_autosummary/solvers>
+   Modules <_autosummary/modules>
+   BenchmarkRecord <_autosummary/BenchmarkRecord>
+   Config Manager <_autosummary/ConfigManager>
+   Metrics <_autosummary/Metrics>

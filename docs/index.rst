@@ -14,19 +14,19 @@ the end-to-end process of designing, implementing, conducting, and communicating
 
 The following figure depicts the main components of the framework. The framework
 follows the separation of concerns design principle encapsulating application- and problem-specific aspects, mappings
-to mathematical formulations, solvers and hardware. More details can be found in the paper.
+to mathematical formulations, solvers, hardware or other custom module definitions.
 
 .. image:: architecture.png
   :align: center
-  :width: 400
+  :width: 700
   :alt: Architecture of the QUARK framework
 
 Paper
 ======
 
 Details about the motivations for the framework can be seen in the accompanying QUARK paper (`arXiv link
-<https://arxiv.org/abs/2202.03028>`_).
-The data used for this paper can be found in ``paper/results.csv``.
+<https://arxiv.org/abs/2202.03028>`_). Even though the architecture changed quite significantly with the 2.0 release of QUARK, the guiding principles still remain.
+The data used for the original paper can be found in ``paper/results.csv``.
 
 .. toctree::
    :maxdepth: 2

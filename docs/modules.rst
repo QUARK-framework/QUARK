@@ -9,8 +9,9 @@
    :template: custom-module-template.rst
    :recursive:
 
-   applications
-   devices
-   solvers
    main
+   modules
+   Metrics
+   BenchmarkRecord
+   ConfigManager
    BenchmarkManager

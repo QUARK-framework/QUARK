@@ -7,7 +7,7 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3, you need to install Python 3 if you don`t already have it installed.
+As this framework is implemented in Python 3, you need to install Python 3 if you don`t have it already installed.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually
@@ -51,59 +51,51 @@ Example Run (You need to check at least one option with an ``X`` for the checkbo
 
 ::
 
-   python src/main.py
-   [?] What application do you want?: TSP
-    > TSP
-      PVC
-      SAT
+    [?] What application do you want?: TSP
+       PVC
+       SAT
+     > TSP
 
-   [?] (Option for TSP) How many nodes does you graph need?:
-      o 3
-      X 4
-    > X 5
-      o 6
+    2023-03-21 09:18:36,440 [INFO] Import module modules.applications.optimization.TSP.TSP
+    [?] (Option for TSP) How many nodes does you graph need?:
+     > [X] 3
+       [ ] 4
+       [ ] 6
+       [ ] 8
+       [ ] 10
+       [ ] 14
+       [ ] 16
 
-   [?] What mapping do you want?:
-      o Ising
-    > X Qubo
-      o Direct
+    [?] What submodule do you want?:
+       [ ] Ising
+       [ ] Qubo
+     > [X] GreedyClassicalTSP
+       [ ] ReverseGreedyClassicalTSP
+       [ ] RandomTSP
 
-   [?] (Option for Qubo) By which factor would you like to multiply your lagrange?:
-      o 0.75
-    > X 1.0
-      o 1.25
+    2023-03-21 09:18:49,563 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
+    2023-03-21 09:18:49,566 [INFO] Submodule configuration finished
+    [?] How many repetitions do you want?: 1
+    2023-03-21 09:18:50,577 [INFO] Import module modules.applications.optimization.TSP.TSP
+    2023-03-21 09:18:50,948 [INFO] Created Benchmark run directory /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50
+    2023-03-21 09:18:51,025 [INFO] Codebase is based on revision 075201825fa71c24b5567e1290966081be7dbdc0 and has some uncommitted changes
+    2023-03-21 09:18:51,026 [INFO] Running backlog item 1/1, Iteration 1/1:
+    2023-03-21 09:18:51,388 [INFO] Route found:
+     Node 0 ->
+     Node 2 ->
+     Node 1
+    2023-03-21 09:18:51,388 [INFO] All 3 nodes got visited
+    2023-03-21 09:18:51,388 [INFO] Total distance (without return): 727223.0
+    2023-03-21 09:18:51,388 [INFO] Total distance (including return): 1436368.0
+    2023-03-21 09:18:51,389 [INFO]
+    2023-03-21 09:18:51,389 [INFO]  ============================================================
+    2023-03-21 09:18:51,389 [INFO]
+    2023-03-21 09:18:51,389 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50/results.json
+    2023-03-21 09:18:51,746 [INFO] Finished creating plots.
+    2023-03-21 09:18:51,746 [INFO]  ============================================================
+    2023-03-21 09:18:51,746 [INFO]  ====================  QUARK finished!   ====================
+    2023-03-21 09:18:51,746 [INFO]  ============================================================
 
-   [?] What Solver do you want for mapping Qubo?:
-    > X Annealer
-
-   [?] (Option for Annealer) How many reads do you need?:
-      o 250
-    > X 500
-      o 750
-
-   [?] What Device do you want for solver Annealer?:
-    > X SimulatedAnnealer
-      o arn:aws:braket:::device/qpu/d-wave/DW_2000Q_6
-      o arn:aws:braket:::device/qpu/d-wave/Advantage_system4
-
-   [?] How many repetitions do you want?: 1
-   2022-02-01 08:25:06,654 [INFO] Created Benchmark run directory /user1/quark/benchmark_runs/tsp-2022-02-01-08-25-06
-   2022-02-01 08:25:07,133 [INFO] Default Lagrange parameter: 1541836.6666666667
-   2022-02-01 08:25:07,134 [INFO] Running TSP with config {'nodes': 4} on solver Annealer and device simulatedannealer (Repetition 1/1)
-   2022-02-01 08:25:07,134 [INFO] Start to measure execution time of <function Annealer.run at 0x1840c7310>
-   2022-02-01 08:25:07,274 [INFO] Result: {(0, 2): 1, (1, 1): 1, (2, 3): 1, (3, 0): 1}
-   2022-02-01 08:25:07,274 [INFO] Total execution time of <function Annealer.run at 0x1840c7310>: 139 ms
-   2022-02-01 08:25:07,275 [INFO] Route found:
-    Node 0 →
-    Node 2 →
-    Node 3 →
-    Node 1 🏁
-   2022-02-01 08:25:07,275 [INFO] All 4 nodes got visited ✅
-   2022-02-01 08:25:07,275 [INFO] Total distance (without return): 807105.0 📏
-   2022-02-01 08:25:07,275 [INFO] Total distance (including return): 1516250.0 📏
-   2022-02-01 08:25:08,492 [INFO] Saving plot for metric solution_quality
-   2022-02-01 08:25:08,751 [INFO] Saving plot for metric time_to_solve
-   2022-02-01 08:25:08,943 [INFO] Saving plot for solver Annealer
 
 All used config files, logs and results are stored in a folder in the
 ``benchmark_runs`` directory.
@@ -130,22 +122,17 @@ Example for a config file:
     application:
       config:
         nodes:
-        - 4
-        - 6
+        - 3
       name: TSP
-    mapping:
-      Qubo:
-        config:
-          lagrange_factor:
-          - 1.0
-        solver:
-        - config:
-            number_of_reads:
-            - 250
-          device:
-          - SimulatedAnnealer
-          name: Annealer
-    repetitions: 2
+      submodules:
+      - config: {}
+        name: GreedyClassicalTSP
+        submodules:
+        - config: {}
+          name: Local
+          submodules: []
+    repetitions: 1
+
 
 One handy thing to do is to use the interactive mode once to create a config file.
 Then you can change the values of this config file and use it to start the framework.
@@ -174,49 +161,44 @@ The module configuration file has to be a json file of the form:
 ::
 
     [
-       {"name":..., "module":..., "dir":..., "mappings":
-          [
-             {"name":..., "module":..., "dir":..., "solvers":
-                [
-                   {"name":..., "module":..., "dir":..., "devices":
-                      [
-                         {"name":..., "module":..., "dir":..., "args": {...}, "class": ...},...
-                      ]
-                   },...
-                ]
-             },...
-          ]
-       },...
+      {"name":..., "module":..., "dir":..., "submodules":
+         [
+            {"name":..., "module":..., "dir":..., "submodules":
+               [
+                  {"name":..., "module":..., "dir":..., "args": {...}, "class": ..., submodules":
+                     []
+                  },...
+               ]
+            },...
+
+         ]
+      },...
     ]
 
-``name`` and ``module`` are mandatory and specify the class name and python module, resp.,
-``module`` has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified, its
+``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
+has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified its
 value will be added to the python search path.
 In case the class requires some arguments in its constructor they can be defined in the ``args`` dictionary.
 In case the class you want use differs from the name you want to show to the user, you can add the name of the class to
 the ``class`` argument and leave the user-friendly name in the ``name`` arg.
 
+
 An example for this would be:
 ::
 
     [
-       {
-          "name": "TSP",
-          "module": "applications.TSP.TSP",
-          "dir": "src",
-          "mappings": [
-             {
-                "name": "Direct",
-                "module": "applications.TSP.mappings.Direct",
-                "solvers": [
-                   {
-                      "name": "GreedyClassicalTSP",
-                      "module": "solvers.GreedyClassicalTSP"
-                   }
-                ]
-             }
-          ]
-       }
+      {
+        "name": "TSP",
+        "module": "modules.applications.optimization.TSP.TSP",
+        "dir": "src",
+        "submodules": [
+          {
+            "name": "GreedyClassicalTSP",
+            "module": "modules.solvers.GreedyClassicalTSP",
+            "submodules": []
+          }
+        ]
+      }
     ]
 
 You can save this in a JSON file and then call the framework like:
@@ -225,8 +207,8 @@ You can save this in a JSON file and then call the framework like:
 
     python src/main.py --modules tsp_example.json
 
-Exploring a problem in Jupyter Notebook
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Exploring problem in Jupyter Notebook
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can also use a jupyter notebook to generate an application instance and create a concrete problem to work on.
 Especially while implementing a new mapping or solver, this can be very useful!

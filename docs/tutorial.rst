@@ -180,7 +180,7 @@ The module configuration file has to be a json file of the form:
                 [
                    {"name":..., "module":..., "dir":..., "devices":
                       [
-                         {"name":..., "module":..., "dir":...},...
+                         {"name":..., "module":..., "dir":..., "args": {...}, "class": ...},...
                       ]
                    },...
                 ]
@@ -192,6 +192,9 @@ The module configuration file has to be a json file of the form:
 ``name`` and ``module`` are mandatory and specify the class name and python module, resp.,
 ``module`` has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified, its
 value will be added to the python search path.
+In case the class requires some arguments in its constructor they can be defined in the ``args`` dictionary.
+In case the class you want use differs from the name you want to show to the user, you can add the name of the class to
+the ``class`` argument and leave the user-friendly name in the ``name`` arg.
 
 An example for this would be:
 ::

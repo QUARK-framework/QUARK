@@ -78,7 +78,9 @@ def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -
     :rtype: any
     """
     for opt in options:
-        if class_name != opt["name"]:
+        if "class" in opt:
+            class_name = opt["class"]
+        elif class_name != opt["name"]:
             continue
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = None
@@ -86,7 +88,11 @@ def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -
             if key in opt:
                 sub_options = opt[key]
                 break
-        instance = clazz(*args)
+        # In case the class requires some arguments in its constructor they can be defined in the "args" dict
+        if "args" in opt:
+            instance = clazz(**opt["args"])
+        else:
+            instance = clazz(*args)
 
         # sub_options inherits 'dir'
         if sub_options is not None and "dir" in opt:

@@ -66,7 +66,7 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
 def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
-    class_name.
+    name.
 
     :param options: the section of the QUARK module configuration which is relevant here, including the information on submodules.
     :type options: list of dict

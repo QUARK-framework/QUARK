@@ -265,7 +265,7 @@ class TSP(Application):
 
         # add distance between start and end point to complete cycle
         return_distance = self.application[solution[0]][solution[-1]]['weight']
-        # logging.info('Distance between start and end:', return_distance)
+        # logging.info('Distance between start and end: ' + return_distance)
 
         # get distance for full cycle
         distance_with_return = total_dist + return_distance

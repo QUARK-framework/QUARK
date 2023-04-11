@@ -310,7 +310,7 @@ class Ising(Mapping):
 
         for i in qubitOp:
             pauli_str, coeff = i.primitive.to_list()[0]
-            logging.info(pauli_str, coeff)
+            logging.info((pauli_str, coeff))
             pauli_str_list = list(pauli_str)
             index_pos_list = list(locate(pauli_str_list, lambda a: a == 'Z'))
             matrix_to_process = None

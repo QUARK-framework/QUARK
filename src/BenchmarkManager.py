@@ -63,25 +63,24 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     return vars(module)[class_name]
 
 
-def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -> any:
+def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
-    class_name.
+    name.
 
     :param options: the section of the QUARK module configuration which is relevant here, including the information on submodules.
     :type options: list of dict
-    :param class_name: the name of the class to be initialized.
-    :type class_name: str
+    :param name: the name of the QUARK component to be initialized.
+    :type name: str
     :param args: the list of arguments used for to the class initialization
     :type args: any
     :return: the new instance of the QUARK module
     :rtype: any
     """
     for opt in options:
-        if "class" in opt:
-            class_name = opt["class"]
-        elif class_name != opt["name"]:
+        if name != opt["name"]:
             continue
+        class_name = opt.get("class", name)
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = None
         for key in ["mappings", "solvers", "devices"]:
@@ -90,7 +89,7 @@ def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -
                 break
         # In case the class requires some arguments in its constructor they can be defined in the "args" dict
         if "args" in opt:
-            instance = clazz(**opt["args"])
+            instance = clazz(*args, **opt["args"])
         else:
             instance = clazz(*args)
 
@@ -102,7 +101,7 @@ def _get_instance_with_sub_options(options: list, class_name: str, *args: any) -
 
         instance.sub_options = sub_options
         return instance
-    logging.warning(f"{class_name} not found in {options}")
+    logging.warning(f"{name} not found in {options}")
 
 
 class BenchmarkManager:

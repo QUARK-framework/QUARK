@@ -93,6 +93,12 @@ def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
         else:
             instance = clazz(*args)
 
+        git_dir = os.path.dirname(sys.modules[opt["module"]].__file__)
+        git_revision_number, git_uncommitted_changes = _check_git_status(git_dir)
+        if git_revision_number != "unknown":
+            logging.info(
+                f"Codebase for {opt['module']} ({git_dir}) is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
+
         # sub_options inherits 'dir'
         if sub_options is not None and "dir" in opt:
             for sub_opt in sub_options:
@@ -103,6 +109,21 @@ def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
         return instance
     logging.warning(f"{name} not found in {options}")
 
+def _check_git_status(git_dir):
+    # Collect git revision number and check if there are uncommitted changes to allow user to analyze which
+    # codebase was used for benchmark runs
+    try:
+        git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode(
+            'ascii').strip()
+        git_uncommitted_changes = True if subprocess.check_output(
+            ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode(
+            'ascii').strip() else False
+
+    except Exception as e:
+        logging.warning(f"Logging of git revision number not possible because of: {e}")
+        git_revision_number = "unknown"
+        git_uncommitted_changes = "unknown"
+    return git_revision_number, git_uncommitted_changes
 
 class BenchmarkManager:
     """
@@ -257,6 +278,7 @@ class BenchmarkManager:
                     "devices"] = {}
 
                 for single_device in single_solver["device"]:
+                    print("####################", single_device)
                     device_wrapper = solver.get_submodule(single_device)
                     self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']][
                         "devices"][single_device] = device_wrapper
@@ -372,9 +394,10 @@ class BenchmarkManager:
         """
         # TODO Make this nicer
 
-        self.load_config(config, app_modules)
 
-        self._create_store_dir(store_dir, tag=self.application.__class__.__name__.lower())
+        appl_name = config["application"]["name"]
+        self._create_store_dir(store_dir, tag=appl_name.lower())
+
         logger = logging.getLogger()
         formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
         fh = logging.FileHandler(f"{self.store_dir}/logger.log")
@@ -382,25 +405,15 @@ class BenchmarkManager:
         logger.addHandler(fh)
         logging.info(f"Created Benchmark run directory {self.store_dir}")
 
+        self.load_config(config, app_modules)
+
         # Collect git revision number and check if there are uncommitted changes to allow user to analyze which
         # codebase was used for benchmark runs
-        try:
-            # TODO: Does it work with windows?
-            # '-C', git_dir ensures that the following commands also work when QUARK is started from other working
-            # directories
-            git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
-            git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode(
-                'ascii').strip()
-            git_uncommitted_changes = True if subprocess.check_output(
-                ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode(
-                'ascii').strip() else False
-
+        git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
+        git_revision_number, git_uncommitted_changes = _check_git_status(git_dir)
+        if git_revision_number != "unknown":
             logging.info(
-                f"Codebase is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
-        except Exception as e:
-            logging.warning(f"Logging of git revision number not possible because of: {e}")
-            git_revision_number = "unknown"
-            git_uncommitted_changes = "unknown"
+                f"Codebase of the QUARK framework is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
 
         with open(f"{self.store_dir}/config.yml", 'w') as fp:
             yaml.dump(config, fp)

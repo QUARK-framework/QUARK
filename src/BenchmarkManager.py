@@ -278,7 +278,6 @@ class BenchmarkManager:
                     "devices"] = {}
 
                 for single_device in single_solver["device"]:
-                    print("####################", single_device)
                     device_wrapper = solver.get_submodule(single_device)
                     self.mapping_solver_device_combinations[mapping_name]["solvers"][single_solver['name']][
                         "devices"][single_device] = device_wrapper

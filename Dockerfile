@@ -1,6 +1,12 @@
 FROM continuumio/anaconda3
 
-RUN apt-get update && apt-get -y install gcc && apt-get -y install g++
+RUN apt-get update && \
+	apt-get install -y \
+		g++ \
+		gcc \
+		nano \
+		sudo \
+		vim
 
 # Create the environment:
 COPY environment.yml .

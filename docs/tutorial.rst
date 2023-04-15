@@ -158,7 +158,7 @@ First you need to build the docker image locally like:
 
 ::
 
-    docker  build -t quark .
+    docker build -t quark .
 
 And then you can run it like:
 

@@ -13,7 +13,6 @@
 #  limitations under the License.
 import inspect
 import ast
-import os
 from collections import Counter
 from typing import TypedDict, Union
 import types
@@ -21,12 +20,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml
-import psutil
 import json
 from functools import partial, wraps
 
 from devices.braket.Ionq import Ionq
-from devices.braket.LocalSimulator import LocalSimulator
 from devices.braket.Rigetti import Rigetti
 from devices.braket.OQC import OQC
 from devices.braket.SV1 import SV1

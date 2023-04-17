@@ -212,14 +212,14 @@ class Ising(Mapping):
 
         timesteps = graph.number_of_nodes()
 
-        t_matrix = np.array([0.0] * graph.number_of_nodes() * graph.number_of_nodes())
+        t_matrix = np.zeros(graph.number_of_nodes() * graph.number_of_nodes(), dtype=float)
 
         for key, value in linear.items():
             idx = self._get_matrix_index(key, graph.number_of_nodes())
             t_matrix[idx] = value
 
-        j_matrix = np.array(
-            [[0.0] * graph.number_of_nodes() * timesteps for i in range(graph.number_of_nodes() * timesteps)])
+        matrix_size = graph.number_of_nodes() * timesteps
+        j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
 
         index_counter = 0
         for key, value in quad.items():
@@ -255,8 +255,8 @@ class Ising(Mapping):
 
         number_of_edges = graph.number_of_edges()
         # timesteps = len(Q)/number_of_edges
-        j_matrix = np.array(
-            [[0.0] * graph.number_of_nodes() * timesteps for i in range(graph.number_of_nodes() * timesteps)])
+        matrix_size = graph.number_of_nodes() * timesteps
+        j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
 
         self.key_mapping = {}
         index_counter = 0
@@ -302,11 +302,9 @@ class Ising(Mapping):
         qubo = qp2qubo.convert(qp)
         qubitOp, offset = qubo.to_ising()
         # reverse generate J and t out of qubit PauliSumOperator from qiskit
-        t_matrix = np.array([0.0 + 0j] * qubitOp.num_qubits)
+        t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
 
-        j_matrix = np.array(
-            [[0.0 + 0j] * qubitOp.num_qubits for i in range(qubitOp.num_qubits)])
-        logging.info(j_matrix)
+        j_matrix = np.zeros((qubitOp.num_qubits, qubitOp.num_qubits), dtype=complex)
 
         for i in qubitOp:
             pauli_str, coeff = i.primitive.to_list()[0]

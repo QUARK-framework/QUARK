@@ -96,9 +96,8 @@ class Ising(Mapping):
         # Convert Ising dict to matrix
         timesteps = int((g.number_of_nodes() - 1) / 2 + 1)  # G.number_of_nodes()
 
-        j_matrix = np.array(
-            [[0.0] * g.number_of_nodes() * len(config) * len(tool) * timesteps for i in
-             range(g.number_of_nodes() * timesteps * len(config) * len(tool))])
+        matrix_size = g.number_of_nodes() * len(config) * len(tool) * timesteps
+        j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
 
         self.key_mapping = {}
         index_counter = 0

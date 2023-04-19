@@ -97,7 +97,8 @@ def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
         git_revision_number, git_uncommitted_changes = _check_git_status(git_dir)
         if git_revision_number != "unknown":
             logging.info(
-                f"Codebase for {opt['module']} ({git_dir}) is based on revision {git_revision_number} and has {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
+                f"Codebase for {opt['module']} ({git_dir}) is based on revision {git_revision_number} and has"
+                f" {'some' if git_uncommitted_changes else 'no'} uncommitted changes")
 
         # sub_options inherits 'dir'
         if sub_options is not None and "dir" in opt:
@@ -109,9 +110,17 @@ def _get_instance_with_sub_options(options: list, name: str, *args: any) -> any:
         return instance
     logging.warning(f"{name} not found in {options}")
 
-def _check_git_status(git_dir):
-    # Collect git revision number and check if there are uncommitted changes to allow user to analyze which
-    # codebase was used for benchmark runs
+
+def _check_git_status(git_dir: str) -> (str, any):
+    """
+    Collect git revision number and check if there are uncommitted changes to allow user to analyze which codebase was
+    used for benchmark runs
+    :param git_dir: directory of the git repository
+    :type git_dir: str
+    :return: Tuple with the revision number and if there are any uncommitted changes
+    :rtype: (str, any)
+    """
+
     try:
         git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode(
             'ascii').strip()
@@ -124,6 +133,7 @@ def _check_git_status(git_dir):
         git_revision_number = "unknown"
         git_uncommitted_changes = "unknown"
     return git_revision_number, git_uncommitted_changes
+
 
 class BenchmarkManager:
     """

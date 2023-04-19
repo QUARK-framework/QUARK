@@ -230,7 +230,7 @@ class PennylaneQAOA(Solver):
         # set up the problem
         try:
             device_arn = device_wrapper.arn
-        except Exception as e:
+        except Exception:
             device_arn = None
 
         def qaoa_layer(gamma, alpha):
@@ -327,7 +327,7 @@ class PennylaneQAOA(Solver):
                 min_param = params
 
             if "store_dir" in kwargs:
-                fig = plt.figure(figsize=(6, 4))
+                plt.figure(figsize=(6, 4))
                 plt.plot(x, cost_pt, label='global minimum')
                 plt.xlabel("Optimization steps")
                 plt.ylabel("Cost / Energy")

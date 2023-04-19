@@ -181,7 +181,6 @@ class PVC(Application):
         """
         start_time = time() * 1000
         nodes = list(self.application.nodes())
-        edges = self.application.edges()
         start = ((0, 0), 1, 1)
         # fill route with None values
         route = [None] * int((len(self.application) - 1) / 2 + 1)

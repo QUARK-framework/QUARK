@@ -314,9 +314,6 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
     result = task.result()
     logging.info(result)
 
-    # get metadata
-    metadata = result.task_metadata
-
     # convert results (0 and 1) to ising (-1 and 1)
     meas_ising = result.measurements
     meas_ising[meas_ising == 0] = -1

@@ -8,6 +8,9 @@ RUN apt-get update && \
 		sudo \
 		vim
 
+# Update conda
+RUN conda update -n base -c defaults conda
+
 # Create the environment:
 COPY environment.yml .
 RUN conda env create -f environment.yml

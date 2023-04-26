@@ -48,10 +48,10 @@ def _filter_comments(f: Iterable) -> str:
 
 def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     """
-    If the json object j contains relative paths as value of 'dir', this
-    value gets replaced by joining base_dir with that path.
+    Expands the paths given as value of the 'dir' attribute appearing in the QUARK modules
+    configuration by joining base_dir with that path.
 
-    :param j: the json to be adapted
+    :param j: the json to be adapted - expected to be a QUARK modules configuration or a part of it
     :type j: dict|list
     :param base_dir: the base directory to be used for path expansion
     :type base_dir: str
@@ -64,7 +64,7 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-            if type(j[attr]) in [dict, list]:
+            if attr in ["mappings","solvers","devices"]:
                 _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]

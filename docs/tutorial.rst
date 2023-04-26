@@ -167,6 +167,7 @@ And then you can run it like:
     docker run -it --rm -v $(pwd):/quark -v /Users/alice/desktop/my_config.yml:/quark/config.yml quark
 
 "/Users/alice/desktop/my_config.yml" specifies the QUARK config file on your local machine.
+(Note: If you're using Docker Desktop on Windows with PowerShell, use '${pwd}' instead of '$(pwd)'.)
 
 In case you have local proxy settings you can add the following flags to the run command:
 

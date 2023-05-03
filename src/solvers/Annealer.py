@@ -28,10 +28,10 @@ class Annealer(Solver):
         Constructor method
         """
         super().__init__()
-        self.device_options = ["SimulatedAnnealer"]
+        self.device_options = ["Simulated Annealer"]
 
     def get_device(self, device_option: str) -> Union[SimulatedAnnealingSampler]:
-        if device_option == "SimulatedAnnealer":
+        if device_option == "Simulated Annealer":
             return SimulatedAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {device_option}  not implemented")
@@ -89,8 +89,8 @@ class Annealer(Solver):
         additional_solver_information = {}
         device = device_wrapper.get_device()
         start = time() * 1000
-        if device_wrapper.device_name != "simulatedannealer":
-            logging.warning("Only Simulated Annealer available at the moment!")
+        if device_wrapper.device_name != "simulated annealer":
+            logging.warning("Only simulated annealer available at the moment!")
             # TODO: Check what to do with this..
             # This section was used to leverage the D-Wave devices previously available on Amazon Braket
 

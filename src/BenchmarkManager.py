@@ -313,7 +313,7 @@ class BenchmarkManager:
                     for device_config in device_config_list:
                         device_wrapper = solver.get_submodule(device_name)
                         device_wrapper.set_config(device_config)
-                        device_list.append(device_wrapper)
+                        device_list.append((device_wrapper, device_config))
 
 
     @staticmethod
@@ -464,7 +464,7 @@ class BenchmarkManager:
                         for solver_name, solver_value in mapping_value["solvers"].items():
                             solver = solver_value["solver_instance"]
                             for solver_config in solver_value['solver_config']:
-                                for device in solver_value["devices"]:
+                                for device, device_config in solver_value["devices"]:
                                     for i in range(1, self.repetitions + 1):
                                         problem = self.application.init_problem(application_config, idx, i, path)
                                         mapped_problem, time_to_mapping = mapping.map(problem, mapping_config)
@@ -474,8 +474,7 @@ class BenchmarkManager:
                                                 f"{application_config} on solver {solver.__class__.__name__} and device "
                                                 f"{device.get_device_name()} (Repetition {i}/{self.repetitions})")
                                             logging.info(f"solver_config: {solver_config}")
-                                            if device.config:
-                                                logging.info(f"device_config: {device.config}")
+                                            logging.info(f"type of device_config: {type(device_config)}")
                                             solution_raw, time_to_solve, additional_solver_information = solver.run(
                                                 mapped_problem, device, solver_config, store_dir=path, repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)
@@ -530,7 +529,7 @@ class BenchmarkManager:
                                                 "solver": solver.__class__.__name__,
                                                 "device_class": device.__class__.__name__,
                                                 "device": device.get_device_name(),
-                                                "device_config": device.config,
+                                                "device_config": device_config,
                                                 "git_revision_number": git_revision_number,
                                                 "git_uncommitted_changes ": git_uncommitted_changes
                                             })
@@ -583,6 +582,7 @@ class BenchmarkManager:
                                                        axis=1)
         df['solver_config'] = df.apply(lambda row: json.dumps(row["solver_config"]), axis=1)
         df['mapping_config'] = df.apply(lambda row: json.dumps(row["mapping_config"]), axis=1)
+        df['device_config'] = df.apply(lambda row: json.dumps(row["device_config"]), axis=1)
         df.to_csv(path_or_buf=f"{self.store_dir}/results.csv")
 
     def load_results(self, input_dirs: list = None) -> pd.DataFrame:
@@ -609,6 +609,7 @@ class BenchmarkManager:
         df['additional_solver_information'] = df.apply(lambda row: json.loads(row["additional_solver_information"]),
                                                        axis=1)
         df['mapping_config'] = df.apply(lambda row: json.loads(row["mapping_config"]), axis=1)
+        df['device_config'] = df.apply(lambda row: json.loads(row["device_config"]), axis=1)
 
         return df
 
@@ -654,8 +655,11 @@ class BenchmarkManager:
             lambda row: '/\n'.join(
                 ['%s: %s' % (key, value) for (key, value) in
                  sorted(row['solver_config'].items(), key=lambda key_value_pair: key_value_pair[0])]) +
-                        "\ndevice:" + row['device']+ row['device_config'] + "\nmapping:" + '/\n'.join(
-                ['%s: %s' % (key, value) for (key, value) in
+                        "\ndevice: " + row['device']+ ''.join(
+                ['\n%s: %s' % (key, value) for (key, value) in
+                 sorted(row['device_config'].items(), key=lambda key_value_pair: key_value_pair[0])]) +
+                        "\nmapping: " + row['mapping'] + ''.join(
+                ['\n%s: %s' % (key, value) for (key, value) in
                  sorted(row['mapping_config'].items(), key=lambda key_value_pair: key_value_pair[0])]), axis=1)
 
         df_complete = df.copy()

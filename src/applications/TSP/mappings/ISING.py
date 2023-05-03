@@ -26,7 +26,7 @@ from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from applications.Mapping import *
-from applications.TSP.mappings.QUBO import Qubo
+from applications.TSP.mappings.QUBO import QUBO
 from solvers.PennylaneQAOA import PennylaneQAOA
 from solvers.QAOA import QAOA
 from solvers.QiskitQAOA import QiskitQAOA

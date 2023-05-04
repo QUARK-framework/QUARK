@@ -20,7 +20,7 @@ import sys
 from typing import Union
 
 
-def _get_instance_with_sub_options(options: dict, class_name: str, *args: any) -> any:
+def _get_instance_with_sub_options(options: list[dict], class_name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
     class_name.

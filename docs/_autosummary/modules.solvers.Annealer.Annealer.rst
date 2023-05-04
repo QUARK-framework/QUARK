@@ -20,6 +20,7 @@ modules.solvers.Annealer.Annealer
       ~Annealer.get_available_submodule_options
       ~Annealer.get_default_submodule
       ~Annealer.get_parameter_options
+      ~Annealer.get_requirements
       ~Annealer.get_submodule
       ~Annealer.postprocess
       ~Annealer.preprocess

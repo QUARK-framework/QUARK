@@ -30,6 +30,21 @@ class ReverseGreedyClassicalTSP(Solver):
         super().__init__()
         self.submodule_options = ["Local"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            }
+        ]
+
     def get_default_submodule(self, option: str) -> Core:
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415

@@ -20,6 +20,7 @@ modules.solvers.QiskitQAOA.QiskitQAOA
       ~QiskitQAOA.get_available_submodule_options
       ~QiskitQAOA.get_default_submodule
       ~QiskitQAOA.get_parameter_options
+      ~QiskitQAOA.get_requirements
       ~QiskitQAOA.get_submodule
       ~QiskitQAOA.normalize_data
       ~QiskitQAOA.postprocess

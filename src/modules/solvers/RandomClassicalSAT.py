@@ -31,6 +31,25 @@ class RandomSAT(Solver):
         super().__init__()
         self.submodule_options = ["Local"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "python-sat",
+                "version": "0.1.7.dev26"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_default_submodule(self, option: str) -> Core:
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415

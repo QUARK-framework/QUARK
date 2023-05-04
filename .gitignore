@@ -310,3 +310,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,macos,windows,python
 /benchmark_runs/
 /.idea/
+/.settings/active_env.json
+/.settings/envs/

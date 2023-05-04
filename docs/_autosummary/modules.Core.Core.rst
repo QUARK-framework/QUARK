@@ -20,6 +20,7 @@ modules.Core.Core
       ~Core.get_available_submodule_options
       ~Core.get_default_submodule
       ~Core.get_parameter_options
+      ~Core.get_requirements
       ~Core.get_submodule
       ~Core.postprocess
       ~Core.preprocess

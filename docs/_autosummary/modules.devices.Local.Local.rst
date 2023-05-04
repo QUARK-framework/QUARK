@@ -22,6 +22,7 @@ modules.devices.Local.Local
       ~Local.get_device
       ~Local.get_device_name
       ~Local.get_parameter_options
+      ~Local.get_requirements
       ~Local.get_submodule
       ~Local.postprocess
       ~Local.preprocess

@@ -22,6 +22,7 @@ modules.devices.braket.LocalSimulator.LocalSimulator
       ~LocalSimulator.get_device
       ~LocalSimulator.get_device_name
       ~LocalSimulator.get_parameter_options
+      ~LocalSimulator.get_requirements
       ~LocalSimulator.get_submodule
       ~LocalSimulator.init_s3_storage
       ~LocalSimulator.postprocess

@@ -1,0 +1,1597 @@
+{
+  "build_number": 1,
+  "build_date": "05-05-2023 06:44:00",
+  "git_revision_number": "19e077135fc5d903609cdc89b7d7554216224123",
+  "modules": [
+    {
+      "name": "PVC",
+      "module": "modules.applications.optimization.PVC.PVC",
+      "submodules": [
+        {
+          "name": "Ising",
+          "module": "modules.applications.optimization.PVC.mappings.ISING",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.24.1"
+            },
+            {
+              "name": "dimod",
+              "version": "0.12.5"
+            },
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QAOA",
+              "module": "modules.solvers.QAOA",
+              "requirements": [
+                {
+                  "name": "amazon-braket-sdk",
+                  "version": "1.35.1"
+                },
+                {
+                  "name": "scipy",
+                  "version": "1.10.1"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "LocalSimulator",
+                  "module": "modules.devices.braket.LocalSimulator",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "PennylaneQAOA",
+              "module": "modules.solvers.PennylaneQAOA",
+              "requirements": [
+                {
+                  "name": "pennylane",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "pennylane-lightning",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "amazon-braket-pennylane-plugin",
+                  "version": "1.5.2"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "module": "modules.devices.braket.OQC",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "braket.local.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit.autograd",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qulacs.simulator",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.gpu",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Qubo",
+          "module": "modules.applications.optimization.PVC.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "SimulatedAnnealer",
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "GreedyClassicalPVC",
+          "module": "modules.solvers.GreedyClassicalPVC",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "ReverseGreedyClassicalPVC",
+          "module": "modules.solvers.ReverseGreedyClassicalPVC",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "RandomPVC",
+          "module": "modules.solvers.RandomClassicalPVC",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "networkx",
+          "version": "2.8.8"
+        },
+        {
+          "name": "numpy",
+          "version": "1.24.1"
+        }
+      ]
+    },
+    {
+      "name": "SAT",
+      "module": "modules.applications.optimization.SAT.SAT",
+      "submodules": [
+        {
+          "name": "QubovertQubo",
+          "module": "modules.applications.optimization.SAT.mappings.QubovertQUBO",
+          "requirements": [
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            },
+            {
+              "name": "qubovert",
+              "version": "1.2.5"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "SimulatedAnnealer",
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Direct",
+          "module": "modules.applications.optimization.SAT.mappings.Direct",
+          "requirements": [
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            },
+            {
+              "name": "python-sat",
+              "version": "0.1.7.dev26"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "ClassicalSAT",
+              "module": "modules.solvers.ClassicalSAT",
+              "requirements": [
+                {
+                  "name": "python-sat",
+                  "version": "0.1.7.dev26"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "Local",
+                  "module": "modules.devices.Local",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "RandomSAT",
+              "module": "modules.solvers.RandomClassicalSAT",
+              "requirements": [
+                {
+                  "name": "python-sat",
+                  "version": "0.1.7.dev26"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "Local",
+                  "module": "modules.devices.Local",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ChoiQubo",
+          "module": "modules.applications.optimization.SAT.mappings.ChoiQUBO",
+          "requirements": [
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "SimulatedAnnealer",
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DinneenQubo",
+          "module": "modules.applications.optimization.SAT.mappings.DinneenQUBO",
+          "requirements": [
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "SimulatedAnnealer",
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ChoiIsing",
+          "module": "modules.applications.optimization.SAT.mappings.ChoiISING",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.24.1"
+            },
+            {
+              "name": "dimod",
+              "version": "0.12.5"
+            },
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QAOA",
+              "module": "modules.solvers.QAOA",
+              "requirements": [
+                {
+                  "name": "amazon-braket-sdk",
+                  "version": "1.35.1"
+                },
+                {
+                  "name": "scipy",
+                  "version": "1.10.1"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "LocalSimulator",
+                  "module": "modules.devices.braket.LocalSimulator",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "PennylaneQAOA",
+              "module": "modules.solvers.PennylaneQAOA",
+              "requirements": [
+                {
+                  "name": "pennylane",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "pennylane-lightning",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "amazon-braket-pennylane-plugin",
+                  "version": "1.5.2"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "module": "modules.devices.braket.OQC",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "braket.local.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit.autograd",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qulacs.simulator",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.gpu",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DinneenIsing",
+          "module": "modules.applications.optimization.SAT.mappings.DinneenISING",
+          "requirements": [
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            },
+            {
+              "name": "numpy",
+              "version": "1.24.1"
+            },
+            {
+              "name": "dimod",
+              "version": "0.12.5"
+            },
+            {
+              "name": "nnf",
+              "version": "0.4.1"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QAOA",
+              "module": "modules.solvers.QAOA",
+              "requirements": [
+                {
+                  "name": "amazon-braket-sdk",
+                  "version": "1.35.1"
+                },
+                {
+                  "name": "scipy",
+                  "version": "1.10.1"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "LocalSimulator",
+                  "module": "modules.devices.braket.LocalSimulator",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "PennylaneQAOA",
+              "module": "modules.solvers.PennylaneQAOA",
+              "requirements": [
+                {
+                  "name": "pennylane",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "pennylane-lightning",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "amazon-braket-pennylane-plugin",
+                  "version": "1.5.2"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "module": "modules.devices.braket.OQC",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "braket.local.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit.autograd",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qulacs.simulator",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.gpu",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "nnf",
+          "version": "0.4.1"
+        },
+        {
+          "name": "numpy",
+          "version": "1.24.1"
+        }
+      ]
+    },
+    {
+      "name": "TSP",
+      "module": "modules.applications.optimization.TSP.TSP",
+      "submodules": [
+        {
+          "name": "Ising",
+          "module": "modules.applications.optimization.TSP.mappings.ISING",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            },
+            {
+              "name": "numpy",
+              "version": "1.24.1"
+            },
+            {
+              "name": "dimod",
+              "version": "0.12.5"
+            },
+            {
+              "name": "more-itertools",
+              "version": "9.0.0"
+            },
+            {
+              "name": "qiskit-optimization",
+              "version": "0.5.0"
+            },
+            {
+              "name": "pyqubo",
+              "version": "1.4.0"
+            },
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            },
+            {
+              "name": "dwave_networkx",
+              "version": "0.8.13"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QAOA",
+              "module": "modules.solvers.QAOA",
+              "requirements": [
+                {
+                  "name": "amazon-braket-sdk",
+                  "version": "1.35.1"
+                },
+                {
+                  "name": "scipy",
+                  "version": "1.10.1"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "LocalSimulator",
+                  "module": "modules.devices.braket.LocalSimulator",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "PennylaneQAOA",
+              "module": "modules.solvers.PennylaneQAOA",
+              "requirements": [
+                {
+                  "name": "pennylane",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "pennylane-lightning",
+                  "version": "0.28.0"
+                },
+                {
+                  "name": "amazon-braket-pennylane-plugin",
+                  "version": "1.5.2"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "module": "modules.devices.braket.SV1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "module": "modules.devices.braket.TN1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "module": "modules.devices.braket.Ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "module": "modules.devices.braket.Rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "module": "modules.devices.braket.OQC",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.35.1"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.25.7"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.22.7"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "braket.local.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit.autograd",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qulacs.simulator",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.gpu",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.qubit",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "QiskitQAOA",
+              "module": "modules.solvers.QiskitQAOA",
+              "requirements": [
+                {
+                  "name": "qiskit",
+                  "version": "0.40.0"
+                },
+                {
+                  "name": "qiskit-optimization",
+                  "version": "0.5.0"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.24.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "qasm_simulator",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qasm_simulator_gpu",
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Qubo",
+          "module": "modules.applications.optimization.TSP.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            },
+            {
+              "name": "dwave_networkx",
+              "version": "0.8.13"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "SimulatedAnnealer",
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "GreedyClassicalTSP",
+          "module": "modules.solvers.GreedyClassicalTSP",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "ReverseGreedyClassicalTSP",
+          "module": "modules.solvers.ReverseGreedyClassicalTSP",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "RandomTSP",
+          "module": "modules.solvers.RandomClassicalTSP",
+          "requirements": [
+            {
+              "name": "networkx",
+              "version": "2.8.8"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "networkx",
+          "version": "2.8.8"
+        },
+        {
+          "name": "numpy",
+          "version": "1.24.1"
+        }
+      ]
+    }
+  ]
+}

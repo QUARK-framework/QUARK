@@ -49,6 +49,33 @@ class PennylaneQAOA(Solver):
                                "lightning.gpu",
                                "lightning.qubit"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "pennylane",
+                "version": "0.28.0"
+            },
+            {
+                "name": "pennylane-lightning",
+                "version": "0.28.0"
+            },
+            {
+                "name": "amazon-braket-pennylane-plugin",
+                "version": "1.5.2"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_default_submodule(self, option: str) -> Core:
 
         if option == "arn:aws:braket:::device/qpu/ionq/ionQdevice":
@@ -57,7 +84,7 @@ class PennylaneQAOA(Solver):
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
             from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
-        elif option == "arn:aws:braket:::modules.device/quantum-simulator/amazon/tn1":
+        elif option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
             from modules.devices.braket.TN1 import TN1  # pylint: disable=C0415
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
         elif option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":

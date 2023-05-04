@@ -20,6 +20,7 @@ modules.solvers.ReverseGreedyClassicalTSP.ReverseGreedyClassicalTSP
       ~ReverseGreedyClassicalTSP.get_available_submodule_options
       ~ReverseGreedyClassicalTSP.get_default_submodule
       ~ReverseGreedyClassicalTSP.get_parameter_options
+      ~ReverseGreedyClassicalTSP.get_requirements
       ~ReverseGreedyClassicalTSP.get_submodule
       ~ReverseGreedyClassicalTSP.postprocess
       ~ReverseGreedyClassicalTSP.preprocess

@@ -33,6 +33,25 @@ class QubovertQubo(Mapping):
         self.pubo_problem = None
         self.nr_vars = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "nnf",
+                "version": "0.4.1"
+            },
+            {
+                "name": "qubovert",
+                "version": "1.2.5"
+            }
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

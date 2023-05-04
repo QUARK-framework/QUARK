@@ -173,7 +173,7 @@ class ConfigManager:
         """
         self.config = config
 
-    def load_config(self, app_modules: dict):
+    def load_config(self, app_modules: list[dict]):
         """
         Uses the config to generate all class instances needed to run the benchmark.
 

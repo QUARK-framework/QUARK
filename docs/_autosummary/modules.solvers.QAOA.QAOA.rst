@@ -20,6 +20,7 @@ modules.solvers.QAOA.QAOA
       ~QAOA.get_available_submodule_options
       ~QAOA.get_default_submodule
       ~QAOA.get_parameter_options
+      ~QAOA.get_requirements
       ~QAOA.get_submodule
       ~QAOA.postprocess
       ~QAOA.preprocess

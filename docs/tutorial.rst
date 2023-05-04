@@ -7,26 +7,60 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3, you need to install Python 3 if you don`t have it already installed.
+As this framework is implemented in Python ≥ 3.9, you need to install at least Python 3.9 if you don`t have it already installed.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually
+2. Use the QUARK installer
 
-2. Create new conda env using ``environment.yml``: ``conda env create -f environment.yml``
+To limit the number of packages you need to install, the installer gives you the option to only include a subsection of
+QUARK modules.
 
-   **Note:** Currently environment.yml is only tested for macOS users!
+For this installer to work you need to install the following packages in the first place:
+ * inquirer
+ * pyyaml
 
-Some packages such as ``pennylane-lightning[gpu]`` are not included in this environment file as these work only on specific
-hardware! Therefore, these have to be installed manually on demand.
-
-For exporting your environment run:
+You can select the modules of choice via:
 
 ::
 
-   conda env export --no-builds > <environment-name>.yml
+   python src/main.py env --install myenv
 
-In case you don't want to install all the packages needed by the different applications, mapping, devices or solvers you
-can also use the dynamic import feature. More information about that can be found in the ``Dynamic Imports``  section below.
+Of course there is a default option, which will include all available options.
+
+Depending on your installed modules, you will need to install different python packages.
+We provide the option to generate a Conda file or a pip requirements file, which you then can install.
+
+You can also install multiple QUARK environments and then switch between them via:
+
+::
+
+   python src/main.py env --activate myenv2
+
+**Note:**  Different modules require different python packages, be sure that you python environment has the necessary packages installed!
+
+To see which environments are installed please use:
+
+::
+
+   python src/main.py env --list
+
+You can also visualize the contents of your QUARK environment:
+
+::
+
+
+    (quark) %  python src/main.py env --show myenv
+    [...]
+    Content of the Environment:
+    └── TSP
+        └── GreedyClassicalTSP
+            └── Local
+
+
+In case you want to use custom modules file (for example to use external modules from other repositories), you can still
+use the ``--modules`` option. You can find the documentation in the Dynamic Imports section.
+
 
 Running a Benchmark
 ~~~~~~~~~~~~~~~~~~~~
@@ -92,9 +126,6 @@ Example Run (You need to check at least one option with an ``X`` for the checkbo
     2023-03-21 09:18:51,389 [INFO]
     2023-03-21 09:18:51,389 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50/results.json
     2023-03-21 09:18:51,746 [INFO] Finished creating plots.
-    2023-03-21 09:18:51,746 [INFO]  ============================================================
-    2023-03-21 09:18:51,746 [INFO]  ====================  QUARK finished!   ====================
-    2023-03-21 09:18:51,746 [INFO]  ============================================================
 
 
 All used config files, logs and results are stored in a folder in the
@@ -152,10 +183,11 @@ This allows you to generate plots from multiple experiments.
 Dynamic Imports
 ~~~~~~~~~~~~~~~
 
-You can specify the applications, mappers, solvers and devices that the benchmark manager should work with by
-specifying a module configuration file with the option ``-m | --modules``. This way you can add new modules without
-changing the benchmark manager. This also implies that new library dependencies introduced by your modules are
-needed only if these modules are listed in the module configuration file.
+You can specify the modules that are available in the QUARK framework by specifying a module configuration file with
+the option ``-m | --modules``.
+This way you can also work with modules that are compatible with QUARK, but are not part of the original QUARK repository.
+This also implies that new library dependencies introduced by your modules are needed only if these modules are listed
+in the module configuration file.
 
 The module configuration file has to be a json file of the form:
 ::
@@ -175,7 +207,7 @@ The module configuration file has to be a json file of the form:
       },...
     ]
 
-``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
+The fields ``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
 has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified its
 value will be added to the python search path.
 In case the class requires some arguments in its constructor they can be defined in the ``args`` dictionary.

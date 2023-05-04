@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.ChoiISING.ChoiIsing
       ~ChoiIsing.get_available_submodule_options
       ~ChoiIsing.get_default_submodule
       ~ChoiIsing.get_parameter_options
+      ~ChoiIsing.get_requirements
       ~ChoiIsing.get_submodule
       ~ChoiIsing.map
       ~ChoiIsing.postprocess

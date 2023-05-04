@@ -20,6 +20,7 @@ modules.solvers.ClassicalSAT.ClassicalSAT
       ~ClassicalSAT.get_available_submodule_options
       ~ClassicalSAT.get_default_submodule
       ~ClassicalSAT.get_parameter_options
+      ~ClassicalSAT.get_requirements
       ~ClassicalSAT.get_submodule
       ~ClassicalSAT.postprocess
       ~ClassicalSAT.preprocess

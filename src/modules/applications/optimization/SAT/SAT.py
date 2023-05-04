@@ -43,6 +43,25 @@ class SAT(Optimization):
         self.num_constraints = None
         self.num_variables = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "nnf",
+                "version": "0.4.1"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_solution_quality_unit(self) -> str:
         return "Evaluation"
 

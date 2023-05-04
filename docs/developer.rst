@@ -37,6 +37,9 @@ You can also implement a new module type that inherits from another abstract mod
 So for example we have an `Optimization` class, that specifies the requirements for an optimization application. This
 `Optimization` class inherits the requirements from the more general `Application` class.
 
+Every class also needs to implement the `get_requirements` method, where one specifies which imports are used by this class
+and which version.
+This is needed to provide the user the information which packages need to be installed.
 
 Adding a new Class for an existing Module Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,6 +59,7 @@ another module (for example a solver). Also the new application has to be added 
 Every application has a couple of functions that need to be implemented:
     - :code:`get_parameter_options(self)`: Method to return the parameters in a dictionary needed to create a concrete problem of an application.
     - :code:`save(self, path)`: Method which stores the application instance to a file. Needed for making experiments reproducible.
+    - :code:`get_requirements()`: Which packages are used by this application.
     - :code:`get_default_submodule(self, option)`: Based on :code:`option` string the function returns an instance of a submodule class.
     - :code:`preprocess(self, input_data: any, config: dict, **kwargs)`: Function which is always called and that can be used to pass certain information to the next sub-module.
     - :code:`postprocess(self, input_data: any, config: dict, **kwargs)`:  Function which is always called and that can be used to pass certain information to the next parent-module.
@@ -87,6 +91,19 @@ Example for an Application, which should reside under ``src/modules/applications
             def __init__(self):
                 super().__init__("MyApplication")
                 self.submodule_options  = ["submodule1"]
+
+            @staticmethod
+            def get_requirements() -> list:
+                return [
+                    {
+                        "name": "networkx",
+                        "version": "2.8.8"
+                    },
+                    {
+                        "name": "numpy",
+                        "version": "1.24.1"
+                    }
+                ]
 
             def get_default_submodule(self, option: str) -> Core:
 
@@ -166,6 +183,16 @@ Example for an Application, which should reside under ``src/modules/applications
 
             def save(self, path, iter_count):
                 save_your_application(self.application, f"{path}/application.txt")
+
+
+Updating the Module Database
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After adding a new module or making a module available for another module you need to update the Module Database stored
+under `.settings/module_db.json`. You might also need to update your current QUARK module environment so that your new
+modules can be used. You can update this database automatically via `python src/main.py env --createmoduledb`.
+
+**Note:** For `python src/main.py env --createmoduledb` to work you need to have all packages from all modules installed!
 
 
 Review Process

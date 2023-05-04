@@ -35,6 +35,30 @@ class Ising(Mapping):
         self.submodule_options = ["QAOA", "PennylaneQAOA"]
         self.key_mapping = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            },
+            {
+                "name": "dimod",
+                "version": "0.12.5"
+            },
+            *Qubo.get_requirements()
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

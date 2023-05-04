@@ -33,6 +33,21 @@ class Qubo(Mapping):
         super().__init__()
         self.submodule_options = ["Annealer"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            }
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

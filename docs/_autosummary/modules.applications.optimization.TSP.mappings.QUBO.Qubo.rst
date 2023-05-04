@@ -20,6 +20,7 @@ modules.applications.optimization.TSP.mappings.QUBO.Qubo
       ~Qubo.get_available_submodule_options
       ~Qubo.get_default_submodule
       ~Qubo.get_parameter_options
+      ~Qubo.get_requirements
       ~Qubo.get_submodule
       ~Qubo.map
       ~Qubo.postprocess

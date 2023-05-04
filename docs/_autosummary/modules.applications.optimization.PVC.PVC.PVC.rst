@@ -23,6 +23,7 @@ modules.applications.optimization.PVC.PVC.PVC
       ~PVC.get_available_submodule_options
       ~PVC.get_default_submodule
       ~PVC.get_parameter_options
+      ~PVC.get_requirements
       ~PVC.get_solution_quality_unit
       ~PVC.get_submodule
       ~PVC.postprocess

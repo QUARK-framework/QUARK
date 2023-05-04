@@ -20,6 +20,7 @@ modules.solvers.RandomClassicalPVC.RandomPVC
       ~RandomPVC.get_available_submodule_options
       ~RandomPVC.get_default_submodule
       ~RandomPVC.get_parameter_options
+      ~RandomPVC.get_requirements
       ~RandomPVC.get_submodule
       ~RandomPVC.postprocess
       ~RandomPVC.preprocess

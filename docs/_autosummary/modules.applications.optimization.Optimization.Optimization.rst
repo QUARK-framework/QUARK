@@ -23,6 +23,7 @@ modules.applications.optimization.Optimization.Optimization
       ~Optimization.get_available_submodule_options
       ~Optimization.get_default_submodule
       ~Optimization.get_parameter_options
+      ~Optimization.get_requirements
       ~Optimization.get_solution_quality_unit
       ~Optimization.get_submodule
       ~Optimization.postprocess

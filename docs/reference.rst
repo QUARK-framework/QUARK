@@ -10,3 +10,4 @@ Reference
    BenchmarkRecord <_autosummary/BenchmarkRecord>
    Config Manager <_autosummary/ConfigManager>
    Metrics <_autosummary/Metrics>
+   Installer <_autosummary/Installer>

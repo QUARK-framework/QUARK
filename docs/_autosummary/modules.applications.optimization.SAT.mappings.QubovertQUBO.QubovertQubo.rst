@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.QubovertQUBO.QubovertQubo
       ~QubovertQubo.get_available_submodule_options
       ~QubovertQubo.get_default_submodule
       ~QubovertQubo.get_parameter_options
+      ~QubovertQubo.get_requirements
       ~QubovertQubo.get_submodule
       ~QubovertQubo.map
       ~QubovertQubo.postprocess

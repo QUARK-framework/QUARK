@@ -42,6 +42,42 @@ class Ising(Mapping):
         self.graph = None
         self.config = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            },
+            {
+                "name": "dimod",
+                "version": "0.12.5"
+            },
+            {
+                "name": "more-itertools",
+                "version": "9.0.0"
+            },
+            {
+                "name": "qiskit-optimization",
+                "version": "0.5.0"
+            },
+            {
+                "name": "pyqubo",
+                "version": "1.4.0"
+            },
+            *Qubo.get_requirements()
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

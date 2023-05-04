@@ -37,6 +37,30 @@ class DinneenIsing(Mapping):
         self.problem = None
         self.qubo_mapping = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "nnf",
+                "version": "0.4.1"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            },
+            {
+                "name": "dimod",
+                "version": "0.12.5"
+            },
+            *DinneenQubo.get_requirements()
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

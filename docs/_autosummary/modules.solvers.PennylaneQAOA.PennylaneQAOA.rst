@@ -20,6 +20,7 @@ modules.solvers.PennylaneQAOA.PennylaneQAOA
       ~PennylaneQAOA.get_available_submodule_options
       ~PennylaneQAOA.get_default_submodule
       ~PennylaneQAOA.get_parameter_options
+      ~PennylaneQAOA.get_requirements
       ~PennylaneQAOA.get_submodule
       ~PennylaneQAOA.normalize_data
       ~PennylaneQAOA.postprocess

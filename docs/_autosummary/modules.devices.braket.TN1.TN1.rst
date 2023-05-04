@@ -22,6 +22,7 @@ modules.devices.braket.TN1.TN1
       ~TN1.get_device
       ~TN1.get_device_name
       ~TN1.get_parameter_options
+      ~TN1.get_requirements
       ~TN1.get_submodule
       ~TN1.init_s3_storage
       ~TN1.postprocess

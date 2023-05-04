@@ -22,6 +22,7 @@ modules.devices.SimulatedAnnealingSampler.SimulatedAnnealingSampler
       ~SimulatedAnnealingSampler.get_device
       ~SimulatedAnnealingSampler.get_device_name
       ~SimulatedAnnealingSampler.get_parameter_options
+      ~SimulatedAnnealingSampler.get_requirements
       ~SimulatedAnnealingSampler.get_submodule
       ~SimulatedAnnealingSampler.postprocess
       ~SimulatedAnnealingSampler.preprocess

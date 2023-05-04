@@ -45,6 +45,19 @@ class TSP(Optimization):
         super().__init__("TSP")
         self.submodule_options = ["Ising", "QUBO", "GreedyClassicalTSP", "ReverseGreedyClassicalTSP", "RandomTSP"]
 
+    @staticmethod
+    def get_requirements() -> list:
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_solution_quality_unit(self) -> str:
         return "Tour cost"
 
@@ -90,7 +103,7 @@ class TSP(Optimization):
                 "values": list([3, 4, 6, 8, 10, 14, 16]),
                 "allow_ranges": True,
                 "description": "How many nodes does you graph need?",
-                "postproc": int # postproc needed to parse the result from allow_ranges to int
+                "postproc": int  # postproc needed to parse the result from allow_ranges to int
             }
         }
 

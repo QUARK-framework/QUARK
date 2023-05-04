@@ -20,6 +20,7 @@ modules.solvers.Solver.Solver
       ~Solver.get_available_submodule_options
       ~Solver.get_default_submodule
       ~Solver.get_parameter_options
+      ~Solver.get_requirements
       ~Solver.get_submodule
       ~Solver.postprocess
       ~Solver.preprocess

@@ -20,6 +20,7 @@ modules.solvers.ReverseGreedyClassicalPVC.ReverseGreedyClassicalPVC
       ~ReverseGreedyClassicalPVC.get_available_submodule_options
       ~ReverseGreedyClassicalPVC.get_default_submodule
       ~ReverseGreedyClassicalPVC.get_parameter_options
+      ~ReverseGreedyClassicalPVC.get_requirements
       ~ReverseGreedyClassicalPVC.get_submodule
       ~ReverseGreedyClassicalPVC.postprocess
       ~ReverseGreedyClassicalPVC.preprocess

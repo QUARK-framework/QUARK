@@ -20,6 +20,7 @@ modules.solvers.RandomClassicalTSP.RandomTSP
       ~RandomTSP.get_available_submodule_options
       ~RandomTSP.get_default_submodule
       ~RandomTSP.get_parameter_options
+      ~RandomTSP.get_requirements
       ~RandomTSP.get_submodule
       ~RandomTSP.postprocess
       ~RandomTSP.preprocess

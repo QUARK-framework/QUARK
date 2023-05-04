@@ -22,6 +22,7 @@ modules.devices.braket.SV1.SV1
       ~SV1.get_device
       ~SV1.get_device_name
       ~SV1.get_parameter_options
+      ~SV1.get_requirements
       ~SV1.get_submodule
       ~SV1.init_s3_storage
       ~SV1.postprocess

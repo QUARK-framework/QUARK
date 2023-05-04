@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.DinneenISING.DinneenIsing
       ~DinneenIsing.get_available_submodule_options
       ~DinneenIsing.get_default_submodule
       ~DinneenIsing.get_parameter_options
+      ~DinneenIsing.get_requirements
       ~DinneenIsing.get_submodule
       ~DinneenIsing.map
       ~DinneenIsing.postprocess

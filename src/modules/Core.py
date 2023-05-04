@@ -132,3 +132,12 @@ class Core(ABC):
             return self.submodule_options
         else:
             return [o["name"] for o in self.sub_options]
+
+    @staticmethod
+    def get_requirements() -> list:
+        """
+        Returns the required pip packages of this module. Optional also the version can be added.
+        :return: List of dictionaries
+        :rtype: list
+        """
+        return list()

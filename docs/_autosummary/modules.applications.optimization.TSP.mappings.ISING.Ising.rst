@@ -20,6 +20,7 @@ modules.applications.optimization.TSP.mappings.ISING.Ising
       ~Ising.get_available_submodule_options
       ~Ising.get_default_submodule
       ~Ising.get_parameter_options
+      ~Ising.get_requirements
       ~Ising.get_submodule
       ~Ising.map
       ~Ising.postprocess

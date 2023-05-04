@@ -37,6 +37,29 @@ class QAOA(Solver):
                                "arn:aws:braket:::device/qpu/ionq/ionQdevice",
                                "arn:aws:braket:::device/qpu/rigetti/Aspen-9"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "amazon-braket-sdk",
+                "version": "1.35.1"
+            },
+            {
+                "name": "scipy",
+                "version": "1.10.1"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_default_submodule(self, option: str) -> Core:
 
         if option == "arn:aws:braket:::device/qpu/ionq/ionQdevice":

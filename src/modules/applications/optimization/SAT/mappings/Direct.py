@@ -34,6 +34,25 @@ class Direct(Mapping):
         super().__init__()
         self.submodule_options = ["ClassicalSAT", "RandomSAT"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "nnf",
+                "version": "0.4.1"
+            },
+            {
+                "name": "python-sat",
+                "version": "0.1.7.dev26"
+            }
+        ]
+
     def get_parameter_options(self):
         """
         Returns empty dict as this mapping has no configurable settings.

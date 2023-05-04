@@ -22,6 +22,7 @@ modules.devices.braket.Ionq.Ionq
       ~Ionq.get_device
       ~Ionq.get_device_name
       ~Ionq.get_parameter_options
+      ~Ionq.get_requirements
       ~Ionq.get_submodule
       ~Ionq.init_s3_storage
       ~Ionq.postprocess

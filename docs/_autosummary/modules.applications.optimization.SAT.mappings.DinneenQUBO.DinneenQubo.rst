@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.DinneenQUBO.DinneenQubo
       ~DinneenQubo.get_available_submodule_options
       ~DinneenQubo.get_default_submodule
       ~DinneenQubo.get_parameter_options
+      ~DinneenQubo.get_requirements
       ~DinneenQubo.get_submodule
       ~DinneenQubo.map
       ~DinneenQubo.postprocess

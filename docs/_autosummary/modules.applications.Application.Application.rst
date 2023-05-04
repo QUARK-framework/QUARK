@@ -1,4 +1,4 @@
-﻿modules.applications.Application.Application
+modules.applications.Application.Application
 ============================================
 
 .. currentmodule:: modules.applications.Application
@@ -21,6 +21,7 @@
       ~Application.get_available_submodule_options
       ~Application.get_default_submodule
       ~Application.get_parameter_options
+      ~Application.get_requirements
       ~Application.get_submodule
       ~Application.postprocess
       ~Application.preprocess

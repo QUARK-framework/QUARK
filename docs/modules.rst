@@ -15,3 +15,4 @@
    BenchmarkRecord
    ConfigManager
    BenchmarkManager
+   Installer

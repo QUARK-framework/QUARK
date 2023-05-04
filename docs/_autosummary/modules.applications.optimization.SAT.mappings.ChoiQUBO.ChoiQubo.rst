@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.ChoiQUBO.ChoiQubo
       ~ChoiQubo.get_available_submodule_options
       ~ChoiQubo.get_default_submodule
       ~ChoiQubo.get_parameter_options
+      ~ChoiQubo.get_requirements
       ~ChoiQubo.get_submodule
       ~ChoiQubo.map
       ~ChoiQubo.postprocess

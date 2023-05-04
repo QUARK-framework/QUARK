@@ -40,6 +40,11 @@ class Braket(Device, ABC):
         self.arn = arn
         self.s3_destination_folder = None
 
+        if 'SKIP_INIT' in os.environ:
+            # TODO: This is currently needed to that create_module_db in the Installer does not need to execute the rest
+            #       of this section, which would be unnecessary. However this should be done better in the future!
+            return
+
         if 'HTTP_PROXY' in os.environ:
             proxy_definitions = {
                 'http': os.environ['HTTP_PROXY'],
@@ -84,6 +89,29 @@ class Braket(Device, ABC):
             logging.error(f"AWS-Profile {profile_name} could not be found! Please set env-variable AWS_PROFILE. "
                           f"Only LocalSimulator is available.")
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "amazon-braket-sdk",
+                "version": "1.35.1"
+            },
+            {
+                "name": "botocore",
+                "version": "1.25.7"
+            },
+            {
+                "name": "boto3",
+                "version": "1.22.7"
+            }
+        ]
+
     def init_s3_storage(self, folder_name: str) -> None:
         """
         Calls function to create a s3 folder that is needed for Amazon Braket.
@@ -93,7 +121,7 @@ class Braket(Device, ABC):
         :return:
         :rtype: None
         """
-        run_timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        run_timestamp = datetime.today().date()
         username = getpass.getuser()
 
         bucket_name = f"amazon-braket-benchmark-framework-{run_timestamp}-{username}"

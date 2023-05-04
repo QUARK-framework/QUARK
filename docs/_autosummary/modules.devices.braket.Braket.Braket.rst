@@ -22,6 +22,7 @@ modules.devices.braket.Braket.Braket
       ~Braket.get_device
       ~Braket.get_device_name
       ~Braket.get_parameter_options
+      ~Braket.get_requirements
       ~Braket.get_submodule
       ~Braket.init_s3_storage
       ~Braket.postprocess

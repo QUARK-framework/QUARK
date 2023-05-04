@@ -77,7 +77,7 @@ class BenchmarkManager:
         filehandler.setFormatter(formatter)
         logger.addHandler(filehandler)
 
-    def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list,
+    def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list[dict],
                               store_dir: str = None) -> None:
         """
         Executes the benchmarks according to the given settings.
@@ -125,7 +125,7 @@ class BenchmarkManager:
                 path = f"{self.store_dir}/benchmark_{idx_backlog}"
                 Path(path).mkdir(parents=True, exist_ok=True)
                 with open(f"{path}/application_config.json", 'w') as filehandler:
-                    json.dump(backlog_item["config"], filehandler)
+                    json.dump(backlog_item["config"], filehandler, indent=2)
                 for i in range(1, repetitions + 1):
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
@@ -156,7 +156,7 @@ class BenchmarkManager:
                     record.sum_up_times()
 
                 with open(f"{path}/results.json", 'w') as filehandler:
-                    json.dump([x.get() for x in benchmark_records], filehandler)
+                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2)
 
                 logging.info("")
                 logging.info(" ============================================================ ")
@@ -233,7 +233,7 @@ class BenchmarkManager:
     def _save_as_json(self, results: list) -> None:
         logging.info(f"Saving {len(results)} benchmark records to {self.store_dir}/results.json")
         with open(f"{self.store_dir}/results.json", 'w') as filehandler:
-            json.dump(results, filehandler)
+            json.dump(results, filehandler, indent=2)
 
     def summarize_results(self, input_dirs: list) -> None:
         """

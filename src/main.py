@@ -18,6 +18,7 @@ import argparse
 from collections.abc import Iterable
 import yaml
 
+from Installer import Installer
 from utils import _expand_paths
 
 # add the paths before the following imports
@@ -79,20 +80,6 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
 
 
-def get_default_app_modules() -> List[Dict]:
-    """
-    Returns the default application modules which should be imported.
-
-    :return: List with the default application modules
-    :rtype: List[Dict]
-    """
-    return [
-        {"name": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
-        {"name": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-        {"name": "TSP", "module": "modules.applications.optimization.TSP.TSP"}
-    ]
-
-
 def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     """
     Function to start a benchmark run from the code
@@ -119,8 +106,107 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     config_manager.set_config(benchmark_config)
     benchmark_manager = BenchmarkManager()
     # May be overridden by using the -m|--modules option
-    app_modules = get_default_app_modules()
+    installer = Installer()
+    app_modules = installer.get_env(installer.get_active_env())
     benchmark_manager.orchestrate_benchmark(config_manager, store_dir=store_dir, app_modules=app_modules)
+
+
+def create_benchmark_parser(parser: argparse.ArgumentParser):
+    parser.add_argument("-c", "--config", help="Provide valid config file instead of interactive mode")
+    parser.add_argument('-cc', '--createconfig', help='If you want o create a config without executing it',
+                        required=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
+                        required=False)
+    parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+    parser.set_defaults(goal='benchmark')
+
+
+def create_env_parser(parser: argparse.ArgumentParser):
+    subparsers = parser.add_subparsers(help='env')
+
+    parser_env = subparsers.add_parser('env', help='When you want to change something about the QUARK module env.')
+    parser_env.add_argument('-i', '--install', help='Install certain QUARK modules', required=False)
+    parser_env.add_argument('-a', '--activate', help='Activate a certain set of modules', required=False)
+    parser_env.add_argument('-cm', '--createmoduledb', help='Create module db', required=False,
+                            action=argparse.BooleanOptionalAction)
+    parser_env.add_argument('-l', '--list', help='List existing environments', required=False,
+                            action=argparse.BooleanOptionalAction)
+    parser_env.add_argument('-s', '--show', help='Show the content of an env', required=False)
+    parser_env.set_defaults(goal='env')
+
+
+def handle_benchmark_run(args: argparse.Namespace) -> None:
+    """
+    Handle the different options of a benchmark run
+
+    :param args: Namespace with the arguments by the user
+    :type args: argparse.Namespace
+    :return:
+    :rtype: None
+    """
+    benchmark_manager = BenchmarkManager()
+
+    if args.summarize:
+        benchmark_manager.summarize_results(args.summarize)
+    else:
+        config_manager = ConfigManager()
+        if args.modules:
+            logging.info(f"load application modules configuration from {args.modules}")
+            # preprocess the 'modules' configuration:
+            #   + filter comment lines (lines starting with '#')
+            #   + replace relative paths by taking them relative to the location of the modules configuration file.
+            base_dir = os.path.dirname(args.modules)
+            with open(args.modules) as filehandler:
+                app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
+        else:
+            # Get current env here
+            installer = Installer()
+            app_modules = installer.get_env(installer.get_active_env())
+
+        if args.config:
+            logging.info(f"Provided config file at {args.config}")
+            # Load config
+            with open(args.config) as filehandler:
+                # returns JSON object as a dictionary
+                try:
+                    benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
+                except Exception as e:
+                    logging.error(f"ERROR: Problem loading the given config file: {e}")
+                    raise Exception("Config file needs to be a valid QUARK YAML Config!")
+
+                config_manager.set_config(benchmark_config)
+        else:
+            config_manager.generate_benchmark_configs(app_modules)
+
+        if args.createconfig:
+            logging.info("Selected config is:")
+            config_manager.print()
+        else:
+            benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
+            results = benchmark_manager.load_results()
+            benchmark_manager.vizualize_results(results, benchmark_manager.store_dir)
+
+
+def handler_env_run(args: argparse.Namespace) -> None:
+    """
+    Orchestrates the requests to the QUARK module environment
+
+    :param args: Namespace with the arguments by the user
+    :type args: argparse.Namespace
+    :return:
+    :rtype: None
+    """
+    installer = Installer()
+    if args.createmoduledb:
+        installer.create_module_db()
+    elif args.activate:
+        installer.set_active_env(args.activate)
+    elif args.install:
+        installer.install(args.install)
+    elif args.list:
+        installer.list_envs()
+    elif args.show:
+        installer.show(installer.get_env(args.show))
 
 
 def main() -> None:
@@ -130,52 +216,20 @@ def main() -> None:
     setup_logging()
 
     try:
-        benchmark_manager = BenchmarkManager()
-
         parser = argparse.ArgumentParser()
-        parser.add_argument("-c", "--config", help="Provide valid config file instead of interactive mode")
-        parser.add_argument('-cc', '--createconfig', help='If you want o create a config without executing it',
-                            required=False, action=argparse.BooleanOptionalAction)
-        parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
-                            required=False)
-        parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+        create_benchmark_parser(parser)
+        create_env_parser(parser)
+
         args = parser.parse_args()
-        if args.summarize:
-            benchmark_manager.summarize_results(args.summarize)
+        if args.goal == "env":
+            handler_env_run(args)
+
         else:
-            config_manager = ConfigManager()
-            if args.modules:
-                logging.info(f"load application modules configuration from {args.modules}")
-                # preprocess the 'modules' configuration:
-                #   + filter comment lines (lines starting with '#')
-                #   + replace relative paths by taking them relative to the location of the modules configuration file.
-                base_dir = os.path.dirname(args.modules)
-                with open(args.modules) as filehandler:
-                    app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
-            else:
-                app_modules = get_default_app_modules()
+            handle_benchmark_run(args)
 
-            if args.config:
-                logging.info(f"Provided config file at {args.config}")
-                # Load config
-                with open(args.config) as filehandler:
-                    # returns JSON object as a dictionary
-                    benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
-                    config_manager.set_config(benchmark_config)
-            else:
-                config_manager.generate_benchmark_configs(app_modules)
-
-            if args.createconfig:
-                logging.info("Selected config is:")
-                config_manager.print()
-            else:
-                benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
-                results = benchmark_manager.load_results()
-                benchmark_manager.vizualize_results(results, benchmark_manager.store_dir)
-
-            logging.info(" ============================================================ ")
-            logging.info(" ====================  QUARK finished!   ==================== ")
-            logging.info(" ============================================================ ")
+        logging.info(" ============================================================ ")
+        logging.info(" ====================  QUARK finished!   ==================== ")
+        logging.info(" ============================================================ ")
 
     except Exception as error:
         logging.error(error)

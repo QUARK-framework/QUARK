@@ -23,6 +23,7 @@ modules.applications.optimization.SAT.SAT.SAT
       ~SAT.get_available_submodule_options
       ~SAT.get_default_submodule
       ~SAT.get_parameter_options
+      ~SAT.get_requirements
       ~SAT.get_solution_quality_unit
       ~SAT.get_submodule
       ~SAT.postprocess

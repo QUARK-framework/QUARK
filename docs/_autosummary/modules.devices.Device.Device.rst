@@ -22,6 +22,7 @@ modules.devices.Device.Device
       ~Device.get_device
       ~Device.get_device_name
       ~Device.get_parameter_options
+      ~Device.get_requirements
       ~Device.get_submodule
       ~Device.postprocess
       ~Device.preprocess

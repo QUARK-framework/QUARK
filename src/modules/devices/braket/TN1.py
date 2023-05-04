@@ -14,7 +14,7 @@
 
 from braket.aws import AwsDevice
 
-from modules.devices.braket.Braket import Braket
+from modules.devices.braket.Braket import *
 
 
 class TN1(Braket):
@@ -27,8 +27,12 @@ class TN1(Braket):
         Constructor method
         """
         super().__init__(device_name=device_name, arn=device_arn)
-        self.init_s3_storage("tn1")
         self.submodule_options = []
+        if 'SKIP_INIT' in os.environ:
+            # TODO: This is currently needed to that create_module_db in the Installer does not need to execute the rest
+            #       of this section, which would be unnecessary. However this should be done better in the future!
+            return
+        self.init_s3_storage("tn1")
         self.device = AwsDevice(device_arn, aws_session=self.aws_session)
 
     def get_parameter_options(self) -> dict:

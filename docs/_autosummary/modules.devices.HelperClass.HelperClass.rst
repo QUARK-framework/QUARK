@@ -22,6 +22,7 @@ modules.devices.HelperClass.HelperClass
       ~HelperClass.get_device
       ~HelperClass.get_device_name
       ~HelperClass.get_parameter_options
+      ~HelperClass.get_requirements
       ~HelperClass.get_submodule
       ~HelperClass.postprocess
       ~HelperClass.preprocess

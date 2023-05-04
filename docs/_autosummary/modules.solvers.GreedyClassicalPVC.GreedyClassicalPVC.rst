@@ -20,6 +20,7 @@ modules.solvers.GreedyClassicalPVC.GreedyClassicalPVC
       ~GreedyClassicalPVC.get_available_submodule_options
       ~GreedyClassicalPVC.get_default_submodule
       ~GreedyClassicalPVC.get_parameter_options
+      ~GreedyClassicalPVC.get_requirements
       ~GreedyClassicalPVC.get_submodule
       ~GreedyClassicalPVC.postprocess
       ~GreedyClassicalPVC.preprocess

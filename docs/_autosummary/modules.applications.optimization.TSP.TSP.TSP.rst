@@ -23,6 +23,7 @@ modules.applications.optimization.TSP.TSP.TSP
       ~TSP.get_available_submodule_options
       ~TSP.get_default_submodule
       ~TSP.get_parameter_options
+      ~TSP.get_requirements
       ~TSP.get_solution_quality_unit
       ~TSP.get_submodule
       ~TSP.postprocess

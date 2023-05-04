@@ -20,6 +20,7 @@ modules.solvers.RandomClassicalSAT.RandomSAT
       ~RandomSAT.get_available_submodule_options
       ~RandomSAT.get_default_submodule
       ~RandomSAT.get_parameter_options
+      ~RandomSAT.get_requirements
       ~RandomSAT.get_submodule
       ~RandomSAT.postprocess
       ~RandomSAT.preprocess

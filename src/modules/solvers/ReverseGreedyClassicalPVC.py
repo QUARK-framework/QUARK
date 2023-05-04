@@ -38,6 +38,21 @@ class ReverseGreedyClassicalPVC(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            }
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns empty dict as this solver has no configurable settings

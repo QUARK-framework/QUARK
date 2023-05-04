@@ -22,6 +22,7 @@ modules.devices.braket.Rigetti.Rigetti
       ~Rigetti.get_device
       ~Rigetti.get_device_name
       ~Rigetti.get_parameter_options
+      ~Rigetti.get_requirements
       ~Rigetti.get_submodule
       ~Rigetti.init_s3_storage
       ~Rigetti.postprocess

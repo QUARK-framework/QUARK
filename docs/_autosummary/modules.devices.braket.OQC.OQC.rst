@@ -22,6 +22,7 @@ modules.devices.braket.OQC.OQC
       ~OQC.get_device
       ~OQC.get_device_name
       ~OQC.get_parameter_options
+      ~OQC.get_requirements
       ~OQC.get_submodule
       ~OQC.init_s3_storage
       ~OQC.postprocess

@@ -38,6 +38,29 @@ class QiskitQAOA(Solver):
         super().__init__()
         self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "qiskit",
+                "version": "0.40.0"
+            },
+            {
+                "name": "qiskit-optimization",
+                "version": "0.5.0"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_default_submodule(self, option: str) -> Core:
         if option == "qasm_simulator":
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415

@@ -45,6 +45,25 @@ class PVC(Optimization):
         super().__init__("PVC")
         self.submodule_options = ["Ising", "Qubo", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "networkx",
+                "version": "2.8.8"
+            },
+            {
+                "name": "numpy",
+                "version": "1.24.1"
+            }
+        ]
+
     def get_solution_quality_unit(self) -> str:
         return "Tour cost"
 

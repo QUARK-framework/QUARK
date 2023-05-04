@@ -20,6 +20,7 @@ modules.applications.Mapping.Mapping
       ~Mapping.get_available_submodule_options
       ~Mapping.get_default_submodule
       ~Mapping.get_parameter_options
+      ~Mapping.get_requirements
       ~Mapping.get_submodule
       ~Mapping.map
       ~Mapping.postprocess

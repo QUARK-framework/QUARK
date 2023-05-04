@@ -20,6 +20,7 @@ modules.applications.optimization.SAT.mappings.Direct.Direct
       ~Direct.get_available_submodule_options
       ~Direct.get_default_submodule
       ~Direct.get_parameter_options
+      ~Direct.get_requirements
       ~Direct.get_submodule
       ~Direct.map
       ~Direct.postprocess

@@ -34,6 +34,21 @@ class ChoiQubo(Mapping):
         self.nr_vars = None
         self.reverse_dict = None
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {
+                "name": "nnf",
+                "version": "0.4.1"
+            }
+        ]
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this mapping

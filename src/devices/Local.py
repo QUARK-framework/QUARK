@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from devices.Device import Device
-from typing import TypedDict, Union
 
 class Local(Device):
     """

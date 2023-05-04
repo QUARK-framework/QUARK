@@ -471,10 +471,15 @@ class BenchmarkManager:
                                         try:
                                             logging.info(
                                                 f"Running {self.application.__class__.__name__} with config "
-                                                f"{application_config} on solver {solver.__class__.__name__} and device "
-                                                f"{device.get_device_name()} (Repetition {i}/{self.repetitions})")
-                                            logging.info(f"solver_config: {solver_config}")
-                                            logging.info(f"type of device_config: {type(device_config)}")
+                                                f"{application_config}"
+                                                f" on solver {solver.__class__.__name__} and device "
+                                                f"{device.get_device_name()}"
+                                                f" (Repetition {i}/{self.repetitions})")
+
+                                            if solver_config:
+                                                logging.info(f"Used solver config: {solver_config}")
+                                            if device_config:
+                                                logging.info(f"Used device config: {device_config}")
                                             solution_raw, time_to_solve, additional_solver_information = solver.run(
                                                 mapped_problem, device, solver_config, store_dir=path, repetition=i)
                                             processed_solution, time_to_reverse_map = mapping.reverse_map(solution_raw)

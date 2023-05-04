@@ -26,5 +26,5 @@ class SimulatedAnnealingSampler(Device):
         """
         Constructor method
         """
-        super().__init__(device_name="simulatedannealer")
+        super().__init__(device_name="simulated annealer")
         self.device = dwave.samplers.SimulatedAnnealingSampler()

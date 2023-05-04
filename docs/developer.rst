@@ -259,13 +259,24 @@ Example for a Device, which should reside under ``src/devices``:
 
 .. code-block:: python
 
-           from devices.Device import Device
+        from devices.Device import Device
 
-           class MyDevice(Device):
-               def __init__(self):
-                   super().__init__(device_name="MyDevice")
-                   self.device = MyDevice()
+        class MyDevice(Device):
 
+            def __init__(self):
+                super().__init__(device_name="MyDevice")
+                self.device = MyDevice()
+
+            def get_parameter_options(self):
+                return {
+                "number_of_cores": {
+                    "values": [1,2,3,4],
+                    "description": "How many CPU cores do you want to use?"
+                    }
+                }
+
+            class Config(TypedDict):
+                number_of_cores: int
 
 Review Process
 ~~~~~~~~~~~~~~~

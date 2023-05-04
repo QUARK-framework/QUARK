@@ -24,7 +24,7 @@ import numpy as np
 from applications.Application import *
 from applications.TSP.mappings.Direct import Direct
 from applications.TSP.mappings.ISING import Ising
-from applications.TSP.mappings.QUBO import Qubo
+from applications.TSP.mappings.QUBO import QUBO
 
 
 class TSP(Application):
@@ -48,16 +48,16 @@ class TSP(Application):
         Constructor method
         """
         super().__init__("TSP")
-        self.mapping_options = ["Ising", "Qubo", "Direct"]
+        self.mapping_options = ["Ising", "QUBO", "Direct"]
 
     def get_solution_quality_unit(self) -> str:
         return "Tour cost"
 
-    def get_mapping(self, mapping_option: str) -> Union[Ising, Qubo, Direct]:
+    def get_mapping(self, mapping_option: str) -> Union[Ising, QUBO, Direct]:
         if mapping_option == "Ising":
             return Ising()
-        elif mapping_option == "Qubo":
-            return Qubo()
+        elif mapping_option == "QUBO":
+            return QUBO()
         elif mapping_option == "Direct":
             return Direct()
         else:

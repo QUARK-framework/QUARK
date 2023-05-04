@@ -21,7 +21,7 @@ from applications.Mapping import *
 from solvers.Annealer import Annealer
 
 
-class Qubo(Mapping):
+class QUBO(Mapping):
     """
     QUBO formulation for the TSP.
 

@@ -27,6 +27,7 @@ modules.devices.braket.Braket.Braket
       ~Braket.init_s3_storage
       ~Braket.postprocess
       ~Braket.preprocess
+      ~Braket.set_config
    
    
 

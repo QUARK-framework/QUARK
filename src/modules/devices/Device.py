@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from modules.Core import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class Device(Core, ABC):
@@ -48,9 +49,7 @@ class Device(Core, ABC):
         :return: Available device settings for this device
         :rtype: dict
         """
-        return {
-            
-        }
+        return {}
 
     def set_config(self, config):
         self.config = config
@@ -68,9 +67,9 @@ class Device(Core, ABC):
         :return: Output and time needed
         :rtype: (any, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         self.config = config
-        return self, round(time() * 1000 - start, 3)
+        return self, end_time_measurement(start)
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
@@ -84,9 +83,9 @@ class Device(Core, ABC):
         :return: Output and time needed
         :rtype: (any, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         self.metrics.add_metric("device", self.get_device_name())
-        return input_data, round(time() * 1000 - start, 3)
+        return input_data, end_time_measurement(start)
 
     def get_device(self) -> any:
         """

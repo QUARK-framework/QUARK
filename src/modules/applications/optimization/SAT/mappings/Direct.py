@@ -20,6 +20,7 @@ from nnf.dimacs import dump
 from pysat.formula import CNF, WCNF
 
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class Direct(Mapping):
@@ -81,7 +82,7 @@ class Direct(Mapping):
         :return: mapped problem and the time it took to map it
         :rtype: tuple(WCNF, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         hard_constraints, soft_constraints = problem
         # get number of vars. The union is required in case not all vars are present in either tests/constraints.
         nr_vars = len(hard_constraints.vars().union(And(soft_constraints).vars()))
@@ -107,7 +108,7 @@ class Direct(Mapping):
         # add soft constraints, with weights.
         total_wcnf.extend(soft_cnf, weights=[1] * len(soft_cnf.clauses))
         logging.info(f'Generated pysat wcnf with {len(total_wcnf.hard)} constraints and {len(total_wcnf.soft)} tests.')
-        return total_wcnf, round(time() * 1000 - start, 3)
+        return total_wcnf, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 
@@ -130,7 +131,7 @@ class Direct(Mapping):
         :rtype: tuple(dict, float)
         """
 
-        start = time() * 1000
+        start = start_time_measurement()
         # converts from (3 / -3) -> (L2 : True / L2: False)
         mapped_sol = {f'L{abs(lit) - 1}': (lit > 0) for lit in solution}
-        return mapped_sol, round(time() * 1000 - start, 3)
+        return mapped_sol, end_time_measurement(start)

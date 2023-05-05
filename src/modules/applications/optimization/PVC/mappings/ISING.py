@@ -19,7 +19,8 @@ import numpy as np
 from dimod import qubo_to_ising
 
 from modules.applications.Mapping import *
-from modules.applications.optimization.PVC.mappings.QUBO import Qubo
+from modules.applications.optimization.PVC.mappings.QUBO import QUBO
+from utils import start_time_measurement, end_time_measurement
 
 
 class Ising(Mapping):
@@ -56,7 +57,7 @@ class Ising(Mapping):
                 "name": "dimod",
                 "version": "0.12.5"
             },
-            *Qubo.get_requirements()
+            *QUBO.get_requirements()
         ]
 
     def get_parameter_options(self) -> dict:
@@ -103,8 +104,8 @@ class Ising(Mapping):
         :return: dict with the ising, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
-        qubo_mapping = Qubo()
+        start = start_time_measurement()
+        qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(problem, config)
         t, j, _ = qubo_to_ising(q["Q"])
 
@@ -134,7 +135,7 @@ class Ising(Mapping):
             v = self.key_mapping[key[1]]
             j_matrix[u][v] = value
 
-        return {"J": j_matrix, "t": np.array(list(t.values()))}, round(time() * 1000 - start, 3)
+        return {"J": j_matrix, "t": np.array(list(t.values()))}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -145,14 +146,14 @@ class Ising(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         logging.info(f"Key Mapping: {self.key_mapping}")
         # TODO Maybe throw error here if solution contains too many 1's
         result = {}
         for key, value in self.key_mapping.items():
             result[key] = 1 if solution[value] == 1 else 0
 
-        return result, round(time() * 1000 - start, 3)
+        return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

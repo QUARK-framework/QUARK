@@ -26,6 +26,7 @@ modules.devices.Local.Local
       ~Local.get_submodule
       ~Local.postprocess
       ~Local.preprocess
+      ~Local.set_config
    
    
 

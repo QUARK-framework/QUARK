@@ -1,14 +1,17 @@
 {
-  "build_number": 1,
-  "build_date": "05-05-2023 06:44:00",
-  "git_revision_number": "19e077135fc5d903609cdc89b7d7554216224123",
+  "build_number": 0,
+  "build_date": "08-05-2023 09:12:29",
+  "git_revision_number": "2398007f842b62420bfbe99acee17f286419c27c",
   "modules": [
     {
       "name": "PVC",
+      "class": "PVC",
       "module": "modules.applications.optimization.PVC.PVC",
       "submodules": [
         {
           "name": "Ising",
+          "class": "Ising",
+          "args": {},
           "module": "modules.applications.optimization.PVC.mappings.ISING",
           "requirements": [
             {
@@ -31,6 +34,8 @@
           "submodules": [
             {
               "name": "QAOA",
+              "class": "QAOA",
+              "args": {},
               "module": "modules.solvers.QAOA",
               "requirements": [
                 {
@@ -49,6 +54,10 @@
               "submodules": [
                 {
                   "name": "LocalSimulator",
+                  "class": "LocalSimulator",
+                  "args": {
+                    "device_name": "LocalSimulator"
+                  },
                   "module": "modules.devices.braket.LocalSimulator",
                   "requirements": [
                     {
@@ -68,6 +77,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -87,6 +101,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -106,6 +125,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionQ",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -124,7 +148,12 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -146,6 +175,8 @@
             },
             {
               "name": "PennylaneQAOA",
+              "class": "PennylaneQAOA",
+              "args": {},
               "module": "modules.solvers.PennylaneQAOA",
               "requirements": [
                 {
@@ -168,6 +199,11 @@
               "submodules": [
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -187,6 +223,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -206,6 +247,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionq",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -225,6 +271,11 @@
                 },
                 {
                   "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -244,6 +295,11 @@
                 },
                 {
                   "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "class": "OQC",
+                  "args": {
+                    "device_name": "OQC",
+                    "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
+                  },
                   "module": "modules.devices.braket.OQC",
                   "requirements": [
                     {
@@ -263,36 +319,60 @@
                 },
                 {
                   "name": "braket.local.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "braket.local.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit.autograd",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit.autograd"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "qulacs.simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qulacs.simulator"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.gpu"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
@@ -302,7 +382,9 @@
           ]
         },
         {
-          "name": "Qubo",
+          "name": "QUBO",
+          "class": "QUBO",
+          "args": {},
           "module": "modules.applications.optimization.PVC.mappings.QUBO",
           "requirements": [
             {
@@ -313,11 +395,15 @@
           "submodules": [
             {
               "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
               "module": "modules.solvers.Annealer",
               "requirements": [],
               "submodules": [
                 {
-                  "name": "SimulatedAnnealer",
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
                   "module": "modules.devices.SimulatedAnnealingSampler",
                   "requirements": [
                     {
@@ -333,6 +419,8 @@
         },
         {
           "name": "GreedyClassicalPVC",
+          "class": "GreedyClassicalPVC",
+          "args": {},
           "module": "modules.solvers.GreedyClassicalPVC",
           "requirements": [
             {
@@ -343,6 +431,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []
@@ -351,6 +441,8 @@
         },
         {
           "name": "ReverseGreedyClassicalPVC",
+          "class": "ReverseGreedyClassicalPVC",
+          "args": {},
           "module": "modules.solvers.ReverseGreedyClassicalPVC",
           "requirements": [
             {
@@ -361,6 +453,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []
@@ -369,6 +463,8 @@
         },
         {
           "name": "RandomPVC",
+          "class": "RandomPVC",
+          "args": {},
           "module": "modules.solvers.RandomClassicalPVC",
           "requirements": [
             {
@@ -379,6 +475,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []
@@ -399,10 +497,13 @@
     },
     {
       "name": "SAT",
+      "class": "SAT",
       "module": "modules.applications.optimization.SAT.SAT",
       "submodules": [
         {
-          "name": "QubovertQubo",
+          "name": "QubovertQUBO",
+          "class": "QubovertQUBO",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.QubovertQUBO",
           "requirements": [
             {
@@ -417,11 +518,15 @@
           "submodules": [
             {
               "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
               "module": "modules.solvers.Annealer",
               "requirements": [],
               "submodules": [
                 {
-                  "name": "SimulatedAnnealer",
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
                   "module": "modules.devices.SimulatedAnnealingSampler",
                   "requirements": [
                     {
@@ -437,6 +542,8 @@
         },
         {
           "name": "Direct",
+          "class": "Direct",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.Direct",
           "requirements": [
             {
@@ -451,6 +558,8 @@
           "submodules": [
             {
               "name": "ClassicalSAT",
+              "class": "ClassicalSAT",
+              "args": {},
               "module": "modules.solvers.ClassicalSAT",
               "requirements": [
                 {
@@ -461,6 +570,8 @@
               "submodules": [
                 {
                   "name": "Local",
+                  "class": "Local",
+                  "args": {},
                   "module": "modules.devices.Local",
                   "requirements": [],
                   "submodules": []
@@ -469,6 +580,8 @@
             },
             {
               "name": "RandomSAT",
+              "class": "RandomSAT",
+              "args": {},
               "module": "modules.solvers.RandomClassicalSAT",
               "requirements": [
                 {
@@ -483,6 +596,8 @@
               "submodules": [
                 {
                   "name": "Local",
+                  "class": "Local",
+                  "args": {},
                   "module": "modules.devices.Local",
                   "requirements": [],
                   "submodules": []
@@ -492,7 +607,9 @@
           ]
         },
         {
-          "name": "ChoiQubo",
+          "name": "ChoiQUBO",
+          "class": "ChoiQUBO",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.ChoiQUBO",
           "requirements": [
             {
@@ -503,11 +620,15 @@
           "submodules": [
             {
               "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
               "module": "modules.solvers.Annealer",
               "requirements": [],
               "submodules": [
                 {
-                  "name": "SimulatedAnnealer",
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
                   "module": "modules.devices.SimulatedAnnealingSampler",
                   "requirements": [
                     {
@@ -522,7 +643,9 @@
           ]
         },
         {
-          "name": "DinneenQubo",
+          "name": "DinneenQUBO",
+          "class": "DinneenQUBO",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.DinneenQUBO",
           "requirements": [
             {
@@ -533,11 +656,15 @@
           "submodules": [
             {
               "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
               "module": "modules.solvers.Annealer",
               "requirements": [],
               "submodules": [
                 {
-                  "name": "SimulatedAnnealer",
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
                   "module": "modules.devices.SimulatedAnnealingSampler",
                   "requirements": [
                     {
@@ -553,6 +680,8 @@
         },
         {
           "name": "ChoiIsing",
+          "class": "ChoiIsing",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.ChoiISING",
           "requirements": [
             {
@@ -571,6 +700,8 @@
           "submodules": [
             {
               "name": "QAOA",
+              "class": "QAOA",
+              "args": {},
               "module": "modules.solvers.QAOA",
               "requirements": [
                 {
@@ -589,6 +720,10 @@
               "submodules": [
                 {
                   "name": "LocalSimulator",
+                  "class": "LocalSimulator",
+                  "args": {
+                    "device_name": "LocalSimulator"
+                  },
                   "module": "modules.devices.braket.LocalSimulator",
                   "requirements": [
                     {
@@ -608,6 +743,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -627,6 +767,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -646,6 +791,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionQ",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -664,7 +814,12 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -686,6 +841,8 @@
             },
             {
               "name": "PennylaneQAOA",
+              "class": "PennylaneQAOA",
+              "args": {},
               "module": "modules.solvers.PennylaneQAOA",
               "requirements": [
                 {
@@ -708,6 +865,11 @@
               "submodules": [
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -727,6 +889,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -746,6 +913,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionq",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -765,6 +937,11 @@
                 },
                 {
                   "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -784,6 +961,11 @@
                 },
                 {
                   "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "class": "OQC",
+                  "args": {
+                    "device_name": "OQC",
+                    "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
+                  },
                   "module": "modules.devices.braket.OQC",
                   "requirements": [
                     {
@@ -803,36 +985,60 @@
                 },
                 {
                   "name": "braket.local.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "braket.local.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit.autograd",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit.autograd"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "qulacs.simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qulacs.simulator"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.gpu"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
@@ -843,6 +1049,8 @@
         },
         {
           "name": "DinneenIsing",
+          "class": "DinneenIsing",
+          "args": {},
           "module": "modules.applications.optimization.SAT.mappings.DinneenISING",
           "requirements": [
             {
@@ -865,6 +1073,8 @@
           "submodules": [
             {
               "name": "QAOA",
+              "class": "QAOA",
+              "args": {},
               "module": "modules.solvers.QAOA",
               "requirements": [
                 {
@@ -883,6 +1093,10 @@
               "submodules": [
                 {
                   "name": "LocalSimulator",
+                  "class": "LocalSimulator",
+                  "args": {
+                    "device_name": "LocalSimulator"
+                  },
                   "module": "modules.devices.braket.LocalSimulator",
                   "requirements": [
                     {
@@ -902,6 +1116,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -921,6 +1140,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -940,6 +1164,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionQ",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -958,7 +1187,12 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -980,6 +1214,8 @@
             },
             {
               "name": "PennylaneQAOA",
+              "class": "PennylaneQAOA",
+              "args": {},
               "module": "modules.solvers.PennylaneQAOA",
               "requirements": [
                 {
@@ -1002,6 +1238,11 @@
               "submodules": [
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -1021,6 +1262,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -1040,6 +1286,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionq",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -1059,6 +1310,11 @@
                 },
                 {
                   "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -1078,6 +1334,11 @@
                 },
                 {
                   "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "class": "OQC",
+                  "args": {
+                    "device_name": "OQC",
+                    "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
+                  },
                   "module": "modules.devices.braket.OQC",
                   "requirements": [
                     {
@@ -1097,36 +1358,60 @@
                 },
                 {
                   "name": "braket.local.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "braket.local.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit.autograd",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit.autograd"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "qulacs.simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qulacs.simulator"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.gpu"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
@@ -1149,10 +1434,13 @@
     },
     {
       "name": "TSP",
+      "class": "TSP",
       "module": "modules.applications.optimization.TSP.TSP",
       "submodules": [
         {
           "name": "Ising",
+          "class": "Ising",
+          "args": {},
           "module": "modules.applications.optimization.TSP.mappings.ISING",
           "requirements": [
             {
@@ -1191,6 +1479,8 @@
           "submodules": [
             {
               "name": "QAOA",
+              "class": "QAOA",
+              "args": {},
               "module": "modules.solvers.QAOA",
               "requirements": [
                 {
@@ -1209,6 +1499,10 @@
               "submodules": [
                 {
                   "name": "LocalSimulator",
+                  "class": "LocalSimulator",
+                  "args": {
+                    "device_name": "LocalSimulator"
+                  },
                   "module": "modules.devices.braket.LocalSimulator",
                   "requirements": [
                     {
@@ -1228,6 +1522,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -1247,6 +1546,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -1266,6 +1570,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionQ",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -1284,7 +1593,12 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/rigetti/Aspen-9",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -1306,6 +1620,8 @@
             },
             {
               "name": "PennylaneQAOA",
+              "class": "PennylaneQAOA",
+              "args": {},
               "module": "modules.solvers.PennylaneQAOA",
               "requirements": [
                 {
@@ -1328,6 +1644,11 @@
               "submodules": [
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
                   "module": "modules.devices.braket.SV1",
                   "requirements": [
                     {
@@ -1347,6 +1668,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
                   "module": "modules.devices.braket.TN1",
                   "requirements": [
                     {
@@ -1366,6 +1692,11 @@
                 },
                 {
                   "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionq",
+                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                  },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
@@ -1385,6 +1716,11 @@
                 },
                 {
                   "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
@@ -1404,6 +1740,11 @@
                 },
                 {
                   "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "class": "OQC",
+                  "args": {
+                    "device_name": "OQC",
+                    "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
+                  },
                   "module": "modules.devices.braket.OQC",
                   "requirements": [
                     {
@@ -1423,36 +1764,60 @@
                 },
                 {
                   "name": "braket.local.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "braket.local.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "default.qubit.autograd",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit.autograd"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "qulacs.simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qulacs.simulator"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.gpu"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "lightning.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.qubit"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
@@ -1461,6 +1826,8 @@
             },
             {
               "name": "QiskitQAOA",
+              "class": "QiskitQAOA",
+              "args": {},
               "module": "modules.solvers.QiskitQAOA",
               "requirements": [
                 {
@@ -1479,12 +1846,20 @@
               "submodules": [
                 {
                   "name": "qasm_simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qasm_simulator"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 },
                 {
                   "name": "qasm_simulator_gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qasm_simulator_gpu"
+                  },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
@@ -1494,7 +1869,9 @@
           ]
         },
         {
-          "name": "Qubo",
+          "name": "QUBO",
+          "class": "QUBO",
+          "args": {},
           "module": "modules.applications.optimization.TSP.mappings.QUBO",
           "requirements": [
             {
@@ -1509,11 +1886,15 @@
           "submodules": [
             {
               "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
               "module": "modules.solvers.Annealer",
               "requirements": [],
               "submodules": [
                 {
-                  "name": "SimulatedAnnealer",
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
                   "module": "modules.devices.SimulatedAnnealingSampler",
                   "requirements": [
                     {
@@ -1529,6 +1910,8 @@
         },
         {
           "name": "GreedyClassicalTSP",
+          "class": "GreedyClassicalTSP",
+          "args": {},
           "module": "modules.solvers.GreedyClassicalTSP",
           "requirements": [
             {
@@ -1539,6 +1922,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []
@@ -1547,6 +1932,8 @@
         },
         {
           "name": "ReverseGreedyClassicalTSP",
+          "class": "ReverseGreedyClassicalTSP",
+          "args": {},
           "module": "modules.solvers.ReverseGreedyClassicalTSP",
           "requirements": [
             {
@@ -1557,6 +1944,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []
@@ -1565,6 +1954,8 @@
         },
         {
           "name": "RandomTSP",
+          "class": "RandomTSP",
+          "args": {},
           "module": "modules.solvers.RandomClassicalTSP",
           "requirements": [
             {
@@ -1575,6 +1966,8 @@
           "submodules": [
             {
               "name": "Local",
+              "class": "Local",
+              "args": {},
               "module": "modules.devices.Local",
               "requirements": [],
               "submodules": []

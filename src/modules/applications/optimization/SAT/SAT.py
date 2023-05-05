@@ -21,6 +21,7 @@ from nnf.dimacs import dump
 
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
+from utils import start_time_measurement, end_time_measurement
 
 
 class SAT(Optimization):
@@ -37,7 +38,7 @@ class SAT(Optimization):
         Constructor method
         """
         super().__init__("SAT")
-        self.submodule_options = ["QubovertQubo", "Direct", "ChoiQubo", "DinneenQubo", "ChoiIsing", "DinneenIsing"]
+        self.submodule_options = ["QubovertQUBO", "Direct", "ChoiQUBO", "DinneenQUBO", "ChoiIsing", "DinneenIsing"]
         self.literals = None
         self.num_tests = None
         self.num_constraints = None
@@ -67,22 +68,22 @@ class SAT(Optimization):
 
     def get_default_submodule(self, option: str) -> Core:
 
-        if option == "QubovertQubo":
-            from modules.applications.optimization.SAT.mappings.QubovertQUBO import QubovertQubo  # pylint: disable=C0415
-            return QubovertQubo()
+        if option == "QubovertQUBO":
+            from modules.applications.optimization.SAT.mappings.QubovertQUBO import QubovertQUBO  # pylint: disable=C0415
+            return QubovertQUBO()
         elif option == "Direct":
             from modules.applications.optimization.SAT.mappings.Direct import Direct  # pylint: disable=C0415
             return Direct()
-        elif option == 'ChoiQubo':
-            from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQubo  # pylint: disable=C0415
-            return ChoiQubo()
-        elif option == 'ChoiIsing':
+        elif option == "ChoiQUBO":
+            from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO  # pylint: disable=C0415
+            return ChoiQUBO()
+        elif option == "ChoiIsing":
             from modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing  # pylint: disable=C0415
             return ChoiIsing()
-        elif option == 'DinneenQubo':
-            from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQubo  # pylint: disable=C0415
-            return DinneenQubo()
-        elif option == 'DinneenIsing':
+        elif option == "DinneenQUBO":
+            from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO  # pylint: disable=C0415
+            return DinneenQUBO()
+        elif option == "DinneenIsing":
             from modules.applications.optimization.SAT.mappings.DinneenISING import DinneenIsing  # pylint: disable=C0415
             return DinneenIsing()
         else:
@@ -173,12 +174,12 @@ class SAT(Optimization):
         :rtype: tuple(nnf.And, list)
         """
 
-        self.num_variables = config['variables']
-        num_constraints = round(config['clvar_ratio_cons'] * self.num_variables)
-        num_tests = round(config['clvar_ratio_test'] * self.num_variables)
+        self.num_variables = config["variables"]
+        num_constraints = round(config["clvar_ratio_cons"] * self.num_variables)
+        num_tests = round(config["clvar_ratio_test"] * self.num_variables)
 
-        max_tries = config['max_tries']
-        self.literals = [Var(f'L{i}') for i in range(self.num_variables)]
+        max_tries = config["max_tries"]
+        self.literals = [Var(f"L{i}") for i in range(self.num_variables)]
 
         self.application = {}
 
@@ -191,7 +192,7 @@ class SAT(Optimization):
                 rng = np.random.default_rng(rseed + attempt * 2)
                 clause_list = []
                 # generate literal list to sample from
-                lit_vars = [Var(f'L{i}') for i in range(nr_vars)]
+                lit_vars = [Var(f"L{i}") for i in range(nr_vars)]
                 for _ in range(nr_clauses):
                     # we select three (non-repeated) literals and negate them randomly -- together constituting a clause
                     chosen_literals = rng.choice(lit_vars, 3, replace=False)
@@ -219,25 +220,25 @@ class SAT(Optimization):
 
         # we choose a random seed -- since we try at most max_tries times to generate a solvable instance,
         # we space the initial random seeds by 2 * max_tries (because we need both hard and soft constraints).
-        random_seed = 2 * config['problem_set'] * max_tries
+        random_seed = 2 * config["problem_set"] * max_tries
         # generate hard  & soft constraints. We make both satisfiable, but this can in principle be tuned.
         hard = And(_generate_3sat_clauses(num_constraints, self.num_variables,
                                           satisfiable=True, rseed=random_seed, nr_tries=max_tries))
         # the random_seed + 1 ensures that a different set of seeds is sampled compared to the hard constraints.
         soft = _generate_3sat_clauses(num_tests, self.num_variables, satisfiable=True, rseed=random_seed + 1,
-                                      nr_tries=config['max_tries'])
+                                      nr_tries=config["max_tries"])
         if (hard is None) or (soft is None):
             raise ValueError("Unable to generate satisfiable")
         # saving constraints and tests
-        self.application['constraints'] = hard
-        self.application['tests'] = soft
+        self.application["constraints"] = hard
+        self.application["tests"] = soft
         # and their cardinalities:
         self.num_constraints = len(hard)
         self.num_tests = len(soft)
 
-        logging.info(f'Generated a vehicle options Max3SAT'
-                     f' instance with {self.num_variables} variables, {self.num_constraints} constraints'
-                     f' and {self.num_tests} tests')
+        logging.info(f"Generated a vehicle options Max3SAT"
+                     f" instance with {self.num_variables} variables, {self.num_constraints} constraints"
+                     f" and {self.num_tests} tests")
         return hard, soft
 
     def validate(self, solution: dict) -> (bool, float):
@@ -249,18 +250,18 @@ class SAT(Optimization):
         :return: Boolean whether the solution is valid, time it took to validate
         :rtype: tuple(bool, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
 
         logging.info("Checking validity of solution:")
         # logging.info(solution)
         nr_satisfied_hardcons = len(*np.where(
-            [c.satisfied_by(solution) for c in self.application['constraints'].children]
+            [c.satisfied_by(solution) for c in self.application["constraints"].children]
         ))
         ratio = nr_satisfied_hardcons / self.num_constraints
         is_valid = ratio == 1.0
         # prints the ratio of satisfied constraints and prints if all constraints are satisfied
         logging.info(f"Ratio of satisfied constraints: {ratio}\nSuccess:{['no', 'yes'][int(is_valid)]}")
-        return is_valid, round(time() * 1000 - start, 3)
+        return is_valid, end_time_measurement(start)
 
     def evaluate(self, solution: dict) -> (float, float):
         """
@@ -271,27 +272,27 @@ class SAT(Optimization):
         :return: Tour length, time it took to calculate the tour length
         :rtype: tuple(float, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
 
-        logging.info("Checking the quality fo the solution:")
+        logging.info("Checking the quality of the solution:")
         # logging.info(solution)
 
         # count the number of satisfied clauses
-        nr_satisfied_tests = len(*np.where([test.satisfied_by(solution) for test in self.application['tests']]))
+        nr_satisfied_tests = len(*np.where([test.satisfied_by(solution) for test in self.application["tests"]]))
 
         ratio_satisfied = nr_satisfied_tests / self.num_tests
         logging.info(f"Ratio of satisfied test clauses: {ratio_satisfied}.")
 
-        return ratio_satisfied, round(time() * 1000 - start, 3)
+        return ratio_satisfied, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
-        with open(f"{path}/constraints_iter_{iter_count}.cnf", 'w') as f_cons:
+        with open(f"{path}/constraints_iter_{iter_count}.cnf", "w") as f_cons:
             dump(
-                obj=self.application['constraints'], fp=f_cons,
+                obj=self.application["constraints"], fp=f_cons,
                 var_labels={str(literal): idx + 1 for idx, literal in enumerate(self.literals)}
             )
-        with open(f"{path}/tests_iter_{iter_count}.cnf", 'w') as f_test:
+        with open(f"{path}/tests_iter_{iter_count}.cnf", "w") as f_test:
             dump(
-                obj=Or(self.application['tests']), fp=f_test,
+                obj=Or(self.application["tests"]), fp=f_test,
                 var_labels={str(literal): idx + 1 for idx, literal in enumerate(self.literals)}
             )

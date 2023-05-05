@@ -26,6 +26,7 @@ modules.devices.SimulatedAnnealingSampler.SimulatedAnnealingSampler
       ~SimulatedAnnealingSampler.get_submodule
       ~SimulatedAnnealingSampler.postprocess
       ~SimulatedAnnealingSampler.preprocess
+      ~SimulatedAnnealingSampler.set_config
    
    
 

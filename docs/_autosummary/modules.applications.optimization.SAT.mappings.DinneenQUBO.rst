@@ -19,7 +19,7 @@ modules.applications.optimization.SAT.mappings.DinneenQUBO
       :toctree:
       :template: custom-class-template.rst
    
-      DinneenQubo
+      DinneenQUBO
    
    
 

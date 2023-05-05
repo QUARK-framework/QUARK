@@ -26,6 +26,7 @@ modules.devices.HelperClass.HelperClass
       ~HelperClass.get_submodule
       ~HelperClass.postprocess
       ~HelperClass.preprocess
+      ~HelperClass.set_config
    
    
 

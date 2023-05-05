@@ -20,6 +20,7 @@ from braket.circuits import Circuit
 from scipy.optimize import minimize
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class QAOA(Solver):
@@ -35,7 +36,7 @@ class QAOA(Solver):
         self.submodule_options = ["LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
                                "arn:aws:braket:::device/qpu/ionq/ionQdevice",
-                               "arn:aws:braket:::device/qpu/rigetti/Aspen-9"]
+                               "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -71,9 +72,9 @@ class QAOA(Solver):
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
             from modules.devices.braket.TN1 import TN1  # pylint: disable=C0415
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
-        elif option == "arn:aws:braket:::device/qpu/rigetti/Aspen-9":
+        elif option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
             from modules.devices.braket.Rigetti import Rigetti  # pylint: disable=C0415
-            return Rigetti("Rigetti Aspen-9", "arn:aws:braket:::device/qpu/rigetti/Aspen-9")
+            return Rigetti("Rigetti Aspen-9", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3")
         elif option == "LocalSimulator":
             from modules.devices.braket.LocalSimulator import LocalSimulator  # pylint: disable=C0415
             return LocalSimulator("LocalSimulator")
@@ -187,13 +188,13 @@ class QAOA(Solver):
         logging.info(f"Problem size:{n_qubits}")
 
         # kick off training
-        start = time() * 1000
+        start = start_time_measurement()
         #result_energy, result_angle, tracker
         _, _, tracker = train(
             device=device_wrapper.get_device(), options=options, p=depth, ising=j, n_qubits=n_qubits,
             n_shots=config['shots'],
             opt_method=opt_method, tracker=tracker, s3_folder=device_wrapper.s3_destination_folder, verbose=True)
-        time_to_solve = round(time() * 1000 - start, 3)
+        time_to_solve = end_time_measurement(start)
 
         # print execution time
         # logging.info('Code execution time [sec]:', end - start)

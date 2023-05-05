@@ -19,7 +19,7 @@ modules.applications.optimization.SAT.mappings.QubovertQUBO
       :toctree:
       :template: custom-class-template.rst
    
-      QubovertQubo
+      QubovertQUBO
    
    
 

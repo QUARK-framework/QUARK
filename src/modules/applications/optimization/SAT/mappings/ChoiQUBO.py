@@ -18,9 +18,10 @@ from typing import TypedDict
 from nnf import Var, And
 
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
-class ChoiQubo(Mapping):
+class ChoiQUBO(Mapping):
     """
     QUBO formulation for SAT problem by Choi (1004.2226).
     """
@@ -106,7 +107,7 @@ class ChoiQubo(Mapping):
         :return:
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
 
         hard_constraints, soft_constraints = problem
         # in principle, one could use a different value of A -- it shouldn't play a role though.
@@ -189,7 +190,7 @@ class ChoiQubo(Mapping):
 
         logging.info(f"Converted to Choi Qubo with {len(node_list)} binary variables. Bh={config['hard_reward']},"
                      f" Bs={Bs}.")
-        return {'Q': Q}, round(time() * 1000 - start, 3)
+        return {'Q': Q}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -200,7 +201,7 @@ class ChoiQubo(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         # we define the literals list, so that we can check the self-consistency of the solution. That is, we save all
         # assignments proposed by the annealer, and see if there is no contradiction. (In principle a solver
         # could mandate L3 = True and L3 = False, resulting in a contradiction.)
@@ -239,7 +240,7 @@ class ChoiQubo(Mapping):
         for nr in missing_vars:
             assignments.append(Var(f'L{nr}'))
 
-        return {list(v.vars())[0]: v.true for v in sorted(assignments)}, round(time() * 1000 - start, 3)
+        return {list(v.vars())[0]: v.true for v in sorted(assignments)}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

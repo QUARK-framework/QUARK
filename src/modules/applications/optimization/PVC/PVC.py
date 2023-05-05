@@ -21,7 +21,7 @@ import numpy as np
 
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
-
+from utils import start_time_measurement, end_time_measurement
 
 class PVC(Optimization):
     """
@@ -43,7 +43,7 @@ class PVC(Optimization):
         Constructor method
         """
         super().__init__("PVC")
-        self.submodule_options = ["Ising", "Qubo", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"]
+        self.submodule_options = ["Ising", "QUBO", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -72,9 +72,9 @@ class PVC(Optimization):
         if option == "Ising":
             from modules.applications.optimization.PVC.mappings.ISING import Ising  # pylint: disable=C0415
             return Ising()
-        elif option == "Qubo":
-            from modules.applications.optimization.PVC.mappings.QUBO import Qubo  # pylint: disable=C0415
-            return Qubo()
+        elif option == "QUBO":
+            from modules.applications.optimization.PVC.mappings.QUBO import QUBO  # pylint: disable=C0415
+            return QUBO()
         elif option == "GreedyClassicalPVC":
             from modules.solvers.GreedyClassicalPVC import GreedyClassicalPVC  # pylint: disable=C0415
             return GreedyClassicalPVC()
@@ -201,7 +201,7 @@ class PVC(Optimization):
         :return: processed solution and the time it took to process it
         :rtype: tuple(list, bool)
         """
-        start_time = time() * 1000
+        start_time = start_time_measurement()
         nodes = list(self.application.nodes())
         start = ((0, 0), 1, 1)
         # fill route with None values
@@ -242,7 +242,7 @@ class PVC(Optimization):
         parsed_route = ' ->\n'.join(
             [f' Node {visit[0][1]} of Seam {visit[0][0]} using config {visit[1]} & tool {visit[2]}' for visit in route])
         logging.info(f"Route found:\n{parsed_route}")
-        return route, round(time() * 1000 - start_time, 3)
+        return route, end_time_measurement(start_time)
 
     def validate(self, solution: list) -> (bool, float):
         """
@@ -254,16 +254,16 @@ class PVC(Optimization):
         :rtype: tuple(bool, float)
         """
         # Check if all seams are visited in route
-        start = time() * 1000
+        start = start_time_measurement()
         visited_seams = list(set(list([seam[0][0] for seam in solution if seam is not None])))  # pylint: disable=R1728
 
         if len(visited_seams) == len(solution):
             logging.info(
                 f"All {len(solution) - 1} seams and the base node got visited (We only need to visit 1 node per seam)")
-            return True, round(time() * 1000 - start, 3)
+            return True, end_time_measurement(start)
         else:
             logging.error(f"Only {len(visited_seams) - 1} got visited")
-            return False, round(time() * 1000 - start, 3)
+            return False, end_time_measurement(start)
 
     def evaluate(self, solution: list) -> (float, float):
         """
@@ -274,7 +274,7 @@ class PVC(Optimization):
         :return: Tour length, time it took to calculate the tour length
         :rtype: tuple(float, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         # get the total distance
         total_dist = 0
         for idx, _ in enumerate(solution[:-1]):
@@ -297,7 +297,7 @@ class PVC(Optimization):
         distance = total_dist + return_distance
         logging.info(f"Total distance (including return): {distance}")
 
-        return distance, round(time() * 1000 - start, 3)
+        return distance, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
         nx.write_gpickle(self.application, f"{path}/graph_iter_{iter_count}.gpickle")

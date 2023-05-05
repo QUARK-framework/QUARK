@@ -1,4 +1,4 @@
-﻿Installer.Installer
+Installer.Installer
 ===================
 
 .. currentmodule:: Installer
@@ -28,6 +28,7 @@
       ~Installer.get_module_db
       ~Installer.get_module_db_build_number
       ~Installer.install
+      ~Installer.list_envs
       ~Installer.query_user
       ~Installer.save_env
       ~Installer.set_active_env

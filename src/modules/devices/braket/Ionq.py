@@ -22,18 +22,18 @@ class Ionq(Braket):
     Class for using the IonQ devices on Amazon Braket
     """
 
-    def __init__(self, device_name: str, device_arn: str = 'arn:aws:braket:::device/qpu/ionq/ionQdevice'):
+    def __init__(self, device_name: str, arn: str = 'arn:aws:braket:::device/qpu/ionq/ionQdevice'):
         """
         Constructor method
         """
-        super().__init__(region="us-east-1", device_name=device_name, arn=device_arn)
+        super().__init__(region="us-east-1", device_name=device_name, arn=arn)
         self.submodule_options = []
         if 'SKIP_INIT' in os.environ:
             # TODO: This is currently needed to that create_module_db in the Installer does not need to execute the rest
             #       of this section, which would be unnecessary. However this should be done better in the futue!
             return
         self.init_s3_storage("ionq")
-        self.device = AwsDevice(device_arn, aws_session=self.aws_session)
+        self.device = AwsDevice(arn, aws_session=self.aws_session)
 
     def get_parameter_options(self) -> dict:
         """

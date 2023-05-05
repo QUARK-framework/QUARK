@@ -15,6 +15,7 @@
 from typing import TypedDict
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class Annealer(Solver):
@@ -88,7 +89,7 @@ class Annealer(Solver):
         Q = mapped_problem['Q']
         additional_solver_information = {}
         device = device_wrapper.get_device()
-        start = time() * 1000
+        start = start_time_measurement()
         if device_wrapper.device_name != "simulated annealer":
             logging.warning("Only simulated annealer available at the moment!")
             # TODO: Check what to do with this..
@@ -113,7 +114,7 @@ class Annealer(Solver):
         else:
             # This is for D-Wave simulated Annealer
             response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
-        time_to_solve = round(time() * 1000 - start, 3)
+        time_to_solve = end_time_measurement(start)
 
         # take the result with the lowest energy:
         sample = response.lowest().first.sample

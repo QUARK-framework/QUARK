@@ -27,6 +27,7 @@ modules.devices.braket.TN1.TN1
       ~TN1.init_s3_storage
       ~TN1.postprocess
       ~TN1.preprocess
+      ~TN1.set_config
    
    
 

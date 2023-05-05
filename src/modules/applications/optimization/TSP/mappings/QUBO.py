@@ -18,6 +18,7 @@ import dwave_networkx as dnx
 import networkx
 
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class QUBO(Mapping):
@@ -102,7 +103,7 @@ class QUBO(Mapping):
         :return: dict with QUBO, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         lagrange = None
         lagrange_factor = config['lagrange_factor']
         weight = 'weight'
@@ -125,7 +126,7 @@ class QUBO(Mapping):
         # Get a QUBO representation of the problem
         q = dnx.traveling_salesperson_qubo(problem, lagrange, weight)
 
-        return {"Q": q}, round(time() * 1000 - start, 3)
+        return {"Q": q}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

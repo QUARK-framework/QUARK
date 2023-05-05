@@ -27,6 +27,7 @@ modules.devices.braket.OQC.OQC
       ~OQC.init_s3_storage
       ~OQC.postprocess
       ~OQC.preprocess
+      ~OQC.set_config
    
    
 

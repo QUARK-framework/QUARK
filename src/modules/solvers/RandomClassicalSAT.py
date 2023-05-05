@@ -17,6 +17,7 @@ import numpy as np
 from pysat.formula import WCNF
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class RandomSAT(Solver):
@@ -96,7 +97,7 @@ class RandomSAT(Solver):
             f" {len(mapped_problem.soft)} tests."
         )
 
-        start = int(round(time() * 1000))
+        start = start_time_measurement()
         sol = [(i + 1) * np.random.choice([-1, 1]) for i in range(mapped_problem.nv)]
 
-        return sol, int(round(time() * 1000)) - start, {}
+        return sol, end_time_measurement(start), {}

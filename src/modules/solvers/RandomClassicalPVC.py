@@ -17,6 +17,7 @@ import random
 import networkx
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class RandomPVC(Solver):
@@ -89,7 +90,7 @@ class RandomPVC(Solver):
         # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
         # with a different graph
         mapped_problem = mapped_problem.copy()
-        start = time() * 1000
+        start = start_time_measurement()
         # We always start at the base node
         current_node = ((0, 0), 1, 1)
         idx = 1
@@ -117,4 +118,4 @@ class RandomPVC(Solver):
 
         # Tour needs to look like {((0, 0), 1, 1, 0): 1,((3, 1), 1, 0, 1): 1,((2, 1), 1, 1, 2): 1,((4, 4), 1, 1, 3): 1}
         # ((0, 0), 1, 1, 0): 1 = ((seam, node), config, tool, timestep): yes we visit this
-        return tour, round(time() * 1000 - start, 3), {}
+        return tour, end_time_measurement(start), {}

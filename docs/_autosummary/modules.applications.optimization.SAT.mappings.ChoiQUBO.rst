@@ -19,7 +19,7 @@ modules.applications.optimization.SAT.mappings.ChoiQUBO
       :toctree:
       :template: custom-class-template.rst
    
-      ChoiQubo
+      ChoiQUBO
    
    
 

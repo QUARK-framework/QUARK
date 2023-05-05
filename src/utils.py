@@ -13,61 +13,70 @@
 #  limitations under the License.
 
 import importlib
+import json
 import logging
 import os
 import subprocess
 import sys
+import time
 from typing import Union
 
+import numpy as np
 
-def _get_instance_with_sub_options(options: list[dict], class_name: str, *args: any) -> any:
+
+def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -> any:
     """
     Create an instance of the QUARK module (application, mapping, solver, device) identified by
     class_name.
 
     :param options: the section of the QUARK module configuration including the submodules' information.
     :type options: list of dict
-    :param class_name: the name of the class to be initialized.
-    :type class_name: str
+    :param name: the name of the QUARK component to be initialized.
+    :type name: str
     :param args: the list of arguments used for to the class initialization
     :type args: any
     :return: the new instance ot the QUARK module
     :rtype: any
     """
     for opt in options:
-        if "class" in opt:
-            class_name = opt["class"]
-        elif class_name != opt["name"]:
+        if name != opt["name"]:
             continue
+        class_name = opt.get("class", name)
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = None
         if "submodules" in opt:
             sub_options = opt["submodules"]
 
         # In case the class requires some arguments in its constructor they can be defined in the "args" dict
-        if "args" in opt:
-            instance = clazz(**opt["args"])
+        if "args" in opt and opt["args"]:
+            instance = clazz(*args, **opt["args"])
         else:
             instance = clazz(*args)
 
         # _get_instance_with_sub_options is mostly called when using the --modules option, so it makes sense to also
         # save the git revision of the given module, since it can be in a different git
-        git_dir = os.path.dirname(sys.modules[opt["module"]].__file__)
-        git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
 
-        instance.metrics.add_metric_batch({
-            "module_git_revision_number": git_revision_number,
-            "module_git_uncommitted_changes": git_uncommitted_changes})
+        # Directory of this file
+        utils_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        module_dir = os.path.dirname(sys.modules[opt["module"]].__file__)
+
+        # Only log git revision number, if the module is not in the same directory as the utils file
+        if not os.path.commonprefix([utils_dir, module_dir]) == utils_dir:
+            git_revision_number, git_uncommitted_changes = get_git_revision(module_dir)
+
+            instance.metrics.add_metric_batch({
+                "module_git_revision_number": git_revision_number,
+                "module_git_uncommitted_changes": git_uncommitted_changes})
 
         # sub_options inherits 'dir'
         if sub_options and "dir" in opt:
             for sub_opt in sub_options:
-                if not "dir" in sub_opt:
+                if "dir" not in sub_opt:
                     sub_opt["dir"] = opt["dir"]
 
         instance.sub_options = sub_options
         return instance
-    logging.warning(f"{class_name} not found in {options}")
+    logging.warning(f"{name} not found in {options}")
 
 
 def _import_class(module_path: str, class_name: str, base_dir: str = None) -> type:
@@ -150,3 +159,40 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
                 if not os.path.isabs(p):
                     j[attr] = os.path.join(base_dir, p)
     return j
+
+
+def start_time_measurement() -> float:
+    """
+    Starts a time measurement
+
+    :return: Starting point
+    :rtype: float
+    """
+    return time.perf_counter()
+
+
+def end_time_measurement(start: float) -> float:
+    """
+    Return the resul of the time measurement in milliseconds
+
+    :param start: Starting point for the measurement
+    :type start: float
+    :return: Time elapsed in ms
+    :rtype: float
+    """
+    end = time.perf_counter()
+    return round((end - start) * 1000, 3)
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """
+    Encoder that is used for json.dump since numpy values items in dictionary might cause problems
+    """
+    def default(self, o: any):
+        if isinstance(o, np.integer):
+            return int(o)
+        if isinstance(o, np.floating):
+            return float(o)
+        if isinstance(o, np.ndarray):
+            return o.tolist()
+        return super(NumpyEncoder).default(o)

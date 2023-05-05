@@ -27,6 +27,7 @@ modules.devices.braket.Ionq.Ionq
       ~Ionq.init_s3_storage
       ~Ionq.postprocess
       ~Ionq.preprocess
+      ~Ionq.set_config
    
    
 

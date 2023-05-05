@@ -26,6 +26,7 @@ modules.devices.Device.Device
       ~Device.get_submodule
       ~Device.postprocess
       ~Device.preprocess
+      ~Device.set_config
    
    
 

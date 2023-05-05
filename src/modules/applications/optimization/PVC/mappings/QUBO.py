@@ -19,13 +19,15 @@ from typing import TypedDict
 import networkx
 
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
-class Qubo(Mapping):
+class QUBO(Mapping):
     """
     QUBO formulation for the PVC
 
     """
+
     def __init__(self):
         """
         Constructor method
@@ -92,7 +94,7 @@ class Qubo(Mapping):
         :return: dict with the QUBO, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         lagrange = None
         lagrange_factor = config['lagrange_factor']
         weight = 'weight'
@@ -215,7 +217,7 @@ class Qubo(Mapping):
 
         logging.info("Created Qubo")
 
-        return {"Q": q}, round(time() * 1000 - start, 3)
+        return {"Q": q}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

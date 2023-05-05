@@ -24,6 +24,7 @@ from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class QiskitQAOA(Solver):
@@ -176,7 +177,7 @@ class QiskitQAOA(Solver):
 
         J = mapped_problem['J']
         t = mapped_problem['t']
-        start = time() * 1000
+        start = start_time_measurement()
         ising_op = self._get_pauli_op((t, J))
         if config["method"] == "classic":
             algorithm = NumPyMinimumEigensolver()
@@ -198,7 +199,7 @@ class QiskitQAOA(Solver):
         # run actual optimization algorithm
         result = algorithm.compute_minimum_eigenvalue(ising_op)
         best_bitstring = self._get_best_solution(result)
-        return best_bitstring, round(time() * 1000 - start, 3), {}
+        return best_bitstring, end_time_measurement(start), {}
 
     @staticmethod
     def _get_quantum_instance(device_wrapper: any) -> any:

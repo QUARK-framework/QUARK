@@ -17,7 +17,8 @@ import json
 import types
 from collections import Counter
 from functools import partial, wraps
-from typing import TypedDict, Union
+from time import time
+from typing import TypedDict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,6 +26,7 @@ import pennylane as qml
 from pennylane import numpy as npqml
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class PennylaneQAOA(Solver):
@@ -345,7 +347,7 @@ class PennylaneQAOA(Solver):
         # Optimization Loop
         optimizer = qml.GradientDescentOptimizer(stepsize=config['stepsize'])
         # optimizer = qml.MomentumOptimizer(stepsize=config['stepsize'], momentum=0.9)
-        #optimizer = qml.QNSPSAOptimizer(stepsize=config['stepsize'])
+        # optimizer = qml.QNSPSAOptimizer(stepsize=config['stepsize'])
         logging.info(f"Device: {device_wrapper.device}, Optimizer {optimizer}, Differentiation: {diff_method}, "
                      f"Optimization start...")
 
@@ -356,20 +358,19 @@ class PennylaneQAOA(Solver):
         params_list = []
         x = []
         run_id = round(time())
-        start = time() * 1000
+        start = start_time_measurement()
         for iteration in range(config['iterations']):
-            t0 = time()
+            t0 = start_time_measurement()
             # Evaluates the cost, then does a gradient step to new params
             params, cost_before = optimizer.step_and_cost(cost_function, params)
             # Convert cost_before to a float, so it's easier to handle
             cost_before = float(cost_before)
-            t1 = time()
             if iteration == 0:
                 logging.info(f"Initial cost: {cost_before}")
             else:
                 logging.info(f"Cost at step {iteration}: {cost_before}")
             # Log the current loss as a metric
-            logging.info(f"Time to complete iteration {iteration + 1}: {t1 - t0} seconds")
+            logging.info(f"Time to complete iteration {iteration + 1}: {end_time_measurement(t0)}")
             cost_pt.append(cost_before)
             params_list.append(params)
             x.append(iteration)
@@ -456,7 +457,7 @@ class PennylaneQAOA(Solver):
             with open(f"{kwargs['store_dir']}/qaoa_details_{run_id}.json", 'w') as fp:
                 json.dump(json_data, fp)
         additional_solver_information["run_id"] = run_id
-        return best_bitstring, round(time() * 1000 - start, 3), additional_solver_information
+        return best_bitstring, end_time_measurement(start), additional_solver_information
 
 
 def monkey_init_array(self):
@@ -478,7 +479,7 @@ def _pseudo_decor(fun, device):
     @wraps(fun)
     def ret_fun(*args, **kwargs):
         # pre function execution stuff here
-        from time import time  # pylint: disable=R0913 disable=W0621 disable=C0415
+        from time import time  # pylint: disable=R0913 disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
         # post execution stuff here

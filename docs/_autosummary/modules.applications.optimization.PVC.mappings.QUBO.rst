@@ -19,7 +19,7 @@ modules.applications.optimization.PVC.mappings.QUBO
       :toctree:
       :template: custom-class-template.rst
    
-      Qubo
+      QUBO
    
    
 

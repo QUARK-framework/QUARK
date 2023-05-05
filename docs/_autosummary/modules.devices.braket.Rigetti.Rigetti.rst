@@ -27,6 +27,7 @@ modules.devices.braket.Rigetti.Rigetti
       ~Rigetti.init_s3_storage
       ~Rigetti.postprocess
       ~Rigetti.preprocess
+      ~Rigetti.set_config
    
    
 

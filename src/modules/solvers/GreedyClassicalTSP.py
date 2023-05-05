@@ -16,7 +16,9 @@ from typing import TypedDict
 
 import networkx
 from networkx.algorithms import approximation as approx
+
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class GreedyClassicalTSP(Solver):
@@ -89,7 +91,7 @@ class GreedyClassicalTSP(Solver):
         # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
         # with a different graph
         mapped_problem = mapped_problem.copy()
-        start = time() * 1000
+        start = start_time_measurement()
 
         tour = approx.greedy_tsp(mapped_problem)
 
@@ -102,4 +104,4 @@ class GreedyClassicalTSP(Solver):
         for idx, node in enumerate(tour):
             result[(node, idx)] = 1
         # Tour needs to look like
-        return result, round(time() * 1000 - start, 3), {}
+        return result, end_time_measurement(start), {}

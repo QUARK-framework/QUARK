@@ -17,9 +17,10 @@ from typing import TypedDict
 from qubovert.sat import NOT, OR, AND
 from nnf import And
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
-class QubovertQubo(Mapping):
+class QubovertQUBO(Mapping):
     """
     Qubovert formulation of the vehicle-options problem.
     """
@@ -129,7 +130,7 @@ class QubovertQubo(Mapping):
         :return: dict with the QUBO, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         lagrange = config['lagrange']
 
         constraints, test_clauses = problem
@@ -170,7 +171,7 @@ class QubovertQubo(Mapping):
                 else:
                     q_dict[(k[0], k[0])] += float(v)
 
-        return {"Q": q_dict}, round(time() * 1000 - start, 3)
+        return {"Q": q_dict}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -181,14 +182,14 @@ class QubovertQubo(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         pubo_sol = self.pubo_problem.convert_solution(solution)
         # Let's check if all variables appear in the solution.
         missing_vars = {f'L{i}' for i in range(self.nr_vars)} - set(pubo_sol.keys())
         # add values for the missing variables -- if they do not appear, then their assignment does not matter.
         for missing_var in missing_vars:
             pubo_sol[missing_var] = True
-        return pubo_sol, round(time() * 1000 - start, 3)
+        return pubo_sol, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

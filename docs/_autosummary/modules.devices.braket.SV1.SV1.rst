@@ -27,6 +27,7 @@ modules.devices.braket.SV1.SV1
       ~SV1.init_s3_storage
       ~SV1.postprocess
       ~SV1.preprocess
+      ~SV1.set_config
    
    
 

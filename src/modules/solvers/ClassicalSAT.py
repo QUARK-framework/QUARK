@@ -18,6 +18,7 @@ from pysat.examples.rc2 import RC2
 from pysat.formula import WCNF
 
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class ClassicalSAT(Solver):
@@ -93,9 +94,9 @@ class ClassicalSAT(Solver):
             f" {len(mapped_problem.soft)} tests."
         )
 
-        start = int(round(time() * 1000))
+        start = start_time_measurement()
         # we use rc2 solver to compute the optimal solution
         with RC2(mapped_problem) as rc2:
             sol = rc2.compute()
 
-        return sol, int(round(time() * 1000)) - start, {}
+        return sol, end_time_measurement(start), {}

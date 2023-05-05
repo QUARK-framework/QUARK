@@ -133,7 +133,7 @@ class BenchmarkRecord:
         }
 
     @final
-    def start_linked_list_to_dict(self) -> None:
+    def start_linked_list_to_dict(self) -> dict:
         """
         Helper function to start linked_list_to_dict function, which merges the various metrics objects to on dict.
 

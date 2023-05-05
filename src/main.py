@@ -172,7 +172,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                     benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
                 except Exception as e:
                     logging.error(f"ERROR: Problem loading the given config file: {e}")
-                    raise Exception("Config file needs to be a valid QUARK YAML Config!")
+                    raise ValueError("Config file needs to be a valid QUARK YAML Config!") from e
 
                 config_manager.set_config(benchmark_config)
         else:

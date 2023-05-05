@@ -25,7 +25,6 @@ modules.applications.Application.Application
       ~Application.get_submodule
       ~Application.postprocess
       ~Application.preprocess
-      ~Application.process_solution
       ~Application.save
    
    

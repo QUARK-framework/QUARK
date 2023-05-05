@@ -13,9 +13,12 @@
 #  limitations under the License.
 
 from typing import TypedDict
+
 import networkx
 from networkx.algorithms import approximation as approx
+
 from modules.solvers.Solver import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class ReverseGreedyClassicalTSP(Solver):
@@ -91,7 +94,7 @@ class ReverseGreedyClassicalTSP(Solver):
         # Let's flip the edge weights to take the worst node every time instead of the best
         for _, _, d in mapped_problem.edges(data=True):
             d['weight'] = -1.0 * d['weight']
-        start = time() * 1000
+        start = start_time_measurement()
 
         tour = approx.greedy_tsp(mapped_problem)
 
@@ -104,4 +107,4 @@ class ReverseGreedyClassicalTSP(Solver):
         for idx, node in enumerate(tour):
             result[(node, idx)] = 1
         # Tour needs to look like
-        return result, round(time() * 1000 - start, 3), {}
+        return result, end_time_measurement(start), {}

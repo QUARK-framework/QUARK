@@ -13,7 +13,6 @@
 #  limitations under the License.
 import os
 from abc import ABC, abstractmethod
-from time import time
 import logging
 from typing import final
 import sys
@@ -142,4 +141,4 @@ class Core(ABC):
         :return: List of dictionaries
         :rtype: list
         """
-        return list()
+        return []

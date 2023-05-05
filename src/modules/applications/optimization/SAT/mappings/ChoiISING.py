@@ -18,7 +18,8 @@ import numpy as np
 from dimod import qubo_to_ising
 
 from modules.applications.Mapping import *
-from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQubo
+from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO
+from utils import start_time_measurement, end_time_measurement
 
 
 class ChoiIsing(Mapping):
@@ -53,7 +54,7 @@ class ChoiIsing(Mapping):
                 "name": "dimod",
                 "version": "0.12.5"
             },
-            *ChoiQubo.get_requirements()
+            *ChoiQUBO.get_requirements()
         ]
 
     def get_parameter_options(self) -> dict:
@@ -111,10 +112,10 @@ class ChoiIsing(Mapping):
         :return: dict with the ising, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         self.problem = problem
         # call mapping function
-        self.qubo_mapping = ChoiQubo()
+        self.qubo_mapping = ChoiQUBO()
         q, _ = self.qubo_mapping.map(problem, config)
         t, j, _ = qubo_to_ising(q["Q"])
 
@@ -129,7 +130,7 @@ class ChoiIsing(Mapping):
         for key, value in j.items():
             j_matrix[key[0]][key[1]] = value
 
-        return {"J": j_matrix, "t": t_vector}, round(time() * 1000 - start, 3)
+        return {"J": j_matrix, "t": t_vector}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -140,7 +141,7 @@ class ChoiIsing(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
 
         # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
         solution_dict = {}
@@ -150,7 +151,7 @@ class ChoiIsing(Mapping):
         # reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)
 
-        return result, round(time() * 1000 - start, 3)
+        return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

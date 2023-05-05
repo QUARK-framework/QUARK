@@ -83,6 +83,8 @@ Example for an Application, which should reside under ``src/modules/applications
 .. code-block:: python
 
         from modules.applications.Application import *
+        from utils import start_time_measurement, end_time_measurement
+
 
 
         class MyApplication(Application):
@@ -137,9 +139,9 @@ Example for an Application, which should reside under ``src/modules/applications
             def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
 
                 # Generate data that gets passed to the next submodule
-                start = time() * 1000
+                start = start_time_measurement()
                 output = self.generate_problem(config)
-                return output, round(time() * 1000 - start, 3)
+                return output, end_time_measurement(start)
 
             def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
 
@@ -164,22 +166,22 @@ Example for an Application, which should reside under ``src/modules/applications
                 return self.application
 
             def validate(self, solution):
-                start = time() * 1000
+                start = start_time_measurement()
 
                 # Check if solution is valid
                 if solution is None:
                   logging.error(f"Solution not valid ❌")
-                    return False, round(time() * 1000 - start, 3)
+                    return False, end_time_measurement(start)
                 else:
                     logging.info(f"Solution valid ✅ ")
-                    return True, round(time() * 1000 - start, 3)
+                    return True, end_time_measurement(start)
 
             def evaluate(self, solution):
-                start = time() * 1000
+                start = start_time_measurement()
 
                 evaluation_metric = calculate_metric(solution)
 
-                return evaluation_metric, round(time() * 1000 - start, 3)
+                return evaluation_metric, end_time_measurement(start)
 
             def save(self, path, iter_count):
                 save_your_application(self.application, f"{path}/application.txt")

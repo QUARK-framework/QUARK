@@ -30,7 +30,7 @@ import pandas as pd
 from ConfigManager import ConfigManager
 from BenchmarkRecord import BenchmarkRecord
 from modules.Core import Core
-from utils import get_git_revision
+from utils import get_git_revision, NumpyEncoder
 
 matplotlib.rcParams['savefig.dpi'] = 300
 
@@ -156,7 +156,7 @@ class BenchmarkManager:
                     record.sum_up_times()
 
                 with open(f"{path}/results.json", 'w') as filehandler:
-                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2)
+                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
                 logging.info("")
                 logging.info(" ============================================================ ")

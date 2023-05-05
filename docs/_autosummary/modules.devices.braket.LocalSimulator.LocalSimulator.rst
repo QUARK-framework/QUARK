@@ -27,6 +27,7 @@ modules.devices.braket.LocalSimulator.LocalSimulator
       ~LocalSimulator.init_s3_storage
       ~LocalSimulator.postprocess
       ~LocalSimulator.preprocess
+      ~LocalSimulator.set_config
    
    
 

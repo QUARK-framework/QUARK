@@ -18,9 +18,10 @@ from typing import TypedDict
 from nnf import And
 
 from modules.applications.Mapping import *
+from utils import start_time_measurement, end_time_measurement
 
 
-class DinneenQubo(Mapping):
+class DinneenQUBO(Mapping):
     """
     QUBO formulation for SAT as given by Dinneen -- see also the description in the QUARK paper (2202.03028).
     """
@@ -92,7 +93,7 @@ class DinneenQubo(Mapping):
         :return: dict with the QUBO, time it took to map it
         :rtype: tuple(dict, float)
         """""
-        start = time() * 1000
+        start = start_time_measurement()
         # extract hard and soft constraints from the generated problem
         hard, soft = problem
         # count the variables
@@ -162,7 +163,7 @@ class DinneenQubo(Mapping):
 
         logging.info(f"Generate Dinneen QUBO with {self.nr_vars + len(hard) + len(soft)} binary variables."
                      f" Lagrange parameter used was: {config['lagrange']}.")
-        return {"Q": qubo_dict}, round(time() * 1000 - start, 3)
+        return {"Q": qubo_dict}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -173,7 +174,7 @@ class DinneenQubo(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         mapped_sol = {}
         for i in range(self.nr_vars):
             # if variable not present in solution, its assignment does not matter
@@ -181,7 +182,7 @@ class DinneenQubo(Mapping):
                 mapped_sol[f'L{i}'] = True
             else:
                 mapped_sol[f'L{i}'] = bool(solution[i])
-        return mapped_sol, round(time() * 1000 - start, 3)
+        return mapped_sol, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from modules.applications.Application import *
+from utils import start_time_measurement, end_time_measurement
 
 
 class Optimization(Application, ABC):
@@ -78,7 +79,7 @@ class Optimization(Application, ABC):
         :rtype: tuple(any, float)
 
         """
-        return solution, 0
+        return solution, 0.0
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
@@ -93,9 +94,9 @@ class Optimization(Application, ABC):
         :return: tuple with output and the preprocessing time
         :rtype: (any, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         output = self.generate_problem(config)
-        return output, round(time() * 1000 - start, 3)
+        return output, end_time_measurement(start)
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
@@ -129,5 +130,8 @@ class Optimization(Application, ABC):
 
         self.metrics.add_metric_batch({"solution_validity": solution_validity, "solution_quality": solution_quality,
                                        "solution_quality_unit": self.get_solution_quality_unit(),
-                                       "processed_solution": processed_solution})
+                                       "processed_solution": processed_solution,
+                                       "time_to_process_solution": time_to_process_solution,
+                                       "time_to_validation": time_to_validation,
+                                       "time_to_evaluation": time_to_evaluation})
         return solution_validity, sum(filter(None, [time_to_process_solution, time_to_validation, time_to_evaluation]))

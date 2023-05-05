@@ -20,6 +20,7 @@ import numpy as np
 
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
+from utils import start_time_measurement, end_time_measurement
 
 
 class TSP(Optimization):
@@ -67,8 +68,8 @@ class TSP(Optimization):
             from modules.applications.optimization.TSP.mappings.ISING import Ising  # pylint: disable=C0415
             return Ising()
         elif option == "QUBO":
-            from modules.applications.optimization.TSP.mappings.QUBO import Qubo  # pylint: disable=C0415
-            return Qubo()
+            from modules.applications.optimization.TSP.mappings.QUBO import QUBO  # pylint: disable=C0415
+            return QUBO()
         elif option == "GreedyClassicalTSP":
             from modules.solvers.GreedyClassicalTSP import GreedyClassicalTSP  # pylint: disable=C0415
             return GreedyClassicalTSP()
@@ -189,7 +190,7 @@ class TSP(Optimization):
         :return: processed solution and the time it took to process it
         :rtype: tuple(list, float)
         """
-        start_time = time() * 1000
+        start_time = start_time_measurement()
         nodes = self.application.nodes()
         start = np.min(nodes)
         # fill route with None values
@@ -215,12 +216,12 @@ class TSP(Optimization):
                     relevant_timesteps.append(solution[(node, timestep)])
             if sum(relevant_nodes) != 1 or sum(relevant_timesteps) != 1:
                 # timestep or nodes have more than 1 or 0 flags
-                return None, round(time() * 1000 - start_time, 3)
+                return None, end_time_measurement(start_time)
 
         # check validity of solution
         if sum(value == 1 for value in solution.values()) > len(route):
             logging.warning("Result is longer than route! This might be problematic!")
-            return None, round(time() * 1000 - start_time, 3)
+            return None, end_time_measurement(start_time)
 
         # run heuristic replacing None values
         if None in route:
@@ -241,7 +242,7 @@ class TSP(Optimization):
         # print route
         parsed_route = ' ->\n'.join([f' Node {visit}' for visit in route])
         logging.info(f"Route found:\n{parsed_route}")
-        return route, round(time() * 1000 - start_time, 3)
+        return route, end_time_measurement(start_time)
 
     def validate(self, solution: list) -> (bool, float):
         """
@@ -252,17 +253,17 @@ class TSP(Optimization):
         :return: Boolean whether the solution is valid, time it took to validate
         :rtype: tuple(bool, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         nodes = self.application.nodes()
 
         if solution is None:
-            return False, round(time() * 1000 - start, 3)
+            return False, end_time_measurement(start)
         elif len([node for node in list(nodes) if node not in solution]) == 0:
             logging.info(f"All {len(solution)} nodes got visited")
-            return True, round(time() * 1000 - start, 3)
+            return True, end_time_measurement(start)
         else:
             logging.error(f"{len([node for node in list(nodes) if node not in solution])} nodes were NOT visited")
-            return False, round(time() * 1000 - start, 3)
+            return False, end_time_measurement(start)
 
     def evaluate(self, solution: list) -> (float, float):
         """
@@ -273,7 +274,7 @@ class TSP(Optimization):
         :return: Tour cost and the time it took to calculate it
         :rtype: tuple(float, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         # get the total distance without return
         total_dist = 0
         for idx, _ in enumerate(solution[:-1]):
@@ -290,7 +291,7 @@ class TSP(Optimization):
         distance_with_return = total_dist + return_distance
         logging.info(f"Total distance (including return): {distance_with_return}")
 
-        return distance_with_return, round(time() * 1000 - start, 3)
+        return distance_with_return, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
         nx.write_gpickle(self.application, f"{path}/graph_iter_{iter_count}.gpickle")

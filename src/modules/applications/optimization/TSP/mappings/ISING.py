@@ -24,7 +24,8 @@ from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from modules.applications.Mapping import *
-from modules.applications.optimization.TSP.mappings.QUBO import Qubo
+from modules.applications.optimization.TSP.mappings.QUBO import QUBO
+from utils import start_time_measurement, end_time_measurement
 
 
 class Ising(Mapping):
@@ -75,7 +76,7 @@ class Ising(Mapping):
                 "name": "pyqubo",
                 "version": "1.4.0"
             },
-            *Qubo.get_requirements()
+            *QUBO.get_requirements()
         ]
 
     def get_parameter_options(self) -> dict:
@@ -222,7 +223,7 @@ class Ising(Mapping):
         :return: dict with the Ising, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         # cost_matrix = nx.to_numpy_matrix(graph) #self.get_tsp_matrix(graph)
         # cost_matrix = self.get_tsp_matrix(graph)
         cost_matrix = np.array(nx.to_numpy_matrix(graph, weight="weight"))
@@ -252,7 +253,7 @@ class Ising(Mapping):
         # print("Number items in Ising dict: {} Number of non-zero entries in matrix: {}".\
         #       format(len(quad.items()), len(j_matrix.nonzero())))
 
-        return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, round(time() * 1000 - start, 3)
+        return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, end_time_measurement(start)
 
     def _map_ocean(self, graph: nx.Graph, config: Config) -> (dict, float):
         """
@@ -267,8 +268,8 @@ class Ising(Mapping):
         :rtype: tuple(dict, float)
         """
 
-        start = time() * 1000
-        qubo_mapping = Qubo()
+        start = start_time_measurement()
+        qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(graph, config)
         t, j, _ = qubo_to_ising(q["Q"])
 
@@ -300,7 +301,7 @@ class Ising(Mapping):
         # logging.info("Upper triangle form: ")
         # logging.info(j_matrix)
 
-        return {"J": j_matrix, "t": np.array(list(t.values())), "J_dict": j}, round(time() * 1000 - start, 3)
+        return {"J": j_matrix, "t": np.array(list(t.values())), "J_dict": j}, end_time_measurement(start)
 
     @staticmethod
     def _map_qiskit(graph: nx.Graph, config: Config) -> (dict, float):
@@ -316,7 +317,7 @@ class Ising(Mapping):
         :return: dict with the Ising, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         tsp = Tsp(graph)
         qp = tsp.to_quadratic_program()
         logging.info(qp.export_as_lp_string())
@@ -339,7 +340,7 @@ class Ising(Mapping):
             elif len(index_pos_list) == 2:
                 j_matrix[index_pos_list[0]][index_pos_list[1]] = coeff
 
-        return {"J": j_matrix, "t": t_matrix}, round(time() * 1000 - start, 3)
+        return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -350,7 +351,7 @@ class Ising(Mapping):
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        start = time() * 1000
+        start = start_time_measurement()
         if np.any(solution == "-1"):  # ising model output from Braket QAOA
             solution = self._convert_ising_to_qubo(solution)
         elif self.config["mapping"] == "pyqubo" or self.config["mapping"] == "ocean":
@@ -374,7 +375,7 @@ class Ising(Mapping):
                 result[key] = 1 if solution[value] == 1 else 0
 
         logging.info(result)
-        return result, round(time() * 1000 - start, 3)
+        return result, end_time_measurement(start)
 
     @staticmethod
     def _flip_bits_in_bitstring(solution: any) -> any:

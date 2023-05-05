@@ -17,6 +17,7 @@ import json
 import os
 import time
 from pathlib import Path
+import  inspect
 
 import yaml
 from packaging import version
@@ -40,9 +41,9 @@ class Installer:
         self.python_version = "3.9.16"
         self.pip_version = "23.0"
         self.default_app_modules = [
-            {"name": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
-            {"name": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-            {"name": "TSP", "module": "modules.applications.optimization.TSP.TSP"}
+            {"name": "PVC", "class":  "PVC", "module": "modules.applications.optimization.PVC.PVC"},
+            {"name": "SAT", "class":  "SAT", "module": "modules.applications.optimization.SAT.SAT"},
+            {"name": "TSP", "class":  "TSP", "module": "modules.applications.optimization.TSP.TSP"}
         ]
 
         self.core_requirements = [
@@ -69,19 +70,19 @@ class Installer:
 
         if env_name in installed_envs:
             answer_continue = inquirer.prompt([
-                inquirer.List('continue',
+                inquirer.List("continue",
                               message=f" {env_name} found in the existing QUARK module environment, are you sure you "
                                       f"want to overwrite it?",
-                              choices=['Yes', 'No'], )])["continue"]
+                              choices=["Yes", "No"], )])["continue"]
 
             if answer_continue == "No":
                 logging.info("Exiting install")
                 return
 
         chosen_install_type = inquirer.prompt([
-            inquirer.List('installs',
-                          message=f"What do you want to install?",
-                          choices=['Default', 'Custom'],
+            inquirer.List("installs",
+                          message="What do you want to install?",
+                          choices=["Default", "Custom"],
                           )])["installs"]
         logging.info(f"You chose {chosen_install_type}")
 
@@ -104,11 +105,12 @@ class Installer:
             self.create_req_file(requirements, env_name)
         if "Print it here" in activate_requirements:
             logging.info("Please install:")
-            [logging.info(f"  -  {p}{': ' + v[0] if v else ''}") for p, v in requirements.items()]
+            for p, v in requirements.items():
+                logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
 
         activate_answer = inquirer.prompt([
-            inquirer.List('activate',
-                          message=f"Do you want to activate the QUARK module environment?",
+            inquirer.List("activate",
+                          message="Do you want to activate the QUARK module environment?",
                           choices=["Yes", "No"],
                           )])["activate"]
 
@@ -178,14 +180,15 @@ class Installer:
         file = f"{self.envs_dir}/{name}.json"
         self._check_if_env_exists(name)
 
-        with open(file, 'r') as filehandler:
+        with open(file, "r") as filehandler:
             env = json.load(filehandler)
-            logging.info(f"Getting {name} env")
+            logging.info(f"Getting {name} QUARK module environment")
             module_db_build_number = self.get_module_db_build_number()
             if env["build_number"] < module_db_build_number:
                 logging.warning(f"You QUARK module env is based on an outdated build version of the module database "
-                                f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER {module_db_build_number}) might "
-                                f"bring new features. You should think about updating your environment!")
+                                f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
+                                f"{module_db_build_number}) might bring new features. You should think about"
+                                f" updating your environment!")
 
             return env["modules"]
 
@@ -273,7 +276,7 @@ class Installer:
         logging.info("Creating Module Database")
 
         # TODO Helper to skip constructor in Braket.py. Should be changed in the future!
-        os.environ['SKIP_INIT'] = "True"
+        os.environ["SKIP_INIT"] = "True"
 
         module_db_modules = self.default_app_modules
 
@@ -286,7 +289,7 @@ class Installer:
             module_db_modules[idx]["requirements"] = app_instance.get_requirements()
 
         git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
-        git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
+        git_revision_number, _ = get_git_revision(git_dir)
         module_db = {
             "build_number": self.get_module_db_build_number() + 1,
             "build_date": time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()),
@@ -313,8 +316,16 @@ class Installer:
         :rtype: dict
         """
 
+        if name == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
+            print("qew")
         return {
             "name": name,
+            "class": module.__class__.__name__,
+            # TODO Verify the following if it really works as intended
+            # Since some modules are initliazed with parameters in their constructor we need to check what these param.
+            # were. Hence we here check whether any parameters in the class instance match the one from the constructor
+            "args": {k: v for k, v in module.__dict__.items() if k in
+                     inspect.signature(module.__init__).parameters.keys()},
             "module": module.__module__,
             "requirements": module.get_requirements(),
             "submodules": [Installer._create_module_db_helper(module.get_submodule(sm), sm) for sm in
@@ -346,11 +357,11 @@ class Installer:
         """
 
         requirements: list[dict] = self.core_requirements
-
-        [requirements.extend(Installer._collect_requirements_helper(app)) for app in env]
+        for app in env:
+            requirements.extend(Installer._collect_requirements_helper(app))
 
         # Let`s see how many duplicates we have and if we have any version conflicts
-        merged_requirements: dict = dict()
+        merged_requirements: dict = {}
         for req in requirements:
             if req["name"] in merged_requirements:
                 # Check if the specific version if already there, then we skip it
@@ -365,7 +376,7 @@ class Installer:
         for k, v in merged_requirements.items():
             if len(v) > 1:
                 # If there are multiple different version
-                newest_version = sorted(v, key=lambda x: version.Version(x))[-1]
+                newest_version = sorted(v, key=lambda x: version.Version(x))[-1]  # pylint: disable=W0108
                 merged_requirements[k] = [newest_version]
                 logging.warning(f"Different version requirements for {k}: {v}. Will try to take the newer version "
                                 f"{newest_version}, but this might cause problems at QUARK runtime!")
@@ -410,10 +421,10 @@ class Installer:
 
             ]
         }
-        with open(f"{self.envs_dir}/conda_{name}.yml", 'w') as filehandler:
+        with open(f"{self.envs_dir}/conda_{name}.yml", "w") as filehandler:
             yaml.dump(conda_data, filehandler)
 
-        logging.info(f"Saved conda env file, if you like to install it run:")
+        logging.info("Saved conda env file, if you like to install it run:")
         logging.info(f"conda env create -f {self.envs_dir}/conda_{name}.yml")
 
     def create_req_file(self, requirements: dict, name: str) -> None:
@@ -432,7 +443,7 @@ class Installer:
                 filehandler.write(f"{k}=={v[0]}" if v else k)
                 filehandler.write("\n")
 
-        logging.info(f"Saved pip txt file, if you like to install it run:")
+        logging.info("Saved pip txt file, if you like to install it run:")
         logging.info(f"pip install -r  {self.envs_dir}/requirements_{name}.txt")
 
     def list_envs(self) -> None:
@@ -444,7 +455,8 @@ class Installer:
         """
 
         logging.info("Existing environments:")
-        [logging.info(f"  -  {env}") for env in self.check_for_installs()]
+        for env in self.check_for_installs():
+            logging.info(f"  -  {env}")
 
     @staticmethod
     def show(env: list[dict]) -> None:
@@ -461,7 +473,7 @@ class Installer:
         connector = "├── "
         leaf = "└── "
 
-        def tree(modules: list[dict], prefix: str = ''):
+        def tree(modules: list[dict], prefix: str = ""):
             """
              A recursive function that generated a tree from the modules
              This function is based on https://stackoverflow.com/a/59109706, but modified to the needs here

@@ -39,19 +39,6 @@ class Application(Core, ABC):
         """
         return self.application
 
-    def process_solution(self, solution) -> (any, float):
-        """
-        Most of the time the solution has to be processed before it can be validated and evaluated
-        This might not be necessary in all cases, so the default is to return the original solution.
-
-        :param solution:
-        :type solution: any
-        :return: Processed solution and the execution time to process it
-        :rtype: tuple(any, float)
-
-        """
-        return solution, 0
-
     @abstractmethod
     def save(self, path: str, iter_count: int) -> None:
         """

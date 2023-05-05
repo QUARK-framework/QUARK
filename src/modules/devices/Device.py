@@ -26,6 +26,7 @@ class Device(Core, ABC):
         """
         super().__init__()
         self.device = None
+        self.config = None
         self.device_name = device_name
         self.config = None
 
@@ -55,10 +56,34 @@ class Device(Core, ABC):
         self.config = config
 
     def preprocess(self, input_data, config, **kwargs):
+        """
+        Returns itself
+
+        :param input_data:
+        :type input_data: any
+        :param config: config for the device
+        :type config: dict
+        :param kwargs: optional keyword arguments
+        :type kwargs: dict
+        :return: Output and time needed
+        :rtype: (any, float)
+        """
         start = time() * 1000
+        self.config = config
         return self, round(time() * 1000 - start, 3)
 
-    def postprocess(self, input_data, config, **kwargs):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+        """
+        Does nothing at the moment: input=output
+
+        :param input_data:
+        :type input_data: any
+        :param config: solver config
+        :type config: dict
+        :param kwargs:
+        :return: Output and time needed
+        :rtype: (any, float)
+        """
         start = time() * 1000
         self.metrics.add_metric("device", self.get_device_name())
         return input_data, round(time() * 1000 - start, 3)

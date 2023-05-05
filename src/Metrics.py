@@ -22,7 +22,12 @@ class Metrics:
 
     def __init__(self, module_name: str, module_src: str):
         """
-        Constructor method
+        Constructor for Metrics class
+
+        :param module_name: Name of the module this metrics object belongs to
+        :type module_name: str
+        :param module_src: Source file of the module this metrics object belongs to
+        :type module_src: str
         """
         self.module_name = module_name
         self.module_src = module_src
@@ -36,7 +41,7 @@ class Metrics:
         self.additional_metrics = {}
 
     @final
-    def validate(self):
+    def validate(self) -> None:
         """
         Validates whether the mandatory metrics got recorded, then sets total time.
 
@@ -47,19 +52,43 @@ class Metrics:
         self.total_time = self.preprocessing_time + self.postprocessing_time
 
     @final
-    def set_preprocessing_time(self, value: float):
+    def set_preprocessing_time(self, value: float) -> None:
+        """
+        Sets the preprocessing time
+
+        :param value: the time
+        :type value: float
+        :return:
+        :rtype: None
+        """
         self.preprocessing_time = value
 
     @final
-    def set_module_config(self, config: dict):
+    def set_module_config(self, config: dict) -> None:
+        """
+        Set the config of this module where this metrics object belongs to
+
+        :param config: config of the QUARK module
+        :type config: dict
+        :return:
+        :rtype: None
+        """
         self.module_config = config
 
     @final
-    def set_postprocessing_time(self, value: float):
+    def set_postprocessing_time(self, value: float) -> None:
+        """
+        Sets the postprocessing time
+
+        :param value: the time
+        :type value: float
+        :return:
+        :rtype: None
+        """
         self.postprocessing_time = value
 
     @final
-    def add_metric(self, name: str, value: any):
+    def add_metric(self, name: str, value: any) -> None:
         """
         Method to add a single metric.
 
@@ -73,7 +102,7 @@ class Metrics:
         self.additional_metrics.update({name: value})
 
     @final
-    def add_metric_batch(self, key_values: dict):
+    def add_metric_batch(self, key_values: dict) -> None:
         """
         Adds a dictionary containing metrics to the existing metrics.
 
@@ -85,7 +114,7 @@ class Metrics:
         self.additional_metrics.update(key_values)
 
     @final
-    def reset(self):
+    def reset(self) -> None:
         """
         Resets all recorded metrics
 

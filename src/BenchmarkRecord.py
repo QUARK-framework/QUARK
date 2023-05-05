@@ -28,6 +28,19 @@ class BenchmarkRecord:
 
     def __init__(self, timestamp: str, git_revision_number: str, git_uncommitted_changes: bool, repetition: int,
                  total_repetitions: int):
+        """
+
+        :param timestamp: What is the timestamp
+        :type timestamp: str
+        :param git_revision_number:  What is the git revision number
+        :type git_revision_number: str
+        :param git_uncommitted_changes: Are there uncommitted changes
+        :type git_uncommitted_changes: bool
+        :param repetition: Number of current repetitions
+        :type repetition: int
+        :param total_repetitions: Number of total repetitions
+        :type total_repetitions: int
+        """
         self.timestamp = timestamp
         self.git_revision_number = git_revision_number
         self.git_uncommitted_changes = git_uncommitted_changes
@@ -49,7 +62,7 @@ class BenchmarkRecord:
         self.linked_list_metrics.append(module_record)
 
     @final
-    def append_module_record_left(self, module_record: Metrics):
+    def append_module_record_left(self, module_record: Metrics) -> None:
         """
         Adds Metrics instance to the beginning of the linked list
 
@@ -60,9 +73,10 @@ class BenchmarkRecord:
         self.linked_list_metrics.appendleft(module_record)
 
     @final
-    def sum_up_times(self):
+    def sum_up_times(self) -> None:
         """
         Sums up the recording timings
+
         :rtype: None
         """
         self.total_time = 0.0
@@ -119,7 +133,7 @@ class BenchmarkRecord:
         }
 
     @final
-    def start_linked_list_to_dict(self):
+    def start_linked_list_to_dict(self) -> None:
         """
         Helper function to start linked_list_to_dict function, which merges the various metrics objects to on dict.
 
@@ -151,9 +165,10 @@ class BenchmarkRecord:
         }
 
     @final
-    def copy(self):
+    def copy(self) -> any:
         """
         Return a copy of itself
-        :return:
+        :return: Return copy of itself
+        :rtype: BenchmarkRecord
         """
         return deepcopy(self)

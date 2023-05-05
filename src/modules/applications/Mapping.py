@@ -24,11 +24,12 @@ class Mapping(Core, ABC):
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
         In this module, the preprocessing step is mapping the data to the correct target format.
-        :param input_data:
+
+        :param input_data: data which should be mapped
         :type input_data: any
-        :param config:
+        :param config: config of the mapping
         :type config: dict
-        :param kwargs:
+        :param kwargs: optional keyword arguments
         :type kwargs: dict
         :return: tuple with mapped problem and the time it took to map it
         :rtype: (any, float)
@@ -44,7 +45,7 @@ class Mapping(Core, ABC):
         :type input_data: any
         :param config:
         :type config: dict
-        :param kwargs:
+        :param kwargs: optional keyword arguments
         :type kwargs: dict
         :return:
         """

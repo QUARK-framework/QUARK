@@ -26,12 +26,15 @@ class Solver(Core, ABC):
         """
         Here the actual solving process is done as we have here the device, which got provided by the device submodule,
         and the problem data provided by the parent module
-        :param input_data:
+
+        :param input_data: Data passed to the run function of the solder
         :type input_data: any
-        :param config:
+        :param config: solver config
         :type config: dict
-        :param kwargs:
-        :return:
+        :param kwargs: optional keyword arguments
+        :type kwargs: dict
+        :return: Output and time needed
+        :rtype: (any, float)
         """
         output, elapsed_time, additional_metrics = self.run(self.preprocessed_input, input_data, config, **kwargs)
         self.metrics.add_metric_batch(additional_metrics)

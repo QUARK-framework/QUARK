@@ -60,13 +60,14 @@ class ConfigManager:
         self.config = None
         self.application = None
 
-    def generate_benchmark_configs(self, app_modules: dict):
+    def generate_benchmark_configs(self, app_modules: dict) -> None:
         """
         Queries the user to get all needed information about application, solver, mapping, device and general settings
         to run the benchmark.
 
         :param app_modules: the list of application modules as specified in the application modules configuration.
         :type app_modules: list of dict
+        :rtype: None
         """
         application_answer = inquirer.prompt([inquirer.List('application',
                                                             message="What application do you want?",
@@ -164,12 +165,13 @@ class ConfigManager:
 
         return answer
 
-    def set_config(self, config: BenchmarkConfig):
+    def set_config(self, config: BenchmarkConfig) -> None:
         """
         In case the user supplies a config file this function is used to set the config
 
         :param config:  Valid config file
         :type config: BenchmarkConfig
+        :rtype: None
         """
         self.config = config
 
@@ -301,7 +303,7 @@ class ConfigManager:
         with open(f"{store_dir}/config.yml", 'w') as filehandler:
             yaml.dump(self.config, filehandler)
 
-    def print(self):
+    def print(self) -> None:
         """
         Prints the config
         :rtype: None
@@ -411,7 +413,7 @@ class ConfigManager:
 
         return config
 
-    def create_tree_figure(self, store_dir: str):
+    def create_tree_figure(self, store_dir: str) -> None:
         """
         Visualize the benchmark as a graph, experimental feature!
 
@@ -429,7 +431,7 @@ class ConfigManager:
         plt.clf()
 
     @staticmethod
-    def _create_tree_figure_helper(graph: nx.Graph, config: ConfigModule):
+    def _create_tree_figure_helper(graph: nx.Graph, config: ConfigModule) -> None:
         """
         Helper for _create_tree_figure that traverses the config recursively
 

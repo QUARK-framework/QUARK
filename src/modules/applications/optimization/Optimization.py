@@ -67,6 +67,19 @@ class Optimization(Application, ABC):
         """
         pass
 
+    def process_solution(self, solution) -> (any, float):
+        """
+        Most of the time the solution has to be processed before it can be validated and evaluated
+        This might not be necessary in all cases, so the default is to return the original solution.
+
+        :param solution:
+        :type solution: any
+        :return: Processed solution and the execution time to process it
+        :rtype: tuple(any, float)
+
+        """
+        return solution, 0
+
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
         For optimization problems we generate the actual problem instance in the preprocess function.
@@ -75,8 +88,8 @@ class Optimization(Application, ABC):
         :type input_data: any
         :param config: config for the problem creation.
         :type config:  dict
-        :param kwargs: optional additional arguments.:
-        :type kwargs:
+        :param kwargs: optional additional arguments
+        :type kwargs: dict
         :return: tuple with output and the preprocessing time
         :rtype: (any, float)
         """
@@ -88,11 +101,12 @@ class Optimization(Application, ABC):
         """
         For optimization, we process the solution here, then validate and evaluate it.
 
-        :param input_data:
+        :param input_data: data which should be evaluated for this optimization problem
         :type input_data: any
         :param config: config
         :type config: dict
-        :param kwargs:
+        :param kwargs: optional additional arguments
+        :type kwargs: dict
         :return: tuple with results and the postprocessing time
         :rtype: (any, float)
         """

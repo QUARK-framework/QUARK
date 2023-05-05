@@ -80,6 +80,7 @@ class Core(ABC):
 
     def get_default_submodule(self, option: str) -> any:
         """
+        Given an option string by the user return a submodule
 
         :param option: String with the chosen submodule
         :type option: str
@@ -88,33 +89,33 @@ class Core(ABC):
         """
         return None
 
-    def preprocess(self, input_data, config, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
         Essential Method for the benchmarking process. Is always executed before traversing down to the next module,
         passing the data returned by this function.
 
-        :param input_data:
-        :type input_data:
-        :param config:
-        :type config:
-        :param kwargs:
-        :type kwargs:
+        :param input_data: data for the module, comes from the parent module if that exists
+        :type input_data: any
+        :param config: config for the module
+        :type config: dict
+        :param kwargs: optional keyword arguments
+        :type kwargs: dict
         :return: The output of the precprocessing and the time it took to preprocess
         :rtype: (any, float)
         """
         return input_data, 0.0
 
-    def postprocess(self, input_data, config, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
         Essential Method for the benchmarking process. Is always executed after the submodule is finished. The data by
         this method is passed up to the parent module.
 
-        :param input_data:
-        :type input_data:
-        :param config:
-        :type config:
-        :param kwargs:
-        :type kwargs:
+        :param input_data: input data comes from the submodule if that exists
+        :type input_data: any
+        :param config: config for the module
+        :type config: dict
+        :param kwargs: optional keyword arguments
+        :type kwargs: dict
         :return: The output of the postprocessing and the time it took to postprocess
         :rtype: (any, float)
         """
@@ -137,6 +138,7 @@ class Core(ABC):
     def get_requirements() -> list:
         """
         Returns the required pip packages of this module. Optional also the version can be added.
+
         :return: List of dictionaries
         :rtype: list
         """

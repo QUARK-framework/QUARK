@@ -13,7 +13,7 @@ permissions:
 jobs:
   lint:
     name: Run linter
-    runs-on: [ 'atc-ubuntu-latest' ]
+    runs-on: [ 'ubuntu-latest' ]
     env:
       AGENT_TOOLSDIRECTORY: /home/runner/actions-runner/_work/_tool/
     defaults:

@@ -22,7 +22,7 @@ class Ionq(Braket):
     Class for using the IonQ devices on Amazon Braket
     """
 
-    def __init__(self, device_name: str, arn: str = 'arn:aws:braket:::device/qpu/ionq/ionQdevice'):
+    def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-east-1::device/qpu/ionq/Harmony'):
         """
         Constructor method
         """

@@ -35,7 +35,7 @@ class QAOA(Solver):
         super().__init__()
         self.submodule_options = ["LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
                                "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                               "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                               "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                                "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
 
     @staticmethod
@@ -63,9 +63,9 @@ class QAOA(Solver):
 
     def get_default_submodule(self, option: str) -> Core:
 
-        if option == "arn:aws:braket:::device/qpu/ionq/ionQdevice":
+        if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
             from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
-            return Ionq("ionQ", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
+            return Ionq("ionQ", "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
             from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")

@@ -7,7 +7,8 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python ≥ 3.9, you need to install at least Python 3.9 if you don`t have it already installed.
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed.
+Other versions could cause issues with other dependencies used in the framework.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually

@@ -30,9 +30,9 @@ from utils import _get_instance_with_sub_options
 
 class ConfigModule(TypedDict):
     """
-    Each Module consists of the name of the module, its config, its configured submodules, which are modules itself.
-    It can also contain the instance of the class associated to this module, which is then used in the actual benchmark
-    process.
+    Each instance consists of the name of the module, its config, and a list of its configured submodules, which are
+    ConfigModule instances themselves. It can also contain the instance of the class associated to this module,
+    which is then used in the actual benchmarking process.
     """
     name: str
     config: dict
@@ -42,8 +42,8 @@ class ConfigModule(TypedDict):
 
 class BenchmarkConfig(TypedDict):
     """
-    The benchmarking config consists of a Module, which is the application on the first level and the number of
-    repetitions for the benchmark.
+    Each instance consists of a ConfigModule associated with the application at the first level and the number of
+    repetitions of the benchmark.
     """
     repetitions: int
     application: ConfigModule
@@ -51,8 +51,8 @@ class BenchmarkConfig(TypedDict):
 
 class ConfigManager:
     """
-    Classes responsible for generating/loading QUARK benchmark configs. Loading includes instantiation of the various
-    modules specified in the config
+    A class responsible for generating/loading QUARK benchmark configs. Loading includes instantiation of the various
+    modules specified in the config.
 
     """
 
@@ -62,11 +62,11 @@ class ConfigManager:
 
     def generate_benchmark_configs(self, app_modules: dict) -> None:
         """
-        Queries the user to get all needed information about application, solver, mapping, device and general settings
-        to run the benchmark.
+        Queries the user to get all information about the application, other modules, and general settings
+        necessary to run the benchmark.
 
-        :param app_modules: the list of application modules as specified in the application modules configuration.
-        :type app_modules: list of dict
+        :param app_modules: List of application modules as specified in the application modules configuration
+        :type app_modules: List of dict
         :rtype: None
         """
         application_answer = inquirer.prompt([inquirer.List('application',
@@ -167,7 +167,7 @@ class ConfigManager:
 
     def set_config(self, config: BenchmarkConfig) -> None:
         """
-        In case the user supplies a config file this function is used to set the config
+        In case the user provides a config file, this function is used to set the config.
 
         :param config:  Valid config file
         :type config: BenchmarkConfig
@@ -177,10 +177,10 @@ class ConfigManager:
 
     def load_config(self, app_modules: list[dict]):
         """
-        Uses the config to generate all class instances needed to run the benchmark.
+        Uses the config to generate all class instances needed to run the benchmark
 
-        :param app_modules: the list of application modules as specified in the application modules configuration.
-        :type app_modules: list of dict
+        :param app_modules: List of application modules as specified in the application modules configuration
+        :type app_modules: List of dict
         :rtype: None
         """
 
@@ -195,11 +195,11 @@ class ConfigManager:
     @staticmethod
     def initialize_module_classes(parent_module: Core, config: ConfigModule) -> ConfigModule:
         """
-        Recursively initializes all instances of the needed modules and its submodules for a given config
+        Recursively initializes all instances of the required modules and their submodules for a given config
 
         :param parent_module: Class of the parent module
         :type parent_module: Core
-        :param config: uninitialized config module
+        :param config: Uninitialized config module
         :type config: ConfigModule
         :return: Config with instances
         :rtype: ConfigModule
@@ -241,7 +241,7 @@ class ConfigManager:
 
     def start_create_benchmark_backlog(self) -> list:
         """
-        Helper function to kick of the creation of the benchmark backlog
+        Helper function to kick off the creation of the benchmark backlog
 
         :return: List with all benchmark items
         :rtype: list
@@ -251,14 +251,14 @@ class ConfigManager:
     @staticmethod
     def create_benchmark_backlog(module: ConfigModule) -> list:
         """
-        Recursive function which splits up the loaded config into single benchmark runs.
+        Recursive function which splits up the loaded config into single benchmark runs
 
-        :param module: config module
+        :param module: ConfigModule
         :type module: any
         :return: List with all benchmark items
         :rtype: list
         """
-        # fill dict until end is reached and then add dict to the backlog
+
         items = []
 
         if len(module["config"].items()) > 0:
@@ -294,9 +294,9 @@ class ConfigManager:
 
     def save(self, store_dir: str):
         """
-        Save the config as a YAML file.
+        Saves the config as a YAML file
 
-        :param store_dir: directory where the file should be stored
+        :param store_dir: Directory in which the file should be stored
         :type store_dir: str
         :rtype: None
         """
@@ -313,8 +313,8 @@ class ConfigManager:
     @staticmethod
     def _query_for_config(param_opts: dict, prefix: str = "") -> dict:
         """
-        For a given module config, queries the user in an interactive mode, which of the options he would like to
-        include in the final benchmark config.
+        For a given module config, queries users in an interactive mode, which of the options they would like to
+        include in the final benchmark config
 
         :param param_opts: Dictionary containing the options for a parameter including a description
         :type param_opts: dict
@@ -326,21 +326,10 @@ class ConfigManager:
         config = {}
         for key, config_answer in param_opts.items():
             if config_answer.get("if"):
-                #
-                # support parameter descriptions like
-                # "seed": {
-                #    "if": {"key":"graph_type", "in" : ["erdos-renyi"]},
-                #    ...
-                # }
-                # meaning that 'seed' only gets displayed if graph_type has been chosen to be 'erdos-renyi'
-                # This expects that the referenced parameter has been declared before and is declared to be
-                # 'exclusive' so that its value is unique.
-                #
 
                 key_in_cond = config_answer.get("if")["key"]
                 dependency = param_opts.get(key_in_cond)
 
-                # check configuration is consistent
                 consistent = False
                 err_msg = None
                 if dependency is None:
@@ -415,9 +404,9 @@ class ConfigManager:
 
     def create_tree_figure(self, store_dir: str) -> None:
         """
-        Visualize the benchmark as a graph, experimental feature!
+        Visualizes the benchmark as a graph (experimental feature)
 
-        :param store_dir: directory where the file should be stored
+        :param store_dir: Directory where the file should be stored
         :type store_dir: str
         :rtype: None
         """
@@ -433,7 +422,7 @@ class ConfigManager:
     @staticmethod
     def _create_tree_figure_helper(graph: nx.Graph, config: ConfigModule) -> None:
         """
-        Helper for _create_tree_figure that traverses the config recursively
+        Helper function for _create_tree_figure that traverses the config recursively
 
         :param graph: networkx Graph
         :type graph: networkx.Graph

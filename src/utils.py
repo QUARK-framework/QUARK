@@ -26,16 +26,15 @@ import numpy as np
 
 def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -> any:
     """
-    Create an instance of the QUARK module (application, mapping, solver, device) identified by
-    class_name.
+    Creates an instance of the QUARK module identified by class_name
 
-    :param options: the section of the QUARK module configuration including the submodules' information.
+    :param options: Section of the QUARK module configuration including the submodules' information.
     :type options: list of dict
-    :param name: the name of the QUARK component to be initialized.
+    :param name: name of the QUARK component to be initialized
     :type name: str
-    :param args: the list of arguments used for to the class initialization
+    :param args: List of arguments used for to the class initialization
     :type args: any
-    :return: the new instance ot the QUARK module
+    :return: New instance ot the QUARK module
     :rtype: any
     """
     for opt in options:
@@ -81,16 +80,16 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
 
 def _import_class(module_path: str, class_name: str, base_dir: str = None) -> type:
     """
-    Helper function which allows to replace hard coded imports of the form
+    Helper function which allows to replace hard-coded imports of the form
     'import MyClass from path.to.mypkg' by calling _import_class('path.to.mypkg', 'MyClass').
     If base_dir is specified its value will be added to python search path
     if not already contained in it.
 
-    :param module_path: python module path of the module containing the class to be imported
+    :param module_path: Python module path of the module containing the class to be imported
     :type module_path: str
-    :param class_name: the name of the class to be imported
+    :param class_name: Name of the class to be imported
     :type class_name: str
-    :return: the imported class object
+    :return: Imported class object
     :rtype: type
     """
 
@@ -106,8 +105,8 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
 
 def get_git_revision(git_dir: str) -> (str, str):
     """
-    Collect git revision number and check if there are uncommitted changes to allow user to analyze which codebase
-     was used.
+    Collects git revision number and checks if there are uncommitted changes to allow user to analyze which
+    codebase was used
 
     :param git_dir: Directory of the git repository
     :type git_dir: str
@@ -137,7 +136,7 @@ def get_git_revision(git_dir: str) -> (str, str):
 def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     """
     Expands the paths given as value of the 'dir' attribute appearing in the QUARK modules
-    configuration by joining base_dir with that path.
+    configuration by joining base_dir with that path
 
     :param j: the json to be adapted - expected to be a QUARK modules configuration or a part of it
     :type j: dict|list
@@ -173,7 +172,7 @@ def start_time_measurement() -> float:
 
 def end_time_measurement(start: float) -> float:
     """
-    Return the resul of the time measurement in milliseconds
+    Returns the result of the time measurement in milliseconds
 
     :param start: Starting point for the measurement
     :type start: float

@@ -6,13 +6,13 @@ We use Sphinx for generating the API and reference documentation.
 ## Instructions
 
 After installing NetworkX and its dependencies, install the Python
-packages needed to build the documentation by entering::
+packages needed to build the documentation by entering
 
     pip install sphinx
     pip install sphinx-rtd-theme
 
 
-To build the HTML documentation, enter:
+To build the HTML documentation, enter
 
     make html
 

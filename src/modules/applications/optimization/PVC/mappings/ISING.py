@@ -39,9 +39,9 @@ class Ising(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Returns requirements of this module
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         :rtype: list[dict]
         """
         return [
@@ -95,13 +95,13 @@ class Ising(Mapping):
 
     def map(self, problem: networkx.Graph, config: Config) -> (dict, float):
         """
-        Uses the PVC QUBO formulation and converts it to an Ising.
+        Uses the PVC QUBO formulation and converts it to an Ising
 
-        :param problem: a networkx Graph
+        :param problem: networkx graph
         :type problem: networkx.Graph
-        :param config: dictionary with the mapping config
+        :param config: Dict with the mapping config
         :type config: Config
-        :return: dict with the ising, time it took to map it
+        :return: Dict with the ising and time it took to map it
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
@@ -141,14 +141,13 @@ class Ising(Mapping):
         """
         Maps the solution back to the representation needed by the PVC class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
+        :param solution: Dictionary containing the solution
         :type solution: dict
-        :return: solution mapped accordingly, time it took to map it
+        :return: Solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         logging.info(f"Key Mapping: {self.key_mapping}")
-        # TODO Maybe throw error here if solution contains too many 1's
         result = {}
         for key, value in self.key_mapping.items():
             result[key] = 1 if solution[value] == 1 else 0

@@ -48,7 +48,7 @@ class PVC(Optimization):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Returns requirements of this module
 
         :return: list of dict with requirements of this module
         :rtype: list[dict]
@@ -124,7 +124,7 @@ class PVC(Optimization):
 
     def generate_problem(self, config: Config) -> nx.Graph:
         """
-        Uses the reference graph to generate a problem for a given config.
+        Uses the reference graph to generate a problem for a given config
 
         :param config: Config specifying the number of seams for the problem
         :type config: Config
@@ -194,11 +194,11 @@ class PVC(Optimization):
 
     def process_solution(self, solution: dict) -> (list, bool):
         """
-        Convert dict to list of visited seams.
+        Converts dict to list of visited seams
 
-        :param solution: unprocessed solution
+        :param solution: Unprocessed solution
         :type solution: dict
-        :return: processed solution and the time it took to process it
+        :return: Processed solution and the time it took to process it
         :rtype: tuple(list, bool)
         """
         start_time = start_time_measurement()
@@ -246,11 +246,11 @@ class PVC(Optimization):
 
     def validate(self, solution: list) -> (bool, float):
         """
-        Checks if all seams and the home position are visited for a given solution.
+        Checks if all seams and the home position are visited for a given solution
 
-        :param solution: list containing the nodes of the solution
+        :param solution: List containing the nodes of the solution
         :type solution: list
-        :return: Boolean whether the solution is valid, time it took to validate
+        :return: Boolean whether the solution is valid and time it took to validate
         :rtype: tuple(bool, float)
         """
         # Check if all seams are visited in route
@@ -267,9 +267,9 @@ class PVC(Optimization):
 
     def evaluate(self, solution: list) -> (float, float):
         """
-        Calculates the tour length for a given valid tour.
+        Calculates the tour length for a given valid tour
 
-        :param solution: list containing the nodes of the solution
+        :param solution: List containing the nodes of the solution
         :type solution: list
         :return: Tour length, time it took to calculate the tour length
         :rtype: tuple(float, float)

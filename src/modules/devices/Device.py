@@ -33,7 +33,7 @@ class Device(Core, ABC):
 
     def get_parameter_options(self) -> dict:
         """
-        Method to return the parameters to fine tune the device.
+        Returns the parameters to fine-tune the device
 
         Should always be in this format:
 
@@ -56,13 +56,13 @@ class Device(Core, ABC):
 
     def preprocess(self, input_data, config, **kwargs):
         """
-        Returns itself
+        Returns instance of device class (self) and time it takes to call config
 
-        :param input_data:
+        :param input_data: Input data (not used)
         :type input_data: any
-        :param config: config for the device
+        :param config: Config for the device
         :type config: dict
-        :param kwargs: optional keyword arguments
+        :param kwargs: Optional keyword arguments
         :type kwargs: dict
         :return: Output and time needed
         :rtype: (any, float)
@@ -73,13 +73,14 @@ class Device(Core, ABC):
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        Does nothing at the moment: input=output
+        Returns input data and adds device name to the metrics class instance
 
-        :param input_data:
+        :param input_data: Input data passed by the parent module
         :type input_data: any
         :param config: solver config
         :type config: dict
-        :param kwargs:
+        :param kwargs: Optional keyword arguments
+        :type kwargs: dict
         :return: Output and time needed
         :rtype: (any, float)
         """
@@ -89,7 +90,7 @@ class Device(Core, ABC):
 
     def get_device(self) -> any:
         """
-        Returns Device.
+        Returns device
 
         :return: Instance of the device class
         :rtype: any
@@ -98,7 +99,7 @@ class Device(Core, ABC):
 
     def get_device_name(self) -> str:
         """
-        Returns Device name.
+        Returns device name
 
         :return: Name of the device
         :rtype: str

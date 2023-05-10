@@ -1,9 +1,9 @@
-.. QUARK documentation master file, created by
+.. QUARK documentation main file, created by
    sphinx-quickstart on Fri Feb  4 11:04:21 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to QUARK's documentation!
+Welcome to QUARK's Documentation!
 =================================
 
 **QUantum computing Application benchmaRK** (QUARK) is a framework for designing, implementing, executing, and analyzing
@@ -24,9 +24,9 @@ to mathematical formulations, solvers, hardware or other custom module definitio
 Paper
 ======
 
-Details about the motivations for the framework can be seen in the accompanying QUARK paper (`arXiv link
+Details about the motivations for the QUARK framework can be found in the accompanying paper (`arXiv link
 <https://arxiv.org/abs/2202.03028>`_). Even though the architecture changed quite significantly with the 2.0 release of QUARK, the guiding principles still remain.
-The data used for the original paper can be found in ``paper/results.csv``.
+The data used for the paper can be found in ``results/results.csv``.
 
 .. toctree::
    :maxdepth: 2
@@ -41,10 +41,10 @@ The data used for the original paper can be found in ``paper/results.csv``.
 License
 ========
 
-QUARK is licensed under Apache 2.0 license.
+QUARK is licensed under the Apache License, Version 2.0.
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`

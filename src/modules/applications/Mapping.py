@@ -17,21 +17,21 @@ from modules.Core import *
 
 class Mapping(Core, ABC):
     """
-    The task of the mapping module is to translate the application’s data and problem specification into a mathematical
-    formulation suitable for a solver.
+    This module translates the input data and problem specification from the parent module, e.g.,
+    the application into a mathematical formulation suitable the submodule, e.g., a solver.
     """
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        In this module, the preprocessing step is mapping the data to the correct target format.
+        Maps the data to the correct target format
 
-        :param input_data: data which should be mapped
+        :param input_data: Data which should be mapped
         :type input_data: any
-        :param config: config of the mapping
+        :param config: Config of the mapping
         :type config: dict
-        :param kwargs: optional keyword arguments
+        :param kwargs: Optional keyword arguments
         :type kwargs: dict
-        :return: tuple with mapped problem and the time it took to map it
+        :return: Tuple with mapped problem and the time it took to map it
         :rtype: (any, float)
         """
         output, preprocessing_time = self.map(input_data, config)
@@ -39,15 +39,17 @@ class Mapping(Core, ABC):
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        Does the reverse transformation/mapping
+        Reverse transformation/mapping from the submodule's format to the mathematical formulation
+        suitable for the parent module
 
-        :param input_data:
+        :param input_data: Data which should be reverse-mapped
         :type input_data: any
-        :param config:
+        :param config: Config of the reverse mapping
         :type config: dict
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return:
+        :return: Tuple with reverse-mapped problem and the time it took to map it
+        :rtype: (any,float)
         """
         output, postprocessing_time = self.reverse_map(input_data)
         return output, postprocessing_time
@@ -55,13 +57,13 @@ class Mapping(Core, ABC):
     @abstractmethod
     def map(self, problem: any, config: dict) -> (any, float):
         """
-        Maps the given problem into a specific format a solver can work with. E.g. graph to QUBO.
+        Maps the given problem into a specific format suitable for the submodule, e.g., a solver
 
-        :param config: instance of class Config specifying the mapping settings
+        :param config: Instance of class Config specifying the mapping settings
         :type config: dict
-        :param problem: problem instance which should be mapped to the target representation
+        :param problem: Problem instance which should be mapped to the target representation
         :type problem: any
-        :return: Must always return the mapped problem and the time it took to create the mapping
+        :return: Mapped problem and the time it took to map it
         :rtype: tuple(any, float)
         """
         pass
@@ -72,9 +74,9 @@ class Mapping(Core, ABC):
         to return the original solution. This might be needed to convert the solution to a representation needed
         for validation and evaluation.
 
-        :param solution:
+        :param solution: Solution provided by submodule, e.g., the Solver class
         :type solution: any
-        :return: Mapped solution and the time it took to create it
+        :return: Reverse-mapped solution and the time it took to create it
         :rtype: tuple(any, float)
 
         """

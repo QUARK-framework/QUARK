@@ -24,11 +24,11 @@ class Optimization(Application, ABC):
     @abstractmethod
     def validate(self, solution) -> (bool, float):
         """
-        Check if the solution is a valid solution.
+        Checks if the solution is a valid solution
 
-        :param solution: proposed solution
+        :param solution: Proposed solution
         :type solution: any
-        :return: bool and the time it took to create it
+        :return: bool value if solution is valid and the time it took to validate the solution
         :rtype: tuple(bool, float)
 
         """
@@ -37,18 +37,19 @@ class Optimization(Application, ABC):
     @abstractmethod
     def get_solution_quality_unit(self) -> str:
         """
-        Method to return the unit of the evaluation which is used to make the plots nicer.
+        Returns the unit of the evaluation
 
         :return: String with the unit
         :rtype: str
         """
+        pass
 
     @abstractmethod
     def evaluate(self, solution: any) -> (float, float):
         """
-        Checks how good the solution is to allow comparison to other solutions.
+        Checks how good the solution is
 
-        :param solution:
+        :param solution: Provided solution
         :type solution: any
         :return: Evaluation and the time it took to create it
         :rtype: tuple(any, float)
@@ -59,7 +60,7 @@ class Optimization(Application, ABC):
     @abstractmethod
     def generate_problem(self, config) -> any:
         """
-        Depending on the config this method creates a concrete problem and returns it.
+        Creates a concrete problem and returns it
 
         :param config:
         :type config: dict
@@ -70,10 +71,10 @@ class Optimization(Application, ABC):
 
     def process_solution(self, solution) -> (any, float):
         """
-        Most of the time the solution has to be processed before it can be validated and evaluated
+        Most of the time the solution has to be processed before it can be validated and evaluated.
         This might not be necessary in all cases, so the default is to return the original solution.
 
-        :param solution:
+        :param solution: Proposed solution
         :type solution: any
         :return: Processed solution and the execution time to process it
         :rtype: tuple(any, float)
@@ -83,15 +84,15 @@ class Optimization(Application, ABC):
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        For optimization problems we generate the actual problem instance in the preprocess function.
+        For optimization problems, we generate the actual problem instance in the preprocess function.
 
-        :param input_data: Usually not used for this method.
+        :param input_data: Input data (usually not used in this method)
         :type input_data: any
-        :param config: config for the problem creation.
+        :param config: Config for the problem creation
         :type config:  dict
-        :param kwargs: optional additional arguments
+        :param kwargs: Optional additional arguments
         :type kwargs: dict
-        :return: tuple with output and the preprocessing time
+        :return: Tuple with output and the preprocessing time
         :rtype: (any, float)
         """
         start = start_time_measurement()
@@ -100,15 +101,15 @@ class Optimization(Application, ABC):
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        For optimization, we process the solution here, then validate and evaluate it.
+        For optimization problems, we process the solution here, then validate and evaluate it.
 
-        :param input_data: data which should be evaluated for this optimization problem
+        :param input_data: Data which should be evaluated for this optimization problem
         :type input_data: any
-        :param config: config
+        :param config: Config
         :type config: dict
-        :param kwargs: optional additional arguments
+        :param kwargs: Optional additional arguments
         :type kwargs: dict
-        :return: tuple with results and the postprocessing time
+        :return: Tuple with results and the postprocessing time
         :rtype: (any, float)
         """
         processed_solution = None

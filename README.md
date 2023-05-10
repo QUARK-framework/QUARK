@@ -1,47 +1,41 @@
 # QUARK: A Framework for Quantum Computing Application Benchmarking
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers. 
-QUARK supports various applications (e.g., TSP, MaxSAT or PVC), different solvers (e.g. Annealing) and different quantum devices (e.g., IonQ), and simulators.
-It is designed to be easily extendable in all of its components (Applications, Mappings, Solvers, Devices or other custom module definitions).
+QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case. It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
+It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
 ## Paper
-Details about the motivations for the framework can be seen in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028. 
-Even though the architecture changed quite significantly with the 2.0 release of QUARK, the guiding principles still remain.
+Details about the motivations for the framework can be found in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028. 
+Even though the architecture changed significantly with the 2.0 release of QUARK, the guiding principles still remain.
 
 ## Documentation
-Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io
+Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io.
 
 ## Prerequisites
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed.
-Other versions could cause issues with other dependencies used in the framework.
-Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
 
-1. Install pip packages manually
-2. Use the QUARK installer
+1. Install pip packages manually, or
+2. Use the QUARK installer.
 
 
-For this installer to work you need to install the following packages in the first place
+For this installer to work, you need to install the following packages in the first place:
 * inquirer
 * pyyaml
-
-To limit the number of packages you need to install, the installer gives you the option to only include a subsection of 
-QUARK modules. You can select the modules of choice via:
+To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules. You can select the modules of choice via:
 
 ```python src/main.py env --install myenv```
 
 Of course there is a default option, which will include all available options.
 
-Depending on your installed modules, you will need to install different python packages. 
-We provide the option to generate a Conda file or a pip requirements file, which you then can install.
-
+Depending on your installed modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also install multiple QUARK environments and then switch between them via:
 
 ```python src/main.py env --activate myenv2```
 
-> __Note:__ Different modules require different python packages, be sure that you python environment has the necessary
+> __Note:__ Different modules require different python packages. Be sure that you python environment has the necessary
             packages installed!
 
-To see which environments are installed please use:
+To see which environments are installed, please use
 
 ```python src/main.py env --list```
 
@@ -50,31 +44,29 @@ You can also visualize the contents of your QUARK environment:
 ```
 (quark) %  python src/main.py env --show myenv
 [...]
-Content of the Environment:
+Content of the environment:
 └── TSP
     └── GreedyClassicalTSP
         └── Local
 ```
 
-In case you want to use custom modules file (for example to use external modules from other repositories), you can still
-use the ```--modules``` option. You can find the documentation in the respective Read the Docs section.
+In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option. You can find the documentation in the respective Read the Docs section.
 
 ## Running a Benchmark
 
-```bash 
-export AWS_PROFILE=quantum_computing
+```bash
 export HTTP_PROXY=http://username:password@proxy.com:8080 
+export AWS_PROFILE=quantum_computing
+export AWS_REGION=us-west-1
 python src/main.py
 ```
-`HTTP_PROXY` is only needed if you are sitting behind proxy.
+`HTTP_PROXY` is only needed if you have to use a proxy to access AWS.
 
-`AWS_PROFILE` is only needed if you want to use an aws braket device (default is quantum_computing). 
-In case no profile is needed in your case please set `export AWS_PROFILE=default`.
+`AWS_PROFILE` is only needed if you want to use an AWS braket device (default is quantum_computing). In case no profile is needed in your case, please set `export AWS_PROFILE=default`.
 
-`AWS_REGION` is only needed if you need another aws region than us-east-1.
-Usually this is specific to the Braket device, so no change is needed.
+`AWS_REGION` is only needed if you need another aws region than us-east-1. Usually this is specific to the Braket device.
 
-Example Run (You need to check at least one option with an ``X`` for the checkbox question):
+Example run (You need to check at least one option with an ``X`` for the checkbox question):
 ```
 (quark) % python src/main.py 
 [?] What application do you want?: TSP
@@ -123,7 +115,7 @@ Example Run (You need to check at least one option with an ``X`` for the checkbo
 
 All used config files, logs and results are stored in a folder in the ```benchmark_runs``` directory.
 
-#### Non-Interactive mode
+#### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:
 ```
  python src/main.py --config test_config.yml
@@ -132,7 +124,7 @@ It is also possible to start the script with a config file instead of using the 
 > __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
 
 
-##### Summarizing multiple existing experiments
+#### Summarizing Multiple Existing Experiments
 You can also summarize multiple existing experiments like this:
 ```
 python src/main.py --summarize /Users/user1/quark/benchmark_runs/2021-09-21-15-03-53 /Users/user1/quark/benchmark_runs/2021-09-21-15-23-01

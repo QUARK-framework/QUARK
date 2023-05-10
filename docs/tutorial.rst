@@ -7,21 +7,16 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed.
-Other versions could cause issues with other dependencies used in the framework.
-Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
 
-1. Install pip packages manually
-2. Use the QUARK installer
+1. Install pip packages manually, or
+2. Use the QUARK installer.
 
-To limit the number of packages you need to install, the installer gives you the option to only include a subsection of
-QUARK modules.
 
-For this installer to work you need to install the following packages in the first place:
- * inquirer
- * pyyaml
-
-You can select the modules of choice via:
+For this installer to work, you need to install the following packages in the first place:
+* inquirer
+* pyyaml
+To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules. You can select the modules of choice via:
 
 ::
 
@@ -29,18 +24,16 @@ You can select the modules of choice via:
 
 Of course there is a default option, which will include all available options.
 
-Depending on your installed modules, you will need to install different python packages.
-We provide the option to generate a Conda file or a pip requirements file, which you then can install.
-
+Depending on your installed modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also install multiple QUARK environments and then switch between them via:
 
 ::
 
    python src/main.py env --activate myenv2
 
-**Note:**  Different modules require different python packages, be sure that you python environment has the necessary packages installed!
+**Note:**  Different modules require different python packages. Be sure that you python environment has the necessary packages installed!
 
-To see which environments are installed please use:
+To see which environments are installed, please use
 
 ::
 
@@ -59,7 +52,7 @@ You can also visualize the contents of your QUARK environment:
             └── Local
 
 
-In case you want to use custom modules file (for example to use external modules from other repositories), you can still
+In case you want to use custom modules files (for example to use external modules from other repositories), you can still
 use the ``--modules`` option. You can find the documentation in the Dynamic Imports section.
 
 
@@ -68,24 +61,22 @@ Running a Benchmark
 
 .. code:: bash
 
+   export HTTP_PROXY=http://username:password@proxy.com:8080 
    export AWS_PROFILE=quantum_computing
-   export HTTP_PROXY=http://username:password@proxy.com:8080
+   export AWS_REGION=us-west-1
    python src/main.py
 
-``HTTP_PROXY`` is only needed if you are sitting behind proxy.
+`HTTP_PROXY` is only needed if you have to use a proxy to access AWS.
 
-``AWS_PROFILE`` is only needed if you want to use an aws braket device
-(default is quantum_computing). In case no profile is needed in your
-case please set ``export AWS_PROFILE=default``.
+`AWS_PROFILE` is only needed if you want to use an AWS braket device (default is quantum_computing). In case no profile is needed in your case, please set `export AWS_PROFILE=default`.
 
-``AWS_REGION`` is only needed if you need another aws region than
-us-east-1. Usually this is specific to the Braket device, so no change
-is needed.
+`AWS_REGION` is only needed if you need another aws region than us-east-1. Usually this is specific to the Braket device.
 
-Example Run (You need to check at least one option with an ``X`` for the checkbox question):
+Example run (You need to check at least one option with an ``X`` for the checkbox question):
 
 ::
 
+    (quark) % python src/main.py 
     [?] What application do you want?: TSP
        PVC
        SAT
@@ -132,7 +123,7 @@ Example Run (You need to check at least one option with an ``X`` for the checkbo
 All used config files, logs and results are stored in a folder in the
 ``benchmark_runs`` directory.
 
-Non-Interactive mode
+Non-Interactive Mode
 ^^^^^^^^^^^^^^^^^^^^
 
 It is also possible to start the script with a config file instead of
@@ -169,8 +160,8 @@ Example for a config file:
 One handy thing to do is to use the interactive mode once to create a config file.
 Then you can change the values of this config file and use it to start the framework.
 
-Summarizing multiple existing experiments
-'''''''''''''''''''''''''''''''''''''''''
+Summarizing Multiple Existing Experiments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can also summarize multiple existing experiments like this:
 
@@ -184,13 +175,9 @@ This allows you to generate plots from multiple experiments.
 Dynamic Imports
 ~~~~~~~~~~~~~~~
 
-You can specify the modules that are available in the QUARK framework by specifying a module configuration file with
-the option ``-m | --modules``.
-This way you can also work with modules that are compatible with QUARK, but are not part of the original QUARK repository.
-This also implies that new library dependencies introduced by your modules are needed only if these modules are listed
-in the module configuration file.
+You can specify the modules you want to use in your environment from the list of available modules in the QUARK framework by defining a module configuration file with the option ``-m | --modules``. You can also work with modules that are not part of the original QUARK repository if they are compatible with the rest of the framework. This also implies that new library dependencies introduced by your modules are needed only if these modules are listed in the module configuration file.
 
-The module configuration file has to be a json file of the form:
+The module configuration file has to be a JSON file of the following form:
 ::
 
     [
@@ -208,12 +195,7 @@ The module configuration file has to be a json file of the form:
       },...
     ]
 
-The fields ``name`` and ``module`` are mandatory and specify the class name and python module, resp.. ``module``
-has to be specified exactly as you would do it within a python import statement. If ``dir`` is specified its
-value will be added to the python search path.
-In case the class requires some arguments in its constructor they can be defined in the ``args`` dictionary.
-In case the class you want use differs from the name you want to show to the user, you can add the name of the class to
-the ``class`` argument and leave the user-friendly name in the ``name`` arg.
+The fields ``name`` and ``module`` are mandatory and specify the class name and Python module, respectively. ``module`` has to be equal to the string that would be used as a Python import statement. If ``dir`` is specified, its value will be added to the Python search path. In ``submodules`` you can define a list of subsequent modules that depend on ``module``. In case the class requires some arguments in its constructor, they can be defined in the ``args`` dictionary. In case the name of the class you want to use differs from the name you want to show to users, you can add the name of the class to the ``class`` argument and leave the user-facing name in the ``name`` arg.
 
 
 An example for this would be:
@@ -234,14 +216,14 @@ An example for this would be:
       }
     ]
 
-You can save this in a JSON file and then call the framework like:
+You can save this as a JSON file, e.g., tsp_example.json, and then call the framework with the following command:
 
 ::
 
     python src/main.py --modules tsp_example.json
 
-Exploring problem in Jupyter Notebook
+Exploring a Problem in Jupyter Notebook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also use a jupyter notebook to generate an application instance and create a concrete problem to work on.
-Especially while implementing a new mapping or solver, this can be very useful!
+You can also use a Jupyter Notebook to generate an application instance and create a concrete problem to work on.
+Especially while implementing a new mapping or solver, this can be very useful.

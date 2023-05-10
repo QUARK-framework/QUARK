@@ -36,9 +36,9 @@ def _filter_comments(file: Iterable) -> str:
     """
     Returns the content of the filehandle f, ignoring all lines starting with '#'.
 
-    :param file: the file to be read
+    :param file: file to be read
     :type file: Iterable
-    :return: the file content without comment lines
+    :return: file content without comment lines
     :rtype: str
     """
     lines = []
@@ -51,7 +51,7 @@ def _filter_comments(file: Iterable) -> str:
 
 def setup_logging() -> None:
     """
-    Setup the logging
+    Sets up the logging
 
     :return:
     :rtype: None
@@ -82,21 +82,21 @@ def setup_logging() -> None:
 
 def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     """
-    Function to start a benchmark run from the code
+    Starts a benchmark run from the code
 
+    :return:
     :rtype: None
     """
 
     setup_logging()
 
     # Helper for Hybrid Jobs
-    # TODO Check if this can be done better
     if not config_file:
         config_file = os.environ["AMZN_BRAKET_HP_FILE"]
     if not store_dir:
         store_dir = os.environ["AMZN_BRAKET_JOB_RESULTS_DIR"]
 
-    # Read the config file
+    # Reads the config file
     with open(config_file, "r") as f:
         benchmark_config = json.load(f)
 
@@ -105,7 +105,8 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
     benchmark_manager = BenchmarkManager()
-    # May be overridden by using the -m|--modules option
+
+    # Can be overridden by using the -m|--modules option
     installer = Installer()
     app_modules = installer.get_env(installer.get_active_env())
     benchmark_manager.orchestrate_benchmark(config_manager, store_dir=store_dir, app_modules=app_modules)
@@ -137,9 +138,9 @@ def create_env_parser(parser: argparse.ArgumentParser):
 
 def handle_benchmark_run(args: argparse.Namespace) -> None:
     """
-    Handle the different options of a benchmark run
+    Handles the different options of a benchmark run
 
-    :param args: Namespace with the arguments by the user
+    :param args: Namespace with the arguments given by the user
     :type args: argparse.Namespace
     :return:
     :rtype: None
@@ -151,23 +152,23 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
     else:
         config_manager = ConfigManager()
         if args.modules:
-            logging.info(f"load application modules configuration from {args.modules}")
-            # preprocess the 'modules' configuration:
-            #   + filter comment lines (lines starting with '#')
-            #   + replace relative paths by taking them relative to the location of the modules configuration file.
+            logging.info(f"Load application modules configuration from {args.modules}")
+            # Preprocesses the 'modules' configuration:
+            #   + Filters comment lines (lines starting with '#')
+            #   + Replaces relative paths by taking them relative to the location of the modules configuration file
             base_dir = os.path.dirname(args.modules)
             with open(args.modules) as filehandler:
                 app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
         else:
-            # Get current env here
+            # Gets current env here
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
 
         if args.config:
             logging.info(f"Provided config file at {args.config}")
-            # Load config
+            # Loads config
             with open(args.config) as filehandler:
-                # returns JSON object as a dictionary
+                # Returns JSON object as a dictionary
                 try:
                     benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
                 except Exception as e:
@@ -211,7 +212,7 @@ def handler_env_run(args: argparse.Namespace) -> None:
 
 def main() -> None:
     """
-    Main function that triggers the benchmarking process.
+    Main function that triggers the benchmarking process
     """
     setup_logging()
 

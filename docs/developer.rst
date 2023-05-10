@@ -14,71 +14,62 @@ the release of QUARK one can add arbitrary modules.
 
 A good starting point is to look at the already existing components.
 
-Adding a new Module Type
+Adding a New Module Type
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the case the already existing module types (see "modules" directory) do not fit your needs, you can create new abstract module definitions, where
-you can specify your own requirements.
-The only prerequisite is, that the need to fulfill the requirements by the `Core` module, since every module needs to
-inherit from this abstract class.
+If the already existing module types (see "modules" directory) do not fit your needs, you can create new abstract module definitions, where you can specify your requirements.
 
-The essential functions of the `Core` module, which can be used by every module/subclass to execute its logic (see figure), are the `preprocess` and the `postprocess` method.
-The `preprocess` method executes before the input data is passed on the sub-module, while the `postprocess` method executes before the data is passed onto the parent module.
-If no sub-module/parent-module exists, these functions are still executed.
+The only prerequisite is that they must fulfill the `Core` module requirements since every module needs to inherit from this abstract class.
 
-For a concrete application, the `preprocess` step could include generating the problem instance for an optimization problem, while the `postprocess` would include the validation and evaluation of the solution for a given problem
+The essential functions of the `Core` module, which can be used by every module/subclass to execute its logic (see figure), are the `preprocess` and the `postprocess` methods.
+The `preprocess` method executes before the input data is passed on the sub-module, while the `postprocess` method runs before the data is passed to the parent module.
+If no sub-module/ parent module exists, these functions still execute.
+
+For a concrete application, the `preprocess` step could include generating the problem instance for an optimization problem, while the `postprocess` would include the validation and evaluation of the solution for a given problem.
 
 .. image:: benchmark_process.png
   :align: center
   :width: 700
   :alt: Visualization of how the benchmark process is desinged.
 
-You can also implement a new module type that inherits from another abstract module.
-So for example we have an `Optimization` class, that specifies the requirements for an optimization application. This
-`Optimization` class inherits the requirements from the more general `Application` class.
+You can also implement a new module type that inherits from another abstract module. So, for example, assume an `Optimization` class that specifies the requirements for an optimization application. This `Optimization` class inherits the requirements from the more general `Application` class.
 
-Every class also needs to implement the `get_requirements` method, where one specifies which imports are used by this class
-and which version.
-This is needed to provide the user the information which packages need to be installed.
+Every class also needs to implement the `get_requirements` method, where one specifies which imports are used by this class and which version. This is required to inform the user about which packages need to be installed.
 
-Adding a new Class for an existing Module Type
+Adding a New Class for an Existing Module Type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In this section, we will briefly talk about how one can add a new class to an existing module type.
+This section discusses how to add a new class to an existing module type.
 
-For every component, there is an abstract class that your new class inherits from.
-These abstract classes provide the required functions, which are needed for the benchmarking process.
-So for example if you want to implement a new application, you will need to inherit from the abstract `Application` class.
+For every component, there is an abstract class that a new class inherits from. These abstract classes provide the required functions which are needed for the benchmarking process. So, for example, if you want to implement a new application, it must inherit from the abstract `Application` class.
 
 
-Adding a new Application
+Adding a New Application
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Alongside adding a new application, you should always add at least one submodule to make the application available for
-another module (for example a solver). Also the new application has to be added to the :code:`get_default_app_modules` function in the :code:`main` function.
+another module (for example, a solver). Also, the new application has to be added to the :code:`get_default_app_modules` function in the :code:`main` function.
 
-Every application has a couple of functions that need to be implemented:
-    - :code:`get_parameter_options(self)`: Method to return the parameters in a dictionary needed to create a concrete problem of an application.
-    - :code:`save(self, path)`: Method which stores the application instance to a file. Needed for making experiments reproducible.
-    - :code:`get_requirements()`: Which packages are used by this application.
-    - :code:`get_default_submodule(self, option)`: Based on :code:`option` string the function returns an instance of a submodule class.
-    - :code:`preprocess(self, input_data: any, config: dict, **kwargs)`: Function which is always called and that can be used to pass certain information to the next sub-module.
-    - :code:`postprocess(self, input_data: any, config: dict, **kwargs)`:  Function which is always called and that can be used to pass certain information to the next parent-module.
+Every application has functions that are required to be implemented:
 
+    - :code:`get_parameter_options(self)`: Method to return the parameters needed to create a problem instance of an application as a dictionary.
+    - :code:`save(self, path)`: Method to store the application instance as a file. Needed for making experiments reproducible.
+    - :code:`get_requirements()`: Method to return which packages are used by this application.
+    - :code:`get_default_submodule(self, option)`: Method to return an instance of a submodule class based on :code:`option` string.
+    - :code:`preprocess(self, input_data: any, config: dict, **kwargs)`: Method which is always called. It is used to pass certain information (:code:`input_data`) to the next sub-module.
+    - :code:`postprocess(self, input_data: any, config: dict, **kwargs)`: Method which is always called. It is used to pass certain information (:code:`input_data`) to the next parent-module.
 
 Also, you need to specify the available mapping options :code:`submodule_options` in the constructor of the application class.
 With specifying the solvers in :code:`get_default_submodule(self, option)` and :code:`submodule_options` you decide which mapping is
 available for that application.
-In :code:`get_parameter_options(self)` you can specify which parameters the user can choose from for this module.
+In :code:`get_parameter_options(self)`, you can specify which parameters the user can choose from for this module.
 
-There are also some special flags you can set for each parameter:
+In addition, there are some special flags you can set for each parameter:
+
     - :code:`allow_ranges`: Enabling this feature for your parameter will give the user the option to enter a range for this value. Keep in mind that there is no validation of this user input!
     - :code:`custom_input`: Enabling this feature for your parameter will give the user the option to enter a custom input (text or numbers) for this value. Keep in mind that there is no validation of this user input!
-    - :code:`postproc`: Here you can specify a function that should be called and applied to the parameters, should be callable.
+    - :code:`postproc`: Specifis a function that can be called and applied to the parameters, which must be callable.
 
-
-
-Example for an Application, which should reside under ``src/modules/applications/myApplication/``:
-
+Example for an application, which should reside under ``src/modules/applications/myApplication/``:
 
 .. code-block:: python
 
@@ -190,7 +181,7 @@ Example for an Application, which should reside under ``src/modules/applications
 Updating the Module Database
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After adding a new module or making a module available for another module you need to update the Module Database stored
+After adding a new module or making a module available for another module, you need to update the module database stored
 under `.settings/module_db.json`. You might also need to update your current QUARK module environment so that your new
 modules can be used. You can update this database automatically via `python src/main.py env --createmoduledb`.
 
@@ -200,5 +191,5 @@ modules can be used. You can update this database automatically via `python src/
 Review Process
 ~~~~~~~~~~~~~~~
 
-Every Pull Request (PR) is reviewed to help you improve its implementation, documentation, and style.
-As soon as the PR is approved by the minimum number of the required reviewer, the PR will be merged to the main branch.
+Every pull request (PR) is reviewed to help you improve its implementation, documentation, and style.
+As soon as the PR is approved by the minimum number of required reviewers, the PR will be merged to the main branch.

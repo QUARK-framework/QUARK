@@ -24,7 +24,7 @@ from Metrics import Metrics
 
 class Core(ABC):
     """
-    Core Module for QUARK, is used by all other Modules that are part of a benchmark process.
+    Core Module for QUARK used by all other Modules that are part of a benchmark process
     """
 
     def __init__(self):
@@ -40,7 +40,7 @@ class Core(ABC):
     @abstractmethod
     def get_parameter_options(self) -> dict:
         """
-        Method to return the parameters for a given module.
+        Returns the parameters for a given module
 
         Should always be in this format:
 
@@ -57,26 +57,26 @@ class Core(ABC):
                }
             }
 
-        :return: Available application settings for this application
+        :return: Available settings for this application
         :rtype: dict
         """
 
     @final
     def get_submodule(self, option: str) -> any:
         """
-        If self.sub_options is not None a submobule is instantiated according to the information given in
-        self.sub_options.
-        Otherwise, get_default_submodule is called as fall back.
+        Submodule is instantiated according to the information given in self.sub_options.
+        If self.sub_options is None, get_default_submodule is called as a fallback.
 
-        :param option: String with the option
+        :param option: String with the options
         :type option: str
-        :return: instance of a mapping class
+        :return: Instance of a module
         :rtype: any
         """
         if self.sub_options is None or not self.sub_options:
             return self.get_default_submodule(option)
         return _get_instance_with_sub_options(self.sub_options, option)
 
+    # TODO Think if the naming of get_default_submodule can be improved to better reflect its function.
     def get_default_submodule(self, option: str) -> any:
         """
         Given an option string by the user return a submodule
@@ -90,14 +90,14 @@ class Core(ABC):
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        Essential Method for the benchmarking process. Is always executed before traversing down to the next module,
+        Essential method for the benchmarking process. Is always executed before traversing down to the next module,
         passing the data returned by this function.
 
-        :param input_data: data for the module, comes from the parent module if that exists
+        :param input_data: Data for the module, comes from the parent module if that exists
         :type input_data: any
-        :param config: config for the module
+        :param config: Config for the module
         :type config: dict
-        :param kwargs: optional keyword arguments
+        :param kwargs: Optional keyword arguments
         :type kwargs: dict
         :return: The output of the precprocessing and the time it took to preprocess
         :rtype: (any, float)
@@ -109,11 +109,11 @@ class Core(ABC):
         Essential Method for the benchmarking process. Is always executed after the submodule is finished. The data by
         this method is passed up to the parent module.
 
-        :param input_data: input data comes from the submodule if that exists
+        :param input_data: Input data comes from the submodule if that exists
         :type input_data: any
-        :param config: config for the module
+        :param config: Config for the module
         :type config: dict
-        :param kwargs: optional keyword arguments
+        :param kwargs: Optional keyword arguments
         :type kwargs: dict
         :return: The output of the postprocessing and the time it took to postprocess
         :rtype: (any, float)
@@ -123,9 +123,9 @@ class Core(ABC):
     @final
     def get_available_submodule_options(self) -> list:
         """
-        Get list of available  options.
+        Gets list of available options
 
-        :return: list of mapping options
+        :return: List of module options
         :rtype: list
         """
         if self.sub_options is None or not self.sub_options:
@@ -136,7 +136,7 @@ class Core(ABC):
     @staticmethod
     def get_requirements() -> list:
         """
-        Returns the required pip packages of this module. Optional also the version can be added.
+        Returns the required pip packages of this module. Optionally, version requirements can be added.
 
         :return: List of dictionaries
         :rtype: list

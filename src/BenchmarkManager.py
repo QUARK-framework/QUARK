@@ -37,7 +37,7 @@ matplotlib.rcParams['savefig.dpi'] = 300
 
 class BenchmarkManager:
     """
-    The benchmark manager is the main component of QUARK orchestrating the overall benchmarking process.
+    The benchmark manager is the main component of QUARK, orchestrating the overall benchmarking process.
     Based on the configuration, the benchmark manager will create an experimental plan considering all combinations of
     configurations, e.g., different problem sizes, solver, and hardware combinations. It will then instantiate the
     respective framework components. After executing the benchmarks, it collects the generated data and saves it.
@@ -159,7 +159,7 @@ class BenchmarkManager:
                     json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
                 logging.info("")
-                logging.info(" ============================================================ ")
+                logging.info(" =============== Run finished =============== ")
                 logging.info("")
 
         except KeyboardInterrupt:
@@ -167,8 +167,8 @@ class BenchmarkManager:
 
     def traverse_config(self, module: dict, input_data: any, path: str) -> (any, BenchmarkRecord):
         """
-        Execute a benchmark by traversing down the initialized config recursively until reach the end. Then traverse up
-        again. Once we reach the root/application, a benchmark run is finished.
+        Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
+        traverse up again. Once it reaches the root/application, a benchmark run is finished.
 
         :param module: Current module
         :type module: dict
@@ -180,7 +180,7 @@ class BenchmarkManager:
         :rtype: tuple(any, BenchmarkRecord)
         """
 
-        # We only need to value of the dict (dict has only 1 key)
+        # Only value the dict required (dict has only one key)
         module = module[next(iter(module))]
         module_instance: Core = module["instance"]
 
@@ -190,27 +190,24 @@ class BenchmarkManager:
                                                                                             store_dir=path)
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
 
-        # Check if we reached the end of the chain
-        if module["submodule"]:
-            processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                     module_instance.preprocessed_input, path)
-            module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
-                processed_input, module["config"], store_dir=path)
-            output = module_instance.postprocessed_input
-            module_instance.metrics.set_postprocessing_time(postprocessing_time)
-            module_instance.metrics.validate()
-            benchmark_record.append_module_record_left(deepcopy(module_instance.metrics))
-
-        else:
-            # Here we reached the end, so we don`t traverse down any further
+        # Check if end of the chain is reached
+        if not module["submodule"]:
+            # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
+            benchmark_record = self.benchmark_record_template.copy()
             module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
                 module_instance.preprocessed_input, module["config"])
-            output = module_instance.postprocessed_input
-            module_instance.metrics.set_postprocessing_time(postprocessing_time)
-            module_instance.metrics.validate()
-            benchmark_record = self.benchmark_record_template.copy()
 
-            benchmark_record.append_module_record_left(deepcopy(module_instance.metrics))
+        else:
+            processed_input, benchmark_record = self.traverse_config(module["submodule"],
+                                                                     module_instance.preprocessed_input, path)
+            module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
+                                                                                                   module["config"],
+                                                                                                   store_dir=path)
+
+        output = module_instance.postprocessed_input
+        module_instance.metrics.set_postprocessing_time(postprocessing_time)
+        module_instance.metrics.validate()
+        benchmark_record.append_module_record_left(deepcopy(module_instance.metrics))
 
         return output, benchmark_record
 
@@ -227,7 +224,7 @@ class BenchmarkManager:
                 results += json.load(f)
 
         if len(results) == 0:
-            logging.error("No results.json files could be found! Probably an error was previously happening.")
+            logging.error("No results.json files were found! Probably an error occured during execution.")
         return results
 
     def _save_as_json(self, results: list) -> None:
@@ -246,13 +243,12 @@ class BenchmarkManager:
         self._create_store_dir(tag="summary")
         logging.info(f"Summarizing {len(input_dirs)} benchmark directories")
         results = self.load_results(input_dirs)
-        # Deep copy, else it messes with the json.loads in save_as_json
         self._save_as_json(results)
         BenchmarkManager.vizualize_results(results, self.store_dir)
 
     def load_results(self, input_dirs: list = None) -> list:
         """
-        Load results from one or many results.json files.
+        Load results from one or more results.json files.
 
         :param input_dirs: If you want to load more than 1 results.json (default is just 1, the one from the experiment)
         :type input_dirs: list
@@ -319,21 +315,21 @@ class BenchmarkManager:
         df = pd.DataFrame.from_dict(processed)
         df = df.fillna(0.0)
         df_melt = df.drop(["app_config", "config_combo", "total_time"], axis=1)
-        df_melt = pd.melt(frame=df_melt, id_vars='config_hash',  var_name='module_config', value_name='time')
+        df_melt = pd.melt(frame=df_melt, id_vars='config_hash', var_name='module_config', value_name='time')
 
         # This plot shows the execution time of each module
         ax = sns.barplot(x='config_hash', y='time', data=df_melt, hue='module_config')
         plt.title(app_name)
         # Put the legend out of the figure
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-        ax.set(xlabel="Benchmark Config Hash", ylabel='Execution time of Module (ms)')
+        ax.set(xlabel="benchmark config hash", ylabel='execution time of module (ms)')
         ax.set_xticklabels(ax.get_xticklabels(), rotation=90, size=6)
         plt.savefig(f"{store_dir}/time_by_module.pdf", dpi=300, bbox_inches='tight')
         plt.clf()
 
-        # This module shows the total_time of a benchmark run
+        # This plot shows the total time of a benchmark run
         ax = sns.barplot(x='app_config', y='total_time', data=df, hue='config_combo')
-        ax.set(xlabel=f"{app_name} config", ylabel='Total Execution Time (ms)')
+        ax.set(xlabel=f"{app_name} config", ylabel='total execution time (ms)')
         # Put the legend out of the figure
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         plt.title(app_name)

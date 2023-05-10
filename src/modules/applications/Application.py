@@ -32,7 +32,7 @@ class Application(Core, ABC):
 
     def get_application(self) -> any:
         """
-        Getter that returns the application
+        Gets the application
 
         :return: self.application
         :rtype: any
@@ -42,7 +42,7 @@ class Application(Core, ABC):
     @abstractmethod
     def save(self, path: str, iter_count: int) -> None:
         """
-        Function to save the concrete problem.
+        Saves the concrete problem
         :param path: path of the experiment directory for this run
         :type path: str
         :param iter_count: the iteration count

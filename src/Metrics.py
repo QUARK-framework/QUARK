@@ -44,7 +44,8 @@ class Metrics:
     def validate(self) -> None:
         """
         Validates whether the mandatory metrics got recorded, then sets total time.
-
+        
+        :return:
         :rtype: None
         """
         assert self.preprocessing_time is not None, "preprocessing time must not be None!"
@@ -56,7 +57,7 @@ class Metrics:
         """
         Sets the preprocessing time
 
-        :param value: the time
+        :param value: Time
         :type value: float
         :return:
         :rtype: None
@@ -66,9 +67,9 @@ class Metrics:
     @final
     def set_module_config(self, config: dict) -> None:
         """
-        Set the config of this module where this metrics object belongs to
+        Sets the config of the module this metrics object belongs to
 
-        :param config: config of the QUARK module
+        :param config: Config of the QUARK module
         :type config: dict
         :return:
         :rtype: None
@@ -80,7 +81,7 @@ class Metrics:
         """
         Sets the postprocessing time
 
-        :param value: the time
+        :param value: Time
         :type value: float
         :return:
         :rtype: None
@@ -90,11 +91,11 @@ class Metrics:
     @final
     def add_metric(self, name: str, value: any) -> None:
         """
-        Method to add a single metric.
+        Adds a single metric
 
-        :param name: name of the metric
+        :param name: Name of the metric
         :type name: str
-        :param value: value of the metric
+        :param value: Value of the metric
         :type value: any
         :return:
         :rtype: None
@@ -104,7 +105,7 @@ class Metrics:
     @final
     def add_metric_batch(self, key_values: dict) -> None:
         """
-        Adds a dictionary containing metrics to the existing metrics.
+        Adds a dictionary containing metrics to the existing metrics
 
         :param key_values: dict containing metrics
         :type key_values: dict
@@ -117,7 +118,8 @@ class Metrics:
     def reset(self) -> None:
         """
         Resets all recorded metrics
-
+        
+        :return:
         :rtype: None
         """
         self.preprocessing_time = None
@@ -127,9 +129,9 @@ class Metrics:
     @final
     def get(self) -> dict:
         """
-        Returns all recorded metrics.
+        Returns all recorded metrics
 
-        :return: metrics as a dict
+        :return: Metrics as a dict
         :rtype: dict
         """
         return {

@@ -30,8 +30,8 @@ from utils import _get_instance_with_sub_options, get_git_revision
 
 class Installer:
     """
-    Installer class that can be used by the user to install certain QUARK modules and also return the needed python
-    packages for the wanted modules
+    Installer class that can be used by the user to install certain QUARK modules and also return the required python
+    packages for the demanded modules
     """
 
     def __init__(self):
@@ -58,7 +58,7 @@ class Installer:
 
     def install(self, env_name="default") -> None:
         """
-        Install a new QUARK environment or overwrite an existing one
+        Installs a new QUARK environment or overwrite an existing one
 
         :param env_name: Name of the env to install
         :type env_name: str
@@ -71,7 +71,7 @@ class Installer:
         if env_name in installed_envs:
             answer_continue = inquirer.prompt([
                 inquirer.List("continue",
-                              message=f" {env_name} found in the existing QUARK module environment, are you sure you "
+                              message=f"{env_name} found in the existing QUARK module environment, are you sure you "
                                       f"want to overwrite it?",
                               choices=["Yes", "No"], )])["continue"]
 
@@ -119,16 +119,16 @@ class Installer:
 
     def check_for_installs(self) -> list:
         """
-        Check if QUARK was already install and if yes, which environments
+        Checks if QUARK is already installed and if yes, which environments
 
-        :return:
-        :rtype:
+        :return: Returns the installed QUARK envs in a list
+        :rtype: list
         """
         return list(p.stem for p in Path(self.envs_dir).glob("*.json"))
 
     def set_active_env(self, name: str) -> None:
         """
-        Set active env to active_env.json
+        Sets active env to active_env.json
 
         :param name: Name of the env
         :type name: str
@@ -144,7 +144,7 @@ class Installer:
 
     def check_active_env(self) -> bool:
         """
-        Check if .settings/active_env.json exists
+        Checks if .settings/active_env.json exists
 
         :return: True if active_env.json exists
         :rtype: bool
@@ -172,7 +172,7 @@ class Installer:
         """
         Loads the env from file and returns it
 
-        :param name: The name of the env
+        :param name: Name of the env
         :type name: dict
         :return: Returns the modules of the env
         :rtype: list[dict]
@@ -187,12 +187,20 @@ class Installer:
             if env["build_number"] < module_db_build_number:
                 logging.warning(f"You QUARK module env is based on an outdated build version of the module database "
                                 f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
-                                f"{module_db_build_number}) might bring new features. You should think about"
-                                f" updating your environment!")
+                                f"{module_db_build_number}) might bring new features. You should think about "
+                                f"updating your environment!")
 
             return env["modules"]
 
-    def _check_if_env_exists(self, name):
+    def _check_if_env_exists(self, name: str) -> str:
+        """
+        Checks if a given env exists, returns the location of the associated JSON file and raises an error otherwise
+        
+        :param name: Name of the env
+        :type name: str
+        :return: Returns location of the JSON file associated with the env if it exists
+        :rtype: str
+        """
         file = f"{self.envs_dir}/{name}.json"
         if not Path(file).is_file():
             raise ValueError(f"QUARK environment {name} could not be found!")
@@ -200,7 +208,7 @@ class Installer:
 
     def save_env(self, env: dict, name: str) -> None:
         """
-        Save a created env to a file with the name of choice
+        Saves a created env to a file with the name of choice
 
         :param env: Env which should be saved
         :type env: dict
@@ -213,19 +221,19 @@ class Installer:
         with open(f"{self.envs_dir}/{name}.json", "w") as jsonFile:
             json.dump(env, jsonFile, indent=2)
 
-        logging.info(f"Saved {name} QUARK module environment environment.")
+        logging.info(f"Saved {name} QUARK module environment.")
 
     def start_query_user(self, module_db: dict) -> dict:
         """
-        Query user which applications and submodules to include
+        Queries the user which applications and submodules to include
 
-        :param module_db: module db file
+        :param module_db: module_db file
         :type module_db: dict
-        :return: returns the created env
+        :return: Returns the module_db with selected (sub)modules
         :rtype: dict
         """
 
-        answer_apps = ConfigManager.checkbox("apps", "Which application would you like to include",
+        answer_apps = ConfigManager.checkbox("apps", "Which application would you like to include?",
                                              [m["name"] for m in module_db["modules"]])["apps"]
 
         module_db["modules"] = [x for x in module_db["modules"] if x["name"] in answer_apps]
@@ -237,9 +245,9 @@ class Installer:
 
     def query_user(self, submodules: dict, name: str) -> None:
         """
-        Query user which modules should be included
+        Queries the user which submodules to include
 
-        :param submodules: the submodules for the module
+        :param submodules: Submodules for the module
         :type submodules: dict
         :param name: Name of the module
         :type name: str
@@ -249,7 +257,7 @@ class Installer:
 
         if submodules["submodules"]:
             answer_submodules = \
-                ConfigManager.checkbox("submodules", f"Which submodule would you like to include for {name}",
+                ConfigManager.checkbox("submodules", f"Which submodule would you like to include for {name}?",
                                        [m["name"] for m in submodules["submodules"]])["submodules"]
 
             submodules["submodules"] = [x for x in submodules["submodules"] if x["name"] in answer_submodules]
@@ -258,7 +266,7 @@ class Installer:
 
     def get_module_db(self) -> dict:
         """
-        Returns module database containing the full module possibilities
+        Returns the module database that contains all module possibilities
 
         :return: Module Database
         :rtype: dict
@@ -275,7 +283,7 @@ class Installer:
         """
         logging.info("Creating Module Database")
 
-        # TODO Helper to skip constructor in Braket.py. Should be changed in the future!
+        # TODO Helper to skip constructor in Braket.py. Should probably be changed in the future!
         os.environ["SKIP_INIT"] = "True"
 
         module_db_modules = self.default_app_modules
@@ -316,13 +324,11 @@ class Installer:
         :rtype: dict
         """
 
-        if name == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
-            print("qew")
         return {
             "name": name,
             "class": module.__class__.__name__,
             # TODO Verify the following if it really works as intended
-            # Since some modules are initliazed with parameters in their constructor we need to check what these param.
+            # Since some modules are initialized with parameters in their constructor we need to check what these param.
             # were. Hence we here check whether any parameters in the class instance match the one from the constructor
             "args": {k: v for k, v in module.__dict__.items() if k in
                      inspect.signature(module.__init__).parameters.keys()},
@@ -334,9 +340,9 @@ class Installer:
 
     def get_module_db_build_number(self) -> int:
         """
-        Return the build number from the module_db
+        Returns the build number og the module_db
 
-        :return: build number of module_db
+        :return: Returns the build number of the module_db if it exists, otherwise 0
         :rtype: int
         """
 
@@ -348,9 +354,9 @@ class Installer:
 
     def collect_requirements(self, env: dict) -> dict:
         """
-        Collect requirements of the different modules in the given env file
+        Collects requirements of the different modules in the given env file
 
-        :param env: environment file
+        :param env: env file
         :type env: dict
         :return: Collected requirements
         :rtype: dict
@@ -360,11 +366,11 @@ class Installer:
         for app in env:
             requirements.extend(Installer._collect_requirements_helper(app))
 
-        # Let`s see how many duplicates we have and if we have any version conflicts
+        # Counts duplicates and checks if any version conflicts occur
         merged_requirements: dict = {}
         for req in requirements:
             if req["name"] in merged_requirements:
-                # Check if the specific version if already there, then we skip it
+                # Checks if the specific version is already there, if so the req is skipped
                 if merged_requirements[req["name"]] and ("version" in req and req["version"] not in
                                                          merged_requirements[req["name"]]):
                     merged_requirements[req["name"]].append(req["version"])
@@ -375,7 +381,7 @@ class Installer:
 
         for k, v in merged_requirements.items():
             if len(v) > 1:
-                # If there are multiple different version
+                # If there are multiple different versions, the latest version is selected
                 newest_version = sorted(v, key=lambda x: version.Version(x))[-1]  # pylint: disable=W0108
                 merged_requirements[k] = [newest_version]
                 logging.warning(f"Different version requirements for {k}: {v}. Will try to take the newer version "
@@ -402,9 +408,9 @@ class Installer:
 
     def create_conda_file(self, requirements: dict, name: str) -> None:
         """
-        Create Conda yaml file based on the requirements
+        Creates conda yaml file based on the requirements
 
-        :param requirements: collected requirements
+        :param requirements: Collected requirements
         :type requirements: dict
         :param name: Name of the conda env
         :type name: str
@@ -429,11 +435,11 @@ class Installer:
 
     def create_req_file(self, requirements: dict, name: str) -> None:
         """
-        Create pip txt file based on the requirements
+        Creates pip txt file based on the requirements
 
-        :param requirements: collected requirements
+        :param requirements: Collected requirements
         :type requirements: dict
-        :param name: Name of the  env
+        :param name: Name of the env
         :type name: str
         :return:
         :rtype: None
@@ -448,7 +454,7 @@ class Installer:
 
     def list_envs(self) -> None:
         """
-        List all existing environments
+        List all existing envs
 
         :return:
         :rtype: None
@@ -463,7 +469,7 @@ class Installer:
         """
         Visualize the env
 
-        :param env: environment
+        :param env: env
         :type env: list[dict]
         :return:
         :rtype: None
@@ -475,12 +481,11 @@ class Installer:
 
         def tree(modules: list[dict], prefix: str = ""):
             """
-             A recursive function that generated a tree from the modules
+             A recursive function that generates a tree from the modules.
              This function is based on https://stackoverflow.com/a/59109706, but modified to the needs here
-             # TODO check this
 
             :param modules: Modules
-            :type modules: list[dict
+            :type modules: list[dict]
             :param prefix: Prefix for the indentation
             :type prefix: str
             :return:

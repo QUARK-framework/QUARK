@@ -183,7 +183,7 @@ class SAT(Optimization):
 
         self.application = {}
 
-        def _generate_3sat_clauses(nr_clauses, nr_vars, satisfiable, rseed, nr_tries):  # pylint: disable=R1710
+        def _generate_3sat_clauses(nr_clauses, nr_vars, satisfiable, rseed, nr_tries):
             # iterate over the desired number of attempts: we break if we find a solvable instance.
             for attempt in range(nr_tries):
                 # initialize random number generator -- we multiply the attempt to traverse distinct random seeds
@@ -210,13 +210,13 @@ class SAT(Optimization):
                 # satisfiability.
                 prob = And(clause_list)
 
-                if satisfiable and not prob.satisfiable():
-                    if attempt == nr_tries - 1:
-                        logging.error("Unable to generate valid solutions. Consider increasing max_tries or decreasing "
-                                      "the clause:variable ratio.")
-                        raise ValueError("Unable to generate valid solution.")
-                else:
+                if not satisfiable or prob.satisfiable():
                     return clause_list
+
+            # loop ran out of tries
+            logging.error("Unable to generate valid solutions. Consider increasing max_tries or decreasing "
+                          "the clause:variable ratio.")
+            raise ValueError("Unable to generate valid solution.")
 
         # we choose a random seed -- since we try at most max_tries times to generate a solvable instance,
         # we space the initial random seeds by 2 * max_tries (because we need both hard and soft constraints).

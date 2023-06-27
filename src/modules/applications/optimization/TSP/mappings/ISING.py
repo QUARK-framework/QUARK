@@ -122,7 +122,7 @@ class Ising(Mapping):
         lagrange_factor: float
         mapping: str
 
-    def map(self, problem: nx.Graph, config: Config) -> (dict, float):  # pylint: disable=R1710
+    def map(self, problem: nx.Graph, config: Config) -> (dict, float):
         """
         Maps the networkx graph to an Ising formulation.
 
@@ -136,12 +136,16 @@ class Ising(Mapping):
         self.graph = problem
         self.config = config
         # call mapping function defined in configuration
-        if self.config["mapping"] == "ocean":
+        mapping = self.config["mapping"]
+        if mapping == "ocean":
             return self._map_ocean(problem, config)
-        elif self.config["mapping"] == "pyqubo":
+        elif mapping == "pyqubo":
             return self._map_pyqubo(problem, config)
-        elif self.config["mapping"] == "qiskit":
+        elif mapping == "qiskit":
             return self._map_qiskit(problem, config)
+        else:
+            logging.error(f"Unknown mapping {mapping}.")
+            raise ValueError(f"Unknown mapping {mapping}.")
 
     @staticmethod
     def _create_pyqubo_model(cost_matrix: list) -> any:

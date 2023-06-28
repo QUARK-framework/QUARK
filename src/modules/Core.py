@@ -77,6 +77,7 @@ class Core(ABC):
         return _get_instance_with_sub_options(self.sub_options, option)
 
     # TODO Think if the naming of get_default_submodule can be improved to better reflect its function.
+    @abstractmethod
     def get_default_submodule(self, option: str) -> any:
         """
         Given an option string by the user return a submodule
@@ -86,7 +87,8 @@ class Core(ABC):
         :return: Module of type Core
         :rtype: Core
         """
-        return None
+        raise NotImplementedError("Please don't use the base version of this method. "
+                                  "Implement your own override instead.")
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """

@@ -15,6 +15,7 @@
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import *
+from modules.Core import Core
 
 
 class TN1(Braket):
@@ -45,3 +46,6 @@ class TN1(Braket):
         return {
 
         }
+
+    def get_default_submodule(self, option: str) -> Core:
+        raise ValueError("This module has no submodules.")

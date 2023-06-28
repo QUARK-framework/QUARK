@@ -15,6 +15,7 @@
 from modules.devices.Device import Device
 from modules.Core import Core
 
+
 class Local(Device):
     """
     Some Solvers (often classical) also can run on a normal local environment without any specific device or

@@ -30,8 +30,8 @@ class SV1(Braket):
         super().__init__(device_name=device_name, arn=arn)
         self.submodule_options = []
         if 'SKIP_INIT' in os.environ:
-            # TODO: This is currently needed to that create_module_db in the Installer does not need to execute the rest
-            #       of this section, which would be unnecessary. However this should be done better in the future!
+            # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
+            #       of this section, which would be unnecessary. However, this should be done better in the future!
             return
         self.init_s3_storage("sv1")
         self.device = AwsDevice(arn, aws_session=self.aws_session)

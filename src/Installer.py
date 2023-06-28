@@ -60,7 +60,7 @@ class Installer:
         """
         Configures a new QUARK environment or overwrites an existing one
 
-        :param env_name: Name of the env to install
+        :param env_name: Name of the env to configure
         :type env_name: str
         :return:
         :rtype: None
@@ -75,7 +75,7 @@ class Installer:
                                       f" sure you want to overwrite it?",
                               choices=["Yes", "No"], )])["continue"]
 
-            if answer_continue == "No":
+            if answer_continue == "No" or answer_continue == "no":
                 logging.info("Exiting configuration")
                 return
 
@@ -119,7 +119,7 @@ class Installer:
 
     def check_for_configs(self) -> list:
         """
-        Checks if QUARK is already installed and if yes, which environments
+        Checks if QUARK is already configured and if yes, which environments
 
         :return: Returns the configured QUARK envs in a list
         :rtype: list
@@ -159,7 +159,7 @@ class Installer:
         :rtype: str
         """
         if not self.check_active_env():
-            logging.warning("Not active QUARK module environment found, using default")
+            logging.warning("No active QUARK module environment found, using default")
             module_db = self.get_module_db()
             self.save_env(module_db, "default")
             self.set_active_env("default")
@@ -195,7 +195,7 @@ class Installer:
     def _check_if_env_exists(self, name: str) -> str:
         """
         Checks if a given env exists, returns the location of the associated JSON file and raises an error otherwise
-        
+
         :param name: Name of the env
         :type name: str
         :return: Returns location of the JSON file associated with the env if it exists
@@ -286,7 +286,7 @@ class Installer:
         # TODO Helper to skip constructor in Braket.py. Should probably be changed in the future!
         os.environ["SKIP_INIT"] = "True"
 
-        module_db_modules = self.default_app_modules
+        module_db_modules: list[dict] = self.default_app_modules
 
         for idx, app in enumerate(module_db_modules):
             logging.info(f"Processing {app['name']}")
@@ -327,9 +327,10 @@ class Installer:
         return {
             "name": name,
             "class": module.__class__.__name__,
-            # TODO Verify the following if it really works as intended
-            # Since some modules are initialized with parameters in their constructor we need to check what these param.
-            # were. Hence we here check whether any parameters in the class instance match the one from the constructor
+            # TODO Verify the following really works as intended
+            # Since some modules are initialized with parameters in their constructor, we need to check what these
+            # parameters were. Hence we check whether any parameters in the class instance match the one from
+            # the constructor.
             "args": {k: v for k, v in module.__dict__.items() if k in
                      inspect.signature(module.__init__).parameters.keys()},
             "module": module.__module__,
@@ -340,7 +341,7 @@ class Installer:
 
     def get_module_db_build_number(self) -> int:
         """
-        Returns the build number og the module_db
+        Returns the build number of the module_db
 
         :return: Returns the build number of the module_db if it exists, otherwise 0
         :rtype: int
@@ -450,7 +451,7 @@ class Installer:
                 filehandler.write("\n")
 
         logging.info("Saved pip txt file, if you like to install it run:")
-        logging.info(f"pip install -r  {self.envs_dir}/requirements_{name}.txt")
+        logging.info(f"pip install -r {self.envs_dir}/requirements_{name}.txt")
 
     def list_envs(self) -> None:
         """

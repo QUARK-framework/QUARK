@@ -71,7 +71,7 @@ class ChoiIsing(Mapping):
                                 },
                                 "soft_reward": {
                                     "values": [0.1, 1, 2],
-                                    "description": "What Bh/Bs ratio do you want? This value is multiplied with the"
+                                    "description": "What Bh/Bs ratio do you want? This value is multiplied with the "
                                                    "number of tests."
                                 }
                             }

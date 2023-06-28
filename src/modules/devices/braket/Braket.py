@@ -11,6 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 import getpass
 import logging
 import os
@@ -41,8 +42,8 @@ class Braket(Device, ABC):
         self.s3_destination_folder = None
 
         if 'SKIP_INIT' in os.environ:
-            # TODO: This is currently needed to that create_module_db in the Installer does not need to execute the rest
-            #       of this section, which would be unnecessary. However this should be done better in the future!
+            # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
+            #       of this section, which would be unnecessary. However, this should be done better in the future!
             return
 
         if 'HTTP_PROXY' in os.environ:

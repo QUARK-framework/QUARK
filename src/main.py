@@ -34,7 +34,7 @@ from ConfigManager import ConfigManager
 
 def _filter_comments(file: Iterable) -> str:
     """
-    Returns the content of the filehandle f, ignoring all lines starting with '#'.
+    Returns the content of the filehandle, ignoring all lines starting with '#'.
 
     :param file: file to be read
     :type file: Iterable
@@ -185,7 +185,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
         else:
             benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
             results = benchmark_manager.load_results()
-            benchmark_manager.vizualize_results(results, benchmark_manager.store_dir)
+            benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

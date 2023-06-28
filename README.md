@@ -12,7 +12,7 @@ Even though the architecture changed significantly with the 2.0 release of QUARK
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io.
 
 ## Prerequisites
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually, or
 2. Use the QUARK installer.
@@ -25,21 +25,23 @@ For this installer to work, you need to install the following packages in the fi
 * networkx==2.8.8
 * typing-extensions==4.6.3
 * packaging==23.1
-To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules. You can select the modules of choice via:
+
+To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules.
+You can select the modules of choice via:
 
 ```python src/main.py env --configure myenv```
 
 Of course there is a default option, which will include all available options.
 
-Depending on your installed modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
-You can also install multiple QUARK environments and then switch between them via:
+Depending on your configured modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
+You can also configure multiple QUARK environments and then switch between them via:
 
 ```python src/main.py env --activate myenv2```
 
-> __Note:__ Different modules require different python packages. Be sure that you python environment has the necessary
-            packages installed!
+> __Note:__ Different modules require different python packages.
+> Be sure that your python environment has the necessary packages installed!
 
-To see which environments are installed, please use
+To see which environments are configured, please use
 
 ```python src/main.py env --list```
 
@@ -49,9 +51,9 @@ You can also visualize the contents of your QUARK environment:
 (quark) %  python src/main.py env --show myenv
 [...]
 Content of the environment:
-└── TSP
-    └── GreedyClassicalTSP
-        └── Local
+>-- TSP
+    >-- GreedyClassicalTSP
+        >-- Local
 ```
 
 In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option. You can find the documentation in the respective Read the Docs section.
@@ -63,6 +65,7 @@ export HTTP_PROXY=http://username:password@proxy.com:8080
 export AWS_PROFILE=quantum_computing
 export AWS_REGION=us-west-1
 python src/main.py
+
 ```
 `HTTP_PROXY` is only needed if you have to use a proxy to access AWS.
 

@@ -397,7 +397,7 @@ class Ising(Mapping):
         with np.nditer(solution, op_flags=['readwrite']) as it:
             for x in it:
                 if x == -1:
-                    x = 0
+                    x[...] = 0
         return solution
 
     def get_default_submodule(self, option: str) -> Core:

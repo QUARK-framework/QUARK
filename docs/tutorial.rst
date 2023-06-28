@@ -7,7 +7,7 @@ relying on simulators.
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not have it already installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually, or
 2. Use the QUARK installer.
@@ -20,7 +20,9 @@ For this installer to work, you need to install the following packages in the fi
 * networkx==2.8.8
 * typing-extensions==4.6.3
 * packaging==23.1
-To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules. You can select the modules of choice via:
+
+To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules.
+You can select the modules of choice via:
 
 ::
 
@@ -28,16 +30,16 @@ To limit the number of packages you need to install, there is an option to only 
 
 Of course there is a default option, which will include all available options.
 
-Depending on your installed modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
-You can also install multiple QUARK environments and then switch between them via:
+Depending on your configured modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
+You can also configure multiple QUARK environments and then switch between them via:
 
 ::
 
    python src/main.py env --activate myenv2
 
-**Note:**  Different modules require different python packages. Be sure that you python environment has the necessary packages installed!
+**Note:**  Different modules require different python packages. Be sure that your python environment has the necessary packages installed!
 
-To see which environments are installed, please use
+To see which environments are configured, please use
 
 ::
 
@@ -51,9 +53,9 @@ You can also visualize the contents of your QUARK environment:
     (quark) %  python src/main.py env --show myenv
     [...]
     Content of the Environment:
-    └── TSP
-        └── GreedyClassicalTSP
-            └── Local
+    >-- TSP
+        >-- GreedyClassicalTSP
+            >-- Local
 
 
 In case you want to use custom modules files (for example to use external modules from other repositories), you can still
@@ -65,7 +67,7 @@ Running a Benchmark
 
 .. code:: bash
 
-   export HTTP_PROXY=http://username:password@proxy.com:8080 
+   export HTTP_PROXY=http://username:password@proxy.com:8080
    export AWS_PROFILE=quantum_computing
    export AWS_REGION=us-west-1
    python src/main.py
@@ -80,7 +82,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
 ::
 
-    (quark) % python src/main.py 
+    (quark) % python src/main.py
     [?] What application do you want?: TSP
        PVC
        SAT
@@ -186,16 +188,15 @@ The module configuration file has to be a JSON file of the following form:
 
     [
       {"name":..., "module":..., "dir":..., "submodules":
-         [
-            {"name":..., "module":..., "dir":..., "submodules":
-               [
-                  {"name":..., "module":..., "dir":..., "args": {...}, "class": ..., submodules":
-                     []
-                  },...
-               ]
-            },...
-
-         ]
+        [
+          {"name":..., "module":..., "dir":..., "submodules":
+            [
+              {"name":..., "module":..., "dir":..., "args": {...}, "class": ..., submodules":
+                []
+              },...
+            ]
+          },...
+        ]
       },...
     ]
 

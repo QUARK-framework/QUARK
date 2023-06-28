@@ -168,7 +168,7 @@ class BenchmarkManager:
     def traverse_config(self, module: dict, input_data: any, path: str) -> (any, BenchmarkRecord):
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
-        traverse up again. Once it reaches the root/application, a benchmark run is finished.
+        traverses up again. Once it reaches the root/application, a benchmark run is finished.
 
         :param module: Current module
         :type module: dict
@@ -180,7 +180,7 @@ class BenchmarkManager:
         :rtype: tuple(any, BenchmarkRecord)
         """
 
-        # Only value the dict required (dict has only one key)
+        # Only the value of the dict is needed (dict has only one key)
         module = module[next(iter(module))]
         module_instance: Core = module["instance"]
 
@@ -224,7 +224,7 @@ class BenchmarkManager:
                 results += json.load(f)
 
         if len(results) == 0:
-            logging.error("No results.json files were found! Probably an error occured during execution.")
+            logging.error("No results.json files were found! Probably an error occurred during execution.")
         return results
 
     def _save_as_json(self, results: list) -> None:
@@ -244,7 +244,7 @@ class BenchmarkManager:
         logging.info(f"Summarizing {len(input_dirs)} benchmark directories")
         results = self.load_results(input_dirs)
         self._save_as_json(results)
-        BenchmarkManager.vizualize_results(results, self.store_dir)
+        BenchmarkManager.visualize_results(results, self.store_dir)
 
     def load_results(self, input_dirs: list = None) -> list:
         """
@@ -290,7 +290,7 @@ class BenchmarkManager:
         return config
 
     @staticmethod
-    def vizualize_results(results: List[Dict], store_dir: str):
+    def visualize_results(results: List[Dict], store_dir: str):
         """
         Function to plot the execution times of the benchmark.
 

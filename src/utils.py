@@ -34,7 +34,7 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
     :type name: str
     :param args: List of arguments used for to the class initialization
     :type args: any
-    :return: New instance ot the QUARK module
+    :return: New instance of the QUARK module
     :rtype: any
     """
     for opt in options:
@@ -83,8 +83,8 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     """
     Helper function which allows to replace hard-coded imports of the form
     'import MyClass from path.to.mypkg' by calling _import_class('path.to.mypkg', 'MyClass').
-    If base_dir is specified its value will be added to python search path
-    if not already contained in it.
+    If base_dir is specified, its value will be added to the python search path,
+    unless it's already contained in it.
 
     :param module_path: Python module path of the module containing the class to be imported
     :type module_path: str
@@ -94,9 +94,9 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     :rtype: type
     """
 
-    # make sure that base_dir is in the search path. Otherwise
-    # the module imported here might not find its libraries.
-    if not base_dir is None and not base_dir in sys.path:
+    # Make sure that base_dir is in the search path.
+    # Otherwise, the module imported here might not find its libraries.
+    if base_dir is not None and base_dir not in sys.path:
         logging.info(f"Append to sys.path: {base_dir}")
         sys.path.append(base_dir)
     logging.info(f"Import module {module_path}")
@@ -186,7 +186,7 @@ def end_time_measurement(start: float) -> float:
 
 class NumpyEncoder(json.JSONEncoder):
     """
-    Encoder that is used for json.dump since numpy values items in dictionary might cause problems
+    Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems
     """
     def default(self, o: any):
         if isinstance(o, np.integer):

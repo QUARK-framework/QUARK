@@ -76,6 +76,7 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
         instance.sub_options = sub_options
         return instance
     logging.warning(f"{name} not found in {options}")
+    raise ValueError(f"{name} not found in {options}")
 
 
 def _import_class(module_path: str, class_name: str, base_dir: str = None) -> type:

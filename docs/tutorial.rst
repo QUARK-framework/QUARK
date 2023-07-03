@@ -1,13 +1,23 @@
-Getting Started
-================
+QUARK: A Framework for Quantum Computing Application Benchmarking
+=================================================================
 
-Let's see how to run the framework. You can try out the framework without having a quantum computer at your disposal by
-relying on simulators.
+Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers.
+QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case.
+It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
+It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
+
+Paper
+~~~~~
+
+Details about the motivations for the framework can be found in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028.
+Even though the architecture changed significantly with the 2.0 release of QUARK, the guiding principles still remain.
 
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.
+Other versions could cause issues with other dependencies used in the framework.
+Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually, or
 2. Use the QUARK installer.
@@ -30,7 +40,8 @@ You can select the modules of choice via:
 
 Of course there is a default option, which will include all available options.
 
-Depending on your configured modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
+Depending on your configured modules, you will need to install different Python packages.
+We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also configure multiple QUARK environments and then switch between them via:
 
 ::
@@ -58,8 +69,8 @@ You can also visualize the contents of your QUARK environment:
             >-- Local
 
 
-In case you want to use custom modules files (for example to use external modules from other repositories), you can still
-use the ``--modules`` option. You can find the documentation in the Dynamic Imports section.
+In case you want to use custom modules files (for example to use external modules from other repositories), you can still use the ``--modules`` option.
+You can find the documentation in the Dynamic Imports section.
 
 
 Running a Benchmark
@@ -181,7 +192,9 @@ This allows you to generate plots from multiple experiments.
 Dynamic Imports
 ~~~~~~~~~~~~~~~
 
-You can specify the modules you want to use in your environment from the list of available modules in the QUARK framework by defining a module configuration file with the option ``-m | --modules``. You can also work with modules that are not part of the original QUARK repository if they are compatible with the rest of the framework. This also implies that new library dependencies introduced by your modules are needed only if these modules are listed in the module configuration file.
+You can specify the modules you want to use in your environment from the list of available modules in the QUARK framework by defining a module configuration file with the option ``-m | --modules``.
+You can also work with modules that are not part of the original QUARK repository if they are compatible with the rest of the framework.
+This also implies that new library dependencies introduced by your modules are needed only if these modules are listed in the module configuration file.
 
 The module configuration file has to be a JSON file of the following form:
 ::
@@ -227,8 +240,7 @@ You can save this as a JSON file, e.g., tsp_example.json, and then call the fram
 
     python src/main.py --modules tsp_example.json
 
-Exploring a Problem in Jupyter Notebook
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+License
+~~~~~~~
 
-You can also use a Jupyter Notebook to generate an application instance and create a concrete problem to work on.
-Especially while implementing a new mapping or solver, this can be very useful.
+This project is licensed under Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0.

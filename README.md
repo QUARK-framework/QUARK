@@ -1,7 +1,8 @@
 # QUARK: A Framework for Quantum Computing Application Benchmarking
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers. 
-QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case. It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
+QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case.
+It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
 ## Paper
@@ -12,7 +13,9 @@ Even though the architecture changed significantly with the 2.0 release of QUARK
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io.
 
 ## Prerequisites
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.
+Other versions could cause issues with other dependencies used in the framework.
+Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually, or
 2. Use the QUARK installer.
@@ -33,7 +36,8 @@ You can select the modules of choice via:
 
 Of course there is a default option, which will include all available options.
 
-Depending on your configured modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
+Depending on your configured modules, you will need to install different Python packages.
+We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also configure multiple QUARK environments and then switch between them via:
 
 ```python src/main.py env --activate myenv2```
@@ -56,7 +60,8 @@ Content of the environment:
         >-- Local
 ```
 
-In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option. You can find the documentation in the respective Read the Docs section.
+In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
+You can find the documentation in the respective Read the Docs section.
 
 ## Running a Benchmark
 
@@ -125,19 +130,90 @@ All used config files, logs and results are stored in a folder in the ```benchma
 #### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:
 ```
- python src/main.py --config test_config.yml
+ python src/main.py --config config.yml
 ```
 
 > __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
+
+Example for a config file:
+
+```
+application:
+  config:
+    nodes:
+    - 3
+  name: TSP
+  submodules:
+  - config: {}
+    name: GreedyClassicalTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+repetitions: 1
+```
 
 
 #### Summarizing Multiple Existing Experiments
 You can also summarize multiple existing experiments like this:
 ```
-python src/main.py --summarize /Users/user1/quark/benchmark_runs/2021-09-21-15-03-53 /Users/user1/quark/benchmark_runs/2021-09-21-15-23-01
+python src/main.py --summarize quark/benchmark_runs/2021-09-21-15-03-53 quark/benchmark_runs/2021-09-21-15-23-01
 ```
 This allows you to generate plots from multiple experiments.
 
+## Dynamic Imports
+
+You can specify the modules you want to use in your environment from the list of available modules in the QUARK framework by defining a module configuration file with the option `-m | --modules`.
+You can also work with modules that are not part of the original QUARK repository if they are compatible with the rest of the framework.
+This also implies that new library dependencies introduced by your modules are needed only if these modules are listed in the module configuration file.
+
+The module configuration file has to be a JSON file of the following form:
+```
+[
+  {"name":..., "module":..., "dir":..., "submodules":
+    [
+      {"name":..., "module":..., "dir":..., "submodules":
+        [
+          {"name":..., "module":..., "dir":..., "args": {...}, "class": ..., submodules":
+            []
+          },...
+        ]
+      },...
+    ]
+  },...
+]
+```
+
+The fields `name` and `module` are mandatory and specify the class name and Python module, respectively.
+`module` has to be equal to the string that would be used as a Python import statement.
+If `dir` is specified, its value will be added to the Python search path.
+In `submodules` you can define a list of subsequent modules that depend on `module`.
+In case the class requires some arguments in its constructor, they can be defined in the `args` dictionary.
+In case the name of the class you want to use differs from the name you want to show to users, you can add the name of the class to the `class` argument and leave the user-facing name in the `name` arg.
+
+
+An example for this would be:
+```
+[
+  {
+    "name": "TSP",
+    "module": "modules.applications.optimization.TSP.TSP",
+    "dir": "src",
+    "submodules": [
+      {
+        "name": "GreedyClassicalTSP",
+        "module": "modules.solvers.GreedyClassicalTSP",
+        "submodules": []
+      }
+    ]
+  }
+]
+```
+
+You can save this as a JSON file, e.g. tsp_example.json, and then call the framework with the following command:
+```
+python src/main.py --modules tsp_example.json
+```
 
 ## License
 

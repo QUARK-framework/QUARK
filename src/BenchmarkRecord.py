@@ -26,7 +26,7 @@ class BenchmarkRecord:
     benchmark run.
     """
 
-    def __init__(self, timestamp: str, git_revision_number: str, git_uncommitted_changes: bool, repetition: int,
+    def __init__(self, timestamp: str, git_revision_number: str, git_uncommitted_changes: str, repetition: int,
                  total_repetitions: int):
         """
 
@@ -34,8 +34,8 @@ class BenchmarkRecord:
         :type timestamp: str
         :param git_revision_number:  Git revision number during the benchmark run
         :type git_revision_number: str
-        :param git_uncommitted_changes: Boolean indication if there were uncommited changes during the benchmark run
-        :type git_uncommitted_changes: bool
+        :param git_uncommitted_changes: Indication if there were uncommitted changes during the benchmark run
+        :type git_uncommitted_changes: str
         :param repetition: Number of current repetitions of the benchmark run
         :type repetition: int
         :param total_repetitions: Number of total repetitions of the benchmark run

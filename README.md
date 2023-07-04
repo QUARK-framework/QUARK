@@ -19,11 +19,15 @@ As this framework is implemented in Python 3.9, you need to install this version
 
 
 For this installer to work, you need to install the following packages in the first place:
-* inquirer
-* pyyaml
+* inquirer==3.1.2
+* pyyaml==6.0
+* seaborn==0.12.2
+* networkx==2.8.8
+* typing-extensions==4.6.3
+* packaging==23.1
 To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules. You can select the modules of choice via:
 
-```python src/main.py env --install myenv```
+```python src/main.py env --configure myenv```
 
 Of course there is a default option, which will include all available options.
 

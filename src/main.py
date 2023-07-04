@@ -126,7 +126,7 @@ def create_env_parser(parser: argparse.ArgumentParser):
     subparsers = parser.add_subparsers(help='env')
 
     parser_env = subparsers.add_parser('env', help='When you want to change something about the QUARK module env.')
-    parser_env.add_argument('-i', '--install', help='Install certain QUARK modules', required=False)
+    parser_env.add_argument('-c', '--configure', help='Configure certain QUARK modules', required=False)
     parser_env.add_argument('-a', '--activate', help='Activate a certain set of modules', required=False)
     parser_env.add_argument('-cm', '--createmoduledb', help='Create module db', required=False,
                             action=argparse.BooleanOptionalAction)
@@ -202,8 +202,8 @@ def handler_env_run(args: argparse.Namespace) -> None:
         installer.create_module_db()
     elif args.activate:
         installer.set_active_env(args.activate)
-    elif args.install:
-        installer.install(args.install)
+    elif args.configure:
+        installer.configure(args.config)
     elif args.list:
         installer.list_envs()
     elif args.show:

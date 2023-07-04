@@ -17,7 +17,7 @@ import json
 import os
 import time
 from pathlib import Path
-import  inspect
+import inspect
 
 import yaml
 from packaging import version
@@ -48,17 +48,17 @@ class Installer:
 
         self.core_requirements = [
             {"name": "seaborn", "version": "0.12.2"},
-            {"name": "pandas", "version": "1.5.3"},
             {"name": "networkx", "version": "2.8.8"},
             {"name": "inquirer", "version": "3.1.2"},
-            {"name": "numpy", "version": "1.24.1"},
-            {"name": "pyyaml", "version": "6.0"}
+            {"name": "packaging", "version": "23.1"},
+            {"name": "pyyaml", "version": "6.0"},
+            {"name": "typing-extensions", "version": "4.6.3"}
         ]
         Path(self.envs_dir).mkdir(parents=True, exist_ok=True)
 
-    def install(self, env_name="default") -> None:
+    def configure(self, env_name="default") -> None:
         """
-        Installs a new QUARK environment or overwrite an existing one
+        Configures a new QUARK environment or overwrites an existing one
 
         :param env_name: Name of the env to install
         :type env_name: str
@@ -66,31 +66,31 @@ class Installer:
         :rtype: None
         """
 
-        installed_envs = self.check_for_installs()
+        configured_envs = self.check_for_configs()
 
-        if env_name in installed_envs:
+        if env_name in configured_envs:
             answer_continue = inquirer.prompt([
                 inquirer.List("continue",
-                              message=f"{env_name} found in the existing QUARK module environment, are you sure you "
-                                      f"want to overwrite it?",
+                              message=f"{env_name} found in the list of existing QUARK module environment, are you"
+                                      f" sure you want to overwrite it?",
                               choices=["Yes", "No"], )])["continue"]
 
             if answer_continue == "No":
-                logging.info("Exiting install")
+                logging.info("Exiting configuration")
                 return
 
-        chosen_install_type = inquirer.prompt([
-            inquirer.List("installs",
-                          message="What do you want to install?",
+        chosen_config_type = inquirer.prompt([
+            inquirer.List("config",
+                          message="Do you want to use the default configuration or a custom environment?",
                           choices=["Default", "Custom"],
-                          )])["installs"]
-        logging.info(f"You chose {chosen_install_type}")
+                          )])["config"]
+        logging.info(f"You chose {chosen_config_type}")
 
         module_db = self.get_module_db()
 
-        if chosen_install_type == "Default":
+        if chosen_config_type == "Default":
             self.save_env(module_db, env_name)
-        elif chosen_install_type == "Custom":
+        elif chosen_config_type == "Custom":
             module_db = self.start_query_user(module_db)
             self.save_env(module_db, env_name)
 
@@ -117,11 +117,11 @@ class Installer:
         if activate_answer == "Yes":
             self.set_active_env(env_name)
 
-    def check_for_installs(self) -> list:
+    def check_for_configs(self) -> list:
         """
         Checks if QUARK is already installed and if yes, which environments
 
-        :return: Returns the installed QUARK envs in a list
+        :return: Returns the configured QUARK envs in a list
         :rtype: list
         """
         return list(p.stem for p in Path(self.envs_dir).glob("*.json"))
@@ -461,7 +461,7 @@ class Installer:
         """
 
         logging.info("Existing environments:")
-        for env in self.check_for_installs():
+        for env in self.check_for_configs():
             logging.info(f"  -  {env}")
 
     @staticmethod
@@ -475,9 +475,9 @@ class Installer:
         :rtype: None
         """
         space = "    "
-        branch = "│   "
-        connector = "├── "
-        leaf = "└── "
+        branch = "|   "
+        connector = "|-- "
+        leaf = ">-- "
 
         def tree(modules: list[dict], prefix: str = ""):
             """
@@ -492,7 +492,7 @@ class Installer:
             :rtype:
             """
 
-            # Modules in the middle/beginning get a ├──, the final leaf └──
+            # Modules in the middle/beginning get a |--, the final leaf >--
             pointers = [connector] * (len(modules) - 1) + [leaf]
             for pointer, module in zip(pointers, modules):
                 yield prefix + pointer + module["name"]

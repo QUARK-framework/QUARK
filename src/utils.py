@@ -75,7 +75,7 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
 
         instance.sub_options = sub_options
         return instance
-    logging.warning(f"{name} not found in {options}")
+    logging.error(f"{name} not found in {options}")
     raise ValueError(f"{name} not found in {options}")
 
 

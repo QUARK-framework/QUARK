@@ -11,13 +11,15 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
+from __future__ import annotations  # Needed if you want to type hint a method with the type of the enclosing class
+
 import os
 from abc import ABC, abstractmethod
 import logging
 from typing import final
 import sys
 from utils import _get_instance_with_sub_options
-
 
 from Metrics import Metrics
 
@@ -78,9 +80,9 @@ class Core(ABC):
 
     # TODO Think if the naming of get_default_submodule can be improved to better reflect its function.
     @abstractmethod
-    def get_default_submodule(self, option: str) -> any:
+    def get_default_submodule(self, option: str) -> Core:
         """
-        Given an option string by the user return a submodule
+        Given an option string by the user, this returns a submodule
 
         :param option: String with the chosen submodule
         :type option: str
@@ -101,7 +103,7 @@ class Core(ABC):
         :type config: dict
         :param kwargs: Optional keyword arguments
         :type kwargs: dict
-        :return: The output of the precprocessing and the time it took to preprocess
+        :return: The output of the preprocessing and the time it took to preprocess
         :rtype: (any, float)
         """
         return input_data, 0.0
@@ -138,7 +140,7 @@ class Core(ABC):
     @staticmethod
     def get_requirements() -> list:
         """
-        Returns the required pip packages of this module. Optionally, version requirements can be added.
+        Returns the required pip packages for this module. Optionally, version requirements can be added.
 
         :return: List of dictionaries
         :rtype: list

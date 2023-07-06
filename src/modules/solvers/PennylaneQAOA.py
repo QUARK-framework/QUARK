@@ -40,16 +40,16 @@ class PennylaneQAOA(Solver):
         """
         super().__init__()
         self.submodule_options = ["arn:aws:braket:::device/quantum-simulator/amazon/sv1",
-                               "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                               "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
-                               "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
-                               "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-                               "braket.local.qubit",
-                               "default.qubit",
-                               "default.qubit.autograd",
-                               "qulacs.simulator",
-                               "lightning.gpu",
-                               "lightning.qubit"]
+                                  "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                                  "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                                  "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                                  "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                                  "braket.local.qubit",
+                                  "default.qubit",
+                                  "default.qubit.autograd",
+                                  "qulacs.simulator",
+                                  "lightning.gpu",
+                                  "lightning.qubit"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -280,7 +280,7 @@ class PennylaneQAOA(Solver):
             # QAOA layers
             qml.layer(qaoa_layer, config['layers'], params[0], params[1])
 
-        # The adjoint differentiation method is preferred over the default best method for the lightning devices
+        # The adjoint differentiation method is preferred over the default 'best' method for the lightning devices
         diff_method = "adjoint" if device_wrapper.device in ["lightning.qubit", "lightning.gpu"] else "best"
         # overwrite default with config
         if "differentiation_method" in config:
@@ -479,7 +479,7 @@ def _pseudo_decor(fun, device):
     @wraps(fun)
     def ret_fun(*args, **kwargs):
         # pre function execution stuff here
-        from time import time  # pylint: disable=R0913 disable=W0621 disable=C0415 disable=W0404
+        from time import time  # pylint: disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
         # post execution stuff here

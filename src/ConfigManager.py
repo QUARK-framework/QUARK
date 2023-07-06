@@ -60,7 +60,7 @@ class ConfigManager:
         self.config = None
         self.application = None
 
-    def generate_benchmark_configs(self, app_modules: dict) -> None:
+    def generate_benchmark_configs(self, app_modules: list[dict]) -> None:
         """
         Queries the user to get all information about the application, other modules, and general settings
         necessary to run the benchmark.
@@ -109,10 +109,10 @@ class ConfigManager:
         """
         Recursive function which queries every module and its submodule until end is reached
 
-        :param module_friendly_name: Name of the module
-        :type module_friendly_name: str
         :param module: Module instance
         :type module: Core
+        :param module_friendly_name: Name of the module
+        :type module_friendly_name: str
         :return: Config module with the choices of the user
         :rtype: ConfigModule
         """
@@ -188,9 +188,7 @@ class ConfigManager:
 
         self.config["application"].update({"instance": self.application,
                                            "submodules": [ConfigManager.initialize_module_classes(self.application, c)
-                                                          for c
-                                                          in
-                                                          self.config["application"]["submodules"]]})
+                                                          for c in self.config["application"]["submodules"]]})
 
     @staticmethod
     def initialize_module_classes(parent_module: Core, config: ConfigModule) -> ConfigModule:
@@ -267,7 +265,7 @@ class ConfigManager:
         else:
             config_expanded = [{}]
 
-        for _, single_config in enumerate(config_expanded):
+        for single_config in config_expanded:
             # Check if we reached the end of the chain
             if len(module["submodules"]) > 0:
                 for submodule in module["submodules"]:
@@ -280,7 +278,6 @@ class ConfigManager:
                                 submodule["name"]: item
                             }
                         })
-
             else:
                 return [{
                     "name": module["name"],
@@ -422,7 +419,7 @@ class ConfigManager:
     @staticmethod
     def _create_tree_figure_helper(graph: nx.Graph, config: ConfigModule) -> None:
         """
-        Helper function for _create_tree_figure that traverses the config recursively
+        Helper function for create_tree_figure that traverses the config recursively
 
         :param graph: networkx Graph
         :type graph: networkx.Graph

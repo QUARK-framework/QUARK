@@ -63,7 +63,7 @@ class QUBO(Mapping):
                      return {
                                 "lagrange_factor": {
                                                     "values": [0.75, 1.0, 1.25],
-                                                    "description": "By which factor would you like to multiply your"
+                                                    "description": "By which factor would you like to multiply your "
                                                                     "lagrange?",
                                                     "custom_input": True,
                                                     "postproc": float
@@ -77,7 +77,7 @@ class QUBO(Mapping):
                 "description": "By which factor would you like to multiply your lagrange?",
                 "custom_input": True,
                 "allow_ranges": True,
-                "postproc": float # Since we allow custom input here we need to parse it to float, since input is str
+                "postproc": float  # Since we allow custom input here we need to parse it to float (input is str)
             }
         }
 

@@ -29,10 +29,9 @@ class BenchmarkRecord:
     def __init__(self, timestamp: str, git_revision_number: str, git_uncommitted_changes: str, repetition: int,
                  total_repetitions: int):
         """
-
         :param timestamp: Timestamp of the benchmark run
         :type timestamp: str
-        :param git_revision_number:  Git revision number during the benchmark run
+        :param git_revision_number: Git revision number during the benchmark run
         :type git_revision_number: str
         :param git_uncommitted_changes: Indication if there were uncommitted changes during the benchmark run
         :type git_uncommitted_changes: str
@@ -119,10 +118,10 @@ class BenchmarkRecord:
         """
         Recursively traverses through linked list and adds the items of the Metrics objects to one single dictionary
 
-        :param module_level: Current level in chain (starts at 0)
-        :type module_level: int
         :param llist: Linked list
         :type llist: deque
+        :param module_level: Current level in chain (starts at 0)
+        :type module_level: int
         :return: Dictionary with the module, its level, and its submodule(s)
         :rtype: dict
         """

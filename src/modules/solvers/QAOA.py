@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from time import sleep
-from typing import TypedDict, Union
+from typing import TypedDict
 
 import numpy as np
 from braket.circuits import Circuit
@@ -34,9 +34,9 @@ class QAOA(Solver):
         """
         super().__init__()
         self.submodule_options = ["LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
-                               "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                               "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
-                               "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
+                                  "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                                  "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                                  "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -189,7 +189,7 @@ class QAOA(Solver):
 
         # kick off training
         start = start_time_measurement()
-        #result_energy, result_angle, tracker
+        # result_energy, result_angle, tracker
         _, _, tracker = train(
             device=device_wrapper.get_device(), options=options, p=depth, ising=j, n_qubits=n_qubits,
             n_shots=config['shots'],
@@ -197,7 +197,7 @@ class QAOA(Solver):
         time_to_solve = end_time_measurement(start)
 
         # print execution time
-        # logging.info('Code execution time [sec]:', end - start)
+        # logging.info('Code execution time [sec]: ' + (end - start))
 
         # print optimized results
         logging.info(f"Optimal energy: {tracker['optimal_energy']}")

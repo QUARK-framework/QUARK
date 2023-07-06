@@ -18,16 +18,16 @@ from modules.Core import *
 
 class Solver(Core, ABC):
     """
-    The solver is responsible for finding feasible and high-quality solutions of the formulated problem, i. e., of the
+    The solver is responsible for finding feasible and high-quality solutions of the formulated problem, i.e., of the
     defined objective function.
     """
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """
-        Here the actual solving process is done as we have here the device, which got provided by the device submodule,
-        and the problem data provided by the parent module
+        The actual solving process is done here, as we have the device, which got provided by the device submodule,
+        and the problem data provided by the parent module.
 
-        :param input_data: Data passed to the run function of the solder
+        :param input_data: Data passed to the run function of the solver
         :type input_data: any
         :param config: solver config
         :type config: dict

@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 import itertools
-import os
 from typing import TypedDict
 
 import networkx as nx
@@ -22,6 +21,7 @@ import numpy as np
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
+
 
 class PVC(Optimization):
     """
@@ -205,7 +205,7 @@ class PVC(Optimization):
         nodes = list(self.application.nodes())
         start = ((0, 0), 1, 1)
         # fill route with None values
-        route = [None] * int((len(self.application) - 1) / 2 + 1)
+        route: list = [None] * int((len(self.application) - 1) / 2 + 1)
         visited_seams = []
         # get nodes from sample
         if sum(value == 1 for value in solution.values()) > len(route):

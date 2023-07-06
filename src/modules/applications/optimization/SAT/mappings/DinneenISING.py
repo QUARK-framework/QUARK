@@ -72,7 +72,7 @@ class DinneenIsing(Mapping):
                      return {
                                 "lagrange": {
                                     "values": [0.1, 1, 2],
-                                    "description": "What lagrange parameter to multiply with the number of (hard)"
+                                    "description": "What lagrange parameter to multiply with the number of (hard) "
                                                    "constraints?"
                                 }
                             }

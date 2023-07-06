@@ -23,14 +23,14 @@ The only prerequisite is that they must fulfill the `Core` module requirements s
 
 The essential functions of the `Core` module, which can be used by every module/subclass to execute its logic (see figure), are the `preprocess` and the `postprocess` methods.
 The `preprocess` method executes before the input data is passed on the sub-module, while the `postprocess` method runs before the data is passed to the parent module.
-If no sub-module/ parent module exists, these functions still execute.
+If no sub-module/parent module exists, these functions will still be executed.
 
 For a concrete application, the `preprocess` step could include generating the problem instance for an optimization problem, while the `postprocess` would include the validation and evaluation of the solution for a given problem.
 
 .. image:: benchmark_process.png
   :align: center
   :width: 700
-  :alt: Visualization of how the benchmark process is desinged.
+  :alt: Visualization of how the benchmark process is designed.
 
 You can also implement a new module type that inherits from another abstract module. So, for example, assume an `Optimization` class that specifies the requirements for an optimization application. This `Optimization` class inherits the requirements from the more general `Application` class.
 
@@ -56,7 +56,7 @@ Every application has functions that are required to be implemented:
     - :code:`get_requirements()`: Method to return which packages are used by this application.
     - :code:`get_default_submodule(self, option)`: Method to return an instance of a submodule class based on :code:`option` string.
     - :code:`preprocess(self, input_data: any, config: dict, **kwargs)`: Method which is always called. It is used to pass certain information (:code:`input_data`) to the next sub-module.
-    - :code:`postprocess(self, input_data: any, config: dict, **kwargs)`: Method which is always called. It is used to pass certain information (:code:`input_data`) to the next parent-module.
+    - :code:`postprocess(self, input_data: any, config: dict, **kwargs)`: Method which is always called. It is used to pass certain information (:code:`input_data`) to the next parent module.
 
 Also, you need to specify the available mapping options :code:`submodule_options` in the constructor of the application class.
 With specifying the solvers in :code:`get_default_submodule(self, option)` and :code:`submodule_options` you decide which mapping is
@@ -67,7 +67,7 @@ In addition, there are some special flags you can set for each parameter:
 
     - :code:`allow_ranges`: Enabling this feature for your parameter will give the user the option to enter a range for this value. Keep in mind that there is no validation of this user input!
     - :code:`custom_input`: Enabling this feature for your parameter will give the user the option to enter a custom input (text or numbers) for this value. Keep in mind that there is no validation of this user input!
-    - :code:`postproc`: Specifis a function that can be called and applied to the parameters, which must be callable.
+    - :code:`postproc`: Specifies a function that can be called and applied to the parameters, which must be callable.
 
 Example for an application, which should reside under ``src/modules/applications/myApplication/``:
 
@@ -83,7 +83,7 @@ Example for an application, which should reside under ``src/modules/applications
 
             def __init__(self):
                 super().__init__("MyApplication")
-                self.submodule_options  = ["submodule1"]
+                self.submodule_options = ["submodule1"]
 
             @staticmethod
             def get_requirements() -> list:
@@ -119,7 +119,7 @@ Example for an application, which should reside under ``src/modules/applications
                         "values": [0.75, 1.0, 1.25],
                         "description": "By which factor would you like to multiply your problem?",
                         "custom_input": True,
-                        "postproc": float # Since we allow custom input here we need to parse it to float, since input is str
+                        "postproc": float # Since we allow custom input here we need to parse it to float (input is str)
                     }
                 }
 
@@ -161,10 +161,10 @@ Example for an application, which should reside under ``src/modules/applications
 
                 # Check if solution is valid
                 if solution is None:
-                  logging.error(f"Solution not valid ❌")
+                  logging.error(f"Solution not valid")
                     return False, end_time_measurement(start)
                 else:
-                    logging.info(f"Solution valid ✅ ")
+                    logging.info(f"Solution valid")
                     return True, end_time_measurement(start)
 
             def evaluate(self, solution):

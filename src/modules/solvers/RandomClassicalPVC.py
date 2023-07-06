@@ -95,8 +95,7 @@ class RandomPVC(Solver):
         current_node = ((0, 0), 1, 1)
         idx = 1
 
-        tour = {}
-        tour[current_node + (0,)] = 1  # (0,) is the timestep we visit this node
+        tour = {current_node + (0,): 1}  # (0,) is the timestep we visit this node
 
         # Tour needs to cover all nodes, if there are 2 nodes left we can finish since these 2 nodes belong
         # to the same seam

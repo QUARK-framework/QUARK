@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import os
 from typing import TypedDict
 
 import networkx as nx
@@ -194,7 +193,7 @@ class TSP(Optimization):
         nodes = self.application.nodes()
         start = np.min(nodes)
         # fill route with None values
-        route = [None] * len(self.application)
+        route: list = [None] * len(self.application)
         # get nodes from sample
         # NOTE: Prevent duplicate node entries by enforcing only one occurrence per node along route
         logging.info(str(solution.items()))

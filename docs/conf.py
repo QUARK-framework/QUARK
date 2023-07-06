@@ -100,7 +100,7 @@ html_static_path = []
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 # The default sidebars (for documents that do not match any pattern) are
-# defined by the theme.  Built-in themes are using these templates by
+# defined by the theme. Built-in themes are using these templates by
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #

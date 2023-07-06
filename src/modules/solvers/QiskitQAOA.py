@@ -232,7 +232,7 @@ class QiskitQAOA(Solver):
             key = it.multi_index[0]
             pauli_str = "I" * number_qubits
             pauli_str_list = list(pauli_str)
-            pauli_str_list[(key)] = "Z"
+            pauli_str_list[key] = "Z"
             pauli_str = "".join(pauli_str_list)
             pauli_list.append((pauli_str, complex(x)))
 
@@ -244,8 +244,8 @@ class QiskitQAOA(Solver):
             idx2 = it.multi_index[1]
             pauli_str = "I" * number_qubits
             pauli_str_list = list(pauli_str)
-            pauli_str_list[(idx1)] = "Z"
-            pauli_str_list[(idx2)] = "Z"
+            pauli_str_list[idx1] = "Z"
+            pauli_str_list[idx2] = "Z"
             pauli_str = "".join(pauli_str_list)
             pauli_list.append((pauli_str, complex(x)))
 

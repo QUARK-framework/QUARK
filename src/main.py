@@ -203,7 +203,7 @@ def handler_env_run(args: argparse.Namespace) -> None:
     elif args.activate:
         installer.set_active_env(args.activate)
     elif args.configure:
-        installer.configure(args.config)
+        installer.configure(args.configure)
     elif args.list:
         installer.list_envs()
     elif args.show:

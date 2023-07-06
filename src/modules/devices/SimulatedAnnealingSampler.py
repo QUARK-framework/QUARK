@@ -15,6 +15,7 @@
 import dwave.samplers
 
 from modules.devices.Device import Device
+from modules.Core import Core
 
 
 class SimulatedAnnealingSampler(Device):
@@ -55,3 +56,6 @@ class SimulatedAnnealingSampler(Device):
         return {
 
         }
+
+    def get_default_submodule(self, option: str) -> Core:
+        raise ValueError("This module has no submodules.")

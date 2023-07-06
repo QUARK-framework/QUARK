@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from modules.devices.Device import Device
+from modules.Core import Core
 
 class Local(Device):
     """
@@ -38,3 +39,6 @@ class Local(Device):
         return {
 
         }
+
+    def get_default_submodule(self, option: str) -> Core:
+        raise ValueError("This module has no submodules.")

@@ -75,7 +75,7 @@ class Installer:
                                       f" sure you want to overwrite it?",
                               choices=["Yes", "No"], )])["continue"]
 
-            if answer_continue == "No" or answer_continue == "no":
+            if answer_continue.lower() == "no":
                 logging.info("Exiting configuration")
                 return
 

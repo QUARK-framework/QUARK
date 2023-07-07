@@ -53,7 +53,7 @@ class DinneenIsing(Mapping):
             },
             {
                 "name": "numpy",
-                "version": "1.24.1"
+                "version": "1.23.5"
             },
             {
                 "name": "dimod",

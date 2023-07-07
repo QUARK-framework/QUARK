@@ -26,11 +26,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 
 from ConfigManager import ConfigManager
 from BenchmarkRecord import BenchmarkRecord
 from modules.Core import Core
-from utils import get_git_revision, NumpyEncoder
+from utils import get_git_revision
 
 matplotlib.rcParams['savefig.dpi'] = 300
 
@@ -337,3 +338,17 @@ class BenchmarkManager:
         plt.clf()
 
         logging.info("Finished creating plots.")
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """
+    Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems
+    """
+    def default(self, o: any):
+        if isinstance(o, np.integer):
+            return int(o)
+        if isinstance(o, np.floating):
+            return float(o)
+        if isinstance(o, np.ndarray):
+            return o.tolist()
+        return super(NumpyEncoder).default(o)

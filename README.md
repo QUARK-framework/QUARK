@@ -25,19 +25,17 @@ For this installer to work, you need to install the following packages in the fi
 
 * inquirer==3.1.2
 * pyyaml==6.0
-* seaborn==0.12.2
-* networkx==2.8.8
-* typing-extensions==4.6.3
 * packaging==23.1
 
-To limit the number of packages you need to install, there is an option to only include a subsection of QUARK modules.
+To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
 You can select the modules of choice via:
 
 ```python src/main.py env --configure myenv```
 
 Of course there is a default option, which will include all available options.
 
-Depending on your configured modules, you will need to install different Python packages.
+Depending on your configured modules, you will need to install additional Python packages, as the above-mentioned 3 
+packages are **not** sufficient to run a benchmark!
 We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also configure multiple QUARK environments and then switch between them via:
 

@@ -15,6 +15,8 @@
 import os
 import sys
 import argparse
+import logging
+import json
 from collections.abc import Iterable
 import yaml
 
@@ -27,9 +29,6 @@ sys.path.append(install_dir)
 
 # The following line is at the moment needed for the hybrid jobs repo
 sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)))
-
-from BenchmarkManager import *
-from ConfigManager import ConfigManager
 
 
 def _filter_comments(file: Iterable) -> str:
@@ -102,8 +101,12 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
 
     benchmark_config = json.loads(benchmark_config["config"])
 
+    from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
+    from ConfigManager import ConfigManager  # pylint: disable=C0415
+
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
+
     benchmark_manager = BenchmarkManager()
 
     # Can be overridden by using the -m|--modules option
@@ -145,11 +148,13 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
     :return:
     :rtype: None
     """
+    from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
     benchmark_manager = BenchmarkManager()
 
     if args.summarize:
         benchmark_manager.summarize_results(args.summarize)
     else:
+        from ConfigManager import ConfigManager  # pylint: disable=C0415
         config_manager = ConfigManager()
         if args.modules:
             logging.info(f"Load application modules configuration from {args.modules}")

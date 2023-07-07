@@ -23,9 +23,8 @@ import yaml
 from packaging import version
 import inquirer
 
-from ConfigManager import ConfigManager
 from modules.Core import Core
-from utils import _get_instance_with_sub_options, get_git_revision
+from utils import _get_instance_with_sub_options, get_git_revision, checkbox
 
 
 class Installer:
@@ -95,7 +94,7 @@ class Installer:
             self.save_env(module_db, env_name)
 
         requirements = self.collect_requirements(module_db["modules"])
-        activate_requirements = ConfigManager.checkbox("requirements", "Should we create an package file, if yes for "
+        activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
                                                                        "which package manager?",
                                                        ["Conda", "PIP", "Print it here"])["requirements"]
 
@@ -233,7 +232,7 @@ class Installer:
         :rtype: dict
         """
 
-        answer_apps = ConfigManager.checkbox("apps", "Which application would you like to include?",
+        answer_apps = checkbox("apps", "Which application would you like to include?",
                                              [m["name"] for m in module_db["modules"]])["apps"]
 
         module_db["modules"] = [x for x in module_db["modules"] if x["name"] in answer_apps]
@@ -257,7 +256,7 @@ class Installer:
 
         if submodules["submodules"]:
             answer_submodules = \
-                ConfigManager.checkbox("submodules", f"Which submodule would you like to include for {name}?",
+                checkbox("submodules", f"Which submodule would you like to include for {name}?",
                                        [m["name"] for m in submodules["submodules"]])["submodules"]
 
             submodules["submodules"] = [x for x in submodules["submodules"] if x["name"] in answer_submodules]

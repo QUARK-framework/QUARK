@@ -6,11 +6,6 @@ QUARK supports various applications, like the traveling salesperson problem (TSP
 It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
-Paper
-~~~~~
-
-Details about the motivations for the framework can be found in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028.
-Even though the architecture changed significantly with the 2.0 release of QUARK, the guiding principles still remain.
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -239,8 +234,3 @@ You can save this as a JSON file, e.g., tsp_example.json, and then call the fram
 ::
 
     python src/main.py --modules tsp_example.json
-
-License
-~~~~~~~
-
-This project is licensed under Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0.

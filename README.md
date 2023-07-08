@@ -22,6 +22,7 @@ Additionally, we rely on several pip dependencies, which you can install in two 
 
 
 For this installer to work, you need to install the following packages in the first place:
+
 * inquirer==3.1.2
 * pyyaml==6.0
 * seaborn==0.12.2
@@ -161,59 +162,6 @@ python src/main.py --summarize quark/benchmark_runs/2021-09-21-15-03-53 quark/be
 ```
 This allows you to generate plots from multiple experiments.
 
-## Dynamic Imports
-
-You can specify the modules you want to use in your environment from the list of available modules in the QUARK framework by defining a module configuration file with the option `-m | --modules`.
-You can also work with modules that are not part of the original QUARK repository if they are compatible with the rest of the framework.
-This also implies that new library dependencies introduced by your modules are needed only if these modules are listed in the module configuration file.
-
-The module configuration file has to be a JSON file of the following form:
-```
-[
-  {"name":..., "module":..., "dir":..., "submodules":
-    [
-      {"name":..., "module":..., "dir":..., "submodules":
-        [
-          {"name":..., "module":..., "dir":..., "args": {...}, "class": ..., submodules":
-            []
-          },...
-        ]
-      },...
-    ]
-  },...
-]
-```
-
-The fields `name` and `module` are mandatory and specify the class name and Python module, respectively.
-`module` has to be equal to the string that would be used as a Python import statement.
-If `dir` is specified, its value will be added to the Python search path.
-In `submodules` you can define a list of subsequent modules that depend on `module`.
-In case the class requires some arguments in its constructor, they can be defined in the `args` dictionary.
-In case the name of the class you want to use differs from the name you want to show to users, you can add the name of the class to the `class` argument and leave the user-facing name in the `name` arg.
-
-
-An example for this would be:
-```
-[
-  {
-    "name": "TSP",
-    "module": "modules.applications.optimization.TSP.TSP",
-    "dir": "src",
-    "submodules": [
-      {
-        "name": "GreedyClassicalTSP",
-        "module": "modules.solvers.GreedyClassicalTSP",
-        "submodules": []
-      }
-    ]
-  }
-]
-```
-
-You can save this as a JSON file, e.g. tsp_example.json, and then call the framework with the following command:
-```
-python src/main.py --modules tsp_example.json
-```
 
 ## License
 

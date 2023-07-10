@@ -1,7 +1,8 @@
 # QUARK: A Framework for Quantum Computing Application Benchmarking
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers. 
-QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case. It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
+QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case.
+It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
 ## Paper
@@ -12,13 +13,16 @@ Even though the architecture changed significantly with the 2.0 release of QUARK
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io.
 
 ## Prerequisites
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed. Other versions could cause issues with other dependencies used in the framework. Additionally, we rely on several pip dependencies, which you can install in two ways:
+As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.
+Other versions could cause issues with other dependencies used in the framework.
+Additionally, we rely on several pip dependencies, which you can install in two ways:
 
 1. Install pip packages manually, or
 2. Use the QUARK installer.
 
 
 For this installer to work, you need to install the following packages in the first place:
+
 * inquirer==3.1.2
 * pyyaml==6.0
 * seaborn==0.12.2
@@ -33,7 +37,8 @@ You can select the modules of choice via:
 
 Of course there is a default option, which will include all available options.
 
-Depending on your configured modules, you will need to install different Python packages. We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
+Depending on your configured modules, you will need to install different Python packages.
+We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also configure multiple QUARK environments and then switch between them via:
 
 ```python src/main.py env --activate myenv2```
@@ -56,7 +61,8 @@ Content of the environment:
         >-- Local
 ```
 
-In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option. You can find the documentation in the respective Read the Docs section.
+In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
+You can find the documentation in the respective Read the Docs section.
 
 ## Running a Benchmark
 
@@ -125,16 +131,34 @@ All used config files, logs and results are stored in a folder in the ```benchma
 #### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:
 ```
- python src/main.py --config test_config.yml
+ python src/main.py --config config.yml
 ```
 
 > __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
+
+Example for a config file:
+
+```
+application:
+  config:
+    nodes:
+    - 3
+  name: TSP
+  submodules:
+  - config: {}
+    name: GreedyClassicalTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+repetitions: 1
+```
 
 
 #### Summarizing Multiple Existing Experiments
 You can also summarize multiple existing experiments like this:
 ```
-python src/main.py --summarize /Users/user1/quark/benchmark_runs/2021-09-21-15-03-53 /Users/user1/quark/benchmark_runs/2021-09-21-15-23-01
+python src/main.py --summarize quark/benchmark_runs/2021-09-21-15-03-53 quark/benchmark_runs/2021-09-21-15-23-01
 ```
 This allows you to generate plots from multiple experiments.
 

@@ -19,6 +19,7 @@ Additionally, we rely on several pip dependencies, which you can install in two 
 
 
 For this installer to work, you need to install the following packages in the first place:
+
 * inquirer==3.1.2
 * pyyaml==6.0
 * seaborn==0.12.2

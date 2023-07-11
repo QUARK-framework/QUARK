@@ -1,7 +1,7 @@
 {
-  "build_number": 0,
-  "build_date": "08-05-2023 09:12:29",
-  "git_revision_number": "2398007f842b62420bfbe99acee17f286419c27c",
+  "build_number": 1,
+  "build_date": "11-07-2023 09:25:40",
+  "git_revision_number": "bc52f5390459f5eb1d09069e403b753884233620",
   "modules": [
     {
       "name": "PVC",
@@ -20,7 +20,7 @@
             },
             {
               "name": "numpy",
-              "version": "1.24.1"
+              "version": "1.23.5"
             },
             {
               "name": "dimod",
@@ -48,7 +48,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -124,11 +124,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -193,7 +193,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -246,11 +246,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -491,7 +491,7 @@
         },
         {
           "name": "numpy",
-          "version": "1.24.1"
+          "version": "1.23.5"
         }
       ]
     },
@@ -590,7 +590,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -686,7 +686,7 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.24.1"
+              "version": "1.23.5"
             },
             {
               "name": "dimod",
@@ -714,7 +714,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -790,11 +790,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -859,7 +859,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -912,11 +912,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1059,7 +1059,7 @@
             },
             {
               "name": "numpy",
-              "version": "1.24.1"
+              "version": "1.23.5"
             },
             {
               "name": "dimod",
@@ -1087,7 +1087,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -1163,11 +1163,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1232,7 +1232,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -1285,11 +1285,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1428,7 +1428,7 @@
         },
         {
           "name": "numpy",
-          "version": "1.24.1"
+          "version": "1.23.5"
         }
       ]
     },
@@ -1449,7 +1449,7 @@
             },
             {
               "name": "numpy",
-              "version": "1.24.1"
+              "version": "1.23.5"
             },
             {
               "name": "dimod",
@@ -1493,7 +1493,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -1569,11 +1569,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1638,7 +1638,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -1691,11 +1691,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:::device/qpu/ionq/ionQdevice",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:::device/qpu/ionq/ionQdevice"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1840,7 +1840,7 @@
                 },
                 {
                   "name": "numpy",
-                  "version": "1.24.1"
+                  "version": "1.23.5"
                 }
               ],
               "submodules": [
@@ -1982,7 +1982,7 @@
         },
         {
           "name": "numpy",
-          "version": "1.24.1"
+          "version": "1.23.5"
         }
       ]
     }

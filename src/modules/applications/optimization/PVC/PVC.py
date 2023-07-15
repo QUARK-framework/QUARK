@@ -255,7 +255,7 @@ class PVC(Optimization):
         """
         # Check if all seams are visited in route
         start = start_time_measurement()
-        visited_seams = list(set(list([seam[0][0] for seam in solution if seam is not None])))  # pylint: disable=R1728
+        visited_seams = {seam[0][0] for seam in solution if seam is not None}
 
         if len(visited_seams) == len(solution):
             logging.info(

@@ -102,9 +102,10 @@ class ReverseGreedyClassicalPVC(Solver):
         while len(mapped_problem.nodes) > 2:
             # Get the minimum neighbor edge from the current node
             # TODO This only works if the artificial high edge weights are exactly 100000
-            next_node = max([x for x in mapped_problem.edges(current_node[0], data=True) if  # pylint: disable=R1728
-                             x[2]['c_start'] == current_node[1] and x[2]['t_start'] == current_node[2] and x[2][  # pylint: disable=R1728
-                                 'weight'] != 100000], key=lambda x: x[2]['weight'])  # pylint: disable=R1728
+            next_node = max((x for x in mapped_problem.edges(current_node[0], data=True) if
+                             x[2]['c_start'] == current_node[1] and x[2]['t_start'] == current_node[2] and
+                             x[2]['weight'] != 100000),
+                            key=lambda x: x[2]['weight'])
             next_node = (next_node[1], next_node[2]["c_end"], next_node[2]["t_end"])
 
             # Make the step - add distance to cost, add the best node to tour,

@@ -25,7 +25,7 @@ from typing_extensions import TypedDict, NotRequired, Self
 
 from modules.Core import Core
 from modules.applications import Application
-from utils import _get_instance_with_sub_options
+from utils import _get_instance_with_sub_options, checkbox
 
 
 class ConfigModule(TypedDict):
@@ -83,9 +83,9 @@ class ConfigManager:
         application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
 
-        submodule_answer = ConfigManager.checkbox(key='submodules',
-                                                  message="What submodule do you want?",
-                                                  choices=self.application.get_available_submodule_options())
+        submodule_answer = checkbox(key='submodules',
+                                          message="What submodule do you want?",
+                                          choices=self.application.get_available_submodule_options())
         self.config = {
             "application": {
                 "name": app_name,
@@ -128,9 +128,9 @@ class ConfigManager:
                     f"Skipping asking for submodule, since only 1 option ({available_submodules[0]}) is available.")
                 submodule_answer = {"submodules": [available_submodules[0]]}
             else:
-                submodule_answer = ConfigManager.checkbox(key='submodules',
-                                                          message="What submodule do you want?",
-                                                          choices=available_submodules)
+                submodule_answer = checkbox(key='submodules',
+                                                  message="What submodule do you want?",
+                                                  choices=available_submodules)
         else:
             submodule_answer = {"submodules": []}
 
@@ -141,29 +141,6 @@ class ConfigManager:
                            submodule_answer["submodules"]]
 
         }
-
-    @staticmethod
-    def checkbox(key: str, message: str, choices: list) -> dict:
-        """
-        Wrapper method to avoid empty responses in checkbox
-
-        :param key: Key for response dict
-        :type key: str
-        :param message: Message for the user
-        :type message: str
-        :param choices: Choices for the user
-        :type choices: list
-        :return: Dict with the response from the user
-        :rtype: dict
-        """
-
-        answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
-
-        if not answer[key]:
-            logging.warning("You need to check at least one box! Please try again!")
-            return ConfigManager.checkbox(key, message, choices)
-
-        return answer
 
     def set_config(self, config: BenchmarkConfig) -> None:
         """
@@ -348,9 +325,9 @@ class ConfigManager:
                 print(f"{prefix} {config_answer['description']}: {config_answer['values'][0]}")
 
             elif config_answer.get('exclusive', False):
-                answer = ConfigManager.checkbox(key=key,
-                                                message=f"{prefix} {config_answer['description']}",
-                                                choices=config_answer['values'])
+                answer = checkbox(key=key,
+                                        message=f"{prefix} {config_answer['description']}",
+                                        choices=config_answer['values'])
                 values = (answer[key],)
             else:
 
@@ -360,10 +337,10 @@ class ConfigManager:
 
                 if config_answer.get("allow_ranges") and config_answer["allow_ranges"]:
                     choices.append("Custom Range")
-                answer = ConfigManager.checkbox(key=key,
-                                                message=f"{prefix} {config_answer['description']}",
-                                                # Add custom_input if it is specified in the parameters
-                                                choices=choices)
+                answer = checkbox(key=key,
+                                        message=f"{prefix} {config_answer['description']}",
+                                        # Add custom_input if it is specified in the parameters
+                                        choices=choices)
                 values = answer[key]
 
                 if "Custom Input" in values:

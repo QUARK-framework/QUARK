@@ -21,7 +21,7 @@ import sys
 import time
 from typing import Union
 
-import numpy as np
+import inquirer
 
 
 def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -> any:
@@ -104,6 +104,29 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> ty
     return vars(module)[class_name]
 
 
+def checkbox(key: str, message: str, choices: list) -> dict:
+    """
+    Wrapper method to avoid empty responses in checkbox
+
+    :param key: Key for response dict
+    :type key: str
+    :param message: Message for the user
+    :type message: str
+    :param choices: Choices for the user
+    :type choices: list
+    :return: Dict with the response from the user
+    :rtype: dict
+    """
+
+    answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
+
+    if not answer[key]:
+        logging.warning("You need to check at least one box! Please try again!")
+        return checkbox(key, message, choices)
+
+    return answer
+
+
 def get_git_revision(git_dir: str) -> (str, str):
     """
     Collects git revision number and checks if there are uncommitted changes to allow user to analyze which
@@ -182,17 +205,3 @@ def end_time_measurement(start: float) -> float:
     """
     end = time.perf_counter()
     return round((end - start) * 1000, 3)
-
-
-class NumpyEncoder(json.JSONEncoder):
-    """
-    Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems
-    """
-    def default(self, o: any):
-        if isinstance(o, np.integer):
-            return int(o)
-        if isinstance(o, np.floating):
-            return float(o)
-        if isinstance(o, np.ndarray):
-            return o.tolist()
-        return super(NumpyEncoder).default(o)

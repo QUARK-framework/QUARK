@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "'If QUARK contributes to a project that leads to a scientific publication, please acknowledge this fact by citing it as below."
+message: "If QUARK contributes to a project that leads to a scientific publication, please acknowledge this fact by citing it as below."
 authors:
 - family-names: "Finžgar"
   given-names: "Jernej Rudi"

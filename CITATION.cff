@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If QUARK contributes to a project that leads to a scientific publication, please acknowledge this fact by citing it as below."
 authors:
 - family-names: "Finžgar"
   given-names: "Jernej Rudi"
@@ -18,3 +18,27 @@ title: "QUARK: A Framework for Quantum Computing Application Benchmarking"
 version: 1.1.0
 date-released: 2022-08-03
 url: "https://github.com/QUARK-framework/QUARK"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Finžgar"
+      given-names: "Jernej Rudi"
+      orcid: "https://orcid.org/0000-0003-4393-827X"
+    - family-names: "Ross"
+      given-names: "Philipp"
+      orcid: "https://orcid.org/0000-0002-4720-9835"
+    - family-names: "Hölscher"
+      given-names: "Leonhard"
+    - family-names: "Klepsch"
+      given-names: "Johannes"
+    - family-names: "Luckow"
+      given-names: "Andre"
+      orcid: "https://orcid.org/0000-0002-1225-4062"
+  title: "QUARK: A Framework for Quantum Computing Application Benchmarking"
+  year: 2022
+  journal: 2022 {IEEE} International Conference on Quantum Computing and Engineering ({QCE})
+  pages: 226-237
+  doi: 10.1109/qce53715.2022.00042
+  publisher:
+    name: IEEE Computer Society
+    website: 'https://www.computer.org/'

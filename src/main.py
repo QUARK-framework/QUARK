@@ -23,11 +23,11 @@ import yaml
 from Installer import Installer
 from utils import _expand_paths
 
-# add the paths before the following imports
+# add the paths
 install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(install_dir)
 
-# The following line is at the moment needed for the hybrid jobs repo
+# The following line is currently needed for the hybrid jobs repo
 sys.path.insert(1, os.path.dirname(os.path.realpath(__file__)))
 
 

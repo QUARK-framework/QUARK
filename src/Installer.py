@@ -95,8 +95,8 @@ class Installer:
 
         requirements = self.collect_requirements(module_db["modules"])
         activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
-                                                                       "which package manager?",
-                                                       ["Conda", "PIP", "Print it here"])["requirements"]
+                                                         "which package manager?",
+                                         ["Conda", "PIP", "Print it here"])["requirements"]
 
         if "Conda" in activate_requirements:
             self.create_conda_file(requirements, env_name)
@@ -233,7 +233,7 @@ class Installer:
         """
 
         answer_apps = checkbox("apps", "Which application would you like to include?",
-                                             [m["name"] for m in module_db["modules"]])["apps"]
+                               [m["name"] for m in module_db["modules"]])["apps"]
 
         module_db["modules"] = [x for x in module_db["modules"] if x["name"] in answer_apps]
 

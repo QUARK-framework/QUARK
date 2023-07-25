@@ -84,8 +84,8 @@ class ConfigManager:
             application_config, f"(Option for {application_answer['application']})")
 
         submodule_answer = checkbox(key='submodules',
-                                          message="What submodule do you want?",
-                                          choices=self.application.get_available_submodule_options())
+                                    message="What submodule do you want?",
+                                    choices=self.application.get_available_submodule_options())
         self.config = {
             "application": {
                 "name": app_name,
@@ -129,8 +129,8 @@ class ConfigManager:
                 submodule_answer = {"submodules": [available_submodules[0]]}
             else:
                 submodule_answer = checkbox(key='submodules',
-                                                  message="What submodule do you want?",
-                                                  choices=available_submodules)
+                                            message="What submodule do you want?",
+                                            choices=available_submodules)
         else:
             submodule_answer = {"submodules": []}
 
@@ -326,8 +326,8 @@ class ConfigManager:
 
             elif config_answer.get('exclusive', False):
                 answer = checkbox(key=key,
-                                        message=f"{prefix} {config_answer['description']}",
-                                        choices=config_answer['values'])
+                                  message=f"{prefix} {config_answer['description']}",
+                                  choices=config_answer['values'])
                 values = (answer[key],)
             else:
 
@@ -338,9 +338,9 @@ class ConfigManager:
                 if config_answer.get("allow_ranges") and config_answer["allow_ranges"]:
                     choices.append("Custom Range")
                 answer = checkbox(key=key,
-                                        message=f"{prefix} {config_answer['description']}",
-                                        # Add custom_input if it is specified in the parameters
-                                        choices=choices)
+                                  message=f"{prefix} {config_answer['description']}",
+                                  # Add custom_input if it is specified in the parameters
+                                  choices=choices)
                 values = answer[key]
 
                 if "Custom Input" in values:

@@ -3,5 +3,5 @@
 
 
 ## Description
-Gemeinsames Git-Projekt für BenchQC AP3 und AP7.
+Shared project for BenchQC AP3 and AP7.
 

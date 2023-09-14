@@ -10,7 +10,7 @@ Details about the motivations for the framework can be found in the accompanying
 Even though the architecture changed significantly with the 2.0 release of QUARK, the guiding principles still remain.
 
 ## Documentation
-Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io.
+Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.
 
 ## Prerequisites
 As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.

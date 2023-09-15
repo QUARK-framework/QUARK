@@ -5,9 +5,9 @@ QUARK supports various applications, like the traveling salesperson problem (TSP
 It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
-## Paper
-Details about the motivations for the framework can be found in the accompanying QUARK paper: https://arxiv.org/abs/2202.03028. 
-Even though the architecture changed significantly with the 2.0 release of QUARK, the guiding principles still remain.
+## Publications
+Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028).
+Even though the architecture changes significantly from QUARK 1.0 to 2.0, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK 2.0.
 
 ## Documentation
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.

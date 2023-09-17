@@ -403,7 +403,7 @@ class ConfigManager:
                 if not config[key_in_cond][0] in config_answer.get("if")["in"]:
                     continue
 
-            if len(config_answer['values']) == 1:
+            if len(config_answer['values']) == 1 and "custom_input" not in config_answer:
                 # When there is only 1 value to choose from skip the user input for now
                 values = config_answer['values']
                 print(f"{prefix} {config_answer['description']}: {config_answer['values'][0]}")

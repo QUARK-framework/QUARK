@@ -15,7 +15,6 @@
 import networkx as nx
 import tsplib95
 
-
 # Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
 filename = "dsj1000.tsp"
 print(f"Loading {filename}")

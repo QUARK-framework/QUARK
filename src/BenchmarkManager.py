@@ -33,6 +33,10 @@ from BenchmarkRecord import BenchmarkRecord
 from modules.Core import Core
 from utils import get_git_revision
 
+from utils_mpi import get_comm
+
+comm = get_comm()
+
 matplotlib.rcParams['savefig.dpi'] = 300
 
 
@@ -104,8 +108,11 @@ class BenchmarkManager:
 
         self.run_benchmark(benchmark_backlog, benchmark_config_manager.get_reps())
 
-        results = self._collect_all_results()
-        self._save_as_json(results)
+        # Wait until all MPI processes have finished and save results on rank 0
+        comm.Barrier()
+        if comm.Get_rank() == 0:
+            results = self._collect_all_results()
+            self._save_as_json(results)
 
     def run_benchmark(self, benchmark_backlog: list, repetitions: int):
         """
@@ -157,8 +164,11 @@ class BenchmarkManager:
                 for record in benchmark_records:
                     record.sum_up_times()
 
-                with open(f"{path}/results.json", 'w') as filehandler:
-                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
+                # Wait until all MPI processes have finished and save results on rank 0
+                comm.Barrier()
+                if comm.Get_rank() == 0:
+                    with open(f"{path}/results.json", 'w') as filehandler:
+                        json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
                 logging.info("")
                 logging.info(" =============== Run finished =============== ")

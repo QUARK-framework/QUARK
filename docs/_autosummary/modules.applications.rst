@@ -1,4 +1,4 @@
-modules.applications
+﻿modules.applications
 ====================
 
 .. automodule:: modules.applications
@@ -30,5 +30,6 @@ modules.applications
 
    modules.applications.Application
    modules.applications.Mapping
+   modules.applications.QML
    modules.applications.optimization
 

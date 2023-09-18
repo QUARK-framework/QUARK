@@ -27,6 +27,9 @@ class Inference(Training):
         """
         super().__init__("Inference")
 
+        self.target: np.array
+        self.n_states_range: list
+
     @staticmethod
     def get_requirements() -> list[dict]:
         """
@@ -100,15 +103,18 @@ class Inference(Training):
 
         parameters = np.load(config["pretrained"])
 
-        pmfs, samples = execute_circuit([parameters.get() if gpu else parameters])
+        pmfs, samples = execute_circuit([parameters.get() if GPU else parameters])
         pmfs = np.asarray(pmfs)
-        samples = self.sample_from_pmf(pmf=pmfs[0], n_shots=input_data["n_shots"]) if samples is None else samples[0]
+        samples = self.sample_from_pmf(
+            n_states_range=self.n_states_range,
+            pmf=pmfs[0],
+            n_shots=input_data["n_shots"]) if samples is None else samples[0]
 
-        loss = self.kl_divergence(pmfs.reshape([-1, 1]))
+        loss = self.kl_divergence(pmfs.reshape([-1, 1]), self.target)
 
         input_data["best_parameter"] = parameters
         input_data["inference"] = True
-        input_data["KL"] = [loss.get() if gpu else loss]
+        input_data["KL"] = [loss.get() if GPU else loss]
         input_data["best_sample"] = samples.astype(int)
 
         return input_data

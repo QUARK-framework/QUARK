@@ -69,14 +69,18 @@ class LibraryQiskit(Library):
                         return {
                             "backend": {
                                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                                           "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
+                                           "cusvaer_simulator (only available in cuQuantum applicance)",
+                                           "aer_simulator_gpu",
                                            "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
-                                "description": "Which backend do you want to use? (aer_statevector_simulator uses the measurement probability vector, the others are shot based)"
+                                "description": "Which backend do you want to use? (aer_statevector_simulator
+                                                uses the measurement probability vector, the others are shot based)"
                             },
 
                             "n_shots": {
                                 "values": [100, 1000, 10000, 1000000],
-                                "description": "How many shots do you want use for estimating the PMF of the model? (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+                                "description": "How many shots do you want use for estimating the PMF of the model?
+                                                (If the aer_statevector_simulator selected, 
+                                                only relevant for studying generalization)"
                             }
                         }
 
@@ -86,23 +90,25 @@ class LibraryQiskit(Library):
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
                            "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
-                "description": "Which backend do you want to use? (aer_statevector_simulator uses the measurement probability vector, the others are shot based)"
+                "description": "Which backend do you want to use? (aer_statevector_simulator\
+                             uses the measurement probability vector, the others are shot based)"
             },
 
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
-                "description": "How many shots do you want use for estimating the PMF of the model? (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+                "description": "How many shots do you want use for estimating the PMF of the model?\
+                 (If the aer_statevector_simulator selected, only relevant for studying generalization)"
             }
         }
 
-    def get_default_submodule(self, training_option: str) -> Union[QCBM, Inference]:
+    def get_default_submodule(self, option: str) -> Union[QCBM, Inference]:
 
-        if training_option == "QCBM":
+        if option == "QCBM":
             return QCBM()
-        elif training_option == "Inference":
+        elif option == "Inference":
             return Inference()
         else:
-            raise NotImplementedError(f"Training option {training_option} not implemented")
+            raise NotImplementedError(f"Option {option} not implemented")
 
     def sequence_to_circuit(self, input_data: dict) -> dict:
         """
@@ -169,18 +175,18 @@ class LibraryQiskit(Library):
         return input_data
 
     @staticmethod
-    def select_backend(backend_config: str) -> dict:
+    def select_backend(config: str) -> dict:
         """
         This method configures the backend
 
-        :param backend_config: Name of a backend
-        :type backend_config: str
+        :param config: Name of a backend
+        :type config: str
         :return: Configured qiskit backend
         :rtype: qiskit.providers.Backend
         """
-        if backend_config == "cusvaer_simulator (only available in cuQuantum applicance)":
-            import cusvaer
-            from qiskit.providers.aer import AerSimulator
+        if config == "cusvaer_simulator (only available in cuQuantum applicance)":
+            import cusvaer # pylint: disable=C0415
+            from qiskit.providers.aer import AerSimulator # pylint: disable=C0415
             backend = AerSimulator(
                 method="statevector",
                 device="GPU",
@@ -191,29 +197,29 @@ class LibraryQiskit(Library):
                 cusvaer_comm_plugin_soname="libmpi.so"
             )
 
-        elif backend_config == "aer_simulator_gpu":
-            from qiskit import Aer
+        elif config == "aer_simulator_gpu":
+            from qiskit import Aer # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
 
-        elif backend_config == "aer_simulator_cpu":
-            from qiskit import Aer
+        elif config == "aer_simulator_cpu":
+            from qiskit import Aer # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
 
-        elif backend_config == "aer_statevector_simulator_gpu":
-            from qiskit import Aer
+        elif config == "aer_statevector_simulator_gpu":
+            from qiskit import Aer # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="GPU")
 
-        elif backend_config == "aer_statevector_simulator_cpu":
-            from qiskit import Aer
+        elif config == "aer_statevector_simulator_cpu":
+            from qiskit import Aer # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
 
-        elif backend_config == "ionQ_Harmony":
-            from modules.devices.braket.Ionq import Ionq
-            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider
+        elif config == "ionQ_Harmony":
+            from modules.devices.braket.Ionq import Ionq # pylint: disable=C0415
+            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
             device_wrapper = Ionq("ionQ", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
             backend = AWSBraketBackend(
                 device=device_wrapper.device,
@@ -224,9 +230,9 @@ class LibraryQiskit(Library):
                 backend_version="2",
             )
 
-        elif backend_config == "Amazon_SV1":
-            from modules.devices.braket.SV1 import SV1
-            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider
+        elif config == "Amazon_SV1":
+            from modules.devices.braket.SV1 import SV1 # pylint: disable=C0415
+            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
             device_wrapper = SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
             backend = AWSBraketBackend(
                 device=device_wrapper.device,
@@ -238,12 +244,12 @@ class LibraryQiskit(Library):
             )
 
         else:
-            raise NotImplementedError(f"Device Configuration {backend_config} not implemented")
+            raise NotImplementedError(f"Device Configuration {config} not implemented")
 
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, backend_config: str, n_shots: int) -> callable:
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int) -> callable:
         """
         This method combnines the qiskit circuit implemenation and the selected backend and returns a function, 
         that will be called during training. 
@@ -252,8 +258,8 @@ class LibraryQiskit(Library):
         :type circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
         :type backend: qiskit.providers.Backend
-        :param backend_config: Name of a backend
-        :type backend_config: str
+        :param config: Name of a backend
+        :type config: str
         :param n_shots: The number of times the circuit is run 
         :type n_shots: int
         :return: Method that executes the quantum circuit for a given set of parameters
@@ -262,7 +268,7 @@ class LibraryQiskit(Library):
         n_qubits = circuit.num_qubits
         circuit_transpiled = transpile(circuit, backend=backend)
 
-        if backend_config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
+        if config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
             circuit_transpiled.remove_final_measurements()
 
             def execute_circuit(solutions):
@@ -272,8 +278,8 @@ class LibraryQiskit(Library):
                 pmfs = [jobs.result().get_statevector(circuit).probabilities() for circuit in all_circuits]
                 return pmfs, None
 
-        elif backend_config in ["ionQ_Harmony", "Amazon_SV1"]:
-            import time as timetest
+        elif config in ["ionQ_Harmony", "Amazon_SV1"]:
+            import time as timetest # pylint: disable=C0415
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
                 jobs = backend.run(all_circuits, shots=n_shots)
@@ -297,7 +303,7 @@ class LibraryQiskit(Library):
 
                 return pmfs, samples
 
-        elif backend_config in ["cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_cpu",
+        elif config in ["cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_cpu",
                                 "aer_simulator_gpu"]:
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]

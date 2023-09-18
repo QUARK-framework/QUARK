@@ -88,32 +88,32 @@ class Transformation(Core, ABC):
         return output, end_time_measurement(start)
 
     @abstractmethod
-    def transform(self, problem) -> (dict):
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Helps to ensure that the model can effectively learn the underlying 
         patterns and structure of the data, and produce high-quality outputs.
 
-
-        :param config: instance of class Config specifying the mapping settings
-        :param problem: problem instance which should be mapped to the target representation
-        :return: Must always return the mapped problem and the time it took to create the mapping
+        :param input_data: Input data for transformation.
+        :type input_data: dict
+        :param config: Configuration parameters for the transformation.
+        :type config: dict
+        :return: Transformed data.
         :rtype: dict
         """
         pass
 
-    def reverse_transform(self, solution) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> dict:
         """
-        Transforms the solution back to the original problem. This might not be necessary in all cases, so the default is
-        to return the original solution. This might be needed to convert the solution to a representation needed
-        for validation and evaluation.
+        Transforms the solution back to the original problem.
+        This might not be necessary in all cases, so the default is to return the original solution.
+        This might be needed to convert the solution to a representation needed for validation and evaluation.
 
-        :param solution:
-        :type solution: any
-        :return: Mapped solution and the time it took to create it
-        :rtype: tuple(any, float)
-
+        :param input_data: The input data to be transformed.
+        :type input_data: dict
+        :return: Transformed data.
+        :rtype: dict
         """
-        return
+        return input_data
 
     @staticmethod
     def compute_discretization(n_qubits: int, n_registered: int) -> np.ndarray:

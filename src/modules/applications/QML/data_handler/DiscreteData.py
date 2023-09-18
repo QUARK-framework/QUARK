@@ -26,15 +26,22 @@ from modules.applications.QML.data_handler.MetricsGeneralization import MetricsG
 
 class DiscreteData(DataHandler):
     """
-    A data handler for discrete datasets with cardinality constraints. This class creates a dataset with a cardinality constraint and provides
+    A data handler for discrete datasets with cardinality constraints.
+    This class creates a dataset with a cardinality constraint and provides
     methods for generalisation metrics computing and evaluation.
     """
 
     def __init__(self):
         super().__init__("")
         self.submodule_options = ["CircuitCardinality"]
-        self.dataset_name = None
         self.n_registers = None
+        self.n_qubits = None
+        self.train_size = None
+        self.histogram_train  = None
+        self.histogram_solution = None
+        self.generalization_metrics = None
+        self.samples = None
+
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -51,13 +58,13 @@ class DiscreteData(DataHandler):
             }
         ]
 
-    def get_default_submodule(self, circuit_option: str) -> CircuitCardinality:
+    def get_default_submodule(self, option: str) -> CircuitCardinality:
 
-        if circuit_option == "CircuitCardinality":
+        if option == "CircuitCardinality":
             return CircuitCardinality()
         else:
             raise NotImplementedError(
-                f"Circuit Option {circuit_option} not implemented")
+                f"Circuit Option {option} not implemented")
 
     def get_parameter_options(self) -> dict:
         """
@@ -106,17 +113,17 @@ class DiscreteData(DataHandler):
         :return: Must always return the mapped problem and the time it took to create the mapping
         :rtype: tuple(any, float)
         """
-        self.dataset_name = "Cardinality_Constraint"
+        dataset_name = "Cardinality_Constraint"
         self.n_qubits = gen_mod["n_qubits"]
         self.train_size = config["train_size"]
-        self.num_ones = self.n_qubits // 2
+        num_ones = self.n_qubits // 2
 
         # Generate all possible binary permutations of length n_qubits using NumPy arrays
         search_space = np.array(list(itertools.product([0, 1], repeat=self.n_qubits)))
         search_space = np.apply_along_axis(lambda x: ''.join(str(bit) for bit in x), 1, search_space)
 
         # Filter the binary permutations based on the cardinality constraint using np.char.count
-        cardinality_constraint = np.char.count(search_space, '1') == self.num_ones
+        cardinality_constraint = np.char.count(search_space, '1') == num_ones
         solution_set = search_space[cardinality_constraint]
 
         # Use np.random.choice to select the desired number of rows randomly
@@ -126,23 +133,23 @@ class DiscreteData(DataHandler):
 
         # Create the histogram solution data
         self.histogram_solution = np.zeros(2 ** self.n_qubits)
-        self.solution_set = np.array([int(i, 2) for i in solution_set])
-        self.histogram_solution[self.solution_set] = 1 / len(self.solution_set)
+        solution_set = np.array([int(i, 2) for i in solution_set])
+        self.histogram_solution[solution_set] = 1 / len(solution_set)
 
         # Create the histogram training data
         self.histogram_train = np.zeros(2 ** self.n_qubits)
-        self.train_set = np.array([int(i, 2) for i in train_set])
-        self.histogram_train[self.train_set] = 1 / len(self.train_set)
+        train_set = np.array([int(i, 2) for i in train_set])
+        self.histogram_train[train_set] = 1 / len(train_set)
 
         self.generalization_metrics = MetricsGeneralization(
-            train_set=self.train_set,
+            train_set=train_set,
             train_size=self.train_size,
-            solution_set=self.solution_set,
+            solution_set=solution_set,
             n_qubits=self.n_qubits,
         )
 
         application_config = {
-            "dataset_name": self.dataset_name,
+            "dataset_name": dataset_name,
             "n_qubits": self.n_qubits,
             "histogram_solution": self.histogram_solution,
             "histogram_train": self.histogram_train,
@@ -157,7 +164,8 @@ class DiscreteData(DataHandler):
 
         :param solution: A list representing the solution to be evaluated.
         :type solution: list
-        :return: A tuple containing a dictionary of generalization metrics and the execution time in seconds.
+        :return: A tuple containing a dictionary of generalization metrics 
+                and the execution time in seconds.
         :rtype: tuple
         """
         start = start_time_measurement()
@@ -169,19 +177,22 @@ class DiscreteData(DataHandler):
 
     def evaluate(self, solution: list) -> (dict, float):
         """
-        Evaluates a given solution and calculates the histogram of generated samples and the minimum KL divergence value.
+        Evaluates a given solution and calculates the histogram of generated samples 
+        and the minimum KL divergence value.
 
-        :param solution: A dictionary-like object containing the solution data, including generated samples and KL divergence values.
+        :param solution: A dictionary-like object containing the solution data,
+                        including generated samples and KL divergence values.
         :type solution: list
-        :return: A tuple containing a dictionary with the histogram of generated samples and the minimum KL divergence value, 
-                and the time it took to evaluate the solution in milliseconds.
+        :return: A tuple containing a dictionary with the histogram of generated samples 
+                and the minimum KL divergence value, and the time it took to evaluate
+                the solution in milliseconds.
         :rtype: (dict, float)
         """
         start = start_time_measurement()
         self.samples = solution["best_sample"]
-        self.n_shots = np.sum(self.samples)
+        n_shots = np.sum(self.samples)
 
-        histogram_generated = np.asarray(self.samples) / self.n_shots
+        histogram_generated = np.asarray(self.samples) / n_shots
         histogram_generated[histogram_generated == 0] = 1e-8
 
         KL_list = solution["KL"]

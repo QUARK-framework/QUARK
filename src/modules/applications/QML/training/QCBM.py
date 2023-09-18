@@ -37,6 +37,21 @@ class QCBM(Training):
         """
         super().__init__("QCBM")
 
+        self.n_states_range: list
+        self.target: np.array
+        self.n_shots: int
+        self.execute_circuit: callable
+        self.timing: object
+        self.study_generalization: bool
+        self.generalization_metrics: dict
+        self.writer: SummaryWriter
+        self.image_epochs: list
+        self.tb_images: bool
+        self.loss_func: callable
+        self.n_params: int
+        self.x0: np.array
+        self.options: dict
+
     @staticmethod
     def get_requirements() -> list[dict]:
         """
@@ -167,7 +182,8 @@ class QCBM(Training):
         input_data['MPI_size'] = size
         input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         logging.info(
-            f"Running config: [backend={input_data['backend']}] [n_qubits={input_data['n_qubits']}] [n_shots={input_data['n_shots']}] [population_size={config['population_size']}]")
+            f"Running config: [backend={input_data['backend']}] [n_qubits={input_data['n_qubits']}] "\
+            f"[n_shots={input_data['n_shots']}] [population_size={config['population_size']}]")
 
         if comm.Get_rank() == 0:
             self.target = np.asarray(input_data["histogram_train"])
@@ -175,7 +191,7 @@ class QCBM(Training):
         self.n_states_range = range(2 ** input_data['n_qubits'])
         self.n_shots = input_data["n_shots"]
         self.execute_circuit = input_data["execute_circuit"]
-        self.timing = self.Timing(gpu=gpu)
+        self.timing = self.Timing()
 
         self.study_generalization = "generalization_metrics" in list(input_data.keys())
         if self.study_generalization:
@@ -228,7 +244,7 @@ class QCBM(Training):
         """
         input_data = self.setup_training(input_data, config)
 
-        es = CMAEvolutionStrategy(self.x0.get() if gpu else self.x0, config['sigma'], self.options)
+        es = CMAEvolutionStrategy(self.x0.get() if GPU else self.x0, config['sigma'], self.options)
         for parameter in ["best_parameters", "time_circuit", "time_loss", "KL", "best_sample"]:
             input_data[parameter] = []
 
@@ -246,7 +262,7 @@ class QCBM(Training):
 
             self.timing.start_recording()
             if comm.Get_rank() == 0:
-                loss_epoch = self.loss_func(pmfs_model.reshape([config['population_size'], -1]))
+                loss_epoch = self.loss_func(pmfs_model.reshape([config['population_size'], -1]), self.target)
             else:
                 loss_epoch = np.empty(config["population_size"])
             comm.Bcast(loss_epoch, root=0)
@@ -254,24 +270,31 @@ class QCBM(Training):
 
             time_loss = self.timing.stop_recording()
 
-            es.tell(solutions, loss_epoch.get() if gpu else loss_epoch)
+            es.tell(solutions, loss_epoch.get() if GPU else loss_epoch)
 
             if es.result[1] < best_loss:
                 best_loss = es.result[1]
                 index = loss_epoch.argmin()
                 best_pmf = pmfs_model[index] / pmfs_model[index].sum()
                 if self.study_generalization:
-                    counts = self.sample_from_pmf(pmf=best_pmf.get() if gpu else best_pmf,
-                                                  n_shots=self.generalization_metrics.n_shots) if samples is None else \
-                        samples[int(index)]
-                    metrics = self.generalization_metrics.get_metrics(counts)
+
+                    if samples is None:
+                        counts = self.sample_from_pmf(
+                            n_states_range=self.n_states_range,
+                            pmf=best_pmf.get() if GPU else best_pmf,
+                            n_shots=self.generalization_metrics.n_shots)
+                    else:
+                        counts = samples[int(index)]
+
+                    metrics = self.generalization_metrics.get_metrics(counts.get() if GPU else counts)
                     for (key, value) in metrics.items():
                         self.writer.add_scalar(f"metrics/{key}", value, epoch)
 
-                self.writer.add_scalar("metrics/NLL", self.nll(best_pmf.reshape([1, -1])).get() if gpu else self.nll(
-                    best_pmf.reshape([1, -1])), epoch)
-                self.writer.add_scalar("metrics/KL", self.kl_divergence(
-                    best_pmf.reshape([1, -1])).get() if gpu else self.kl_divergence(best_pmf.reshape([1, -1])), epoch)
+                nll = self.nll(best_pmf.reshape([1, -1]), self.target)
+                kl = self.kl_divergence(best_pmf.reshape([1, -1]), self.target)
+                # best_pmf_cpu = best_pmf.reshape([1, -1]) if GPU else best_pmf.reshape([1, -1])
+                self.writer.add_scalar("metrics/NLL", nll.get() if GPU else nll, epoch)
+                self.writer.add_scalar("metrics/KL", kl.get() if GPU else kl, epoch)
                 self.writer.add_scalar("time/circuit", time_circ, epoch)
                 self.writer.add_scalar("time/loss", time_loss, epoch)
             input_data["best_parameters"].append(es.result[0])
@@ -281,7 +304,7 @@ class QCBM(Training):
             if self.tb_images and epoch in self.image_epochs:
                 ax.clear()
                 ax.imshow(
-                    best_pmf.reshape(int(np.sqrt(best_pmf.size)), int(np.sqrt(best_pmf.size))).get() if gpu
+                    best_pmf.reshape(int(np.sqrt(best_pmf.size)), int(np.sqrt(best_pmf.size))).get() if GPU
                     else best_pmf.reshape(int(np.sqrt(best_pmf.size)),
                                           int(np.sqrt(best_pmf.size))),
                     cmap='binary',
@@ -290,14 +313,20 @@ class QCBM(Training):
                 self.writer.add_figure('grid_figure', fig, global_step=epoch)
 
             logging.info(
-                f"[Iteration {es.result[4]}] [{config['loss']}: {es.result[1]:.5f}] [Circuit processing: {(time_circ):.3f} ms] [{config['loss']} processing: {(time_loss):.3f} ms] [sigma: {sigma:.5f}] ")
+                f"[Iteration {es.result[4]}] "
+                f"[{config['loss']}: {es.result[1]:.5f}] "\
+                f"[Circuit processing: {(time_circ):.3f} ms] "\
+                f"[{config['loss']} processing: {(time_loss):.3f} ms] "\
+                f"[sigma: {sigma:.5f}]")
 
         plt.close()
         self.writer.flush()
         self.writer.close()
 
         input_data["best_parameter"] = es.result[0]
-        input_data["best_sample"] = self.sample_from_pmf(best_pmf.get() if gpu else best_pmf,
-                                                         n_shots=input_data["n_shots"])
+        best_sample = self.sample_from_pmf(self.n_states_range,
+                                           best_pmf.get() if GPU else best_pmf,
+                                           n_shots=input_data["n_shots"])
+        input_data["best_sample"] = best_sample.get() if GPU else best_sample
 
         return input_data

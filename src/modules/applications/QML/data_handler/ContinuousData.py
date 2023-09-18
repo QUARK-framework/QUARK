@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from utils import start_time_measurement, end_time_measurement
 from typing import TypedDict, Union
+import logging
 
 import numpy as np
-
 import pkg_resources
-import logging
+
+from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.QML.data_handler.DataHandler import *
 from modules.applications.QML.transformations.MinMax import MinMax
@@ -43,6 +43,7 @@ class ContinuousData(DataHandler):
         self.dataset = None
         self.n_registers = None
         self.gc = None
+        self.n_qubits = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -59,13 +60,13 @@ class ContinuousData(DataHandler):
             }
         ]
 
-    def get_default_submodule(self, transform_option: str) -> Union[PIT, MinMax]:
-        if transform_option == "MinMax":
+    def get_default_submodule(self, option: str) -> Union[PIT, MinMax]:
+        if option == "MinMax":
             self.transformation = MinMax()
-        elif transform_option == "PIT":
+        elif option == "PIT":
             self.transformation = PIT()
         else:
-            raise NotImplementedError(f"Transformation Option {transform_option} not implemented")
+            raise NotImplementedError(f"Transformation Option {option} not implemented")
         return self.transformation
 
     def get_parameter_options(self) -> dict:
@@ -133,7 +134,8 @@ class ContinuousData(DataHandler):
         """
         Calculate KL in original space.
 
-        :param solution: A dictionary-like object containing the solution data, including histogram_generated_original and histogram_train_original.
+        :param solution: A dictionary-like object containing the solution data,
+        including histogram_generated_original and histogram_train_original.
         :type solution: list
 
         :return: KL for the generated samples and the time it took to calculate it.

@@ -30,10 +30,15 @@ class MinMax(Transformation):
     def __init__(self):
         super().__init__("MinMax")
         self.submodule_options = ["CircuitStandard", "CircuitCardinality"]
-        self.key_mapping = None
         self.transform_config = None
         self.max = None
         self.min = None
+        self.n_qubits = None
+        self.dataset = None
+        self.dataset_name = None
+        self.grid_shape = None
+        self.histogram_train = None
+        self.histogram_train_original = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -50,14 +55,14 @@ class MinMax(Transformation):
             }
         ]
 
-    def get_default_submodule(self, circuit_option: str) -> Union[CircuitStandard, CircuitCardinality]:
+    def get_default_submodule(self, option: str) -> Union[CircuitStandard, CircuitCardinality]:
 
-        if circuit_option == "CircuitStandard":
+        if option == "CircuitStandard":
             return CircuitStandard()
-        elif circuit_option == "CircuitCardinality":
+        elif option == "CircuitCardinality":
             return CircuitCardinality()
         else:
-            raise NotImplementedError(f"Circuit Option {circuit_option} not implemented")
+            raise NotImplementedError(f"Circuit Option {option} not implemented")
 
     def get_parameter_options(self) -> dict:
         """
@@ -70,9 +75,10 @@ class MinMax(Transformation):
 
         }
 
-    def transform(self, application_config: dict, config: dict) -> (dict, float):
+    def transform(self, input_data: dict, config: dict) -> (dict, float):
         """
-        Transforms the input dataset using MinMax transformation and computes histograms of the training dataset in the transformed space.
+        Transforms the input dataset using MinMax transformation and computes histograms
+        of the training dataset in the transformed space.
 
         :param application_config: A dictionary containing information about the dataset and application configuration.
         :type application_config: dict
@@ -81,9 +87,9 @@ class MinMax(Transformation):
         :return: A tuple containing a dictionary with MinMax-transformed data.
         :rtype: tuple(dict, float)
         """
-        self.dataset_name = application_config["dataset_name"]
-        self.dataset = application_config["dataset"]
-        self.n_qubits = application_config["n_qubits"]
+        self.dataset_name = input_data["dataset_name"]
+        self.dataset = input_data["dataset"]
+        self.n_qubits = input_data["n_qubits"]
         self.grid_shape = int(2 ** (self.n_qubits // 2))
         n_registers = self.dataset.shape[-1]
 
@@ -106,12 +112,12 @@ class MinMax(Transformation):
             "dataset_name": self.dataset_name,
             "n_registers": n_registers,
             "n_qubits": self.n_qubits,
-            "store_dir_iter": application_config["store_dir_iter"]
+            "store_dir_iter": input_data["store_dir_iter"]
         }
 
         return self.transform_config
 
-    def reverse_transform(self, solution: dict) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> (any, float):
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
@@ -120,12 +126,12 @@ class MinMax(Transformation):
         :return: solution transformed accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        best_results = solution["best_sample"]
-        depth = solution["depth"]
-        architecture_name = solution["architecture_name"]
-        n_qubits = solution["n_qubits"]
+        best_results = input_data["best_sample"]
+        depth = input_data["depth"]
+        architecture_name = input_data["architecture_name"]
+        n_qubits = input_data["n_qubits"]
         n_registers = self.transform_config["n_registers"]
-        KL_best_transformed = min(solution["KL"])
+        KL_best_transformed = min(input_data["KL"])
 
         array_bins = Transformation.compute_discretization_efficient(n_qubits, n_registers)
         transformed_samples = Transformation.generate_samples_efficient(best_results, array_bins, n_registers,
@@ -149,7 +155,7 @@ class MinMax(Transformation):
         histogram_generated_original = learned_histogram[0] / np.sum(learned_histogram[0])
         histogram_generated_original = histogram_generated_original.flatten()
 
-        best_parameter = solution["best_parameter"]
+        best_parameter = input_data["best_parameter"]
 
         reverse_config_trans = {
             "generated_samples": best_results,
@@ -164,7 +170,7 @@ class MinMax(Transformation):
             "histogram_generated_original": histogram_generated_original,
             "histogram_generated": histogram_generated_transformed,
             "KL_best_transformed": KL_best_transformed,
-            "store_dir_iter": solution["store_dir_iter"]
+            "store_dir_iter": input_data["store_dir_iter"]
         }
 
         return reverse_config_trans

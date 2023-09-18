@@ -13,8 +13,11 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import TypedDict
 import logging
+from typing import TypedDict
+from qiskit import QuantumCircuit
+from qiskit.providers import Backend
+
 from utils import start_time_measurement, end_time_measurement
 
 from modules.Core import Core
@@ -62,8 +65,11 @@ class Library(Core, ABC):
 
         output = self.sequence_to_circuit(input_data)
         backend = self.select_backend(config["backend"])
-        output["execute_circuit"] = self.get_execute_circuit(output["circuit"], backend, config["backend"],
-                                                             config["n_shots"])
+        output["execute_circuit"] = self.get_execute_circuit(
+            output["circuit"],
+            backend,
+            config["backend"],
+            config["n_shots"])
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")
@@ -92,6 +98,12 @@ class Library(Core, ABC):
     def sequence_to_circuit(self, input_data):
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_execute_circuit(self):
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    def select_backend(config: str):
         pass

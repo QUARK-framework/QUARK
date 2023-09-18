@@ -25,7 +25,8 @@ from utils import start_time_measurement, end_time_measurement
 
 class DataHandler(Core, ABC):
     """
-    The task of the DataHandler module is to translate the application’s data and problem specification into preproccesed format.
+    The task of the DataHandler module is to translate the application’s data 
+    and problem specification into preproccesed format.
     """
 
     def __init__(self, name):
@@ -196,7 +197,8 @@ class DataHandler(Core, ABC):
     @staticmethod
     def tb_to_pd(logdir: str, rep: str) -> None:
         """
-        Converts TensorBoard event files in the specified log directory into a pandas DataFrame and saves it as a pickle file.
+        Converts TensorBoard event files in the specified log directory 
+        into a pandas DataFrame and saves it as a pickle file.
 
         :param logdir: path to the log directory containing TensorBoard event files
         :type logdir: str 

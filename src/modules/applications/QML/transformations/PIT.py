@@ -31,8 +31,13 @@ class PIT(Transformation):
         super().__init__("PIT")
         self.submodule_options = ["CircuitCopula"]
         self.reverse_epit_lookup = None
-        self.key_mapping = None
         self.transform_config = None
+        self.n_qubits = None
+        self.dataset = None
+        self.dataset_name = None
+        self.grid_shape = None
+        self.histogram_train = None
+        self.histogram_train_original = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -62,16 +67,17 @@ class PIT(Transformation):
         """
         return {}
 
-    def get_default_submodule(self, circuit_option: str) -> CircuitCopula:
+    def get_default_submodule(self, option: str) -> CircuitCopula:
 
-        if circuit_option == "CircuitCopula":
+        if option == "CircuitCopula":
             return CircuitCopula()
         else:
-            raise NotImplementedError(f"Circuit Option {circuit_option} not implemented")
+            raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def transform(self, application_config: dict, config: dict) -> (dict, float):
+    def transform(self, input_data: dict, config: dict) -> (dict, float):
         """
-        Transforms the input dataset using PIT transformation and computes histograms of the training dataset in the transformed space.
+        Transforms the input dataset using PIT transformation and computes histograms
+        of the training dataset in the transformed space.
 
         :param data_set: dataset
         :type graph: npdarray
@@ -80,9 +86,9 @@ class PIT(Transformation):
         :return: dict with MinMax transformation, time it took to map it
         :rtype: tuple(dict, float)
         """
-        self.dataset_name = application_config["dataset_name"]
-        self.dataset = application_config["dataset"]
-        self.n_qubits = application_config["n_qubits"]
+        self.dataset_name = input_data["dataset_name"]
+        self.dataset = input_data["dataset"]
+        self.n_qubits = input_data["n_qubits"]
         self.grid_shape = int(2 ** (self.n_qubits // 2))
         n_registers = self.dataset.shape[-1]
 
@@ -105,13 +111,13 @@ class PIT(Transformation):
             "dataset_name": self.dataset_name,
             "n_registers": n_registers,
             "n_qubits": self.n_qubits,
-            "store_dir_iter": application_config["store_dir_iter"],
+            "store_dir_iter": input_data["store_dir_iter"],
             "transformed_dataset": transformed_dataset
         }
 
         return self.transform_config
 
-    def reverse_transform(self, solution: dict) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> (any, float):
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
@@ -120,12 +126,12 @@ class PIT(Transformation):
         :return: solution transformed accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
-        depth = solution["depth"]
-        architecture_name = solution["architecture_name"]
-        n_qubits = solution["n_qubits"]
+        depth = input_data["depth"]
+        architecture_name = input_data["architecture_name"]
+        n_qubits = input_data["n_qubits"]
         n_registers = self.transform_config["n_registers"]
-        KL_best_transformed = min(solution["KL"])
-        best_results = solution["best_sample"]
+        KL_best_transformed = min(input_data["KL"])
+        best_results = input_data["best_sample"]
 
         array_bins = self.compute_discretization_efficient(n_qubits, n_registers)
         transformed_samples = self.generate_samples_efficient(best_results, array_bins, n_registers, noisy=True)
@@ -148,7 +154,7 @@ class PIT(Transformation):
         histogram_generated_original = learned_histogram[0] / np.sum(learned_histogram[0])
         histogram_generated_original = histogram_generated_original.flatten()
 
-        best_parameter = solution["best_parameter"]
+        best_parameter = input_data["best_parameter"]
 
         reverse_config_trans = {
             "generated_samples": best_results,
@@ -163,7 +169,7 @@ class PIT(Transformation):
             "histogram_generated_original": histogram_generated_original,
             "histogram_generated": histogram_generated_transformed,
             "KL_best_transformed": KL_best_transformed,
-            "store_dir_iter": solution["store_dir_iter"]
+            "store_dir_iter": input_data["store_dir_iter"]
         }
 
         return reverse_config_trans
@@ -173,7 +179,7 @@ class PIT(Transformation):
         epit = df.copy(deep=True).transpose()
         self.reverse_epit_lookup = epit.copy(deep=True)
 
-        epit.values[::] = [PIT.emp_integral_trans(row) for row in epit.values]
+        epit.values[::] = [self.emp_integral_trans(row) for row in epit.values]
         epit = epit.transpose()
         self.reverse_epit_lookup.values[::] = [np.sort(row) for row in self.reverse_epit_lookup.values]
 
@@ -202,10 +208,10 @@ class PIT(Transformation):
         res = [self._reverse_emp_integral_trans_single(row) for row in data]
         return np.array(res)[:, 0, :]
 
-    def emp_integral_trans(data: np.ndarray):
-        # calling arggsort on the result of argsort creates a bijective mapping mask
-        rank = data.argsort().argsort()
-        len = data.size
-        ecdf = np.linspace(0, 1, len, dtype=np.float64)
+    def emp_integral_trans(self, data: np.ndarray):
+        # calling argsort on the result of argsort creates a bijective mapping mask
+        rank = np.argsort(data).argsort()  # Use np.argsort here
+        length = data.size  # Rename 'len' to 'length' to avoid conflict with built-in len()
+        ecdf = np.linspace(0, 1, length, dtype=np.float64)
         ecdf_biject = ecdf[rank]
         return ecdf_biject

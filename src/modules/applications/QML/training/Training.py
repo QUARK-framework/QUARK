@@ -14,23 +14,19 @@
 
 import logging
 from abc import ABC, abstractmethod
-
-import numpy as np_cpu
+import time
 
 try:
     import cupy as np
-
-    gpu = True
+    GPU = True
     logging.info("Using CuPy, dataprocessing on GPU")
 except ModuleNotFoundError:
     import numpy as np
-
-    gpu = False
+    GPU = False
     logging.info("CuPy not available, using vanilla numpy, dataprocessing on CPU")
 
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
-
 
 class Training(Core, ABC):
     """
@@ -101,35 +97,38 @@ class Training(Core, ABC):
         """
         pass
 
-    def sample_from_pmf(self, pmf, n_shots):
-        samples = np_cpu.random.choice(self.n_states_range, size=n_shots, p=pmf)
-        counts = np_cpu.bincount(samples, minlength=len(self.n_states_range))
+    @staticmethod
+    def sample_from_pmf(n_states_range, pmf, n_shots):
+        samples = np.random.choice(n_states_range, size=n_shots, p=pmf)
+        counts = np.bincount(samples, minlength=len(n_states_range))
         return counts
 
-    def kl_divergence(self, pmf_model):
+    def kl_divergence(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        return np.sum(self.target * np.log(self.target / pmf_model), axis=1)
+        return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
 
-    def nll(self, pmf_model):
+    def nll(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        return -np.sum(self.target * np.log(pmf_model), axis=1)
+        return -np.sum(pmf_target * np.log(pmf_model), axis=1)
 
     class Timing:
         """
-        This module is an abstraction of time measurement for for both CPU and GPU precesses 
+        This module is an abstraction of time measurement for for both CPU and GPU processes 
         """
 
-        def __init__(self, gpu: bool):
+        def __init__(self):
             """
             Constructor method
             """
-            self.gpu = gpu
-            if gpu:
-                self.start_recording = self.start_recording_gpu
-                self.stop_recording = self.stop_recording_gpu
+
+            if GPU:
+                self.start_cpu: time.perf_counter
             else:
-                self.start_recording = self.start_recording_cpu
-                self.stop_recording = self.stop_recording_cpu
+                self.start_gpu: np.cuda.Event
+                self.end_gpu: self.start_cpu
+
+            self.start_recording = self.start_recording_gpu if GPU else self.start_recording_cpu
+            self.stop_recording = self.stop_recording_gpu if GPU else self.stop_recording_cpu
 
         def start_recording_cpu(self):
             self.start_cpu = start_time_measurement()

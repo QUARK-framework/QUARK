@@ -12,8 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from utils import start_time_measurement, end_time_measurement
 from typing import Union
+from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.Application import *
 from modules.applications.QML.QML import QML
@@ -36,15 +36,6 @@ class GenerativeModeling(QML):
         super().__init__("GenerativeModeling")
         self.submodule_options = ["Continuous Data", "Discrete Data"]
         self.data = None
-        self.dataset_name = None
-        self.n_registers = None
-        self.true_probability = None
-        self.cc = None
-        self.gc = None
-        self.bitstrings = None
-        self.bitstrings_train = None
-        self.constrained_bitstring = None
-        self.processed_solution = None
 
     @staticmethod
     def get_requirements() -> list[dict]:

@@ -69,11 +69,11 @@ class CircuitStandard(Circuit):
             }
         }
 
-    def get_default_submodule(self, library_option: str) -> LibraryQiskit:
-        if library_option == "LibraryQiskit":
+    def get_default_submodule(self, option: str) -> LibraryQiskit:
+        if option == "LibraryQiskit":
             return LibraryQiskit()
         else:
-            raise NotImplementedError(f"Library Option {library_option} not implemented")
+            raise NotImplementedError(f"Option {option} not implemented")
 
     class Config(TypedDict):
         """
@@ -100,7 +100,6 @@ class CircuitStandard(Circuit):
         n_registers = input_data["n_registers"]
         n_qubits = input_data["n_qubits"]
         depth = config["depth"]
-        n = n_qubits // n_registers
 
         gate_sequence = []
 

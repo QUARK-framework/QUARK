@@ -14,8 +14,8 @@
 
 import math
 
-import numpy as np
 from typing import Tuple, Dict
+import numpy as np
 
 
 class MetricsGeneralization:

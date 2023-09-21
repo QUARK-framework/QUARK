@@ -351,4 +351,4 @@ class NumpyEncoder(json.JSONEncoder):
             return float(o)
         if isinstance(o, np.ndarray):
             return o.tolist()
-        return super(NumpyEncoder).default(o)
+        return super().default(o)

@@ -123,7 +123,7 @@ class Optimization(Application, ABC):
             solution_validity = False
             time_to_process_solution = None
             time_to_validation = None
-        if solution_validity and processed_solution:
+        if solution_validity and (processed_solution is not None):
             solution_quality, time_to_evaluation = self.evaluate(processed_solution)
         else:
             solution_quality = None

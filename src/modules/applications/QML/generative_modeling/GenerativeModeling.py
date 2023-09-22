@@ -50,13 +50,13 @@ class GenerativeModeling(QML):
     def get_solution_quality_unit(self) -> str:
         return "minimum KL"
 
-    def get_default_submodule(self, data_option: str) -> Union[ContinuousData, DiscreteData]:
-        if data_option == "Continuous Data":
+    def get_default_submodule(self, option: str) -> Union[ContinuousData, DiscreteData]:
+        if option == "Continuous Data":
             self.data = ContinuousData()
-        elif data_option == "Discrete Data":
+        elif option == "Discrete Data":
             self.data = DiscreteData()
         else:
-            raise NotImplementedError(f"Transformation Option {data_option} not implemented")
+            raise NotImplementedError(f"Transformation Option {option} not implemented")
         return self.data
 
     def get_parameter_options(self) -> dict:

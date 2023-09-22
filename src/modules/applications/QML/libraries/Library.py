@@ -28,10 +28,11 @@ class Library(Core, ABC):
     This class is an abstract base class for mapping a library-agnostic gate sequence to a library such as Qiskit 
     """
 
-    def __init__(self):
+    def __init__(self, name):
         """
         Constructor method
         """
+        self.name = name
         super().__init__()
 
     class Config(TypedDict):

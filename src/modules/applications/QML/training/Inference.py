@@ -112,9 +112,9 @@ class Inference(Training):
 
         loss = self.kl_divergence(pmfs.reshape([-1, 1]), self.target)
 
-        input_data["best_parameter"] = parameters
+        input_data["best_parameter"] = parameters.get() if GPU else parameters
         input_data["inference"] = True
         input_data["KL"] = [loss.get() if GPU else loss]
-        input_data["best_sample"] = samples.astype(int)
+        input_data["best_sample"] = samples.astype(int).get() if GPU else samples.astype(int)
 
         return input_data

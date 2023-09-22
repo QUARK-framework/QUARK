@@ -37,7 +37,7 @@ class LibraryQiskit(Library):
         """
         Constructor method
         """
-        super().__init__()
+        super().__init__("LibraryQiskit")
         self.submodule_options = ["QCBM", "Inference"]
 
     @staticmethod

@@ -106,7 +106,7 @@ class DataHandler(Core, ABC):
 
         if self.generalization_mark is not None:
             self.metrics.add_metric_batch({"KL_best": evaluation["KL_best"]})
-            metrics, _ = self.generalisation(input_data)
+            metrics, _ = self.generalisation()
 
             # Save generalisation metrics
             with open(f"{store_dir_iter}/record_gen_metrics_{kwargs['rep_count']}.pkl", 'wb') as f:
@@ -169,7 +169,7 @@ class DataHandler(Core, ABC):
         """
         pass
 
-    def generalisation(self, solution: list) -> (dict, float):
+    def generalisation(self) -> (dict, float):
         """
         Compute generalisation metrics
 
@@ -179,7 +179,10 @@ class DataHandler(Core, ABC):
         :rtype: tuple(any, float)
 
         """
-        pass
+        # Compute your metrics here
+        metrics = {}  # Replace with actual metric calculations
+        time_taken = 0.0  # Replace with actual time calculation
+        return metrics, time_taken
 
     @abstractmethod
     def evaluate(self, solution: any) -> (dict, float):

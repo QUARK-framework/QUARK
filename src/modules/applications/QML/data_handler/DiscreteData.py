@@ -158,7 +158,7 @@ class DiscreteData(DataHandler):
 
         return application_config
 
-    def generalisation(self, solution: list) -> (dict, float):
+    def generalisation(self) -> (dict, float):
         """
         Calculate generalization metrics for the generated.
 

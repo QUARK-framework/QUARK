@@ -325,9 +325,11 @@ class ConfigManager:
                 print(f"{prefix} {config_answer['description']}: {config_answer['values'][0]}")
 
             elif config_answer.get('exclusive', False):
-                answer = checkbox(key=key,
-                                  message=f"{prefix} {config_answer['description']}",
-                                  choices=config_answer['values'])
+                answer = inquirer.prompt(
+                    [inquirer.List(key,
+                                   message=f"{prefix} {config_answer['description']}",
+                                   choices=config_answer['values']
+                                   )])
                 values = (answer[key],)
             else:
 

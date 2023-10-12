@@ -256,13 +256,13 @@ class ConfigManager:
                             }
                         })
             else:
-                return [{
+                items.append({
                     "name": module["name"],
                     "instance": module["instance"],
                     "config": single_config,
                     "submodule": {
                     }
-                }]
+                })
 
         return items
 

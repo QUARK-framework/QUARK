@@ -51,7 +51,9 @@ class Installer:
             {"name": "inquirer", "version": "3.1.2"},
             {"name": "packaging", "version": "23.1"},
             {"name": "pyyaml", "version": "6.0"},
-            {"name": "typing-extensions", "version": "4.6.3"}
+            {"name": "typing-extensions", "version": "4.6.3"},
+            {"name": "sphinx", "version": "6.2.1"},
+            {"name": "sphinx-rtd-theme", "version": "1.2.0"},
         ]
         Path(self.envs_dir).mkdir(parents=True, exist_ok=True)
 
@@ -308,6 +310,9 @@ class Installer:
         with open(f"{self.settings_dir}/module_db.json", "w") as jsonFile:
             json.dump(module_db, jsonFile, indent=2)
 
+        requirements = self.collect_requirements(module_db_modules)
+        self.create_req_file(requirements, "full", self.settings_dir)
+
         logging.info("Created module_db file")
 
     @staticmethod
@@ -352,12 +357,12 @@ class Installer:
         else:
             return 0
 
-    def collect_requirements(self, env: dict) -> dict:
+    def collect_requirements(self, env: list[dict]) -> dict:
         """
         Collects requirements of the different modules in the given env file
 
         :param env: env file
-        :type env: dict
+        :type env: list[dict]
         :return: Collected requirements
         :rtype: dict
         """
@@ -406,7 +411,7 @@ class Installer:
 
         return requirements
 
-    def create_conda_file(self, requirements: dict, name: str) -> None:
+    def create_conda_file(self, requirements: dict, name: str, directory: str = None) -> None:
         """
         Creates conda yaml file based on the requirements
 
@@ -414,9 +419,13 @@ class Installer:
         :type requirements: dict
         :param name: Name of the conda env
         :type name: str
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
+        :type directory: str
         :return:
         :rtype: None
         """
+        if directory is None:
+            directory = self.envs_dir
         conda_data = {
             "name": name,
             "channels": ["defaults"],
@@ -427,13 +436,13 @@ class Installer:
 
             ]
         }
-        with open(f"{self.envs_dir}/conda_{name}.yml", "w") as filehandler:
+        with open(f"{directory}/conda_{name}.yml", "w") as filehandler:
             yaml.dump(conda_data, filehandler)
 
         logging.info("Saved conda env file, if you like to install it run:")
-        logging.info(f"conda env create -f {self.envs_dir}/conda_{name}.yml")
+        logging.info(f"conda env create -f {directory}/conda_{name}.yml")
 
-    def create_req_file(self, requirements: dict, name: str) -> None:
+    def create_req_file(self, requirements: dict, name: str, directory: str = None) -> None:
         """
         Creates pip txt file based on the requirements
 
@@ -441,16 +450,20 @@ class Installer:
         :type requirements: dict
         :param name: Name of the env
         :type name: str
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
+        :type directory: str
         :return:
         :rtype: None
         """
-        with open(f"{self.envs_dir}/requirements_{name}.txt", "w") as filehandler:
+        if directory is None:
+            directory = self.envs_dir
+        with open(f"{directory}/requirements_{name}.txt", "w") as filehandler:
             for k, v in requirements.items():
                 filehandler.write(f"{k}=={v[0]}" if v else k)
                 filehandler.write("\n")
 
         logging.info("Saved pip txt file, if you like to install it run:")
-        logging.info(f"pip install -r {self.envs_dir}/requirements_{name}.txt")
+        logging.info(f"pip install -r {directory}/requirements_{name}.txt")
 
     def list_envs(self) -> None:
         """

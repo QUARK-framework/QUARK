@@ -21,9 +21,9 @@ from qiskit.compiler import transpile, assemble
 from qiskit.providers import Backend
 import numpy as np
 
-from modules.applications.QML.training.QCBM import QCBM
-from modules.applications.QML.training.Inference import Inference
-from modules.applications.QML.libraries.Library import Library
+from modules.training.QCBM import QCBM
+from modules.training.Inference import Inference
+from modules.applications.QML.generative_modeling.mappings.Library import Library
 
 logging.getLogger("qiskit").setLevel(logging.WARNING)
 

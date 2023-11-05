@@ -1,7 +1,7 @@
 {
-  "build_number": 3,
-  "build_date": "15-09-2023 13:07:59",
-  "git_revision_number": "ce28372e0d19413d823d7d6d746052238f52bb23",
+  "build_number": 4,
+  "build_date": "17-11-2023 08:32:15",
+  "git_revision_number": "909e072a1c55494dd5b9628acac0fafa978cf65a",
   "modules": [
     {
       "name": "PVC",
@@ -1995,7 +1995,7 @@
           "name": "Continuous Data",
           "class": "ContinuousData",
           "args": {},
-          "module": "modules.applications.QML.data_handler.ContinuousData",
+          "module": "modules.applications.QML.generative_modeling.data.data_handler.ContinuousData",
           "requirements": [
             {
               "name": "numpy",
@@ -2007,7 +2007,7 @@
               "name": "PIT",
               "class": "PIT",
               "args": {},
-              "module": "modules.applications.QML.transformations.PIT",
+              "module": "modules.applications.QML.generative_modeling.transformations.PIT",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2023,7 +2023,7 @@
                   "name": "CircuitCopula",
                   "class": "CircuitCopula",
                   "args": {},
-                  "module": "modules.applications.QML.circuits.CircuitCopula",
+                  "module": "modules.circuits.CircuitCopula",
                   "requirements": [
                     {
                       "name": "scipy",
@@ -2035,7 +2035,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.libraries.LibraryQiskit",
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2051,7 +2051,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.QML.training.QCBM",
+                          "module": "modules.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2076,7 +2076,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.QML.training.Inference",
+                          "module": "modules.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2095,7 +2095,7 @@
               "name": "MinMax",
               "class": "MinMax",
               "args": {},
-              "module": "modules.applications.QML.transformations.MinMax",
+              "module": "modules.applications.QML.generative_modeling.transformations.MinMax",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2107,7 +2107,7 @@
                   "name": "CircuitStandard",
                   "class": "CircuitStandard",
                   "args": {},
-                  "module": "modules.applications.QML.circuits.CircuitStandard",
+                  "module": "modules.circuits.CircuitStandard",
                   "requirements": [
                     {
                       "name": "scipy",
@@ -2119,7 +2119,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.libraries.LibraryQiskit",
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2135,7 +2135,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.QML.training.QCBM",
+                          "module": "modules.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2160,7 +2160,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.QML.training.Inference",
+                          "module": "modules.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2177,14 +2177,14 @@
                   "name": "CircuitCardinality",
                   "class": "CircuitCardinality",
                   "args": {},
-                  "module": "modules.applications.QML.circuits.CircuitCardinality",
+                  "module": "modules.circuits.CircuitCardinality",
                   "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.libraries.LibraryQiskit",
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2200,7 +2200,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.QML.training.QCBM",
+                          "module": "modules.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2225,7 +2225,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.QML.training.Inference",
+                          "module": "modules.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2246,7 +2246,7 @@
           "name": "Discrete Data",
           "class": "DiscreteData",
           "args": {},
-          "module": "modules.applications.QML.data_handler.DiscreteData",
+          "module": "modules.applications.QML.generative_modeling.data.data_handler.DiscreteData",
           "requirements": [
             {
               "name": "numpy",
@@ -2258,14 +2258,14 @@
               "name": "CircuitCardinality",
               "class": "CircuitCardinality",
               "args": {},
-              "module": "modules.applications.QML.circuits.CircuitCardinality",
+              "module": "modules.circuits.CircuitCardinality",
               "requirements": [],
               "submodules": [
                 {
                   "name": "LibraryQiskit",
                   "class": "LibraryQiskit",
                   "args": {},
-                  "module": "modules.applications.QML.libraries.LibraryQiskit",
+                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -2281,7 +2281,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.applications.QML.training.QCBM",
+                      "module": "modules.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -2306,7 +2306,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.applications.QML.training.Inference",
+                      "module": "modules.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",

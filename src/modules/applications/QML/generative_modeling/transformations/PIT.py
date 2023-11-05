@@ -17,8 +17,8 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from modules.applications.QML.transformations.Transformation import *
-from modules.applications.QML.circuits.CircuitCopula import CircuitCopula
+from modules.applications.QML.generative_modeling.transformations.Transformation import *
+from modules.circuits.CircuitCopula import CircuitCopula
 
 
 class PIT(Transformation):

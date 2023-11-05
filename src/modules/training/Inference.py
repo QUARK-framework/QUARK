@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from typing import TypedDict
-from modules.applications.QML.training.Training import *
+from modules.training.Training import *
 
 
 class Inference(Training):

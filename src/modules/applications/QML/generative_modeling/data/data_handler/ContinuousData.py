@@ -20,9 +20,9 @@ import pkg_resources
 
 from utils import start_time_measurement, end_time_measurement
 
-from modules.applications.QML.data_handler.DataHandler import *
-from modules.applications.QML.transformations.MinMax import MinMax
-from modules.applications.QML.transformations.PIT import PIT
+from modules.applications.QML.generative_modeling.transformations.MinMax import MinMax
+from modules.applications.QML.generative_modeling.transformations.PIT import PIT
+from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import *
 
 
 class ContinuousData(DataHandler):
@@ -35,7 +35,7 @@ class ContinuousData(DataHandler):
     def __init__(self):
         """
         The continuous data class loads a dataset from the path 
-        src/modules/applications/QML/data
+        src/modules/applications/QML/generative_modeling/data
         """
         super().__init__("")
         self.submodule_options = ["PIT", "MinMax"]
@@ -119,7 +119,8 @@ class ContinuousData(DataHandler):
         self.dataset_name = config["data_set"]
         self.n_qubits = gen_mod["n_qubits"]
 
-        filename = pkg_resources.resource_filename('modules.applications.QML.data', f"{self.dataset_name}.npy")
+        filename = pkg_resources.resource_filename('modules.applications.QML.generative_modeling.data',
+                                                   f"{self.dataset_name}.npy")
         self.dataset = np.load(filename)
 
         application_config = {

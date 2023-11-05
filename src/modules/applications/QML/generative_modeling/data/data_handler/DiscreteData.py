@@ -19,9 +19,9 @@ from pprint import pformat
 
 import numpy as np
 
-from modules.applications.QML.data_handler.DataHandler import *
-from modules.applications.QML.circuits.CircuitCardinality import CircuitCardinality
-from modules.applications.QML.data_handler.MetricsGeneralization import MetricsGeneralization
+from modules.circuits.CircuitCardinality import CircuitCardinality
+from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import *
+from modules.applications.QML.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
 
 
 class DiscreteData(DataHandler):
@@ -141,20 +141,21 @@ class DiscreteData(DataHandler):
         train_set = np.array([int(i, 2) for i in train_set])
         self.histogram_train[train_set] = 1 / len(train_set)
 
-        self.generalization_metrics = MetricsGeneralization(
-            train_set=train_set,
-            train_size=self.train_size,
-            solution_set=solution_set,
-            n_qubits=self.n_qubits,
-        )
-
         application_config = {
             "dataset_name": dataset_name,
             "n_qubits": self.n_qubits,
             "histogram_solution": self.histogram_solution,
             "histogram_train": self.histogram_train,
-            "generalization_metrics": self.generalization_metrics,
             "store_dir_iter": gen_mod["store_dir_iter"]}
+
+        if self.train_size != 1:
+            self.generalization_metrics = MetricsGeneralization(
+                train_set=train_set,
+                train_size=self.train_size,
+                solution_set=solution_set,
+                n_qubits=self.n_qubits,
+            )
+            application_config["generalization_metrics"] = self.generalization_metrics
 
         return application_config
 

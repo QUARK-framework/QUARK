@@ -22,7 +22,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class Transformation(Core, ABC):
     """
-    The task of the transformation module is to translate the application’s data and problem specification into
+    The task of the transformation module is to translate data and problem specification of the application into
     preprocessed format.
     """
 

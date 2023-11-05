@@ -17,8 +17,8 @@ from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.Application import *
 from modules.applications.QML.QML import QML
-from modules.applications.QML.data_handler.DiscreteData import DiscreteData
-from modules.applications.QML.data_handler.ContinuousData import ContinuousData
+from modules.applications.QML.generative_modeling.data.data_handler.DiscreteData import DiscreteData
+from modules.applications.QML.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 
 
 class GenerativeModeling(QML):

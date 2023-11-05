@@ -16,9 +16,9 @@ from typing import Union
 
 import numpy as np
 
-from modules.applications.QML.transformations.Transformation import *
-from modules.applications.QML.circuits.CircuitStandard import CircuitStandard
-from modules.applications.QML.circuits.CircuitCardinality import CircuitCardinality
+from modules.applications.QML.generative_modeling.transformations.Transformation import *
+from modules.circuits.CircuitStandard import CircuitStandard
+from modules.circuits.CircuitCardinality import CircuitCardinality
 
 
 class MinMax(Transformation):

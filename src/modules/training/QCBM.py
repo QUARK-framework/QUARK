@@ -19,7 +19,7 @@ from tensorboardX import SummaryWriter
 from matplotlib import figure, axes
 import matplotlib.pyplot as plt
 
-from modules.applications.QML.training.Training import *
+from modules.training.Training import *
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()

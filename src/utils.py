@@ -23,7 +23,7 @@ from typing import Union
 import inquirer
 
 
-def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -> any:
+def _get_instance_with_sub_options(options: list[dict], name: str) -> any:
     """
     Creates an instance of the QUARK module identified by class_name
 
@@ -31,8 +31,6 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
     :type options: list of dict
     :param name: name of the QUARK component to be initialized
     :type name: str
-    :param args: List of arguments used for to the class initialization
-    :type args: any
     :return: New instance of the QUARK module
     :rtype: any
     """
@@ -47,9 +45,9 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
 
         # In case the class requires some arguments in its constructor they can be defined in the "args" dict
         if "args" in opt and opt["args"]:
-            instance = clazz(*args, **opt["args"])
+            instance = clazz(**opt["args"])
         else:
-            instance = clazz(*args)
+            instance = clazz()
 
         # _get_instance_with_sub_options is mostly called when using the --modules option, so it makes sense to also
         # save the git revision of the given module, since it can be in a different git

@@ -29,15 +29,21 @@ class Core(ABC):
     Core Module for QUARK used by all other Modules that are part of a benchmark process
     """
 
-    def __init__(self):
+    def __init__(self, name: str = None):
         """
         Constructor method
+        :param name: name used to identify this QUARK module.
+                     If not specified class name will be used as default
+        :type name: str
         """
         self.submodule_options = []
         self.sub_options = []
         self.preprocessed_input = None
         self.postprocessed_input = None
-        self.metrics = Metrics(self.__class__.__name__, os.path.relpath(sys.modules[self.__module__].__file__))
+        if name is None:
+            name = self.__class__.__name__
+        self.name = name
+        self.metrics = Metrics(name, os.path.relpath(sys.modules[self.__module__].__file__))
 
     @abstractmethod
     def get_parameter_options(self) -> dict:

@@ -245,7 +245,7 @@ class Ising(Mapping):
         """
 
         start = time() * 1000
-        qubo_mapping = Qubo()
+        qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(graph, config)
         t, j, _ = qubo_to_ising(q["Q"])
 

@@ -204,7 +204,8 @@ class BenchmarkManager:
 
         else:
             processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                     module_instance.preprocessed_input, path, rep_count)
+                                                                     module_instance.preprocessed_input, path,
+                                                                     rep_count)
             module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
                                                                                                    module["config"],
                                                                                                    store_dir=path,
@@ -349,6 +350,7 @@ class NumpyEncoder(json.JSONEncoder):
     """
     Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems
     """
+
     def default(self, o: any):
         if isinstance(o, np.integer):
             return int(o)

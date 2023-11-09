@@ -21,6 +21,7 @@ from collections.abc import Iterable
 import yaml
 
 from Installer import Installer
+from Plotter import Plotter
 from utils import _expand_paths
 from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
 
@@ -195,7 +196,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()
-                benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
+                Plotter.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

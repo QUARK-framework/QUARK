@@ -43,12 +43,12 @@ class Installer:
             {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
             {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
             {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
-            {"name": "GenerativeModeling", "class": "GenerativeModeling", \
+            {"name": "GenerativeModeling", "class": "GenerativeModeling",
              "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [
-            {"name": "seaborn", "version": "0.12.2"},
+            {"name": "seaborn", "version": "0.13.0"},
             {"name": "networkx", "version": "2.8.8"},
             {"name": "inquirer", "version": "3.1.2"},
             {"name": "packaging", "version": "23.1"},

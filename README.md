@@ -152,6 +152,46 @@ application:
 repetitions: 1
 ```
 
+### Run as Container
+We also support the option to run the framework as a container.
+After making sure your docker daemon is running, you can run the container:
+```
+docker run -it --rm ghcr.io/quark-framework/quark
+```
+
+You can also build the docker image locally like:
+``` 
+docker build -t ghcr.io/quark-framework/quark .
+```
+
+In case you want to use a config file you have to add it to the docker run command: 
+```
+-v /Users/alice/desktop/my_config.yml:/my_config.yml
+```
+`/Users/alice/desktop/my_config.yml` specifies the QUARK config file on your local machine.
+Then you can run the docker container with the config:
+```
+docker run -it --rm  -v /Users/alice/desktop/my_config.yml:/my_config.yml ghcr.io/quark-framework/quark --config my_config.yml
+```
+
+In case you want to access the benchmark run folder afterwards, you can attach a volume to the run command:
+```
+-v /Users/alice/desktop/benchmark_runs:/benchmark_runs/
+```
+The results of the benchmark run are then stored to a new directory in `/Users/alice/desktop/benchmark_runs`.
+
+In case you have local proxy settings you can add the following flags to the run command:
+
+```
+-e http_proxy=$http_proxy -e https_proxy=$https_proxy -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY
+```
+
+AWS credentials can be mounted to the run command like:
+```
+-v $HOME/.aws/:/root/.aws:ro
+```
+
+
 
 #### Summarizing Multiple Existing Experiments
 You can also summarize multiple existing experiments like this:

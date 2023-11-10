@@ -42,7 +42,8 @@ class Installer:
         self.default_app_modules = [
             {"name": "PVC", "class":  "PVC", "module": "modules.applications.optimization.PVC.PVC"},
             {"name": "SAT", "class":  "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-            {"name": "TSP", "class":  "TSP", "module": "modules.applications.optimization.TSP.TSP"}
+            {"name": "TSP", "class":  "TSP", "module": "modules.applications.optimization.TSP.TSP"},
+            {"name": "ACL", "class":  "ACL", "module": "modules.applications.optimization.ACL.ACL"},
         ]
 
         self.core_requirements = [

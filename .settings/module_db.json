@@ -1,7 +1,7 @@
 {
-  "build_number": 1,
-  "build_date": "11-07-2023 09:25:40",
-  "git_revision_number": "bc52f5390459f5eb1d09069e403b753884233620",
+  "build_number": 6,
+  "build_date": "09-11-2023 09:13:08",
+  "git_revision_number": "b25dc7de36346d751a2e61cbf57b877a3509d342",
   "modules": [
     {
       "name": "PVC",
@@ -1983,6 +1983,77 @@
         {
           "name": "numpy",
           "version": "1.23.5"
+        }
+      ]
+    },
+    {
+      "name": "ACL",
+      "class": "ACL",
+      "module": "modules.applications.optimization.ACL.ACL",
+      "submodules": [
+        {
+          "name": "MIPsolverACL",
+          "class": "MIPaclp",
+          "args": {},
+          "module": "modules.solvers.MIPsolverACL",
+          "requirements": [
+            {
+              "name": "pulp",
+              "version": "2.7.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "class": "Local",
+              "args": {},
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "QUBO",
+          "class": "QUBO",
+          "args": {},
+          "module": "modules.applications.optimization.ACL.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "pulp",
+              "version": "2.7.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "pulp",
+          "version": "2.7.0"
         }
       ]
     }

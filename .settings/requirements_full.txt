@@ -24,3 +24,4 @@ qiskit-optimization==0.5.0
 pyqubo==1.4.0
 dwave_networkx==0.8.13
 qiskit==0.40.0
+pulp==2.7.0

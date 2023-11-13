@@ -146,11 +146,95 @@ class ConfigManager:
         """
         In case the user provides a config file, this function is used to set the config.
 
-        :param config:  Valid config file
+        :param config: Valid config file
         :type config: BenchmarkConfig
         :rtype: None
         """
+
+        if ConfigManager.is_legacy_config(config):
+            config = ConfigManager.translate_legacy_config(config)
+
         self.config = config
+
+    @staticmethod
+    def is_legacy_config(config: dict) -> bool:
+        """
+        Checks if a QUARK 1 config was provided
+
+        :param config:  Valid config file
+        :type config: dict
+        :rtype: bool
+        :return: True if provided config is QUARK 1 config
+        """
+        if "mapping" in config.keys():
+            logging.warning("Looks like you have provided a legacy config file")
+            return True
+
+        return False
+
+    @staticmethod
+    def translate_legacy_config(config: dict) -> BenchmarkConfig:
+        """
+        Translates the QUARK 1 config format to QUARK 2 format
+
+        :param config: QUARK 1 config
+        :type config: dict
+        :return: Translated Config
+        :rtype: BenchmarkConfig
+        """
+
+        logging.info("Trying to translate QUARK 1 config to QUARK 2 config format")
+        try:
+            translated_config = {key: config[key] for key in ["application", "repetitions"]}
+            translated_config["application"]["submodules"] = []
+
+            for key, value in config["mapping"].items():
+                # Direct mapping does not exist anymore in QUARK 2.0
+                if key.lower() == "direct":
+                    translated_config["application"]["submodules"].extend(
+                        ConfigManager.translate_legacy_config_helper(value, "solver"))
+                else:
+                    translated_config["application"]["submodules"].append(
+                        {
+                            "name": key,
+                            "config": value["config"],
+                            "submodules": ConfigManager.translate_legacy_config_helper(value, "solver")
+                        }
+                    )
+        except Exception as e:
+            raise Exception("Error translating the given legacy config file!") from e
+
+        return translated_config
+
+    @staticmethod
+    def translate_legacy_config_helper(config_part: dict, module_key: str) -> list:
+        """
+        Helper function for translate_legacy_config, which translates the QUARK 1 config format to QUARK 2 format
+
+        :param config_part: part of a config
+        :type config_part: dict
+        :param module_key: Module key: mapping, solver or device
+        :type module_key: str
+        :return: translated config_part
+        :rtype: list
+        """
+
+        next_module_key = None
+        if module_key.lower() == "solver":
+            next_module_key = "device"
+
+        result = []
+        for item in config_part[module_key]:
+            result.append(
+                {
+                    "name": item["name"],
+                    "config": item["config"],
+                    "submodules": ConfigManager.translate_legacy_config_helper(item, next_module_key)
+                    if next_module_key is not None else []
+                }
+            )
+
+        return result
 
     def load_config(self, app_modules: list[dict]):
         """

@@ -12,24 +12,25 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import networkx as nx
-import tsplib95
+from modules.applications.Application import *
 
 
-# Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
-filename = "dsj1000.tsp"
-print(f"Loading {filename}")
-# Load the problem from .tsp file
-problem = tsplib95.load(filename)
-graph = problem.get_graph()
+class QML(Application, ABC):
+    """
+    QML Module for QUARK, is used by all QML applications
+    """
 
-# We don't needed edges from e.g. node0 -> node0
-for edge in graph.edges:
-    if edge[0] == edge[1]:
-        graph.remove_edge(edge[0], edge[1])
-print("Loaded graph:")
-print(nx.info(graph))
+    @abstractmethod
+    def generate_problem(self, config) -> any:
+        """
+        Creates a concrete problem and returns it
+        :param config:
+        :type config: dict
+        :return:
+        :rtype: any
+        """
+        pass
 
-nx.write_gpickle(graph, "reference_graph.gpickle")
-
-print("Saved graph as reference_graph.gpickle")
+    def save(self, path: str, iter_count: int) -> None:
+        # Transform tensorboard output file to pandas dataframe
+        pass

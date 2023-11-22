@@ -28,6 +28,7 @@ class Ising(Mapping):
     Ising formulation for the PVC
 
     """
+
     def __init__(self):
         """
         Constructor method

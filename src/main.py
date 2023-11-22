@@ -22,6 +22,9 @@ import yaml
 
 from Installer import Installer
 from utils import _expand_paths
+from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
+
+comm = get_comm()
 
 # add the paths
 install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -60,8 +63,8 @@ def setup_logging() -> None:
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("logging.log"),
-            logging.StreamHandler()
+            MPIFileHandler("logging.log"),
+            MPIStreamHandler()
         ]
     )
 
@@ -189,8 +192,10 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             config_manager.print()
         else:
             benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
-            results = benchmark_manager.load_results()
-            benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
+            comm.Barrier()
+            if comm.Get_rank() == 0:
+                results = benchmark_manager.load_results()
+                benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

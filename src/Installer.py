@@ -40,9 +40,11 @@ class Installer:
         self.python_version = "3.9.16"
         self.pip_version = "23.0"
         self.default_app_modules = [
-            {"name": "PVC", "class":  "PVC", "module": "modules.applications.optimization.PVC.PVC"},
-            {"name": "SAT", "class":  "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-            {"name": "TSP", "class":  "TSP", "module": "modules.applications.optimization.TSP.TSP"}
+            {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
+            {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
+            {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
+            {"name": "GenerativeModeling", "class": "GenerativeModeling", \
+             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [
@@ -259,7 +261,7 @@ class Installer:
         if submodules["submodules"]:
             answer_submodules = \
                 checkbox("submodules", f"Which submodule would you like to include for {name}?",
-                                       [m["name"] for m in submodules["submodules"]])["submodules"]
+                         [m["name"] for m in submodules["submodules"]])["submodules"]
 
             submodules["submodules"] = [x for x in submodules["submodules"] if x["name"] in answer_submodules]
             for idx, entry in enumerate(submodules["submodules"]):

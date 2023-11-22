@@ -17,7 +17,6 @@ ConfigManager.ConfigManager
    .. autosummary::
    
       ~ConfigManager.__init__
-      ~ConfigManager.checkbox
       ~ConfigManager.create_benchmark_backlog
       ~ConfigManager.create_tree_figure
       ~ConfigManager.generate_benchmark_configs

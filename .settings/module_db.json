@@ -1,7 +1,7 @@
 {
-  "build_number": 1,
-  "build_date": "11-07-2023 09:25:40",
-  "git_revision_number": "bc52f5390459f5eb1d09069e403b753884233620",
+  "build_number": 5,
+  "build_date": "22-11-2023 09:57:53",
+  "git_revision_number": "aa2f578cbc65cda03fd6a743505a14049bd260d6",
   "modules": [
     {
       "name": "PVC",
@@ -1985,6 +1985,344 @@
           "version": "1.23.5"
         }
       ]
+    },
+    {
+      "name": "GenerativeModeling",
+      "class": "GenerativeModeling",
+      "module": "modules.applications.QML.generative_modeling.GenerativeModeling",
+      "submodules": [
+        {
+          "name": "Continuous Data",
+          "class": "ContinuousData",
+          "args": {},
+          "module": "modules.applications.QML.generative_modeling.data.data_handler.ContinuousData",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.23.5"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "PIT",
+              "class": "PIT",
+              "args": {},
+              "module": "modules.applications.QML.generative_modeling.transformations.PIT",
+              "requirements": [
+                {
+                  "name": "numpy",
+                  "version": "1.23.5"
+                },
+                {
+                  "name": "pandas",
+                  "version": "1.5.2"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "CircuitCopula",
+                  "class": "CircuitCopula",
+                  "args": {},
+                  "module": "modules.circuits.CircuitCopula",
+                  "requirements": [
+                    {
+                      "name": "scipy",
+                      "version": "1.11.1"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "LibraryQiskit",
+                      "class": "LibraryQiskit",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.40.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "MinMax",
+              "class": "MinMax",
+              "args": {},
+              "module": "modules.applications.QML.generative_modeling.transformations.MinMax",
+              "requirements": [
+                {
+                  "name": "numpy",
+                  "version": "1.23.5"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "CircuitStandard",
+                  "class": "CircuitStandard",
+                  "args": {},
+                  "module": "modules.circuits.CircuitStandard",
+                  "requirements": [
+                    {
+                      "name": "scipy",
+                      "version": "1.11.1"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "LibraryQiskit",
+                      "class": "LibraryQiskit",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.40.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "CircuitCardinality",
+                  "class": "CircuitCardinality",
+                  "args": {},
+                  "module": "modules.circuits.CircuitCardinality",
+                  "requirements": [],
+                  "submodules": [
+                    {
+                      "name": "LibraryQiskit",
+                      "class": "LibraryQiskit",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.40.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Discrete Data",
+          "class": "DiscreteData",
+          "args": {},
+          "module": "modules.applications.QML.generative_modeling.data.data_handler.DiscreteData",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.23.5"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "CircuitCardinality",
+              "class": "CircuitCardinality",
+              "args": {},
+              "module": "modules.circuits.CircuitCardinality",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "LibraryQiskit",
+                  "class": "LibraryQiskit",
+                  "args": {},
+                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                  "requirements": [
+                    {
+                      "name": "qiskit",
+                      "version": "0.40.0"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.23.5"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "3.3.0"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
     }
   ]
 }

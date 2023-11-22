@@ -29,11 +29,5 @@ modules.applications.QML
    :recursive:
 
    modules.applications.QML.QML
-   modules.applications.QML.circuits
-   modules.applications.QML.data
-   modules.applications.QML.data_handler
    modules.applications.QML.generative_modeling
-   modules.applications.QML.libraries
-   modules.applications.QML.training
-   modules.applications.QML.transformations
 

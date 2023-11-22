@@ -79,10 +79,10 @@ class PIT(Transformation):
         Transforms the input dataset using PIT transformation and computes histograms
         of the training dataset in the transformed space.
 
-        :param data_set: dataset
-        :type graph: npdarray
+        :param input_data: dataset
+        :type input_data: dict
         :param config: config with the parameters specified in Config class
-        :type config: Config
+        :type config: dict
         :return: dict with MinMax transformation, time it took to map it
         :rtype: tuple(dict, float)
         """

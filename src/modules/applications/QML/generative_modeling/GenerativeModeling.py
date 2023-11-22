@@ -87,7 +87,7 @@ class GenerativeModeling(QML):
         The number of qubits is chosen for this problem.
 
         :param config:
-        :type config: Config
+        :type config: dict
         :return: n_qubits
         :rtype: dict
         """

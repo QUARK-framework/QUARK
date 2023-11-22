@@ -29,4 +29,7 @@ modules.applications.QML.generative\_modeling
    :recursive:
 
    modules.applications.QML.generative_modeling.GenerativeModeling
+   modules.applications.QML.generative_modeling.data
+   modules.applications.QML.generative_modeling.mappings
+   modules.applications.QML.generative_modeling.transformations
 

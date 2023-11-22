@@ -1,7 +1,7 @@
-﻿modules
-=======
+modules.training
+================
 
-.. automodule:: modules
+.. automodule:: modules.training
 
    
    
@@ -28,10 +28,7 @@
    :template: custom-module-template.rst
    :recursive:
 
-   modules.Core
-   modules.applications
-   modules.circuits
-   modules.devices
-   modules.solvers
-   modules.training
+   modules.training.Inference
+   modules.training.QCBM
+   modules.training.Training
 

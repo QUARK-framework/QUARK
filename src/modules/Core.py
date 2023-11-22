@@ -32,8 +32,7 @@ class Core(ABC):
     def __init__(self, name: str = None):
         """
         Constructor method
-        :param name: name used to identify this QUARK module.
-                     If not specified class name will be used as default
+        :param name: name used to identify this QUARK module. If not specified class name will be used as default.
         :type name: str
         """
         self.submodule_options = []

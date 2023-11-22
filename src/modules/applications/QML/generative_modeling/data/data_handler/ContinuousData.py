@@ -135,10 +135,9 @@ class ContinuousData(DataHandler):
         """
         Calculate KL in original space.
 
-        :param solution: A dictionary-like object containing the solution data,
-        including histogram_generated_original and histogram_train_original.
+        :param solution: A dictionary-like object containing the solution data, including histogram_generated_original
+                         and histogram_train_original.
         :type solution: list
-
         :return: KL for the generated samples and the time it took to calculate it.
         :rtype: tuple(float, float)
         """

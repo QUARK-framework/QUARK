@@ -1,4 +1,4 @@
-﻿modules.applications
+modules.applications
 ====================
 
 .. automodule:: modules.applications

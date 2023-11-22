@@ -24,12 +24,15 @@ ConfigManager.ConfigManager
       ~ConfigManager.get_config
       ~ConfigManager.get_reps
       ~ConfigManager.initialize_module_classes
+      ~ConfigManager.is_legacy_config
       ~ConfigManager.load_config
       ~ConfigManager.print
       ~ConfigManager.query_module
       ~ConfigManager.save
       ~ConfigManager.set_config
       ~ConfigManager.start_create_benchmark_backlog
+      ~ConfigManager.translate_legacy_config
+      ~ConfigManager.translate_legacy_config_helper
    
    
 

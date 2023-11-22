@@ -137,7 +137,7 @@ class PVC(Optimization):
         seams = config['seams']
 
         # Read in the original graph
-        graph = nx.read_gpickle(os.path.join(os.path.dirname(__file__), "reference_graph.gpickle"))
+        graph = nx.read_gpickle(os.path.join(os.path.dirname(__file__), "data", "reference_graph.gpickle"))
 
         # Remove seams until the target number of seams is reached
         # Get number of seam in graph

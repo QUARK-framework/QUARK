@@ -4,7 +4,7 @@ Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating
 QUARK supports various applications (e.g., TSP, MaxSAT or PVC), different solvers (e.g. Annealing) and different quantum devices (e.g., D-Wave, IonQ), and simulators.
 It is designed to be easily extendable in all of its components (Applications, Mappings, Solvers and Devices).
 
-> __Disclaimer:__ This "main" branch contains the original QUARK 1.0 code while we finish the work on QUARK 2.0 in the "dev" branch. So please checkout the "dev" branch if you want to use QUARK 2.0.
+> __Disclaimer:__ This branch contains the original QUARK 1.0 code. So please checkout the "main" branch if you want to use QUARK 2.0.
 
 
 

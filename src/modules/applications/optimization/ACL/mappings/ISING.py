@@ -13,10 +13,11 @@
 #  limitations under the License.
 
 from typing import TypedDict
+from more_itertools import locate
+
 from qiskit_optimization import QuadraticProgram
 import numpy as np
-import re
-from qiskit_optimization.converters import QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary, LinearEqualityToPenalty
+from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from modules.applications.Mapping import *
 from utils import start_time_measurement, end_time_measurement
@@ -24,10 +25,9 @@ from utils import start_time_measurement, end_time_measurement
 # global variable to remember relevant variables of the model
 global_variables = 0
 
-
-class Qubo(Mapping):
+class Ising(Mapping):
     """
-    QUBO formulation for the ACL.
+    Qiskit ISING formulation for the ACL.
 
     """
 
@@ -36,7 +36,7 @@ class Qubo(Mapping):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["Annealer"]
+        self.submodule_options = ["QAOA", "PennylaneQAOA", "QiskitQAOA"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -50,6 +50,10 @@ class Qubo(Mapping):
             {
                 "name": "numpy",
                 "version": "1.23.5"
+            },
+            {
+                "name": "more-itertools",
+                "version": "9.0.0"
             },
             {
                 "name": "qiskit-optimization",
@@ -121,106 +125,50 @@ class Qubo(Mapping):
                                  name=constraint["name"])
         return qp
 
-    def convert_string_to_arguments(self, input_string):
-        terms = re.findall(r'[+\-]?[^+\-]+', input_string)
-        # Convert the penalty string to a list of lists of the individual arguments in the penalty term
-        result = [term.strip() for term in terms]
-        separated_arguments = []
-        first_item = True
-        # Loop over all arguments in the penalty
-        for argument in result:
-            if first_item is True:
-                # Remove "maximize" or minimize string from the first argument
-                argument = argument[8:]
-                first_item = False
-            if "*" in argument:
-                # The variables in each argument are connected by "*" signs. Here we split the variables
-                elements = argument.split('*')
-                # Convert string of numbers to floats
-                new_argument = (elements[0].strip())
-                # Remove empty strings
-                new_argument = [int(new_argument.replace(" ", "")) if new_argument.replace(" ", "").isdigit() else
-                                float(new_argument.replace(" ", ""))]
-                for el in elements[1:]:
-                    new_argument += [el.strip()]
-                separated_arguments.append(new_argument)
-            else:
-                separated_arguments.append(argument)
-        return separated_arguments
-
-    def construct_qubo(self, penalty, variables):
-        """
-        Creates qubo matrix of the form x^T * Q + x
-        """
-        # Create empty qubo matrix
-        count_variables = len(variables)
-        qubo = np.zeros((count_variables, count_variables))
-
-        # Iterate through all the variables twice (x^T, x)
-        for col, variable in enumerate(variables):
-            for row, variable2 in enumerate(variables):
-                # Save the parameters (values in the qubo)
-                parameter = 0
-                for argument in penalty:
-                    if type(argument) is list:
-                        # squared variables in diagonals (x^2 == x)
-                        if len(argument) == 2:
-                            if any(isinstance(elem, str) and variable in elem for elem in argument) and col == row:
-                                parameter += argument[0]
-                        # Multiplication of different variables not on diagonal
-                        if len(argument) == 3:
-                            if variable in argument and variable2 in argument and variable != variable2:
-                                parameter += argument[0]
-                    # For the variables on the diagonal, if the parameter is zero, we still have to check the sign in
-                    # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
-                    elif type(argument) is str:
-                        if variable in argument and variable2 in argument and variable == variable2:
-                            if "-" in argument:
-                                parameter += -1
-                qubo[col, row] = parameter
-        # Minimization problem
-        qubo = -qubo
-        print(qubo)
-        return qubo
-
     def map(self, problem: any, config: Config) -> (dict, float):
         """
         Use Ising Mapping of Qiskit Optimize
-        Converts linear program created with pulp to quadratic program to ising with qiskit to qubo matrix
-
         :param config: config with the parameters specified in Config class
         :type config: Config
-        :return: dict with the Qubo, time it took to map it
+        :return: dict with the Ising, time it took to map it
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
 
-        # Map Linear problem from dictionary (generated by pulp) to quadratic program to qubo
+        # Map Linear problem from dictionary (generated by pulp) to quadratic program
         qp = self.map_pulp_to_qiskit(problem)
         print(qp.prettyprint())
         logging.info(qp.export_as_lp_string())
-        ineq2eq = InequalityToEquality()
-        qp_eq = ineq2eq.convert(qp)
-        int2bin = IntegerToBinary()
-        qp_eq_bin = int2bin.convert(qp_eq)
-        lineq2penalty = LinearEqualityToPenalty(100)
-        qubo = lineq2penalty.convert(qp_eq_bin)
-        print(qubo)
 
+        # convert quadratic problem to qubo to ising
+        conv = QuadraticProgramToQubo()
+        qubo = conv.convert(qp)
         # get variables
         variables = []
         for variable in qubo.variables:
             variables.append(variable.name)
 
-        # convert penalty term to string to qubo
-        qubo_string = str(qubo.objective)
-        arguments = self.convert_string_to_arguments(qubo_string)
-        qubo = self.construct_qubo(arguments, variables)
+        qubitOp, _ = qubo.to_ising()
 
         global global_variables
         global_variables = variables
 
-        return {"Q": qubo}, end_time_measurement(start)
+        # reverse generate J and t out of qubit PauliSumOperator from qiskit
+        t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
+        j_matrix = np.zeros((qubitOp.num_qubits, qubitOp.num_qubits), dtype=complex)
+
+        for i in qubitOp:
+            pauli_str, coeff = i.primitive.to_list()[0]
+            logging.info((pauli_str, coeff))
+            pauli_str_list = list(pauli_str)
+            index_pos_list = list(locate(pauli_str_list, lambda a: a == 'Z'))
+            if len(index_pos_list) == 1:
+                # update t
+                t_matrix[index_pos_list[0]] = coeff
+            elif len(index_pos_list) == 2:
+                j_matrix[index_pos_list[0]][index_pos_list[1]] = coeff
+
+        return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> (dict, float):
         """
@@ -232,15 +180,17 @@ class Qubo(Mapping):
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
+        if np.any(solution == "-1"):  # ising model output from Braket QAOA
+            solution = self._convert_ising_to_qubo(solution)
         result = {}
         result["status"] = [0]
-        objective_value = 0
 
         variables = {}
+        result["status"] = [0]
+        objective_value = 0
         for bit in solution:
             if solution[bit] > 0:
-                # We only care about assignments of vehicles to platforms:
-                # We map the solution to the original variables
+                # We only care about assignments:
                 if "x" in global_variables[bit]:
                     variables[global_variables[bit]] = solution[bit]
                     result["status"] = 'Optimal'
@@ -249,9 +199,24 @@ class Qubo(Mapping):
         result["obj_value"] = objective_value
         return result, end_time_measurement(start)
 
+    @staticmethod
+    def _convert_ising_to_qubo(solution: any) -> any:
+        solution = np.array(solution)
+        with np.nditer(solution, op_flags=['readwrite']) as it:
+            for x in it:
+                if x == -1:
+                    x[...] = 0
+        return solution
+
     def get_default_submodule(self, option: str) -> Core:
-        if option == "Annealer":
-            from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
-            return Annealer()
+        if option == "QAOA":
+            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            return QAOA()
+        elif option == "PennylaneQAOA":
+            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            return PennylaneQAOA()
+        elif option == "QiskitQAOA":
+            from modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
+            return QiskitQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

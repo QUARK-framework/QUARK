@@ -97,6 +97,8 @@ class MIPaclp(Solver):
         status = problem_instance.solve()
         obj_value = pulp.value(problem_instance.objective)
         solution_data = {"status": pulp.LpStatus[status], "obj_value": obj_value}
+        variables = {}
         for v in problem_instance.variables():
-            solution_data[v.name] = v.varValue
+            variables[v.name] = v.varValue
+            solution_data["variables"] = variables
         return solution_data, end_time_measurement(start), {}

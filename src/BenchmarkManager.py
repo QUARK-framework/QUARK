@@ -48,10 +48,13 @@ class BenchmarkManager:
     respective framework components. After executing the benchmarks, it collects the generated data and saves it.
     """
 
-    def __init__(self):
+    def __init__(self, fail_fast: bool = False):
         """
         Constructor method
+        :param fail_fast: Boolean whether a single failed benchmark run causes QUARK to fail
+        :type fail_fast: bool
         """
+        self.fail_fast = fail_fast
         self.application = None
         self.application_configs = None
         self.results = []
@@ -160,6 +163,8 @@ class BenchmarkManager:
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                        if self.fail_fast:
+                            raise
 
                 for record in benchmark_records:
                     record.sum_up_times()

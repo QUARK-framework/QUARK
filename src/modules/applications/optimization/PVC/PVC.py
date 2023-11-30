@@ -14,6 +14,7 @@
 
 import itertools
 from typing import TypedDict
+import pickle
 
 import networkx as nx
 import numpy as np
@@ -137,7 +138,8 @@ class PVC(Optimization):
         seams = config['seams']
 
         # Read in the original graph
-        graph = nx.read_gpickle(os.path.join(os.path.dirname(__file__), "data", "reference_graph.gpickle"))
+        with open(os.path.join(os.path.dirname(__file__), "data", "reference_graph.gpickle"), "rb") as file:
+            graph = pickle.load(file)
 
         # Remove seams until the target number of seams is reached
         # Get number of seam in graph
@@ -300,4 +302,5 @@ class PVC(Optimization):
         return distance, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
-        nx.write_gpickle(self.application, f"{path}/graph_iter_{iter_count}.gpickle")
+        with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
+            pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)

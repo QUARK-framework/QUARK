@@ -19,7 +19,6 @@ from time import time
 import logging
 
 from modules.Core import Core
-
 from modules.applications.Application import Application as Application_NEW
 from quark2_adapter.legacy_classes.Application import Application as Application_OLD
 from modules.applications.Mapping import Mapping as Mapping_NEW
@@ -234,7 +233,7 @@ def recursive_replace_dict_keys(obj: any)-> any:
             obj_new[str(key)] = recursive_replace_dict_keys(obj[key])
     elif isinstance(obj, list):
         obj_new = []
-        for i, element in enumerate(obj):
+        for element in obj:
             obj_new.append(recursive_replace_dict_keys(element))
     elif isinstance(obj, tuple):
         obj_new = tuple(recursive_replace_dict_keys(element) for element in obj)
@@ -324,7 +323,8 @@ class SolverAdapter(Solver_NEW, Solver_OLD, ABC):
         run_kwargs = {
             "store_dir": kwargs["store_dir"], "repetition": kwargs["rep_count"]}
         raw_solution, runtime, additional_solver_information = self.run(input_data["mapped_problem"],
-                                                                        device_wrapper=input_data["device"], config=config, **run_kwargs)
+                                                                        device_wrapper=input_data["device"],
+                                                                        config=config, **run_kwargs)
         self.metrics.add_metric("additional_solver_information", dict(
             additional_solver_information))
         self.metrics.add_metric("solution_raw", self.raw_solution_to_json(raw_solution))

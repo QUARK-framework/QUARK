@@ -47,7 +47,6 @@ class Device(ABC):
         :rtype: dict
         """
         return {
-            
         }
 
     def set_config(self, config):

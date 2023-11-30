@@ -199,8 +199,8 @@ class Application(ABC):
 
     def get_submodule(self, mapping_option: str) -> any:
         """
-        If self.sub_options is not None, a mapping is instantiated according to the information given in self.sub_options.
-        Otherwise, get_mapping is called as fall back.
+        If self.sub_options is not None, a mapping is instantiated according to the information given in
+        self.sub_options. Otherwise, get_mapping is called as fall back.
 
         :param mapping_option: String with the option
         :type mapping_option: str

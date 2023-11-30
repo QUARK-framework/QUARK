@@ -73,8 +73,8 @@ class Solver(ABC):
 
     def get_submodule(self, device_option: str) -> any:
         """
-        If self.sub_options is not None, a device is instantiated according to the information given in self.sub_options.
-        Otherwise, get_device is called as fall back.
+        If self.sub_options is not None, a device is instantiated according to the information given in
+        self.sub_options. Otherwise, get_device is called as fall back.
 
         :param device_option: String with the option
         :type device_option: str
@@ -84,7 +84,7 @@ class Solver(ABC):
         if self.sub_options is None:
             return self.get_device(device_option)
         else:
-            return _get_instance_with_sub_options(self.sub_options, device_option, device_option)
+            return _get_instance_with_sub_options(self.sub_options, device_option)
 
     @abstractmethod
     def get_device(self, device_option: str) -> any:

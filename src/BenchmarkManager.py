@@ -39,6 +39,8 @@ comm = get_comm()
 
 matplotlib.rcParams['savefig.dpi'] = 300
 
+from tqpm.devices.AsyncDevice import AsyncJobData, AsyncStatus
+
 
 class BenchmarkManager:
     """
@@ -48,7 +50,7 @@ class BenchmarkManager:
     respective framework components. After executing the benchmarks, it collects the generated data and saves it.
     """
 
-    def __init__(self):
+    def __init__(self, raise_errors = False):
         """
         Constructor method
         """
@@ -57,6 +59,7 @@ class BenchmarkManager:
         self.results = []
         self.store_dir = None
         self.benchmark_record_template = None
+        self.raise_errors = raise_errors
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:
         """
@@ -83,7 +86,7 @@ class BenchmarkManager:
         logger.addHandler(filehandler)
 
     def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list[dict],
-                              store_dir: str = None) -> None:
+                              store_dir: str = None, raise_errors: bool = False) -> None:
         """
         Executes the benchmarks according to the given settings.
 
@@ -95,7 +98,7 @@ class BenchmarkManager:
         :type store_dir: str
         :rtype: None
         """
-
+        self.raise_errors = raise_errors
         self._create_store_dir(store_dir, tag=benchmark_config_manager.get_config()["application"]["name"].lower())
         benchmark_config_manager.save(self.store_dir)
         benchmark_config_manager.load_config(app_modules)
@@ -160,6 +163,8 @@ class BenchmarkManager:
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                        if self.raise_errors:
+                            raise Exception from error
 
                 for record in benchmark_records:
                     record.sum_up_times()
@@ -193,6 +198,19 @@ class BenchmarkManager:
         :return: tuple with the output of this step and the according BenchmarkRecord
         :rtype: tuple(any, BenchmarkRecord)
         """
+        
+        def unpack_async_job_if_possible(data):
+            if isinstance(data, AsyncJobData) and data.status == AsyncStatus.DONE :
+                #TODO: condition that the module must be the same as the module_name of the AsyncJob
+                    return data.result
+            else:
+                return data
+            
+        def is_unfinished_job(data):
+            return isinstance(unpack_async_job_if_possible(data))
+                
+
+        
 
         # Only the value of the dict is needed (dict has only one key)
         module = module[next(iter(module))]
@@ -205,17 +223,22 @@ class BenchmarkManager:
                                                                                             rep_count=rep_count)
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
 
+        
         # Check if end of the chain is reached
         if not module["submodule"]:
             # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
             benchmark_record = self.benchmark_record_template.copy()
             module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
                 module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count)
-
+        elif is_unfinished_job(module_instance.preprocessed_input):
+            logging.info(f"Asyncronous job {module_instance.preprocessed_input.module_name} is not yet finished")
+            benchmark_record = 0.0
+            module_instance.postprocessed_input = module_instance.preprocessed_input
         else:
             processed_input, benchmark_record = self.traverse_config(module["submodule"],
                                                                      module_instance.preprocessed_input, path,
                                                                      rep_count)
+            processed_input = unpack_async_job_if_possible(processed_input)            
             module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
                                                                                                    module["config"],
                                                                                                    store_dir=path,

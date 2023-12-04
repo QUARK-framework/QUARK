@@ -125,6 +125,7 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+    parser.add_argument('-r', '--resume', help="Continue an interrupted or asyncronous job")
     parser.set_defaults(goal='benchmark')
 
 
@@ -172,7 +173,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
 
-        if args.config:
+        if args.config or args.resume:
+            if not args.config:
+                args.config = os.path.join(args.resume.replace("result.json",''),"config.yml")
             logging.info(f"Provided config file at {args.config}")
             # Loads config
             with open(args.config) as filehandler:
@@ -186,6 +189,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                 config_manager.set_config(benchmark_config)
         else:
             config_manager.generate_benchmark_configs(app_modules)
+            
+        if args.resume:
+            config_manager.add_output_directory(args.resume)
 
         if args.createconfig:
             logging.info("Selected config is:")

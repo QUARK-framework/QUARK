@@ -39,7 +39,7 @@ comm = get_comm()
 
 matplotlib.rcParams['savefig.dpi'] = 300
 
-from parallel.AsyncJob import AsyncJobData, unpack_async_job_if_possible
+from parallel.AsyncJob import AsyncJobData
 
 
 class BenchmarkManager:
@@ -50,7 +50,7 @@ class BenchmarkManager:
     respective framework components. After executing the benchmarks, it collects the generated data and saves it.
     """
 
-    def __init__(self, raise_errors = False):
+    def __init__(self):
         """
         Constructor method
         """
@@ -59,13 +59,8 @@ class BenchmarkManager:
         self.results = []
         self.store_dir = None
         self.benchmark_record_template = None
-        self.raise_errors = raise_errors
         self._async_job_info = None
-        
-    def _resume_store_dir(self, resume_dir) -> None:
-        self.store_dir = resume_dir
-        self._set_logger()
-        
+         
     @property
     def async_job_info(self):
         if not self._async_job_info:
@@ -78,11 +73,7 @@ class BenchmarkManager:
         with open(os.path.join(self.store_dir, "results.json"), encoding='utf-8') as results_file :
             prelim_res = json.load(results_file)
         return prelim_res
-            
-            
-             
-            
-        
+     
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:
         """
@@ -101,6 +92,10 @@ class BenchmarkManager:
                          f"{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
         Path(self.store_dir).mkdir(parents=True, exist_ok=True)
         self._set_logger()
+    
+    def _resume_store_dir(self, resume_dir) -> None:
+        self.store_dir = resume_dir
+        self._set_logger()
 
     def _set_logger(self):
         # Also store the log file to the benchmark dir
@@ -111,7 +106,7 @@ class BenchmarkManager:
         logger.addHandler(filehandler)
 
     def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list[dict],
-                              store_dir: str = None, raise_errors: bool = False) -> None:
+                              store_dir: str = None) -> None:
         """
         Executes the benchmarks according to the given settings.
 
@@ -123,7 +118,6 @@ class BenchmarkManager:
         :type store_dir: str
         :rtype: None
         """
-        self.raise_errors = raise_errors 
         resume_dir = benchmark_config_manager.output_directory        
         if resume_dir:
             self._resume_store_dir(resume_dir)
@@ -170,9 +164,7 @@ class BenchmarkManager:
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
                     try:
-                        
-                        job_info = None if not self.async_job_info else self.async_job_info[idx_backlog]['module']
-                        print(json.dumps(job_info,indent=1))
+
                         self.benchmark_record_template = BenchmarkRecord(datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
                                                                          git_revision_number, git_uncommitted_changes,
                                                                          i, repetitions)
@@ -181,12 +173,22 @@ class BenchmarkManager:
                                                                                   store_dir=path, rep_count=i)
                         self.application.metrics.set_preprocessing_time(preprocessing_time)
                         self.application.save(path, i)
-
+                        #getting information of previously submitted jobs
+                        job_no = (idx_backlog*repetitions + i)  
+                        if self.async_job_info:
+                            job_info = self.async_job_info[job_no-1]['module']
+                        else:
+                            job_info = {}
                         processed_input, benchmark_record = self.traverse_config(backlog_item["submodule"], problem,
-                                                                                 path, rep_count=i, job_info=job_info)
-
-                        _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
-                                                                              rep_count=i)
+                                                                                 path, rep_count=i, asyncrounous_job_info=job_info)
+                        if isinstance(processed_input, AsyncJobData):
+                            self.application.metrics.add_metric("parallel_job_status", processed_input.status.name)
+                            postprocessing_time = 0.0
+                        else:
+                            self.application.metrics.add_metric("parallel_job_status", "finished")
+                                
+                            _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
+                                                                                rep_count=i)
                         self.application.metrics.set_postprocessing_time(postprocessing_time)
                         self.application.metrics.validate()
                         benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
@@ -194,8 +196,6 @@ class BenchmarkManager:
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
-                        if self.raise_errors:
-                            raise Exception from error
 
                 for record in benchmark_records:
                     record.sum_up_times()
@@ -213,7 +213,7 @@ class BenchmarkManager:
         except KeyboardInterrupt:
             logging.warning("CTRL-C detected. Still trying to create results.json.")
 
-    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, job_info: dict) -> (any, BenchmarkRecord):
+    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, asyncrounous_job_info: dict = None) -> (any, BenchmarkRecord):
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
         traverses up again. Once it reaches the root/application, a benchmark run is finished.
@@ -229,44 +229,51 @@ class BenchmarkManager:
         :return: tuple with the output of this step and the according BenchmarkRecord
         :rtype: tuple(any, BenchmarkRecord)
         """
-        print(json.dumps(job_info,indent=1))
+
         # Only the value of the dict is needed (dict has only one key)
         module = module[next(iter(module))]
         module_instance: Core = module["instance"]
-
+        
+        submodule_job_info = None
+        if asyncrounous_job_info:
+            assert module['name'] == asyncrounous_job_info["submodule"]["module_name"], \
+                f"asyncronous job info given, but no information about module {module['name']} stored in it"
+            if 'submodule' in asyncrounous_job_info and asyncrounous_job_info['submodule']:
+                submodule_job_info = asyncrounous_job_info['submodule']
+            
         module_instance.metrics.set_module_config(module["config"])
         module_instance.preprocessed_input, preprocessing_time = module_instance.preprocess(input_data,
                                                                                             module["config"],
                                                                                             store_dir=path,
-                                                                                            rep_count=rep_count)
+                                                                                            rep_count=rep_count,
+                                                                                            asyncrounous_job_info=submodule_job_info)
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
-
-        module_instance.preprocessed_input = unpack_async_job_if_possible(module_instance.preprocessed_input, module['name'], stage="pre")
-        # Check if end of the chain is reached
         if isinstance(module_instance.preprocessed_input, AsyncJobData):
-            logging.info(f"Asyncronous preprocessing job {module_instance.preprocessed_input.module_name} is not yet finished")
-            benchmark_record = self.benchmark_record_template.copy()
-            postprocessing_time = 0.0
             module_instance.postprocessed_input = module_instance.preprocessed_input
-        elif not module["submodule"]:
-            # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
-            benchmark_record = self.benchmark_record_template.copy()
-            module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
-                module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count)
+            benchmark_record =  self.benchmark_record_template.copy()
+            postprocessing_time = 0.0
         else:
-            
-            processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                     module_instance.preprocessed_input, path,
-                                                                     rep_count)
-            processed_input = unpack_async_job_if_possible(processed_input, module["submodule"], stage="post")
-            if isinstance(processed_input, AsyncJobData):
-                module_instance.postprocessed_input, postprocessing_time = processed_input, 0.0
-            else:  
-                module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
-                                                                                                   module["config"],
-                                                                                                   store_dir=path,
-                                                                                                   rep_count=rep_count)
+                
+            # Check if end of the chain is reached
+            if not module["submodule"]:
+                # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
+                benchmark_record = self.benchmark_record_template.copy()
+                module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
+                    module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count, asyncrounous_job_info=submodule_job_info)
 
+            else:
+                processed_input, benchmark_record = self.traverse_config(module["submodule"],
+                                                                        module_instance.preprocessed_input, path,
+                                                                        rep_count, asyncrounous_job_info=submodule_job_info)
+                if not isinstance(processed_input, AsyncJobData):
+                    module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
+                                                                                                    module["config"],
+                                                                                                    store_dir=path,
+                                                                                                    rep_count=rep_count,
+                                                                                                    asyncrounous_job_info=submodule_job_info)
+                else:
+                    module_instance.postprocessed_input, postprocessing_time = processed_input, 0.0
+        
         output = module_instance.postprocessed_input
         module_instance.metrics.set_postprocessing_time(postprocessing_time)
         module_instance.metrics.validate()

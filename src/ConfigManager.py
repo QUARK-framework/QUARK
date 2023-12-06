@@ -465,9 +465,8 @@ class ConfigManager:
     
     def add_output_directory(self, store_dir: str) -> None:
         """Manually adding an output directory from which the processing can be resumed"""
-        assert isinstance(self.config, dict)
         store_dir = store_dir.replace("results.json","")
-        assert(os.path.exists(os.path.join(store_dir,"results.json"))), f"No preliminary results.json file found in {store_dir}"
+        assert(os.path.exists(os.path.join(store_dir,"results.json"))), f"No results.json file found in {store_dir}"
         self.config["output_directory"] = store_dir
         
     @property

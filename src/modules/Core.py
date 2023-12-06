@@ -43,7 +43,6 @@ class Core(ABC):
             name = self.__class__.__name__
         self.name = name
         self.metrics = Metrics(name, os.path.relpath(sys.modules[self.__module__].__file__))
-        self.asyncronous = False
 
     @abstractmethod
     def get_parameter_options(self) -> dict:

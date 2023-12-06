@@ -12,12 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import glob
 import os
 import sys
 import argparse
 import logging
 import json
 from collections.abc import Iterable
+import inquirer
 import yaml
 
 from Installer import Installer
@@ -124,8 +126,10 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
                         required=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
+    parser.add_argument('-rd', '--resume-dir', nargs='+', help='resume the following dirs with async submissions',
+                        required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
-    parser.add_argument('-r', '--resume', help="Continue an interrupted or asyncronous job")
+    parser.add_argument('-r', '--resume', action="store_true", help="Continue an interrupted or asyncronous job")
     parser.set_defaults(goal='benchmark')
 
 
@@ -172,10 +176,38 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             # Gets current env here
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
+            
+        if args.resume and not args.resume_dir:
+            possible_dirs = []
+            dirs_results = glob.glob("benchmark_runs/**/results.json")
+            for dr in dirs_results:
+                with open(dr,'r', encoding='utf-8') as results_json:
+                    res = json.load(results_json)
+                    if any(r.get("module",{}).get("parallel_job_status", "finished") != "finished" for r in res):
+                        possible_dirs.append(dr.replace("results.json",""))
+            if len(possible_dirs) == 1:
+                args.resume_dir = possible_dirs[0]
+            if len(possible_dirs)>1:
+                logging.info("Several unfinished runs. You can also specify by --resume-dir")
+                answer = inquirer.prompt(
+                    [inquirer.List("resume_dir",
+                                   message="Several unfinished runs."
+                                #    "(You can also specify by --resume-dir <benchmark_run_dir>)\n"
+                                   "Please select directory",
+                                   choices=possible_dirs
+                                   )])
+                args.resume_dir = answer["resume_dir"]
+                
+            if len(possible_dirs) == 0 :
+                logging.info("All parallel jobs already collected")
+                exit(0)
+            
+                        
+            
 
-        if args.config or args.resume:
+        if args.config or args.resume_dir:
             if not args.config:
-                args.config = os.path.join(args.resume.replace("result.json",''),"config.yml")
+                args.config = os.path.join(args.resume_dir.replace("result.json",''),"config.yml")
             logging.info(f"Provided config file at {args.config}")
             # Loads config
             with open(args.config) as filehandler:
@@ -190,8 +222,8 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
         else:
             config_manager.generate_benchmark_configs(app_modules)
             
-        if args.resume:
-            config_manager.add_output_directory(args.resume)
+        if args.resume_dir:
+            config_manager.add_output_directory(args.resume_dir)
 
         if args.createconfig:
             logging.info("Selected config is:")

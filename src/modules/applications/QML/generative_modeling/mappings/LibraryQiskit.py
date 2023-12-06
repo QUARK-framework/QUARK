@@ -24,7 +24,7 @@ import numpy as np
 from modules.training.QCBM import QCBM
 from modules.training.Inference import Inference
 from modules.applications.QML.generative_modeling.mappings.Library import Library
-
+from time import perf_counter
 logging.getLogger("qiskit").setLevel(logging.WARNING)
 
 
@@ -89,7 +89,7 @@ class LibraryQiskit(Library):
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
-                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
+                           "aer_simulator_cpu","aer_sim_gpu_Fake_Guadalupe","aer_sim_cpu_Fake_Guadalupe" ,"ionQ_Harmony", "Amazon_SV1"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator\
                              uses the measurement probability vector, the others are shot based)"
             },
@@ -98,6 +98,11 @@ class LibraryQiskit(Library):
                 "values": [100, 1000, 10000, 1000000],
                 "description": "How many shots do you want use for estimating the PMF of the model?\
                  (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+            },
+
+            "transpile_optimization_level": {
+                "values": [1, 2, 3, 0],
+                "description": "Switch between different optimizaition levels in the Qiskit Transpile routine. 1: light optimization, 2: heavy optimization, 3: even heavier optimization, 0: no optimization. 1 as standard option"
             }
         }
 
@@ -201,6 +206,17 @@ class LibraryQiskit(Library):
             from qiskit import Aer # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
+        
+        elif config in ["aer_sim_cpu_Fake_Guadalupe","aer_sim_gpu_Fake_Guadalupe"]:
+            from qiskit.providers.fake_provider import FakeGuadalupeV2
+            from qiskit.providers.aer import AerSimulator
+            backend = AerSimulator.from_backend(FakeGuadalupeV2())
+            if config=="aer_sim_gpu_Fake_Guadalupe":
+                device_to_use = "GPU"
+            else:
+                device_to_use = "CPU"
+            backend.set_options(device=device_to_use)
+
 
         elif config == "aer_simulator_cpu":
             from qiskit import Aer # pylint: disable=C0415
@@ -249,7 +265,7 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int) -> callable:
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int, transpile_optimization_level = 1) -> callable:
         """
         This method combnines the qiskit circuit implemenation and the selected backend and returns a function, 
         that will be called during training. 
@@ -265,8 +281,13 @@ class LibraryQiskit(Library):
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """
+        start = perf_counter()
         n_qubits = circuit.num_qubits
-        circuit_transpiled = transpile(circuit, backend=backend)
+        circuit_transpiled = transpile(circuit, backend=backend, optimization_level = transpile_optimization_level)
+        logging.info(f"Using Transpile optimization level {transpile_optimization_level}")
+        logging.info(f"With the following gates: {circuit_transpiled.count_ops()}")
+        logging.info(f"Process took {perf_counter() - start} seconds")
+        logging.info(f"{backend=}")
 
         if config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
             circuit_transpiled.remove_final_measurements()
@@ -304,7 +325,7 @@ class LibraryQiskit(Library):
                 return pmfs, samples
 
         elif config in ["cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_cpu",
-                                "aer_simulator_gpu"]:
+                                "aer_simulator_gpu","aer_sim_gpu_Fake_Guadalupe","aer_sim_cpu_Fake_Guadalupe"]:
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
                 qobjs = assemble(all_circuits, backend=backend)

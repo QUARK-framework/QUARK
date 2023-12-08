@@ -11,3 +11,4 @@ Reference
    Config Manager <_autosummary/ConfigManager>
    Metrics <_autosummary/Metrics>
    Installer <_autosummary/Installer>
+   Plotter <_autosummary/Plotter>

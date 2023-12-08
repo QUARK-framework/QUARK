@@ -69,6 +69,18 @@ In addition, there are some special flags you can set for each parameter:
     - :code:`custom_input`: Enabling this feature for your parameter will give the user the option to enter a custom input (text or numbers) for this value. Keep in mind that there is no validation of this user input!
     - :code:`postproc`: Specifies a function that can be called and applied to the parameters, which must be callable.
 
+Application Score
+"""""""""""""""""
+
+For applications, there is the option to provide a set of fields representing the application score, which defines the
+overall quality of the benchmark run in the view of the application.
+If these three fields are present in the :code:`Metrics` object of the application, the :code:`Plotter` class will generate some plots visualizing the application score:
+
+    - "application_score_value": Value of the application score. None if there is no valid application score for this run.
+    - "application_score_unit": Unit of the application will be used for the y-axis of the application score plot.
+    - "application_score_type": The type of the application score needs to be a string. For example :code:`str(float)`.
+
+
 Example for an application, which should reside under ``src/modules/applications/myApplication/``:
 
 .. code-block:: python
@@ -141,9 +153,12 @@ Example for an application, which should reside under ``src/modules/applications
                     input_data)
                 if solution_validity and processed_solution:
                    solution_quality, time_to_evaluation = self.evaluate(processed_solution)
+                else:
+                   solution_quality = None
 
-                self.metrics.add_metric_batch({"solution_validity": solution_validity, "solution_quality": solution_quality,
-                           "solution": input_data})
+                self.metrics.add_metric_batch({"solution_validity": solution_validity,
+                          "application_score_value": solution_quality, "application_score_unit": "score",
+                          "application_score_type": str(float), "solution": input_data})
 
                 return solution_validity, sum(time_to_validation, time_to_evaluation))
 

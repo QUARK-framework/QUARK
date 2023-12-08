@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 import networkx as nx
+import pickle
 
 # Read in the original graph
 graph = nx.MultiDiGraph()
@@ -58,4 +59,5 @@ with open("reference_data.txt") as infile:
             graph.add_edge((s_start, n_start), (s_end, n_end), c_start=c_start, t_start=t_start, c_end=c_end,
                            t_end=t_end, weight=duration)
 
-nx.write_gpickle(graph, "reference_graph.gpickle")
+with open("reference_graph.gpickle", "wb") as file:
+    pickle.dump(graph, file, pickle.HIGHEST_PROTOCOL)

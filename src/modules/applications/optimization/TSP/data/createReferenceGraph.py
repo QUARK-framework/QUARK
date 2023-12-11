@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 import networkx as nx
+import pickle
 import tsplib95
 
 # Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
@@ -29,6 +30,7 @@ for edge in graph.edges:
 print("Loaded graph:")
 print(nx.info(graph))
 
-nx.write_gpickle(graph, "reference_graph.gpickle")
+with open("reference_graph.gpickle", "wb") as file:
+    pickle.dump(graph, file, pickle.HIGHEST_PROTOCOL)
 
 print("Saved graph as reference_graph.gpickle")

@@ -21,6 +21,7 @@ from collections.abc import Iterable
 import yaml
 
 from Installer import Installer
+from Plotter import Plotter
 from utils import _expand_paths
 from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
 
@@ -82,7 +83,7 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
 
 
-def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
+def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fast: bool = False) -> None:
     """
     Starts a benchmark run from the code
 
@@ -110,7 +111,7 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
 
-    benchmark_manager = BenchmarkManager()
+    benchmark_manager = BenchmarkManager(fail_fast=fail_fast)
 
     # Can be overridden by using the -m|--modules option
     installer = Installer()
@@ -125,6 +126,8 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+    parser.add_argument('-ff', '--failfast', help='Flag whether a single failed benchmark run causes QUARK to fail',
+                        required=False, action=argparse.BooleanOptionalAction)
     parser.set_defaults(goal='benchmark')
 
 
@@ -152,7 +155,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
     :rtype: None
     """
     from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
-    benchmark_manager = BenchmarkManager()
+    benchmark_manager = BenchmarkManager(fail_fast=args.failfast)
 
     if args.summarize:
         benchmark_manager.summarize_results(args.summarize)
@@ -195,7 +198,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()
-                benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
+                Plotter.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

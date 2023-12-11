@@ -129,8 +129,9 @@ class Optimization(Application, ABC):
             solution_quality = None
             time_to_evaluation = None
 
-        self.metrics.add_metric_batch({"solution_validity": solution_validity, "solution_quality": solution_quality,
-                                       "solution_quality_unit": self.get_solution_quality_unit(),
+        self.metrics.add_metric_batch({"application_score_value": solution_quality,
+                                       "application_score_unit": self.get_solution_quality_unit(),
+                                       "application_score_type": str(float),
                                        "processed_solution": processed_solution,
                                        "time_to_process_solution": time_to_process_solution,
                                        "time_to_validation": time_to_validation,

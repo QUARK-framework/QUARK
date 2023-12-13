@@ -1,15 +1,20 @@
-# Protokoll zum Treffen vom [Datum]
+# Protocol meeting xx.yy.zzzz
 
-# Teilnehmer
-- Friedrich Wagner
-- Eric Stopfer
-- Marvin Erdmann
-- Daria Gutina
-- Ulrich Schwenk
-- Kimberly Lange
-- Lennart Piro
-- David Rudolph
+# Participants
+- Friedrich Wagner (IIS)
+- Eric Stopfer (IIS) - protocol
+- Marvin Erdmann (BMW)
+- Daria Gutina (OptWare)
+- Ulrich Schwenk (OptWare)
+- Kimberly Lange (OptWare)
+- Lennart Piro (MLReply) - absent
+- Florian Geissler (IKS)
+- Theodora Dragan (IKS)
 
-# Zusammenfassung
+# Summary
 
-# Arbeitsaufträge
+## Project Coordination
+
+
+# To-dos
+

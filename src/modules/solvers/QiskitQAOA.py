@@ -22,6 +22,8 @@ from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit.circuit.library import TwoLocal
 from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
+from qiskit_ibm_runtime import QiskitRuntimeService
+from qiskit_ibm_runtime import Estimator, Sampler, Session, Options
 
 from modules.solvers.Solver import *
 from utils import start_time_measurement, end_time_measurement
@@ -37,7 +39,7 @@ class QiskitQAOA(Solver):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu"]
+        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm eagle"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -69,6 +71,9 @@ class QiskitQAOA(Solver):
         elif option == "qasm_simulator_gpu":
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("qasm_simulator_gpu")
+        elif option == "ibm eagle":
+            from modules.devices.IBMEagle import IBMEagle
+            return IBMEagle("ibm eagle")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
@@ -204,10 +209,15 @@ class QiskitQAOA(Solver):
     @staticmethod
     def _get_quantum_instance(device_wrapper: any) -> any:
         backend = Aer.get_backend("qasm_simulator")
+        service = QiskitRuntimeService(channel="ibm_quantum")
+        backend_eagle = service.least_busy(min_num_qubits=127, operational=True, simulator=False)
         if device_wrapper.device == 'qasm_simulator_gpu':
             logging.info("Using GPU simulator")
             backend.set_options(device='GPU')
             backend.set_options(method='statevector_gpu')
+        if device_wrapper.device == 'ibm eagle':
+            logging.info("Using IBM Eagle")
+            backend_eagle.set_options(device='ibm eagle')
         else:
             logging.info("Using CPU simulator")
             backend.set_options(device='CPU')

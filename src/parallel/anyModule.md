@@ -9,6 +9,9 @@ AsyncCore <|-- AsyncDevice
 AsyncCore <|-- AsyncSolver
 SomeSolverWithQAOALogic <|-- AsyncSolver
 
+AsyncJob <|-- AsyncPOCJob
+AsyncJob <|-- AsyncQaptivaJob
+
 
 note for AsyncSolver "Solver with access to a device"
 
@@ -16,9 +19,9 @@ AsyncCore: +bool is_asynchron
 class AsyncCore{
     +preprocess()
     +postprocess()
-    +abstract sumbit()
+    +abstract submit()
     +abstract collect()
-    +abstract run()
+    +abstract sequencial_run()
 }
 
 class DigitalDevice{
@@ -26,11 +29,30 @@ class DigitalDevice{
 }
 
 class SomeSolverWithQAOALogic{
-    fake_module
-    run()
+    device_wrapper
+}
+class AsyncSolver{
+    submit()
+    collect()
+    sequencial_run()
+}
+
+class AsyncDevice{
+    submit()
+    collect()
+    sequencial_run()
 }
 class SomeSolverWithQUARKLogic{
-    run()
+    sequencial_run()
+}
+
+
+class AsyncJob{
+    property result
+    property status
+    abstract get_result()
+    abstract get_status()
+
 }
 
 ```
@@ -46,7 +68,7 @@ participant AD as AsyncDevice
 
 
 
-BM ->> +BM: run_benchmark()
+BM ->> +BM: sequencial_run_benchmark()
 
 
 BM ->> +BM:traverse_config(preprocessed_input: dict )
@@ -60,7 +82,7 @@ BM ->> +SO: preprocess(problem: dict)
 SO -->> -BM: return job: Job|JobWrapper
 
 BM ->> +BM:traverse_config(preprocessed_input: Job|JobWrapper)
-BM ->> +AD: preprocess/postprocess/run(job: Job|JobWrapper)
+BM ->> +AD: preprocess/postprocess/sequencial_run(job: Job|JobWrapper)
 AD -->> -BM: return job_result: JobResult
 
 BM -->> -BM:traverse_config return : JobResult
@@ -77,7 +99,7 @@ BM -->> -BM:traverse_config return : problem_solution
 BM ->> +MA: postprocess(problem: dict)
 MA -->> -BM: return job: Job|JobWrapper
 
-BM -->> -BM: run_benchmark return wasauchimmer
+BM -->> -BM: sequencial_run_benchmark return wasauchimmer
 
 
 ```

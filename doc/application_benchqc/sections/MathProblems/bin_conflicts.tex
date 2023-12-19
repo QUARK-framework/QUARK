@@ -1,0 +1,32 @@
+\subsubsection{Bin Packing mit Konflikten}\label{subsubsec:bin-packing-with-conflicts}
+
+Eine weitere interessante Erweiterung des Bin Packing Problems ergibt sich durch die Einführung
+von inkompatiblen Objekten.
+Inkompatible Objekte müssen zwingend auf unterschiedliche Behälter aufgeteilt werden \eqref{eq:incompatible}.
+
+Dadurch ergibt sich das folgende ganzzahlige Optimierungsproblem:
+\begin{table}[H]
+    \begin{tabularx}{\textwidth}{  l | X | l }
+    Symbol & Bedeutung & Definitionsbereich \\\hline\hline
+    Mengen & & \\\hline\hline
+    $O$ & Menge der Objekte & $\N$\\\hline
+    $B$ & Menge der Behälter & $\N$\\\hline
+    $I$ & Menge der inkompatiblen Objekte & $\N\times\N$\\\hline\hline
+    Konstanten &  &  \\\hline\hline
+    $c$ & Maximale Kapazität der Behälter & $\N$\\\hline
+    $w_o$ & Benötigte Größe für Objekt $o\in O$ & $\N$\\\hline\hline
+    Variablen &  &  \\\hline\hline
+    $x_{ob}$ & Genau dann, wenn $x_{ob}=1$ wird Objekt $o\in O$ dem Behälter $b\in B$ zugeteilt & $\B$\\\hline
+    $y_b$ & $y_b=1$ gdw.\ Behälter $b\in B$ verwendet wird & $\B$\\\hline
+    \end{tabularx}
+    \caption{Notation zu Bin Packing mit Konflikten}\label{tab:notation_bin_packing_conflicts}
+\end{table}
+
+\begin{align}
+    \min \qquad& \sum_{b\in B} y_b \\
+    \textit{s.t.} \qquad
+    & \sum_{b\in B} x_{ob} = 1~, \qquad &&\forall o\in O  \\
+    & \sum_{o\in O} w_{o} \cdot x_{ob} \leq c \cdot y_b~, \qquad &&\forall b\in B \\
+    & x_{ob} + x_{o'b} \leq 1~, \qquad &&\forall (o,o')\in I, b\in B\label{eq:incompatible}\\
+    & x_{ob} \in \B~, \qquad &&\forall o\in O, b\in B
+\end{align}

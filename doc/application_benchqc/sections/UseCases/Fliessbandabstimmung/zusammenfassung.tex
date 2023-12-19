@@ -1,0 +1,70 @@
+\subsubsection{Anwendungsfall Fließbandabstimmung}\label{subsec:anwendungsfall-fliessbandabstimmung}
+
+\begin{figure}[h]
+    \centering
+    \tikzfig{images/fliessbandabstimmung/balancing}
+    \caption{%
+    \label{fig:balancing}
+    Beispiel für Fließbandabstimmung: Die einem Reihenfolgegraph unterliegenden Arbeitsschritte (1-6)
+        sollen nach Zeitbedarf gleichmäßig auf Arbeitsstationen (I-IV) verteilt werden.
+        Dabei darf die Arbeitslast pro Station 25 Sekunden nicht überschreiten.}
+\end{figure}
+
+Gegeben ist bei dem Problem der Fließbandabstimmung eine Reihe von Arbeitsschritten, die Arbeitsstationen zugeordnet werden sollen.
+Dabei soll eine möglichst geringe Anzahl und eine im Mittel gleichmäßige Auslastung der Arbeitsstationen angestrebt werden.
+Pro Arbeitsstation steht maximal ein Takt zur Verfügung. Zum Taktschlag sollen die Arbeitsaufträge auf der nächsten Station bearbeitet werden.
+Somit darf die summierte durchschnittliche Arbeitszeit der Arbeitsschritte die Taktzeit nicht überschreiten.
+
+Die Arbeitsschritte müssen teilweise in einer vorgegebenen Reihenfolge abgearbeitet werden.
+\Cref{fig:balancing} zeigt im oberen Teil einen beispielhaften Reihenfolgegraphen
+mit den Tätigkeiten (1-6) zu denen auch jeweils eine mittlere Dauer
+(z.B. 10 Sekunden bei Tätigkeit 1) angegeben ist.
+Tätigkeit 2 hängt von Tätigkeit 1 ab und kann deshalb erst durchgeführt werden,
+wenn Tätigkeit 1 bereits abgeschlossen ist.
+Gleiches gilt für Tätigkeit 3, sie hängt wiederum von Tätigkeit 2 ab.
+Tätigkeit 4 im Beispiel kann parallel zu Tätigkeit 2 erfolgen,
+da sie nur von Tätigkeit 1 abhängig ist und nicht etwa von Tätigkeit 2 oder 3.
+
+In \cref{fig:balancing} sind im unteren Teil Arbeitsstationen (I-IV) als offene Behälter angedeutet.
+Den Arbeitsstationen sollen nun, unter Achtung des Reihenfolgegraphen, Tätigkeiten zugeteilt werden.
+Die Taktzeit beträgt 25 Sekunden. Die Zuordnung in \cref{fig:solution_ok} wäre denkbar,
+während die Zuordnung in \cref{fig:solution_fail} nicht möglich ist, da sie dem
+Reihenfolgegraphen widerspricht und Station III die Taktzeit überschreitet.
+
+\begin{figure}[h]
+    \centering
+    \tikzfig{images/fliessbandabstimmung/solution_ok}
+    \caption{Mögliche Lösung für das Ausgangsproblem aus \cref{fig:balancing}}
+    \label{fig:solution_ok}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \tikzfig{images/fliessbandabstimmung/solution_fail}
+    \caption{Unzulässige Lösung für das Ausgangsproblem aus \cref{fig:balancing}}
+    \label{fig:solution_fail}
+\end{figure}
+
+\subsubsection*{Transformation zu Bin Packing}
+% \todo[inline]{evtl. ein eigenes Kapitel für das Mapping einfügen.}
+Das Fließbandabstimmungsproblem lässt sich klassisch als Assembly Line Balancing Problem aus
+\cref{subsubsec:assembly-line-balancing-problem} aufstellen und lösen.
+Die Arbeitsschritte sind dabei die Aufgaben und die Arbeitsstationen die Stationen des klassischen Problems.
+Die Taktzeit wird durch die maximale Zeit pro Station dargestellt.
+
+Zusammengefasst, lässt sich die Fließbandabstimmung wie folgt auf die Notation aus
+\cref{subsubsec:assembly-line-balancing-problem} mappen:
+\begin{table}[H]
+    \begin{tabularx}{\textwidth}{  l | X | l }
+    Symbol & Bedeutung & Definitionsbereich \\\hline\hline
+    Mengen & & \\\hline\hline
+    $T$ & Menge der Arbeitsschritte & $\N$\\\hline
+    $S$ & Menge der Arbeitsstationen & $\N$\\\hline
+    $R$ & Menge an Abhängigkeitsbeziehungen zwischen den Arbeitsschritten & $\N\times\N$\\\hline\hline
+    Konstanten &  &  \\\hline\hline
+    $c$ & Taktzeit & $\N$\\\hline
+    $v_t$ & Benötigte Zeit für Arbeitsschritt $t\in T$ & $\N$\\\hline\hline
+    Variablen &  &  \\\hline\hline
+    $x_{ts}$ & Genau dann, wenn $x_{ts}=1$ wird Arbeitsschritt $t\in T$ der Station $s\in S$ zugeteilt & $\B$\\\hline
+    \end{tabularx}
+    \caption{Notation Fließbandabstimmung}\label{tab:notification_fliessbandabstimmung}
+\end{table}

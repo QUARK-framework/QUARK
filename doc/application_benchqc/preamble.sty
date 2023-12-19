@@ -1,0 +1,179 @@
+% SORT OF ENVIRONMENT VARIABLES
+%--------------------------------------
+\newif\ifcustomer
+\newif\ifenglish
+
+\customerfalse % Ändere zu \customertrue wenn an Kunden rausgehen soll
+\englishtrue
+%--------------------------------------
+\usepackage[ngerman]{babel}
+%\usepackage[english]{babel}
+\usepackage[parfill]{parskip}
+
+% Encoding
+%--------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%--------------------------------------
+
+% Literatur
+%--------------------------------------
+\usepackage[backend=biber,style=alphabetic]{biblatex}
+%--------------------------------------
+
+\usepackage[titletoc]{appendix}
+\usepackage{pdfpages}
+
+% Glossar
+%--------------------------------------
+\usepackage[toc]{glossaries}
+\usepackage{glossaries-extra}
+%\addto\captionsngerman{%
+%    \renewcommand*{\glossaryname}{Glossar}%
+%}
+\makeglossaries
+\setglossarystyle{long3colheader}
+\usepackage{glossar}
+
+% Font
+%--------------------------------------
+\usepackage{helvet}
+%--------------------------------------
+
+% Format
+%--------------------------------------
+\usepackage{float}
+%--------------------------------------
+
+% Tikz
+%--------------------------------------
+\usepackage{tikzit}
+\input{images/tikzstyle.tikzstyles}
+%--------------------------------------
+
+% Tables
+%--------------------------------------
+\usepackage{tabularx}
+%--------------------------------------
+
+% To do Notizen
+%--------------------------------------
+% Wenn die Variable auf customertrue gesetzt wird,
+% dann tauchen die To do Notizen nicht im Dokument auf
+\ifcustomer
+    \RequirePackage[disable]{todonotes}
+\else
+    \RequirePackage{todonotes}
+\fi
+%--------------------------------------
+
+% Enumeration
+%--------------------------------------
+\RequirePackage{enumitem}
+\setenumerate{noitemsep}
+\setitemize{noitemsep}
+\setlist[2]{noitemsep}
+%--------------------------------------
+
+% Hyphenation rules
+%--------------------------------------
+\RequirePackage{hyphenat}
+\hyphenation{Mathe-mathik}
+%--------------------------------------
+
+% Math-specific packages
+%--------------------------------------
+\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+\RequirePackage{amsthm}
+%\setlength{\jot}{13pt}
+
+% Own style for definition
+\newtheoremstyle{definition}
+    {}%         Space above, empty = `usual value'
+    {}%         Space below
+    {}%         Body font
+    {}%         Indent amount (empty = no indent, \parindent = para indent)
+    {\bfseries}% Thm head font
+    {.}%        Punctuation after thm head
+    {\newline}% Space after thm head: \newline = linebreak
+    {}%         Thm head spec
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+
+
+
+% To show an algorithm veeeery niceee
+\usepackage[ruled,vlined]{algorithm2e}
+\SetKwInOut{Boolean}{Boolean}
+
+\usepackage{pgfplots}
+%--------------------------------------
+
+% Graphics und Code-Style
+%--------------------------------------
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{colortbl} % Color-Table
+\usepackage{float} % For placing a figure RIGHT HERE
+\usepackage{caption}
+\usepackage{subcaption}
+%--------------------------------------
+
+% Color definitions
+%--------------------------------------
+\definecolor{optware_green}{HTML}{99CC00}
+\definecolor{optware_green_darker}{HTML}{64AA28}
+\definecolor{optware_green_brighter}{HTML}{CAFF2A}
+\definecolor{optware_blue}{HTML}{003399}
+\definecolor{optware_blue_lighter}{HTML}{1995DE}
+%--------------------------------------
+
+% Version History
+%--------------------------------------
+\usepackage[tablegrid, tocentry]{vhistory}
+%--------------------------------------
+
+% Links, URL, Hyperref
+%--------------------------------------
+% Um die unschönen roten Ränder der Links
+% zu entfernen wird die Option hidelinks
+% hinzugefügt
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+%--------------------------------------
+
+% Special prefs
+%--------------------------------------
+% Unterdrückt die TeX-Warnung von
+% overful or underful hbox
+\hfuzz=5.002pt
+%--------------------------------------
+
+% TColorBox
+%--------------------------------------
+\usepackage[most]{tcolorbox}
+\tcbset{
+    colframe=optware_blue,
+    highlight math style={
+        enhanced, %<-- needed for the ’remember’ options
+        colframe=red,
+        colback=red!10!white,
+        boxsep=0pt
+    }
+}
+%--------------------------------------
+
+
+% math shortcuts
+%--------------------------------------
+\newcommand{\B}{\{0,1\}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+%--------------------------------------
+
+\showoutput

@@ -1,0 +1,208 @@
+\subsubsection{Anwendungsfall Reihenfolgeplanung (Sequencing)}\label{subsubsec:anwendungsfall-reihenfolgeplanung}
+% Allgemeine (high-level) Beschreibung:
+Wie bereits in~\cref{subsec:fliessbandfertigung} beschrieben,
+folgt in modernen Produktionen auf die Fließbandabstimmung,
+in der die benötigten Arbeitsschritte auf Arbeitsstationen verteilt wurden,
+häufig die operative Reihenfolge(fein)planung, auch \emph{Sequencing} genannt.
+Hierbei geht es nun darum, konkrete Arbeitsaufträge,
+die die einzelnen Stationen durchlaufen müssen, in die optimale Reihenfolge zu bringen.
+Wir legen hier eine sogenannte \emph{mixed-model assembly line} zugrunde,
+was bedeutet, dass die Aufträge die Herstellung verschiedener Modelle eines Basisprodukts beschreiben.
+Die benötigten Arbeitsschritte und die Zeit für deren Erledigung unterscheiden sich somit pro Auftrag.
+Die operative Feinplanung muss daher u.a.\ dafür sorgen, dass zu keinem Zeitpunkt zu große Abweichungen (Drift)
+von den in der Fließbandabstimmung verwendeten Mittelwerten pro Station entstehen.
+
+Eine Probleminstanz für das Sequencing besteht aus
+einem Fließband, einer Liste an Aufträgen und einer Liste an Anforderungen bzw.\ Regeln für die Reihenfolge.
+Das Ziel ist es, die Aufträge in eine Reihenfolge zu bringen, die diese Regeln beachtet und eine vorher definierte Zielfunktion optimiert.
+Im Folgenden werden nun die Eingabeparameter und die verschiedenen Komponenten der Zielfunktion und einer validen Lösung genauer erläutert.
+
+\begin{figure}[H]
+    \begin{subfigure}[c]{0.48\textwidth}
+        \centering
+        \tikzfig{images/reihenfolgeplanung/assembly_line}
+        \caption{%
+        \label{fig:sequencing_assembly_line}
+        Ein Fließband mit drei Stationen,
+            die jeweils aus einem Arbeitsplatz bestehen,
+            einen Takt dauern
+            und eine maximale Driftzeit erlauben.
+        Ein Auftrag an Station 1 muss vollständig abgearbeitet sein,
+            bevor er an Station 2 weiterbearbeitet werden kann (durchgezogene Linie).
+        }
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[c]{0.48\textwidth}
+        \centering
+        \tikzfig{images/reihenfolgeplanung/auftraege}
+        \caption{%
+        \label{fig:sequencing_auftraege}
+        Die Aufträge symbolisieren durch die verschiedenen Formen
+        die Herstellung verschiedener Varianten eines Basisprodukts
+        und haben eine individuelle Bearbeitungszeit pro Station.
+        Die zu erledigenden Aufträge sind vorgegeben.
+        }
+    \end{subfigure}
+    \caption{%
+        \label{fig:sequencing_instance}
+        Eine einfache Probleminstanz für das Sequencing.
+        Das Ziel ist eine optimale Abarbeitungsreihenfolge für die Auftragsliste zu finden.
+    }
+\end{figure}
+
+\paragraph{Das Fließband}
+ist üblicherweise bereits durch die Fließbandabstimmung (siehe~\cref{subsec:anwendungsfall-fliessbandabstimmung})
+\marginpar{\scriptsize {\emph{Fließband}:\\ \phantom{s} Taktzeit \\ \phantom{s} Stationen}}
+konfiguriert worden und hat somit eine feste Anzahl an \emph{Arbeitsstationen}---denen die verschiedenen Arbeitsschritte,
+die an einem Produkt ausgeführt werden müssen, zugeteilt wurden---und eine feste \emph{Taktzeit}.
+Ein einfaches Beispiel für ein Fließband mit drei Stationen ist in~\cref{fig:sequencing_assembly_line} illustriert.
+
+Jede Station hat eine vordefinierte Anzahl an \emph{Takten}, für die ein Produkt auf dieser Station verweilen kann,
+\marginpar{\scriptsize {\emph{Station}:\\ \phantom{s} Takte \\ \phantom{s} Plätze}}
+und ist selbst wieder in eine Menge an \emph{Arbeitsplätze} aufgeteilt.
+Jeder Arbeitsplatz kann das Produkt selbst wieder für eine feste Anzahl an Takten bearbeiten
+(was auch dazu führen kann, dass sich ein Arbeitsplatz über mehrere Stationen erstreckt)
+\marginpar{\scriptsize {\emph{Arbeitsplatz}:\\ \phantom{s} Takte \\ \phantom{s} Vorgänger \\ \phantom{s} Drifts}}
+und hat eine Liste an Vorgängerarbeitsplätzen, an denen ein Produkt schon vollständig bearbeitet worden sein muss,
+bevor es an dem aktuellen Arbeitsplatz bearbeitet werden kann. % besteht keine Vorgängerbeziehung zwischen zwei Arbeitsplätzen,
+% kann also gleichzeitig am Produkt gearbeitet werden (wenn z.B. ein Arbeitsplatz der vorherigen Station über diese hinaus arbeitet)
+
+Des Weiteren können für jeden Arbeitsplatz erlaubte \emph{Drifts} festgelegt werden:
+Die Arbeit an diesem Platz darf dann um diese Zeiteinheit früher beginnen bzw.\
+über das Ende der Taktzeit hinausdauern.
+Bei der ersten Arbeitsstation kann es zudem zu einem initialen Drift kommen,
+der z.B.\ durch Verspätungen aus einer vorangegangenen Schicht (mit eigener Reihenfolgeplanung) entstanden ist.
+Die Driftgrenzen dürfen nie überschritten werden,
+da das Produkt dann beispielsweise außerhalb des Arbeitsradius bestimmter Werkzeuge gelangt und das Fließband gestoppt werden müsste.
+Wenn der maximale Drift an einem Arbeitsplatz überschritten würde, muss daher eine sogenannte \emph{Springerin} eingesetzt werden,
+die dann pünktlich den Folgeauftrag übernimmt, während die Person an dem Arbeitsplatz ihren aktuellen Auftrag beendet.
+Diese Person kann dann den Folgeauftrag, der ja bereits von der Springerin bearbeitet wird,
+überspringen und pünktlich zum Taktschlag mit dem nächsten Auftrag fortfahren.
+
+\paragraph{Die Aufträge} bestehen aus einer Auflistung verschiedener Arbeitsschritte, die auf den Arbeitsstationen ausgeführt werden müssen,
+\marginpar{\scriptsize {\emph{Auftrag}:\\ \phantom{s} Zeit \\ \phantom{s} Attribute}}
+um ein konkretes Produkt herzustellen.
+Pro Auftrag kennen wir die benötigte \emph{Arbeitszeit} pro Arbeitsplatz und eine Liste von \emph{Attributen},
+anhand derer Regeln für die Reihenfolge bestimmt werden können.
+\todo{\tiny Sollen Attribute zunächst vernachlässigt werden? Wenn nicht, sollte das Beispiel ggf. erweitert werden}
+Ein vereinfachtes Beispiel ohne Attribute ist in~\cref{fig:sequencing_auftraege} dargestellt.
+
+\paragraph{Die Regeln} schränken den Lösungsraum, also die Anzahl zulässiger Reihenfolgen für die Aufträge,
+zusätzlich ein.
+So lässt sich beispielsweise festlegen, dass Aufträge mit einem bestimmten Attribut einen gewissen zeitlichen Mindestabstand haben.
+Die Regeln stellen jedoch keine starren Vorschriften dar, sondern sollen so gut es geht erfüllt werden.
+% ,weshalb sich ihre Nichterfüllung negativ auf den Zielfunktionswert auswirkt.
+
+\paragraph{Die Lösung} einer konkreten Probleminstanz beinhaltet eine hinsichtlich der Zielfunktion optimierte Reihenfolge der Aufträge.
+Konkret setzt sich der Zielfunktionswert aus drei Komponenten zusammen, die je nach Wichtigkeit mit einem festgelegten Faktor in die Zielfunktion eingehen:
+Die Anzahl an benötigten Springerinnen, der Drift und die Anzahl an verletzen Regeln.
+Im einfachen Beispiel (ohne Attribute und Regeln) in~\cref{fig:example_jumper} würden dementsprechend die benötigte Springerin
+und die Drifts an Station 1 und 2 in die Zielfunktion eingehen.
+\cref{fig:example_optimal} stellt zudem eine Lösung der Instanz dar, die ohne Springerinnen auskommt.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \resizebox{1\textwidth}{!}{
+            \tikzfig{images/reihenfolgeplanung/example_jumper}
+        }
+        \caption{%
+        \label{fig:example_jumper}
+        Die hier angegebene (nicht optimale) Lösung erfordert eine Springerin (rot),
+        da der dritte Auftrag sonst den zulässigen maximalen Drift an Station 1 überschritte.
+        }
+    \end{subfigure}%
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \resizebox{1\textwidth}{!}{
+            \tikzfig{images/reihenfolgeplanung/example_optimal}
+        }
+        \caption{%
+        \label{fig:example_optimal}
+        Diese Lösung ist hinsichtlich der Anzahl der Springerinnen und der aufsummierten Drifts optimal.
+        }
+    \end{subfigure}
+    \caption{%
+    \label{fig:example_sequencing}
+    Beispiel für zwei Lösungen der Instanz aus \cref{fig:sequencing_instance}.
+    Die festgelegte Auftragsreihenfolge liest sich von oben nach unten
+    und die Bearbeitungszeiten der Aufträge sind durch die Länge der horizontalen Balken symbolisiert.
+    Zudem markieren die gestrichelten Linien die maximalen Drifts an den Stationen.
+    Da die Arbeit an Station 2 erst nach dem Arbeitsende an Station 1 beginnen kann,
+    kann ein Drift an Station 1 den Bearbeitungsstart an Station 2 verzögern.
+    Der Startzeitpunkt auf Station 2 ergibt sich also aus dem Maximum von dem Ende des Auftrags auf Station 1
+    und dem Drift des vorherigen Auftrags auf Station 2.
+    Station 3 hingegen hat keine Vorgängerbeziehungen und kann alle Aufträge pünktlich starten,
+    weil sich ein Drift auf Station 2 nicht auf Station 3 auswirkt,
+    sondern die Arbeiten an diesen Stationen gleichzeitig erledigt werden können.}
+\end{figure}
+
+% Input Parameter:
+%Eine Probleminstanz für die Reihenfolgeplanung enthält folgende Informationen:
+%\begin{itemize}
+%    \item Für das Fließband (\textit{line}) gibt es:
+%    \begin{itemize}
+%        \item eine Liste an (verschiedenen) Arbeitsstationen (\textit{stations}) mit:
+%        \begin{itemize}
+%            \item Anzahl Takte (\textit{cycles}) %ermöglicht unterschiedliche Taktzeiten für die Stationen trotz globaler cycle time
+%            \item einer Liste an (verschiedenen) Arbeitsplätzen (\textit{workplaces}) mit:
+%            \begin{itemize}
+%                \item Anzahl Takte (\textit{cycles})
+%                \item Liste an Vorgängern (\textit{predecessors})
+%                \item Informationen über den Drift (\textit{maxEarlyDrift, maxLateDrift, initialDrift})
+%            \end{itemize}
+%        \end{itemize}
+%        \item eine globale Taktzeit (\textit{cycle time}) pro Arbeitsstation (wobei eine Station jedoch mehrere Takte dauern kann)
+%    \end{itemize}
+%    \item Außerdem gibt es eine Anzahl an Aufträgen (\textit{numOrders}), welche aus verschiedenen Arbeitsschritten,
+%    die bei der Fließbandabstimmung (siehe \cref{subsec:anwendungsfall-fliessbandabstimmung}) beachtet wurden und
+%    hier nicht mehr relevant sind.
+%    \item Für jeden Auftrag (\textit{order}) kennen wir:
+%    \begin{itemize}
+%        \item die benötigte Arbeitszeit (\textit{processingTime}) an einer gegebenen Arbeitsstation
+%        \item eine Liste an Attributen (\textit{Attributes})  % kein input -> automatisch erstellt
+%    \end{itemize}
+%    \item Zudem gibt es diverse Anforderungen an bzw.\ Regeln für die Reihenfolge
+    %https://gitlab.optware.de/sequencer/product/90200438-sequencer-mvp/-/blob/main/libs/interfaces/src/assets/problem/problem_data_schema.json?ref_type=heads
+%\end{itemize}
+
+% Output -> result.svg
+%Eine Lösung, also eine konkrete Reihenfolgeplanung, enthält
+%\begin{itemize}
+%    \item eine Reihenfolge der Aufträge (\textit{SequenceResult})
+%    \item und einen Zielfunktionswert, der sich zusammensetzt aus:
+%    \begin{itemize}
+%        \item jumper
+%        \item sequencingRules % Anzahl verletzter Regeln
+%        \item lateDrift
+%    \end{itemize}
+%\end{itemize}
+
+\subsubsection*{Datensatz}\label{subsubsec:datensatz-sequencer}
+% https://gitlab.optware.de/sequencer/product/90200438-sequencer-mvp/-/blob/main/libs/interfaces/src/assets/data-generation/generation_input_scheme.json?ref_type=heads
+Der Datensatz wurde mittels eines \textit{data generators} künstlich erzeugt.
+Dafür wurden für die verschiedenen Parameter Werte ausgewählt bzw.\ ein Bereich angegeben, aus dem der
+Wert des Parameters gleichverteilt ausgewählt wurde, um Instanzen verschiedener realer Probleme zu simulieren.
+
+Um die Komplexität des Problems zu verringern, wurden in Bezug auf das oben präsentierte Problem folgende
+Vereinfachungen vorgenommen:
+\todo[inline]{Liste von Vereinfachungen updaten!}
+\begin{itemize}
+    \item Jede Station besteht aus nur einem Arbeitsplatz,
+    d.h.\ die Aufteilung einer Arbeitsstation in verschiedene Arbeitsplätze wurde weggelassen.
+    \item \dots
+\end{itemize}
+\todo[inline]{Nachdem die Parameter für den Datengenerator festgelegt wurden, sollte hier angegeben werden,
+    wie die Parameter gesetzt wurden und wie viele Instanzen welcher Größe generiert wurden.
+    Vielleicht kann der generierte Datensatz mit Grafiken/Tabellen dargestellt werden (wie viele Instanzen welcher Art, etc.)?!}
+% für folgende Werte kann entweder eine Zahl oder eine Verteilung (number-or-distribution) angegeben werden:
+    % cycles
+    % numPredecessors
+    % numWorkplaces
+    % numStations
+    % workloadDistribution (pro StationId -> aus dieser Verteilung wird gesamplet, um die processing time pro station zu ermitteln)
+% für folgende Werte kann entweder eine Zeiteinheit oder eine Verteilung (time-unit-or-distribution) angegeben werden:
+    % maxLateDrift
+        % sind keine Drift Parameter angegeben, dann ist an dieser Workstation kein Drift erlaubt
+    % cycleTime
+%TODO: die Attribute werden automatisch erstellt. An welcher Stelle passiert das? Und wie?

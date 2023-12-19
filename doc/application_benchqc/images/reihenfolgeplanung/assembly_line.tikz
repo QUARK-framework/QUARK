@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\footnotesize]
+\draw [](0,2.75) to (11.5,2.75);
+\draw [](0,0) to (11.5,0);
+\draw[dash dot]  (7.5,2.75) to (7.5,0);
+\draw[draw=none]  (0.5,2.75) rectangle  node[align=left] {Station 1\\\tiny{Max Drift: $3s$}\\\tiny{Max Takte: $1$}} (4,0);
+\draw[draw=none]  (4,2.75) rectangle  node[align=left] {Station 2\\\tiny{Max Drift: $6s$}\\\tiny{Max Takte: $1$}} (7.5,0);
+\draw[draw=none]  (7.5,2.75) rectangle  node[align=left] {Station 3\\\tiny{Max Drift: $2s$}\\\tiny{Max Takte: $1$}} (11,0);
+\draw  (0.5,2.75) rectangle (4,0);
+\draw  (4,2.75) rectangle (11,0);
+\node at (2.5,3.5) {Taktzeit: $10s$};
+\end{tikzpicture}

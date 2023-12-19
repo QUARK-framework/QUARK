@@ -1,0 +1,32 @@
+\section{Anwendungsfälle}
+
+Im Folgenden sollen zunächst die industriellen Anwendungsfälle vorgestellt werden.
+
+\subsection{Fließbandfertigung}\label{subsec:fliessbandfertigung}
+
+Moderne Produktion, wie zum Beispiel die Automobilproduktion, erfolgt oft mithilfe der Fließbandfertigung.
+Bei der Fließbandfertigung durchläuft das zu fertigende Produkt auf dem Weg zur Fertigstellung zahlreiche
+Arbeitsstationen, in denen die einzelnen Arbeitsschritte zur Fertigstellung des Produktes ausgeführt werden.
+
+Die Beplanung einer Fertigungslinie erfolgt dabei in zwei Schritten:
+Die Fließbandabstimmung (cf.\ \cref{subsec:anwendungsfall-fliessbandabstimmung}) und die Reihenfolgeplanung
+(cf.\ \cref{subsubsec:anwendungsfall-reihenfolgeplanung}).
+
+Die Fließbandabstimmung (\emph{Assembly Line Balancing}) beschäftigt sich damit,
+Arbeitsschritte nach ihrem mittleren Zeitbedarf auf Arbeitsstationen zu verteilen.
+In der Reihenfolgeplanung (\emph{Sequencing}) werden konkrete Folgen von Aufträgen gebildet,
+die in Form einer operativen Feinplanung zu große Abweichung von den in der
+Fließbandabstimmung verwendeten Mittelwerten auf den einzelnen Stationen verhindern sollen.
+Die Fließbandabstimmung liefert somit eine taktische Grobplanung,
+auf der die operative Reihenfolge(fein)planung basiert.
+
+Der mittlere Zeitbedarf der Arbeitsschritte, die als Ausgangsbasis der Fließbandabstimmung dient,
+ergibt sich aus dem tatsächlichen Zeitbedarf für einen Arbeitsschritt multipliziert
+mit der erwarteten Häufigkeit des Auftretens dieses Schrittes.
+Dauert z.B.\ die Montage einer Anhängerkupplung 100 Sekunden,
+und ist eine Anhängerkupplung nur bei jedem zehnten Fahrzeug zu erwarten,
+beträgt der mittlere Zeitbedarf 10 Sekunden.
+
+\input{sections/UseCases/Fliessbandabstimmung/zusammenfassung}
+\input{sections/UseCases/Reihenfolgeplannung/zusammenfassung}
+\input{sections/UseCases/Testfahrzeugkonfiguration/zusammenfassung}

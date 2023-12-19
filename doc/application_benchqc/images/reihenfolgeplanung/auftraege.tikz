@@ -1,0 +1,20 @@
+\footnotesize{%
+\begin{tabular}{c|ccc}
+    & \multicolumn{3}{c}{Bearbeitungszeit} \\
+    Auftragsart & Stat.\ 1 & Stat.\ 2 & Stat.\ 3 \\
+    \hline
+    \hline
+    {\tikz \node[circle, draw, minimum width=.5cm] {};} & $13s$ & $12s$ & $10s$ \\
+    {\tikz \node[rectangle, draw, minimum width=.6cm, minimum height=.3cm] {};} & $10s$ & $9s$ & $10s$ \\
+    {\tikz \node[ellipse, draw, minimum width=.75cm] {};} & $5s$ & $5s$ & $10s$ \\\hline
+\end{tabular}
+
+\begin{tabular}{cc}
+    Auftragsliste: &
+            {\tikz \node[circle, draw, minimum width=.5cm] {};}
+            {\tikz \node[circle, draw, minimum width=.5cm] {};}
+            {\tikz \node[rectangle, draw, minimum width=.6cm, minimum height=.3cm] {};}
+            {\tikz \node[rectangle, draw, minimum width=.6cm, minimum height=.3cm] {};}
+            {\tikz \node[ellipse, draw, minimum width=.75cm] {};}
+\end{tabular}
+}

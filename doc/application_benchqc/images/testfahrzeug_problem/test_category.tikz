@@ -1,0 +1,20 @@
+\begin{tikzpicture}[every state/.style={draw,rectangle, rounded corners},node distance=2em]
+	\node [style=circle] (1) {1};
+	\node [style=circle] (2) [right= of 1] {D};
+	\node [style=circle] (3) [right= of 2] {A};
+	\node [style=circle] (4) [right= of 3] {B};
+	\node [style=circle] (5) [right= of 4] {C};
+	\node [style=circle] (6) [right= of 5] {0};
+	\node [style=circle] (7) [right= of 6] {Z};
+	\path[thick,-to] (1) edge (2);
+	\path[thick,-to] (2) edge (3);
+	\path[thick,-to] (3) edge (4);
+	\path[thick,-to] (4) edge (5);
+	\path[thick,-to] (5) edge (6);
+	\path[thick,-to] (6) edge (7);
+	\path[thick,-to] (2) edge [loop above] (2);
+	\path[thick,-to] (3) edge [loop above] (3);
+	\path[thick,-to] (4) edge [loop above] (4);
+	\path[thick,-to] (5) edge [loop above] (5);
+	\path[thick,-to] (6) edge [loop above] (6);
+\end{tikzpicture}

@@ -1,0 +1,41 @@
+% figure generation supported by https://tikzmaker.com/editor
+\begin{tikzpicture}[baseline=10em]
+\draw[step=0.5,gray,opacity=.2,thin] (1.5,5.75) grid (10.5,12);
+\tikzstyle{every node}=[font=\tiny]
+%  assembly line:
+\draw [](1.5,13.5) to (11,13.5);
+\draw [](1.5,12.25) to (11,12.25);
+\draw  (2.5,13.5) rectangle  node {Station 1} (5,12.25);
+\draw  (5,13.5) rectangle  node {Station 2} (7.5,12.25);
+\draw  (7.5,13.5) rectangle  node {Station 3} (10,12.25);
+\draw [->] (4.5,13.25) .. controls (5,13.25) and (5,13.25) .. (5.25,13.25);
+% orders:
+\draw  (0,12) rectangle (1.5,5.75); % outer rectangle
+\draw  (0.75,11.25) circle (0.5cm);
+\draw  (0.25,10.5) rectangle (1.25,9.75);
+\draw  (0.75,8.75) circle (0.5cm);
+\draw  (0.75,7.5) ellipse (0.5cm and 0.25cm);
+\draw  (0.25,6.75) rectangle (1.25,6);
+% tasks:
+\draw[line width=.8pt]  (2.5,11.5) rectangle (5.75,11.25);
+\draw[line width=.8pt]  (3.25,10.25) rectangle (5.75,10);
+\draw[line width=.8pt] [ color={rgb,255:red,255; green,38; blue,0} ] (2.5,9) rectangle (5.75,8.75); % springer
+\draw[line width=.8pt]  (2.5,7.75) rectangle (3.75,7.5);
+\draw[line width=.8pt]  (2.5,6.5) rectangle (5,6.25);
+\draw [dashed] (5.75,13.5) .. controls (5.75,10.25) and (5.75,10.25) .. (5.75,5.5);  % max drift 1
+\draw [dashed] (9,13.5) .. controls (9,10.25) and (9,10.25) .. (9,5.5);  % max drift 2
+\draw [dashed] (10.5,13.5) .. controls (10.5,10.25) and (10.5,10.25) .. (10.5,5.5);  % max drift 3
+\draw[line width=.8pt]  (5.75,11.5) rectangle (8.75,11.25);
+\draw[line width=.8pt]  (7.5,11.75) rectangle (10,11.5);
+\draw[line width=.8pt]  (6.25,10.25) rectangle (8.5,10);
+\draw[line width=.8pt]  (7.5,10.5) rectangle (10,10.25);
+\draw[line width=.8pt] (6,9.25) rectangle (9,9);
+\draw[line width=.8pt]  (7.5,9) rectangle (10,8.75);
+\draw[line width=.8pt]  (6.5,7.75) rectangle (7.75,7.5);
+\draw[line width=.8pt]  (7.5,8) rectangle (10,7.75);
+\draw[line width=.8pt]  (5.25,6.5) rectangle (7.5,6.25);
+\draw[line width=.8pt]  (7.5,6.75) rectangle (10,6.5);
+%labels:
+\node at (0.65,5.5) {Aufträge};
+%\node at (5.75,5.5) {Max Drift};
+\end{tikzpicture}

@@ -1,0 +1,68 @@
+\subsection{Bin Packing}\label{subsec:bin-packing}
+
+Beim Bin Packing Problem (oder auch Behälterproblem) geht es darum, eine gegebene Anzahl an Objekten auf eine
+kleinstmögliche Anzahl an Behältern zu verteilen, sodass kein Behälter überläuft.
+
+Als ganzzahliges Optimierungsproblem lässt sich das Bin Packing Problem wie folgt darstellen:
+Jedes Objekt muss genau einem Behälter zugeteilt werden~\eqref{eq:one_bin_per_object}.
+Pro Behälter darf die maximale Kapazität nicht überschritten werden~\eqref{eq:max_capacity_bin}.
+Das Ziel ist, die Anzahl der Behälter zu minimieren, was mithilfe der Zielfunktion~\eqref{eq:minimize_bins} erreicht wird.
+
+%{Die Zielfunktion minimiert die Anzahl der Behälter nicht immer. In der Literatur werden andere
+%Formulierungen genutzt, die jedoch mehr binäre Variablen benötigen. Daher sollte die Wahl der Zielfunktion
+%noch weiter diskutiert werden.}
+
+\begin{table}[H]
+    \begin{tabularx}{\textwidth}{  l | X | l }
+    Symbol & Bedeutung & Definitionsbereich \\\hline\hline
+    Mengen & & \\\hline\hline
+    $O$ & Menge der Objekte & $\N$\\\hline
+    $B$ & Menge der Behälter & $\N$\\\hline\hline
+    Konstanten &  &  \\\hline\hline
+    $c$ & Maximale Kapazität der Behälter & $\N$\\\hline
+    $w_o$ & Gewicht von Objekt $o\in O$ & $\N$\\\hline\hline
+    Variablen &  &  \\\hline\hline
+    $x_{ob}$ & $x_{ob}=1$ gdw.\ Objekt $o\in O$ dem Behälter $b\in B$ zugeteilt wird & $\B$\\\hline
+    $y_b$ & $y_b=1$ gdw.\ Behälter $b\in B$ verwendet wird & $\B$\\\hline
+    \end{tabularx}
+    \caption{Notation Bin Packing}\label{tab:notation_bin_packing}
+\end{table}
+
+%\begin{align}
+%    \min \qquad& \sum_{b\in B,\,o\in O} b \cdot x_{ob} \label{eq:minimize_bins}\\
+%    \textit{s.t.} \qquad
+%    & \sum_{b\in B} x_{ob} = 1~, \qquad &&\forall o\in O \label{eq:one_bin_per_object} \\
+%    & \sum_{o\in O} w_{o} \cdot x_{ob} \leq c~, \qquad &&\forall b\in B \label{eq:max_capacity_bin}\\
+%    & x_{ob} \in \B~, \qquad &&\forall o\in O, b\in B
+%\end{align}
+
+\begin{align}
+    \min \qquad& \sum_{b\in B} y_b \label{eq:minimize_bins}\\
+    \textit{s.t.} \qquad
+    & \sum_{b\in B} x_{ob} = 1~, \qquad &&\forall o\in O \label{eq:one_bin_per_object} \\
+    & \sum_{o\in O} w_{o} \cdot x_{ob} \leq c \cdot y_b~, \qquad &&\forall b\in B \label{eq:max_capacity_bin}\\
+    & x_{ob}, y_b \in \B~, \qquad &&\forall o\in O, b\in B
+\end{align}
+
+\paragraph{Alternative Zielfunktionen.}
+% K: eine weitere interessante Formulierung mit wenigen Variablen findet sich in: https://hal.science/hal-03006106/document
+% bisher habe ich aber noch keine Möglichkeit gefunden, in dieser Formulierung Precedence Relations einzubauen.
+% Daher habe ich sie hier noch nicht genannt.
+
+In einer früheren Version dieses Dokuments wurde als Zielfunktion statt ~\eqref{eq:minimize_bins}
+\[
+    \sum_{b\in B,\,o\in O} b \cdot x_{ob}
+\]
+minimiert,\footnote{Die Constraints können fast unverändert bleiben; es müssen lediglich die $y$ Variablen gelöscht werden.}
+was auch in der Literatur (für das speziellere Assembly Line Balancing Problem) zu finden ist~\cite{alb_paper_50}.
+Diese Version ermöglicht im Vergleich zu der obigen Formulierung zwar die $y$ Variablen einzusparen,
+führt aufgrund der Gewichtung allerdings manchmal zu suboptimalen Lösungen in Bezug auf die Anzahl der benötigten Bins.
+
+Um dieses Problem zu vermeiden, kann in der Zielfunktion mit einer \emph{cost explosion} gearbeitet werden,
+um zusätzliche Bins stärker zu bestrafen:
+\[
+    \min \sum_{b\in B,\,o\in O} |O|^{b} \cdot x_{ob}
+\]
+\todo[inline]{Der Exponent kann auch $b-1$ sein, wenn Bin $0$ den Koeffizienten $0$ hat.}
+Da die Koeffizienten, abhängig von $|B|$, sehr groß werden können, kommt es in der Praxis jedoch schnell zu numerischen Problemen,
+weshalb diese Variante hier nur von theoretischem Interesse ist.

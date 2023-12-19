@@ -1,0 +1,111 @@
+\documentclass[12pt, ngerman]{article}
+\usepackage{import}
+\usepackage{preamble}
+\usepackage{booktabs}
+\addbibresource{literatur.bib}
+
+
+
+\begin{document}
+
+    % Large images on titel page
+    \lhead{\includegraphics[height=2cm]{images/logo_tex.png}}
+    \chead{}
+    \rhead{\includegraphics[height=2cm]{images/logo_optware.png}}
+    \lfoot{\includegraphics[width=9cm]{images/logo_optware_supplement_and_claim_rgb_1258x71px_300dpi.jpg}}
+    \cfoot{}
+    \rfoot{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+
+    % Title page
+    %--------------------------------------
+    \title{BenchQC - Anwendungsfälle der Optimierung}
+    \date{\today}
+    \author{OptWare GmbH}
+    \maketitle
+    \thispagestyle{fancy}
+    %--------------------------------------
+
+    % Abstract
+    %--------------------------------------
+    \begin{abstract}
+        Das Forschungsprojekt BenchQC, Anwendungsgetriebenes Benchmarking von
+        Quantencomputern, befasst sich mit echten Anwendungsfällen der Industrie
+        aus Machine Learning, Simulation und Optimierung.
+        In diesem Dokument sollen die folgenden industriellen Anwendungsfelder der Optimierung
+        betrachtet werden:
+        \begin{itemize}
+            \item Fließbandabstimmung
+            \item Testfahrzeugkonfiguration
+            \item ...
+        \end{itemize}
+        Die einzelnen Anwendungsfälle werden zunächst definiert,
+        ihre klassischen Algorithmen erarbeitet und anschließend
+        für die Anwendung auf Quantencomputern modifiziert.
+        Abschließend werden die klassischen und QC Lösungen mithilfe eines
+        Benchmarking Frameworks (QUARK) verglichen.
+    \end{abstract}
+    \newpage
+    %--------------------------------------
+
+    % Different header images after title page
+    %--------------------------------------
+    \setlength{\headheight}{1.5cm}
+    \lhead{}
+    \chead{}
+    \rhead{\includegraphics[height=1.2cm]{images/logo_optware.png}}
+    \pagestyle{fancy}
+    %--------------------------------------
+
+    % Table of contents
+    %--------------------------------------
+    \newpage
+    \tableofcontents
+    %--------------------------------------
+
+    % Sections
+    %--------------------------------------
+    \newpage
+    \input{sections/Usecases/einfuehrung.tex}
+    \input{sections/mathproblems/einfuehrung.tex}
+    %--------------------------------------
+
+    % Glossar
+    %--------------------------------------
+    \newpage
+    %\printglossary
+    %--------------------------------------
+
+    % Version History
+    %--------------------------------------
+    \newpage
+    \begin{versionhistory}
+        %Example usage
+        %\vhEntry{VERSION}{DATE}{AUTHOR(S)}{DESCRPTION}
+        \vhEntry{0.0}{2023-07-28}{OptWare}{Initiale Version: Beschreibung UseCase, Bin Packing}
+        \vhEntry{0.1}{2023-09-05}{OptWare}{Anpassung Beschreibung Testfahrzeugkonfiguration}
+        \vhEntry{0.2}{2023-09-20}{OptWare}{Anpassung der Zielfunktionen}
+    \end{versionhistory}
+    %--------------------------------------
+
+    % Literatur
+    %--------------------------------------
+    \newpage
+    \printbibliography
+    %--------------------------------------
+
+
+    % List of todos
+    %--------------------------------------
+    \newpage
+    \todototoc
+    \listoftodos
+    \newpage
+    %--------------------------------------
+
+    % Appendix
+    %--------------------------------------
+    \begin{appendices}
+    \end{appendices}
+    %--------------------------------------
+\end{document}

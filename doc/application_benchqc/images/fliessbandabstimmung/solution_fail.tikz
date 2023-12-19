@@ -1,0 +1,63 @@
+\begin{tikzpicture}
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=circle] (5) at (-9, 4.25) {};
+		\node [style=circle] (6) at (-12, 2.75) {};
+		\node [style=circle] (7) at (-6, 5.75) {};
+		\node [style=circle] (8) at (-6, 2.75) {};
+		\node [style=circle] (9) at (-12.25, 5.25) {};
+		\node [style=circle] (10) at (-3, 4.25) {};
+		\node [style=circle] (11) at (-12.25, 5.25) {1};
+		\node [style=circle] (12) at (-6, 5.75) {2};
+		\node [style=circle] (13) at (-9, 4.25) {3};
+		\node [style=circle] (14) at (-12, 2.75) {4};
+		\node [style=circle] (15) at (-6, 2.75) {5};
+		\node [style=circle] (16) at (-3, 4.25) {6};
+		\node [style=none] (17) at (-13, 6.5) {};
+		\node [style=none] (18) at (-13, 1.5) {};
+		\node [style=none] (19) at (-11, 1.5) {};
+		\node [style=none] (20) at (-11, 6.5) {};
+		\node [style=none] (21) at (-10, 6.5) {};
+		\node [style=none] (22) at (-10, 1.5) {};
+		\node [style=none] (23) at (-8, 1.5) {};
+		\node [style=none] (24) at (-8, 6.5) {};
+		\node [style=none] (25) at (-7, 6.5) {};
+		\node [style=none] (26) at (-7, 1.5) {};
+		\node [style=none] (27) at (-5, 1.5) {};
+		\node [style=none] (28) at (-5, 6.5) {};
+		\node [style=none] (29) at (-4, 6.5) {};
+		\node [style=none] (30) at (-4, 1.5) {};
+		\node [style=none] (31) at (-2, 1.5) {};
+		\node [style=none] (32) at (-2, 6.5) {};
+		\node [style=none] (37) at (-12, 0.5) {I};
+		\node [style=none] (40) at (-9, 0.5) {II};
+		\node [style=none] (41) at (-6, 0.5) {III};
+		\node [style=none] (42) at (-3, 0.5) {IV};
+		\node [style=none] (43) at (-12, 7) {};
+		\node [style=none] (44) at (-12, 7) {10s};
+		\node [style=none] (45) at (-6, 7) {20s};
+		\node [style=none] (46) at (-11.5, 3.75) {15s};
+		\node [style=none] (47) at (-9, 3.25) {12s};
+		\node [style=none] (48) at (-6, 3.75) {8s};
+		\node [style=none] (49) at (-3, 5.25) {13s};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw [style=arrow] (11) to (14);
+		\draw [style=arrow] (11) to (12);
+		\draw [style=arrow] (12) to (13);
+		\draw [style=arrow] (13) to (16);
+		\draw [style=arrow] (14) to (15);
+		\draw [style=arrow] (15) to (16);
+		\draw (17.center) to (18.center);
+		\draw (18.center) to (19.center);
+		\draw (19.center) to (20.center);
+		\draw (21.center) to (22.center);
+		\draw (22.center) to (23.center);
+		\draw (23.center) to (24.center);
+		\draw (25.center) to (26.center);
+		\draw (26.center) to (27.center);
+		\draw (27.center) to (28.center);
+		\draw (29.center) to (30.center);
+		\draw (30.center) to (31.center);
+		\draw (31.center) to (32.center);
+	\end{pgfonlayer}
+\end{tikzpicture}

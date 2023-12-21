@@ -39,7 +39,7 @@ comm = get_comm()
 
 matplotlib.rcParams['savefig.dpi'] = 300
 
-from parallel.AsyncJob import AsyncJobData
+from parallel.AsyncJob import AsyncJobManager
 
 
 class BenchmarkManager:
@@ -180,12 +180,12 @@ class BenchmarkManager:
                         else:
                             job_info = {}
                         processed_input, benchmark_record = self.traverse_config(backlog_item["submodule"], problem,
-                                                                                 path, rep_count=i, asyncrounous_job_info=job_info)
-                        if isinstance(processed_input, AsyncJobData):
+                                                                                 path, rep_count=i, asynchronous_job_info=job_info)
+                        if isinstance(processed_input, AsyncJobManager):
                             self.application.metrics.add_metric("parallel_job_status", processed_input.status.name)
                             postprocessing_time = 0.0
                         else:
-                            self.application.metrics.add_metric("parallel_job_status", "finished")
+                            self.application.metrics.add_metric("parallel_job_status", "FINISHED")
                                 
                             _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
                                                                                 rep_count=i)
@@ -213,7 +213,7 @@ class BenchmarkManager:
         except KeyboardInterrupt:
             logging.warning("CTRL-C detected. Still trying to create results.json.")
 
-    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, asyncrounous_job_info: dict = None) -> (any, BenchmarkRecord):
+    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, asynchronous_job_info: dict = None) -> (any, BenchmarkRecord):
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
         traverses up again. Once it reaches the root/application, a benchmark run is finished.
@@ -235,20 +235,20 @@ class BenchmarkManager:
         module_instance: Core = module["instance"]
         
         submodule_job_info = None
-        if asyncrounous_job_info:
-            assert module['name'] == asyncrounous_job_info["submodule"]["module_name"], \
+        if asynchronous_job_info:
+            assert module['name'] == asynchronous_job_info["submodule"]["module_name"], \
                 f"asyncronous job info given, but no information about module {module['name']} stored in it"
-            if 'submodule' in asyncrounous_job_info and asyncrounous_job_info['submodule']:
-                submodule_job_info = asyncrounous_job_info['submodule']
+            if 'submodule' in asynchronous_job_info and asynchronous_job_info['submodule']:
+                submodule_job_info = asynchronous_job_info['submodule']
             
         module_instance.metrics.set_module_config(module["config"])
         module_instance.preprocessed_input, preprocessing_time = module_instance.preprocess(input_data,
                                                                                             module["config"],
                                                                                             store_dir=path,
                                                                                             rep_count=rep_count,
-                                                                                            asyncrounous_job_info=submodule_job_info)
+                                                                                            asynchronous_job_info=submodule_job_info)
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
-        if isinstance(module_instance.preprocessed_input, AsyncJobData):
+        if isinstance(module_instance.preprocessed_input, AsyncJobManager):
             module_instance.postprocessed_input = module_instance.preprocessed_input
             benchmark_record =  self.benchmark_record_template.copy()
             postprocessing_time = 0.0
@@ -259,18 +259,18 @@ class BenchmarkManager:
                 # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
                 benchmark_record = self.benchmark_record_template.copy()
                 module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
-                    module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count, asyncrounous_job_info=submodule_job_info)
+                    module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count, asynchronous_job_info=submodule_job_info)
 
             else:
                 processed_input, benchmark_record = self.traverse_config(module["submodule"],
                                                                         module_instance.preprocessed_input, path,
-                                                                        rep_count, asyncrounous_job_info=submodule_job_info)
-                if not isinstance(processed_input, AsyncJobData):
+                                                                        rep_count, asynchronous_job_info=submodule_job_info)
+                if not isinstance(processed_input, AsyncJobManager):
                     module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
                                                                                                     module["config"],
                                                                                                     store_dir=path,
                                                                                                     rep_count=rep_count,
-                                                                                                    asyncrounous_job_info=submodule_job_info)
+                                                                                                    asynchronous_job_info=submodule_job_info)
                 else:
                     module_instance.postprocessed_input, postprocessing_time = processed_input, 0.0
         

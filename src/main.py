@@ -183,7 +183,8 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             for dr in dirs_results:
                 with open(dr,'r', encoding='utf-8') as results_json:
                     res = json.load(results_json)
-                    if any(r.get("module",{}).get("parallel_job_status", "finished") != "finished" for r in res):
+                    # find all results.json with the field parallel_job_status that is different from "FINISHED" 
+                    if any(r.get("module",{}).get("parallel_job_status", "FINISHED") != "FINISHED" for r in res):
                         possible_dirs.append(dr.replace("results.json",""))
             if len(possible_dirs) == 1:
                 args.resume_dir = possible_dirs[0]
@@ -194,7 +195,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                                    message="Several unfinished runs."
                                 #    "(You can also specify by --resume-dir <benchmark_run_dir>)\n"
                                    "Please select directory",
-                                   choices=possible_dirs
+                                   choices=possible_dirs # add FAILED here if results.json contains info about previous attempts
                                    )])
                 args.resume_dir = answer["resume_dir"]
                 

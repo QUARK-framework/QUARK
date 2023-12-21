@@ -19,17 +19,23 @@ class AsyncStatus(Enum):
     SUBMITTED = 1
     DONE = 2
     FAILED = 3
+    SYNCHRON = 4
 
 
 
-class AsyncJobData():
-    def __init__(self, module_name, raw_input_data: any = None) -> None:
+class AsyncJobManager():
+    def __init__(self, module_name, input_data: any = None, config=None, **kwargs) -> None:
         self._status: AsyncStatus = 0
-        self._job_input_data = raw_input_data
+        self._job_input_data = input_data
         self._job_return_data = None
         self._module_name = module_name
         self._job_info: dict = {}
         self.metrics = {}
+        self.config = config
+        self.kwargs = kwargs
+        
+    def __repr__(self) -> str:
+        return f"Async job {self.module_name} failed"
         
         
     @property
@@ -93,6 +99,10 @@ class AsyncJobData():
         self._job_info = {}
         self._job_info['server_response'] = value
         
+    @property
+    def runtime(self):
+        return self.job_info.get("runtime", 0.0)
+        
     
     def _primitivize(self, value):
         # print(f"primitivize {value} of type {type(value)}")
@@ -119,9 +129,12 @@ class AsyncJobData():
         return {}
     
     def get_json_serializable_info(self):
+        """Should return a primitive object, that can be filled into the results.json
+        and contain all necessary information to retrieve the job from server again
+        and some bookkeeping"""
         return self._primitivize(self.job_info)
 
-class AsyncPOCJobData(AsyncJobData):
+class AsyncPOCJobData(AsyncJobManager):
     @property
     def status(self):# TODO status as parameter in dummy module
         """The status of the job on the server. In this POC case, the status turns to DONE after  0.001s. 
@@ -162,6 +175,6 @@ class AsyncPOCJobData(AsyncJobData):
         else:
             return None
 
-class QaptivaAsyncJob(AsyncJobData):
+class QaptivaAsyncJob(AsyncJobManager):
     pass
 

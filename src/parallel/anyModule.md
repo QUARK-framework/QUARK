@@ -11,14 +11,12 @@ AsyncCore <|-- AsyncSolver
 SomeSolverWithQAOALogic <|-- AsyncSolver
 AsyncJob <|-- AsyncPOCJob
 AsyncJob <|-- AsyncQaptivaJob
-note for AsyncSolver "Solver with access to a device"
 AsyncCore: +bool is_asynchron
 class AsyncCore{
-    +preprocess()
-    +postprocess()
-    +abstract submit()
-    +abstract collect()
-    +abstract sequencial_run()
+    +get_parameter_options(self)
+    +preprocess() = if not hasattr(self,submit_preprocess,collect_preprocess) return super()
+    +postprocess() = if not hasattr(self,submit_postprocess,collect_postprocess) return super()
+    +sequencial_run() = collect(submit())  
 }
 class DigitalDevice{
     getQPU()
@@ -27,17 +25,13 @@ class SomeSolverWithQAOALogic{
     device_wrapper
 }
 class AsyncSolver{
-    submit()
-    collect()
-    sequencial_run()
+    #e.g. current QAOA logic
+    submit_postprocess()
+    collect_postprocess()
 }
 class AsyncDevice{
-    submit()
-    collect()
-    sequencial_run()
-}
-class SomeSolverWithQUARKLogic{
-    sequencial_run()
+    submit_preprocess()
+    collect_preprocess()
 }
 class AsyncJob{
     property result
@@ -142,12 +136,25 @@ Note over AJob,Connection: AsyncJobData knows about how to retrieve info from th
 BM ->> BM: get previous_job_info from old results.json
 Note over BM: previous_job_info: simple element dictionary containing e.g. job id, timestamt,... etc
 BM ->> +any: Xprocess(input_job: InputJob, previous_job_info: dict)
-activate AJob
+
 Note over any: Xprocess: either pre- or postprocess
 
-alt collect mode
+any ->> +AJob: __init__
+alt submit mode
+    Note right of any: submit mode has empty previous_job_info {} or None
+    any ->> +any: _submit()
+    Note over any: Submitting to server
+    AJob -->> any : async_job: AsyncJobData
+    any ->> +Connection: submit (e.g.  AnyModule.getQPU().submit(job))
+    Connection -->> -any: server_response: (Qaptiva)AsyncJob
+    any-->> AJob: async_job.job_info.append(server_response : (Qaptiva)AsyncJob) [extract relevant fields]
+    any -->> -any: return job_data
+    any -->> any: AnyModule.metrics.add_metric("job_info", job_info)
+    
+
+else collect mode
     Note right of any: Collect mode is determined by argument previous_job_info
-    any ->> +any: collect()
+    any ->> +any: _collect()
     Note over any: Collect data based on info stored in previous_job_info
     any ->> AJob: AsyncJobData.status
     AJob ->> +Connection: get_connection
@@ -172,20 +179,8 @@ alt collect mode
         AJob ->> AJob: return self 
     end
 
-    AJob -->> -any:  output_result: OutputResult | JobWrapper
-    any-->> -any:  output_result
-
-else submit mode
-    Note right of any: submit mode has empty previous_job_info {} or None
-    any ->> +any: submit()
-    Note over any: Submitting to server
-    any ->> +AJob: __init__
-    AJob -->> any : async_job: AsyncJobData
-    any ->> +Connection: submit (e.g.  AnyModule.getQPU().submit(job))
-    Connection -->> -any: server_response: (Qaptiva)AsyncJob
-    any-->> AJob: async_job.job_info.append(server_response : (Qaptiva)AsyncJob) [extract relevant fields]
-    any -->> -any: return job_data
-    any -->> any: AnyModule.metrics.add_metric("job_info", job_info)
+    AJob -->> any:  output_result: OutputResult | JobWrapper
+    any-->> any:  output_result
     deactivate AJob
 
 else sequenzial mode

@@ -1,35 +1,73 @@
 from abc import ABC, abstractmethod
+import abc
 from enum import Enum
 import logging
 import time
+
+from overrides import final
 
 
 
 
 from modules.Core import Core
-from parallel.AsyncJob import AsyncJobManager, AsyncStatus
+from parallel.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
+from tqpm.devices.QLM_Default_QPU import QLM_Default_QPU
 
 class ModuleStage(Enum):
-    none = 0
-    pre = 1
-    post = 2
-    leaf = 3
-    both = 4
-    
-    
+    """enum to classify preprocessing or postprocessing stage of a Core Module"""
+    PRE = 1
+    POST = 2
+     
 
 class AsyncCore(Core, ABC):
+    """Base class for asynchrous QUARK module. 
+    implement submit_preprocess or submit_postprocess analogously to 
+    preprocess or postprocess to make use of the asynchronous functionality
+    additionally 
+    
+    
+    implement
+    ```
+    def submit_preprocess(self, input_data: any, config: dict, **kwargs):
+        return foo()
+    def collect_preprocess(server_result):
+        return bar(server_result)
+    ```
+
+    instead of 
+    
+    ```
+    def preprocess(self, input_data: any, config: dict, **kwargs):
+        server_result = foo()
+        return bar(server_result)
+    ```
+    
+    requires the redefinition of MODULE.JobManager, e.g.
+    ```
+    JobManager = POCAsyncJobManager
+    ```
+    
+    """
+    
+    JobManager = AsyncJobManager
 
     def get_parameter_options(self) -> dict:
         return {"async":
-                    {"values": ["pre","post","both"]}
+                    {"values": ["preprocess","postprocess","both","all sequencially"],
+                     "description":"Choose which process should run in parallel mode"}
                 }
-                
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
-        return self._process(ModuleStage.pre, input_data, config, **kwargs)
     
+    #@ not final, since it is possible to define preprocess async and postprocess sequencially and v.v.           
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+        """preprocess must not be overwritten in an async module. Use submit_preprocess
+        instead"""
+        return self._process(ModuleStage.PRE, input_data, config, **kwargs)
+    
+    #@ not final, since it is possible to define preprocess async and postprocess sequencially and v.v.          
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
-        return self._process(ModuleStage.post,input_data, config, **kwargs)
+        """postprocess must not be overwritten in an async module. Use submit_postprocess
+        instead"""
+        return self._process(ModuleStage.POST,input_data, config, **kwargs)
         
     def _process(self, stage: ModuleStage, input_data: any, config: dict, **kwargs) -> (any, float): 
         """ Input data is the job
@@ -39,21 +77,21 @@ class AsyncCore(Core, ABC):
         # check if *process is configured to run asynchron, else fallback to Core
         async_mode = config.get("async", "none")
         if not async_mode != "both" and async_mode != stage.name:
-            if stage == ModuleStage.pre:
+            if stage == ModuleStage.PRE:
                 return super().preprocess(input_data, config, **kwargs)
-            if stage == ModuleStage.post:
+            if stage == ModuleStage.POST:
                 return super().postprocess(input_data, config, **kwargs)
             
         
         
         asynchronous_job_info =  kwargs.get("asynchronous_job_info", dict())
-        synchron_mode = kwargs.get("synchron_mode",False)
+        synchron_mode = config.get("async",None) == "all sequencially"
         prev_run_job_info = None if not asynchronous_job_info else asynchronous_job_info.get("job_info", False)
         is_submit_job = not prev_run_job_info
         is_collect_job = not is_submit_job or synchron_mode
         
-        job_manager =  AsyncJobManager (self.name, input_data,
-                                        config, **kwargs) #TODO make the class an option
+        job_manager =  self.JobManager (self.name, input_data,
+                                        config, **kwargs)
         if is_submit_job:
             return self._submit(stage, job_manager)
             
@@ -65,11 +103,11 @@ class AsyncCore(Core, ABC):
             
     
     
-    def _submit(self, stage, job_manager: AsyncJobManager):
+    def _submit(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """calls the corresponding submit_pre or postprocess function with arguments
         filled from job_manager"""
         submit = self.submit_preprocess \
-            if stage == ModuleStage.pre \
+            if stage == ModuleStage.PRE \
                 else self.submit_postprocess
         job_manager.job_info = submit(job_manager.input, 
                                         job_manager.config, 
@@ -81,29 +119,23 @@ class AsyncCore(Core, ABC):
         return job_manager, 0.0
     
     
-    def _collect(self, stage, job_manager):
+    def _collect(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """calls the corresponding collect_pre or postprocess function with arguments
         filled from job_manager"""
         collect = self.collect_preprocess \
-            if stage == ModuleStage.pre \
+            if stage == ModuleStage.PRE \
                 else self.collect_postprocess
-        
-        if job_manager.status == AsyncStatus.FAILED:
-            raise Exception(f"job {job_manager} failed")
-        
+               
         try:
             while job_manager.status == AsyncStatus.SUBMITTED:
                 time.sleep(1)
             if job_manager.status == AsyncStatus.DONE:
                 logging.info(f"job {job_manager} done")
-            if job_manager.status == AsyncStatus.FAILED:
-                raise Exception(f"job {job_manager} failed")
-        except KeyboardInterrupt:
+        except KeyboardInterrupt: #TODO: this does not work in my (debugging) setup
             pass
         
-        self.set_metrics_of(job_manager)
-            
-        return job_manager.result, job_manager.runtime
+        self.metrics.add_metric("parallel_job_info", job_manager.job_info)
+        return collect(job_manager.result), job_manager.runtime
     
     def submit_preprocess(self, job, config, **kwargs):
         """interface: overwrite this method to a module specific submission.
@@ -116,28 +148,32 @@ class AsyncCore(Core, ABC):
         return server_response
         ```
         """
-        raise NotImplementedError
+        raise NotImplementedError("If you want to run preprocess asynchron, "
+        "you need to implement a submit_preprocess method in {self.__class__.__name__}")
     
-    def collect_preprocess(self):
+    def collect_preprocess(self, server_result):
         """interface: overwrite this method to a module specific collect-call"""
-        raise NotImplementedError
+        return server_result
     
     def submit_postprocess(self, job, config, **kwargs):
-        raise NotImplementedError
+        raise NotImplementedError("If you want to run postprocess asynchron, "
+        "you need to implement a submit_postprocess method in {self.__class__.__name__}")
     
-    def collect_postprocess(self):
-        raise NotImplementedError
+    def collect_postprocess(self, server_result):
+        return server_result
 
      
-      
-    def set_metrics_of(self, job: AsyncJobManager): 
-        """Parsing metrics from a done job into the Device metrics"""
-        for metric_key, metric_value in job.metrics.items():
-            self.metrics.add_metric(metric_key, metric_value)
 
 
-class AsyncPOCDevice(AsyncCore):
-    pass
+class AsyncPOCDevice(AsyncCore, QLM_Default_QPU):
+     
+    
+    JobManager = POCJobManager
+    def submit_preprocess(self, job, config, **kwargs):
+        qpu = self._get_qpu_plugin()
+        server_response = qpu.submit(job)
+        return server_response
+            
 
 class AsyncQaptivaDevice(AsyncCore):
     pass

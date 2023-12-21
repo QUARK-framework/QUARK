@@ -1,3 +1,28 @@
+# Async mode
+# Basic Idea
+The QUARK module M3 in the following graph supports asynchronous execution.
+QUARK supplies a data type AsyncResult.
+If the benchmark manager receives an AsyncResult from one of the modules it stops the execution of the current module 
+stack and stores the result data written by the modules so far.
+M3 writes all data needed to continue its task later.
+```mermaid
+flowchart LR
+    M1 --> M2 --> M3
+    --> B((AsyncResult))
+```
+
+continue-mode
+
+The benchmark manager adds the
+```mermaid
+flowchart LR
+    M1 --> M2 --> M3 --> M4
+        PR((previous result)) --> M3
+    M4 -->M3 --> M2 --> M1
+
+```
+
+# Details
 submit mode
 ```mermaid
 sequenceDiagram

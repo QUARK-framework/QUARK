@@ -281,13 +281,11 @@ class LibraryQiskit(Library):
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """
-        start = perf_counter()
         n_qubits = circuit.num_qubits
-        circuit_transpiled = transpile(circuit, backend=backend, optimization_level = transpile_optimization_level)
-        logging.info(f"Using Transpile optimization level {transpile_optimization_level}")
-        logging.info(f"With the following gates: {circuit_transpiled.count_ops()}")
-        logging.info(f"Process took {perf_counter() - start} seconds")
-        logging.info(f"{backend=}")
+
+        if transpile_optimization_level == -1:
+            from mqt.predictor.rl import Predictor, qcompile
+            pred = Predictor(figure_of_merit="expected_fidelity", device_name="ibm_guadalupe")
 
         if config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
             circuit_transpiled.remove_final_measurements()
@@ -327,8 +325,16 @@ class LibraryQiskit(Library):
         elif config in ["cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_cpu",
                                 "aer_simulator_gpu","aer_sim_gpu_Fake_Guadalupe","aer_sim_cpu_Fake_Guadalupe"]:
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobjs = assemble(all_circuits, backend=backend)
+
+                all_circuits = [circuit.bind_parameters(solution) for solution in solutions]
+
+                if transpile_optimization_level in range(4):
+                    all_circuit_transpiled = [transpile(circuit, backend=backend, optimization_level=transpile_optimization_level) for circuit in all_circuits]
+
+                elif transpile_optimization_level==-1:
+                    all_circuit_transpiled = [qcompile(circuit, figure_of_merit="expected_fidelity", device_name="ibm_guadalupe", predictor_singleton=pred) [0] for circuit in all_circuits]
+
+                qobjs = assemble(all_circuit_transpiled, backend=backend)
                 jobs = backend.run(qobjs, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
 

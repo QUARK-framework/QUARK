@@ -1,0 +1,46 @@
+application:
+  config:
+    n_qubits:
+    - 6
+  name: GenerativeModeling
+  submodules:
+  - config:
+      data_set:
+      - X_2D
+    name: Continuous Data
+    submodules:
+    - config: {}
+      name: PIT
+      submodules:
+      - config:
+          depth:
+          - 1
+        name: CircuitCopula
+        submodules:
+        - config:
+            backend:
+            - aer_sim_cpu_Fake_Guadalupe
+            n_shots:
+            - 1000
+            transpile_optimization_level:
+            - -1
+            - 0
+            - 1
+            - 2
+            - 3
+          name: LibraryQiskit
+          submodules:
+          - config:
+              loss:
+              - KL
+              max_evaluations:
+              - 1000
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.5
+            name: QCBM
+            submodules: []
+repetitions: 2

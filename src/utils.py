@@ -217,8 +217,13 @@ def quark_stop_watch(func):
     ```
     """
     def wrapper(*args, **kwargs):
+        pos = kwargs.pop("time_pos", None)
         start = start_time_measurement()
         return_value = func(*args, **kwargs)
         duration = end_time_measurement(start)
+        if pos != None and isinstance(return_value, tuple):
+            l = list(return_value)
+            l[pos] = duration
+            return tuple(l)
         return return_value, duration
     return wrapper

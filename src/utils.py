@@ -202,3 +202,23 @@ def end_time_measurement(start: float) -> float:
     """
     end = time.perf_counter()
     return round((end - start) * 1000, 3)
+
+
+def quark_stop_watch(func):
+    """usage as decorator to measure time,eg:
+    ```
+    @quark_stop_watch
+    def run(input_data,....):
+        return processed_data
+    ```
+    results in valid:    
+    ```
+    processed_data, time_to_process = run(input,.....)
+    ```
+    """
+    def wrapper(*args, **kwargs):
+        start = start_time_measurement()
+        return_value = func(*args, **kwargs)
+        duration = end_time_measurement(start)
+        return return_value, duration
+    return wrapper

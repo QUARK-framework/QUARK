@@ -221,6 +221,8 @@ def quark_stop_watch(func):
         start = start_time_measurement()
         return_value = func(*args, **kwargs)
         duration = end_time_measurement(start)
+        if len(args) and hasattr(args[0],"metrics"):
+            args[0].metrics.add_metric(f"time_to_process_{func.__name__}", duration)
         if pos != None and isinstance(return_value, tuple):
             l = list(return_value)
             l[pos] = duration

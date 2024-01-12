@@ -205,7 +205,8 @@ def end_time_measurement(start: float) -> float:
 
 
 def quark_stop_watch(func):
-    """usage as decorator to measure time,eg:
+    """
+    Usage as decorator to measure time, eg:
     ```
     @quark_stop_watch
     def run(input_data,....):
@@ -215,14 +216,15 @@ def quark_stop_watch(func):
     ```
     processed_data, time_to_process = run(input,.....)
     ```
+    if the return value of the function is of type tuple,
+    the optial additional keyword `time_pos` specifies a position in the returned tuple
+    that is to be replaced by the measured time.
     """
     def wrapper(*args, **kwargs):
         pos = kwargs.pop("time_pos", None)
         start = start_time_measurement()
         return_value = func(*args, **kwargs)
         duration = end_time_measurement(start)
-        if len(args) and hasattr(args[0],"metrics"):
-            args[0].metrics.add_metric(f"time_to_process_{func.__name__}", duration)
         if pos != None and isinstance(return_value, tuple):
             l = list(return_value)
             l[pos] = duration

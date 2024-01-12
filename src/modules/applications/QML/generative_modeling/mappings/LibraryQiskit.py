@@ -283,6 +283,9 @@ class LibraryQiskit(Library):
         """
         n_qubits = circuit.num_qubits
 
+        #readded this option, since this variable will be stored
+        circuit_transpiled = transpile(circuit, backend=backend, optimization_level=transpile_optimization_level, seed_transpiler=42)
+
         if transpile_optimization_level == -1:
             from mqt.predictor.rl import Predictor, qcompile
             pred = Predictor(figure_of_merit="expected_fidelity", device_name="ibm_guadalupe")
@@ -331,10 +334,14 @@ class LibraryQiskit(Library):
                 if transpile_optimization_level in range(4):
                     all_circuit_transpiled = [transpile(circuit, backend=backend, optimization_level=transpile_optimization_level) for circuit in all_circuits]
 
+
+                
                 elif transpile_optimization_level==-1:
                     all_circuit_transpiled = [qcompile(circuit, figure_of_merit="expected_fidelity", device_name="ibm_guadalupe", predictor_singleton=pred) [0] for circuit in all_circuits]
 
                 qobjs = assemble(all_circuit_transpiled, backend=backend)
+                #circuit_transpiled = qobjs; if possible
+
                 jobs = backend.run(qobjs, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
 
@@ -351,4 +358,4 @@ class LibraryQiskit(Library):
                 pmfs = samples / n_shots
                 return pmfs, samples
 
-        return execute_circuit
+        return execute_circuit, circuit_transpiled

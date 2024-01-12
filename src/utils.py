@@ -209,23 +209,23 @@ def quark_stop_watch(func):
     Usage as decorator to measure time, eg:
     ```
     @quark_stop_watch
-    def run(input_data,....):
+    def run(input_data,...):
         return processed_data
     ```
     results in valid:    
     ```
-    processed_data, time_to_process = run(input,.....)
+    processed_data, time_to_process = run(input,...)
     ```
-    if the return value of the function is of type tuple,
-    the optial additional keyword `time_pos` specifies a position in the returned tuple
-    that is to be replaced by the measured time.
+    If the return value of the function is of type tuple,
+    the optional keyword `time_pos` can be used to specify the position at which the
+    measured time is to be inserted in the returned tuple.
     """
     def wrapper(*args, **kwargs):
         pos = kwargs.pop("time_pos", None)
         start = start_time_measurement()
         return_value = func(*args, **kwargs)
         duration = end_time_measurement(start)
-        if pos != None and isinstance(return_value, tuple):
+        if pos is not None and isinstance(return_value, tuple):
             l = list(return_value)
             l[pos] = duration
             return tuple(l)

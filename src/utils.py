@@ -204,11 +204,11 @@ def end_time_measurement(start: float) -> float:
     return round((end - start) * 1000, 3)
 
 
-def quark_stop_watch(func):
+def quark_stop_watch(position: int = None):
     """
     Usage as decorator to measure time, eg:
     ```
-    @quark_stop_watch
+    @quark_stop_watch()
     def run(input_data,...):
         return processed_data
     ```
@@ -216,18 +216,22 @@ def quark_stop_watch(func):
     ```
     processed_data, time_to_process = run(input,...)
     ```
-    If the return value of the function is of type tuple,
-    the optional keyword `time_pos` can be used to specify the position at which the
+    If the return value of the decorated function is of type tuple,
+    the optional parameter `position` can be used to specify the position at which the
     measured time is to be inserted in the returned tuple.
+
+    :param position: the position at which to insert the time
+    :type position: int
     """
-    def wrapper(*args, **kwargs):
-        pos = kwargs.pop("time_pos", None)
-        start = start_time_measurement()
-        return_value = func(*args, **kwargs)
-        duration = end_time_measurement(start)
-        if pos is not None and isinstance(return_value, tuple):
-            l = list(return_value)
-            l[pos] = duration
-            return tuple(l)
-        return return_value, duration
-    return wrapper
+    def wrap(func):
+        def wrapper(*args, **kwargs):
+            start = start_time_measurement()
+            return_value = func(*args, **kwargs)
+            duration = end_time_measurement(start)
+            if position is not None and isinstance(return_value, tuple):
+                rv = list(return_value)
+                rv.insert(position, duration)
+                return tuple(rv)
+            return return_value, duration
+        return wrapper
+    return wrap

@@ -154,6 +154,8 @@ Example for a config file:
 
     application:
       config:
+        regenerate:
+        - False
         nodes:
         - 3
       name: TSP
@@ -169,6 +171,11 @@ Example for a config file:
 
 One handy thing to do is to use the interactive mode once to create a config file.
 Then you can change the values of this config file and use it to start the framework.
+The ``regenerate`` key can be set for every application and defines whether you want to regenerate the application
+instance for every repetition. When this key is missing, the default value is ``True``. This option can be handy if you
+are using random seeds in the creation of the application instance and you want to have the same instance for every
+repetition. If you want to change the default behavior for your application, you have to add the ``regenerate`` key to
+your ``get_parameter_options`` function.
 
 
 Run as Container

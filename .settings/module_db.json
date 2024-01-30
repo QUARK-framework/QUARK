@@ -1,7 +1,7 @@
 {
-  "build_number": 5,
-  "build_date": "22-11-2023 09:57:53",
-  "git_revision_number": "aa2f578cbc65cda03fd6a743505a14049bd260d6",
+  "build_number": 6,
+  "build_date": "22-11-2023 13:47:42",
+  "git_revision_number": "5ea1fcf56c438df4b32fcc318dcb6e2c8e58447b",
   "modules": [
     {
       "name": "PVC",

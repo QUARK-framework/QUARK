@@ -22,14 +22,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 
-import matplotlib
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 import numpy as np
 
 from ConfigManager import ConfigManager
 from BenchmarkRecord import BenchmarkRecord
+from Plotter import Plotter
 from modules.Core import Core
 from utils import get_git_revision
 
@@ -37,7 +34,6 @@ from utils_mpi import get_comm
 
 comm = get_comm()
 
-matplotlib.rcParams['savefig.dpi'] = 300
 
 from parallel.AsyncJob import AsyncJobManager
 
@@ -50,10 +46,13 @@ class BenchmarkManager:
     respective framework components. After executing the benchmarks, it collects the generated data and saves it.
     """
 
-    def __init__(self):
+    def __init__(self, fail_fast: bool = False):
         """
         Constructor method
+        :param fail_fast: Boolean whether a single failed benchmark run causes QUARK to fail
+        :type fail_fast: bool
         """
+        self.fail_fast = fail_fast
         self.application = None
         self.application_configs = None
         self.results = []
@@ -165,7 +164,8 @@ class BenchmarkManager:
                                  f" Iteration {i}/{repetitions}:")
                     try:
 
-                        self.benchmark_record_template = BenchmarkRecord(datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
+                        self.benchmark_record_template = BenchmarkRecord(idx_backlog,
+                                                                         datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
                                                                          git_revision_number, git_uncommitted_changes,
                                                                          i, repetitions)
                         self.application.metrics.set_module_config(backlog_item["config"])
@@ -196,6 +196,8 @@ class BenchmarkManager:
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                        if self.fail_fast:
+                            raise
 
                 for record in benchmark_records:
                     record.sum_up_times()
@@ -314,7 +316,7 @@ class BenchmarkManager:
         logging.info(f"Summarizing {len(input_dirs)} benchmark directories")
         results = self.load_results(input_dirs)
         self._save_as_json(results)
-        BenchmarkManager.visualize_results(results, self.store_dir)
+        Plotter.visualize_results(results, self.store_dir)
 
     def load_results(self, input_dirs: list = None) -> list:
         """
@@ -337,77 +339,6 @@ class BenchmarkManager:
 
         return results
 
-    @staticmethod
-    def _extract_columns(config, rest_result):
-
-        if rest_result:
-            module_name = rest_result["module_name"]
-            for key, value in sorted(rest_result["module_config"].items(),
-                                     key=lambda key_value_pair: key_value_pair[0]):
-                module_name += f", {key}: {value}"
-
-            config_combo = config.pop("config_combo") + "\n" + module_name if "config_combo" in config else ""
-            return BenchmarkManager._extract_columns(
-                {
-                    **config,
-                    "config_combo": config_combo,
-                    module_name: rest_result["total_time"] if module_name not in config else config[module_name] +
-                                                                                             rest_result["total_time"]
-                },
-                rest_result["submodule"]
-            )
-
-        return config
-
-    @staticmethod
-    def visualize_results(results: List[Dict], store_dir: str):
-        """
-        Function to plot the execution times of the benchmark.
-
-        :param results: Dict containing the results
-        :type results: List[Dict]
-        :param store_dir: directory where the plots are stored
-        :type store_dir:  str
-        :return:
-        :rtype: None
-        """
-        processed = []
-        app_name = None
-        for x in results:
-            app_name = x["module"]["module_name"]
-            app_config = ', '.join([f"{key}: {value}" for (key, value) in sorted(x["module"]["module_config"].items(),
-                                                                                 key=lambda key_value_pair:
-                                                                                 key_value_pair[0])])
-            processed.append(
-                BenchmarkManager._extract_columns({"config_hash": x["config_hash"], "total_time": x["total_time"],
-                                                   "app_config": app_config}, x["module"]))
-
-        df = pd.DataFrame.from_dict(processed)
-        df = df.fillna(0.0)
-        df_melt = df.drop(["app_config", "config_combo", "total_time"], axis=1)
-        df_melt = pd.melt(frame=df_melt, id_vars='config_hash', var_name='module_config', value_name='time')
-
-        # This plot shows the execution time of each module
-        ax = sns.barplot(x='config_hash', y='time', data=df_melt, hue='module_config')
-        plt.title(app_name)
-        # Put the legend out of the figure
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-        ax.set(xlabel="benchmark config hash", ylabel='execution time of module (ms)')
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=90, size=6)
-        plt.savefig(f"{store_dir}/time_by_module.pdf", dpi=300, bbox_inches='tight')
-        plt.clf()
-
-        # This plot shows the total time of a benchmark run
-        ax = sns.barplot(x='app_config', y='total_time', data=df, hue='config_combo')
-        ax.set(xlabel=f"{app_name} config", ylabel='total execution time (ms)')
-        # Put the legend out of the figure
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-        plt.title(app_name)
-        plt.savefig(f"{store_dir}/total_time.pdf", dpi=300, bbox_inches='tight')
-        plt.clf()
-
-        logging.info("Finished creating plots.")
-
 
 class NumpyEncoder(json.JSONEncoder):
     """
@@ -419,6 +350,8 @@ class NumpyEncoder(json.JSONEncoder):
             return int(o)
         if isinstance(o, np.floating):
             return float(o)
+        if isinstance(o, np.bool_):
+            return bool(o)
         if isinstance(o, np.ndarray):
             return o.tolist()
         return super().default(o)

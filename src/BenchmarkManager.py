@@ -35,7 +35,6 @@ from utils_mpi import get_comm
 comm = get_comm()
 
 
-
 class BenchmarkManager:
     """
     The benchmark manager is the main component of QUARK, orchestrating the overall benchmarking process.
@@ -133,6 +132,9 @@ class BenchmarkManager:
                 Path(path).mkdir(parents=True, exist_ok=True)
                 with open(f"{path}/application_config.json", 'w') as filehandler:
                     json.dump(backlog_item["config"], filehandler, indent=2)
+
+                problem = None
+                preprocessing_time = None
                 for i in range(1, repetitions + 1):
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
@@ -143,8 +145,9 @@ class BenchmarkManager:
                                                                          git_revision_number, git_uncommitted_changes,
                                                                          i, repetitions)
                         self.application.metrics.set_module_config(backlog_item["config"])
-                        problem, preprocessing_time = self.application.preprocess(None, backlog_item["config"],
-                                                                                  store_dir=path, rep_count=i)
+                        if problem is None or backlog_item["config"].get("regenerate", True):
+                            problem, preprocessing_time = self.application.preprocess(None, backlog_item["config"],
+                                                                                      store_dir=path, rep_count=i)
                         self.application.metrics.set_preprocessing_time(preprocessing_time)
                         self.application.save(path, i)
 

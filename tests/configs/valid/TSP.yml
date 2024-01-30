@@ -1,5 +1,8 @@
 application:
   config:
+    regenerate:
+      - True
+      - False
     nodes:
     - 6
   name: TSP

@@ -10,7 +10,7 @@ import time
 
 from modules.Core import Core
 from parallel.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
-from tqpm.devices.QLM_Default_QPU import QLM_Default_QPU
+from tqpm.devices.qaptiva.myqlm.digital import MyQLMDigitalQPU
 
 class ModuleStage(Enum):
     """enum to classify preprocessing or postprocessing stage of a Core Module"""
@@ -164,11 +164,12 @@ class AsyncCore(Core, ABC):
      
 
 
-class AsyncPOCDevice(AsyncCore, QLM_Default_QPU):
+class AsyncPOCDevice(AsyncCore, MyQLMDigitalQPU):
      
     
     JobManager = POCJobManager
     def submit_preprocess(self, job, config, **kwargs):
+        self.config = config
         qpu = self._get_qpu_plugin()
         server_response = qpu.submit(job)
         return server_response

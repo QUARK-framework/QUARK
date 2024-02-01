@@ -1,6 +1,4 @@
-
-
-
+import os.path
 from abc import ABC, abstractmethod
 import datetime
 from enum import Enum
@@ -185,9 +183,11 @@ class POCJobManager(AsyncJobManager):
             })
         #dummy submission:
         dummy_server_mock= f"dummyServer/job{self._job_info['id']}.pkl"
+        if not os.path.exists("dummyServer"):
+            os.mkdir("dummyServer")
         with open(dummy_server_mock, 'wb') as mock_file:
             pickle.dump(self.job_info, mock_file)
-            logging.info("file %s written",dummy_server_mock )
+            logging.info("file %s written in %s", dummy_server_mock, os.getcwd() )
         
     def get_result(self) -> dict:
         dummy_server_mock= f"dummyServer/job{self._job_info['id']}.pkl"

@@ -188,7 +188,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                 with open(dr,'r', encoding='utf-8') as results_json:
                     res = json.load(results_json)
                     # find all results.json with the field parallel_job_status that is different from "FINISHED" 
-                    if any(r.get("module",{}).get("parallel_job_status", "FINISHED") != "FINISHED" for r in res):
+                    if any(r.get("module",{}).get("quark_job_status", "FINISHED") != "FINISHED" for r in res):
                         possible_dirs.append(dr.replace("results.json",""))
             if len(possible_dirs) == 1:
                 args.resume_dir = possible_dirs[0]

@@ -7,7 +7,7 @@ import time
 
 
 
-
+from BenchmarkManager import Instruction
 from modules.Core import Core
 from parallel.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
 from tqpm.devices.qaptiva.myqlm.digital import MyQLMDigitalQPU
@@ -16,7 +16,7 @@ class ModuleStage(Enum):
     """enum to classify preprocessing or postprocessing stage of a Core Module"""
     PRE = 1
     POST = 2
-     
+
 
 class AsyncCore(Core, ABC):
     """Base class for asynchrous QUARK module. 
@@ -52,21 +52,28 @@ class AsyncCore(Core, ABC):
 
     def get_parameter_options(self) -> dict:
         return {"async":
-                    {"values": ["preprocess","postprocess","both","all sequencially"],
+                    {"values": [ModuleStage.PRE.name,ModuleStage.POST.name,"both","all sequencially"],
                      "description":"Choose which process should run in parallel mode"}
                 }
-    
+
+    def _prepend_instruction(self, result):
+        instruction = Instruction.PROCEED
+        if isinstance(result[0], AsyncJobManager):
+            instruction = Instruction.INTERRUPT
+        return instruction, *result
+
+
     #@ not final, since it is possible to define preprocess async and postprocess sequencially and v.v.           
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """preprocess must not be overwritten in an async module. Use submit_preprocess
         instead"""
-        return self._process(ModuleStage.PRE, input_data, config, **kwargs)
-    
+        return self._prepend_instruction(self._process(ModuleStage.PRE, input_data, config, **kwargs))
+
     #@ not final, since it is possible to define preprocess async and postprocess sequencially and v.v.          
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         """postprocess must not be overwritten in an async module. Use submit_postprocess
         instead"""
-        return self._process(ModuleStage.POST,input_data, config, **kwargs)
+        return self._prepend_instruction(self._process(ModuleStage.POST,input_data, config, **kwargs))
         
     def _process(self, stage: ModuleStage, input_data: any, config: dict, **kwargs) -> (any, float): 
         """ Input data is the job
@@ -75,14 +82,12 @@ class AsyncCore(Core, ABC):
         
         # check if *process is configured to run asynchron, else fallback to Core
         async_mode = config.get("async", "none")
-        if not async_mode != "both" and async_mode != stage.name:
+        if async_mode != "both" and async_mode != stage.name:
             if stage == ModuleStage.PRE:
                 return super().preprocess(input_data, config, **kwargs)
             if stage == ModuleStage.POST:
                 return super().postprocess(input_data, config, **kwargs)
-            
-        
-        
+
         asynchronous_job_info =  kwargs.get("asynchronous_job_info", dict())
         synchron_mode = config.get("async",None) == "all sequencially"
         prev_run_job_info = None if not asynchronous_job_info else asynchronous_job_info.get("job_info", False)
@@ -161,13 +166,11 @@ class AsyncCore(Core, ABC):
     def collect_postprocess(self, server_result):
         return server_result
 
-     
-
 
 class AsyncPOCDevice(AsyncCore, MyQLMDigitalQPU):
-     
-    
+
     JobManager = POCJobManager
+
     def submit_preprocess(self, job, config, **kwargs):
         self.config = config
         qpu = self._get_qpu_plugin()

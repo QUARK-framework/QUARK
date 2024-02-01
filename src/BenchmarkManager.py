@@ -19,6 +19,7 @@ import os
 import os.path
 from copy import deepcopy
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import List, Dict
 
@@ -34,8 +35,26 @@ from utils_mpi import get_comm
 
 comm = get_comm()
 
+class Instruction(Enum):
+    PROCEED = 0
+    INTERRUPT = 1
+    BREAK = 2 # for future use
 
-from parallel.AsyncJob import AsyncJobManager
+
+def postprocess(module_instance, *args, **kwargs):
+    result = module_instance.postprocess(*args, **kwargs)
+    if len(result) == 2:
+        return Instruction.PROCEED, result[0], result[1]
+    else:
+        return result
+
+
+def preprocess(module_instance, *args, **kwargs):
+    result = module_instance.preprocess(*args, **kwargs)
+    if len(result) == 2:
+        return Instruction.PROCEED, result[0], result[1]
+    else:
+        return result
 
 
 class BenchmarkManager:
@@ -163,36 +182,43 @@ class BenchmarkManager:
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
                     try:
+                        # getting information of interrupted jobs
+                        job_no = (idx_backlog*repetitions + i)
+                        if self.async_job_info:
+                            job_info = self.async_job_info[job_no-1]['module']
+                        else:
+                            job_info = {}
 
                         self.benchmark_record_template = BenchmarkRecord(idx_backlog,
                                                                          datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
                                                                          git_revision_number, git_uncommitted_changes,
                                                                          i, repetitions)
                         self.application.metrics.set_module_config(backlog_item["config"])
-                        problem, preprocessing_time = self.application.preprocess(None, backlog_item["config"],
-                                                                                  store_dir=path, rep_count=i)
+                        instruction, problem, preprocessing_time = preprocess(self.application, None, backlog_item["config"],
+                                                                              store_dir=path, rep_count=i,
+                                                                              asynchronous_job_info=job_info)
                         self.application.metrics.set_preprocessing_time(preprocessing_time)
                         self.application.save(path, i)
-                        #getting information of previously submitted jobs
-                        job_no = (idx_backlog*repetitions + i)  
-                        if self.async_job_info:
-                            job_info = self.async_job_info[job_no-1]['module']
-                        else:
-                            job_info = {}
-                        processed_input, benchmark_record = self.traverse_config(backlog_item["submodule"], problem,
-                                                                                 path, rep_count=i, asynchronous_job_info=job_info)
-                        if isinstance(processed_input, AsyncJobManager):
-                            self.application.metrics.add_metric("parallel_job_status", processed_input.status.name)
-                            postprocessing_time = 0.0
-                        else:
-                            self.application.metrics.add_metric("parallel_job_status", "FINISHED")
-                                
-                            _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
-                                                                                rep_count=i)
+
+                        postprocessing_time = 0.
+                        benchmark_record = self.benchmark_record_template.copy()
+                        if instruction == Instruction.PROCEED:
+                            instruction, processed_input, benchmark_record = \
+                                self.traverse_config(backlog_item["submodule"], problem,
+                                                     path, rep_count=i, asynchronous_job_info=job_info)
+                            if instruction == Instruction.PROCEED:
+                                instruction, _, postprocessing_time = \
+                                    postprocess(self.application, processed_input, None, store_dir=path, rep_count=i)
+
+                        quark_job_status = "INTERRUPTED" if instruction == Instruction.INTERRUPT \
+                            else "FINISHED"
+                        self.application.metrics.add_metric("quark_job_status", quark_job_status)
+
                         self.application.metrics.set_postprocessing_time(postprocessing_time)
                         self.application.metrics.validate()
-                        benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
-                        benchmark_records.append(benchmark_record)
+                        if benchmark_record is not None:
+                            benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
+                            benchmark_records.append(benchmark_record)
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
@@ -244,44 +270,50 @@ class BenchmarkManager:
                 submodule_job_info = asynchronous_job_info['submodule']
             
         module_instance.metrics.set_module_config(module["config"])
-        module_instance.preprocessed_input, preprocessing_time = module_instance.preprocess(input_data,
-                                                                                            module["config"],
-                                                                                            store_dir=path,
-                                                                                            rep_count=rep_count,
-                                                                                            asynchronous_job_info=submodule_job_info)
+        instruction, module_instance.preprocessed_input, preprocessing_time\
+            = preprocess(module_instance, input_data,
+                                                        module["config"],
+                                                        store_dir=path,
+                                                        rep_count=rep_count,
+                                                        asynchronous_job_info=submodule_job_info)
+
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
-        if isinstance(module_instance.preprocessed_input, AsyncJobManager):
-            module_instance.postprocessed_input = module_instance.preprocessed_input
-            benchmark_record =  self.benchmark_record_template.copy()
-            postprocessing_time = 0.0
-        else:
+        output = None
+        benchmark_record = self.benchmark_record_template.copy()
+        postprocessing_time = 0.0
+        if instruction == Instruction.PROCEED:
                 
             # Check if end of the chain is reached
             if not module["submodule"]:
                 # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
-                benchmark_record = self.benchmark_record_template.copy()
-                module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(
-                    module_instance.preprocessed_input, module["config"], store_dir=path, rep_count=rep_count, asynchronous_job_info=submodule_job_info)
-
+                instruction, module_instance.postprocessed_input, postprocessing_time = \
+                    postprocess( module_instance,
+                                 module_instance.preprocessed_input,
+                                 module["config"], store_dir=path,
+                                 rep_count=rep_count,
+                                 asynchronous_job_info=submodule_job_info)
+                output = module_instance.postprocessed_input
             else:
-                processed_input, benchmark_record = self.traverse_config(module["submodule"],
+                instruction, processed_input, benchmark_record = self.traverse_config(module["submodule"],
                                                                         module_instance.preprocessed_input, path,
                                                                         rep_count, asynchronous_job_info=submodule_job_info)
-                if not isinstance(processed_input, AsyncJobManager):
-                    module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
-                                                                                                    module["config"],
-                                                                                                    store_dir=path,
-                                                                                                    rep_count=rep_count,
-                                                                                                    asynchronous_job_info=submodule_job_info)
+
+                if instruction == Instruction.PROCEED:
+                    instruction, module_instance.postprocessed_input, postprocessing_time = \
+                        postprocess(module_instance, processed_input,
+                                    module["config"],
+                                    store_dir=path,
+                                    rep_count=rep_count,
+                                    asynchronous_job_info=submodule_job_info)
+                    output = module_instance.postprocessed_input
                 else:
-                    module_instance.postprocessed_input, postprocessing_time = processed_input, 0.0
-        
-        output = module_instance.postprocessed_input
+                    output = processed_input
+
         module_instance.metrics.set_postprocessing_time(postprocessing_time)
         module_instance.metrics.validate()
         benchmark_record.append_module_record_left(deepcopy(module_instance.metrics))
 
-        return output, benchmark_record
+        return instruction, output, benchmark_record
 
     def _collect_all_results(self) -> List[Dict]:
         """

@@ -39,7 +39,7 @@ class QiskitQAOA(Solver):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm eagle"]
+        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm_eagle"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -71,9 +71,9 @@ class QiskitQAOA(Solver):
         elif option == "qasm_simulator_gpu":
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("qasm_simulator_gpu")
-        elif option == "ibm eagle":
-            from modules.devices.IBMEagle import IBMEagle
-            return IBMEagle("ibm eagle")
+        elif option == "ibm_eagle":
+            from modules.devices.HelperClass import HelperClass
+            return HelperClass("ibm_eagle")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
@@ -215,9 +215,9 @@ class QiskitQAOA(Solver):
             logging.info("Using GPU simulator")
             backend.set_options(device='GPU')
             backend.set_options(method='statevector_gpu')
-        if device_wrapper.device == 'ibm eagle':
+        elif device_wrapper.device == 'ibm_eagle':
             logging.info("Using IBM Eagle")
-            backend_eagle.set_options(device='ibm eagle')
+            backend_eagle.set_options(device='ibm_eagle')
         else:
             logging.info("Using CPU simulator")
             backend.set_options(device='CPU')

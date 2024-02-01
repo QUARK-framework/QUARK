@@ -1863,6 +1863,16 @@
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
+                },
+                {
+                  "name": "ibm_eagle",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "ibm_eagle"
+                  },
+                  "module": "modules.devices.IBMEagle",
+                  "requirements": [],
+                  "submodules": []
                 }
               ]
             }

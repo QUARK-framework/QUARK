@@ -208,7 +208,8 @@ class BenchmarkManager:
                                                      path, rep_count=i, asynchronous_job_info=job_info)
                             if instruction == Instruction.PROCEED:
                                 instruction, _, postprocessing_time = \
-                                    postprocess(self.application, processed_input, None, store_dir=path, rep_count=i)
+                                    postprocess(self.application, processed_input, backlog_item["config"],
+                                                store_dir=path, rep_count=i, asynchronous_job_info=job_info)
 
                         quark_job_status = "INTERRUPTED" if instruction == Instruction.INTERRUPT \
                             else "FINISHED"
@@ -263,7 +264,7 @@ class BenchmarkManager:
         module_instance: Core = module["instance"]
         
         submodule_job_info = None
-        if asynchronous_job_info:
+        if asynchronous_job_info and asynchronous_job_info.get("submodule"):
             assert module['name'] == asynchronous_job_info["submodule"]["module_name"], \
                 f"asyncronous job info given, but no information about module {module['name']} stored in it"
             if 'submodule' in asynchronous_job_info and asynchronous_job_info['submodule']:

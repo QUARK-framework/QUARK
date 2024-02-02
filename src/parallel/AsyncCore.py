@@ -5,12 +5,11 @@ import logging
 import time
 
 
-
-
 from BenchmarkManager import Instruction
 from modules.Core import Core
 from parallel.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
 from tqpm.devices.qaptiva.myqlm.digital import MyQLMDigitalQPU
+
 
 class ModuleStage(Enum):
     """enum to classify preprocessing or postprocessing stage of a Core Module"""
@@ -19,7 +18,7 @@ class ModuleStage(Enum):
 
 
 class AsyncCore(Core, ABC):
-    """Base class for asynchrous QUARK module. 
+    """Base class for asynchronous QUARK module.
     implement submit_preprocess or submit_postprocess analogously to 
     preprocess or postprocess to make use of the asynchronous functionality
     additionally 
@@ -94,19 +93,16 @@ class AsyncCore(Core, ABC):
         is_submit_job = not prev_run_job_info
         is_collect_job = not is_submit_job or synchron_mode
         
-        job_manager =  self.JobManager (self.name, input_data,
-                                        config, **kwargs)
+        job_manager = self.JobManager(self.name, input_data,
+                                      config, **kwargs)
         if is_submit_job:
             return self._submit(stage, job_manager)
-            
-       
+
         if is_collect_job:
             logging.info("Resuming previous run with job_info = %s", prev_run_job_info)
             job_manager.set_info( **prev_run_job_info)
-            return self._collect(stage,job_manager)
-            
-    
-    
+            return self._collect(stage, job_manager)
+
     def _submit(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """calls the corresponding submit_pre or postprocess function with arguments
         filled from job_manager"""
@@ -114,32 +110,36 @@ class AsyncCore(Core, ABC):
             if stage == ModuleStage.PRE \
                 else self.submit_postprocess
         job_manager.job_info = submit(job_manager.input, 
-                                        job_manager.config, 
-                                        **job_manager.kwargs)
+                                      job_manager.config,
+                                      **job_manager.kwargs)
         
         self.metrics.add_metric("job_info", 
                                 job_manager.get_json_serializable_info())
         
         return job_manager, 0.0
-    
-    
+
     def _collect(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """calls the corresponding collect_pre or postprocess function with arguments
         filled from job_manager"""
         collect = self.collect_preprocess \
             if stage == ModuleStage.PRE \
-                else self.collect_postprocess
-               
-        try:
-            while job_manager.status == AsyncStatus.SUBMITTED:
-                time.sleep(1)
-            if job_manager.status == AsyncStatus.DONE:
-                logging.info(f"job {job_manager} done")
-        except KeyboardInterrupt: #TODO: this does not work in my (debugging) setup
-            pass
-        
-        self.metrics.add_metric("parallel_job_info", job_manager.job_info)
-        return collect(job_manager.result), job_manager.runtime
+            else self.collect_postprocess
+
+
+#        try:
+#            while job_manager.status == AsyncStatus.SUBMITTED:
+#                time.sleep(1)
+#            if job_manager.status == AsyncStatus.DONE:
+#                logging.info(f"job {job_manager} done")
+#        except KeyboardInterrupt: #TODO: this does not work in my (debugging) setup
+#            pass
+#
+
+        result = collect(job_manager.result)  # TODO ugly side effect: modifies job_manager.job_info
+        self.metrics.add_metric("job_info",
+                                job_manager.get_json_serializable_info())
+
+        return result, job_manager.runtime
     
     def submit_preprocess(self, job, config, **kwargs):
         """interface: overwrite this method to a module specific submission.
@@ -167,16 +167,29 @@ class AsyncCore(Core, ABC):
         return server_result
 
 
-class AsyncPOCDevice(AsyncCore, MyQLMDigitalQPU):
+class AsyncPOCDevice(AsyncCore):
 
     JobManager = POCJobManager
 
-    def submit_preprocess(self, job, config, **kwargs):
-        self.config = config
-        qpu = self._get_qpu_plugin()
+    def __init__(self, device_name):
+        super().__init__(device_name)
+
+    def get_default_submodule(self, option: str) -> Core:
+        return None
+
+    def _do_submit(self, job, config):
+        myQLM_QPU = MyQLMDigitalQPU()
+        myQLM_QPU.config = config
+        qpu = myQLM_QPU._get_qpu_plugin()
         server_response = qpu.submit(job)
         return server_response
-            
+
+    def submit_preprocess(self, job, config, **kwargs):
+        return self._do_submit(job, config)
+
+    def submit_postprocess(self, job, config, **kwargs):
+        return self._do_submit(job, config)
+
 
 class AsyncQaptivaDevice(AsyncCore):
     pass

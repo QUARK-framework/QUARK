@@ -37,7 +37,7 @@ class AsyncJobManager(ABC):
         self.kwargs = kwargs
         
     def __repr__(self) -> str:
-        return f"parallel job with ID={self.job_info['id'] or 'UNKNOWN'}"
+        return f"parallel job with ID={self.job_info.get('id') or 'UNKNOWN'}"
         
         
     @property
@@ -69,7 +69,7 @@ class AsyncJobManager(ABC):
         
     
     @abstractmethod
-    def get_status(self):
+    def get_status(self) -> AsyncStatus:
         """Server specific implementation of how to determine the job status"""
 
     #@abstractmethod
@@ -110,10 +110,11 @@ class AsyncJobManager(ABC):
             }
         self._status = AsyncStatus.SUBMITTED
         self._handle_submit_info(value)
-        assert "id" in self.job_info, f"The job info does not contain 'id', please modify the"\
-            f"{self.__class__.__name__}._handle_submit_info method and define a unique id"
-        
-    @abstractmethod
+        if "id" not in self.job_info:
+            self.job_info["id"] = "unknown"
+        #assert "id" in self.job_info, f"The job info does not contain 'id', please modify the"\
+        #    f"{self.__class__.__name__}._handle_submit_info method and define a unique id"
+
     def _handle_submit_info(self, value):
         '''
         simplest case is just to copy the value inside, or modify, if needed
@@ -123,7 +124,8 @@ class AsyncJobManager(ABC):
         assert 'id' in self._job_info, "'id' is needed"
         ```
         '''
-        
+
+        self._job_info['server_response'] = value
         
     @property
     def runtime(self):
@@ -162,9 +164,9 @@ class POCJobManager(AsyncJobManager):
         If the status comes from the QLM, then the Connection().get_info(id=job_info["id"]) would be my 
         idea to resolve the status. this property might be overwritten in a QLM specific child class 
         """
-        runtime = time.time()-self.job_info.get("submission_time_s", 3000000000) 
-        if runtime< 0.01:
-            return AsyncStatus.SUBMITTED
+        #runtime = time.time()-self.job_info.get("submission_time_s", 3000000000)
+        #if runtime< 0.01:
+        #    return AsyncStatus.SUBMITTED
         # if random.random() < 0.3:
         #     return AsyncStatus.FAILED
         return AsyncStatus.DONE

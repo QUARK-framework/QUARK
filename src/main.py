@@ -22,6 +22,7 @@ from collections.abc import Iterable
 import inquirer
 import yaml
 
+from BenchmarkManager import JobStatus
 from Installer import Installer
 from Plotter import Plotter
 from utils import _expand_paths
@@ -52,6 +53,24 @@ def _filter_comments(file: Iterable) -> str:
             continue
         lines.append(line)
     return "".join(lines)
+
+
+def _find_interrupted_jobs() -> list:
+    """
+    Search for results.json files containing interrupted jobs.
+    :return: list of directories containing results of interrupted jobs.
+    :rtype: None
+    """
+    possible_dirs = []
+    dirs_results = glob.glob("benchmark_runs/**/results.json")
+    for dr in dirs_results:
+        with open(dr, 'r', encoding='utf-8') as results_json:
+            res = json.load(results_json)
+            # find all results.json contain interrupted jobs
+            if any(r.get("module", {}).get("quark_job_status", JobStatus.UNDEF.name)
+                   == JobStatus.INTERRUPTED.name for r in res):
+                possible_dirs.append(dr.replace("results.json", ""))
+    return possible_dirs
 
 
 def setup_logging() -> None:
@@ -127,10 +146,9 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
                         required=False, action=argparse.BooleanOptionalAction)
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
-    parser.add_argument('-rd', '--resume-dir', nargs='+', help='resume the following dirs with async submissions',
-                        required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
-    parser.add_argument('-r', '--resume', action="store_true", help="Continue an interrupted or asyncronous job")
+    parser.add_argument('-r', '--resume', action="store_true", help="Resume an interrupted job")
+    parser.add_argument('-rd', '--resume-dir', nargs='?', help='Provide results directory of the job to be resumed')
     parser.add_argument('-ff', '--failfast', help='Flag whether a single failed benchmark run causes QUARK to fail',
                         required=False, action=argparse.BooleanOptionalAction)
 
@@ -180,23 +198,16 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             # Gets current env here
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
-            
+
         if args.resume and not args.resume_dir:
-            possible_dirs = []
-            dirs_results = glob.glob("benchmark_runs/**/results.json")
-            for dr in dirs_results:
-                with open(dr,'r', encoding='utf-8') as results_json:
-                    res = json.load(results_json)
-                    # find all results.json with the field parallel_job_status that is different from "FINISHED" 
-                    if any(r.get("module",{}).get("quark_job_status", "FINISHED") != "FINISHED" for r in res):
-                        possible_dirs.append(dr.replace("results.json",""))
+            possible_dirs = _find_interrupted_jobs()
             if len(possible_dirs) == 1:
                 args.resume_dir = possible_dirs[0]
-            if len(possible_dirs)>1:
-                logging.info("Several unfinished runs. You can also specify by --resume-dir")
+            if len(possible_dirs) > 1:
+                logging.info("Several interrupted jobs. You can also specify by --resume-dir")
                 answer = inquirer.prompt(
                     [inquirer.List("resume_dir",
-                                   message="Several unfinished runs."
+                                   message="Found several interrupted jobs."
                                 #    "(You can also specify by --resume-dir <benchmark_run_dir>)\n"
                                    "Please select directory",
                                    choices=possible_dirs # add FAILED here if results.json contains info about previous attempts
@@ -204,15 +215,12 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                 args.resume_dir = answer["resume_dir"]
                 
             if len(possible_dirs) == 0 :
-                logging.info("All parallel jobs already collected")
+                logging.info("No interrupted jobs found.")
                 exit(0)
-            
-                        
-            
 
         if args.config or args.resume_dir:
             if not args.config:
-                args.config = os.path.join(args.resume_dir.replace("result.json",''),"config.yml")
+                args.config = os.path.join(args.resume_dir, "config.yml")
             logging.info(f"Provided config file at {args.config}")
             # Loads config
             with open(args.config) as filehandler:
@@ -226,15 +234,13 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                 config_manager.set_config(benchmark_config)
         else:
             config_manager.generate_benchmark_configs(app_modules)
-            
-        if args.resume_dir:
-            config_manager.add_output_directory(args.resume_dir)
 
         if args.createconfig:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
+            interrupted_results = None if args.resume_dir is None else os.path.join(args.resume_dir, "results.json")
+            benchmark_manager.orchestrate_benchmark(config_manager, app_modules, interrupted_results=interrupted_results)
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()

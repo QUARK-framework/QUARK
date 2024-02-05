@@ -35,11 +35,18 @@ from utils_mpi import get_comm
 
 comm = get_comm()
 
+
 class Instruction(Enum):
     PROCEED = 0
     INTERRUPT = 1
-    BREAK = 2 # for future use
+    SKIP = 2
 
+
+class JobStatus(Enum):
+    UNDEF = 0
+    INTERRUPTED = 1
+    SKIPPED = 2
+    FINISHED = 3
 
 def postprocess(module_instance, *args, **kwargs):
     result = module_instance.postprocess(*args, **kwargs)
@@ -77,6 +84,7 @@ class BenchmarkManager:
         self.results = []
         self.store_dir = None
         self.benchmark_record_template = None
+        self.interrupted_results = None
         self._async_job_info = None
          
     @property
@@ -86,12 +94,11 @@ class BenchmarkManager:
         return self._async_job_info 
     
     def load_async_job_info(self):
-        if not os.path.exists(os.path.join(self.store_dir, "results.json")):
+        if self.interrupted_results is None or not os.path.exists(self.interrupted_results):
             return None
-        with open(os.path.join(self.store_dir, "results.json"), encoding='utf-8') as results_file :
+        with open(self.interrupted_results, encoding='utf-8') as results_file :
             prelim_res = json.load(results_file)
         return prelim_res
-     
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:
         """
@@ -111,8 +118,8 @@ class BenchmarkManager:
         Path(self.store_dir).mkdir(parents=True, exist_ok=True)
         self._set_logger()
     
-    def _resume_store_dir(self, resume_dir) -> None:
-        self.store_dir = resume_dir
+    def _resume_store_dir(self, store_dir) -> None:
+        self.store_dir = store_dir
         self._set_logger()
 
     def _set_logger(self):
@@ -124,7 +131,7 @@ class BenchmarkManager:
         logger.addHandler(filehandler)
 
     def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list[dict],
-                              store_dir: str = None) -> None:
+                              store_dir: str = None, interrupted_results: str = None) -> None:
         """
         Executes the benchmarks according to the given settings.
 
@@ -134,11 +141,13 @@ class BenchmarkManager:
         :type app_modules: list of dict
         :param store_dir: target directory to store the results of the benchmark (if you decided to store it)
         :type store_dir: str
+        :param interrupted_results: result file from which the information for the interrupted jobs will be read.
+        :type interrupted_results: str
         :rtype: None
         """
-        resume_dir = benchmark_config_manager.output_directory        
-        if resume_dir:
-            self._resume_store_dir(resume_dir)
+        self.interrupted_results = interrupted_results
+        if interrupted_results and not store_dir:
+            self._resume_store_dir(os.path.dirname(interrupted_results))
         else:   
             self._create_store_dir(store_dir, tag=benchmark_config_manager.get_config()["application"]["name"].lower())
         benchmark_config_manager.save(self.store_dir)
@@ -178,6 +187,7 @@ class BenchmarkManager:
                 Path(path).mkdir(parents=True, exist_ok=True)
                 with open(f"{path}/application_config.json", 'w') as filehandler:
                     json.dump(backlog_item["config"], filehandler, indent=2)
+                quark_job_status = None
                 for i in range(1, repetitions + 1):
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
@@ -211,9 +221,13 @@ class BenchmarkManager:
                                     postprocess(self.application, processed_input, backlog_item["config"],
                                                 store_dir=path, rep_count=i, asynchronous_job_info=job_info)
 
-                        quark_job_status = "INTERRUPTED" if instruction == Instruction.INTERRUPT \
-                            else "FINISHED"
-                        self.application.metrics.add_metric("quark_job_status", quark_job_status)
+                        if instruction == Instruction.INTERRUPT:
+                            quark_job_status = JobStatus.INTERRUPTED
+                        elif instruction == Instruction.SKIP:
+                            quark_job_status = JobStatus.SKIPPED
+                        else:
+                            quark_job_status = JobStatus.FINISHED
+                        self.application.metrics.add_metric("quark_job_status", quark_job_status.name)
 
                         self.application.metrics.set_postprocessing_time(postprocessing_time)
                         self.application.metrics.validate()
@@ -236,7 +250,7 @@ class BenchmarkManager:
                         json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
                 logging.info("")
-                logging.info(" =============== Run finished =============== ")
+                logging.info(f" =============== Run {quark_job_status.name} =============== ")
                 logging.info("")
 
         except KeyboardInterrupt:

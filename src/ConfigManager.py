@@ -14,7 +14,6 @@
 
 import itertools
 import logging
-import os
 import re
 
 import inquirer
@@ -462,22 +461,7 @@ class ConfigManager:
             config[key] = values
 
         return config
-    
-    def add_output_directory(self, store_dir: str) -> None:
-        """Manually adding an output directory from which the processing can be resumed"""
-        store_dir = store_dir.replace("results.json","")
-        assert(os.path.exists(os.path.join(store_dir,"results.json"))), f"No results.json file found in {store_dir}"
-        self.config["output_directory"] = store_dir
-        
-    @property
-    def output_directory(self) -> str:
-        """The directory on file system that contains the result.json"""
-        if not self.config:
-            return None
-        if "output_directory" not in self.config:
-            return None
-        return self.config["output_directory"]
-    
+
     def create_tree_figure(self, store_dir: str) -> None:
         """
         Visualizes the benchmark as a graph (experimental feature)

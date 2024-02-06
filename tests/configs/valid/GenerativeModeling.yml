@@ -1,0 +1,124 @@
+application:
+  config:
+    n_qubits:
+    - 8
+  name: GenerativeModeling
+  submodules:
+  - config:
+      data_set:
+      - Stocks_2D
+    name: Continuous Data
+    submodules:
+    - config: {}
+      name: PIT
+      submodules:
+      - config:
+          depth:
+          - 1
+        name: CircuitCopula
+        submodules:
+        - config:
+            backend:
+            - aer_simulator_cpu
+            n_shots:
+            - 100
+          name: LibraryQiskit
+          submodules:
+          - config:
+              loss:
+              - KL
+              max_evaluations:
+              - 10
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+    - config: {}
+      name: MinMax
+      submodules:
+      - config:
+          depth:
+          - 1
+        name: CircuitStandard
+        submodules:
+        - config:
+            backend:
+            - aer_statevector_simulator_cpu
+            n_shots:
+            - 100
+          name: LibraryQiskit
+          submodules:
+          - config:
+              loss:
+              - NLL
+              max_evaluations:
+              - 10
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+      - config:
+          depth:
+          - 2
+        name: CircuitCardinality
+        submodules:
+        - config:
+            backend:
+            - aer_statevector_simulator_cpu
+            n_shots:
+            - 100
+          name: LibraryQiskit
+          submodules:
+          - config:
+              loss:
+              - KL
+              max_evaluations:
+              - 10
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+  - config:
+      train_size:
+      - 0.1
+      - 1.0
+    name: Discrete Data
+    submodules:
+    - config:
+        depth:
+        - 2
+      name: CircuitCardinality
+      submodules:
+      - config:
+          backend:
+          - aer_statevector_simulator_cpu
+          n_shots:
+          - 100
+        name: LibraryQiskit
+        submodules:
+        - config:
+            loss:
+            - KL
+            max_evaluations:
+            - 10
+            population_size:
+            - 5
+            pretrained:
+            - 'False'
+            sigma:
+            - 0.01
+          name: QCBM
+          submodules: []
+repetitions: 1

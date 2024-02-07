@@ -56,7 +56,6 @@ class AsyncJobManager(ABC):
     def input(self, value):
         self._job_input_data = value
 
-    @property
     def status(self):
         """The status of the job on the server. In this POC case, the status turns to DONE after  0.001s.
         If the status comes from the QLM, then the Connection().get_info(id=job_info["id"]) would be my
@@ -74,16 +73,16 @@ class AsyncJobManager(ABC):
     def get_status(self) -> AsyncStatus:
         """Server specific implementation of how to determine the job status"""
 
-    # @abstractmethod
-    @property
     def result(self):
         """returns the job result or self, if job is not finished"""
-        if self.status == AsyncStatus.DONE:
+        status = self.status()
+        assert isinstance(status, AsyncStatus), "Status is not of type AsyncStatus"
+        if status == AsyncStatus.DONE:
             self.set_info(
                 reception_time=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S")
             )
             return self.get_result()
-        if self.status == AsyncStatus.FAILED:
+        if status == AsyncStatus.FAILED:
             self.set_info(
                 reception_time=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S")
             )
@@ -142,6 +141,8 @@ class AsyncJobManager(ABC):
         # print(f"primitivize {value} of type {type(value)}")
         if isinstance(value, (bool, str, int, float, type(None))):
             return value
+        if isinstance(value, Enum):
+            return value.name
         if isinstance(value, list):
             return list(
                 [

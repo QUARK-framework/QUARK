@@ -67,6 +67,12 @@ class AsyncPreprocessForPoc(AsyncCore):
 
     JobManager = MyJobManager
 
+    def __init__(self):
+        super().__init__(
+            interruptable="PRE"
+        )  # "PRE", "POST" oder "PREPOST" (searches for substring)
+
+    
     def get_default_submodule(self, option: str) -> Core:
         pass
 
@@ -81,7 +87,7 @@ class AsyncPreprocessForPoc(AsyncCore):
         if not isinstance(server_result, AsyncJobManager):
             self.metrics.add_metric("server_result", server_result)
         else:
-            count = server_result.job_info.setdefault("count", 1)
+            count = server_result.job_info.get("count", 1)
             server_result.job_info["count"] = count + 1
             self.metrics.add_metric("server_result", "not available")
         return server_result
@@ -106,6 +112,10 @@ class AsyncPostprocessForPoc(AsyncCore):
     """
 
     JobManager = MyJobManager
+    def __init__(self):
+        super().__init__(
+            interruptable="POST"
+        )  # "PRE", "POST" oder "PREPOST" (searches for substring)
 
     def get_default_submodule(self, option: str) -> Core:
         pass

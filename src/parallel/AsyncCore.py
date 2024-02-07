@@ -168,19 +168,22 @@ class AsyncCore(Core, ABC):
 
         if status == AsyncStatus.DONE:
             logging.info(f"job {job_manager} done")
+            instruction = Instruction.PROCEED
         elif status == AsyncStatus.FAILED:
             # TODO: implement exception/ assert that the exception is catched elsewhere
-            raise NotImplementedError("serverside failure is not yet implemented")
+            instruction = Instruction.SKIP
+            # raise NotImplementedError("serverside failure is not yet implemented")
         else:
             logging.info(
                 f"Async module {self.name} is not yet finished. Status={status}"
             )
-            return Instruction.INTERRUPT, job_manager, 0.0
+            instruction = Instruction.INTERRUPT
 
         result = collect(job_manager.result())
+
         self.metrics.add_metric("job_info", job_manager.get_json_serializable_info())
 
-        return Instruction.PROCEED, result, job_manager.runtime
+        return instruction, result, job_manager.runtime
 
     def sync_run(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """default method is running submit and collect consecutively
@@ -219,22 +222,30 @@ class AsyncCore(Core, ABC):
         return server_result
 
 
-class AsyncPOCDevice(AsyncCore, MyQLMDigitalQPU):
+class AsyncPOCDevice(AsyncCore):
+
     JobManager = POCJobManager
 
     def __init__(self, device_name):
         super().__init__(
-            interruptable="PRE"
+            name=device_name, interruptable="PREPOST"
         )  # "PRE", "POST" oder "PREPOST" (searches for substring)
 
     def get_default_submodule(self, option: str) -> Core:
         return None
 
-    def submit_preprocess(self, job, config, **kwargs):
-        self.config = config
-        qpu = self._get_qpu_plugin()
+    def _do_submit(self, job, config):
+        myQLM_QPU = MyQLMDigitalQPU()
+        myQLM_QPU.config = config
+        qpu = myQLM_QPU._get_qpu_plugin()
         server_response = qpu.submit(job)
         return server_response
+
+    def submit_preprocess(self, job, config, **kwargs):
+        return self._do_submit(job, config)
+
+    def submit_postprocess(self, job, config, **kwargs):
+        return self._do_submit(job, config)
 
 
 class AsyncQaptivaDevice(AsyncCore):

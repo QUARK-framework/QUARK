@@ -163,12 +163,3 @@ class LeafForPoc(Core):
         input_data_post.setdefault("post_processed_by", []).append("LeafForPoc")
         return input_data_post
 
-
-class AsyncPostprocessLeafForPoc(Core):
-
-    def get_parameter_options(self) -> dict:
-        return {}
-
-    def get_default_submodule(self, option: str) -> Core:
-        pass
-

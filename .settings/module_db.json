@@ -1870,7 +1870,7 @@
                   "args": {
                     "device_name": "ibm_eagle"
                   },
-                  "module": "modules.devices.IBMEagle",
+                  "module": "modules.devices.HelperClass",
                   "requirements": [],
                   "submodules": []
                 }

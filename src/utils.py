@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import time
-from typing import Union
+from typing import Union, Callable
 
 import inquirer
 
@@ -204,11 +204,11 @@ def end_time_measurement(start: float) -> float:
     return round((end - start) * 1000, 3)
 
 
-def quark_stop_watch(position: int = None):
+def stop_watch(position: int = None) -> Callable:
     """
     Usage as decorator to measure time, eg:
     ```
-    @quark_stop_watch()
+    @stop_watch()
     def run(input_data,...):
         return processed_data
     ```
@@ -218,10 +218,13 @@ def quark_stop_watch(position: int = None):
     ```
     If the return value of the decorated function is of type tuple,
     the optional parameter `position` can be used to specify the position at which the
-    measured time is to be inserted in the returned tuple.
+    measured time is to be inserted in the return tuple.
 
-    :param position: the position at which to insert the time
+    :param position: The position at which the measured time gets inserted in the return tuple.
+                     If not specified the measured time will be appended to the original return value.
     :type position: int
+    :return: The wrapper function
+    :rtype: Callable
     """
     def wrap(func):
         def wrapper(*args, **kwargs):

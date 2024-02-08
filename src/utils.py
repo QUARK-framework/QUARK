@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import time
-from typing import Union
+from typing import Union, Callable
 
 import inquirer
 
@@ -202,3 +202,39 @@ def end_time_measurement(start: float) -> float:
     """
     end = time.perf_counter()
     return round((end - start) * 1000, 3)
+
+
+def stop_watch(position: int = None) -> Callable:
+    """
+    Usage as decorator to measure time, eg:
+    ```
+    @stop_watch()
+    def run(input_data,...):
+        return processed_data
+    ```
+    results in valid:    
+    ```
+    processed_data, time_to_process = run(input,...)
+    ```
+    If the return value of the decorated function is of type tuple,
+    the optional parameter `position` can be used to specify the position at which the
+    measured time is to be inserted in the return tuple.
+
+    :param position: The position at which the measured time gets inserted in the return tuple.
+                     If not specified the measured time will be appended to the original return value.
+    :type position: int
+    :return: The wrapper function
+    :rtype: Callable
+    """
+    def wrap(func):
+        def wrapper(*args, **kwargs):
+            start = start_time_measurement()
+            return_value = func(*args, **kwargs)
+            duration = end_time_measurement(start)
+            if position is not None and isinstance(return_value, tuple):
+                rv = list(return_value)
+                rv.insert(position, duration)
+                return tuple(rv)
+            return return_value, duration
+        return wrapper
+    return wrap

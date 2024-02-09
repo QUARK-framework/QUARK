@@ -9,11 +9,10 @@ Shared project for BenchQC AP3 and AP7.
 .
 ├── README.md
 ├── application
-│   ├── data
-        
+    ├── data
         Sample-Data for the usecases
-
-│   └── src
+        
+│   └── src
 
         Program-code contributions go here
 
@@ -31,7 +30,7 @@ Shared project for BenchQC AP3 and AP7.
     findings of interest. One Markdown-file describing the literature-item is contributed per
     paper / article or book.
 
-│   └──    000_literature_template.md
+│   └──    000_literature_template.md
            Provides an template for listing a literature-item. Copy this file, renaming it to 
                      <first author>-<title>
            and contribute the relevant information.

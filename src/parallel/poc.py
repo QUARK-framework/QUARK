@@ -1,6 +1,6 @@
 from modules.Core import Core
 from modules.applications.Application import Application
-from utils import quark_stop_watch
+from utils import stop_watch
 from BenchmarkManager import Instruction
 from parallel.AsyncCore import AsyncCore
 from parallel.AsyncJob import AsyncJobManager, AsyncStatus
@@ -26,12 +26,12 @@ class ApplForPoc(Application):
         pass
 
 
-    @quark_stop_watch()
+    @stop_watch()
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         return {"x": 5}  # the problem instance
 
 
-    @quark_stop_watch()
+    @stop_watch()
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         self.metrics.add_metric("post_input", input_data)
         return input_data
@@ -92,7 +92,7 @@ class AsyncPreprocessForPoc(AsyncCore):
             self.metrics.add_metric("server_result", "not available")
         return server_result
 
-    @quark_stop_watch()
+    @stop_watch()
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         self.metrics.add_metric("post_input", input_data)
         input_data_post = {}
@@ -137,7 +137,7 @@ class AsyncPostprocessForPoc(AsyncCore):
             self.metrics.add_metric("server_result", "not available")
         return server_result
 
-    @quark_stop_watch()
+    @stop_watch()
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         self.metrics.add_metric("pre_input", input_data)
         input_data_post = {}
@@ -160,12 +160,12 @@ class LeafForPoc(Core):
     def get_default_submodule(self, option: str) -> Core:
         pass
 
-    @quark_stop_watch()
+    @stop_watch()
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         self.metrics.add_metric("pre_input", input_data)
         return input_data
 
-    @quark_stop_watch()
+    @stop_watch()
     def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         self.metrics.add_metric("post_input", input_data)
         input_data_post = {}

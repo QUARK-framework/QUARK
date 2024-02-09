@@ -40,6 +40,7 @@ class AsyncJobManager(ABC):
         self.metrics = {}
         self.config = config
         self.kwargs = kwargs
+        self.server_connection = None
 
     def __repr__(self) -> str:
         return f"parallel job with ID={self.job_info.get('id') or 'UNKNOWN'}"

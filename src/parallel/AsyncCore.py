@@ -51,7 +51,7 @@ class AsyncCore(Core, ABC):
     JobManager = AsyncJobManager
 
     def __init__(self, interruptable: str, name: str = None):
-        super().__init__(name)
+        Core.__init__(self, name)
         self.interruptable = [
             stage for stage in ModuleStage if stage.name in interruptable
         ]

@@ -47,6 +47,7 @@ class JobStatus(Enum):
     INTERRUPTED = 1
     SKIPPED = 2
     FINISHED = 3
+    FAILED = 4
 
 def postprocess(module_instance, *args, **kwargs):
     result = module_instance.postprocess(*args, **kwargs)
@@ -237,6 +238,7 @@ class BenchmarkManager:
 
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                        quark_job_status = JobStatus.FAILED
                         if self.fail_fast:
                             raise
 
@@ -280,7 +282,7 @@ class BenchmarkManager:
         submodule_job_info = None
         if asynchronous_job_info and asynchronous_job_info.get("submodule"):
             assert module['name'] == asynchronous_job_info["submodule"]["module_name"], \
-                f"asyncronous job info given, but no information about module {module['name']} stored in it"
+                f"asyncronous job info given, but no information about module {module['name']} stored in it" #TODO!!
             if 'submodule' in asynchronous_job_info and asynchronous_job_info['submodule']:
                 submodule_job_info = asynchronous_job_info['submodule']
             
@@ -347,6 +349,7 @@ class BenchmarkManager:
         return results
 
     def _save_as_json(self, results: list) -> None:
+        results.sort(key = lambda r: r.get("benchmark_backlog_item_number"))
         logging.info(f"Saving {len(results)} benchmark records to {self.store_dir}/results.json")
         with open(f"{self.store_dir}/results.json", 'w') as filehandler:
             json.dump(results, filehandler, indent=2)

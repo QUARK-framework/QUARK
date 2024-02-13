@@ -192,15 +192,15 @@ class QiskitQAOA(Solver):
             optimizer = None
             if config["optimizer"] == "COBYLA":
                 optimizer = COBYLA(maxiter=config["iterations"])
-                if device_wrapper.device = 'ibm_eagle':
+                if device_wrapper.device == 'ibm_eagle':
                     optimizer = COBYLA(maxiter=10)
             elif config["optimizer"] == "POWELL":
                 optimizer = POWELL(maxiter=config["iterations"])
-                if device_wrapper.device = 'ibm_eagle':
+                if device_wrapper.device == 'ibm_eagle':
                     optimizer = COBYLA(maxiter=10)
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
-                if device_wrapper.device = 'ibm_eagle':
+                if device_wrapper.device == 'ibm_eagle':
                     optimizer = COBYLA(maxiter=10)
             if config["method"] == "vqe":
                 ry = TwoLocal(ising_op.num_qubits, "ry", "cz", reps=config["depth"], entanglement="full")

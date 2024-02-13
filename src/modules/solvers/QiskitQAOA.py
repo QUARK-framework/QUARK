@@ -22,8 +22,8 @@ from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit.circuit.library import TwoLocal
 from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
-# from qiskit_ibm_runtime import QiskitRuntimeService
-# from qiskit_ibm_runtime import Estimator, Sampler, Session, Options
+from qiskit_ibm_runtime import QiskitRuntimeService
+from qiskit_ibm_runtime import Estimator, Sampler, Session, Options
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 
@@ -192,10 +192,16 @@ class QiskitQAOA(Solver):
             optimizer = None
             if config["optimizer"] == "COBYLA":
                 optimizer = COBYLA(maxiter=config["iterations"])
+                if device_wrapper.device = 'ibm_eagle':
+                    optimizer = COBYLA(maxiter=10)
             elif config["optimizer"] == "POWELL":
                 optimizer = POWELL(maxiter=config["iterations"])
+                if device_wrapper.device = 'ibm_eagle':
+                    optimizer = COBYLA(maxiter=10)
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
+                if device_wrapper.device = 'ibm_eagle':
+                    optimizer = COBYLA(maxiter=10)
             if config["method"] == "vqe":
                 ry = TwoLocal(ising_op.num_qubits, "ry", "cz", reps=config["depth"], entanglement="full")
                 algorithm = VQE(ry, optimizer=optimizer, quantum_instance=self._get_quantum_instance(device_wrapper))
@@ -204,32 +210,28 @@ class QiskitQAOA(Solver):
                                  quantum_instance=self._get_quantum_instance(device_wrapper))
 
         # run actual optimization algorithm
-        result = algorithm.compute_minimum_eigenvalue(ising_op)
+        result = algorithm.compute_minimum_eigenvalue(ising_op) 
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
 
     @staticmethod
     def _get_quantum_instance(device_wrapper: any) -> any:
         backend = Aer.get_backend("qasm_simulator")
-        IBMQ.load_account()
-        provider = IBMQ.get_provider(hub='ibm-q')
-        backends_eagle = provider.backends(min_num_qubits=127, operational=True, simulator=False) # add 'simulator=Fals' if you only want to use real QPUs
-        backend_eagle = least_busy(backends_eagle)
-        # service = QiskitRuntimeService(channel="ibm_quantum")
-        # backend_eagle = service.least_busy(min_num_qubits=127, operational=True, simulator=False)
         if device_wrapper.device == 'qasm_simulator_gpu':
             logging.info("Using GPU simulator")
             backend.set_options(device='GPU')
             backend.set_options(method='statevector_gpu')
         elif device_wrapper.device == 'ibm_eagle':
             logging.info("Using IBM Eagle")
-            backend_eagle.set_options(device='ibm_eagle')
+            IBMQ.load_account()
+            provider = IBMQ.get_provider(hub='ibm-q')
+            backends_eagle = provider.backends(operational=True, simulator=True)
+            backend = least_busy(backends_eagle)
         else:
             logging.info("Using CPU simulator")
             backend.set_options(device='CPU')
             backend.set_options(method='statevector')
             backend.set_options(max_parallel_threads=48)
-        print(backend)
         return backend
 
     @staticmethod

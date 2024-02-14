@@ -153,7 +153,7 @@ class AsyncCore(Core, ABC):
     ) -> [Instruction, any, float]:
         """calls the corresponding collect_pre or postprocess function with arguments
         filled from job_manager"""
-        collect = (
+        collect_if_done = (
             self.collect_preprocess
             if stage == ModuleStage.PRE
             else self.collect_postprocess
@@ -167,7 +167,7 @@ class AsyncCore(Core, ABC):
             status = job_manager.status()
 
         if status == AsyncStatus.DONE:
-            logging.info(f"job {job_manager} done")
+            logging.info(f"{job_manager} done")
             instruction = Instruction.PROCEED
         elif status == AsyncStatus.FAILED:
             # TODO: implement exception/ assert that the exception is catched elsewhere
@@ -177,13 +177,14 @@ class AsyncCore(Core, ABC):
             logging.info(
                 f"Async module {self.name} is not yet finished. Status={status}"
             )
-            instruction = Instruction.INTERRUPT
+            self.metrics.add_metric("job_info", job_manager.get_json_serializable_info())
+            return Instruction.INTERRUPT, job_manager, 0.
 
-        result = collect(job_manager.result())
+        result = collect_if_done(job_manager.result())
 
         self.metrics.add_metric("job_info", job_manager.get_json_serializable_info())
 
-        return instruction, result, job_manager.runtime
+        return Instruction.PROCEED, result, job_manager.runtime
 
     def sync_run(self, stage: ModuleStage, job_manager: AsyncJobManager):
         """default method is running submit and collect consecutively

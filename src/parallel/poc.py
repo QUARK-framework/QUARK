@@ -50,6 +50,8 @@ class MyJobManager(AsyncJobManager):
         if self.job_info.get("count", 1) > 1:
             return AsyncStatus.DONE
         else:
+            count = self.job_info.get("count", 1)
+            self.job_info["count"] = count + 1
             return AsyncStatus.SUBMITTED
 
     def get_result(self) -> dict:
@@ -87,8 +89,6 @@ class AsyncPreprocessForPoc(AsyncCore):
         if not isinstance(server_result, AsyncJobManager):
             self.metrics.add_metric("server_result", server_result)
         else:
-            count = server_result.job_info.get("count", 1)
-            server_result.job_info["count"] = count + 1
             self.metrics.add_metric("server_result", "not available")
         return server_result
 
@@ -132,8 +132,6 @@ class AsyncPostprocessForPoc(AsyncCore):
         if not isinstance(server_result, AsyncJobManager):
             self.metrics.add_metric("server_result", server_result)
         else:
-            count = server_result.job_info.setdefault("count", 1)
-            server_result.job_info["count"] = count + 1
             self.metrics.add_metric("server_result", "not available")
         return server_result
 

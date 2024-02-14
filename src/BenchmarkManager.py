@@ -349,7 +349,7 @@ class BenchmarkManager:
         return results
 
     def _save_as_json(self, results: list) -> None:
-        results.sort(key = lambda r: r.get("benchmark_backlog_item_number"))
+        results.sort(key = lambda r: (r.get("benchmark_backlog_item_number"), r.get("repetition")))
         logging.info(f"Saving {len(results)} benchmark records to {self.store_dir}/results.json")
         with open(f"{self.store_dir}/results.json", 'w') as filehandler:
             json.dump(results, filehandler, indent=2)

@@ -2,8 +2,8 @@ from modules.Core import Core
 from modules.applications.Application import Application
 from utils import stop_watch
 from BenchmarkManager import Instruction
-from parallel.AsyncCore import AsyncCore
-from parallel.AsyncJob import AsyncJobManager, AsyncStatus
+from async_modules.AsyncCore import AsyncCore
+from async_modules.AsyncJob import AsyncJobManager, AsyncStatus
 
 import logging
 """

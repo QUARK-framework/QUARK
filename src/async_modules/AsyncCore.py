@@ -7,7 +7,7 @@ import time
 
 from BenchmarkManager import Instruction
 from modules.Core import Core
-from parallel.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
+from async_modules.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
 from tqpm.devices.qaptiva.myqlm.digital import MyQLMDigitalQPU
 
 

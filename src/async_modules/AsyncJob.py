@@ -1,11 +1,7 @@
-import os.path
 from abc import ABC, abstractmethod
 import datetime
 from enum import Enum
 import logging
-import pickle
-import random
-import time
 
 
 class AsyncModeException(Exception):
@@ -179,46 +175,3 @@ class AsyncJobManager(ABC):
         and contain all necessary information to retrieve the job from server again
         and some bookkeeping"""
         return self._primitivize(self.job_info)
-
-
-class POCJobManager(AsyncJobManager):
-    def get_status(self):
-        """The status of the job on the server. In this POC case, the status turns to DONE after  0.001s.
-        If the status comes from the QLM, then the Connection().get_info(id=job_info["id"]) would be my
-        idea to resolve the status. this property might be overwritten in a QLM specific child class
-        """
-        # runtime = time.time()-self.job_info.get("submission_time_s", 3000000000)
-        # if runtime< 0.01:
-        #    return AsyncStatus.SUBMITTED
-        # if random.random() < 0.3:
-        #     return AsyncStatus.FAILED
-        return AsyncStatus.DONE
-
-    def _handle_submit_info(self, value):
-        """stack is a device like object that has the method submit(job: JOB), where
-        JOB is the raw input to the async job object"""
-
-        self._job_info["server_response"] = value
-
-        self._job_info.update(
-            {
-                "server_response": value,
-                "id": int(random.random() * 1000),
-                "owner": "Smasch",
-                "submission_time_s": time.time(),
-            }
-        )
-        # dummy submission:
-        dummy_server_mock = f"dummyServer/job{self._job_info['id']}.pkl"
-        if not os.path.exists("dummyServer"):
-            os.mkdir("dummyServer")
-        with open(dummy_server_mock, "wb") as mock_file:
-            pickle.dump(self.job_info, mock_file)
-            logging.info("file %s written in %s", dummy_server_mock, os.getcwd())
-
-    def get_result(self) -> dict:
-        dummy_server_mock = f"dummyServer/job{self._job_info['id']}.pkl"
-        with open(dummy_server_mock, "rb") as mock_file:
-            self._job_info = pickle.load(mock_file)
-            logging.info("file %s loaded", dummy_server_mock)
-        return self.job_info.get("server_response", None)

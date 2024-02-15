@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-import abc
 from enum import Enum
 import logging
 import time
@@ -7,8 +6,7 @@ import time
 
 from BenchmarkManager import Instruction
 from modules.Core import Core
-from async_modules.AsyncJob import AsyncJobManager, POCJobManager, AsyncStatus
-from tqpm.devices.qaptiva.myqlm.digital import MyQLMDigitalQPU
+from async_modules.AsyncJob import AsyncJobManager, AsyncStatus
 
 
 class ModuleStage(Enum):
@@ -221,33 +219,4 @@ class AsyncCore(Core, ABC):
 
     def collect_postprocess(self, server_result):
         return server_result
-
-
-class AsyncPOCDevice(AsyncCore):
-
-    JobManager = POCJobManager
-
-    def __init__(self, device_name):
-        super().__init__(
-            name=device_name, interruptable="PREPOST"
-        )  # "PRE", "POST" oder "PREPOST" (searches for substring)
-
-    def get_default_submodule(self, option: str) -> Core:
-        return None
-
-    def _do_submit(self, job, config):
-        myQLM_QPU = MyQLMDigitalQPU()
-        myQLM_QPU.config = config
-        qpu = myQLM_QPU._get_qpu_plugin()
-        server_response = qpu.submit(job)
-        return server_response
-
-    def submit_preprocess(self, job, config, **kwargs):
-        return self._do_submit(job, config)
-
-    def submit_postprocess(self, job, config, **kwargs):
-        return self._do_submit(job, config)
-
-
-class AsyncQaptivaDevice(AsyncCore):
-    pass
+    

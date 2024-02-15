@@ -126,14 +126,14 @@ Note over any: XXXprocess: either pre- or postprocess
 any ->> +AJob: __init__
 alt submit mode
     Note right of any: submit mode has empty previous_job_info {} or None
-    any ->> +any: _submit() calls correct submit_XXXprocess
+    any ->> +any: _submit() 
     Note over any: Submitting to server
     AJob -->> any : async_job: MyJobManager
-    any ->> +Connection: submit (e.g.  AnyModule.getQPU().submit(job))
-    Connection -->> -any: server_response: (Qaptiva)AsyncJob
-    any-->> AJob: async_job.job_info.append(server_response : (Qaptiva)AsyncJob) [extract relevant fields]
+    any ->> any: submit_XXXprocess() -> server_response : (Qaptiva)AsyncJob
+    any ->> AJob: server_response
+    AJob-->> AJob: async_job._handle_submision_info(server_response) -> store e.g. job-id
     any -->> -any: return Instruction.INTERRUPT, job_info: MyJobManager
-    any -->> any: AnyModule.metrics.add_metric("job_info", job_info)
+    any -->> any: AsyncCore.metrics.add_metric("job_info", job_info)
     
 
 else collect mode

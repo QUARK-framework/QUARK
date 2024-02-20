@@ -186,6 +186,7 @@ class QiskitQAOA(Solver):
         t = mapped_problem['t']
         start = start_time_measurement()
         ising_op = self._get_pauli_op((t, J))
+        eagle_max_iter = 1
         if config["method"] == "classic":
             algorithm = NumPyMinimumEigensolver()
         else:
@@ -193,15 +194,15 @@ class QiskitQAOA(Solver):
             if config["optimizer"] == "COBYLA":
                 optimizer = COBYLA(maxiter=config["iterations"])
                 if device_wrapper.device == 'ibm_eagle':
-                    optimizer = COBYLA(maxiter=10)
+                    optimizer = COBYLA(maxiter=eagle_max_iter)
             elif config["optimizer"] == "POWELL":
                 optimizer = POWELL(maxiter=config["iterations"])
                 if device_wrapper.device == 'ibm_eagle':
-                    optimizer = COBYLA(maxiter=10)
+                    optimizer = COBYLA(maxiter=eagle_max_iter)
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
                 if device_wrapper.device == 'ibm_eagle':
-                    optimizer = COBYLA(maxiter=10)
+                    optimizer = COBYLA(maxiter=eagle_max_iter)
             if config["method"] == "vqe":
                 ry = TwoLocal(ising_op.num_qubits, "ry", "cz", reps=config["depth"], entanglement="full")
                 algorithm = VQE(ry, optimizer=optimizer, quantum_instance=self._get_quantum_instance(device_wrapper))
@@ -223,9 +224,10 @@ class QiskitQAOA(Solver):
             backend.set_options(method='statevector_gpu')
         elif device_wrapper.device == 'ibm_eagle':
             logging.info("Using IBM Eagle")
+            # IBMQ.save_account(TOKEN) # has to be run the very first time using the IBM Quantum Plattform, don´t forget to insert your API Token
             IBMQ.load_account()
             provider = IBMQ.get_provider(hub='ibm-q')
-            backends_eagle = provider.backends(operational=True, simulator=True)
+            backends_eagle = provider.backends(operational=True, simulator=False)
             backend = least_busy(backends_eagle)
         else:
             logging.info("Using CPU simulator")

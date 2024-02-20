@@ -22,8 +22,6 @@ from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit.circuit.library import TwoLocal
 from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
-from qiskit_ibm_runtime import QiskitRuntimeService
-from qiskit_ibm_runtime import Estimator, Sampler, Session, Options
 from qiskit import IBMQ
 from qiskit.providers.ibmq import least_busy
 

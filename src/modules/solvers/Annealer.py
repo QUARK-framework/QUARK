@@ -34,9 +34,6 @@ class Annealer(Solver):
         if option == "Simulated Annealer":
             from modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
             return SimulatedAnnealingSampler()
-        elif option == "Fujitsu Digital Annealer":
-            from dadk.Optimizer import Solver  # pylint: disable=C0415
-            return Solver()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")
 

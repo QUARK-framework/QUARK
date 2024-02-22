@@ -125,59 +125,64 @@ class BenchmarkManager:
         """
         git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
         git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
+        break_flag = False
 
-        try:
-            for idx_backlog, backlog_item in enumerate(benchmark_backlog):
-                benchmark_records: [BenchmarkRecord] = []
-                path = f"{self.store_dir}/benchmark_{idx_backlog}"
-                Path(path).mkdir(parents=True, exist_ok=True)
-                with open(f"{path}/application_config.json", 'w') as filehandler:
-                    json.dump(backlog_item["config"], filehandler, indent=2)
-                for i in range(1, repetitions + 1):
-                    logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
-                                 f" Iteration {i}/{repetitions}:")
-                    try:
+        for idx_backlog, backlog_item in enumerate(benchmark_backlog):
+            benchmark_records: [BenchmarkRecord] = []
+            path = f"{self.store_dir}/benchmark_{idx_backlog}"
+            Path(path).mkdir(parents=True, exist_ok=True)
+            with open(f"{path}/application_config.json", 'w') as filehandler:
+                json.dump(backlog_item["config"], filehandler, indent=2)
+            for i in range(1, repetitions + 1):
+                logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
+                             f" Iteration {i}/{repetitions}:")
+                try:
 
-                        self.benchmark_record_template = BenchmarkRecord(idx_backlog,
-                                                                         datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
-                                                                         git_revision_number, git_uncommitted_changes,
-                                                                         i, repetitions)
-                        self.application.metrics.set_module_config(backlog_item["config"])
-                        problem, preprocessing_time = self.application.preprocess(None, backlog_item["config"],
-                                                                                  store_dir=path, rep_count=i)
-                        self.application.metrics.set_preprocessing_time(preprocessing_time)
-                        self.application.save(path, i)
+                    self.benchmark_record_template = BenchmarkRecord(idx_backlog,
+                                                                     datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
+                                                                     git_revision_number, git_uncommitted_changes,
+                                                                     i, repetitions)
+                    self.application.metrics.set_module_config(backlog_item["config"])
+                    problem, preprocessing_time = self.application.preprocess(None, backlog_item["config"],
+                                                                              store_dir=path, rep_count=i)
+                    self.application.metrics.set_preprocessing_time(preprocessing_time)
+                    self.application.save(path, i)
 
-                        processed_input, benchmark_record = self.traverse_config(backlog_item["submodule"], problem,
-                                                                                 path, rep_count=i)
+                    processed_input, benchmark_record = self.traverse_config(backlog_item["submodule"], problem,
+                                                                             path, rep_count=i)
 
-                        _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
-                                                                              rep_count=i)
-                        self.application.metrics.set_postprocessing_time(postprocessing_time)
-                        self.application.metrics.validate()
-                        benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
-                        benchmark_records.append(benchmark_record)
+                    _, postprocessing_time = self.application.postprocess(processed_input, None, store_dir=path,
+                                                                          rep_count=i)
+                    self.application.metrics.set_postprocessing_time(postprocessing_time)
+                    self.application.metrics.validate()
+                    benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
+                    benchmark_records.append(benchmark_record)
 
-                    except Exception as error:
-                        logging.exception(f"Error during benchmark run: {error}", exc_info=True)
-                        if self.fail_fast:
-                            raise
+                except KeyboardInterrupt:
+                    logging.warning("CTRL-C detected during run_benchmark. Still trying to create results.json.")
+                    break_flag = True
+                    break
 
-                for record in benchmark_records:
-                    record.sum_up_times()
+                except Exception as error:
+                    logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                    if self.fail_fast:
+                        raise
 
-                # Wait until all MPI processes have finished and save results on rank 0
-                comm.Barrier()
-                if comm.Get_rank() == 0:
-                    with open(f"{path}/results.json", 'w') as filehandler:
-                        json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
+            for record in benchmark_records:
+                record.sum_up_times()
 
-                logging.info("")
-                logging.info(" =============== Run finished =============== ")
-                logging.info("")
+            # Wait until all MPI processes have finished and save results on rank 0
+            comm.Barrier()
+            if comm.Get_rank() == 0:
+                with open(f"{path}/results.json", 'w') as filehandler:
+                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
-        except KeyboardInterrupt:
-            logging.warning("CTRL-C detected. Still trying to create results.json.")
+            logging.info("")
+            logging.info(" =============== Run finished =============== ")
+            logging.info("")
+
+            if break_flag:
+                break
 
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int) -> (any, BenchmarkRecord):
         """

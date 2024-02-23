@@ -26,7 +26,7 @@ from typing import List, Dict
 import numpy as np
 
 from ConfigManager import ConfigManager
-from BenchmarkRecord import BenchmarkRecord
+from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
 from Plotter import Plotter
 from modules.Core import Core
 from utils import get_git_revision
@@ -188,18 +188,27 @@ class BenchmarkManager:
                 Path(path).mkdir(parents=True, exist_ok=True)
                 with open(f"{path}/application_config.json", 'w') as filehandler:
                     json.dump(backlog_item["config"], filehandler, indent=2)
-                quark_job_status = None
+                job_status_count = {}
                 for i in range(1, repetitions + 1):
                     logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                                  f" Iteration {i}/{repetitions}:")
-                    try:
-                        # getting information of interrupted jobs
-                        job_no = (idx_backlog*repetitions + i)
-                        if self.async_job_info:
-                            job_info = self.async_job_info[job_no-1]['module']
-                        else:
-                            job_info = {}
 
+                    quark_job_status = JobStatus.UNDEF
+                    # getting information of interrupted jobs
+                    job_info_with_meta_data = {}
+                    if self.async_job_info:
+                        for entry in self.async_job_info:
+                            if entry["benchmark_backlog_item_number"] == idx_backlog and entry["repetition"] == i:
+                                job_info_with_meta_data = entry
+                                break
+                    job_info = job_info_with_meta_data['module'] if job_info_with_meta_data else {}
+                    if job_info.get("quark_job_status") == JobStatus.FINISHED.name:
+                        benchmark_records.append(BenchmarkRecordStored(job_info_with_meta_data))
+                        quark_job_status = JobStatus.FINISHED
+                        logging.info("job already FINISHED - skip.")
+                        continue
+
+                    try:
                         self.benchmark_record_template = BenchmarkRecord(idx_backlog,
                                                                          datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
                                                                          git_revision_number, git_uncommitted_changes,
@@ -239,8 +248,13 @@ class BenchmarkManager:
                     except Exception as error:
                         logging.exception(f"Error during benchmark run: {error}", exc_info=True)
                         quark_job_status = JobStatus.FAILED
+                        if job_info:
+                            # restore results/infos from previous run
+                            benchmark_records.append(job_info)
                         if self.fail_fast:
                             raise
+
+                    job_status_count[quark_job_status] = job_status_count.get(quark_job_status, 0) + 1
 
                 for record in benchmark_records:
                     record.sum_up_times()
@@ -251,8 +265,9 @@ class BenchmarkManager:
                     with open(f"{path}/results.json", 'w') as filehandler:
                         json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
 
+                status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count.items()])
                 logging.info("")
-                logging.info(f" =============== Run {quark_job_status.name} =============== ")
+                logging.info(f" =============== Run finished: {status_report} =============== ")
                 logging.info("")
 
         except KeyboardInterrupt:

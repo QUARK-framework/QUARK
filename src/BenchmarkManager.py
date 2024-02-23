@@ -47,20 +47,20 @@ class JobStatus(Enum):
     FINISHED = 2
     FAILED = 3
 
+
+def _prepend_instruction(result):
+    if isinstance(result[0], Instruction):
+        return result
+    else:
+        return Instruction.PROCEED, *result
+
 def postprocess(module_instance, *args, **kwargs):
     result = module_instance.postprocess(*args, **kwargs)
-    if len(result) == 2:
-        return Instruction.PROCEED, result[0], result[1]
-    else:
-        return result
-
+    return _prepend_instruction(result)
 
 def preprocess(module_instance, *args, **kwargs):
     result = module_instance.preprocess(*args, **kwargs)
-    if len(result) == 2:
-        return Instruction.PROCEED, result[0], result[1]
-    else:
-        return result
+    return _prepend_instruction(result)
 
 
 class BenchmarkManager:
@@ -214,7 +214,7 @@ class BenchmarkManager:
                         self.application.metrics.set_module_config(backlog_item["config"])
                         instruction, problem, preprocessing_time = preprocess(self.application, None, backlog_item["config"],
                                                                               store_dir=path, rep_count=i,
-                                                                              asynchronous_job_info=job_info)
+                                                                              previous_job_info=job_info)
                         self.application.metrics.set_preprocessing_time(preprocessing_time)
                         self.application.save(path, i)
 
@@ -223,11 +223,11 @@ class BenchmarkManager:
                         if instruction == Instruction.PROCEED:
                             instruction, processed_input, benchmark_record = \
                                 self.traverse_config(backlog_item["submodule"], problem,
-                                                     path, rep_count=i, asynchronous_job_info=job_info)
+                                                     path, rep_count=i, previous_job_info=job_info)
                             if instruction == Instruction.PROCEED:
                                 instruction, _, postprocessing_time = \
                                     postprocess(self.application, processed_input, backlog_item["config"],
-                                                store_dir=path, rep_count=i, asynchronous_job_info=job_info)
+                                                store_dir=path, rep_count=i, previous_job_info=job_info)
 
                         if instruction == Instruction.INTERRUPT:
                             quark_job_status = JobStatus.INTERRUPTED
@@ -269,7 +269,7 @@ class BenchmarkManager:
         except KeyboardInterrupt:
             logging.warning("CTRL-C detected. Still trying to create results.json.")
 
-    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, asynchronous_job_info: dict = None) -> (any, BenchmarkRecord):
+    def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info: dict = None) -> (any, BenchmarkRecord):
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
         traverses up again. Once it reaches the root/application, a benchmark run is finished.
@@ -291,11 +291,11 @@ class BenchmarkManager:
         module_instance: Core = module["instance"]
         
         submodule_job_info = None
-        if asynchronous_job_info and asynchronous_job_info.get("submodule"):
-            assert module['name'] == asynchronous_job_info["submodule"]["module_name"], \
+        if previous_job_info and previous_job_info.get("submodule"):
+            assert module['name'] == previous_job_info["submodule"]["module_name"], \
                 f"asyncronous job info given, but no information about module {module['name']} stored in it" #TODO!!
-            if 'submodule' in asynchronous_job_info and asynchronous_job_info['submodule']:
-                submodule_job_info = asynchronous_job_info['submodule']
+            if 'submodule' in previous_job_info and previous_job_info['submodule']:
+                submodule_job_info = previous_job_info['submodule']
             
         module_instance.metrics.set_module_config(module["config"])
         instruction, module_instance.preprocessed_input, preprocessing_time\
@@ -303,7 +303,7 @@ class BenchmarkManager:
                                                         module["config"],
                                                         store_dir=path,
                                                         rep_count=rep_count,
-                                                        asynchronous_job_info=submodule_job_info)
+                                                        previous_job_info=submodule_job_info)
 
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
         output = None
@@ -319,12 +319,12 @@ class BenchmarkManager:
                                  module_instance.preprocessed_input,
                                  module["config"], store_dir=path,
                                  rep_count=rep_count,
-                                 asynchronous_job_info=submodule_job_info)
+                                 previous_job_info=submodule_job_info)
                 output = module_instance.postprocessed_input
             else:
                 instruction, processed_input, benchmark_record = self.traverse_config(module["submodule"],
                                                                         module_instance.preprocessed_input, path,
-                                                                        rep_count, asynchronous_job_info=submodule_job_info)
+                                                                        rep_count, previous_job_info=submodule_job_info)
 
                 if instruction == Instruction.PROCEED:
                     instruction, module_instance.postprocessed_input, postprocessing_time = \
@@ -332,7 +332,7 @@ class BenchmarkManager:
                                     module["config"],
                                     store_dir=path,
                                     rep_count=rep_count,
-                                    asynchronous_job_info=submodule_job_info)
+                                    previous_job_info=submodule_job_info)
                     output = module_instance.postprocessed_input
                 else:
                     output = processed_input

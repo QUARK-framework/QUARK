@@ -12,7 +12,7 @@ class InstructionDemo(Application):
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
         logging.info("%s", kwargs.keys())
-        logging.info("job_info: %s", kwargs.get("asynchronous_job_info"))
+        logging.info("previous_job_info: %s", kwargs.get("previous_job_info"))
         rep_count = kwargs["rep_count"]
         instruction_name = config.get("instruction", Instruction.PROCEED.name)
         instruction = Instruction.PROCEED

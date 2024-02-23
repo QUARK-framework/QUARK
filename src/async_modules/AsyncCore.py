@@ -97,12 +97,12 @@ class AsyncCore(Core, ABC):
                     input_data, config, **kwargs
                 )
 
-        asynchronous_job_info = kwargs.get("asynchronous_job_info", dict())
+        previous_job_info = kwargs.get("previous_job_info", dict())
 
         prev_run_job_info = (
             None
-            if not asynchronous_job_info
-            else asynchronous_job_info.get("job_info", False)
+            if not previous_job_info
+            else previous_job_info.get("job_info", False)
         )
 
         is_interrupted_here = (

@@ -169,7 +169,7 @@ class AsyncCore(Core, ABC):
             instruction = Instruction.PROCEED
         elif status == AsyncStatus.FAILED:
             # TODO: implement exception/ assert that the exception is catched elsewhere
-            instruction = Instruction.SKIP
+            instruction = Instruction.INTERRUPT
             # raise NotImplementedError("serverside failure is not yet implemented")
         else:
             logging.info(

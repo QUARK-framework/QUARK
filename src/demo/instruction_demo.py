@@ -18,15 +18,11 @@ class InstructionDemo(Application):
         instruction = Instruction.PROCEED
         if instruction_name == Instruction.PROCEED.name:
             instruction = Instruction.PROCEED
-        elif instruction_name == Instruction.SKIP.name:
-            instruction = Instruction.SKIP
         elif instruction_name == Instruction.INTERRUPT.name:
             instruction = Instruction.INTERRUPT
         if instruction_name == "mixed":
             instruction = Instruction.PROCEED
-            if rep_count%3 == 1:
-                instruction = Instruction.SKIP
-            elif rep_count%3 == 2:
+            if rep_count%2 == 1:
                 instruction = Instruction.INTERRUPT
         elif instruction_name == "exception":
             raise Exception("demo exception")
@@ -37,7 +33,6 @@ class InstructionDemo(Application):
     def get_parameter_options(self) -> dict:
         return {
             "instruction": {"values": [Instruction.PROCEED.name,
-                                       Instruction.SKIP.name,
                                        Instruction.INTERRUPT.name,
                                        "exception",
                                        "mixed"],

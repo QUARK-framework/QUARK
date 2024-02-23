@@ -39,15 +39,13 @@ comm = get_comm()
 class Instruction(Enum):
     PROCEED = 0
     INTERRUPT = 1
-    SKIP = 2
 
 
 class JobStatus(Enum):
     UNDEF = 0
     INTERRUPTED = 1
-    SKIPPED = 2
-    FINISHED = 3
-    FAILED = 4
+    FINISHED = 2
+    FAILED = 3
 
 def postprocess(module_instance, *args, **kwargs):
     result = module_instance.postprocess(*args, **kwargs)
@@ -233,8 +231,6 @@ class BenchmarkManager:
 
                         if instruction == Instruction.INTERRUPT:
                             quark_job_status = JobStatus.INTERRUPTED
-                        elif instruction == Instruction.SKIP:
-                            quark_job_status = JobStatus.SKIPPED
                         else:
                             quark_job_status = JobStatus.FINISHED
                         self.application.metrics.add_metric("quark_job_status", quark_job_status.name)

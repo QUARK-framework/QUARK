@@ -6,8 +6,11 @@ from modules.applications.Application import Application
 
 
 class InstructionDemo(Application):
-    def __init__(self, name: str = None):
-        super().__init__(name)
+    """
+    A simple QUARK Application implementation showing the usage of instructions.
+    """
+    def __init__(self, application_name: str = None):
+        super().__init__(application_name)
         self.submodule_options = ["Dummy"]
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
@@ -47,6 +50,10 @@ class InstructionDemo(Application):
 
 
 class Dummy(Core):
+    """
+    Dummy QUARK module implementation which is used by the InstructionDemo.
+    """
+
     def get_parameter_options(self) -> dict:
         return {}
 

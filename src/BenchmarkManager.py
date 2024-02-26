@@ -169,6 +169,8 @@ class BenchmarkManager:
         :param store_dir: target directory to store the results of the benchmark (if you decided to store it)
         :type store_dir: str
         :param interrupted_results_path: result file from which the information for the interrupted jobs will be read.
+                                         If store_dir is None the parent directory of interrupted_results_path will
+                                         be used as store_dir.
         :type interrupted_results_path: str
         :rtype: None
         """
@@ -389,7 +391,6 @@ class BenchmarkManager:
         return results
 
     def _save_as_json(self, results: list) -> None:
-        results.sort(key = lambda r: (r.get("benchmark_backlog_item_number"), r.get("repetition")))
         logging.info(f"Saving {len(results)} benchmark records to {self.store_dir}/results.json")
         with open(f"{self.store_dir}/results.json", 'w') as filehandler:
             json.dump(results, filehandler, indent=2)

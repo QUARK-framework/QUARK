@@ -48,17 +48,48 @@ class JobStatus(Enum):
     FAILED = 3
 
 
-def _prepend_instruction(result):
+def _prepend_instruction(result: list) -> list:
+    """
+    If the given list does not contain an instruction as first entry a
+    PROCEED is inserted at position 0 such that it is guaranteed that
+    the first entry of the returned list is an INSTRUCTION with PROCEED
+    as default.
+
+    :param result: the list to which the instruction is to be prepended
+    :type result: list
+    :return: the list with an INSTRUCTION as first entry
+    :rtype: list
+    """
     if isinstance(result[0], Instruction):
         return result
     else:
         return Instruction.PROCEED, *result
 
-def postprocess(module_instance, *args, **kwargs):
+
+def postprocess(module_instance: Core, *args, **kwargs) -> list:
+    """
+    Wraps module_instance.postprocess such that the first entry of the
+    result list is guaranteed to be an Instruction. See _prepend_instruction.
+
+    :param module_instance: the QUARK module on which to call postprocess
+    :type module_instance: Core
+    :return: the result list of module_instance.postprocess with an Instruction as first entry.
+    :rtype: list
+    """
     result = module_instance.postprocess(*args, **kwargs)
     return _prepend_instruction(result)
 
-def preprocess(module_instance, *args, **kwargs):
+
+def preprocess(module_instance: Core, *args, **kwargs) -> list:
+    """
+    Wraps module_instance.preprocess such that the first entry of the
+    result list is guaranteed to be an Instruction. See _prepend_instruction.
+
+    :param module_instance: the QUARK module on which to call preprocess
+    :type module_instance: Core
+    :return: the result list of module_instance.preprocess with an Instruction as first entry.
+    :rtype: list
+    """
     result = module_instance.preprocess(*args, **kwargs)
     return _prepend_instruction(result)
 
@@ -85,7 +116,11 @@ class BenchmarkManager:
         self.benchmark_record_template = None
         self.interrupted_results_path = None
 
-    def load_interrupted_results(self):
+    def load_interrupted_results(self) -> list:
+        """
+        :return: the content of the results file from the QUARK run to be resumed or None.
+        :rtype: list
+        """
         if self.interrupted_results_path is None or not os.path.exists(self.interrupted_results_path):
             return None
         with open(self.interrupted_results_path, encoding='utf-8') as results_file :

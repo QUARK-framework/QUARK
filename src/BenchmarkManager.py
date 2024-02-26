@@ -83,21 +83,14 @@ class BenchmarkManager:
         self.results = []
         self.store_dir = None
         self.benchmark_record_template = None
-        self.interrupted_results = None
-        self._async_job_info = None
-         
-    @property
-    def async_job_info(self):
-        if not self._async_job_info:
-            self._async_job_info = self.load_async_job_info()
-        return self._async_job_info 
-    
-    def load_async_job_info(self):
-        if self.interrupted_results is None or not os.path.exists(self.interrupted_results):
+        self.interrupted_results_path = None
+
+    def load_interrupted_results(self):
+        if self.interrupted_results_path is None or not os.path.exists(self.interrupted_results_path):
             return None
-        with open(self.interrupted_results, encoding='utf-8') as results_file :
-            prelim_res = json.load(results_file)
-        return prelim_res
+        with open(self.interrupted_results_path, encoding='utf-8') as results_file :
+            results = json.load(results_file)
+        return results
 
     def _create_store_dir(self, store_dir: str = None, tag: str = None) -> None:
         """
@@ -130,7 +123,7 @@ class BenchmarkManager:
         logger.addHandler(filehandler)
 
     def orchestrate_benchmark(self, benchmark_config_manager: ConfigManager, app_modules: list[dict],
-                              store_dir: str = None, interrupted_results: str = None) -> None:
+                              store_dir: str = None, interrupted_results_path: str = None) -> None:
         """
         Executes the benchmarks according to the given settings.
 
@@ -140,13 +133,13 @@ class BenchmarkManager:
         :type app_modules: list of dict
         :param store_dir: target directory to store the results of the benchmark (if you decided to store it)
         :type store_dir: str
-        :param interrupted_results: result file from which the information for the interrupted jobs will be read.
-        :type interrupted_results: str
+        :param interrupted_results_path: result file from which the information for the interrupted jobs will be read.
+        :type interrupted_results_path: str
         :rtype: None
         """
-        self.interrupted_results = interrupted_results
-        if interrupted_results and not store_dir:
-            self._resume_store_dir(os.path.dirname(interrupted_results))
+        self.interrupted_results_path = interrupted_results_path
+        if interrupted_results_path and not store_dir:
+            self._resume_store_dir(os.path.dirname(interrupted_results_path))
         else:   
             self._create_store_dir(store_dir, tag=benchmark_config_manager.get_config()["application"]["name"].lower())
         benchmark_config_manager.save(self.store_dir)
@@ -180,6 +173,7 @@ class BenchmarkManager:
         git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
 
         try:
+            interrupted_results = self.load_interrupted_results()
             for idx_backlog, backlog_item in enumerate(benchmark_backlog):
                 benchmark_records: [BenchmarkRecord] = []
                 path = f"{self.store_dir}/benchmark_{idx_backlog}"
@@ -194,8 +188,8 @@ class BenchmarkManager:
                     quark_job_status = JobStatus.UNDEF
                     # getting information of interrupted jobs
                     job_info_with_meta_data = {}
-                    if self.async_job_info:
-                        for entry in self.async_job_info:
+                    if interrupted_results:
+                        for entry in interrupted_results:
                             if entry["benchmark_backlog_item_number"] == idx_backlog and entry["repetition"] == i:
                                 job_info_with_meta_data = entry
                                 break

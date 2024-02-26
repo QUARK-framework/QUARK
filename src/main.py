@@ -198,8 +198,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            interrupted_results = None if args.resume_dir is None else os.path.join(args.resume_dir, "results.json")
-            benchmark_manager.orchestrate_benchmark(config_manager, app_modules, interrupted_results=interrupted_results)
+            interrupted_results_path = None if args.resume_dir is None else os.path.join(args.resume_dir, "results.json")
+            benchmark_manager.orchestrate_benchmark(config_manager, app_modules,
+                                                    interrupted_results_path=interrupted_results_path)
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()

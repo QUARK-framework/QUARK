@@ -1,0 +1,44 @@
+name: Linting
+
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: ['main', 'dev']
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  lint:
+    name: Run linter
+    runs-on: [ 'ubuntu-latest' ]
+    env:
+      AGENT_TOOLSDIRECTORY: /home/runner/actions-runner/_work/_tool/
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9.16'
+          token: ${{ secrets.QUARK_GH_GITHUB_COM_TOKEN }}
+
+      - name: Install pylint
+        run: pip install pylint
+
+      - name: Run pylint
+        uses: wearerequired/lint-action@v2
+        with:
+          pylint: true
+          pylint_args: "--max-line-length=120 --max-attributes=10 --max-args=8  --disable=C0111 --disable=W1514
+                        --disable=logging-fstring-interpolation --disable=import-error --disable=C0103 --disable=W0718
+                        --disable=W0719 --disable=R1705 --disable=W0107 --disable=W0613 --disable=W0401 --disable=W0614
+                        --disable=W0611 --disable=C0123 --disable=C0413 --disable=W0511 --disable=R1702 --disable=R0912
+                        --disable=R0914 --disable=R0911 --disable=R0801"
+

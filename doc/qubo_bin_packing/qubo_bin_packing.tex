@@ -1,0 +1,85 @@
+\documentclass[reqno,a4paper]{article}
+%\documentclass[a4paper,twocolumn,11pt,accepted=2017-05-09]{quantumarticle}
+\pdfoutput=1
+% Seitenformat
+\usepackage[top=1in, bottom=1.25in, left=1in, right=1in]{geometry}
+\textwidth15cm
+\textheight23cm
+\topmargin0cm
+\oddsidemargin0.5cm
+\evensidemargin0.5cm
+
+% Sprachen
+\usepackage[ngerman,british]{babel}
+
+% Eingabekodierung
+\usepackage[utf8]{inputenc}
+
+% Schrift
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+%\usepackage{mathpazo,tgcursor,tgpagella}
+%\usepackage{textcomp}
+
+% Weitere Pakete
+\input{packages}
+\usepackage[short,nocomma]{optidef}
+
+% Makros
+\input{macros}
+
+% Hyperlinks im Dokument und PDF-Optionen
+\usepackage[bookmarksnumbered,bookmarksopen,unicode]{hyperref}
+\usepackage{url}            % simple URL typesetting
+
+% Pfade für die Bilder und Tabellen
+\newcommand{\graphicpath}{fig}
+\newcommand{\tablepath}{tab}
+
+%Kommentare
+\usepackage[]{todonotes}
+\newcommand{\fw}[1]{\todo{\textcolor{red}{Fritz:} #1}}
+\newcommand{\fwil}[1]{\todo[inline]{\textcolor{red}{Fritz:} #1}}
+\newcommand{\fl}[1]{\todo{\textcolor{green}{Frauke:} #1}}
+\newcommand{\flil}[1]{\todo[inline]{\textcolor{green} {Frauke:} #1}}
+\newcommand{\ab}[1]{\todo{\textcolor{blue}{Andi:} #1}}
+\newcommand{\abil}[1]{\todo[inline]{\textcolor{blue} {Andi:} #1}}
+\newcommand{\mw}[1]{\todo{\textcolor{yellow}{Markus:} #1}}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\title{BenchQC:\\QUBO models for bin packing}
+
+\author{
+	Friedrich Wagner
+%%	\thanks{Department of Data Science, University of Erlangen-Nuremberg, Germany}
+%	\thanks{Fraunhofer Institute for Integrated Circuits IIS, Erlangen, Germany}\\
+%	\texttt{friedrich.wagner@iis.fraunhofer.de}
+%	\and
+%	Andreas Bärmann
+%	\thanks{Department of Mathematics, University of Erlangen-Nuremberg, Germany}\\
+%	\texttt{andreas.baermann@fau.de}
+%	\and
+%	Frauke Liers
+%	\thanks{Department of Data Science, University of Erlangen-Nuremberg, Germany}\\
+%	\texttt{frauke.liers@fau.de}
+%	\and
+%	Markus Weissenbäck
+%	%	\thanks{Department of Data Science, University of Erlangen-Nuremberg, Germany}
+%	\thanks{Fraunhofer Institute for Integrated Circuits IIS, Erlangen, Germany}\\
+%	\texttt{markus.weissenbaeck@iis.fraunhofer.de}
+}
+
+\begin{document}
+	
+	\maketitle
+	
+	\input{content}
+	
+	\bibliographystyle{unsrt}  
+%	\bibliographystyle{quantum}
+	\bibliography{./bib_qubo}
+	
+\end{document}
+}

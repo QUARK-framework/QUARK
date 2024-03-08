@@ -28,4 +28,4 @@ pandas==1.5.2
 cma==3.3.0
 tensorboard==2.13.0
 tensorboardX==2.6.2
-qiskit-ibm-runtime
+qiskit-ibm-runtime==0.19.1

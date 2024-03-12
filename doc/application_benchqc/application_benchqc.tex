@@ -2,13 +2,17 @@
 \usepackage{import}
 \usepackage{preamble}
 \usepackage{booktabs}
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
 \addbibresource{literatur.bib}
 
+
+% Eingabekodierung
+\usepackage[utf8]{inputenc}
 
 
 \begin{document}
 
-    % Large images on titel page
+    % Large images on title page
     \lhead{\includegraphics[height=2cm]{images/logo_tex.png}}
     \chead{}
     \rhead{\includegraphics[height=2cm]{images/logo_optware.png}}
@@ -64,12 +68,14 @@
     \tableofcontents
     %--------------------------------------
 
-    % Sections
-    %--------------------------------------
-    \newpage
-    \input{sections/Usecases/einfuehrung.tex}
-    \input{sections/mathproblems/einfuehrung.tex}
-    %--------------------------------------
+    % % Sections
+    % %--------------------------------------
+    % \newpage
+    \input{sections/UseCases/einfuehrung}
+    \input{sections/MathProblems/einfuehrung}
+    \input{sections/Mappings/binpacking_qubo}
+    \input{sections/Metriken/zusammenfassung}
+    % %--------------------------------------
 
     % Glossar
     %--------------------------------------
@@ -86,7 +92,8 @@
         \vhEntry{0.0}{2023-07-28}{OptWare}{Initiale Version: Beschreibung UseCase, Bin Packing}
         \vhEntry{0.1}{2023-09-05}{OptWare}{Anpassung Beschreibung Testfahrzeugkonfiguration}
         \vhEntry{0.2}{2023-09-20}{OptWare}{Anpassung der Zielfunktionen}
-        \vhEntry{0.3}{2023-12-19}{OptWare}{Beschreibung des Andwenungsfalls - Reihenfolgeplanung}
+        \vhEntry{0.3}{2023-12-19}{OptWare}{Beschreibung des Anwenungsfalls - Reihenfolgeplanung}
+        \vhEntry{0.4}{2024-03-12}{Fraunhofer IIS}{Mapping des Bin Packing Problems zu QUBO Formulierung}
     \end{versionhistory}
     %--------------------------------------
 

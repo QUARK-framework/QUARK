@@ -1,0 +1,141 @@
+% Zahlenräume
+\newcommand{\F}{\{0, 1\}}
+\newcommand{\FR}{[0, 1]}
+%\newcommand{\N}{\mathbbm{N}}
+%\newcommand{\Z}{\mathbbm{Z}}
+%\newcommand{\Q}{\mathbbm{Q}}
+%\newcommand{\R}{\mathbbm{R}}
+
+%\newcommand{\B}{\mathbbm{B}}
+%\newcommand{\BB}{\mathcal{B}}
+
+%\renewcommand{\L}{\mathbbm{L}}
+%\newcommand{\LL}{\mathcal{L}}
+
+% Landau-Symbol
+\newcommand{\OO}{\mathcal{O}}
+
+% Mengen
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\setlr}[1]{\left\{#1\right\}}
+
+% Operatoren
+\newcommand{\argmax}[1]{\operatorname{argmax}\set{#1}}
+%\newcommand{\argmaxi}[2]{\operatorname{argmax}_{#1}\set{#2}}
+\newcommand{\argmaxil}[2]{\operatornamewithlimits{argmax}_{#1}\set{#2}}
+\newcommand{\argmaxillr}[2]{\operatornamewithlimits{argmax}_{#1}\setlr{#2}}
+\newcommand{\argmin}[1]{\operatorname{argmin}\set{#1}}
+%\newcommand{\argmini}[2]{\operatorname{argmin}_{#1}\set{#2}}
+\newcommand{\argminil}[2]{\operatornamewithlimits{argmin}_{#1}\set{#2}}
+\newcommand{\argminillr}[2]{\operatornamewithlimits{argmin}_{#1}\setlr{#2}}
+\renewcommand{\vec}[1]{\operatorname{vec}(#1)}
+\newcommand{\mat}[1]{\operatorname{mat}(#1)}
+\newcommand{\proj}[1]{\operatorname{proj}(#1)}
+\newcommand{\conv}[1]{\operatorname{conv}#1}
+\newcommand{\face}[1]{\operatorname{face}\set{#1}}
+\newcommand{\prob}[1]{\mathbbm{P}(#1)}
+
+\newcommand{\card}[1]{\lvert #1 \rvert}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\lrnorm}[1]{\left\lVert #1 \right\rVert}
+
+\renewcommand{\binom}[1]{\left(\begin{array}{c} #1 \end{array}\right)}
+\newcommand{\choice}[1]{\left\{\begin{array}{rl} #1 \end{array}\right.}
+\newcommand{\cvector}[1]{\left(\begin{array}{c} #1 \end{array}\right)}
+\renewcommand{\matrix}[2]{\left(\begin{array}{*{#1}{c}} #2 \end{array}\right)}
+
+% Mathematische Akzente
+\newcommand{\sol}[1]{\bar{#1}}
+\newcommand{\arb}[1]{\hat{#1}}
+%\newcommand{\nom}[1]{\hat{#1}}
+\newcommand{\pert}[1]{\tilde{#1}}
+\newcommand{\inc}[1]{\tilde{#1}}
+\newcommand{\alt}[1]{\hat{#1}}
+\newcommand{\low}[1]{\underaccent{\bar}{#1}}
+\newcommand{\up}[1]{\bar{#1}}
+\newcommand{\nom}[1]{\underaccent{\bar}{#1}}
+\newcommand{\dev}[1]{\hat{#1}}
+
+% Indexmengen
+\newcommand{\iset}[1]{\mathcal{#1}}
+\newcommand{\iB}{\iset{B}}
+\newcommand{\iT}{\iset{T}}
+\newcommand{\iTO}{\alt{\iset{T}}}
+\newcommand{\iR}{\iset{R}}
+\newcommand{\iP}{\iset{P}}
+
+% Anführungszeichen
+\newcommand{\sqm}[1]{`#1'}
+\newcommand{\qm}[1]{``#1''}
+
+% Kommentare
+\newcommand{\Todo}[1]{\textcolor{red}{#1}}
+
+% Abkürzungen
+\newcommand{\ie}{i.e.\ }
+\newcommand{\Wlog}{w.l.o.g.\ }
+\newcommand{\Wlogc}{w.l.o.g.}
+\newcommand{\WLOGc}{W.l.o.g.}
+\newcommand{\cf}{cf.\ }
+\newcommand{\eg}{e.g.\ }
+\newcommand{\etc}{etc.\ }
+\newcommand{\wrt}{w.r.t.\ }
+
+% Fette Tabelleneinträge
+\newcommand{\cbf}[1]{\textbf{\boldmath{#1}}}
+
+% Optimierungsprobleme
+\newcommand{\st}{\mathrm{s.t.}}
+\newcommand{\find}{\mathrm{find}}
+
+\newlength\mysinglespace
+\setlength\mysinglespace{0.5\baselineskip}
+
+\newlength\objspace
+\setlength\objspace{2\mysinglespace}
+
+\newlength\conspace
+\setlength\conspace{\mysinglespace}
+
+\newlength\cconspace
+\setlength\cconspace{3\mysinglespace}
+
+\newenvironment{constr}[1]{\begin{array}[t]{#1}}{\end{array}} %TODO: Abstände zwischen ZF und NBs ggf. mit \hspace{-?pt} korrigieren
+\newenvironment{opt}[3]{\begin{equation}\begin{array}{rl}#1 & #2 \\[\objspace] \st & \begin{constr}{#3}}{\end{constr}\end{array}\end{equation}\\[0pt]}
+\newenvironment{opt*}[3]{\begin{equation*}\begin{array}{rl}#1 & #2 \\[\objspace] \st & \begin{constr}{#3}}{\end{constr}\end{array}\end{equation*}\\[0pt]}
+
+\newenvironment{mip}{\alignat{4}}{\endalignat}
+\newenvironment{lmip}[1]{\subequations \label{#1} \alignat{4}}{\endsubequations\endalignat}
+\newcommand{\objective}[2]{#1\>\>\>\> & #2 \span\span\span\span\span\span}
+\newcommand{\stconstraint}[4]{\st\>\>\>\> && #1 && \;\;\;\, #2 & \;\;\;\, #3 && \quad \begin{array}{l} #4 \end{array}}
+\newcommand{\constraint}[4]{&& #1 && \;\;\;\, #2 & \;\;\;\, #3 && \quad \begin{array}{l} #4 \end{array}}
+\newcommand{\lobjective}[3]{#1\>\>\>\> & #2 \span\span\span\span\span\span \label{#3}}
+\newcommand{\lstconstraint}[5]{\st\>\>\>\> && #1 && \;\;\;\, #2 & \;\;\;\, #3 && \quad \begin{array}{l} #4 \end{array} \label{#5}}
+\newcommand{\lconstraint}[5]{&& #1 && \;\;\;\, #2 & \;\;\;\, #3 && \quad \begin{array}{l} #4 \end{array} \label{#5}}
+
+% Gleichungsarrays
+\newenvironment{eqns}[1]{\begin{equation}\begin{array}[t]{#1}}{\end{array}\end{equation}\\[0pt]}
+\newenvironment{eqns*}[1]{\begin{equation*}\begin{array}[t]{#1}}{\end{array}\end{equation*}\\[0pt]}
+
+% Theoremumgebungen
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{remark}[theorem]{Remark}
+% \newtheorem{observation}[theorem]{Observation}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{example}[theorem]{Example}
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{conjecture}[theorem]{Conjecture}
+
+%\newcommand{\argmin}[1]{\operatorname{argmin}{\set{#1}}}
+%\newcommand{\argmax}[1]{\operatorname{argmax}{\set{#1}}}
+%\newcommand{\argminn}[2]{\operatorname{argmin}_{#1}\set{#2}}
+%\newcommand{\diam}{\operatorname{diam}}
+
+% Bezeichnungen
+
+\newcommand{\GG}{\mathcal{G}}
+\newcommand{\TT}{\mathcal{T}}
+\newcommand{\mS}{\mathcal{S}}

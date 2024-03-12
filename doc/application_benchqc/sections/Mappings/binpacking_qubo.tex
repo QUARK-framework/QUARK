@@ -1,0 +1,63 @@
+\section{Problem mappings}
+
+\subsection{Bin packing with conflicts - QUBO model}
+
+Consider the bin packing IP model from \cref{subsubsec:bin-packing-with-conflicts}.\\
+Define the QUBO cost function as
+\begin{align}\label{eq:costfunction}
+	H(x,y) = A\cdot H_A(x,y) + B\cdot H_B(x)
+\end{align}
+The cost term $H_B$ models the costs in eq. \eqref{eq:objective_bin_conflicts}:
+\begin{align}
+	H_B(x) = \sum_{b\in B o \in O}b\cdot x_{ob}\,.
+\end{align}
+The penalty term $H_A$ encodes feasibility.\\
+For every constraint in the IP model, a penalty term for its violation is introduced.
+For the bin-assignment-constraints \eqref{eq:assignment_bin_conflicts}:
+\begin{align}
+	\sum_{o\in O}\left(\sum_{b\in B}x_{ob}-1\right)^2\ .
+\end{align}
+For the object-conflict-constraints \eqref{eq:incompatible_bin_conflicts} we introduce:
+\begin{align}
+	\sum_{b\in B}\sum_{o,o'\in I}\left(x_{ob}\cdot x_{o'b}\right)\ .
+\end{align}
+For the bin-capacity-constraints \eqref{eq:capacity_bin_conflicts}, auxiliary variables $y$ are necessary.
+For $b \in B$, the \emph{slack}  is
+\begin{align}
+	S_b \coloneqq c-\sum_{ o \in O}w_o\cdot x_{ob} \geq 0\,.
+\end{align}
+
+\paragraph{Unary (one-hot) encoding of slack.}
+We introduce $y_{sb}\in \{0,1\},\ b\in B,\ s \in \{0,1,\dots,c\}$, where
+$y_{sb} = 1 \Leftrightarrow S_b = s$.
+Thus,
+\begin{align}
+	S_b = \sum_{s= 0}^{c}s\cdot y_{sb} \quad\forall b\in B\ .
+\end{align}
+This is modeled by introducing two additional penalty terms into $H_A$.
+First, for each $b\in B$, only a single $y_{sb}$ is equal to one:
+\begin{align}
+	\sum_{b \in B}\left(1 - \sum_{s= 1}^{c}y_{sb}\right)^2\ .
+\end{align}
+Second, for each $b\in B$, negative slack is penalized:
+\begin{align}
+	\sum_{b \in B}\left(\sum_{s= 0}^{c}s\cdot y_{sb} - \sum_{o\in O} w_o\cdot x_{ob} \right)^2\ .
+\end{align}
+In total, we need $|B| \cdot (c+1)$ additional variables.
+
+\paragraph{Binary (logarithmic) encoding of slack.}
+Here, we introduce a different slack-encoding with $|B| \cdot \lceil \log_2(c+1) \rceil$ additional variables.
+We introduce $y_{kb}\in \{0,1\},\ b\in B,\ k \in \{0,1,\dots,M\}$, where
+\begin{align}
+	M\coloneqq \lceil \log_2(c+1) \rceil .
+\end{align}
+Then, the slack has a binary representation
+\begin{align}
+	S_b = \sum_{k=0}^{M-2}2^k\cdot y_{kb} + (c  - 2^{M-1} + 1)\cdot y_{M-1,b}\ .
+\end{align}
+We add a  penalty to $H_A$ if the slack does not have such a binary representation, i.e. Constraint \eqref{eq:capacity_bin_conflicts} is violated:
+\begin{align}
+	\sum_{b \in B} \left(\sum_{k=0}^{M-2}2^k\cdot y_{kb} + (c  - 2^{M-1} + 1)\cdot y_{M-1,b} - \sum_{ o \in O}w_o\cdot x_{ob} \right)^2\ .
+\end{align}
+Now we can get $H_A(x,y)$ by adding up 
+

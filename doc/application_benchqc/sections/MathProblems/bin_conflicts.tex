@@ -2,7 +2,7 @@
 
 Eine weitere interessante Erweiterung des Bin Packing Problems ergibt sich durch die Einführung
 von inkompatiblen Objekten.
-Inkompatible Objekte müssen zwingend auf unterschiedliche Behälter aufgeteilt werden \eqref{eq:incompatible}.
+Inkompatible Objekte müssen zwingend auf unterschiedliche Behälter aufgeteilt werden \eqref{eq:incompatible_bin_conflicts}.
 
 Dadurch ergibt sich das folgende ganzzahlige Optimierungsproblem:
 \begin{table}[H]
@@ -23,10 +23,10 @@ Dadurch ergibt sich das folgende ganzzahlige Optimierungsproblem:
 \end{table}
 
 \begin{align}
-    \min \qquad& \sum_{b\in B} y_b \\
-    \textit{s.t.} \qquad
-    & \sum_{b\in B} x_{ob} = 1~, \qquad &&\forall o\in O  \\
-    & \sum_{o\in O} w_{o} \cdot x_{ob} \leq c \cdot y_b~, \qquad &&\forall b\in B \\
-    & x_{ob} + x_{o'b} \leq 1~, \qquad &&\forall (o,o')\in I, b\in B\label{eq:incompatible}\\
+    \min \qquad & \sum_{b\in B} y_b \label{eq:objective_bin_conflicts}\\
+    \textit{s.t.} \qquad 
+    & \sum_{b\in B} x_{ob} = 1~, \qquad &&\forall o\in O \label{eq:assignment_bin_conflicts} \\
+    & \sum_{o\in O} w_{o} \cdot x_{ob} \leq c \cdot y_b~, \qquad &&\forall b\in B \label{eq:capacity_bin_conflicts} \\
+    & x_{ob} + x_{o'b} \leq 1~, \qquad &&\forall (o,o')\in I, b\in B\label{eq:incompatible_bin_conflicts}\\
     & x_{ob} \in \B~, \qquad &&\forall o\in O, b\in B
 \end{align}

@@ -192,6 +192,35 @@ Example for an application, which should reside under ``src/modules/applications
             def save(self, path, iter_count):
                 save_your_application(self.application, f"{path}/application.txt")
 
+Writing an asynchronous Module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A typical example for an asynchronous module is a solver which submits its job into
+the queue of some server and retrieves the result some times later. In QUARK this is
+supported via the interrupt/resume mechanism.
+
+QUARK modules may return instructions to the benchmark manager as first entry in the return value of
+pre and post-process. Currently the following instructions are supported:
+    - PROCEED
+    - INTERRUPT
+
+PROCEED: if the benchmark manger gets a PROCEED (or no instruction at all) he continues with the regular QUARK work flow.
+If the job manager can finish the current job without getting an INTERRUPT or exception he adds
+"quark_job_status"=FINISHED to the metrics.
+
+INTERRUPT: if the benchmark manager gets an INTERRUPT he stops the current QUARK work flow,
+adds "quark_job_status"=INTERRUPTED to the metrics, saves all the metrics written so far to the BenchmarkRecord
+and continues with the configuration/repetition loop.
+
+QUARK resume-mode:
+
+After running QUARK in its regular mode QUARK can be run again on the same results directory in resume mode by
+specifying the existing results directory with the --resume-dir option. This can be done repeatedly for the same
+results directory.
+
+If QUARK is called in resume mode the module which has returned an INTERRUPT previously will be called again
+with the same input supplemented by the key word argument "previous_job_info" which contains all the information
+the moduls has written to the metrics on the previous run.
+
 
 Updating the Module Database
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

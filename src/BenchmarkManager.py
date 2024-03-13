@@ -209,6 +209,7 @@ class BenchmarkManager:
         git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
         git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
 
+        job_status_count_total = {}
         try:
             interrupted_results = self.load_interrupted_results()
             for idx_backlog, backlog_item in enumerate(benchmark_backlog):
@@ -282,6 +283,7 @@ class BenchmarkManager:
                             raise
 
                     job_status_count[quark_job_status] = job_status_count.get(quark_job_status, 0) + 1
+                    job_status_count_total[quark_job_status] = job_status_count_total.get(quark_job_status, 0) + 1
 
                 for record in benchmark_records:
                     record.sum_up_times()
@@ -294,11 +296,28 @@ class BenchmarkManager:
 
                 status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count.items()])
                 logging.info("")
-                logging.info(f" =============== Run finished: {status_report} =============== ")
+                logging.info(f" ==== Run backlog item {idx_backlog + 1}/{len(benchmark_backlog)} "
+                             f"with {repetitions} iterations - {status_report} ==== ")
                 logging.info("")
 
         except KeyboardInterrupt:
             logging.warning("CTRL-C detected. Still trying to create results.json.")
+
+        # print overall status information
+        status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count_total.items()])
+        logging.info(80 * "=")
+        logging.info(f"====== Run {len(benchmark_backlog)} backlog items "
+                     f"with {repetitions} iterations - {status_report}")
+        if job_status_count_total.get(JobStatus.INTERRUPTED, 0) > 0:
+            try:
+                rel_path = Path(self.store_dir).relative_to(os.getcwd())
+            except ValueError:
+                rel_path = self.store_dir
+            logging.info(f"====== There are interrupted jobs. You may resume them by running QUARK with")
+            logging.info(f"====== --resume-dir={rel_path}")
+        logging.info(80*"=")
+        logging.info("")
+
 
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info: dict = None) -> (any, BenchmarkRecord):
         """

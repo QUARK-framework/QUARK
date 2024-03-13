@@ -126,6 +126,22 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
 All used config files, logs and results are stored in a folder in the ```benchmark_runs``` directory.
 
+#### interrupt/resume
+The processing of backlog items may get interrupted in which case you will see something like
+```
+2024-03-13 10:25:20,201 [INFO] ================================================================================
+2024-03-13 10:25:20,201 [INFO] ====== Run 3 backlog items with 10 iterations - FINISHED:15 INTERRUPTED:15
+2024-03-13 10:25:20,201 [INFO] ====== There are interrupted jobs. You may resume them by running QUARK with
+2024-03-13 10:25:20,201 [INFO] ====== --resume-dir=benchmark_runs\tsp-2024-03-13-10-25-19
+2024-03-13 10:25:20,201 [INFO] ================================================================================
+```
+This happens if you press CTRL-C or if some QUARK module does its work asynchronously, e.g. by submitting its job to some 
+batch system. For details on asynchronous modules look into Read the Docs.
+You can resume an interrupted QUARK run by calling: 
+```
+python src/main.py --resume-dir=<result-dir>
+```
+
 #### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:
 ```

@@ -202,7 +202,7 @@ class QiskitQAOA(Solver):
                                  quantum_instance=self._get_quantum_instance(device_wrapper))
 
         # run actual optimization algorithm
-        result = algorithm.compute_minimum_eigenvalue(ising_op) 
+        result = algorithm.compute_minimum_eigenvalue(ising_op)
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
 

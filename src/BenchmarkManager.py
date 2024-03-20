@@ -208,100 +208,113 @@ class BenchmarkManager:
         """
         git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
         git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
+        break_flag = False
 
         job_status_count_total = {}
-        try:
-            interrupted_results = self.load_interrupted_results()
-            for idx_backlog, backlog_item in enumerate(benchmark_backlog):
-                benchmark_records: [BenchmarkRecord] = []
-                path = f"{self.store_dir}/benchmark_{idx_backlog}"
-                Path(path).mkdir(parents=True, exist_ok=True)
-                with open(f"{path}/application_config.json", 'w') as filehandler:
-                    json.dump(backlog_item["config"], filehandler, indent=2)
-                job_status_count = {}
-                for i in range(1, repetitions + 1):
-                    logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
-                                 f" Iteration {i}/{repetitions}:")
+        interrupted_results = self.load_interrupted_results()
+        for idx_backlog, backlog_item in enumerate(benchmark_backlog):
+            benchmark_records: [BenchmarkRecord] = []
+            path = f"{self.store_dir}/benchmark_{idx_backlog}"
+            Path(path).mkdir(parents=True, exist_ok=True)
+            with open(f"{path}/application_config.json", 'w') as filehandler:
+                json.dump(backlog_item["config"], filehandler, indent=2)
+            job_status_count = {}
+            for i in range(1, repetitions + 1):
+                logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
+                             f" Iteration {i}/{repetitions}:")
 
-                    quark_job_status = JobStatus.UNDEF
-                    # getting information of interrupted jobs
-                    job_info_with_meta_data = {}
-                    if interrupted_results:
-                        for entry in interrupted_results:
-                            if entry["benchmark_backlog_item_number"] == idx_backlog and entry["repetition"] == i:
-                                job_info_with_meta_data = entry
-                                break
-                    job_info = job_info_with_meta_data['module'] if job_info_with_meta_data else {}
-                    if job_info.get("quark_job_status") == JobStatus.FINISHED.name:
-                        benchmark_records.append(BenchmarkRecordStored(job_info_with_meta_data))
-                        quark_job_status = JobStatus.FINISHED
-                        logging.info("job already FINISHED - skip.")
-                        continue
+                quark_job_status = JobStatus.UNDEF
+                # getting information of interrupted jobs
+                job_info_with_meta_data = {}
+                if interrupted_results:
+                    for entry in interrupted_results:
+                        if entry["benchmark_backlog_item_number"] == idx_backlog and entry["repetition"] == i:
+                            job_info_with_meta_data = entry
+                            break
+                job_info = job_info_with_meta_data['module'] if job_info_with_meta_data else {}
+                if job_info.get("quark_job_status") == JobStatus.FINISHED.name:
+                    benchmark_records.append(BenchmarkRecordStored(job_info_with_meta_data))
+                    quark_job_status = JobStatus.FINISHED
+                    logging.info("job already FINISHED - skip.")
+                    continue
 
-                    try:
-                        self.benchmark_record_template = BenchmarkRecord(idx_backlog,
-                                                                         datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
-                                                                         git_revision_number, git_uncommitted_changes,
-                                                                         i, repetitions)
-                        self.application.metrics.set_module_config(backlog_item["config"])
-                        instruction, problem, preprocessing_time = preprocess(self.application, None, backlog_item["config"],
-                                                                              store_dir=path, rep_count=i,
-                                                                              previous_job_info=job_info)
-                        self.application.metrics.set_preprocessing_time(preprocessing_time)
-                        self.application.save(path, i)
+                try:
 
-                        postprocessing_time = 0.
-                        benchmark_record = self.benchmark_record_template.copy()
+                    self.benchmark_record_template = BenchmarkRecord(idx_backlog,
+                                                                     datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
+                                                                     git_revision_number, git_uncommitted_changes,
+                                                                     i, repetitions)
+                    self.application.metrics.set_module_config(backlog_item["config"])
+                    instruction, problem, preprocessing_time = preprocess(self.application, None, backlog_item["config"],
+                                                                          store_dir=path, rep_count=i,
+                                                                          previous_job_info=job_info)
+                    self.application.metrics.set_preprocessing_time(preprocessing_time)
+                    self.application.save(path, i)
+
+                    postprocessing_time = 0.
+                    benchmark_record = self.benchmark_record_template.copy()
+                    if instruction == Instruction.PROCEED:
+                        instruction, processed_input, benchmark_record = \
+                            self.traverse_config(backlog_item["submodule"], problem,
+                                                 path, rep_count=i, previous_job_info=job_info)
                         if instruction == Instruction.PROCEED:
-                            instruction, processed_input, benchmark_record = \
-                                self.traverse_config(backlog_item["submodule"], problem,
-                                                     path, rep_count=i, previous_job_info=job_info)
-                            if instruction == Instruction.PROCEED:
-                                instruction, _, postprocessing_time = \
-                                    postprocess(self.application, processed_input, backlog_item["config"],
-                                                store_dir=path, rep_count=i, previous_job_info=job_info)
+                            instruction, _, postprocessing_time = \
+                                postprocess(self.application, processed_input, backlog_item["config"],
+                                            store_dir=path, rep_count=i, previous_job_info=job_info)
 
-                        if instruction == Instruction.INTERRUPT:
-                            quark_job_status = JobStatus.INTERRUPTED
-                        else:
-                            quark_job_status = JobStatus.FINISHED
-                        self.application.metrics.add_metric("quark_job_status", quark_job_status.name)
+                    if instruction == Instruction.INTERRUPT:
+                        quark_job_status = JobStatus.INTERRUPTED
+                    else:
+                        quark_job_status = JobStatus.FINISHED
+                    self.application.metrics.add_metric("quark_job_status", quark_job_status.name)
 
-                        self.application.metrics.set_postprocessing_time(postprocessing_time)
-                        self.application.metrics.validate()
-                        if benchmark_record is not None:
-                            benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
-                            benchmark_records.append(benchmark_record)
+                    self.application.metrics.set_postprocessing_time(postprocessing_time)
+                    self.application.metrics.validate()
+                    if benchmark_record is not None:
+                        benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
+                        benchmark_records.append(benchmark_record)
 
-                    except Exception as error:
-                        logging.exception(f"Error during benchmark run: {error}", exc_info=True)
-                        quark_job_status = JobStatus.FAILED
-                        if job_info:
-                            # restore results/infos from previous run
-                            benchmark_records.append(job_info)
-                        if self.fail_fast:
-                            raise
+                except KeyboardInterrupt:
+                    logging.warning("CTRL-C detected during run_benchmark. Still trying to create results.json.")
+                    break_flag = True
+                    break
 
-                    job_status_count[quark_job_status] = job_status_count.get(quark_job_status, 0) + 1
-                    job_status_count_total[quark_job_status] = job_status_count_total.get(quark_job_status, 0) + 1
+                except Exception as error:
+                    logging.exception(f"Error during benchmark run: {error}", exc_info=True)
+                    quark_job_status = JobStatus.FAILED
+                    if job_info:
+                        # restore results/infos from previous run
+                        benchmark_records.append(job_info)
+                    if self.fail_fast:
+                        raise
 
-                for record in benchmark_records:
-                    record.sum_up_times()
+                job_status_count[quark_job_status] = job_status_count.get(quark_job_status, 0) + 1
+                job_status_count_total[quark_job_status] = job_status_count_total.get(quark_job_status, 0) + 1
 
-                # Wait until all MPI processes have finished and save results on rank 0
-                comm.Barrier()
-                if comm.Get_rank() == 0:
-                    with open(f"{path}/results.json", 'w') as filehandler:
-                        json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
+            for record in benchmark_records:
+                record.sum_up_times()
 
-                status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count.items()])
-                logging.info("")
-                logging.info(f" ==== Run backlog item {idx_backlog + 1}/{len(benchmark_backlog)} "
-                             f"with {repetitions} iterations - {status_report} ==== ")
-                logging.info("")
+            for record in benchmark_records:
+                record.sum_up_times()
 
-        except KeyboardInterrupt:
-            logging.warning("CTRL-C detected. Still trying to create results.json.")
+            status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count.items()])
+            logging.info("")
+            logging.info(f" ==== Run backlog item {idx_backlog + 1}/{len(benchmark_backlog)} "
+                         f"with {repetitions} iterations - {status_report} ==== ")
+            logging.info("")
+
+            # Wait until all MPI processes have finished and save results on rank 0
+            comm.Barrier()
+            if comm.Get_rank() == 0:
+                with open(f"{path}/results.json", 'w') as filehandler:
+                    json.dump([x.get() for x in benchmark_records], filehandler, indent=2, cls=NumpyEncoder)
+
+            logging.info("")
+            logging.info(" =============== Run finished =============== ")
+            logging.info("")
+
+            if break_flag:
+                break
 
         # print overall status information
         status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count_total.items()])

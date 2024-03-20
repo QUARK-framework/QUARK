@@ -10,7 +10,7 @@ Testfahrzeuge minimiert werden.
 
 Jeder Test gehört dabei einer bestimmten Kategorie an,
 die über die Reihenfolge der Ausführung entscheidet.
-Crashtests müssen zum Beispiel immer als letzter Test eines
+Crashtests (Z) müssen zum Beispiel immer als letzter Test eines
 Vorserienautos durchgeführt werden, da diese Teile der
 Vorserienfahrzeuge zerstören können und somit die
 Ausführung der anderen Tests unmöglich machen.
@@ -44,14 +44,14 @@ Fahrzeugs absolviert sein.
     \label{fig:test_times}
 \end{figure}
 
-Pro konkrete Bauphase ist somit eine Menge an Tests vorgegeben,
+Pro konkreter Bauphase ist somit eine Menge an Tests vorgegeben,
 die auf $n$ verschiedenen Testfahrzeugen durchgeführt werden müssen.
 Pro Test sind dabei gewisse Sonderausstattungen (SAs) vorgegeben oder ausgeschlossen.
-In Testfahrzeuge können je nach Modelltyp unterschiedliche Sonderausstattungen
-verbaut werden. Sonderausstattungen können andere Sonderausstattungen fordern
-oder ausschließen. Zum Beispiel kann ein Auto nicht gleichzeitig einen $4$- und $8$
+In Testfahrzeuge können je nach Modelltyp unterschiedliche SAs
+verbaut werden. Manche SAs können andere SAs fordern oder ausschließen.
+Zum Beispiel kann ein Auto nicht gleichzeitig einen $4$- und $8$
 Zylindermotor verbaut haben. Diese direkten Abhängigkeiten können auf die Tests
-übertragen werden, so dass eine minimale Anzahl an Testfahrzeugen gefunden werden kann.
+übertragen werden, sodass eine minimale Anzahl an Testfahrzeugen gefunden werden kann.
 
 \subsubsection{Transformation Testinkompatibilitäten}
 
@@ -66,16 +66,19 @@ werden dürfen. Dies ergibt sich aus den folgenden Informationen:
 \end{itemize}
 
 \paragraph{Abhängigkeiten und Ausschlüsse der SAs}
-Für jeden Tests sollte bekannt sein, welche Sonderausstattung des Testfahrzeugs
-gefordert werden sollte. Neben den direkten Abhängigkeiten gibt es auch die
-indirekten, die sich aus den geforderten SAs ergeben. Wie die indirekten
-Abhängigkeiten auf die Tests übertragen werden können, sollen exemplarisch die
-nachfolgenden Regeln zeigen. Angenommen eine Sonderausstattung $SA1$ wird gefordert.
+Für jeden Tests ist bekannt, welche SAs des Testfahrzeugs gefordert werden.
+Neben den direkten Abhängigkeiten gibt es auch die indirekten, die sich aus den
+geforderten SAs ergeben. Wie die indirekten Abhängigkeiten auf die Tests übertragen
+werden können, sollen exemplarisch die nachfolgenden Regeln zeigen.
+
+Angenommen eine Sonderausstattung $SA1$ wird gefordert.
+\todo{Marvin: ich würde die Abhängigkeiten für Negationen umformulieren,
+z.B.: "SA2 für Test ausgeschlossen"}
 
 \begin{table}[H]
     \label{tab:tableSAs}
     \begin{tabularx}{\textwidth}{ | l | X |}
-        Bedingung an SAs & Abhängigkeit im Test \\\hline\hline
+        Bedingung an SAs & Abhängigkeit im Test mit SA1 \\\hline\hline
         $SA1 \Rightarrow SA2$ & $SA2$ für Test benötigt \\\hline
         $SA1 \Rightarrow \sim SA2$ & $\sim SA2$  für Test benötigt \\\hline
         $SA1 \Rightarrow SA2~|~SA3$ & $SA2$ oder $SA3$  für Test benötigt \\\hline
@@ -85,29 +88,33 @@ nachfolgenden Regeln zeigen. Angenommen eine Sonderausstattung $SA1$ wird geford
     \end{tabularx}
 \end{table}
 \todo{Liste ist nicht vollständig!}
-Wenn eine benötigte $SA$ oder ausgeschlossene $~SA$ gefunden wurde,
-müssen auch für diese die Regeln überprüft werden.
+Wenn eine benötigte $SA$ oder ausgeschlossene $\sim SA$ gefunden wurde,
+müssen auch für diese die Regeln überprüft werden. So ergibt sich eine Menge
+an Tests, für die bekannt ist, welche SAs auf dem Testfahrzeug platziert werden
+(a) müssen, (b) dürfen und (c) welche nicht platziert werden dürfen.
 
-Am Ende ergibt sich eine Menge an Tests, für die bekannt ist,
-welche SAs auf dem Testfahrzeug sein müssen und welche SAs nicht erlaubt sind.
-
-Tests, die sich ausschließende SAs haben, können somit nicht auf demselben
-Testfahrzeug getestet werden.
+Tests, die sich ausschließende SAs beinhalten, können z.B. nicht auf demselben
+Testfahrzeug durchgeführt werden. Sich gegenseitig bedingende SAs müssen
+hingegen im selben Testfahrzeug verbaut werden.
 
 \paragraph{Verfügbare Testfahrzeugkategorien}
 Des Weiteren sind auch die SAs auf den Testfahrzeugen eingeschränkt.
 Testfahrzeuge gehören unterschiedlichen Testfahrzeugkategorien an.
 Jede Testfahrzeugkategorie hat erlaubte SAs.
-Ein Test kann nur dann durchgeführt werden, wenn mindestens ein Testfahrzeugkategorie
-alle benötigten Sonderausstattungen erlaubt. Andernfalls kann dieser Test nicht
-ausgeführt werden und die Verteilung aller Tests ist nicht möglich.
 
-Tests, die nicht auf demselben Testfahrzeug ausgeführt werden können,
+Ein Test kann nur dann durchgeführt werden, wenn mindestens eine
+Testfahrzeugkategorie alle benötigten Sonderausstattungen erlaubt.
+Andernfalls kann dieser Test nicht ausgeführt werden und die Verteilung
+aller Tests ist nicht möglich.
+\todo{Marvin: das sollte schon vor der Optimierung sichergestellt sein.
+Undurchführbare Tests sollten nicht Teil des Input-Datensatzes sein.}
+
+Tests, die nicht auf dem selben Testfahrzeug ausgeführt werden können,
 können ebenfalls gegenseitig ausgeschlossen werden.
 
 \paragraph{Forderung von unterschiedlichen Testfahrzeugen}
-Normalerweise müssen Tests mehr als einmal auf unterschiedlichen Testfahrzeugen
-durchgeführt werden. Diese Tests schließen sich somit auch gegenseitig aus.
+Es gibt Tests, die mehr als einmal auf unterschiedlichen Testfahrzeugen
+durchgeführt werden müssen. Diese Tests schließen sich somit auch gegenseitig aus.
 
 \paragraph{Zugehörigkeit zu Testkategorien}
 
@@ -120,15 +127,15 @@ Tests anderer Kategorien müssen nicht besonders behandelt werden.
 \subsubsection{Transformation zu Bin Packing mit Konflikten}
 
 Gegeben ist eine Liste an Tests einer konkreten Bauphase, die genau einmal durchgeführt werden müssen.
-Für jeden Test ist bekannt:
+Für jeden Test ist bekannt
 \begin{itemize}
     \item welche Tests nicht am selben Fahrzeug durchgeführt werden dürfen,
-    \item wie lange für die Durchführung benötigt wird,
+    \item wie viel Zeit für die Durchführung benötigt wird,
     \item wann er frühestmöglich ausgeführt werden darf und
     \item bis wann er spätestens ausgeführt werden muss.
 \end{itemize}
 
-Um die Kosten möglichst gering zu halten, soll die Anzahl der Testfahrzeuge minimal gehalten werden.
+Um die Kosten möglichst gering zu halten, soll die Anzahl der Testfahrzeuge minimiert werden.
 Alle Tests müssen ausgeführt werden.
 
 %\subsubsection{Klassische Lösung}\todo[inline]{evtl. ein eigenes Kapitel für das Mapping einfügen.}
@@ -137,10 +144,21 @@ Das Testfahrzeugkonfigurationsproblem lässt sich auf das spezielle Bin Packing 
 
 Die Testfahrzeuge sind dabei die Behälter, deren Anzahl im Optimum möglichst gering sein muss.
 Die Objekte sind die auszuführenden Tests, die in dieser Bauphase abgeschlossen sein müssen.
-Die Test-Durchführungszeit ist im klassischen Problem das Gewicht der Objekte.
+\todo{Marvin: so kann nur je eine Bauphase gleichzeitig optimiert werden, richtig?
+Sollte kein Problem sein, da wie oben beschrieben davon ausgegangen wird, dass jedem Test
+genau eine Bauphase zugeordnet ist. Sollte man hier nur noch mal klarstellen.}
+Die Test-Durchführungszeit ist in der klassischen Problemformulierung das Gewicht der Objekte.
 Die maximale Kapazität pro Testfahrzeug ist ein Jahr, da alle Tests nacheinander ausgeführt werden müssen.
+\todo{Marvin: verstehe hier den Zusammenhang nicht. Die Beschränkung des Testzeitraums auf ein Jahr
+ist meiner Ansicht nach eine zusätzliche Randbedingung. Die Tatsache, dass Tests sequenziell ausgeführt
+werden müssen, hat damit nicht direkt was zu tun, oder? Man könnte schreiben "Alle einem Testfahrzeug
+zugewiesenen Tests müssen sequenziell innerhalb des Testzeitraums durchgeführt werden."}
 
 Die letzten beiden Eigenschaften der Tests bezüglich der Ausführungszeit ignorieren wir zunächst.
+\todo{Marvin: kann man diese Bedingungen später noch in der Bin Packing Formulierung implementieren
+oder ist das modell-seitig nicht möglich. Falls dem so ist, müssen wir in Betracht ziehen, 
+eine andere Formulierung zu wählen oder zumindest im Kopf zu haben, da das Scheduling der Tests
+einen signifikanten Teil der Problemkomplexität ausmacht.}
 
 Zusammengefasst, lässt sich die Testfahrzeugkonfiguration wie folgt auf die Notation aus
 \cref{subsubsec:bin-packing-with-conflicts} mappen:

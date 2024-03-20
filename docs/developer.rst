@@ -198,20 +198,20 @@ A typical example for an asynchronous module is a solver which submits its job i
 the queue of some server and retrieves the result some times later. In QUARK this is
 supported via the interrupt/resume mechanism.
 
-QUARK modules may return instructions to the benchmark manager as first entry in the return value of
+QUARK modules may return instructions to the BenchmarkManager as first entry in the return value of
 pre and post-process. Currently the following instructions are supported:
     - PROCEED
     - INTERRUPT
 
-PROCEED: if the benchmark manger gets a PROCEED (or no instruction at all) he continues with the regular QUARK work flow.
-If the job manager can finish the current job without getting an INTERRUPT or exception he adds
-"quark_job_status"=FINISHED to the metrics.
+PROCEED: If the BenchmarkManager gets the instruction "PROCEED" (or no instruction at all) it continues with the regular QUARK workflow.
+If the current job can be finished without getting an "INTERRUPT" instruction or an exception,
+the BenchmarkManager adds "quark_job_status"=FINISHED to the metrics.
 
-INTERRUPT: if the benchmark manager gets an INTERRUPT he stops the current QUARK work flow,
+INTERRUPT: If the BenchmarkManager gets the instruction "INTERRUPT" it stops the current QUARK workflow,
 adds "quark_job_status"=INTERRUPTED to the metrics, saves all the metrics written so far to the BenchmarkRecord
 and continues with the configuration/repetition loop.
 
-QUARK resume-mode:
+QUARK Resume Mode:
 
 After running QUARK in its regular mode QUARK can be run again on the same results directory in resume mode by
 specifying the existing results directory with the --resume-dir option. This can be done repeatedly for the same

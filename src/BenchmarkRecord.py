@@ -181,8 +181,8 @@ class BenchmarkRecord:
 
 class BenchmarkRecordStored:
     """
-    This class can be used to store the benchmark record of a previous QUARK run as read from results.json.
-    It is a simple wrapper with the purpose to provide the same interface to the BenchMarkManager as the
+    This class can be used to store the BenchmarkRecord of a previous QUARK run as read from results.json.
+    It is a simple wrapper with the purpose to provide the same interface to the BenchmarkManager as the
     BenchmarkRecord does.
     """
     def __init__(self, record: dict):

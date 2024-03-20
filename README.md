@@ -136,7 +136,7 @@ The processing of backlog items may get interrupted in which case you will see s
 2024-03-13 10:25:20,201 [INFO] ================================================================================
 ```
 This happens if you press CTRL-C or if some QUARK module does its work asynchronously, e.g. by submitting its job to some 
-batch system. For details on asynchronous modules look into Read the Docs.
+batch system. Learn more about how to write asynchronous modules in the [developer guide](https://quark-framework.readthedocs.io/en/dev/).
 You can resume an interrupted QUARK run by calling: 
 ```
 python src/main.py --resume-dir=<result-dir>

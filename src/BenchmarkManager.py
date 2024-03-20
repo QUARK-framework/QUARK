@@ -21,7 +21,7 @@ from copy import deepcopy
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 import numpy as np
 
@@ -48,7 +48,7 @@ class JobStatus(Enum):
     FAILED = 3
 
 
-def _prepend_instruction(result: list) -> list:
+def _prepend_instruction(result: tuple) -> tuple:
     """
     If the given list does not contain an instruction as first entry a
     PROCEED is inserted at position 0 such that it is guaranteed that
@@ -56,9 +56,9 @@ def _prepend_instruction(result: list) -> list:
     as default.
 
     :param result: the list to which the instruction is to be prepended
-    :type result: list
+    :type result: tuple
     :return: the list with an INSTRUCTION as first entry
-    :rtype: list
+    :rtype: tuple
     """
     if isinstance(result[0], Instruction):
         return result
@@ -66,7 +66,7 @@ def _prepend_instruction(result: list) -> list:
         return Instruction.PROCEED, *result
 
 
-def postprocess(module_instance: Core, *args, **kwargs) -> list:
+def postprocess(module_instance: Core, *args, **kwargs) -> tuple:
     """
     Wraps module_instance.postprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
@@ -74,13 +74,13 @@ def postprocess(module_instance: Core, *args, **kwargs) -> list:
     :param module_instance: the QUARK module on which to call postprocess
     :type module_instance: Core
     :return: the result list of module_instance.postprocess with an Instruction as first entry.
-    :rtype: list
+    :rtype: tuple
     """
     result = module_instance.postprocess(*args, **kwargs)
     return _prepend_instruction(result)
 
 
-def preprocess(module_instance: Core, *args, **kwargs) -> list:
+def preprocess(module_instance: Core, *args, **kwargs) -> tuple:
     """
     Wraps module_instance.preprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
@@ -88,7 +88,7 @@ def preprocess(module_instance: Core, *args, **kwargs) -> list:
     :param module_instance: the QUARK module on which to call preprocess
     :type module_instance: Core
     :return: the result list of module_instance.preprocess with an Instruction as first entry.
-    :rtype: list
+    :rtype: tuple
     """
     result = module_instance.preprocess(*args, **kwargs)
     return _prepend_instruction(result)
@@ -116,10 +116,10 @@ class BenchmarkManager:
         self.benchmark_record_template = None
         self.interrupted_results_path = None
 
-    def load_interrupted_results(self) -> list:
+    def load_interrupted_results(self) -> Optional[list]:
         """
         :return: the content of the results file from the QUARK run to be resumed or None.
-        :rtype: list
+        :rtype: Optional[list]
         """
         if self.interrupted_results_path is None or not os.path.exists(self.interrupted_results_path):
             return None
@@ -149,7 +149,7 @@ class BenchmarkManager:
         self.store_dir = store_dir
         self._set_logger()
 
-    def _set_logger(self):
+    def _set_logger(self) -> None:
         # Also store the log file to the benchmark dir
         logger = logging.getLogger()
         formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")

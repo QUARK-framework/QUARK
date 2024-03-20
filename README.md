@@ -141,6 +141,7 @@ You can resume an interrupted QUARK run by calling:
 ```
 python src/main.py --resume-dir=<result-dir>
 ```
+Note that you can copy/paste the --resume-dir option from the QUARK output as shown in the above example.
 
 #### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:

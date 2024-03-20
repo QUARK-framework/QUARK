@@ -106,6 +106,9 @@ html_static_path = []
 #
 # html_sidebars = {}
 
+# If smartquotes is True, double dashes (--) are transformed to en-dashes (–)
+# which could be confused with single dashes (-).
+smartquotes = False
 
 # -- Options for HTMLHelp output ---------------------------------------------
 

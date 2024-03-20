@@ -222,8 +222,6 @@ class BenchmarkManager:
             for i in range(1, repetitions + 1):
                 logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                              f" Iteration {i}/{repetitions}:")
-
-                quark_job_status = JobStatus.UNDEF
                 # getting information of interrupted jobs
                 job_info_with_meta_data = {}
                 if interrupted_results:
@@ -232,10 +230,14 @@ class BenchmarkManager:
                             job_info_with_meta_data = entry
                             break
                 job_info = job_info_with_meta_data['module'] if job_info_with_meta_data else {}
-                if job_info.get("quark_job_status") == JobStatus.FINISHED.name:
+                quark_job_status_name = job_info.get("quark_job_status")
+                if quark_job_status_name in (JobStatus.FINISHED.name, JobStatus.FAILED.name):
+                    quark_job_status = JobStatus.FINISHED if quark_job_status_name == JobStatus.FINISHED.name \
+                        else JobStatus.FAILED
                     benchmark_records.append(BenchmarkRecordStored(job_info_with_meta_data))
-                    quark_job_status = JobStatus.FINISHED
-                    logging.info("job already FINISHED - skip.")
+                    job_status_count[quark_job_status] = job_status_count.get(quark_job_status, 0) + 1
+                    job_status_count_total[quark_job_status] = job_status_count_total.get(quark_job_status, 0) + 1
+                    logging.info("job already %s - skip.", quark_job_status_name)
                     continue
 
                 try:
@@ -321,7 +323,10 @@ class BenchmarkManager:
         logging.info(80 * "=")
         logging.info(f"====== Run {len(benchmark_backlog)} backlog items "
                      f"with {repetitions} iterations - {status_report}")
-        if job_status_count_total.get(JobStatus.INTERRUPTED, 0) > 0:
+
+        nb_interrupted = job_status_count_total.get(JobStatus.INTERRUPTED, 0)
+        nb_not_started = sum(job_status_count_total.values()) < len(benchmark_backlog)
+        if nb_interrupted + nb_not_started > 0:
             try:
                 rel_path = Path(self.store_dir).relative_to(os.getcwd())
             except ValueError:

@@ -1,7 +1,7 @@
 {
-  "build_number": 6,
-  "build_date": "22-11-2023 13:47:42",
-  "git_revision_number": "5ea1fcf56c438df4b32fcc318dcb6e2c8e58447b",
+  "build_number": 7,
+  "build_date": "20-03-2024 12:51:58",
+  "git_revision_number": "3be6f3847150d4bb8debee2451522b0b19fa205f",
   "modules": [
     {
       "name": "PVC",
@@ -1859,6 +1859,16 @@
                   "class": "HelperClass",
                   "args": {
                     "device_name": "qasm_simulator_gpu"
+                  },
+                  "module": "modules.devices.HelperClass",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "ibm_eagle",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "ibm_eagle"
                   },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],

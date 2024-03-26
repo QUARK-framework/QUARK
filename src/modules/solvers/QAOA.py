@@ -156,7 +156,7 @@ class QAOA(Solver):
                             "This may lead to an error later in the run.")
         else:
             j = np.real(j)
-        
+
         # set up the problem
         n_qubits = j.shape[0]
 

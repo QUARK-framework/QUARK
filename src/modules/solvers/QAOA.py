@@ -151,7 +151,12 @@ class QAOA(Solver):
         """
 
         j = mapped_problem['J']
-
+        if np.any(np.iscomplex(j)):
+            logging.warning("The problem matrix of the QAOA solver contains imaginary numbers."
+                            "This may lead to an error later in the run.")
+        else:
+            j = np.real(j)
+        
         # set up the problem
         n_qubits = j.shape[0]
 

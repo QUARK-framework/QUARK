@@ -133,11 +133,11 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 All used config files, logs and results are stored in a folder in the
 ``benchmark_runs`` directory.
 
-Access IBM Eagle
-^^^^^^^^^^^^^^^^
+Access to IBM Eagle
+^^^^^^^^^^^^^^^^^^^
 
 In order to use the IBM Eagle device in QUARK you have to first save your API token. 
-This can be done similar to AWS:
+This can be done similar to accessing AWS:
 
 .. code:: bash
 

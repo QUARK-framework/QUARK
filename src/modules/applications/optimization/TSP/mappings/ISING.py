@@ -346,17 +346,17 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (dict, float):
+    def reverse_map(self, solution: any) -> (dict, float):
         """
         Maps the solution back to the representation needed by the TSP class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :type solution: dict
+        :param solution: list or array containing the solution
+        :type solution: any
         :return: solution mapped accordingly, time it took to map it
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
-        if np.any(solution == "-1"):  # ising model output from Braket QAOA
+        if -1 in solution:  # ising model output from Braket QAOA
             solution = self._convert_ising_to_qubo(solution)
         elif self.config["mapping"] == "pyqubo" or self.config["mapping"] == "ocean":
             logging.debug("Flip bits in solutions to unify different mappings")

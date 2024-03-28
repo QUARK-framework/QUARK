@@ -126,8 +126,10 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+    parser.add_argument('-rd', '--resume-dir', nargs='?', help='Provide results directory of the job to be resumed')
     parser.add_argument('-ff', '--failfast', help='Flag whether a single failed benchmark run causes QUARK to fail',
                         required=False, action=argparse.BooleanOptionalAction)
+
     parser.set_defaults(goal='benchmark')
 
 
@@ -175,7 +177,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
 
-        if args.config:
+        if args.config or args.resume_dir:
+            if not args.config:
+                args.config = os.path.join(args.resume_dir, "config.yml")
             logging.info(f"Provided config file at {args.config}")
             # Loads config
             with open(args.config) as filehandler:
@@ -194,7 +198,10 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
+            interrupted_results_path = None if args.resume_dir is None else os.path.join(args.resume_dir,
+                                                                                         "results.json")
+            benchmark_manager.orchestrate_benchmark(config_manager, app_modules,
+                                                    interrupted_results_path=interrupted_results_path)
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()

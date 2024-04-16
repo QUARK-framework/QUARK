@@ -72,22 +72,21 @@ geforderten SAs ergeben. Wie die indirekten Abhängigkeiten auf die Tests übert
 werden können, sollen exemplarisch die nachfolgenden Regeln zeigen.
 
 Angenommen eine Sonderausstattung $SA1$ wird gefordert.
-\todo{Marvin: ich würde die Abhängigkeiten für Negationen umformulieren,
-z.B.: "SA2 für Test ausgeschlossen"}
 
 \begin{table}[H]
     \label{tab:tableSAs}
     \begin{tabularx}{\textwidth}{ | l | X |}
         Bedingung an SAs & Abhängigkeit im Test mit SA1 \\\hline\hline
         $SA1 \Rightarrow SA2$ & $SA2$ für Test benötigt \\\hline
-        $SA1 \Rightarrow \sim SA2$ & $\sim SA2$  für Test benötigt \\\hline
-        $SA1 \Rightarrow SA2~|~SA3$ & $SA2$ oder $SA3$  für Test benötigt \\\hline
-        Nur eins $SA1, SA2, SA3$ & $\sim SA2$ und $\sim SA3$  für Test benötigt \\\hline
+        $SA1 \Rightarrow \sim SA2$ & $SA2$ für Test ausgeschlossen \\\hline
+        $SA1 \Rightarrow SA2~|~SA3$ & $SA2$, $SA3$ oder beide für Test benötigt \\\hline
+        Nur eins $SA1, SA2, SA3$ & $SA2$ und $SA3$ für Test ausgeschlossen \\\hline
         $SA1~\&~SA2$ & $SA2$  für Test benötigt \\\hline
-        $SA2 \Rightarrow \sim SA1$ & dh. $SA1 \Rightarrow \sim SA2$ \\& $\sim SA2$  für Test benötigt\\\hline
+        $SA2 \Rightarrow \sim SA1$ & dh. $SA1 \Rightarrow \sim SA2$ \\& $SA2$  für Test ausgeschlossen\\\hline
     \end{tabularx}
 \end{table}
 \todo{Liste ist nicht vollständig!}
+\todo{Marvin: Check Datensatz, exklusives ODER, weitere Abhängigkeiten, die man darstellen müsste?}
 Wenn eine benötigte $SA$ oder ausgeschlossene $\sim SA$ gefunden wurde,
 müssen auch für diese die Regeln überprüft werden. So ergibt sich eine Menge
 an Tests, für die bekannt ist, welche SAs auf dem Testfahrzeug platziert werden
@@ -102,12 +101,10 @@ Des Weiteren sind auch die SAs auf den Testfahrzeugen eingeschränkt.
 Testfahrzeuge gehören unterschiedlichen Testfahrzeugkategorien an.
 Jede Testfahrzeugkategorie hat erlaubte SAs.
 
-Ein Test kann nur dann durchgeführt werden, wenn mindestens eine
-Testfahrzeugkategorie alle benötigten Sonderausstattungen erlaubt.
-Andernfalls kann dieser Test nicht ausgeführt werden und die Verteilung
-aller Tests ist nicht möglich.
-\todo{Marvin: das sollte schon vor der Optimierung sichergestellt sein.
-Undurchführbare Tests sollten nicht Teil des Input-Datensatzes sein.}
+Vor der Optimierung (als Teil des Pre-Processings) müssen folgende
+Punkte sichergestellt werden: mindestens eine Testfahrzeugkategorie
+erlaubt alle benötigten Sonderausstattungen eines Tests. Alle
+Sonderausstattungen eines Tests müssen miteinander kompatibel sein.
 
 Tests, die nicht auf dem selben Testfahrzeug ausgeführt werden können,
 können ebenfalls gegenseitig ausgeschlossen werden.
@@ -144,21 +141,18 @@ Das Testfahrzeugkonfigurationsproblem lässt sich auf das spezielle Bin Packing 
 
 Die Testfahrzeuge sind dabei die Behälter, deren Anzahl im Optimum möglichst gering sein muss.
 Die Objekte sind die auszuführenden Tests, die in dieser Bauphase abgeschlossen sein müssen.
-\todo{Marvin: so kann nur je eine Bauphase gleichzeitig optimiert werden, richtig?
-Sollte kein Problem sein, da wie oben beschrieben davon ausgegangen wird, dass jedem Test
-genau eine Bauphase zugeordnet ist. Sollte man hier nur noch mal klarstellen.}
+Hierbei gehen wir davon aus, dass jeder Test genau einer Bauphase zugeordnet ist. Die maximale
+Kapazität jedes Behälters ist eine Randbedingung des Optimierungsproblems und zunächst auf ein
+Jahr beschränkt.
+\todo{Marvin: Check Datensatz, jeder Test nur eine Bauphase?}
 Die Test-Durchführungszeit ist in der klassischen Problemformulierung das Gewicht der Objekte.
-Die maximale Kapazität pro Testfahrzeug ist ein Jahr, da alle Tests nacheinander ausgeführt werden müssen.
-\todo{Marvin: verstehe hier den Zusammenhang nicht. Die Beschränkung des Testzeitraums auf ein Jahr
-ist meiner Ansicht nach eine zusätzliche Randbedingung. Die Tatsache, dass Tests sequenziell ausgeführt
-werden müssen, hat damit nicht direkt was zu tun, oder? Man könnte schreiben "Alle einem Testfahrzeug
-zugewiesenen Tests müssen sequenziell innerhalb des Testzeitraums durchgeführt werden."}
+Alle einem Testfahrzeug zugewiesenen Tests müssen sequenziell innerhalb des Testzeitraums
+durchgeführt werden, der der maximalen Kapazität eines Behälters entspricht.
+\todo{Marvin: Check Datensatz, Tests sequenziell?}
 
 Die letzten beiden Eigenschaften der Tests bezüglich der Ausführungszeit ignorieren wir zunächst.
-\todo{Marvin: kann man diese Bedingungen später noch in der Bin Packing Formulierung implementieren
-oder ist das modell-seitig nicht möglich. Falls dem so ist, müssen wir in Betracht ziehen, 
-eine andere Formulierung zu wählen oder zumindest im Kopf zu haben, da das Scheduling der Tests
-einen signifikanten Teil der Problemkomplexität ausmacht.}
+Man könnte das Ergebnis des Bin Packing Problems als Grundlage für das Scheduling nutzen, indem
+man die durchzuführenden Tests unter Berücksichtigung der Testkategorien sortiert.
 
 Zusammengefasst, lässt sich die Testfahrzeugkonfiguration wie folgt auf die Notation aus
 \cref{subsubsec:bin-packing-with-conflicts} mappen:
@@ -177,3 +171,4 @@ Zusammengefasst, lässt sich die Testfahrzeugkonfiguration wie folgt auf die Not
     \end{tabularx}
     \caption{Notation zu Testfahrzeugkonfiguration}\label{tab:notation_test_vehicle}
 \end{table}
+\todo{Marvin: Check Datensatz, fehlt irgendwas?}

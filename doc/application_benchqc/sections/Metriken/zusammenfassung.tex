@@ -1,7 +1,72 @@
 \section{Metriken}
 
-\subsection{Metriken Kategorie 1}
-\todo[inline] {Zusammenfassung der Metriken}
+\subsection{Berechnungszeit}
+Die erste wichtige Metrik beim Benchmarking von Algorithmen für Quantencomputer zum Lösen von kombinatorischen Optimierungsproblemen ist die Zeit, die für die Ausführung des Algorithmus benötigt wurde.
+Hierbei wird nicht das Generieren einer Lösung, noch die Qualität einer solchen Lösung bewertet, sondern lediglich die Zeit gemessen, die während der Ausführung des Algorithmus vergangen ist.
+Außerdem ist es bei mehrgliedrigen Algorithmen sinnvoll, die Berechnungszeit der einzelnen Teile zu erfassen. 
+Beispielsweise sollte man bei der Ausführung der Quantum Approximate Optimization Algorithm (QAOA) die Parameter-Training-Zeit als auch die Ausführzeit erfassen.
 
-\subsection{Metriken Kategorie 2}
-\todo[inline] {Zusammenfassung der Metriken}
+
+\subsection{Lösungsqualität}
+Die zweite wegweisende Metrik ist die Qualität der generierten Lösung. 
+Bei Optimierungsproblemen ist natürlich das Ziel, die optimale Lösung mit dem Algorithmus zu generieren. 
+Aber auch schon das Finden von sehr guten zulässigen, aber nicht optimalen Lösungen kann sehr wertvoll sein. Vor allem bei sehr komplexen Optimierungsproblemen, bei denen die Rechenleistung eines klassischen Computers für eine optimale Lösung nicht ausreicht, können Quantencomputer eine sehr gute Alternative darstellen, um in wenig Rechenzeit gute zulässige Lösungen zu erzeugen.
+Folglich ist das erste wichtige Kriterium für die Lösungsqualität die Zulässigkeit der durch den Quantencomputer generierten Lösung.
+Wenn die optimale Lösung eines Problems bekannt ist, kann die Qualität der zulässigen Lösung des Quantencomputers quantifiziert werden, durch die Differenz der Zielfunktionswerte der optimalen Lösung und der Quantencomputer-Lösung.
+Eine solche optimale Lösung kann generell durch einen klassischen Computer bestimmt werden. Jedoch kommen klassische Computer bei sehr komplexen Problemen an ihre Grenzen. 
+In einem solchen Fall, bei dem die Rechenleistung eines klassischen Computers nicht ausreicht, ist die optimale Lösung nicht bekannt und es muss eine andere Möglichkeit gefunden werden, um die Lösungsqualität zu quantifzieren.
+Optionen hierfür wären beispielsweise:
+\begin{itemize}
+	\item Differenz der Zielfunktionswerte der besten Quantencomputerlösungen mit mit der von einem klassichen Algorithmus in der gleichen Rechenzeit bestimmten besten Lösung.
+	\item Vergleich der Zielfunktionswerte der besten Quantencomputerlösungen mit Random-Sampling
+\end{itemize}
+
+
+
+\subsection{Kombinationen der Metriken}
+
+\subsubsection{Time-to-solution}
+Vorgeschlagen in "Application-Oriented Performance Benchmarks for Quantum Computing" (Sankar, Scherer, Kako), indiziert die "Time-to-solution"-Metrik
+sowohl die Berechnungszeit als auch die Lösungsqualität.
+Hier wird die time-to-solution $ t_{s} $ berechnet durch:
+\begin{equation}
+	t_{s} = R_{99} \dot t_{max} \quad ,
+\end{equation}
+wobei $ R_{99} = \frac{log(0.01)}{log(1-P_{s})} $ die Anzahl der Shots ist, die für eine 99%-ige Erfolgswahrscheinlichkeit für eine zulässige / optimale Lösung nötig sind. $ P_{s} $ ist hierbei der Median der Erfolgswahrscheinlichkeit.
+[https://arxiv.org/abs/2110.03137]
+
+\subsubsection{Q-Pack}
+Eine Benchmarking-Metrik für den QAOA, die folgende Aspekte berücksichtigt:
+\begin{itemize}
+	\item die maximale Problemgröße, die der QC lösen kann ($\Rightarrow$ Grenzen für das Optimierungsproblem und die QAOA-Layer-Anzahl p)
+	\item Berechnungszeit ($\Rightarrow$ Overall, Klassicher Computer, Dauer der Connection zum QC, Dauer des Preprocessings für den QC, Dauer des QC-Queuings, QC-Runtime)
+	\item die erreichte Lösungsgenauigkeit (Accuracy) ($\Rightarrow$ Entfernung der QC-Lösung von der optimalen Lösung)
+\end{itemize}
+QPack ist auf folgende Optimierungsprobleme zugeschnitten:
+\begin{itemize}
+	\item Max-Cut
+	\item dominating set
+	\item travelling salesman problem
+\end{itemize}
+[https://arxiv.org/abs/2103.17193]
+Der wesentliche Aspekt, der bei Q-Pack dazukommt, ist die Scalability, also die zusätzliche Auskunft über die Performance bei verschiedenen Problemgrößen.
+
+
+\subsection{Energie-verbrauch / -kosten}
+Die bei der Ausführung auf dem Quantencomputer verbrauchte Energie ist ebenfalls eine interessante Metrik. Jedoch ist dies schwer herauszufinden. (siehe Abbas, https://arxiv.org/abs/2312.02279 )
+
+
+\subsection{Hardware-spezifische Metriken}
+
+
+\subsubsection{Quantum Volume}
+Von IBM Quantum. [https://quantum-computing.ibm.com, 2021. accessed 2021-05-15] vorgestellt, ist das Quantum Volume genau $2^{n} $, wobei n die Länge als auch die Höhe des größten Quanten-Schaltkreises ist, der mit mehr als einer $ \frac{2}{3} $-Wahrscheinlichkeit erfolgreich ausgeführt wird.
+Beispielsweise, wenn ein QC einen Schaltkreis mit Länge und Höhe 5 erfolgreich ausführt, aber nicht mehr mit Länge und Höhe 6, dann ist das $ QV(QC) = 2^{5} = 32 $
+
+\subsubsection{Gate Error Rates}
+Es ist wichtig, bei der Performance eines gatebasierten QC-Algorithmus auch die Fehlerraten zu betrachten.
+
+
+
+
+

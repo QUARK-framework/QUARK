@@ -15,7 +15,6 @@
 from typing import Tuple
 from typing import TypedDict
 
-import os
 import numpy as np
 from qiskit import Aer
 from qiskit.algorithms import VQE, QAOA, NumPyMinimumEigensolver
@@ -23,7 +22,6 @@ from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit.circuit.library import TwoLocal
 from qiskit.opflow import PauliSumOp
 from qiskit_optimization.applications import OptimizationApplication
-from qiskit_ibm_runtime import QiskitRuntimeService
 
 from modules.solvers.Solver import *
 from utils import start_time_measurement, end_time_measurement
@@ -39,7 +37,7 @@ class QiskitQAOA(Solver):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm_eagle"]
+        self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -71,9 +69,6 @@ class QiskitQAOA(Solver):
         elif option == "qasm_simulator_gpu":
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("qasm_simulator_gpu")
-        elif option == "ibm_eagle":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
-            return HelperClass("ibm_eagle")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
@@ -90,11 +85,8 @@ class QiskitQAOA(Solver):
                                             "description": "How many shots do you need?"
                                         },
                                         "iterations": {  # number measurements to make on circuit
-                                            "values": [1, 5, 10, 20, 50, 75],
-                                            "description": "How many iterations do you need? Warning: When using\
-                                            the IBM Eagle Device you should only choose a lower number of\
-                                            iterations, since a high number would lead to a waiting time that\
-                                            could take up to mulitple days!"
+                                            "values": [10, 20, 50, 75],
+                                            "description": "How many iterations do you need?"
                                         },
                                         "depth": {
                                             "values": [2, 3, 4, 5, 10, 20],
@@ -106,9 +98,7 @@ class QiskitQAOA(Solver):
                                         },
                                         "optimizer": {
                                             "values": ["POWELL", "SPSA", "COBYLA"],
-                                            "description": "Which Qiskit solver should be used? Warning: When\
-                                            using the IBM Eagle Device you should not use the SPSA optimizer,\
-                                            since it is not suited for only one evaluation!"
+                                            "description": "Which Qiskit solver should be used?"
                                         }
                                     }
 
@@ -119,10 +109,8 @@ class QiskitQAOA(Solver):
                 "description": "How many shots do you need?"
             },
             "iterations": {  # number measurements to make on circuit
-                "values": [1, 5, 10, 20, 50, 75],
-                "description": "How many iterations do you need? Warning: When using the IBM Eagle Device you\
-                should only choose a lower number of iterations, since a high number would lead to a waiting \
-                ime that could take up to mulitple days!"
+                "values": [10, 20, 50, 75],
+                "description": "How many iterations do you need?"
             },
             "depth": {
                 "values": [2, 3, 4, 5, 10, 20],
@@ -134,8 +122,7 @@ class QiskitQAOA(Solver):
             },
             "optimizer": {
                 "values": ["POWELL", "SPSA", "COBYLA"],
-                "description": "Which Qiskit solver should be used? Warning: When using the IBM Eagle Device\
-                you should not use the SPSA optimizer for a low number of iterations!"
+                "description": "Which Qiskit solver should be used?"
             }
         }
 
@@ -199,8 +186,7 @@ class QiskitQAOA(Solver):
             if config["optimizer"] == "COBYLA":
                 optimizer = COBYLA(maxiter=config["iterations"])
             elif config["optimizer"] == "POWELL":
-                optimizer = POWELL(maxiter=config["iterations"], maxfev=config["iterations"] if
-                device_wrapper.device == 'ibm_eagle' else None)
+                optimizer = POWELL(maxiter=config["iterations"])
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
             if config["method"] == "vqe":
@@ -222,11 +208,6 @@ class QiskitQAOA(Solver):
             logging.info("Using GPU simulator")
             backend.set_options(device='GPU')
             backend.set_options(method='statevector_gpu')
-        elif device_wrapper.device == 'ibm_eagle':
-            logging.info("Using IBM Eagle")
-            ibm_quantum_token = os.environ.get('ibm_quantum_token')
-            service = QiskitRuntimeService(channel="ibm_quantum", token=ibm_quantum_token)
-            backend = service.least_busy(operational=True, simulator=False, min_num_qubits=127)
         else:
             logging.info("Using CPU simulator")
             backend.set_options(device='CPU')

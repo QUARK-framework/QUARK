@@ -29,7 +29,6 @@ class Device(Core, ABC):
         self.device = None
         self.config = None
         self.device_name = self.name
-        self.config = None
 
     def get_parameter_options(self) -> dict:
         """

@@ -111,6 +111,16 @@ class Training(Core, ABC):
         pmf_model[pmf_model == 0] = 1e-8
         return -np.sum(pmf_target * np.log(pmf_model), axis=1)
 
+    def mmd(self, pmf_model, pmf_target):
+        pmf_model[pmf_model == 0] = 1e-8
+        sigma = 1/pmf_model.shape[1] # TODO Improve scaling sigma and revise Formula
+        kernel_distance = np.exp((-np.square(pmf_model - pmf_target) / (sigma ** 2)))
+        mmd = 2 - 2 * np.mean(kernel_distance, axis=1)
+        # The correct formula would take the transformed distances of both distributions into account. Since we are
+        # not sampling from the distribution but using the probability mass function we can skip this step since the
+        # sum of both, a modified version of the Gaussian kernel is used.
+        return mmd
+
     class Timing:
         """
         This module is an abstraction of time measurement for for both CPU and GPU processes 

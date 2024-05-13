@@ -61,16 +61,15 @@ class Library(Core, ABC):
         :return: Dictionary including the function to execute the quantum cicrcuit on a simulator or on quantum hardware
         :rtype: (dict, float)
         """
-
         start = start_time_measurement()
 
         output = self.sequence_to_circuit(input_data)
         backend = self.select_backend(config["backend"])
-        output["execute_circuit"] = self.get_execute_circuit(
+        output["execute_circuit"], output['circuit_transpiled'] = self.get_execute_circuit(
             output["circuit"],
             backend,
             config["backend"],
-            config["n_shots"])
+            config_dict=config)
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")
@@ -101,7 +100,7 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int):
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict):
         pass
 
     @staticmethod

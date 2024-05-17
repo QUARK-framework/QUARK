@@ -41,19 +41,19 @@ class MockNeutralAtomDevice(Pulser):
         Returns the configurable settings for this application
         """
         return {
-            "doppler_noise": {
+            "doppler": {
                 "values": [False, True],
                 "description": "Simulate doppler noise? Has a large impact on performance!"
             },
-            "amplitude_noise": {
+            "amplitude": {
                 "values": [False, True],
                 "description": "Simulate amplitude noise? Has a large impact on performance!"
             },
-            "SPAM_noise": {
+            "SPAM": {
                 "values": [False, True],
                 "description": "Simulate SPAM noise? Has a large impact on performance!"
             },
-            "dephasing_noise": {
+            "dephasing": {
                 "values": [False, True],
                 "description": "Simulate dephasing noise? Has a large impact on performance!"
             },
@@ -63,10 +63,10 @@ class MockNeutralAtomDevice(Pulser):
         """
         Attributes of a valid config
         """
-        doppler_noise: bool
-        amplitude_noise: bool
-        SPAM_noise: bool
-        dephasing_noise: bool
+        doppler: bool
+        amplitude: bool
+        SPAM: bool
+        dephasing: bool
 
     def get_backend_config(self) -> pulser.backend.config.EmulatorConfig:
         """

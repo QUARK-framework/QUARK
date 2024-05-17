@@ -30,7 +30,7 @@ def generate_hexagonal_graph(n_nodes:int, spacing:float,
         n (int): The number of nodes in the graph.
         spacing (float): The spacing between atoms.
         filling_fraction (float): The fraction of available places in the
-        latice to be filled with atoms. (default: 1.0)
+        lattice to be filled with atoms. (default: 1.0)
 
     Returns:
         Graph: networkx Graph representing the hexagonal graph layout.

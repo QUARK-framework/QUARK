@@ -137,6 +137,12 @@ class NeutralAtomMIS(Solver):
     def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
         """
         Creates pulses tuned to MIS problem.
+
+        Pulse creation is a whole art/science on its own that we have not delved into yet.
+        If you shape and finetune your pulses to decrease compute time on your neutral atom device.
+        We found this configuration in the documentation of the pulser documentation and it works for MIS.
+        We are hesitant to make them parametrizable, because setting the wrong values will break your whole MIS.
+        Though parameterization of pulses is a feature that we might implement in the future.
         """
         Omega_max = 2.3 * 2 * np.pi
         delta_factor = 2 * np.pi

@@ -14,7 +14,7 @@
 
 from typing import Union
 import logging
-
+# from qiskit_ibm_runtime import QiskitRuntimeService, Sampler
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
 from qiskit.compiler import transpile, assemble
@@ -51,12 +51,20 @@ class LibraryQiskit(Library):
         return [
             {
                 "name": "qiskit",
-                "version": "0.40.0"
+                "version": "0.45.0"
             },
+            # {
+            #    "name": "qiskit_ibm_runtime",
+            #      "version": "0.10.0"
+            # },
             {
                 "name": "numpy",
                 "version": "1.23.5"
             },
+            {
+                "name": "qiskit-ibmq-provider",
+                "version": "0.19.2"
+            }
         ]
 
     def get_parameter_options(self) -> dict:
@@ -67,32 +75,32 @@ class LibraryQiskit(Library):
                  .. code-block:: python
 
                         return {
-                            "backend": {
-                                "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                                           "cusvaer_simulator (only available in cuQuantum applicance)",
-                                           "aer_simulator_gpu",
-                                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
-                                "description": "Which backend do you want to use? (aer_statevector_simulator
-                                                uses the measurement probability vector, the others are shot based)"
-                            },
+            "backend": {
+                "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
+                           "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
+                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1",
+                           "simulator_statevector IBM Quantum Platform", "ibm_brisbane IBM Quantum Platform"],
+                "description": "Which backend do you want to use? (aer_statevector_simulator\
+                             uses the measurement probability vector, the others are shot based)"
+            },
 
-                            "n_shots": {
-                                "values": [100, 1000, 10000, 1000000],
-                                "description": "How many shots do you want use for estimating the PMF of the model?
-                                                (If the aer_statevector_simulator selected, 
-                                                only relevant for studying generalization)"
-                            }
-                        }
+            "n_shots": {
+                "values": [100, 1000, 10000, 1000000],
+                "description": "How many shots do you want use for estimating the PMF of the model?\
+                 (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+            }
+        }
 
         """
         return {
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
-                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
+                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1", "ibm_brisbane IBM Quantum Platform"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator\
                              uses the measurement probability vector, the others are shot based)"
             },
+            #TODO Discuss: Use IBM Eagle (so 1 of 3) or IBM Brisbane so one specific?
 
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
@@ -217,6 +225,18 @@ class LibraryQiskit(Library):
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
 
+        # elif config == "simulator_statevector IBM Quantum Platform":
+            # define token here once
+            # service = QiskitRuntimeService(token='TOKEN')
+            # service = QiskitRuntimeService()
+            # backend = service.get_backend('simulator_statevector')
+
+        # elif config == "ibm_brisbane IBM Quantum Platform":
+            #define token here once
+            #service = QiskitRuntimeService(token='TOKEN')
+            # service = QiskitRuntimeService()
+            # backend = service.get_backend('ibm_brisbane')
+
         elif config == "ionQ_Harmony":
             from modules.devices.braket.Ionq import Ionq # pylint: disable=C0415
             from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
@@ -249,22 +269,24 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, n_shots: int) -> callable:
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
+            -> callable:  # pylint: disable=W0221,R0915
         """
-        This method combnines the qiskit circuit implemenation and the selected backend and returns a function, 
-        that will be called during training. 
+        This method combines the qiskit circuit implementation and the selected backend and returns a function,
+        that will be called during training.
 
-        :param circuit: Qiskit implementation of the quantum circuit 
+        :param circuit: Qiskit implementation of the quantum circuit
         :type circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
         :type backend: qiskit.providers.Backend
         :param config: Name of a backend
         :type config: str
-        :param n_shots: The number of times the circuit is run 
-        :type n_shots: int
+        :param config_dict: Contains information about config
+        :type config_dict: dict
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """
+        n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits
         circuit_transpiled = transpile(circuit, backend=backend)
 
@@ -324,4 +346,27 @@ class LibraryQiskit(Library):
                 pmfs = samples / n_shots
                 return pmfs, samples
 
-        return execute_circuit
+        elif config in ["simulator_statevector IBM Quantum Platform", "ibm_brisbane IBM Quantum Platform"]:
+            def execute_circuit(solutions, *kwargs):
+
+                """
+                This function will submit the circuits with different parameter individually.
+                If you want to deploy a circuit to ibm for inference, we recommend using a Jupyter Notebook.
+                """
+                # all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
+                # service = QiskitRuntimeService()
+                samples_dictionary = []
+                samples = []
+                for result in samples_dictionary:
+                    target_iter = np.zeros(2 ** n_qubits)
+                    result_keys = list(result.keys())
+                    result_vals = np.abs(list(result.values()))
+                    # To ensure no negative values from the quasi ditribution are taken.
+                    target_iter[result_keys] = result_vals
+                    target_iter = np.asarray(target_iter)
+                    samples.append(target_iter)
+                samples = np.asarray(samples)
+                pmfs = samples
+                return pmfs, samples
+
+        return execute_circuit, circuit_transpiled

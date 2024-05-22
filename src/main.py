@@ -21,7 +21,6 @@ from collections.abc import Iterable
 import yaml
 
 from Installer import Installer
-from Plotter import Plotter
 from utils import _expand_paths
 from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
 
@@ -157,6 +156,8 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
     :rtype: None
     """
     from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
+    from Plotter import Plotter  # pylint: disable=C0415
+
     benchmark_manager = BenchmarkManager(fail_fast=args.failfast)
 
     if args.summarize:

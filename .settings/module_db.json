@@ -1,7 +1,7 @@
 {
-  "build_number": 8,
-  "build_date": "13-05-2024 15:58:02",
-  "git_revision_number": "1caf302b6d1ff20061b631f42044049e92e7c5dc",
+  "build_number": 9,
+  "build_date": "21-05-2024 10:16:52",
+  "git_revision_number": "16d427e5b1954cf0855dcea6c8aa5b13ee98a1f9",
   "modules": [
     {
       "name": "PVC",
@@ -2844,6 +2844,55 @@
                       "submodules": []
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
+      "name": "MIS",
+      "class": "MIS",
+      "module": "modules.applications.optimization.MIS.MIS",
+      "submodules": [
+        {
+          "name": "NeutralAtom",
+          "class": "NeutralAtom",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "requirements": [
+            {
+              "name": "pulser",
+              "version": "0.16.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "NeutralAtomMIS",
+              "class": "NeutralAtomMIS",
+              "args": {},
+              "module": "modules.solvers.NeutralAtomMIS",
+              "requirements": [
+                {
+                  "name": "pulser",
+                  "version": "0.16.0"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "MockNeutralAtomDevice",
+                  "class": "MockNeutralAtomDevice",
+                  "args": {},
+                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "requirements": [
+                    {
+                      "name": "pulser",
+                      "version": "0.16.0"
+                    }
+                  ],
+                  "submodules": []
                 }
               ]
             }

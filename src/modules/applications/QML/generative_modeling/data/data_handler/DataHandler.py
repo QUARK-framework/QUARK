@@ -14,6 +14,7 @@
 
 import pickle
 import os
+from qiskit import qpy
 
 import numpy as np
 import pandas as pd
@@ -25,7 +26,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class DataHandler(Core, ABC):
     """
-    The task of the DataHandler module is to translate the application’s data 
+    The task of the DataHandler module is to translate the application’s data
     and problem specification into preproccesed format.
     """
 
@@ -150,6 +151,10 @@ class DataHandler(Core, ABC):
             with open(f"{store_dir_iter}/training_results-{kwargs['rep_count']}.pkl", 'wb') as f:
                 pickle.dump(input_data, f)
 
+            if "circuit_transpiled" in list(input_data.keys()):
+                with open(f"{store_dir_iter}/transpiled_circuit_{kwargs['rep_count']}.qpy", 'wb') as f:
+                    qpy.dump(input_data.pop("circuit_transpiled"), f)
+
             # Save variables transformed space
             if "Transformation" in list(input_data.keys()):
                 self.metrics.add_metric_batch({"KL_best": input_data["KL_best_transformed"]})
@@ -164,7 +169,7 @@ class DataHandler(Core, ABC):
     @abstractmethod
     def data_load(self, gen_mod: dict, config: dict) -> dict:
         """
-        Helps to ensure that the model can effectively learn the underlying 
+        Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
 
         :param gen_mod: dictionary with collected information of the previous modules
@@ -207,12 +212,12 @@ class DataHandler(Core, ABC):
     @staticmethod
     def tb_to_pd(logdir: str, rep: str) -> None:
         """
-        Converts TensorBoard event files in the specified log directory 
+        Converts TensorBoard event files in the specified log directory
         into a pandas DataFrame and saves it as a pickle file.
 
         :param logdir: path to the log directory containing TensorBoard event files
-        :type logdir: str 
-        
+        :type logdir: str
+
         """
         event_acc = EventAccumulator(logdir)
         event_acc.Reload()

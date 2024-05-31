@@ -132,6 +132,7 @@ class MinMax(Transformation):
         n_qubits = input_data["n_qubits"]
         n_registers = self.transform_config["n_registers"]
         KL_best_transformed = min(input_data["KL"])
+        circuit_transpiled = input_data['circuit_transpiled']
 
         array_bins = Transformation.compute_discretization_efficient(n_qubits, n_registers)
         transformed_samples = Transformation.generate_samples_efficient(best_results, array_bins, n_registers,
@@ -170,7 +171,8 @@ class MinMax(Transformation):
             "histogram_generated_original": histogram_generated_original,
             "histogram_generated": histogram_generated_transformed,
             "KL_best_transformed": KL_best_transformed,
-            "store_dir_iter": input_data["store_dir_iter"]
+            "store_dir_iter": input_data["store_dir_iter"],
+            "circuit_transpiled": circuit_transpiled
         }
 
         return reverse_config_trans

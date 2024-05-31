@@ -19,6 +19,8 @@ from scipy.special import binom
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
+from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
 class CircuitCopula(Circuit):
@@ -33,7 +35,7 @@ class CircuitCopula(Circuit):
         Constructor method
         """
         super().__init__("DiscreteCopula")
-        self.submodule_options = ["LibraryQiskit"]
+        self.submodule_options = ["LibraryQiskit", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -76,6 +78,10 @@ class CircuitCopula(Circuit):
     def get_default_submodule(self, option: str) -> LibraryQiskit:
         if option == "LibraryQiskit":
             return LibraryQiskit()
+        elif option == "PresetQiskitNoisyBackend":
+            return PresetQiskitNoisyBackend()
+        elif option == "CustomQiskitNoisyBackend":
+            return CustomQiskitNoisyBackend()
         else:
             raise NotImplementedError(f"Option {option} not implemented")
 

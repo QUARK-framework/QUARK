@@ -190,6 +190,8 @@ class QCBM(Training):
             self.loss_func = self.kl_divergence
         elif config['loss'] == "NLL":
             self.loss_func = self.nll
+        elif config['loss'] == "MMD":
+            self.loss_func = self.mmd
         else:
             raise NotImplementedError("Loss function not implemented")
 
@@ -284,9 +286,9 @@ class QCBM(Training):
 
         input_data["best_parameter"] = es.result[0]
         best_sample = self.sample_from_pmf(self.n_states_range,
-                                           best_pmf.get() if GPU else best_pmf,
+                                           best_pmf.get() if GPU else best_pmf,  # pylint: disable=E0606
                                            n_shots=input_data["n_shots"])
-        input_data["best_sample"] = best_sample.get() if GPU else best_sample # pylint: disable=E1101
+        input_data["best_sample"] = best_sample.get() if GPU else best_sample  # pylint: disable=E1101
 
         return input_data
 
@@ -304,14 +306,16 @@ class QCBM(Training):
             else:
                 counts = samples[int(index)]
 
-            metrics = self.generalization_metrics.get_metrics(counts.get() if GPU else counts)
+            metrics = self.generalization_metrics.get_metrics(counts if GPU else counts)
             for (key, value) in metrics.items():
                 self.writer.add_scalar(f"metrics/{key}", value, epoch)
 
         nll = self.nll(best_pmf.reshape([1, -1]), self.target)
         kl = self.kl_divergence(best_pmf.reshape([1, -1]), self.target)
+        mmd = self.mmd(best_pmf.reshape([1, -1]), self.target)
         self.writer.add_scalar("metrics/NLL", nll.get() if GPU else nll, epoch)
         self.writer.add_scalar("metrics/KL", kl.get() if GPU else kl, epoch)
+        self.writer.add_scalar("metrics/MMD", mmd.get() if GPU else mmd, epoch)
 
         self.ax.clear()
         self.ax.imshow(

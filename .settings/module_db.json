@@ -1,7 +1,7 @@
 {
-  "build_number": 7,
-  "build_date": "20-03-2024 12:51:58",
-  "git_revision_number": "3be6f3847150d4bb8debee2451522b0b19fa205f",
+  "build_number": 9,
+  "build_date": "21-05-2024 10:16:52",
+  "git_revision_number": "16d427e5b1954cf0855dcea6c8aa5b13ee98a1f9",
   "modules": [
     {
       "name": "PVC",
@@ -1832,7 +1832,7 @@
               "requirements": [
                 {
                   "name": "qiskit",
-                  "version": "0.40.0"
+                  "version": "0.45.0"
                 },
                 {
                   "name": "qiskit-optimization",
@@ -1859,16 +1859,6 @@
                   "class": "HelperClass",
                   "args": {
                     "device_name": "qasm_simulator_gpu"
-                  },
-                  "module": "modules.devices.HelperClass",
-                  "requirements": [],
-                  "submodules": []
-                },
-                {
-                  "name": "ibm_eagle",
-                  "class": "HelperClass",
-                  "args": {
-                    "device_name": "ibm_eagle"
                   },
                   "module": "modules.devices.HelperClass",
                   "requirements": [],
@@ -2049,11 +2039,143 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "0.45.0"
                         },
                         {
                           "name": "numpy",
                           "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2133,11 +2255,143 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "0.45.0"
                         },
                         {
                           "name": "numpy",
                           "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2198,11 +2452,143 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "0.45.0"
                         },
                         {
                           "name": "numpy",
                           "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "0.45.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.11.2"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "qiskit-ibmq-provider",
+                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2279,11 +2665,15 @@
                   "requirements": [
                     {
                       "name": "qiskit",
-                      "version": "0.40.0"
+                      "version": "0.45.0"
                     },
                     {
                       "name": "numpy",
                       "version": "1.23.5"
+                    },
+                    {
+                      "name": "qiskit-ibmq-provider",
+                      "version": "0.19.2"
                     }
                   ],
                   "submodules": [
@@ -2326,6 +2716,183 @@
                       "submodules": []
                     }
                   ]
+                },
+                {
+                  "name": "CustomQiskitNoisyBackend",
+                  "class": "CustomQiskitNoisyBackend",
+                  "args": {},
+                  "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                  "requirements": [
+                    {
+                      "name": "qiskit",
+                      "version": "0.45.0"
+                    },
+                    {
+                      "name": "qiskit_aer",
+                      "version": "0.11.2"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.23.5"
+                    },
+                    {
+                      "name": "qiskit-ibmq-provider",
+                      "version": "0.19.2"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "3.3.0"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "PresetQiskitNoisyBackend",
+                  "class": "PresetQiskitNoisyBackend",
+                  "args": {},
+                  "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                  "requirements": [
+                    {
+                      "name": "qiskit",
+                      "version": "0.45.0"
+                    },
+                    {
+                      "name": "qiskit_aer",
+                      "version": "0.11.2"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.23.5"
+                    },
+                    {
+                      "name": "qiskit-ibmq-provider",
+                      "version": "0.19.2"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "3.3.0"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
+      "name": "MIS",
+      "class": "MIS",
+      "module": "modules.applications.optimization.MIS.MIS",
+      "submodules": [
+        {
+          "name": "NeutralAtom",
+          "class": "NeutralAtom",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "requirements": [
+            {
+              "name": "pulser",
+              "version": "0.16.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "NeutralAtomMIS",
+              "class": "NeutralAtomMIS",
+              "args": {},
+              "module": "modules.solvers.NeutralAtomMIS",
+              "requirements": [
+                {
+                  "name": "pulser",
+                  "version": "0.16.0"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "MockNeutralAtomDevice",
+                  "class": "MockNeutralAtomDevice",
+                  "args": {},
+                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "requirements": [
+                    {
+                      "name": "pulser",
+                      "version": "0.16.0"
+                    }
+                  ],
+                  "submodules": []
                 }
               ]
             }

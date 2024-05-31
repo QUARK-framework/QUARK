@@ -82,10 +82,10 @@ class NeutralAtom(Mapping):
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
-        
+
         pos = networkx.get_node_attributes(problem, 'pos')
         register = pulser.Register(pos)
-        
+
         neutral_atom_problem = {
             'graph': problem,
             'register': register

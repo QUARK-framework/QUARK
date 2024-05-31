@@ -2061,50 +2061,6 @@
             }
           ],
           "submodules": [
-            {
-              "name": "QAOA",
-              "class": "QAOA",
-              "args": {},
-              "module": "modules.solvers.QAOA",
-              "requirements": [
-                {
-                  "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
-                },
-                {
-                  "name": "scipy",
-                  "version": "1.10.1"
-                },
-                {
-                  "name": "numpy",
-                  "version": "1.23.5"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "LocalSimulator",
-                  "class": "LocalSimulator",
-                  "args": {
-                    "device_name": "LocalSimulator"
-                  },
-                  "module": "modules.devices.braket.LocalSimulator",
-                  "requirements": [
-                    {
-                      "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
-                    },
-                    {
-                      "name": "botocore",
-                      "version": "1.25.7"
-                    },
-                    {
-                      "name": "boto3",
-                      "version": "1.22.7"
-                    }
-                  ]
-		}
-	       ]
-	     },
            {
                "name": "Annealer",
                "class": "Annealer",
@@ -2124,6 +2080,20 @@
                      }
                    ],
                    "submodules": []
+                 },
+                 {
+                 
+                     "name": "Quantum Annealer Dwave",
+                     "class": "QuantumAnnealingSampler",
+                     "args": {},
+                     "module": "modules.devices.QuantumAnnealingSampler",
+                     "requirements": [
+                       {
+                         "name": "dwave-system",
+                         "version": "1.23.0"
+                       }
+                     ],
+                     "submodules": []
                  }
                ]
              }

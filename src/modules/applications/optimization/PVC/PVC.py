@@ -225,7 +225,7 @@ class PVC(Optimization):
             # get not assigned nodes
             logging.info(f"Route until now is: {route}")
             nodes_unassigned = [(node, 1, 1) for node in nodes if node[0] not in visited_seams]
-            nodes_unassigned = list(np.random.permutation(nodes_unassigned))
+            nodes_unassigned = list(np.random.permutation(nodes_unassigned, dtype=object))
             logging.info(nodes_unassigned)
             logging.info(visited_seams)
             logging.info(nodes)

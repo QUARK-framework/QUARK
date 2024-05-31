@@ -11,7 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+import logging
 from typing import Tuple
 from typing import TypedDict
 
@@ -210,6 +210,9 @@ class QiskitQAOA(Solver):
             elif config["method"] == "qaoa":
                 algorithm = QAOA(reps=config["depth"], optimizer=optimizer,
                                  quantum_instance=self._get_quantum_instance(device_wrapper))
+            else:
+                logging.warning("No method selected in QiskitQAOA. Continue with NumPyMinimumEigensolver.")
+                algorithm = NumPyMinimumEigensolver()
 
         # run actual optimization algorithm
         result = algorithm.compute_minimum_eigenvalue(ising_op)

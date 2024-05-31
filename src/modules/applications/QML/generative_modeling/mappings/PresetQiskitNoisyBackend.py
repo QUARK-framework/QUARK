@@ -242,8 +242,8 @@ class PresetQiskitNoisyBackend(Library):
 
         return backend
 
-    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str,
-                            config_dict: dict) -> callable:  # pylint: disable=W0221
+    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str,  # pylint: disable=W0221
+                            config_dict: dict) -> callable:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.

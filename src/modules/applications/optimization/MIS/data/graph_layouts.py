@@ -47,9 +47,9 @@ def generate_hexagonal_graph(n_nodes:int, spacing:float,
         n_traps=n_traps, spacing=spacing)
 
     # Fill the layout with traps
-    reg = hexagonal_layout.hexagonal_register(n_traps) 
-    ids = reg._ids
-    coords = reg._coords
+    reg = hexagonal_layout.hexagonal_register(n_traps)
+    ids = reg._ids  # pylint: disable=W0212
+    coords = reg._coords  # pylint: disable=W0212
     coords = [l.tolist() for l in coords]
     traps = dict(zip(ids, coords))
 
@@ -61,8 +61,8 @@ def generate_hexagonal_graph(n_nodes:int, spacing:float,
 
     # Rename the atoms
     i = 0
-    node_positions = dict()
-    for trap in traps.keys():
+    node_positions = {}
+    for trap in traps.keys():  # pylint: disable=C0206
         node_positions[i] = traps[trap]
         i += 1
 
@@ -70,9 +70,9 @@ def generate_hexagonal_graph(n_nodes:int, spacing:float,
     hexagonal_graph = networkx.Graph()
 
     # Add the nodes
-    for id, coord in node_positions.items():
-        hexagonal_graph.add_node(id, pos=coord)
-    
+    for ID, coord in node_positions.items():
+        hexagonal_graph.add_node(ID, pos=coord)
+
     # Generate the edges and add them to the graph
     edges = _generate_edges(node_positions=node_positions)
     hexagonal_graph.add_edges_from(edges)

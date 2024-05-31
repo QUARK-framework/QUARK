@@ -58,7 +58,7 @@ class MockNeutralAtomDevice(Pulser):
                 "description": "Simulate dephasing noise? Has a large impact on performance!"
             },
         }
-    
+
     class Config(TypedDict):
         """
         Attributes of a valid config

@@ -56,7 +56,7 @@ class MIS(Optimization):
     def get_solution_quality_unit(self) -> str:
         return "Set size"
 
-    def get_default_submodule(self, option: str) -> Core:        
+    def get_default_submodule(self, option: str) -> Core:
         if option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
@@ -191,16 +191,16 @@ class MIS(Optimization):
         """
         start = start_time_measurement()
         is_valid = True
-        
+
         nodes = list(self.application.nodes())
         edges = list(self.application.edges())
 
-        # TODO: Check if the solution is maximal? 
+        # TODO: Check if the solution is maximal?
 
         # Check if the solution is independent
         is_independent = all((u, v) not in edges for u, v in edges if u in solution and v in solution)
         if is_independent:
-            logging.info("The solution is independent")   
+            logging.info("The solution is independent")
         else:
             logging.warning("The solution is not independent")
             is_valid = False

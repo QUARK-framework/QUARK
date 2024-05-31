@@ -109,21 +109,22 @@ class NeutralAtomMIS(Solver):
         start = start_time_measurement()
 
         sequence = self._create_sequence(register, device)
-        
+
         if device_wrapper.device_name == "mock neutral atom device":
             backend = device_backend(sequence, device_config)
             results = backend.run(progress_bar=False)
             sampled_state_counts = results.sample_final_state(N_samples=config['samples'])
         else:
             raise NotImplementedError(f"Device Option {device_wrapper.device_name} not implemented")
-        
+
         valid_state_counts = self._filter_invalid_states(sampled_state_counts, nodes, edges)
         state = self._select_best_state(valid_state_counts, nodes)
         state_nodes = self._translate_state_to_nodes(state, nodes)
 
         return state_nodes, end_time_measurement(start), {}
-    
-    def _create_sequence(self, register:pulser.Register, device:pulser.devices._device_datacls.Device) -> pulser.Sequence:
+
+    def _create_sequence(self, register:pulser.Register, device:pulser.devices._device_datacls.Device) -> (
+            pulser.Sequence):
         """
         Creates a pulser sequence from a register and a device.
         """
@@ -133,7 +134,7 @@ class NeutralAtomMIS(Solver):
         for pulse in pulses:
             sequence.add(pulse, "Rydberg global")
         return sequence
-    
+
     def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
         """
         Creates pulses tuned to MIS problem.
@@ -174,7 +175,7 @@ class NeutralAtomMIS(Solver):
             channel.validate_pulse(pulse)
 
         return pulses
-    
+
     def _filter_invalid_states(self, state_counts:dict, nodes:list, edges:list) -> dict:
         valid_state_counts = {}
         for state, count in state_counts.items():
@@ -189,15 +190,16 @@ class NeutralAtomMIS(Solver):
                 valid_state_counts[state] = count
 
         return valid_state_counts
-    
+
     def _translate_state_to_nodes(self, state:str, nodes:list) -> list:
         return [key for index, key in enumerate(nodes) if state[index] == '1']
-    
+
     def _select_best_state(self, states:dict, nodes=list) -> str:
         # TODO: Implement the samplers
         try:
             best_state = max(states, key=lambda k: states[k])
-        except:
+        except:  # pylint: disable=W0702
+            # TODO: Specify error
             # TODO: Clean up this monstrocity
             n_nodes = len(nodes)
             best_state = "0" * n_nodes

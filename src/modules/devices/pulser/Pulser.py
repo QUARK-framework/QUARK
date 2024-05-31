@@ -38,7 +38,7 @@ class Pulser(Device, ABC):
         :rtype: any
         """
         return self.backend
-    
+
     @abstractmethod
     def get_backend_config(self) -> any:
         """

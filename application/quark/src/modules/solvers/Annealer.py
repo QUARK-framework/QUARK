@@ -35,6 +35,9 @@ class Annealer(Solver):
         if option == "Simulated Annealer":
             from modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
             return SimulatedAnnealingSampler()
+        elif option == "Quantum Annealer":
+            from modules.devices.QuantumAnnealingSampler import QuantumAnnealingSampler
+            return QuantumAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")
 

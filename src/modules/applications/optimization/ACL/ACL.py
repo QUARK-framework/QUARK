@@ -43,6 +43,7 @@ assignment problem.
         """
         super().__init__("ACL")
         self.submodule_options = ["MIPsolverACL", "Ising", "QUBO"]
+        self.application = None
 
     @staticmethod
     def get_requirements() -> list:
@@ -113,15 +114,17 @@ assignment problem.
         model_select = config['model_select']
 
         """
-        All of the parameters are given in decimeters -> 4m == 400 cm == 40 dcm or decitons -> 2 tons -> 20 dct
+        All of the parameters are given in decimeters -> 4m == 400 cm == 40 dm or decitons -> 2 tons -> 20 dt
         Below are the model specific parameters, constraints and objectives for the tiny, small and the full model
         """
         if model_select == "Tiny":
             # Weight parameters
             # max. total weight on truck / trailer
             wt = [100]
+            # wt = [10]
             # max. weight on the four levels
             wl = [50, 60]
+            # wl = [5, 6]
             # max. weights on platforms p, if not angled
             wp = [23, 23, 23, 26, 17]
             # wp = [2, 2, 2, 2, 1]
@@ -132,6 +135,7 @@ assignment problem.
             for i in set(range(len(vehicles))):
                 df_new = (df.loc[df['Type'] == vehicles[i]])
                 weight_list[i] = int(df_new["Weight"].iloc[0])
+                # weight_list[i] = int(int(df_new["Weight"].iloc[0])/10)
 
             # Construct sets
             # Set of available cars
@@ -633,7 +637,7 @@ assignment problem.
         for key in variables:
             if variables[key] > 0:
                 assignments.append(key)
-        print("vehicle to platform assignments (car, platform): ", assignments)
+        print("vehicle to platform assignments (platform, vehicle): ", assignments)
         return objective_value, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:

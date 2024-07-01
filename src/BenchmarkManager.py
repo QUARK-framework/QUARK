@@ -329,6 +329,8 @@ class BenchmarkManager:
         # Put the legend out of the figure
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         ax.set(xlabel="benchmark config hash", ylabel='execution time of module (ms)')
+        ax.set_xticks(ax.get_xticks())
+        ax.set_yticks(ax.get_yticks())
         ax.set_xticklabels(ax.get_xticklabels(), rotation=90, size=6)
         plt.savefig(f"{store_dir}/time_by_module.pdf", dpi=300, bbox_inches='tight')
         plt.clf()

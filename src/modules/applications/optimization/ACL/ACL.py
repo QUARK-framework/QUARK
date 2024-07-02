@@ -16,7 +16,7 @@ from typing import TypedDict
 
 import pandas as pd
 import numpy as np
-from pulp import *
+import pulp
 
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
@@ -157,7 +157,7 @@ assignment problem.
             x = pulp.LpVariable.dicts('x', ((p, v) for p in plats for v in vecs), cat='Binary')
 
             # Create the 'prob' variable to contain the problem data
-            prob = LpProblem("ACL", LpMaximize)
+            prob = pulp.LpProblem("ACL", pulp.LpMaximize)
 
             # Objective function
             # Maximize number of vehicles on the truck
@@ -189,9 +189,9 @@ assignment problem.
                     weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[t] for v in vecs) <= wt[t]
 
         elif model_select == "Small":
-            """
-            For the small model, we only consider two levels with 3 and 2 platforms each
-            """
+
+            # For the small model, we only consider two levels with 3 and 2 platforms each
+
             # Length parameters
             # platform lengths, extension, bounds on extension
             # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
@@ -260,7 +260,7 @@ assignment problem.
             gamma = pulp.LpVariable.dicts('gamma', (p for p in plats_sp), cat='Binary')
 
             # Create the 'prob' variable to contain the problem data
-            prob = LpProblem("ACL", LpMaximize)
+            prob = pulp.LpProblem("ACL", pulp.LpMaximize)
 
             # Objective function
             # Maximize number of vehicles on the truck
@@ -415,7 +415,7 @@ assignment problem.
             plats_h2 = set(range(len(platforms_height_array_trailer)))
 
             # Create the 'prob' variable to contain the problem data
-            prob = LpProblem("ACL", LpMaximize)
+            prob = pulp.LpProblem("ACL", pulp.LpMaximize)
 
             # Create decision variables
             # Vehicle v assigned to p
@@ -439,9 +439,7 @@ assignment problem.
             # Weight for split-platforms
             gamma = pulp.LpVariable.dicts('gamma', (p for p in plats_sp), cat='Binary')
 
-            """
-            here starts the actual model with objective and constraints
-            """
+            # Here the model starts, including objective and constraints
 
             # Objective function
             # Maximize number of vehicles on the truck
@@ -660,6 +658,6 @@ assignment problem.
 
     def save(self, path: str, iter_count: int) -> None:
         # Convert our problem instance from Dict to an LP problem and then to json
-        _, problem_instance = LpProblem.from_dict(self.application)
+        _, problem_instance = pulp.LpProblem.from_dict(self.application)
         # Save problem instance to json
         problem_instance.to_json(f"{path}/ACL_instance.json")

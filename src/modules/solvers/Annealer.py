@@ -112,9 +112,8 @@ class Annealer(Solver):
             # # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
             # additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
             raise ValueError
-        else:
-            # This is for D-Wave simulated Annealer
-            response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
+        # This is for D-Wave simulated Annealer
+        response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 
         # take the result with the lowest energy:

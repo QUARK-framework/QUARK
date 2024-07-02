@@ -195,6 +195,8 @@ class QiskitQAOA(Solver):
             elif config["method"] == "qaoa":
                 algorithm = QAOA(reps=config["depth"], optimizer=optimizer,
                                  quantum_instance=self._get_quantum_instance(device_wrapper))
+            else:
+                raise ValueError
 
         # run actual optimization algorithm
         result = algorithm.compute_minimum_eigenvalue(ising_op)

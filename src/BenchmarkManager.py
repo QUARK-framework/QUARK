@@ -204,7 +204,8 @@ class BenchmarkManager:
 
         else:
             processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                     module_instance.preprocessed_input, path, rep_count)
+                                                                     module_instance.preprocessed_input, path,
+                                                                     rep_count)
             module_instance.postprocessed_input, postprocessing_time = module_instance.postprocess(processed_input,
                                                                                                    module["config"],
                                                                                                    store_dir=path,

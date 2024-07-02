@@ -69,7 +69,7 @@ assignment problem.
 
     def get_default_submodule(self, option: str) -> Core:
         if option == "MIPsolverACL":
-            from modules.solvers.MIPsolverACL import MIPaclp # pylint: disable=C0415
+            from modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
             return MIPaclp()
         elif option == "Ising":
             from modules.applications.optimization.ACL.mappings.ISING import Ising  # pylint: disable=C0415
@@ -113,10 +113,9 @@ assignment problem.
         df = pd.read_excel(os.path.join(os.path.dirname(__file__), "Vehicle_data_QUARK.xlsx"))
         model_select = config['model_select']
 
-        """
-        All of the parameters are given in decimeters -> 4m == 400 cm == 40 dm or decitons -> 2 tons -> 20 dt
-        Below are the model specific parameters, constraints and objectives for the tiny, small and the full model
-        """
+        # All the parameters are given in decimeters -> 4m == 400 cm == 40 dm or decitons -> 2 tons -> 20 dt
+        # Below are the model specific parameters, constraints and objectives for the tiny, small and the full model
+
         if model_select == "Tiny":
             # Weight parameters
             # max. total weight on truck / trailer
@@ -133,60 +132,61 @@ assignment problem.
             weight_list = [0] * (len(vehicles))
 
             for i in set(range(len(vehicles))):
-                df_new = (df.loc[df['Type'] == vehicles[i]])
+                df_new = df.loc[df['Type'] == vehicles[i]]
+                # df_new = (df.loc[df['Type'] == vehicles[i]])
                 weight_list[i] = int(df_new["Weight"].iloc[0])
                 # weight_list[i] = int(int(df_new["Weight"].iloc[0])/10)
 
             # Construct sets
             # Set of available cars
-            V = set(range(len(vehicles)))
+            vecs = set(range(len(vehicles)))
             # Set of available platforms
             platforms_array = np.array([0, 1, 2, 3, 4])
-            P = set(range(len(platforms_array)))
+            plats = set(range(len(platforms_array)))
 
-            # Set of platforms that have a limitation on allowed length
-            platforms_length_array = np.array([[0, 1, 2], [3, 4]], dtype=object)
-            Pl = set(range(len(platforms_length_array)))
+            # Set of platforms that have a limitation on allowed weight
+            platforms_level_array = np.array([[0, 1, 2], [3, 4]], dtype=object)
+            plats_l = set(range(len(platforms_level_array)))
 
             # Set of platforms that form trailer and truck
             platforms_truck_trailer_array = np.array([[0, 1, 2, 3, 4]], dtype=object)
-            Pt = set(range(len(platforms_truck_trailer_array)))
+            plats_t = set(range(len(platforms_truck_trailer_array)))
 
             # Create decision variables
             # Vehicle v assigned to p
-            x = pulp.LpVariable.dicts('x', ((p, v) for p in P for v in V), cat='Binary')
+            x = pulp.LpVariable.dicts('x', ((p, v) for p in plats for v in vecs), cat='Binary')
 
             # Create the 'prob' variable to contain the problem data
             prob = LpProblem("ACL", LpMaximize)
 
             # Objective function
             # Maximize number of vehicles on the truck
-            prob += pulp.lpSum(x[p, v] for p in P for v in V)
+            prob += pulp.lpSum(x[p, v] for p in plats for v in vecs)
 
             # Constraints
             # Assignment constraints
             # (1) Every vehicle can only be assigned to a single platform
-            for p in P:
-                prob += pulp.lpSum(x[p, v] for v in V) <= 1
+            for p in plats:
+                prob += pulp.lpSum(x[p, v] for v in vecs) <= 1
 
             # (2) Every platform can only hold a single vehicle
-            for v in V:
-                prob += pulp.lpSum(x[p, v] for p in P) <= 1
+            for v in vecs:
+                prob += pulp.lpSum(x[p, v] for p in plats) <= 1
 
             # (3) Weight limit for every platform
-            for p in P:
-                for v in V:
+            for p in plats:
+                for v in vecs:
                     prob += weight_list[v] * x[p, v] <= wp[p]
 
             # (4) Weight constraint for every level
-            for L in Pl:
-                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_length_array[L] for v in V) <= \
-                        wl[L]
+            for p_l in plats_l:
+                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <= \
+                        wl[p_l]
 
             # (5) Weight constraint for truck and trailer
-            for T in Pt:
+            for t in plats_t:
                 prob += pulp.lpSum(
-                    weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[T] for v in V) <= wt[T]
+                    weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[t] for v in vecs) <= wt[t]
 
         elif model_select == "Small":
             """
@@ -196,8 +196,8 @@ assignment problem.
             # platform lengths, extension, bounds on extension
             # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
             # Consider maximum length of 20750, drivers cab 2350, distance between truck and trailer of 500
-            # We do not consider continous extension of the loading planes
-            lmax_L = [97, 79]
+            # We do not consider continuous extension of the loading planes
+            lmax_l = [97, 79]
 
             # Height parameters
             # Considers base truck height and height distance between vehicles (~10cm)
@@ -208,7 +208,7 @@ assignment problem.
             # max. total weight on truck / trailer
             wt = [100]
             # max. weight on the four levels
-            wl = [50, 60]
+            wl = [65, 50]
             # max. weights on platforms p, if not angled
             wp = [23, 23, 23, 26, 17]
             # max. weight on p, if sp is used
@@ -221,7 +221,7 @@ assignment problem.
             weight_list = [0] * (len(vehicles))
 
             for i in set(range(len(vehicles))):
-                df_new = (df.loc[df['Type'] == vehicles[i]])
+                df_new = df.loc[df['Type'] == vehicles[i]]
                 class_list[i] = int(df_new["Class"].iloc[0])
                 length_list[i] = int(df_new["Length"].iloc[0])
                 height_list[i] = int(df_new["Height"].iloc[0])
@@ -229,60 +229,61 @@ assignment problem.
 
             # Construct sets
             # Set of available cars
-            V = set(range(len(vehicles)))
+            vecs = set(range(len(vehicles)))
             # Set of available platforms
             platforms_array = np.array([0, 1, 2, 3, 4])
-            P = set(range(len(platforms_array)))
+            plats = set(range(len(platforms_array)))
 
             # Set of possible split platforms
             split_platforms_array = np.array([[0, 1], [1, 2], [3, 4]], dtype=object)
-            Psp = set(range(len(split_platforms_array)))
+            plats_sp = set(range(len(split_platforms_array)))
 
-            # Set of platforms that have a limitation on allowed length
-            platforms_length_array = np.array([[0, 1, 2], [3, 4]], dtype=object)
-            Pl = set(range(len(platforms_length_array)))
+            # Set of platforms that have a limitation on allowed length and weight because they are on the same level
+            platforms_level_array = np.array([[0, 1, 2], [3, 4]], dtype=object)
+            plats_l = set(range(len(platforms_level_array)))
 
             # Set of platforms that form trailer and truck
             platforms_truck_trailer_array = np.array([[0, 1, 2, 3, 4]], dtype=object)
-            Pt = set(range(len(platforms_truck_trailer_array)))
+            plats_t = set(range(len(platforms_truck_trailer_array)))
 
             # Set of platforms that have a limitation on allowed height
-            platforms_height_array_truck = np.array([[0, 3], [1, 3], [2, 3], [0, 4], [1, 4], [2, 4]], dtype=object)
-            Ph1 = set(range(len(platforms_height_array_truck)))
+            platforms_height_array_truck = np.array([[0, 3], [1, 3], [2, 3], [0, 4], [1, 4], [2, 4]],
+                                                    dtype=object)
+            plats_h1 = set(range(len(platforms_height_array_truck)))
 
             # Create decision variables
             # Vehicle v assigned to p
-            x = pulp.LpVariable.dicts('x', ((p, v) for p in P for v in V), cat='Binary')
+            x = pulp.LpVariable.dicts('x', ((p, v) for p in plats for v in vecs), cat='Binary')
             # Usage of split platform
-            sp = pulp.LpVariable.dicts('sp', (q for q in Psp), cat='Binary')
+            sp = pulp.LpVariable.dicts('sp', (q for q in plats_sp), cat='Binary')
             # Auxiliary variable for linearization of quadratic constraints
-            gamma = pulp.LpVariable.dicts('gamma', (p for p in Psp), cat='Binary')
+            gamma = pulp.LpVariable.dicts('gamma', (p for p in plats_sp), cat='Binary')
 
             # Create the 'prob' variable to contain the problem data
             prob = LpProblem("ACL", LpMaximize)
 
             # Objective function
             # Maximize number of vehicles on the truck
-            prob += pulp.lpSum(x[p, v] for p in P for v in V)
+            prob += pulp.lpSum(x[p, v] for p in plats for v in vecs)
 
             # Constraints
             # Assignment constraints
             # (1) Every vehicle can only be assigned to a single platform
-            for p in P:
-                prob += pulp.lpSum(x[p, v] for v in V) <= 1
+            for p in plats:
+                prob += pulp.lpSum(x[p, v] for v in vecs) <= 1
 
             # (2) Every platform can only hold a single vehicle
-            for v in V:
-                prob += pulp.lpSum(x[p, v] for p in P) <= 1
+            for v in vecs:
+                prob += pulp.lpSum(x[p, v] for p in plats) <= 1
 
-            # (3) If a split platform q in Psp is used, only one of its "sub platforms" can be used
-            for q in Psp:
-                prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in V) \
+            # (3) If a split platform q in plats_sp is used, only one of its "sub platforms" can be used
+            for q in plats_sp:
+                prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs) \
                         <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
 
             # (4) It is always only possible to use a single split-platform for any given p
-            for q in Psp:
-                for p in Psp:
+            for q in plats_sp:
+                for p in plats_sp:
                     if p != q:
                         z = bool(set(split_platforms_array[q]) & set(split_platforms_array[p]))
                         if z is True:
@@ -290,44 +291,45 @@ assignment problem.
 
             # (5) Length constraint
             # Checks that vehicles v on platforms p that belong to level L are shorter than the maximum available length
-            for L in Pl:
-                prob += pulp.lpSum(x[p, v] * length_list[v] for p in platforms_length_array[L] for v in V) <= lmax_L[L]
+            for L in plats_l:
+                prob += (pulp.lpSum(x[p, v] * length_list[v] for p in platforms_level_array[L] for v in vecs)
+                         <= lmax_l[L])
 
             # (6) Height constraints for truck and trailer, analogue to length constraints
             # Truck
-            for H in Ph1:
-                prob += pulp.lpSum(x[p, v] * height_list[v] for p in platforms_height_array_truck[H] for v in V) \
-                        <= hmax_truck[H]
+            for h in plats_h1:
+                prob += pulp.lpSum(x[p, v] * height_list[v] for p in platforms_height_array_truck[h] for v in vecs) \
+                        <= hmax_truck[h]
 
             # (7) Linearization constraint -> gamma == 1, if split platform is used
-            for q in Psp:
+            for q in plats_sp:
                 prob += pulp.lpSum(
                     sp[q] + x[p, v] for p in self.intersectset(split_platforms_array[q], platforms_array)
-                    for v in V) >= 2 * gamma[q]
+                    for v in vecs) >= 2 * gamma[q]
 
             # (8) Weight limit for every platform
-            for p in P:
-                for v in V:
+            for p in plats:
+                for v in vecs:
                     prob += weight_list[v] * x[p, v] <= wp[p]
 
             # (9) If split platform is used, weight limit == wsp, if not, then weight limit == wp
-            for q in Psp:
+            for q in plats_sp:
                 for p in split_platforms_array[q]:
-                    prob += pulp.lpSum(weight_list[v] * x[p, v] for v in V) <= gamma[q] * wsp[q] \
+                    prob += pulp.lpSum(weight_list[v] * x[p, v] for v in vecs) <= gamma[q] * wsp[q] \
                             + (1 - gamma[q]) * wp[p]
 
             # (10) Weight constraint for every level
-            for L in Pl:
-                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_length_array[L] for v in V) <= \
-                        wl[L]
+            for p_l in plats_l:
+                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <= \
+                        wl[p_l]
 
             # (11) Weight constraint for truck and trailer
-            for T in Pt:
+            for p_t in plats_t:
                 prob += pulp.lpSum(
-                    weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[T] for v in V) <= wt[T]
+                    weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[p_t] for v in vecs) <= wt[p_t]
         else:
             # Horizontal Coefficients: Length reduction
-            # 1 = vorwärts, 0 = rückwärts
+            # 1 = forward, 0 = backward
             # [0:1, 1:1, 0:0, 1:0]
             v_coef = np.array([[0.20, 0.15, 0.14, 0.19],
                                [0.22, 0.22, 0.22, 0.22],
@@ -343,8 +345,8 @@ assignment problem.
             # platform lengths, extension, bounds on extension
             # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
             # Consider maximum length of 20750, drivers cab 2350, distance between truck and trailer of 500
-            # We do not consider continous extension of the loading planes
-            lmax_L = [97, 79, 97, 97]
+            # We do not consider continuous extension of the loading planes
+            lmax_l = [97, 79, 97, 97]
 
             # Height parameters
             # Considers base truck height and height distance between vehicles (~10cm)
@@ -374,7 +376,7 @@ assignment problem.
             weight_list = [0] * (len(vehicles))
 
             for i in set(range(len(vehicles))):
-                df_new = (df.loc[df['Type'] == vehicles[i]])
+                df_new = df.loc[df['Type'] == vehicles[i]]
                 class_list[i] = int(df_new["Class"].iloc[0])
                 length_list[i] = int(df_new["Length"].iloc[0])
                 height_list[i] = int(df_new["Height"].iloc[0])
@@ -382,59 +384,60 @@ assignment problem.
 
             # Construct sets
             # Set of available cars
-            V = set(range(len(vehicles)))
+            vecs = set(range(len(vehicles)))
             # Set of available platforms
             platforms_array = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-            P = set(range(len(platforms_array)))
+            plats = set(range(len(platforms_array)))
 
             # Set of platforms that can be angled
             platforms_angled_array = [1, 2, 4, 7, 8]
             vp = [0, 1, 3, 8, 9]  # Platforms "under" a_p
-            Pa = set(range(len(platforms_angled_array)))
+            plats_a = set(range(len(platforms_angled_array)))
 
             # Set of possible split platforms
             split_platforms_array = np.array([[0, 1], [1, 2], [3, 4], [5, 6], [7, 8], [8, 9]], dtype=object)
-            Psp = set(range(len(split_platforms_array)))
+            plats_sp = set(range(len(split_platforms_array)))
 
-            # Set of platforms that have a limitation on allowed length
-            platforms_length_array = np.array([[0, 1, 2], [3, 4], [5, 6], [7, 8, 9]], dtype=object)
-            Pl = set(range(len(platforms_length_array)))
+            # Set of platforms that have a limitation on allowed length and weight because they are on the same level
+            platforms_level_array = np.array([[0, 1, 2], [3, 4], [5, 6], [7, 8, 9]], dtype=object)
+            plats_l = set(range(len(platforms_level_array)))
 
             # Set of platforms that form trailer and truck
             platforms_truck_trailer_array = np.array([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]], dtype=object)
-            Pt = set(range(len(platforms_truck_trailer_array)))
+            plats_t = set(range(len(platforms_truck_trailer_array)))
 
             # Set of platforms that have a limitation on allowed height
-            platforms_height_array_truck = np.array([[0, 3], [1, 3], [2, 3], [0, 4], [1, 4], [2, 4]], dtype=object)
+            platforms_height_array_truck = np.array([[0, 3], [1, 3], [2, 3], [0, 4], [1, 4], [2, 4]],
+                                                    dtype=object)
             platforms_height_array_trailer = np.array([[5, 7], [5, 8], [6, 8], [6, 9]], dtype=object)
 
-            Ph1 = set(range(len(platforms_height_array_truck)))
-            Ph2 = set(range(len(platforms_height_array_trailer)))
+            plats_h1 = set(range(len(platforms_height_array_truck)))
+            plats_h2 = set(range(len(platforms_height_array_trailer)))
 
             # Create the 'prob' variable to contain the problem data
             prob = LpProblem("ACL", LpMaximize)
 
             # Create decision variables
             # Vehicle v assigned to p
-            x = pulp.LpVariable.dicts('x', ((p, v) for p in P for v in V), cat='Binary')
+            x = pulp.LpVariable.dicts('x', ((p, v) for p in plats for v in vecs), cat='Binary')
             # Usage of split platform
-            sp = pulp.LpVariable.dicts('sp', (q for q in Psp), cat='Binary')
+            sp = pulp.LpVariable.dicts('sp', (q for q in plats_sp), cat='Binary')
             # Direction of vehicle on p
-            d = pulp.LpVariable.dicts('d', (p for p in P), cat='Binary')
+            d = pulp.LpVariable.dicts('d', (p for p in plats), cat='Binary')
             # State of platform p in PA - angled == 1, not angled == 0
-            a_p = pulp.LpVariable.dicts('a_p', (p for p in Pa), cat='Binary')
+            a_p = pulp.LpVariable.dicts('a_p', (p for p in plats_a), cat='Binary')
 
             # Create auxiliary variables for linearization of quadratic constraints
-            y1 = pulp.LpVariable.dicts('y1', (p for p in Pa), cat='Binary')
-            y2 = pulp.LpVariable.dicts('y2', (p for p in Pa), cat='Binary')
-            y3 = pulp.LpVariable.dicts('y3', (p for p in Pa), cat='Binary')
-            y4 = pulp.LpVariable.dicts('y4', (p for p in Pa), cat='Binary')
-            ay1 = pulp.LpVariable.dicts('ay1', (p for p in Pa), cat='Binary')
-            ay2 = pulp.LpVariable.dicts('ay2', (p for p in Pa), cat='Binary')
-            ay3 = pulp.LpVariable.dicts('ay3', (p for p in Pa), cat='Binary')
-            ay4 = pulp.LpVariable.dicts('ay4', (p for p in Pa), cat='Binary')
+            y1 = pulp.LpVariable.dicts('y1', (p for p in plats_a), cat='Binary')
+            y2 = pulp.LpVariable.dicts('y2', (p for p in plats_a), cat='Binary')
+            y3 = pulp.LpVariable.dicts('y3', (p for p in plats_a), cat='Binary')
+            y4 = pulp.LpVariable.dicts('y4', (p for p in plats_a), cat='Binary')
+            ay1 = pulp.LpVariable.dicts('ay1', (p for p in plats_a), cat='Binary')
+            ay2 = pulp.LpVariable.dicts('ay2', (p for p in plats_a), cat='Binary')
+            ay3 = pulp.LpVariable.dicts('ay3', (p for p in plats_a), cat='Binary')
+            ay4 = pulp.LpVariable.dicts('ay4', (p for p in plats_a), cat='Binary')
             # Weight for split-platforms
-            gamma = pulp.LpVariable.dicts('gamma', (p for p in Psp), cat='Binary')
+            gamma = pulp.LpVariable.dicts('gamma', (p for p in plats_sp), cat='Binary')
 
             """
             here starts the actual model with objective and constraints
@@ -442,26 +445,26 @@ assignment problem.
 
             # Objective function
             # Maximize number of vehicles on the truck
-            prob += pulp.lpSum(x[p, v] for p in P for v in V)
+            prob += pulp.lpSum(x[p, v] for p in plats for v in vecs)
 
             # Constraints
             # Assignment constraints
             # (1) Every vehicle can only be assigned to a single platform
-            for p in P:
-                prob += pulp.lpSum(x[p, v] for v in V) <= 1
+            for p in plats:
+                prob += pulp.lpSum(x[p, v] for v in vecs) <= 1
 
             # (2) Every platform can only hold a single vehicle
-            for v in V:
-                prob += pulp.lpSum(x[p, v] for p in P) <= 1
+            for v in vecs:
+                prob += pulp.lpSum(x[p, v] for p in plats) <= 1
 
-            # (3) If a split platform q in Psp is used, only one of its "sub platforms" can be used
-            for q in Psp:
-                prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in V)\
+            # (3) If a split platform q in plats_sp is used, only one of its "sub platforms" can be used
+            for q in plats_sp:
+                prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs)\
                         <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
 
             # (3.1) It is always only possible to use a single split-platform for any given p
-            for q in Psp:
-                for p in Psp:
+            for q in plats_sp:
+                for p in plats_sp:
                     if p != q:
                         z = bool(set(split_platforms_array[q]) & set(split_platforms_array[p]))
                         if z is True:
@@ -469,7 +472,7 @@ assignment problem.
 
             # (3.2) It is not allowed to angle platforms next to empty platforms
             for i, p in enumerate(platforms_angled_array):
-                prob += pulp.lpSum(x[p, v] + x[vp[i], v] for v in V) >= 2 * a_p[i]
+                prob += pulp.lpSum(x[p, v] + x[vp[i], v] for v in vecs) >= 2 * a_p[i]
 
             # Linearization constraints
             # Linearization of d_p and d_v(p) -> orientations of two neighboring cars
@@ -490,13 +493,13 @@ assignment problem.
                 prob += a_p[z] + y4[z] >= 2 * ay4[z]
 
             # Linearization of x * ay -> linear combination of assignment and orientation/angle
-            xay1 = pulp.LpVariable.dicts('xay1', ((p, v) for p in Pa for v in V), cat='Binary')
-            xay2 = pulp.LpVariable.dicts('xay2', ((p, v) for p in Pa for v in V), cat='Binary')
-            xay3 = pulp.LpVariable.dicts('xay3', ((p, v) for p in Pa for v in V), cat='Binary')
-            xay4 = pulp.LpVariable.dicts('xay4', ((p, v) for p in Pa for v in V), cat='Binary')
+            xay1 = pulp.LpVariable.dicts('xay1', ((p, v) for p in plats_a for v in vecs), cat='Binary')
+            xay2 = pulp.LpVariable.dicts('xay2', ((p, v) for p in plats_a for v in vecs), cat='Binary')
+            xay3 = pulp.LpVariable.dicts('xay3', ((p, v) for p in plats_a for v in vecs), cat='Binary')
+            xay4 = pulp.LpVariable.dicts('xay4', ((p, v) for p in plats_a for v in vecs), cat='Binary')
             for p in platforms_angled_array:
                 z = platforms_angled_array.index(p)
-                for v in V:
+                for v in vecs:
                     prob += ay1[z] + x[z, v] >= 2 * xay1[z, v]
                     prob += ay2[z] + x[z, v] >= 2 * xay2[z, v]
                     prob += ay3[z] + x[z, v] >= 2 * xay3[z, v]
@@ -512,85 +515,100 @@ assignment problem.
             # Checks that vehicles v on platforms p that belong to level L are shorter than the maximum available length
             # The length of the vehicles depends on whether they are angled or not and which vehicle is standing on
             # platform v(p)
-            for L in Pl:
+            for L in plats_l:
                 prob += pulp.lpSum(x[p, v] * length_list[v]
-                                   - xay1[platforms_angled_array.index(p), v] * int(v_coef[class_list[v]][0]*length_list[v])
-                                   - xay2[platforms_angled_array.index(p), v] * int(v_coef[class_list[v]][1]*length_list[v])
-                                   - xay3[platforms_angled_array.index(p), v] * int(v_coef[class_list[v]][2]*length_list[v])
-                                   - xay4[platforms_angled_array.index(p), v] * int(v_coef[class_list[v]][3]*length_list[v])
-                                   for p in self.intersectset(platforms_angled_array, platforms_length_array[L])
-                                   for v in V)\
+                                   - xay1[platforms_angled_array.index(p), v] *
+                                   int(v_coef[class_list[v]][0]*length_list[v])
+                                   - xay2[platforms_angled_array.index(p), v] *
+                                   int(v_coef[class_list[v]][1]*length_list[v])
+                                   - xay3[platforms_angled_array.index(p), v] *
+                                   int(v_coef[class_list[v]][2]*length_list[v])
+                                   - xay4[platforms_angled_array.index(p), v]
+                                   * int(v_coef[class_list[v]][3]*length_list[v])
+                                   for p in self.intersectset(platforms_angled_array, platforms_level_array[L])
+                                   for v in vecs)\
                         + pulp.lpSum(x[p, v] * length_list[v]
-                                     for p in self.diffset(platforms_length_array[L], platforms_angled_array)
-                                     for v in V) \
-                        <= lmax_L[L]
+                                     for p in self.diffset(platforms_level_array[L], platforms_angled_array)
+                                     for v in vecs) \
+                        <= lmax_l[L]
 
             # (5) Platforms can not be angled, if they are part of a split platform
-            for q in Psp:
+            for q in plats_sp:
                 prob += pulp.lpSum(a_p[platforms_angled_array.index(p)]
                                    for p in self.intersectset(platforms_angled_array, split_platforms_array[q]))\
                         <= len(split_platforms_array[q]) * (1 - sp[q])
 
             # (6) Weight constraint if split platform is used, gamma == 1
-            for q in Psp:
+            for q in plats_sp:
                 prob += pulp.lpSum(sp[q] + x[p, v] for p in self.intersectset(split_platforms_array[q], platforms_array)
-                                   for v in V) >= 2 * gamma[q]
+                                   for v in vecs) >= 2 * gamma[q]
 
             # If split platform is used, weight limit == wsp, if not, then weight limit == wp
-            for q in Psp:
+            for q in plats_sp:
                 for p in split_platforms_array[q]:
-                    prob += pulp.lpSum(weight_list[v] * x[p, v] for v in V) <= gamma[q] * wsp[q] + (1 - gamma[q]) * wp[p]
+                    prob += (pulp.lpSum(weight_list[v] * x[p, v] for v in vecs) <= gamma[q] * wsp[q] + (1 - gamma[q]) *
+                             wp[p])
 
             # (7) If a platform that can be angled is angled, weight limit == wpa
             # Need another linearization for that:
-            apx = pulp.LpVariable.dicts('apx', ((p, v) for p in Pa for v in V), cat='Binary')
+            apx = pulp.LpVariable.dicts('apx', ((p, v) for p in plats_a for v in vecs), cat='Binary')
             for p in platforms_angled_array:
                 z = platforms_angled_array.index(p)
-                for v in V:
+                for v in vecs:
                     prob += a_p[z] + x[z, v] >= 2 * apx[z, v]
 
             for p in platforms_angled_array:
-                prob += pulp.lpSum(weight_list[v] * apx[platforms_angled_array.index(p), v] for v in V) \
+                prob += pulp.lpSum(weight_list[v] * apx[platforms_angled_array.index(p), v] for v in vecs) \
                         <= wpa[platforms_angled_array.index(p)]
 
             # (8) Weight constraint for every level
-            for L in Pl:
-                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_length_array[L] for v in V) <= wl[L]
+            for p_l in plats_l:
+                prob += (pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <=
+                         wl[p_l])
 
             # (9) Weight constraint for truck and trailer
-            for T in Pt:
-                prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[T] for v in V) <= wt[T]
+            for p_t in plats_t:
+                prob += (pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[p_t] for v in vecs)
+                         <= wt[p_t])
 
             # (10) Weight constraint for entire auto carrier
-            prob += pulp.lpSum(weight_list[v] * x[p, v] for p in P for v in V) <= wmax
+            prob += pulp.lpSum(weight_list[v] * x[p, v] for p in plats for v in vecs) <= wmax
 
             # (11) Height constraints for truck and trailer, analogue to length constraints
             # Truck
-            for H in Ph1:
+            for h in plats_h1:
                 prob += pulp.lpSum(x[p, v] * height_list[v]
-                                   - xay1[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][0]*height_list[v])
-                                   - xay2[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][1]*height_list[v])
-                                   - xay3[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][2]*height_list[v])
-                                   - xay4[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][3]*height_list[v])
-                                   for p in self.intersectset(platforms_angled_array, platforms_height_array_truck[H])
-                                   for v in V)\
+                                   - xay1[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][0]*height_list[v])
+                                   - xay2[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][1]*height_list[v])
+                                   - xay3[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][2]*height_list[v])
+                                   - xay4[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][3]*height_list[v])
+                                   for p in self.intersectset(platforms_angled_array, platforms_height_array_truck[h])
+                                   for v in vecs)\
                         + pulp.lpSum(x[p, v] * height_list[v]
-                                     for p in self.diffset(platforms_height_array_truck[H], platforms_angled_array)
-                                     for v in V) \
-                        <= hmax_truck[H]
+                                     for p in self.diffset(platforms_height_array_truck[h], platforms_angled_array)
+                                     for v in vecs) \
+                        <= hmax_truck[h]
             # Trailer
-            for H in Ph2:
+            for h in plats_h2:
                 prob += pulp.lpSum(x[p, v] * height_list[v]
-                                   - xay1[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][0]*height_list[v])
-                                   - xay2[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][1]*height_list[v])
-                                   - xay3[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][2]*height_list[v])
-                                   - xay4[platforms_angled_array.index(p), v] * int(h_coef[class_list[v]][3]*height_list[v])
-                                   for p in self.intersectset(platforms_angled_array, platforms_height_array_trailer[H])
-                                   for v in V)\
+                                   - xay1[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][0]*height_list[v])
+                                   - xay2[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][1]*height_list[v])
+                                   - xay3[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][2]*height_list[v])
+                                   - xay4[platforms_angled_array.index(p), v] *
+                                   int(h_coef[class_list[v]][3]*height_list[v])
+                                   for p in self.intersectset(platforms_angled_array, platforms_height_array_trailer[h])
+                                   for v in vecs)\
                         + pulp.lpSum(x[p, v] * height_list[v]
-                                     for p in self.diffset(platforms_height_array_trailer[H], platforms_angled_array)
-                                     for v in V) \
-                        <= hmax_trailer[H]
+                                     for p in self.diffset(platforms_height_array_trailer[h], platforms_angled_array)
+                                     for v in vecs) \
+                        <= hmax_trailer[h]
 
         # Set the problem sense and name
         problem_instance = prob.to_dict()
@@ -645,4 +663,3 @@ assignment problem.
         _, problem_instance = LpProblem.from_dict(self.application)
         # Save problem instance to json
         problem_instance.to_json(f"{path}/ACL_instance.json")
-

@@ -15,15 +15,13 @@
 from typing import TypedDict
 from more_itertools import locate
 
-from qiskit_optimization import QuadraticProgram
 import numpy as np
+from qiskit_optimization import QuadraticProgram
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from modules.applications.Mapping import *
 from utils import start_time_measurement, end_time_measurement
 
-# global variable to remember relevant variables of the model
-global_variables = 0
 
 class Ising(Mapping):
     """
@@ -37,6 +35,7 @@ class Ising(Mapping):
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA", "QiskitQAOA"]
+        self.global_variables = 0
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -150,8 +149,7 @@ class Ising(Mapping):
 
         qubitOp, _ = qubo.to_ising()
 
-        global global_variables
-        global_variables = variables
+        self.global_variables = variables
 
         # reverse generate J and t out of qubit PauliSumOperator from qiskit
         t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
@@ -182,17 +180,14 @@ class Ising(Mapping):
         start = start_time_measurement()
         if np.any(solution == "-1"):  # ising model output from Braket QAOA
             solution = self._convert_ising_to_qubo(solution)
-        result = {}
-        result["status"] = [0]
-
+        result = {"status": [0]}
         variables = {}
-        result["status"] = [0]
         objective_value = 0
         for bit in solution:
             if solution[bit] > 0:
                 # We only care about assignments:
-                if "x" in global_variables[bit]:
-                    variables[global_variables[bit]] = solution[bit]
+                if "x" in self.global_variables[bit]:
+                    variables[self.global_variables[bit]] = solution[bit]
                     result["status"] = 'Optimal'
                     objective_value += solution[bit]
         result["variables"] = variables

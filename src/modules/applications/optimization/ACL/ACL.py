@@ -99,7 +99,7 @@ assignment problem.
     def diffset(p1, p2):
         return np.setdiff1d(p1, p2).tolist()
 
-    def generate_problem(self, config: Config):
+    def generate_problem(self, config: Config):  # pylint: disable=R0915
         """
         This function includes three models: Full, small and tiny. Full refers to the original model with all of its
         constraints. Small refers to the simplified model which is more suitable for solving it with QC methods.

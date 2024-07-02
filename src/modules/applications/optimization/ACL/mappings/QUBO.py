@@ -13,16 +13,15 @@
 #  limitations under the License.
 
 from typing import TypedDict
-from qiskit_optimization import QuadraticProgram
-import numpy as np
 import re
-from qiskit_optimization.converters import QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary, LinearEqualityToPenalty
+
+import numpy as np
+from qiskit_optimization import QuadraticProgram
+from qiskit_optimization.converters import (QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary,
+                                            LinearEqualityToPenalty)
 
 from modules.applications.Mapping import *
 from utils import start_time_measurement, end_time_measurement
-
-# global variable to remember relevant variables of the model
-global_variables = 0
 
 
 class Qubo(Mapping):
@@ -37,6 +36,7 @@ class Qubo(Mapping):
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
+        self.global_variables = 0
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -137,7 +137,7 @@ class Qubo(Mapping):
                 # The variables in each argument are connected by "*" signs. Here we split the variables
                 elements = argument.split('*')
                 # Convert string of numbers to floats
-                new_argument = (elements[0].strip())
+                new_argument = elements[0].strip()
                 # Remove empty strings
                 new_argument = [int(new_argument.replace(" ", "")) if new_argument.replace(" ", "").isdigit() else
                                 float(new_argument.replace(" ", ""))]
@@ -217,8 +217,7 @@ class Qubo(Mapping):
         arguments = self.convert_string_to_arguments(qubo_string)
         qubo = self.construct_qubo(arguments, variables)
 
-        global global_variables
-        global_variables = variables
+        self.global_variables = variables
 
         return {"Q": qubo}, end_time_measurement(start)
 
@@ -232,17 +231,15 @@ class Qubo(Mapping):
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
-        result = {}
-        result["status"] = [0]
+        result = {"status": [0]}
         objective_value = 0
-        # print("\nSolution: ", solution)
         variables = {}
         for bit in solution:
             if solution[bit] > 0:
                 # We only care about assignments of vehicles to platforms:
                 # We map the solution to the original variables
-                if "x" in global_variables[bit]:
-                    variables[global_variables[bit]] = solution[bit]
+                if "x" in self.global_variables[bit]:
+                    variables[self.global_variables[bit]] = solution[bit]
                     result["status"] = 'Optimal'  # TODO: I do not think every solution with at least one car is optimal
                     objective_value += solution[bit]
         result["variables"] = variables

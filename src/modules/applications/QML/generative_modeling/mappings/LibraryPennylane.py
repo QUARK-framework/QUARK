@@ -156,31 +156,31 @@ class LibraryPennylane(Library):
         return input_data
 
     @staticmethod
-    def select_backend(backend_config: str, n_qubits: int) -> qml.device:
+    def select_backend(config: str, n_qubits: int) -> qml.device:
         """
         This method configures the backend
 
-        :param backend_config: Name of a backend
-        :type backend_config: str
+        :param config: Name of a backend
+        :type config: str
         :param n_qubits: Number of qubits
         :type n_qubits: int
         :return: Configured backend
         :rtype: pennylane.device
         """
-        if backend_config == "lightning.gpu":
+        if config == "lightning.gpu":
             backend = qml.device(name="lightning.gpu", wires=n_qubits)
 
-        if backend_config == "lightning.qubit":
+        if config == "lightning.qubit":
             backend = qml.device(name="lightning.qubit", wires=n_qubits)
 
-        elif backend_config == "default.qubit":
+        elif config == "default.qubit":
             backend = qml.device(name="default.qubit", wires=n_qubits)
 
-        elif backend_config == "default.qubit.jax":
+        elif config == "default.qubit.jax":
             backend = qml.device(name="default.qubit.jax", wires=n_qubits)
 
         else:
-            raise NotImplementedError(f"Device Configuration {backend_config} not implemented")
+            raise NotImplementedError(f"Device Configuration {config} not implemented")
 
         return backend
 

@@ -38,6 +38,7 @@ class PIT(Transformation): # pylint disable=R0902
         self.grid_shape = None
         self.histogram_train = None
         self.histogram_train_original = None
+        self.histogram_transformed = None
 
     @staticmethod
     def get_requirements() -> list[dict]:

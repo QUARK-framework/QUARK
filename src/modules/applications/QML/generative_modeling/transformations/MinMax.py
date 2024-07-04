@@ -98,12 +98,11 @@ class MinMax(Transformation): # pylint: disable=R0902
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
         # Compute histogram for the transformed dataset
-        transformed_histogram_grid, self.bin_edges = np.histogramdd( # pylint: disable=W0201
+        transformed_histogram_grid = np.histogramdd(
             transformed_dataset,
             bins=self.grid_shape,
-            range=ranges_transformed)
+            range=ranges_transformed)[0]
         histogram_transformed_1d = transformed_histogram_grid.flatten()
-        histogram_transformed = histogram_transformed_1d / np.sum(histogram_transformed_1d)
 
         solution_space = np.zeros(len(transformed_dataset), dtype=int)
         #Initialize a variable to keep track of the current position in the result_array

@@ -37,11 +37,12 @@ class DiscreteData(DataHandler):
         self.n_registers = None
         self.n_qubits = None
         self.train_size = None
-        self.histogram_train  = None
+        self.histogram_train = None
         self.histogram_solution = None
         self.generalization_metrics = None
         self.samples = None
-
+        self.train_set = None
+        self.solution_set = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -131,7 +132,7 @@ class DiscreteData(DataHandler):
 
         # Create the histogram solution data
         self.histogram_solution = np.zeros(2 ** self.n_qubits)
-        self.solution_set = np.array([int(i, 2) for i in solution_set]) # pylint: disable=W0201
+        self.solution_set = np.array([int(i, 2) for i in solution_set])
         self.histogram_solution[self.solution_set] = 1 / len(self.solution_set)
 
         # Create the histogram training data

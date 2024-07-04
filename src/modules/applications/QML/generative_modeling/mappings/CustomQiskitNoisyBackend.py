@@ -195,7 +195,7 @@ class CustomQiskitNoisyBackend(Library):
             elif gate == "RZ_PI/2":
                 circuit.rz(np.pi / 2, wires[0])
             elif gate == "CNOT":
-                circuit.cnot(wires[0], wires[1])
+                circuit.cx(wires[0], wires[1])
             elif gate == "ECR":
                 circuit.ecr(wires[0], wires[1])
             elif gate == "RZ":

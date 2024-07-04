@@ -19,6 +19,7 @@ from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
 from qiskit.compiler import transpile, assemble
 from qiskit.providers import Backend
+from qiskit.quantum_info import Statevector
 import numpy as np
 
 from modules.training.QCBM import QCBM
@@ -139,7 +140,7 @@ class LibraryQiskit(Library):
                 circuit.h(wires[0])
 
             elif gate == "CNOT":
-                circuit.cnot(wires[0], wires[1])
+                circuit.cx(wires[0], wires[1])
 
             elif gate == "RZ":
                 circuit.rz(Parameter(f"x_{param_counter:03d}"), wires[0])
@@ -295,9 +296,7 @@ class LibraryQiskit(Library):
 
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobj = assemble(all_circuits, backend=backend)
-                jobs = backend.run(qobj)
-                pmfs = [jobs.result().get_statevector(circuit).probabilities() for circuit in all_circuits]
+                pmfs = [Statevector(circuit).probabilities() for circuit in all_circuits]
                 return pmfs, None
 
         elif config in ["ionQ_Harmony", "Amazon_SV1"]:

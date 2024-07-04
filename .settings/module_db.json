@@ -1,7 +1,7 @@
 {
-  "build_number": 10,
-  "build_date": "04-07-2024 08:45:54",
-  "git_revision_number": "bfffc3f1fcc1a2c41ab6e1e7501cf2fc2d593d8f",
+  "build_number": 12,
+  "build_date": "04-07-2024 09:33:53",
+  "git_revision_number": "5a383e64f003eafda8304ac4e157a0ae341baa34",
   "modules": [
     {
       "name": "PVC",
@@ -2092,6 +2092,66 @@
                       ]
                     },
                     {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.29.1"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.5"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
@@ -2264,6 +2324,66 @@
                         {
                           "name": "qiskit-ibmq-provider",
                           "version": "0.19.2"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.29.1"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.5"
                         }
                       ],
                       "submodules": [
@@ -2505,6 +2625,66 @@
                       ]
                     },
                     {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.29.1"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.5"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
@@ -2674,6 +2854,66 @@
                     {
                       "name": "qiskit-ibmq-provider",
                       "version": "0.19.2"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "3.3.0"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "LibraryPennylane",
+                  "class": "LibraryPennylane",
+                  "args": {},
+                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                  "requirements": [
+                    {
+                      "name": "pennylane",
+                      "version": "0.29.1"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.23.5"
+                    },
+                    {
+                      "name": "jax",
+                      "version": "0.4.5"
                     }
                   ],
                   "submodules": [

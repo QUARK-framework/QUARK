@@ -229,10 +229,11 @@ class CustomQiskitNoisyBackend(Library):
         input_data["circuit"] = circuit
         input_data.pop("gate_sequence")
         logging.info(param_counter)
+        input_data["n_params"] = len(circuit.parameters)
         return input_data
 
     @staticmethod
-    def select_backend(config: str) -> dict:
+    def select_backend(config: str, n_qubits) -> dict:
         """
         This method configures the backend
 

@@ -64,7 +64,7 @@ class Library(Core, ABC):
         start = start_time_measurement()
 
         output = self.sequence_to_circuit(input_data)
-        backend = self.select_backend(config["backend"])
+        backend = self.select_backend(config["backend"], output["n_qubits"])
         output["execute_circuit"], output['circuit_transpiled'] = self.get_execute_circuit(
             output["circuit"],
             backend,

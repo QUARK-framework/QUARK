@@ -181,10 +181,11 @@ class LibraryQiskit(Library):
 
         input_data["circuit"] = circuit
         input_data.pop("gate_sequence")
+        input_data["n_params"] = len(circuit.parameters)
         return input_data
 
     @staticmethod
-    def select_backend(config: str) -> dict:
+    def select_backend(config: str, n_qubits: int) -> dict:
         """
         This method configures the backend
 

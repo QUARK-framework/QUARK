@@ -195,7 +195,7 @@ class QCBM(Training):
         else:
             raise NotImplementedError("Loss function not implemented")
 
-        n_params = len(input_data["circuit"].parameters)
+        n_params = input_data["n_params"]
         x0 = (np.random.rand(n_params) - 0.5) * np.pi
         if config["pretrained"] != "False":
             parameters = np.load(config["pretrained"])

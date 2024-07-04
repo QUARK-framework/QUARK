@@ -148,6 +148,7 @@ class DataHandler(Core, ABC):
                 f"{store_dir_iter}/best_parameters_{kwargs['rep_count']}.npy", current_directory)})
 
             # Save training results
+            input_data.pop("circuit_transpiled")
             with open(f"{store_dir_iter}/training_results-{kwargs['rep_count']}.pkl", 'wb') as f:
                 pickle.dump(input_data, f)
 

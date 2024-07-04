@@ -12,10 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from typing import Union
 from typing import TypedDict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.QML.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
 from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
@@ -33,7 +35,7 @@ class CircuitCardinality(Circuit):
         Constructor method
         """
         super().__init__("CircuitCardinality")
-        self.submodule_options = ["LibraryQiskit", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
+        self.submodule_options = ["LibraryQiskit", "LibraryPennylane", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
 
     def get_parameter_options(self) -> dict:
         """
@@ -58,9 +60,11 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) -> LibraryQiskit:
+    def get_default_submodule(self, option: str) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
+        if option == "LibraryPennylane":
+            return LibraryPennylane()
         elif option == "PresetQiskitNoisyBackend":
             return PresetQiskitNoisyBackend()
         elif option == "CustomQiskitNoisyBackend":

@@ -98,15 +98,15 @@ class Training(Core, ABC):
         pass
 
     def sample_from_pmf(self, pmf, n_shots):
-        samples = np.random.choice(self.n_states_range, size=n_shots, p=pmf)
-        counts = np.bincount(samples, minlength=len(self.n_states_range))
+        samples = np.random.choice(self.n_states_range, size=n_shots, p=pmf) # pylint: disable=E1101
+        counts = np.bincount(samples, minlength=len(self.n_states_range)) # pylint: disable=E1101
         return counts
 
     def kl_divergence(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
         if self.name == "QCBM":
             return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
-        else: 
+        else:
             return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=0)
 
     def nll(self, pmf_model, pmf_target):

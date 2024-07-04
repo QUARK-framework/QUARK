@@ -17,7 +17,7 @@ import logging
 
 import torch
 from torch.utils.data import  DataLoader
-import torch.nn as nn
+from torch import nn
 import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 import numpy as np
@@ -71,7 +71,7 @@ class QGAN(Training):
                 "version": "2.6.2"
             }
         ]
-    
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this circuit
@@ -176,62 +176,64 @@ class QGAN(Training):
         :type kwargs: dict
         """
 
-        self.beta_1 = 0.5
-        self.real_label = 1.
-        self.fake_label = 0. #use integers
+        self.beta_1 = 0.5 # pylint: disable=W0201
+        self.real_label = 1. # pylint: disable=W0201
+        self.fake_label = 0. # pylint: disable=W0201
 
-        self.n_qubits = preprocessed_input['n_qubits']
-        self.n_registers = preprocessed_input['n_registers']
-        self.n_shots = preprocessed_input["n_shots"]
-        self.train_size = preprocessed_input["train_size"]
-        self.execute_circuit = preprocessed_input["execute_circuit"]
+        self.n_qubits = preprocessed_input['n_qubits'] # pylint: disable=W0201
+        self.n_registers = preprocessed_input['n_registers'] # pylint: disable=W0201
+        self.n_shots = preprocessed_input["n_shots"] # pylint: disable=W0201
+        self.train_size = preprocessed_input["train_size"] # pylint: disable=W0201
+        self.execute_circuit = preprocessed_input["execute_circuit"] # pylint: disable=W0201
 
-        self.device = config["device"]
-        self.n_epochs = config["epochs"]
-        self.batch_size = config["batch_size"]
-        self.learning_rate_generator = config["learning_rate_generator"]
+        self.device = config["device"] # pylint: disable=W0201
+        self.n_epochs = config["epochs"] # pylint: disable=W0201
+        self.batch_size = config["batch_size"] # pylint: disable=W0201
+        self.learning_rate_generator = config["learning_rate_generator"] # pylint: disable=W0201
 
         n = 2 ** (self.n_qubits // self.n_registers)
-        self.n_bins = n ** self.n_registers
-        self.n_states_range = range(2 ** self.n_qubits)
+        self.n_bins = n ** self.n_registers # pylint: disable=W0201
+        self.n_states_range = range(2 ** self.n_qubits) # pylint: disable=W0201
 
-        self.timing = self.Timing()
-        self.writer = SummaryWriter(preprocessed_input["store_dir_iter"])
+        self.timing = self.Timing() # pylint: disable=W0201
+        self.writer = SummaryWriter(preprocessed_input["store_dir_iter"]) # pylint: disable=W0201
 
-        self.bins_train = preprocessed_input["binary_train"]
+        self.bins_train = preprocessed_input["binary_train"] # pylint: disable=W0201
         if preprocessed_input["dataset_name"] == "Cardinality_Constraint":
             new_size = 1000
-            self.bins_train = np.repeat(self.bins_train,new_size,axis=0)
-        self.study_generalization = "generalization_metrics" in list(preprocessed_input.keys())
+            self.bins_train = np.repeat(self.bins_train,new_size,axis=0) # pylint: disable=W0201
+        self.study_generalization = "generalization_metrics" in list(preprocessed_input.keys()) # pylint: disable=W0201
         if self.study_generalization:
-            self.generalization_metrics = preprocessed_input["generalization_metrics"]
+            self.generalization_metrics = preprocessed_input["generalization_metrics"] # pylint: disable=W0201
 
-        self.target = np.asarray(preprocessed_input["histogram_train"])
+        self.target = np.asarray(preprocessed_input["histogram_train"]) # pylint: disable=W0201
         self.target[self.target == 0] = 1e-8
 
-        self.n_params = preprocessed_input["n_params"]
+        self.n_params = preprocessed_input["n_params"] # pylint: disable=W0201
 
-        self.discriminator = Discriminator(self.n_qubits).to(self.device)
+        self.discriminator = Discriminator(self.n_qubits).to(self.device) # pylint: disable=W0201
         self.discriminator.apply(Discriminator.weights_init)
 
-        self.params = [np.random.rand(self.n_params) * np.pi][0]
+        self.params = [np.random.rand(self.n_params) * np.pi][0] # pylint: disable=W0201
 
-        self.generator = QuantumGenerator(self.n_qubits, self.execute_circuit, self.batch_size)
-        self.accuracy = []
+        self.generator = QuantumGenerator(self.n_qubits, self.execute_circuit, self.batch_size) # pylint: disable=W0201
+        self.accuracy = [] # pylint: disable=W0201
 
-        self.criterion = torch.nn.BCELoss()
-        self.optimizer_discriminator = torch.optim.Adam(self.discriminator.parameters(), lr=config["learning_rate_discriminator"],
-                                                   betas=(self.beta_1, 0.999))
+        self.criterion = torch.nn.BCELoss() # pylint: disable=W0201
+        self.optimizer_discriminator = torch.optim.Adam( # pylint: disable=W0201
+            self.discriminator.parameters(),
+            lr=config["learning_rate_discriminator"],
+            betas=(self.beta_1, 0.999))
 
-        self.real_labels = torch.full((self.batch_size,), 1.0, dtype=torch.float, device=self.device)
-        self.fake_labels = torch.full((self.batch_size,), 0.0, dtype=torch.float, device=self.device)
-                
-        self.dataloader = DataLoader(self.bins_train, batch_size=self.batch_size, shuffle=True, drop_last=True)
+        self.real_labels = torch.full((self.batch_size,), 1.0, dtype=torch.float, device=self.device) # pylint: disable=W0201
+        self.fake_labels = torch.full((self.batch_size,), 0.0, dtype=torch.float, device=self.device) # pylint: disable=W0201
+
+        self.dataloader = DataLoader(self.bins_train, batch_size=self.batch_size, shuffle=True, drop_last=True) # pylint: disable=W0201
 
         if config['loss'] == "KL":
-            self.loss_func = self.kl_divergence
+            self.loss_func = self.kl_divergence # pylint: disable=W0201
         elif config['loss'] == "NLL":
-            self.loss_func = self.nll
+            self.loss_func = self.nll # pylint: disable=W0201
         else:
             raise NotImplementedError("Loss function not implemented")
 
@@ -254,7 +256,7 @@ class QGAN(Training):
         best_generator_params = None
 
         n_batches = len(self.dataloader)
-        
+
         for epoch in range(self.n_epochs):
             for batch, data in enumerate(self.dataloader):
                 # Training the discriminator
@@ -280,10 +282,16 @@ class QGAN(Training):
                 outD_fake = self.discriminator(fake_data).view(-1)
                 errG = self.criterion(outD_fake, self.real_labels)
                 fake_data, _ = self.generator.execute(self.params,self.batch_size)
-                gradients= self.generator.compute_gradient(self.params, self.discriminator, self.criterion, self.real_labels, self.device)
+                gradients= self.generator.compute_gradient(
+                    self.params,
+                    self.discriminator,
+                    self.criterion,
+                    self.real_labels,
+                    self.device)
+
                 updated_params = self.params - self.learning_rate_generator * gradients
                 self.params = updated_params
-                
+
                 self.discriminator_weights = self.discriminator.state_dict()
 
                 generator_losses.append(errG.item())
@@ -292,7 +300,7 @@ class QGAN(Training):
                 # Calculate loss
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
                 pmfs_model = np.asarray(pmfs_model.copy())
-                
+
                 loss= self.loss_func(pmfs_model, self.target)
                 self.accuracy.append(loss)
 
@@ -302,7 +310,7 @@ class QGAN(Training):
 
                 # Calculate and log the loss values at the end of each epoch
                 self.writer.add_scalar('Loss/GAN_Generator', errG.item(), circuit_evals)
-                self.writer.add_scalar('Loss/GAN_Discriminator', errD.item(), circuit_evals)      
+                self.writer.add_scalar('Loss/GAN_Discriminator', errD.item(), circuit_evals)
                 
                 if loss < best_kl_divergence:
                     best_kl_divergence = loss
@@ -340,7 +348,7 @@ class QGAN(Training):
             # Log the figure in TensorBoard
             ax.set_title(f'train')
             self.writer.add_figure('train', fig)
-            
+
             # Plot the generator and discriminator losses on the existing figure
             ax.clear()
             ax.plot(generator_losses, label='Generator Loss', color='blue')

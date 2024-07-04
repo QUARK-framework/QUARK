@@ -273,7 +273,7 @@ class QGAN(Training): # pylint: disable=R0902
         else:
             raise NotImplementedError("Loss function not implemented")
 
-    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> (dict, float): # pylint disable=R0915
+    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> (dict, float): # pylint: disable=R0915
         """
         :param input_data: dictionary with the variables from the circuit needed to start the training
         :type input_data: dict

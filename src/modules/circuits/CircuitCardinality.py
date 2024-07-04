@@ -34,7 +34,11 @@ class CircuitCardinality(Circuit):
         Constructor method
         """
         super().__init__("CircuitCardinality")
-        self.submodule_options = ["LibraryQiskit", "LibraryPennylane", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
+        self.submodule_options = [
+            "LibraryQiskit",
+            "LibraryPennylane",
+            "CustomQiskitNoisyBackend",
+            "PresetQiskitNoisyBackend"]
 
     def get_parameter_options(self) -> dict:
         """
@@ -59,7 +63,8 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(self, option: str) ->\
+        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":

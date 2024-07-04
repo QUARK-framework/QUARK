@@ -88,17 +88,17 @@ class LibraryPennylane(Library):
             }
         }
 
-    def get_default_submodule(self, training_option: str) -> Union[QCBM, QGAN, Inference]:
+    def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
 
-        if training_option == "QCBM":
+        if option == "QCBM":
             return QCBM()
-        elif training_option == "QGAN":
+        elif option == "QGAN":
             return QGAN()
-        elif training_option == "Inference":
+        elif option == "Inference":
             return Inference()
         else:
-            raise NotImplementedError(f"Training option {training_option} not implemented")
-    
+            raise NotImplementedError(f"Training option {option} not implemented")
+
     def sequence_to_circuit(self, input_data: dict) -> dict:
         """
         Method that maps the gate sequence, that specifies the architecture of a quantum circuit
@@ -177,7 +177,7 @@ class LibraryPennylane(Library):
             backend = qml.device(name="default.qubit", wires=n_qubits)
 
         elif backend_config == "default.qubit.jax":
-                backend = qml.device(name="default.qubit.jax", wires=n_qubits)
+            backend = qml.device(name="default.qubit.jax", wires=n_qubits)
 
         else:
             raise NotImplementedError(f"Device Configuration {backend_config} not implemented")
@@ -185,7 +185,7 @@ class LibraryPennylane(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: callable, backend: qml.device, backend_config: str, config: dict) -> callable:
+    def get_execute_circuit(circuit: callable, backend: qml.device, config: str, config_dict: dict) -> callable:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.
@@ -194,24 +194,24 @@ class LibraryPennylane(Library):
         :type circuit: callable
         :param backend: Configured PennyLane device
         :type backend: pennylane.device
-        :param backend_config: Name PennyLane device
-        :type backend_config: str
-        :param config: Dictionary including the number of shots
+        :param config: Name PennyLane device
         :type config: str
+        :param config_dict: Dictionary including the number of shots
+        :type config_dict: str
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """
 
-        n_shots = config["n_shots"]
+        n_shots = config_dict["n_shots"]
 
-        if backend_config == "default.qubit.jax":
+        if config == "default.qubit.jax":
             qnode = qml.QNode(circuit, device=backend, interface="jax")
             qnode = jax.jit(qnode)
         else:
             qnode = qml.QNode(circuit, device=backend)
 
         def execute_circuit(solutions):
-            if backend_config == "default.qubit.jax":
+            if config == "default.qubit.jax":
                 solutions = jnp.asarray(solutions)
 
             pmfs, samples = [], []

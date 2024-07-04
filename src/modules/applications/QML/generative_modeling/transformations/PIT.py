@@ -21,7 +21,7 @@ from modules.applications.QML.generative_modeling.transformations.Transformation
 from modules.circuits.CircuitCopula import CircuitCopula
 
 
-class PIT(Transformation):
+class PIT(Transformation): # pylint disable=R0902
     """
     The transformation of the original probability distribution to 
     the distribution of its uniformly distributed cumulative marginals is known as the copula.
@@ -99,23 +99,24 @@ class PIT(Transformation):
 
 
         # Compute histogram for the transformed dataset
-        transformed_histogram_grid, self.bin_edges = np.histogramdd(transformed_dataset, bins=self.grid_shape, range=ranges_transformed)
-        self.histogram_transformed_1d = transformed_histogram_grid.flatten()
-        self.histogram_transformed = self.histogram_transformed_1d / np.sum(self.histogram_transformed_1d)
+        transformed_histogram_grid = np.histogramdd(
+            transformed_dataset,
+            bins=self.grid_shape,
+            range=ranges_transformed)[0]
+        histogram_transformed_1d = transformed_histogram_grid.flatten()
+        self.histogram_transformed = histogram_transformed_1d / np.sum(histogram_transformed_1d)
 
-        self.solution_space = np.zeros(len(transformed_dataset), dtype=int)
+        solution_space = np.zeros(len(transformed_dataset), dtype=int)
         #Initialize a variable to keep track of the current position in the result_array
         position = 0
         value = 0
-        for count in self.histogram_transformed_1d:
+        for count in histogram_transformed_1d:
             if count > 0:
-                self.solution_space[position:position+int(count)] = value
+                solution_space[position:position+int(count)] = value
                 position += int(count)
             value += 1
 
-        self.solution_space_unique = np.unique(self.solution_space)
-
-        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in self.solution_space]            
+        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in solution_space]
         # Convert the binary strings to a NumPy array of integers
         binary_transformed = np.array([list(map(int, s)) for s in binary_strings])
 

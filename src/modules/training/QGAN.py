@@ -30,7 +30,7 @@ from utils_mpi import is_running_mpi, get_comm
 MPI = is_running_mpi()
 comm = get_comm()
 
-class QGAN(Training):
+class QGAN(Training): # pylint: disable=R0902
     """
     Class for QGAN
     """
@@ -166,10 +166,10 @@ class QGAN(Training):
     def get_default_submodule(self, option: str) -> Core:
         raise ValueError("This module has no submodules.")
 
-    def setup_training(self, preprocessed_input, config):
+    def setup_training(self, input_data, config):
         """
-        :param preprocessed_input: dictionary with the variables from the circuit needed to start the training
-        :type preprocessed_input: dict
+        :param input_data: dictionary with the variables from the circuit needed to start the training
+        :type input_data: dict
         :param config: Annealing settings
         :type config: Config
         :param kwargs: Optional additional arguments
@@ -180,11 +180,11 @@ class QGAN(Training):
         self.real_label = 1. # pylint: disable=W0201
         self.fake_label = 0. # pylint: disable=W0201
 
-        self.n_qubits = preprocessed_input['n_qubits'] # pylint: disable=W0201
-        self.n_registers = preprocessed_input['n_registers'] # pylint: disable=W0201
-        self.n_shots = preprocessed_input["n_shots"] # pylint: disable=W0201
-        self.train_size = preprocessed_input["train_size"] # pylint: disable=W0201
-        self.execute_circuit = preprocessed_input["execute_circuit"] # pylint: disable=W0201
+        self.n_qubits = input_data['n_qubits'] # pylint: disable=W0201
+        self.n_registers = input_data['n_registers'] # pylint: disable=W0201
+        self.n_shots = input_data["n_shots"] # pylint: disable=W0201
+        self.train_size = input_data["train_size"] # pylint: disable=W0201
+        self.execute_circuit = input_data["execute_circuit"] # pylint: disable=W0201
 
         self.device = config["device"] # pylint: disable=W0201
         self.n_epochs = config["epochs"] # pylint: disable=W0201
@@ -196,20 +196,20 @@ class QGAN(Training):
         self.n_states_range = range(2 ** self.n_qubits) # pylint: disable=W0201
 
         self.timing = self.Timing() # pylint: disable=W0201
-        self.writer = SummaryWriter(preprocessed_input["store_dir_iter"]) # pylint: disable=W0201
+        self.writer = SummaryWriter(input_data["store_dir_iter"]) # pylint: disable=W0201
 
-        self.bins_train = preprocessed_input["binary_train"] # pylint: disable=W0201
-        if preprocessed_input["dataset_name"] == "Cardinality_Constraint":
+        self.bins_train = input_data["binary_train"] # pylint: disable=W0201
+        if input_data["dataset_name"] == "Cardinality_Constraint":
             new_size = 1000
             self.bins_train = np.repeat(self.bins_train,new_size,axis=0) # pylint: disable=W0201
-        self.study_generalization = "generalization_metrics" in list(preprocessed_input.keys()) # pylint: disable=W0201
+        self.study_generalization = "generalization_metrics" in list(input_data.keys()) # pylint: disable=W0201
         if self.study_generalization:
-            self.generalization_metrics = preprocessed_input["generalization_metrics"] # pylint: disable=W0201
+            self.generalization_metrics = input_data["generalization_metrics"] # pylint: disable=W0201
 
-        self.target = np.asarray(preprocessed_input["histogram_train"]) # pylint: disable=W0201
+        self.target = np.asarray(input_data["histogram_train"]) # pylint: disable=W0201
         self.target[self.target == 0] = 1e-8
 
-        self.n_params = preprocessed_input["n_params"] # pylint: disable=W0201
+        self.n_params = input_data["n_params"] # pylint: disable=W0201
 
         self.discriminator = Discriminator(self.n_qubits).to(self.device) # pylint: disable=W0201
         self.discriminator.apply(Discriminator.weights_init)
@@ -237,10 +237,10 @@ class QGAN(Training):
         else:
             raise NotImplementedError("Loss function not implemented")
 
-    def start_training(self, preprocessed_input: dict, config: Config, **kwargs: dict) -> (dict, float):
+    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> (dict, float):
         """
-        :param preprocessed_input: dictionary with the variables from the circuit needed to start the training
-        :type preprocessed_input: dict
+        :param input_data: dictionary with the variables from the circuit needed to start the training
+        :type input_data: dict
         :param config: Annealing settings
         :type config: Config
         :param kwargs: Optional additional arguments
@@ -248,7 +248,7 @@ class QGAN(Training):
         :return: Solution, the time it took to compute it and optional additional information
         :rtype: tuple(list, float, dict)
         """
-        self.setup_training(preprocessed_input, config)
+        self.setup_training(input_data, config)
         best_generator_params = None
         generator_losses = []
         discriminator_losses = []
@@ -278,7 +278,7 @@ class QGAN(Training):
 
                 errD = errD_real + errD_fake
                 self.optimizer_discriminator.step()
-                
+
                 outD_fake = self.discriminator(fake_data).view(-1)
                 errG = self.criterion(outD_fake, self.real_labels)
                 fake_data, _ = self.generator.execute(self.params,self.batch_size)
@@ -290,12 +290,12 @@ class QGAN(Training):
                     self.device)
 
                 updated_params = self.params - self.learning_rate_generator * gradients
-                self.params = updated_params
+                self.params = updated_params # pylint: disable=W0201
 
-                self.discriminator_weights = self.discriminator.state_dict()
+                self.discriminator_weights = self.discriminator.state_dict() # pylint: disable=W0201
 
                 generator_losses.append(errG.item())
-                discriminator_losses.append(errD.item())  
+                discriminator_losses.append(errD.item())
 
                 # Calculate loss
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
@@ -311,7 +311,7 @@ class QGAN(Training):
                 # Calculate and log the loss values at the end of each epoch
                 self.writer.add_scalar('Loss/GAN_Generator', errG.item(), circuit_evals)
                 self.writer.add_scalar('Loss/GAN_Discriminator', errD.item(), circuit_evals)
-                
+
                 if loss < best_kl_divergence:
                     best_kl_divergence = loss
                     best_generator_params = self.params.copy()  # Make a copy of the parameters
@@ -346,8 +346,8 @@ class QGAN(Training):
                 interpolation='none'
             )
             # Log the figure in TensorBoard
-            ax.set_title(f'train')
-            self.writer.add_figure('train', fig)
+            ax.set_title("train")
+            self.writer.add_figure("train", fig)
 
             # Plot the generator and discriminator losses on the existing figure
             ax.clear()
@@ -362,18 +362,18 @@ class QGAN(Training):
         self.writer.flush()
         self.writer.close()
 
-        preprocessed_input["best_parameter"] = best_generator_params
-        preprocessed_input["best_sample"] = best_sample
+        input_data["best_parameter"] = best_generator_params
+        input_data["best_sample"] = best_sample
 
-        preprocessed_input["KL"] = self.accuracy
-        preprocessed_input["generator_loss"]= generator_losses
-        preprocessed_input["discriminator_loss"]= discriminator_losses
+        input_data["KL"] = self.accuracy
+        input_data["generator_loss"] = generator_losses
+        input_data["discriminator_loss"] = discriminator_losses
 
-        return preprocessed_input
+        return input_data
 
 class Discriminator(nn.Module):
     def __init__(self, input_length: int):
-        super(Discriminator, self).__init__()
+        super().__init__()
         self.dense1 = nn.Linear(int(input_length), 2 * int(input_length))
         self.dense2 = nn.Linear(2 * int(input_length), 1)
 

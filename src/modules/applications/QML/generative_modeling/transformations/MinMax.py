@@ -21,7 +21,7 @@ from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 
 
-class MinMax(Transformation):
+class MinMax(Transformation): # pylint: disable=R0902
     """
     In min-max normalization each data point is shifted
     such that it lies between 0 and 1
@@ -98,23 +98,24 @@ class MinMax(Transformation):
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
         # Compute histogram for the transformed dataset
-        transformed_histogram_grid, self.bin_edges = np.histogramdd(transformed_dataset, bins=self.grid_shape, range=ranges_transformed)
-        self.histogram_transformed_1d = transformed_histogram_grid.flatten()
-        self.histogram_transformed = self.histogram_transformed_1d / np.sum(self.histogram_transformed_1d)
+        transformed_histogram_grid, self.bin_edges = np.histogramdd( # pylint: disable=W0201
+            transformed_dataset,
+            bins=self.grid_shape,
+            range=ranges_transformed)
+        histogram_transformed_1d = transformed_histogram_grid.flatten()
+        histogram_transformed = histogram_transformed_1d / np.sum(histogram_transformed_1d)
 
-        self.solution_space = np.zeros(len(transformed_dataset), dtype=int)
+        solution_space = np.zeros(len(transformed_dataset), dtype=int)
         #Initialize a variable to keep track of the current position in the result_array
         position = 0
         value = 0
-        for count in self.histogram_transformed_1d:
+        for count in histogram_transformed_1d:
             if count > 0:
-                self.solution_space[position:position+int(count)] = value
+                solution_space[position:position+int(count)] = value
                 position += int(count)
             value += 1
 
-        self.solution_space_unique = np.unique(self.solution_space)
-
-        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in self.solution_space]            
+        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in solution_space]
         binary_transformed = np.array([list(map(int, s)) for s in binary_strings])
         learned_histogram = np.histogramdd(self.dataset, bins=self.grid_shape, range=ranges_original)
         self.histogram_train_original = learned_histogram[0] / np.sum(learned_histogram[0])

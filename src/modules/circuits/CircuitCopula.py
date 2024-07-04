@@ -37,7 +37,11 @@ class CircuitCopula(Circuit):
         Constructor method
         """
         super().__init__("DiscreteCopula")
-        self.submodule_options = ["LibraryQiskit", "LibraryPennylane", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
+        self.submodule_options = [
+            "LibraryQiskit",
+            "LibraryPennylane",
+            "CustomQiskitNoisyBackend",
+            "PresetQiskitNoisyBackend"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -77,7 +81,8 @@ class CircuitCopula(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(self, option: str) -> \
+        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":

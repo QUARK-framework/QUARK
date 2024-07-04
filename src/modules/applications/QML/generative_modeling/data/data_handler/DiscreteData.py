@@ -131,7 +131,7 @@ class DiscreteData(DataHandler):
 
         # Create the histogram solution data
         self.histogram_solution = np.zeros(2 ** self.n_qubits)
-        self.solution_set = np.array([int(i, 2) for i in solution_set])
+        self.solution_set = np.array([int(i, 2) for i in solution_set]) # pylint: disable=W0201
         self.histogram_solution[self.solution_set] = 1 / len(self.solution_set)
 
         # Create the histogram training data

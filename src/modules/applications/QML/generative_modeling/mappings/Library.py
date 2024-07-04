@@ -105,5 +105,5 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def select_backend(config: str):
+    def select_backend(config: str, n_qubits: int):
         pass

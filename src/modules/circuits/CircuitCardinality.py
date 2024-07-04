@@ -22,7 +22,6 @@ from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBack
 from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
-
 class CircuitCardinality(Circuit):
     """
     This class generates a library-agnostic gate sequence, i.e. a list containing information
@@ -129,11 +128,13 @@ class CircuitCardinality(Circuit):
             "gate_sequence": gate_sequence,
             "circuit_name": "Cardinality",
             "n_qubits": n_qubits,
-            "n_registers": None,
+            "n_registers": input_data["n_registers"],
             "depth": depth,
             "histogram_train": input_data["histogram_train"],
             "store_dir_iter": input_data["store_dir_iter"],
-            "dataset_name": input_data["dataset_name"]
+            "train_size": input_data["train_size"],
+            "dataset_name": input_data["dataset_name"],
+            "binary_train":input_data["binary_train"]
         }
 
         return output_dict

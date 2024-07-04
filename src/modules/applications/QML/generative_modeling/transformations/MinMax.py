@@ -71,17 +71,16 @@ class MinMax(Transformation):
         :return: empty dict
         :rtype: dict
         """
-        return {
 
-        }
+        return {}
 
     def transform(self, input_data: dict, config: dict) -> (dict, float):
         """
         Transforms the input dataset using MinMax transformation and computes histograms
         of the training dataset in the transformed space.
 
-        :param application_config: A dictionary containing information about the dataset and application configuration.
-        :type application_config: dict
+        :param input_data: A dictionary containing information about the dataset and application configuration.
+        :type input_data: dict
         :param config: A dictionary with parameters specified in the Config class.
         :type config: dict
         :return: A tuple containing a dictionary with MinMax-transformed data.
@@ -98,7 +97,25 @@ class MinMax(Transformation):
         transformed_dataset = self.fit_transform(self.dataset)
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
-        # Compute histogram for the original dataset
+        # Compute histogram for the transformed dataset
+        transformed_histogram_grid, self.bin_edges = np.histogramdd(transformed_dataset, bins=self.grid_shape, range=ranges_transformed)
+        self.histogram_transformed_1d = transformed_histogram_grid.flatten()
+        self.histogram_transformed = self.histogram_transformed_1d / np.sum(self.histogram_transformed_1d)
+
+        self.solution_space = np.zeros(len(transformed_dataset), dtype=int)
+        #Initialize a variable to keep track of the current position in the result_array
+        position = 0
+        value = 0
+        for count in self.histogram_transformed_1d:
+            if count > 0:
+                self.solution_space[position:position+int(count)] = value
+                position += int(count)
+            value += 1
+
+        self.solution_space_unique = np.unique(self.solution_space)
+
+        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in self.solution_space]            
+        binary_transformed = np.array([list(map(int, s)) for s in binary_strings])
         learned_histogram = np.histogramdd(self.dataset, bins=self.grid_shape, range=ranges_original)
         self.histogram_train_original = learned_histogram[0] / np.sum(learned_histogram[0])
 
@@ -109,9 +126,11 @@ class MinMax(Transformation):
 
         self.transform_config = {
             "histogram_train": self.histogram_train,
+            "binary_train": binary_transformed,
             "dataset_name": self.dataset_name,
             "n_registers": n_registers,
             "n_qubits": self.n_qubits,
+            "train_size": input_data["train_size"],
             "store_dir_iter": input_data["store_dir_iter"]
         }
 
@@ -189,6 +208,7 @@ class MinMax(Transformation):
         self.min = data.min()
         self.max = data.max() - data.min()
         data = (data - self.min) / self.max
+
         return data
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
@@ -202,4 +222,5 @@ class MinMax(Transformation):
         """
         self.min = data.min()
         self.max = data.max() - data.min()
+
         return data * self.max + self.min

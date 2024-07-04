@@ -14,15 +14,15 @@
 
 from typing import Union
 
-import pennylane as qml
-import jax
-
 import numpy as np
+import pennylane as qml
 from jax import numpy as jnp
+import jax
 
 jax.config.update("jax_enable_x64", True)
 
 from modules.training.QCBM import QCBM
+from modules.training.QGAN import QGAN
 from modules.training.Inference import Inference
 from modules.applications.QML.generative_modeling.mappings.Library import Library
 
@@ -31,7 +31,7 @@ class LibraryPennylane(Library):
 
     def __init__(self):
         super().__init__("LibraryPennylane")
-        self.submodule_options = ["QCBM", "Inference"]
+        self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -53,7 +53,7 @@ class LibraryPennylane(Library):
             {
                 "name": "jax",
                 "version": "0.4.5"
-            },
+            }
         ]
 
     def get_parameter_options(self) -> dict:
@@ -88,16 +88,18 @@ class LibraryPennylane(Library):
             }
         }
 
-    def get_default_submodule(self, training_option: str) -> Union[QCBM, Inference]:
+    def get_default_submodule(self, training_option: str) -> Union[QCBM, QGAN, Inference]:
 
         if training_option == "QCBM":
             return QCBM()
+        elif training_option == "QGAN":
+            return QGAN()
         elif training_option == "Inference":
             return Inference()
         else:
             raise NotImplementedError(f"Training option {training_option} not implemented")
     
-    def sequence_to_circuit(self, input_data: dict):
+    def sequence_to_circuit(self, input_data: dict) -> dict:
         """
         Method that maps the gate sequence, that specifies the architecture of a quantum circuit
         to its PennyLane implementation.
@@ -158,8 +160,10 @@ class LibraryPennylane(Library):
         """
         This method configures the backend
 
-        :param config: Name of a backend
-        :type config: str
+        :param backend_config: Name of a backend
+        :type backend_config: str
+        :param n_qubits: Number of qubits
+        :type n_qubits: int
         :return: Configured backend
         :rtype: pennylane.device
         """
@@ -181,7 +185,7 @@ class LibraryPennylane(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: callable, backend: qml.device, backend_config: str, config_dict: dict) -> callable:
+    def get_execute_circuit(circuit: callable, backend: qml.device, backend_config: str, config: dict) -> callable:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.
@@ -190,15 +194,15 @@ class LibraryPennylane(Library):
         :type circuit: callable
         :param backend: Configured PennyLane device
         :type backend: pennylane.device
-        :param config: Name of a backend
+        :param backend_config: Name PennyLane device
+        :type backend_config: str
+        :param config: Dictionary including the number of shots
         :type config: str
-        :param n_shots: The number of times the circuit is run
-        :type n_shots: int
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """
 
-        n_shots = config_dict["n_shots"]
+        n_shots = config["n_shots"]
 
         if backend_config == "default.qubit.jax":
             qnode = qml.QNode(circuit, device=backend, interface="jax")
@@ -206,20 +210,15 @@ class LibraryPennylane(Library):
         else:
             qnode = qml.QNode(circuit, device=backend)
 
-        def execute_circuit(solutions, **kwargs):
+        def execute_circuit(solutions):
             if backend_config == "default.qubit.jax":
                 solutions = jnp.asarray(solutions)
 
-            pmfs = []
-            samples = []
+            pmfs, samples = [], []
             for solution in solutions:
                 pmf = qnode(solution)
                 pmfs.append(pmf)
-
-                if n_shots in list(kwargs.keys()):
-                    samples.append(np.random.multinomial(kwargs["n_shots"], pmf))
-                else:
-                    samples.append(np.random.multinomial(n_shots, pmf))
+                samples.append(np.random.multinomial(n_shots, pmf))
 
             return np.asarray(pmfs), np.asarray(samples)
 

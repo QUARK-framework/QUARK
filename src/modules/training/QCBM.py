@@ -65,6 +65,10 @@ class QCBM(Training):
                 "version": "3.3.0"
             },
             {
+                "name": "matplotlib",
+                "version": "3.7.5"
+            },
+            {
                 "name": "tensorboard",
                 "version": "2.13.0"
             },
@@ -170,8 +174,8 @@ class QCBM(Training):
         :type input_data: dict
         :param config: Config specifying the parameters of the training
         :type config: dict
-        :return: Updated input_data 
-        :rtype: dict
+        :return: Initial parameters and options for CMA-ES 
+        :rtype: tuple
         """
 
         logging.info(
@@ -182,7 +186,6 @@ class QCBM(Training):
         if self.study_generalization:
             self.generalization_metrics = input_data["generalization_metrics"]
             self.generalization_metrics.n_shots = input_data["n_shots"]
-            input_data["store_dir_iter"] += f"_alpha{self.generalization_metrics.train_size}_depth{input_data['depth']}"
 
         self.writer = SummaryWriter(input_data["store_dir_iter"])
 
@@ -226,7 +229,7 @@ class QCBM(Training):
         :rtype: dict
         """
 
-        size = None # TODO: define correct mpi size
+        size = None
         input_data['MPI_size'] = size
         input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         x0, options = self.setup_training(input_data, config)
@@ -285,10 +288,9 @@ class QCBM(Training):
         self.writer.close()
 
         input_data["best_parameter"] = es.result[0]
-        best_sample = self.sample_from_pmf(self.n_states_range,
-                                           best_pmf.get() if GPU else best_pmf,  # pylint: disable=E0606
+        best_sample = self.sample_from_pmf(best_pmf.get() if GPU else best_pmf, # pylint: disable=E0606
                                            n_shots=input_data["n_shots"])
-        input_data["best_sample"] = best_sample.get() if GPU else best_sample  # pylint: disable=E1101
+        input_data["best_sample"] = best_sample.get() if GPU else best_sample # pylint: disable=E1101
 
         return input_data
 
@@ -300,7 +302,6 @@ class QCBM(Training):
 
             if samples is None:
                 counts = self.sample_from_pmf(
-                    n_states_range=self.n_states_range,
                     pmf=best_pmf.get() if GPU else best_pmf,
                     n_shots=self.generalization_metrics.n_shots)
             else:

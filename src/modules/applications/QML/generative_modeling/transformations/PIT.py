@@ -97,6 +97,28 @@ class PIT(Transformation):
         transformed_dataset = self.fit_transform(self.dataset)
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
+
+        # Compute histogram for the transformed dataset
+        transformed_histogram_grid, self.bin_edges = np.histogramdd(transformed_dataset, bins=self.grid_shape, range=ranges_transformed)
+        self.histogram_transformed_1d = transformed_histogram_grid.flatten()
+        self.histogram_transformed = self.histogram_transformed_1d / np.sum(self.histogram_transformed_1d)
+
+        self.solution_space = np.zeros(len(transformed_dataset), dtype=int)
+        #Initialize a variable to keep track of the current position in the result_array
+        position = 0
+        value = 0
+        for count in self.histogram_transformed_1d:
+            if count > 0:
+                self.solution_space[position:position+int(count)] = value
+                position += int(count)
+            value += 1
+
+        self.solution_space_unique = np.unique(self.solution_space)
+
+        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in self.solution_space]            
+        # Convert the binary strings to a NumPy array of integers
+        binary_transformed = np.array([list(map(int, s)) for s in binary_strings])
+
         # Compute histogram for the original dataset
         learned_histogram = np.histogramdd(self.dataset, bins=self.grid_shape, range=ranges_original)
         self.histogram_train_original = learned_histogram[0] / np.sum(learned_histogram[0])
@@ -108,10 +130,12 @@ class PIT(Transformation):
 
         self.transform_config = {
             "histogram_train": self.histogram_train,
+            "binary_train": binary_transformed,
             "dataset_name": self.dataset_name,
             "n_registers": n_registers,
             "n_qubits": self.n_qubits,
             "store_dir_iter": input_data["store_dir_iter"],
+            "train_size": input_data["train_size"],
             "transformed_dataset": transformed_dataset
         }
 
@@ -190,7 +214,6 @@ class PIT(Transformation):
         return df.values
 
     def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> List[float]:
-        # assumes non ragged array
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
         # if we are an integer do not use linear interpolation
@@ -211,7 +234,7 @@ class PIT(Transformation):
         return np.array(res)[:, 0, :]
 
     def emp_integral_trans(self, data: np.ndarray):
-        # calling argsort on the result of argsort creates a bijective mapping mask
+
         rank = np.argsort(data).argsort()  # Use np.argsort here
         length = data.size  # Rename 'len' to 'length' to avoid conflict with built-in len()
         ecdf = np.linspace(0, 1, length, dtype=np.float64)

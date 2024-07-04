@@ -69,7 +69,7 @@ class Library(Core, ABC):
             output["circuit"],
             backend,
             config["backend"],
-            config_dict=config)
+            config)
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")

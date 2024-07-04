@@ -43,12 +43,7 @@ class CircuitStandard(Circuit):
         :return: list of dict with requirements of this module
         :rtype: list[dict]
         """
-        return [
-            {
-                "name": "scipy",
-                "version": "1.11.1"
-            }
-        ]
+        return {}
 
     def get_parameter_options(self) -> dict:
         """
@@ -59,7 +54,7 @@ class CircuitStandard(Circuit):
 
                      return {
                                 "depth": {
-                                    "values": [1, 2, 3, 4, 5],
+                                    "values": [1, 2, 3],
                                     "description": "What depth do you want?"
                                 }
                             }
@@ -136,7 +131,9 @@ class CircuitStandard(Circuit):
             "depth": depth,
             "histogram_train": input_data["histogram_train"],
             "store_dir_iter": input_data["store_dir_iter"],
-            "dataset_name": input_data["dataset_name"]
+            "train_size": input_data["train_size"],
+            "dataset_name": input_data["dataset_name"],
+            "binary_train":input_data["binary_train"]
         }
 
         return output_dict

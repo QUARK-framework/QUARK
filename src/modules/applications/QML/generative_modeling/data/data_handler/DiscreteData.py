@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Union
+from typing import TypedDict
 import itertools
 import logging
 from pprint import pformat
@@ -85,7 +85,7 @@ class DiscreteData(DataHandler):
             "train_size": {
                 "values": [0.1, 0.3, 0.5, 0.7, 0.9, 1.0],
                 "description": "What percentage of the dataset do you want to use for training?"
-            },
+            }
         }
 
     class Config(TypedDict):
@@ -94,12 +94,10 @@ class DiscreteData(DataHandler):
 
         .. code-block:: python
 
-            n_qubits: int
             train_size: int
 
         """
 
-        n_qubits: int
         train_size: int
 
     def data_load(self, gen_mod: dict, config: Config) -> dict:
@@ -133,26 +131,33 @@ class DiscreteData(DataHandler):
 
         # Create the histogram solution data
         self.histogram_solution = np.zeros(2 ** self.n_qubits)
-        solution_set = np.array([int(i, 2) for i in solution_set])
-        self.histogram_solution[solution_set] = 1 / len(solution_set)
+        self.solution_set = np.array([int(i, 2) for i in solution_set])
+        self.histogram_solution[self.solution_set] = 1 / len(self.solution_set)
 
         # Create the histogram training data
         self.histogram_train = np.zeros(2 ** self.n_qubits)
-        train_set = np.array([int(i, 2) for i in train_set])
-        self.histogram_train[train_set] = 1 / len(train_set)
+        self.train_set = np.array([int(i, 2) for i in train_set])
+        self.histogram_train[self.train_set] = 1 / len(self.train_set)
+
+        train_set_binary = np.array([list(map(int, s)) for s in train_set])
+        solution_set_binary = np.array([list(map(int, s)) for s in solution_set])
 
         application_config = {
             "dataset_name": dataset_name,
+            "binary_train":train_set_binary,
+            "binary_solution":solution_set_binary,
+            "train_size":self.train_size,
             "n_qubits": self.n_qubits,
+            "n_registers": 2,
             "histogram_solution": self.histogram_solution,
             "histogram_train": self.histogram_train,
             "store_dir_iter": gen_mod["store_dir_iter"]}
 
         if self.train_size != 1:
             self.generalization_metrics = MetricsGeneralization(
-                train_set=train_set,
+                train_set=self.train_set,
                 train_size=self.train_size,
-                solution_set=solution_set,
+                solution_set=self.solution_set,
                 n_qubits=self.n_qubits,
             )
             application_config["generalization_metrics"] = self.generalization_metrics
@@ -182,7 +187,7 @@ class DiscreteData(DataHandler):
         and the minimum KL divergence value.
 
         :param solution: A dictionary-like object containing the solution data,
-                        including generated samples and KL divergence values.
+                         including generated samples and KL divergence values.
         :type solution: list
         :return: A tuple containing a dictionary with the histogram of generated samples 
                 and the minimum KL divergence value, and the time it took to evaluate

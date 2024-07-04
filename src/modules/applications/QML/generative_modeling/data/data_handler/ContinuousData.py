@@ -81,6 +81,11 @@ class ContinuousData(DataHandler):
                             "data_set": {
                                 "values": ["X_2D", "O_2D", "MG_2D", "Stocks_2D"],
                                 "description": "Which dataset do you want to use?"
+                            },
+
+                            "train_size": {
+                                "values": [0.1, 0.3, 0.5, 0.7, 1.0],
+                                "description": "What percentage of the dataset do you want to use for training?"
                             }
                         }
 
@@ -89,7 +94,13 @@ class ContinuousData(DataHandler):
             "data_set": {
                 "values": ["X_2D", "O_2D", "MG_2D", "Stocks_2D"],
                 "description": "Which dataset do you want to use?"
+            },
+
+            "train_size": {
+                "values": [0.1, 0.3, 0.5, 0.7, 1.0],
+                "description": "What percentage of the dataset do you want to use for training?"
             }
+
         }
 
     class Config(TypedDict):
@@ -103,6 +114,7 @@ class ContinuousData(DataHandler):
         """
 
         data_set: int
+        train_size: int
 
     def data_load(self, gen_mod: dict, config: Config) -> dict:
 
@@ -111,7 +123,7 @@ class ContinuousData(DataHandler):
 
         :param gen_mod: Dictionary with collected information of the previous modules
         :type gen_mod: dict
-        :param config: Config specifying the paramters of the data handler
+        :param config: Config specifying the parameters of the data handler
         :type config: dict
         :return: Must always return the mapped problem and the time it took to create the mapping
         :rtype: tuple(any, float)
@@ -127,6 +139,7 @@ class ContinuousData(DataHandler):
             "dataset_name": self.dataset_name,
             "n_qubits": self.n_qubits,
             "dataset": self.dataset,
+            "train_size": config["train_size"],
             "store_dir_iter": gen_mod["store_dir_iter"]}
 
         return application_config
@@ -138,7 +151,7 @@ class ContinuousData(DataHandler):
         :param solution: A dictionary-like object containing the solution data, including histogram_generated_original
                          and histogram_train_original.
         :type solution: list
-        :return: KL for the generated samples and the time it took to calculate it.
+        :return: KL divergence for the generated samples and the time it took to calculate it.
         :rtype: tuple(float, float)
         """
         start = start_time_measurement()
@@ -149,11 +162,8 @@ class ContinuousData(DataHandler):
         histogram_train_original = solution["histogram_train_original"]
         histogram_train_original[histogram_train_original == 0] = 1e-8
 
-        # Flatten the arrays for efficient computation
         target = histogram_train_original.ravel()
         generated = generated.ravel()
-
-        # Compute KL divergence using NumPy vectorized operations
         kl_divergence = self.kl_divergence(target, generated)
 
         logging.info(f"KL original space: {kl_divergence}")

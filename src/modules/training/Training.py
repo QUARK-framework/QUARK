@@ -97,28 +97,30 @@ class Training(Core, ABC):
         """
         pass
 
-    @staticmethod
-    def sample_from_pmf(n_states_range, pmf, n_shots):
-        samples = np.random.choice(n_states_range, size=n_shots, p=pmf)
-        counts = np.bincount(samples, minlength=len(n_states_range))
+    def sample_from_pmf(self, pmf, n_shots):
+        samples = np.random.choice(self.n_states_range, size=n_shots, p=pmf)
+        counts = np.bincount(samples, minlength=len(self.n_states_range))
         return counts
 
     def kl_divergence(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
+        if self.name == "QCBM":
+            return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
+        else: 
+            return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=0)
 
     def nll(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        return -np.sum(pmf_target * np.log(pmf_model), axis=1)
+        if self.name == "QCBM":
+            return -np.sum(pmf_target * np.log(pmf_model), axis=1)
+        else:
+            return -np.sum(pmf_target * np.log(pmf_model), axis=0)
 
     def mmd(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        sigma = 1/pmf_model.shape[1] # TODO Improve scaling sigma and revise Formula
+        sigma = 1/pmf_model.shape[1]
         kernel_distance = np.exp((-np.square(pmf_model - pmf_target) / (sigma ** 2)))
         mmd = 2 - 2 * np.mean(kernel_distance, axis=1)
-        # The correct formula would take the transformed distances of both distributions into account. Since we are
-        # not sampling from the distribution but using the probability mass function we can skip this step since the
-        # sum of both, a modified version of the Gaussian kernel is used.
         return mmd
 
     class Timing:

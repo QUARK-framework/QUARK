@@ -11,7 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+import logging
 from typing import TypedDict
 from more_itertools import locate
 
@@ -25,7 +25,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class Ising(Mapping):
     """
-    Qiskit ISING formulation for the ACL.
+    Ising formulation of the auto-carrier loading (ACL) problem.
 
     """
 
@@ -34,8 +34,10 @@ class Ising(Mapping):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["QAOA", "PennylaneQAOA", "QiskitQAOA"]
+        self.submodule_options = ["QAOA", "QiskitQAOA"]
         self.global_variables = 0
+        logging.warning("Currently, all scenarios are too large to be solved with an Ising model.")
+        logging.warning("Consider using another mapping until the modelling is refined.")
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -77,6 +79,14 @@ class Ising(Mapping):
         pass
 
     def map_pulp_to_qiskit(self, problem: any):
+        """
+        Maps the problem dict to a quadratic program.
+
+        :param problem: Problem formulation in dict form
+        :type problem: dict
+        :return: quadratic program in qiskit-optimization format
+        :rtype: QuadraticProgram
+        """
         # Details at:
         # https://coin-or.github.io/pulp/guides/how_to_export_models.html
         # https://qiskit.org/documentation/stable/0.26/tutorials/optimization/2_converters_for_quadratic_programs.html
@@ -126,7 +136,7 @@ class Ising(Mapping):
 
     def map(self, problem: any, config: Config) -> (dict, float):
         """
-        Use Ising Mapping of Qiskit Optimize
+        Use Ising mapping of qiskit-optimize
         :param config: config with the parameters specified in Config class
         :type config: Config
         :return: dict with the Ising, time it took to map it
@@ -207,9 +217,6 @@ class Ising(Mapping):
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()
-        elif option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
-            return PennylaneQAOA()
         elif option == "QiskitQAOA":
             from modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
             return QiskitQAOA()

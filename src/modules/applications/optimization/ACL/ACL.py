@@ -645,15 +645,15 @@ assignment problem.
         """
         start = start_time_measurement()
         objective_value = solution["obj_value"]
-        print("Loading successful!")
-        print(objective_value, "cars will fit on the auto carrier.")
+        logging.info("Loading successful!")
+        logging.info(str(objective_value)+" cars will fit on the auto carrier.")
         variables = solution["variables"]
         assignments = []
         # Check which decision variables are equal to 1
         for key in variables:
             if variables[key] > 0:
                 assignments.append(key)
-        print("vehicle to platform assignments (platform, vehicle): ", assignments)
+        logging.info("vehicle to platform assignments (platform, vehicle): "+ str(assignments))
         return objective_value, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:

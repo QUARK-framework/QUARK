@@ -190,7 +190,8 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
         else:
             benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
             results = benchmark_manager.load_results()
-            benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
+            if len(results) > 0:
+                benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

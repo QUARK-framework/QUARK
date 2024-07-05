@@ -414,14 +414,19 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
     tracker["params"].append(params0)
 
     # run classical optimization (example: method='Nelder-Mead')
-    result = minimize(
-        objective_function,
-        params0,
-        args=(device, ising, n_qubits, n_shots, tracker, s3_folder, verbose),
-        options=options,
-        method=opt_method,
-        bounds=bnds,
-    )
+    try:
+        result = minimize(
+            objective_function,
+            params0,
+            args=(device, ising, n_qubits, n_shots, tracker, s3_folder, verbose),
+            options=options,
+            method=opt_method,
+            bounds=bnds,
+        )
+    except ValueError as e:
+        logging.error("The following ValueError occurred in module QAOA: " + str(e))
+        logging.error("The benchmarking run terminates with exception.")
+        raise Exception("Please refer to the logged error message.")
 
     # store result of classical optimization
     result_energy = result.fun

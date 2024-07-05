@@ -36,7 +36,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class MIPaclp(Solver):
     """
-    Classical Random Solver for the PVC problem.
+    Classical mixed integer problem (MIP) solver for the auto-carrier loading problem (ACLP).
     """
 
     def __init__(self):
@@ -85,9 +85,20 @@ class MIPaclp(Solver):
         """
         pass
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float):
         """
-        Solve the ACL
+        Solve the ACL problem as a mixed integer problem (MIP)
+
+        :param mapped_problem: linear problem in form of a dictionary
+        :type mapped_problem: dict
+        :param device_wrapper: Local device
+        :type device_wrapper: any
+        :param config: empty dict
+        :type config: Config
+        :param kwargs: no additionally settings needed
+        :type kwargs: any
+        :return: Solution, the time it took to compute it and optional additional information
+        :rtype: tuple(dict, float, dict)
         """
         # Convert dict of problem instance to LP problem
         _, problem_instance = pulp.LpProblem.from_dict(mapped_problem)

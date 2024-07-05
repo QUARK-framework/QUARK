@@ -52,11 +52,11 @@ class LibraryPennylane(Library):
             },
             {
                 "name": "jax",
-                "version": "0.4.5"
+                "version": "0.4.30"
             },
             {
                 "name": "jaxlib",
-                "version": "0.4.5"
+                "version": "0.4.30"
             }
         ]
 

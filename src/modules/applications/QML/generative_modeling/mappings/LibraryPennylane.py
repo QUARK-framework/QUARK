@@ -44,7 +44,11 @@ class LibraryPennylane(Library):
         return [
             {
                 "name": "pennylane",
-                "version": "0.29.1"
+                "version": "0.36.0"
+            },
+            {
+                "name": "pennylane-lightning",
+                "version": "0.36.0"
             },
             {
                 "name": "numpy",

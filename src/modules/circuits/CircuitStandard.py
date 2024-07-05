@@ -39,6 +39,16 @@ class CircuitStandard(Circuit):
             "CustomQiskitNoisyBackend",
             "PresetQiskitNoisyBackend"]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Returns requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return []
+
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this standard circuit.

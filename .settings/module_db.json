@@ -1,7 +1,7 @@
 {
   "build_number": 10,
-  "build_date": "05-07-2024 07:29:13",
-  "git_revision_number": "df8e86adee36254bed83ca5dc2cb05e4814bbca4",
+  "build_date": "05-07-2024 08:14:41",
+  "git_revision_number": "db74bf0a5adb8564a5e462d8c8b1522140334558",
   "modules": [
     {
       "name": "PVC",
@@ -181,11 +181,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -847,11 +847,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -1220,11 +1220,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -1626,11 +1626,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -2128,7 +2128,11 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.29.1"
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
                         },
                         {
                           "name": "numpy",
@@ -2473,7 +2477,11 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.29.1"
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
                         },
                         {
                           "name": "numpy",
@@ -2804,7 +2812,11 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.29.1"
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
                         },
                         {
                           "name": "numpy",
@@ -3151,7 +3163,11 @@
                   "requirements": [
                     {
                       "name": "pennylane",
-                      "version": "0.29.1"
+                      "version": "0.36.0"
+                    },
+                    {
+                      "name": "pennylane-lightning",
+                      "version": "0.36.0"
                     },
                     {
                       "name": "numpy",

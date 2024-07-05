@@ -12,8 +12,8 @@ amazon-braket-sdk==1.35.1
 scipy==1.11.1
 botocore==1.25.7
 boto3==1.22.7
-pennylane==0.29.1
-pennylane-lightning==0.28.0
+pennylane==0.36.0
+pennylane-lightning==0.36.0
 amazon-braket-pennylane-plugin==1.5.2
 dwave-samplers==1.0.0
 nnf==0.4.1

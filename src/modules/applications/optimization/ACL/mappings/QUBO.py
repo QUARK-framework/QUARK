@@ -204,8 +204,7 @@ class Qubo(Mapping):
                 qubo[col, row] = parameter
         # Minimization problem
         qubo = -qubo.astype(int)
-        logging.info("\nQUBO dimensions: " + str(count_variables) + "\n\nQUBO: " + str(qubo), "\n\nVariables: " +
-                     str(variables))
+
         return qubo
 
     def map(self, problem: any, config: Config) -> (dict, float):

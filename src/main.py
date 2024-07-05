@@ -22,6 +22,9 @@ import yaml
 
 from Installer import Installer
 from utils import _expand_paths
+from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
+
+comm = get_comm()
 
 # add the paths
 install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -60,8 +63,8 @@ def setup_logging() -> None:
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("logging.log"),
-            logging.StreamHandler()
+            MPIFileHandler("logging.log"),
+            MPIStreamHandler()
         ]
     )
 
@@ -79,7 +82,7 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
 
 
-def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
+def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fast: bool = False) -> None:
     """
     Starts a benchmark run from the code
 
@@ -107,7 +110,7 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None) -> None:
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
 
-    benchmark_manager = BenchmarkManager()
+    benchmark_manager = BenchmarkManager(fail_fast=fail_fast)
 
     # Can be overridden by using the -m|--modules option
     installer = Installer()
@@ -122,6 +125,10 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
     parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
                         required=False)
     parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
+    parser.add_argument('-rd', '--resume-dir', nargs='?', help='Provide results directory of the job to be resumed')
+    parser.add_argument('-ff', '--failfast', help='Flag whether a single failed benchmark run causes QUARK to fail',
+                        required=False, action=argparse.BooleanOptionalAction)
+
     parser.set_defaults(goal='benchmark')
 
 
@@ -149,7 +156,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
     :rtype: None
     """
     from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
-    benchmark_manager = BenchmarkManager()
+    from Plotter import Plotter  # pylint: disable=C0415
+
+    benchmark_manager = BenchmarkManager(fail_fast=args.failfast)
 
     if args.summarize:
         benchmark_manager.summarize_results(args.summarize)
@@ -169,7 +178,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             installer = Installer()
             app_modules = installer.get_env(installer.get_active_env())
 
-        if args.config:
+        if args.config or args.resume_dir:
+            if not args.config:
+                args.config = os.path.join(args.resume_dir, "config.yml")
             logging.info(f"Provided config file at {args.config}")
             # Loads config
             with open(args.config) as filehandler:
@@ -177,7 +188,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                 try:
                     benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
                 except Exception as e:
-                    logging.error(f"ERROR: Problem loading the given config file: {e}")
+                    logging.exception("Problem loading the given config file")
                     raise ValueError("Config file needs to be a valid QUARK YAML Config!") from e
 
                 config_manager.set_config(benchmark_config)
@@ -188,10 +199,14 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            benchmark_manager.orchestrate_benchmark(config_manager, app_modules)
-            results = benchmark_manager.load_results()
-            if len(results) > 0:
-                benchmark_manager.visualize_results(results, benchmark_manager.store_dir)
+            interrupted_results_path = None if args.resume_dir is None else os.path.join(args.resume_dir,
+                                                                                         "results.json")
+            benchmark_manager.orchestrate_benchmark(config_manager, app_modules,
+                                                    interrupted_results_path=interrupted_results_path)
+            comm.Barrier()
+            if comm.Get_rank() == 0:
+                results = benchmark_manager.load_results()
+                Plotter.visualize_results(results, benchmark_manager.store_dir)
 
 
 def handler_env_run(args: argparse.Namespace) -> None:

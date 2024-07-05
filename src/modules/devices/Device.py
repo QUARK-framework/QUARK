@@ -25,11 +25,10 @@ class Device(Core, ABC):
         """
         Constructor method
         """
-        super().__init__()
+        super().__init__(device_name)
         self.device = None
         self.config = None
-        self.device_name = device_name
-        self.config = None
+        self.device_name = self.name
 
     def get_parameter_options(self) -> dict:
         """

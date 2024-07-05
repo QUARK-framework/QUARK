@@ -16,3 +16,4 @@
    ConfigManager
    BenchmarkManager
    Installer
+   Plotter

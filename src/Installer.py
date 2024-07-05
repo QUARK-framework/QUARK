@@ -40,14 +40,17 @@ class Installer:
         self.python_version = "3.9.16"
         self.pip_version = "23.0"
         self.default_app_modules = [
-            {"name": "PVC", "class":  "PVC", "module": "modules.applications.optimization.PVC.PVC"},
-            {"name": "SAT", "class":  "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-            {"name": "TSP", "class":  "TSP", "module": "modules.applications.optimization.TSP.TSP"},
-            {"name": "ACL", "class":  "ACL", "module": "modules.applications.optimization.ACL.ACL"},
+            {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
+            {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
+            {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
+            {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
+            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+            {"name": "GenerativeModeling", "class": "GenerativeModeling",
+             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [
-            {"name": "seaborn", "version": "0.12.2"},
+            {"name": "seaborn", "version": "0.13.0"},
             {"name": "networkx", "version": "2.8.8"},
             {"name": "inquirer", "version": "3.1.2"},
             {"name": "packaging", "version": "23.1"},
@@ -260,7 +263,7 @@ class Installer:
         if submodules["submodules"]:
             answer_submodules = \
                 checkbox("submodules", f"Which submodule would you like to include for {name}?",
-                                       [m["name"] for m in submodules["submodules"]])["submodules"]
+                         [m["name"] for m in submodules["submodules"]])["submodules"]
 
             submodules["submodules"] = [x for x in submodules["submodules"] if x["name"] in answer_submodules]
             for idx, entry in enumerate(submodules["submodules"]):

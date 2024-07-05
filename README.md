@@ -126,6 +126,23 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
 All used config files, logs and results are stored in a folder in the ```benchmark_runs``` directory.
 
+#### interrupt/resume
+The processing of backlog items may get interrupted in which case you will see something like
+```
+2024-03-13 10:25:20,201 [INFO] ================================================================================
+2024-03-13 10:25:20,201 [INFO] ====== Run 3 backlog items with 10 iterations - FINISHED:15 INTERRUPTED:15
+2024-03-13 10:25:20,201 [INFO] ====== There are interrupted jobs. You may resume them by running QUARK with
+2024-03-13 10:25:20,201 [INFO] ====== --resume-dir=benchmark_runs\tsp-2024-03-13-10-25-19
+2024-03-13 10:25:20,201 [INFO] ================================================================================
+```
+This happens if you press CTRL-C or if some QUARK module does its work asynchronously, e.g. by submitting its job to some 
+batch system. Learn more about how to write asynchronous modules in the [developer guide](https://quark-framework.readthedocs.io/en/dev/).
+You can resume an interrupted QUARK run by calling: 
+```
+python src/main.py --resume-dir=<result-dir>
+```
+Note that you can copy/paste the --resume-dir option from the QUARK output as shown in the above example.
+
 #### Non-Interactive Mode
 It is also possible to start the script with a config file instead of using the interactive mode:
 ```
@@ -151,6 +168,46 @@ application:
       submodules: []
 repetitions: 1
 ```
+
+### Run as Container
+We also support the option to run the framework as a container.
+After making sure your docker daemon is running, you can run the container:
+```
+docker run -it --rm ghcr.io/quark-framework/quark
+```
+
+You can also build the docker image locally like:
+``` 
+docker build -t ghcr.io/quark-framework/quark .
+```
+
+In case you want to use a config file you have to add it to the docker run command: 
+```
+-v /Users/alice/desktop/my_config.yml:/my_config.yml
+```
+`/Users/alice/desktop/my_config.yml` specifies the QUARK config file on your local machine.
+Then you can run the docker container with the config:
+```
+docker run -it --rm  -v /Users/alice/desktop/my_config.yml:/my_config.yml ghcr.io/quark-framework/quark --config my_config.yml
+```
+
+In case you want to access the benchmark run folder afterwards, you can attach a volume to the run command:
+```
+-v /Users/alice/desktop/benchmark_runs:/benchmark_runs/
+```
+The results of the benchmark run are then stored to a new directory in `/Users/alice/desktop/benchmark_runs`.
+
+In case you have local proxy settings you can add the following flags to the run command:
+
+```
+-e http_proxy=$http_proxy -e https_proxy=$https_proxy -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY
+```
+
+AWS credentials can be mounted to the run command like:
+```
+-v $HOME/.aws/:/root/.aws:ro
+```
+
 
 
 #### Summarizing Multiple Existing Experiments

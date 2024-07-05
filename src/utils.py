@@ -18,12 +18,12 @@ import os
 import subprocess
 import sys
 import time
-from typing import Union
+from typing import Union, Callable
 
 import inquirer
 
 
-def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -> any:
+def _get_instance_with_sub_options(options: list[dict], name: str) -> any:
     """
     Creates an instance of the QUARK module identified by class_name
 
@@ -31,8 +31,6 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
     :type options: list of dict
     :param name: name of the QUARK component to be initialized
     :type name: str
-    :param args: List of arguments used for to the class initialization
-    :type args: any
     :return: New instance of the QUARK module
     :rtype: any
     """
@@ -47,9 +45,9 @@ def _get_instance_with_sub_options(options: list[dict], name: str, *args: any) -
 
         # In case the class requires some arguments in its constructor they can be defined in the "args" dict
         if "args" in opt and opt["args"]:
-            instance = clazz(*args, **opt["args"])
+            instance = clazz(**opt["args"])
         else:
-            instance = clazz(*args)
+            instance = clazz()
 
         # _get_instance_with_sub_options is mostly called when using the --modules option, so it makes sense to also
         # save the git revision of the given module, since it can be in a different git
@@ -204,3 +202,39 @@ def end_time_measurement(start: float) -> float:
     """
     end = time.perf_counter()
     return round((end - start) * 1000, 3)
+
+
+def stop_watch(position: int = None) -> Callable:
+    """
+    Usage as decorator to measure time, eg:
+    ```
+    @stop_watch()
+    def run(input_data,...):
+        return processed_data
+    ```
+    results in valid:    
+    ```
+    processed_data, time_to_process = run(input,...)
+    ```
+    If the return value of the decorated function is of type tuple,
+    the optional parameter `position` can be used to specify the position at which the
+    measured time is to be inserted in the return tuple.
+
+    :param position: The position at which the measured time gets inserted in the return tuple.
+                     If not specified the measured time will be appended to the original return value.
+    :type position: int
+    :return: The wrapper function
+    :rtype: Callable
+    """
+    def wrap(func):
+        def wrapper(*args, **kwargs):
+            start = start_time_measurement()
+            return_value = func(*args, **kwargs)
+            duration = end_time_measurement(start)
+            if position is not None and isinstance(return_value, tuple):
+                rv = list(return_value)
+                rv.insert(position, duration)
+                return tuple(rv)
+            return return_value, duration
+        return wrapper
+    return wrap

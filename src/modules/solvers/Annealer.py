@@ -91,7 +91,9 @@ class Annealer(Solver):
         device = device_wrapper.get_device()
         start = start_time_measurement()
         if device_wrapper.device_name != "simulated annealer":
-            logging.warning("Only simulated annealer available at the moment!")
+            logging.error("Only simulated annealer available at the moment!")
+            logging.error("Please select another solver module.")
+            logging.error("The benchmarking run terminates with exception.")
             # TODO: Check what to do with this..
             # This section was used to leverage the D-Wave devices previously available on Amazon Braket
 
@@ -111,8 +113,7 @@ class Annealer(Solver):
             # response = sampler.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
             # # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
             # additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
-            raise ValueError
-        # This is for D-Wave simulated Annealer
+            raise Exception("Please refer to the logged error message.")
         response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 

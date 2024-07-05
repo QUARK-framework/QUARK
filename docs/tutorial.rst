@@ -133,6 +133,20 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 All used config files, logs and results are stored in a folder in the
 ``benchmark_runs`` directory.
 
+Access to IBM Eagle
+^^^^^^^^^^^^^^^^^^^
+
+In order to use the IBM Eagle device in QUARK you have to first save your API token. 
+This can be done similar to accessing AWS:
+
+.. code:: bash
+
+   export ibm_quantum_token='Your Token'
+   python src/main.py
+
+::
+
+
 Non-Interactive Mode
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -169,6 +183,57 @@ Example for a config file:
 
 One handy thing to do is to use the interactive mode once to create a config file.
 Then you can change the values of this config file and use it to start the framework.
+
+
+Run as Container
+^^^^^^^^^^^^^^^^
+We also support the option to run the framework as a container.
+After making sure your docker daemon is running, you can run the container:
+
+::
+
+    docker run -it --rm ghcr.io/quark-framework/quark
+
+You can also build the docker image locally like:
+
+::
+
+    docker build -t ghcr.io/quark-framework/quark .
+
+In case you want to use a config file you have to add it to the docker run command:
+
+::
+
+    -v /Users/alice/desktop/my_config.yml:/my_config.yml
+
+
+"/Users/alice/desktop/my_config.yml" specifies the QUARK config file on your local machine.
+Then you can run the docker container with the config:
+
+::
+
+    docker run -it --rm  -v /Users/alice/desktop/my_config.yml:/my_config.yml  ghcr.io/quark-framework/quark --config my_config.yml
+
+In case you want to access the benchmark run folder afterwards, you can attach a volume to the run command:
+
+::
+
+    -v /Users/alice/desktop/benchmark_runs:/benchmark_runs/
+
+The results of the benchmark run are then stored to a new directory in `/Users/alice/desktop/benchmark_runs`.
+
+In case you have local proxy settings you can add the following flags to the run command:
+
+::
+
+    -e http_proxy=$http_proxy -e https_proxy=$https_proxy -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY
+
+AWS credentials can be mounted to the run command like:
+
+::
+
+    -v $HOME/.aws/:/root/.aws:ro
+
 
 Summarizing Multiple Existing Experiments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

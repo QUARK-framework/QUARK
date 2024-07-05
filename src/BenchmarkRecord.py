@@ -26,9 +26,11 @@ class BenchmarkRecord:
     benchmark run.
     """
 
-    def __init__(self, timestamp: str, git_revision_number: str, git_uncommitted_changes: str, repetition: int,
-                 total_repetitions: int):
+    def __init__(self, benchmark_backlog_item_number: int, timestamp: str, git_revision_number: str,
+                 git_uncommitted_changes: str, repetition: int, total_repetitions: int):
         """
+        :param benchmark_backlog_item_number: Number of the item in the benchmark backlog
+        :type benchmark_backlog_item_number: int
         :param timestamp: Timestamp of the benchmark run
         :type timestamp: str
         :param git_revision_number: Git revision number during the benchmark run
@@ -40,6 +42,7 @@ class BenchmarkRecord:
         :param total_repetitions: Number of total repetitions of the benchmark run
         :type total_repetitions: int
         """
+        self.benchmark_backlog_item_number = benchmark_backlog_item_number
         self.timestamp = timestamp
         self.git_revision_number = git_revision_number
         self.git_uncommitted_changes = git_uncommitted_changes
@@ -154,6 +157,7 @@ class BenchmarkRecord:
         :rtype: dict
         """
         return {
+            "benchmark_backlog_item_number": self.benchmark_backlog_item_number,
             "timestamp": self.timestamp,
             "config_hash": self.start_hash_config(),
             "total_time": self.total_time,
@@ -173,3 +177,34 @@ class BenchmarkRecord:
         :rtype: BenchmarkRecord
         """
         return deepcopy(self)
+
+
+class BenchmarkRecordStored:
+    """
+    This class can be used to store the BenchmarkRecord of a previous QUARK run as read from results.json.
+    It is a simple wrapper with the purpose to provide the same interface to the BenchmarkManager as the
+    BenchmarkRecord does.
+    """
+    def __init__(self, record: dict):
+        """
+        :param record: the record as dictionary
+        :type record: dict
+        """
+        self.record = record
+
+    def get(self) -> dict:
+        """
+        Simply returns the dictionary as given to the constructor.
+
+        :return: Dictionary as given to the constructor
+        :rtype: dict
+        """
+        return self.record
+
+    def sum_up_times(self) -> None:
+        """
+        Dummy implementation which does nothing.
+
+        :rtype: None
+        """
+        pass

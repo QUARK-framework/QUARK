@@ -69,7 +69,8 @@ class SAT(Optimization):
     def get_default_submodule(self, option: str) -> Core:
 
         if option == "QubovertQUBO":
-            from modules.applications.optimization.SAT.mappings.QubovertQUBO import QubovertQUBO  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.QubovertQUBO import \
+                QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         elif option == "Direct":
             from modules.applications.optimization.SAT.mappings.Direct import Direct  # pylint: disable=C0415
@@ -84,7 +85,8 @@ class SAT(Optimization):
             from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO  # pylint: disable=C0415
             return DinneenQUBO()
         elif option == "DinneenIsing":
-            from modules.applications.optimization.SAT.mappings.DinneenISING import DinneenIsing  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.DinneenISING import \
+                DinneenIsing  # pylint: disable=C0415
             return DinneenIsing()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

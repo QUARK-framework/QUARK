@@ -69,6 +69,18 @@ In addition, there are some special flags you can set for each parameter:
     - :code:`custom_input`: Enabling this feature for your parameter will give the user the option to enter a custom input (text or numbers) for this value. Keep in mind that there is no validation of this user input!
     - :code:`postproc`: Specifies a function that can be called and applied to the parameters, which must be callable.
 
+Application Score
+"""""""""""""""""
+
+For applications, there is the option to provide a set of fields representing the application score, which defines the
+overall quality of the benchmark run in the view of the application.
+If these three fields are present in the :code:`Metrics` object of the application, the :code:`Plotter` class will generate some plots visualizing the application score:
+
+    - "application_score_value": Value of the application score. None if there is no valid application score for this run.
+    - "application_score_unit": Unit of the application will be used for the y-axis of the application score plot.
+    - "application_score_type": The type of the application score needs to be a string. For example :code:`str(float)`.
+
+
 Example for an application, which should reside under ``src/modules/applications/myApplication/``:
 
 .. code-block:: python
@@ -141,9 +153,12 @@ Example for an application, which should reside under ``src/modules/applications
                     input_data)
                 if solution_validity and processed_solution:
                    solution_quality, time_to_evaluation = self.evaluate(processed_solution)
+                else:
+                   solution_quality = None
 
-                self.metrics.add_metric_batch({"solution_validity": solution_validity, "solution_quality": solution_quality,
-                           "solution": input_data})
+                self.metrics.add_metric_batch({"solution_validity": solution_validity,
+                          "application_score_value": solution_quality, "application_score_unit": "score",
+                          "application_score_type": str(float), "solution": input_data})
 
                 return solution_validity, sum(time_to_validation, time_to_evaluation))
 
@@ -176,6 +191,35 @@ Example for an application, which should reside under ``src/modules/applications
 
             def save(self, path, iter_count):
                 save_your_application(self.application, f"{path}/application.txt")
+
+Writing an asynchronous Module
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A typical example for an asynchronous module is a solver which submits its job into
+the queue of some server and retrieves the result some times later. In QUARK this is
+supported via the interrupt/resume mechanism.
+
+QUARK modules may return instructions to the BenchmarkManager as first entry in the return value of
+pre and post-process. Currently the following instructions are supported:
+    - PROCEED
+    - INTERRUPT
+
+PROCEED: If the BenchmarkManager gets the instruction "PROCEED" (or no instruction at all) it continues with the regular QUARK workflow.
+If the current job can be finished without getting an "INTERRUPT" instruction or an exception,
+the BenchmarkManager adds "quark_job_status"=FINISHED to the metrics.
+
+INTERRUPT: If the BenchmarkManager gets the instruction "INTERRUPT" it stops the current QUARK workflow,
+adds "quark_job_status"=INTERRUPTED to the metrics, saves all the metrics written so far to the BenchmarkRecord
+and continues with the configuration/repetition loop.
+
+QUARK Resume Mode:
+
+After running QUARK in its regular mode QUARK can be run again on the same results directory in resume mode by
+specifying the existing results directory with the --resume-dir option. This can be done repeatedly for the same
+results directory.
+
+If QUARK is called in resume mode the module which has returned an INTERRUPT previously will be called again
+with the same input supplemented by the key word argument "previous_job_info" which contains all the information
+the moduls has written to the metrics on the previous run.
 
 
 Updating the Module Database

@@ -1,0 +1,36 @@
+name: Unit Testing
+
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: [ 'main', 'dev' ]
+
+jobs:
+  lint:
+    name: Run Unit Tests
+    runs-on: [ 'ubuntu-latest' ]
+    env:
+      AGENT_TOOLSDIRECTORY: /home/runner/actions-runner/_work/_tool/
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9.16'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: '**/requirements_full.txt'
+          token: ${{ secrets.QUARK_GH_GITHUB_COM_TOKEN }}
+
+      - name: Install Dependencies
+        run: pip install -r .settings/requirements_full.txt
+
+      - name: Run tests with unittest
+        run: python -m unittest discover .
+            
+

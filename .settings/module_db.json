@@ -1,7 +1,7 @@
 {
-  "build_number": 13,
-  "build_date": "04-07-2024 13:11:37",
-  "git_revision_number": "86b3474c513931161fa69fa1fb2cc2f741feb492",
+  "build_number": 10,
+  "build_date": "05-07-2024 07:29:13",
+  "git_revision_number": "df8e86adee36254bed83ca5dc2cb05e4814bbca4",
   "modules": [
     {
       "name": "PVC",
@@ -2044,10 +2044,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2064,6 +2060,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2089,6 +2089,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2125,6 +2137,10 @@
                         {
                           "name": "jax",
                           "version": "0.4.5"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.5"
                         }
                       ],
                       "submodules": [
@@ -2141,6 +2157,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2166,6 +2186,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2222,6 +2254,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2286,6 +2322,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2334,12 +2374,7 @@
                   "class": "CircuitStandard",
                   "args": {},
                   "module": "modules.circuits.CircuitStandard",
-                  "requirements": [
-                    {
-                      "name": "scipy",
-                      "version": "1.11.1"
-                    }
-                  ],
+                  "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
@@ -2354,10 +2389,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2374,6 +2405,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2399,6 +2434,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2435,6 +2482,10 @@
                         {
                           "name": "jax",
                           "version": "0.4.5"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.5"
                         }
                       ],
                       "submodules": [
@@ -2451,6 +2502,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2476,6 +2531,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2532,6 +2599,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2596,6 +2667,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2645,10 +2720,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2665,6 +2736,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2690,6 +2765,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2726,6 +2813,10 @@
                         {
                           "name": "jax",
                           "version": "0.4.5"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.5"
                         }
                       ],
                       "submodules": [
@@ -2742,6 +2833,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2767,6 +2862,18 @@
                             {
                               "name": "torch",
                               "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
                             }
                           ],
                           "submodules": []
@@ -2823,6 +2930,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2887,6 +2998,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2952,10 +3067,6 @@
                     {
                       "name": "numpy",
                       "version": "1.23.5"
-                    },
-                    {
-                      "name": "qiskit-ibmq-provider",
-                      "version": "0.19.2"
                     }
                   ],
                   "submodules": [
@@ -2972,6 +3083,10 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",
@@ -2997,6 +3112,18 @@
                         {
                           "name": "torch",
                           "version": "2.0.1"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
                         }
                       ],
                       "submodules": []
@@ -3033,6 +3160,10 @@
                     {
                       "name": "jax",
                       "version": "0.4.5"
+                    },
+                    {
+                      "name": "jaxlib",
+                      "version": "0.4.5"
                     }
                   ],
                   "submodules": [
@@ -3049,6 +3180,10 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",
@@ -3074,6 +3209,18 @@
                         {
                           "name": "torch",
                           "version": "2.0.1"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
                         }
                       ],
                       "submodules": []
@@ -3130,6 +3277,10 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",
@@ -3194,6 +3345,10 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",

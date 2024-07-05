@@ -53,6 +53,10 @@ class LibraryPennylane(Library):
             {
                 "name": "jax",
                 "version": "0.4.5"
+            },
+            {
+                "name": "jaxlib",
+                "version": "0.4.5"
             }
         ]
 

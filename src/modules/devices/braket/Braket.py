@@ -86,10 +86,10 @@ class Braket(Device, ABC):
                 else:
                     self.boto_session = boto3.Session(profile_name=profile_name, region_name=region)
                 self.aws_session = AwsSession(boto_session=self.boto_session, config=my_config)
-            except ProfileNotFound:
+            except ProfileNotFound as exc:
                 logging.error(f"AWS-Profile {profile_name} could not be found! Please set env-variable AWS_PROFILE. "
                               f"Only LocalSimulator is available.")
-                raise Exception("Please refer to logged error message.")
+                raise Exception("Please refer to logged error message.") from exc
 
     @staticmethod
     def get_requirements() -> list[dict]:

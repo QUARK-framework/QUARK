@@ -42,7 +42,7 @@ assignment problem.
         Constructor method
         """
         super().__init__("ACL")
-        self.submodule_options = ["MIPsolverACL", "Ising", "QUBO"]
+        self.submodule_options = ["MIPsolverACL", "QUBO"]
         self.application = None
 
     @staticmethod
@@ -71,9 +71,9 @@ assignment problem.
         if option == "MIPsolverACL":
             from modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
             return MIPaclp()
-        elif option == "Ising":
-            from modules.applications.optimization.ACL.mappings.ISING import Ising  # pylint: disable=C0415
-            return Ising()
+        # elif option == "Ising":
+            # from modules.applications.optimization.ACL.mappings.ISING import Ising  # pylint: disable=C0415
+            # return Ising()
         elif option == "QUBO":
             from modules.applications.optimization.ACL.mappings.QUBO import Qubo  # pylint: disable=C0415
             return Qubo()
@@ -198,10 +198,7 @@ assignment problem.
             # For the small model, we only consider two levels with 3 and 2 platforms each
 
             # Length parameters
-            # platform lengths, extension, bounds on extension
-            # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
-            # Consider maximum length of 20750, drivers cab 2350, distance between truck and trailer of 500
-            # We do not consider continuous extension of the loading planes
+            # Level 1 (Truck up), 2 (Truck down)
             lmax_l = [97, 79]
 
             # Height parameters
@@ -347,10 +344,7 @@ assignment problem.
                                [0.17, 0.38, 0.32, 0.32]])
 
             # Length parameters
-            # platform lengths, extension, bounds on extension
             # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
-            # Consider maximum length of 20750, drivers cab 2350, distance between truck and trailer of 500
-            # We do not consider continuous extension of the loading planes
             lmax_l = [97, 79, 97, 97]
 
             # Height parameters

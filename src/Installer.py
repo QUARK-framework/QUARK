@@ -46,7 +46,8 @@ class Installer:
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
+             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"},
+            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
         ]
 
         self.core_requirements = [

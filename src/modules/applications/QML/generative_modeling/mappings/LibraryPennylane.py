@@ -165,7 +165,7 @@ class LibraryPennylane(Library):
         return input_data
 
     @staticmethod
-    def select_backend(config: str, n_qubits: int) -> qml.device:
+    def select_backend(config: str, n_qubits: int) -> any:
         """
         This method configures the backend
 
@@ -174,12 +174,12 @@ class LibraryPennylane(Library):
         :param n_qubits: Number of qubits
         :type n_qubits: int
         :return: Configured backend
-        :rtype: pennylane.device
+        :rtype: any
         """
         if config == "lightning.gpu":
             backend = qml.device(name="lightning.gpu", wires=n_qubits)
 
-        if config == "lightning.qubit":
+        elif config == "lightning.qubit":
             backend = qml.device(name="lightning.qubit", wires=n_qubits)
 
         elif config == "default.qubit":

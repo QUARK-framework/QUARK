@@ -429,7 +429,7 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
             bounds=bnds,
         )
     except ValueError as e:
-        logging.error("The following ValueError occurred in module QAOA: %s", e)
+        logging.error(f"The following ValueError occurred in module QAOA: {e}")
         logging.error("The benchmarking run terminates with exception.")
         raise Exception("Please refer to the logged error message.") from e
 

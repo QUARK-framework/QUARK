@@ -12,4 +12,4 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for TSP mappings"""
+"""Module for ACL mappings"""

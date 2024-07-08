@@ -207,7 +207,7 @@ assignment problem.
             # Weight parameters
             # max. total weight on truck / trailer
             wt = [100]
-            # max. weight on the four levels
+            # max. weight on the two levels
             wl = [65, 50]
             # max. weights on platforms p, if not angled
             wp = [23, 23, 23, 26, 17]
@@ -312,7 +312,7 @@ assignment problem.
                 for v in vecs:
                     prob += weight_list[v] * x[p, v] <= wp[p]
 
-            # (9) If split platform is used, weight limit == wsp, if not, then weight limit == wp
+            # (9) If a split platform is used, weight limit == wsp, if not, then weight limit == wp
             for q in plats_sp:
                 for p in split_platforms_array[q]:
                     prob += pulp.lpSum(weight_list[v] * x[p, v] for v in vecs) <= gamma[q] * wsp[q] \
@@ -613,7 +613,7 @@ assignment problem.
         self.application = problem_instance
         return self.application
 
-    def validate(self, solution) -> (bool, float):
+    def validate(self, solution:any) -> (bool, float):
         """
         Checks if the solution is a valid solution
 :

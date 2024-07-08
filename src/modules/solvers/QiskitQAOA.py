@@ -218,7 +218,7 @@ class QiskitQAOA(Solver):
         try:
             result = algorithm.compute_minimum_eigenvalue(ising_op)
         except ValueError as e:
-            logging.error("The following ValueError occurred in module QiskitQAOA: %s", e)
+            logging.error(f"The following ValueError occurred in module QiskitQAOA: {e}")
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.") from e
         best_bitstring = self._get_best_solution(result)

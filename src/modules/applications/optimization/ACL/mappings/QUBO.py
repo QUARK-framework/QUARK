@@ -129,7 +129,7 @@ class Qubo(Mapping):
                                  name=constraint["name"])
         return qp
 
-    def convert_string_to_arguments(self, input_string):
+    def convert_string_to_arguments(self, input_string: str):
         """
         Converts QUBO in string format to a list of separated arguments, used to construct the QUBO matrix.
 
@@ -164,7 +164,7 @@ class Qubo(Mapping):
                 separated_arguments.append(argument)
         return separated_arguments
 
-    def construct_qubo(self, penalty, variables):
+    def construct_qubo(self, penalty: list[list], variables: list):
         """
         Creates QUBO matrix Q to solve linear problem of the form x^T * Q + x
 

@@ -73,7 +73,6 @@ class QGAN(Training): # pylint: disable=R0902
         self.fake_labels = None
         self.dataloader = None
         self.loss_func = None
-        self.loss_func = None
         self.params = None
         self.discriminator_weights = None
 
@@ -337,7 +336,7 @@ class QGAN(Training): # pylint: disable=R0902
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
                 pmfs_model = np.asarray(pmfs_model.copy())
 
-                loss= self.loss_func(pmfs_model, self.target)
+                loss= self.loss_func(pmfs_model[None,], self.target)
                 self.accuracy.append(loss)
 
                 self.writer.add_scalar("metrics/KL", loss, epoch * n_batches + batch)
@@ -373,7 +372,6 @@ class QGAN(Training): # pylint: disable=R0902
             )
             ax.set_title(f'Iteration {epoch}')
             self.writer.add_figure('grid_figure', fig, global_step=epoch)
-            fig.colorbar(im)
 
             ax.clear()
             ax.imshow(

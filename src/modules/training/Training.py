@@ -104,17 +104,12 @@ class Training(Core, ABC):
 
     def kl_divergence(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        if self.name == "QCBM":
-            return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
-        else:
-            return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=0)
+        return np.sum(pmf_target * np.log(pmf_target / pmf_model), axis=1)
 
     def nll(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8
-        if self.name == "QCBM":
-            return -np.sum(pmf_target * np.log(pmf_model), axis=1)
-        else:
-            return -np.sum(pmf_target * np.log(pmf_model), axis=0)
+        return -np.sum(pmf_target * np.log(pmf_model), axis=1)
+
 
     def mmd(self, pmf_model, pmf_target):
         pmf_model[pmf_model == 0] = 1e-8

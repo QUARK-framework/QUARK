@@ -365,11 +365,6 @@ class QGAN(Training): # pylint: disable=R0902
                 logging.info(log_message)
 
             fig, ax = plt.subplots()
-            im = ax.imshow(
-                pmfs_model.reshape((2 ** (self.n_qubits // 2), 2 ** (self.n_qubits // 2))),
-                cmap='binary',
-                interpolation='none'
-            )
             ax.set_title(f'Iteration {epoch}')
             self.writer.add_figure('grid_figure', fig, global_step=epoch)
 

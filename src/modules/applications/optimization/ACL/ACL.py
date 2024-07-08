@@ -99,13 +99,18 @@ assignment problem.
     def diffset(p1, p2):
         return np.setdiff1d(p1, p2).tolist()
 
-    def generate_problem(self, config: Config):  # pylint: disable=R0915
+    def generate_problem(self, config: Config) -> dict:  # pylint: disable=R0915
         """
         This function includes three models: Full, small and tiny. Full refers to the original model with all of its
         constraints. Small refers to the simplified model which is more suitable for solving it with QC methods.
         The simplified model does not consider the possibility that vehicles can be angled or that they can be
         oriented forwards or backwards in relation to the auto carrier. For the tiny version we do not consider split
         platforms and consider only weight constraints.
+
+        :param config: Config containing the selected scenario
+        :type config: Config
+        :return: Dictionary with scenario-dependent model formulated as linear problem
+        :rtype: dict
         """
         # Enter vehicles to load (BMW model codes)
         vehicles = ["G20", "G20", "G20", "G20", "G07", "G20"]
@@ -646,14 +651,14 @@ assignment problem.
         start = start_time_measurement()
         objective_value = solution["obj_value"]
         logging.info("Loading successful!")
-        logging.info(str(objective_value)+" cars will fit on the auto carrier.")
+        logging.info(f"{objective_value} cars will fit on the auto carrier.")
         variables = solution["variables"]
         assignments = []
         # Check which decision variables are equal to 1
         for key in variables:
             if variables[key] > 0:
                 assignments.append(key)
-        logging.info("vehicle to platform assignments (platform, vehicle): "+ str(assignments))
+        logging.info(f"vehicle-to-platform assignments (platform, vehicle): {assignments}")
         return objective_value, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:

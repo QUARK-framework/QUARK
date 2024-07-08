@@ -100,7 +100,7 @@ class LibraryQiskit(Library):
             }
         }
 
-    def get_default_submodule(self, option: str) -> Union[QCBM, Inference]:
+    def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
 
         if option == "QCBM":
             return QCBM()
@@ -118,7 +118,7 @@ class LibraryQiskit(Library):
 
         :param input_data: Collected information of the benchmarking process
         :type input_data: dict
-        :return: Same dictionary but the gate sequence is replaced by it Qiskit implementation
+        :return: Same dictionary but the gate sequence is replaced by its Qiskit implementation
         :rtype: dict
         """
         n_qubits = input_data["n_qubits"]
@@ -178,7 +178,7 @@ class LibraryQiskit(Library):
         return input_data
 
     @staticmethod
-    def select_backend(config: str, n_qubits: int) -> dict:
+    def select_backend(config: str, n_qubits: int) -> any:
         """
         This method configures the backend
 
@@ -187,11 +187,11 @@ class LibraryQiskit(Library):
         :param n_qubits: Number of qubits
         :type n_qubits: int
         :return: Configured qiskit backend
-        :rtype: qiskit.providers.Backend
+        :rtype: any
         """
         if config == "cusvaer_simulator (only available in cuQuantum appliance)":
-            import cusvaer # pylint: disable=C0415
-            from qiskit.providers.aer import AerSimulator # pylint: disable=C0415
+            import cusvaer  # pylint: disable=C0415
+            from qiskit.providers.aer import AerSimulator  # pylint: disable=C0415
             backend = AerSimulator(
                 method="statevector",
                 device="GPU",
@@ -203,22 +203,22 @@ class LibraryQiskit(Library):
             )
 
         elif config == "aer_simulator_gpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
 
         elif config == "aer_simulator_cpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
 
         elif config == "aer_statevector_simulator_gpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="GPU")
 
         elif config == "aer_statevector_simulator_cpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
 
@@ -254,14 +254,14 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
-            -> callable: # pylint: disable=W0221,R0915
+    def get_execute_circuit(quantum_circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
+            -> callable:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
 
-        :param circuit: Qiskit implementation of the quantum circuit
-        :type circuit: qiskit.circuit.QuantumCircuit
+        :param quantum_circuit: Qiskit implementation of the quantum circuit
+        :type quantum_circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
         :type backend: qiskit.providers.Backend
         :param config: Name of a backend
@@ -272,8 +272,8 @@ class LibraryQiskit(Library):
         :rtype: callable
         """
         n_shots = config_dict["n_shots"]
-        n_qubits = circuit.num_qubits
-        circuit_transpiled = transpile(circuit, backend=backend)
+        n_qubits = quantum_circuit.num_qubits
+        circuit_transpiled = transpile(quantum_circuit, backend=backend)
 
         if config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
             circuit_transpiled.remove_final_measurements()
@@ -284,7 +284,8 @@ class LibraryQiskit(Library):
                 return pmfs, None
 
         elif config in ["ionQ_Harmony", "Amazon_SV1"]:
-            import time as timetest # pylint: disable=C0415
+            import time as timetest  # pylint: disable=C0415
+
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
                 jobs = backend.run(all_circuits, shots=n_shots)

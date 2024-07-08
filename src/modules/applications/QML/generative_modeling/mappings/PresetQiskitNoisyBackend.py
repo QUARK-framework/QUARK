@@ -243,14 +243,14 @@ class PresetQiskitNoisyBackend(Library):
 
         return backend
 
-    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str,  # pylint: disable=W0221
+    def get_execute_circuit(self, quantum_circuit: QuantumCircuit, backend: Backend, config: str,  # pylint: disable=W0221
                             config_dict: dict) -> callable:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
 
-        :param circuit: Qiskit implementation of the quantum circuit
-        :type circuit: qiskit.circuit.QuantumCircuit
+        :param quantum_circuit: Qiskit implementation of the quantum circuit
+        :type quantum_circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
         :type backend: qiskit.providers.Backend
         :param config: Name of a backend
@@ -261,7 +261,7 @@ class PresetQiskitNoisyBackend(Library):
         :rtype: callable
         """
         n_shots = config_dict["n_shots"]
-        n_qubits = circuit.num_qubits
+        n_qubits = quantum_circuit.num_qubits
         start = perf_counter()
 
         backend = self.decompile_noisy_config(config_dict, n_qubits)
@@ -269,9 +269,9 @@ class PresetQiskitNoisyBackend(Library):
         optimization_level = self.get_transpile_routine(config_dict['transpile_optimization_level'])
         seed_transp = 42  # Remove seed if wanted
         logging.info(f'Using {optimization_level=} with seed: {seed_transp}')
-        circuit_transpiled = transpile(circuit, backend=backend, optimization_level=optimization_level,
+        circuit_transpiled = transpile(quantum_circuit, backend=backend, optimization_level=optimization_level,
                                        seed_transpiler=seed_transp)
-        logging.info(f'Circuit operations before transpilation: {circuit.count_ops()}')
+        logging.info(f'Circuit operations before transpilation: {quantum_circuit.count_ops()}')
         logging.info(f'Circuit operations before transpilation: {circuit_transpiled.count_ops()}')
         logging.info(perf_counter() - start)
 

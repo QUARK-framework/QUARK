@@ -124,9 +124,9 @@ class ContinuousData(DataHandler):
         :param gen_mod: Dictionary with collected information of the previous modules
         :type gen_mod: dict
         :param config: Config specifying the parameters of the data handler
-        :type config: dict
-        :return: Must always return the mapped problem and the time it took to create the mapping
-        :rtype: tuple(any, float)
+        :type config: Config
+        :return: dictionary including the mapped problem
+        :rtype: dict
         """
         self.dataset_name = config["data_set"]
         self.n_qubits = gen_mod["n_qubits"]
@@ -144,15 +144,15 @@ class ContinuousData(DataHandler):
 
         return application_config
 
-    def evaluate(self, solution: list, **kwargs) -> (float, float):
+    def evaluate(self, solution: dict, **kwargs) -> tuple[float, float]:
         """
         Calculate KL in original space.
 
-        :param solution: A dictionary-like object containing the solution data, including histogram_generated_original
-                         and histogram_train_original.
-        :type solution: list
-        :return: KL divergence for the generated samples and the time it took to calculate it.
-        :rtype: tuple(float, float)
+        :param solution: a dictionary containing the solution data, including histogram_generated_original
+                         and histogram_train_original
+        :type solution: dict
+        :return: Kullback-Leibler (KL) divergence for the generated samples and the time it took to calculate it
+        :rtype: tuple[float, float]
         """
         start = start_time_measurement()
 

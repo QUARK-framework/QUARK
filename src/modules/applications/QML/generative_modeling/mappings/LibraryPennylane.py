@@ -120,6 +120,7 @@ class LibraryPennylane(Library):
         gate_sequence = input_data["gate_sequence"]
         n_qubits = input_data["n_qubits"]
         num_parameters = sum(1 for gate, _ in gate_sequence if gate in ["RZ", "RX", "RY", "RXX", "RYY", "RZZ", "CRY"])
+
         def create_circuit(params):
             param_counter = 0
             for gate, wires in gate_sequence:

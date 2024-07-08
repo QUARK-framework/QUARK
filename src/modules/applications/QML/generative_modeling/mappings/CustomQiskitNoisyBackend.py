@@ -109,9 +109,7 @@ class CustomQiskitNoisyBackend(Library):
                         }
 
         """
-        value_list = []
-        value_list.append('Custom configurations')
-        value_list.append('No noise')
+        value_list = ['Custom configurations', 'No noise']
         return {
             "backend": {
                 "values": ["aer_simulator_gpu", "aer_simulator_cpu"],
@@ -233,12 +231,14 @@ class CustomQiskitNoisyBackend(Library):
         return input_data
 
     @staticmethod
-    def select_backend(config: str, n_qubits) -> dict:
+    def select_backend(config: str, n_qubits: int) -> any:
         """
         This method configures the backend
 
         :param config: Name of a backend
         :type config: str
+        :param n_qubits: Number of qubits
+        :type n_qubits: int
         :return: Configured qiskit backend
         :rtype: qiskit.providers.Backend
         """
@@ -290,7 +290,6 @@ class CustomQiskitNoisyBackend(Library):
         logging.info(f'Circuit operations before transpilation: {circuit_transpiled.count_ops()}')
         logging.info(perf_counter() - start)
 
-
         if config in ["aer_simulator_cpu", "aer_simulator_gpu"]:
             def execute_circuit(solutions):
 
@@ -312,7 +311,6 @@ class CustomQiskitNoisyBackend(Library):
                 return pmfs, samples
 
         return execute_circuit, circuit_transpiled
-
 
     @staticmethod
     def split_string(s):
@@ -385,7 +383,7 @@ class CustomQiskitNoisyBackend(Library):
             return CouplingMap.from_full(num_qubits)
         # elif layout == "ibm_brisbane":
             # service = QiskitRuntimeService()
-             #backend = service.backend("ibm_brisbane")
+            # backend = service.backend("ibm_brisbane")
             # logging.info(f'Loaded with IBMQ Account {backend.name}, {backend.version}, {backend.num_qubits}')
             # return backend.coupling_map
         elif layout is None:

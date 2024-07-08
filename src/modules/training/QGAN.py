@@ -124,11 +124,11 @@ class QGAN(Training): # pylint: disable=R0902
                         },
                         "learning_rate_generator": {
                             "values": [0.1, 0.2],
-                            "description": "What learnig rate do you want to set for the generator?"
+                            "description": "What learning rate do you want to set for the generator?"
                         },
                         "learning_rate_discriminator": {
                             "values": [0.1, 0.05],
-                            "description": "What learnig rate do you want to set for the discriminator?"
+                            "description": "What learning rate do you want to set for the discriminator?"
                         },
                         "device": {
                             "values": ["cpu", "gpu"],
@@ -207,8 +207,6 @@ class QGAN(Training): # pylint: disable=R0902
         :type input_data: dict
         :param config: Annealing settings
         :type config: Config
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
         """
 
         self.beta_1 = 0.5
@@ -272,23 +270,24 @@ class QGAN(Training): # pylint: disable=R0902
         else:
             raise NotImplementedError("Loss function not implemented")
 
-    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> (dict, float): # pylint: disable=R0915
+    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> dict:  # pylint: disable=R0915
         """
         :param input_data: dictionary with the variables from the circuit needed to start the training
         :type input_data: dict
-        :param config: Annealing settings
+        :param config: annealing settings
         :type config: Config
-        :param kwargs: Optional additional arguments
+        :param kwargs: optional additional arguments
         :type kwargs: dict
-        :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
+        :return: dictionary including the solution
+        :rtype: dict
         """
         self.setup_training(input_data, config)
-        best_generator_params = None
         generator_losses = []
         discriminator_losses = []
         best_kl_divergence = float('inf')
         best_generator_params = None
+        pmfs_model = None
+        best_sample = None
 
         n_batches = len(self.dataloader)
 
@@ -365,6 +364,11 @@ class QGAN(Training): # pylint: disable=R0902
                 logging.info(log_message)
 
             fig, ax = plt.subplots()
+            ax.imshow(
+                pmfs_model.reshape((2 ** (self.n_qubits // 2), 2 ** (self.n_qubits // 2))),
+                cmap='binary',
+                interpolation='none'
+            )
             ax.set_title(f'Iteration {epoch}')
             self.writer.add_figure('grid_figure', fig, global_step=epoch)
 
@@ -400,6 +404,7 @@ class QGAN(Training): # pylint: disable=R0902
 
         return input_data
 
+
 class Discriminator(nn.Module):
     def __init__(self, input_length: int):
         super().__init__()
@@ -416,6 +421,7 @@ class Discriminator(nn.Module):
         if isinstance(m, nn.Linear):
             nn.init.xavier_uniform_(m.weight.data, gain=10)
             nn.init.constant_(m.bias.data, 1)
+
 
 class QuantumGenerator:
     def __init__(self, n_qubits, execute_circuit, batch_size):
@@ -441,7 +447,7 @@ class QuantumGenerator:
 
         return samples, pdfs
 
-    def compute_gradient(self,params, discriminator, criterion, label, device):
+    def compute_gradient(self, params, discriminator, criterion, label, device):
         shift = 0.5 * np.pi
         gradients = np.zeros(len(params))  # Initialize gradients as an array of zeros
 

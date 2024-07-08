@@ -21,7 +21,7 @@ from modules.applications.QML.generative_modeling.transformations.Transformation
 from modules.circuits.CircuitCopula import CircuitCopula
 
 
-class PIT(Transformation): # pylint disable=R0902
+class PIT(Transformation):  # pylint disable=R0902
     """
     The transformation of the original probability distribution to 
     the distribution of its uniformly distributed cumulative marginals is known as the copula.
@@ -98,7 +98,6 @@ class PIT(Transformation): # pylint disable=R0902
         transformed_dataset = self.fit_transform(self.dataset)
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
-
         # Compute histogram for the transformed dataset
         transformed_histogram_grid = np.histogramdd(
             transformed_dataset,
@@ -108,7 +107,8 @@ class PIT(Transformation): # pylint disable=R0902
         self.histogram_transformed = histogram_transformed_1d / np.sum(histogram_transformed_1d)
 
         solution_space = np.zeros(len(transformed_dataset), dtype=int)
-        #Initialize a variable to keep track of the current position in the result_array
+
+        # Initialize a variable to keep track of the current position in the result_array
         position = 0
         value = 0
         for count in histogram_transformed_1d:
@@ -143,20 +143,20 @@ class PIT(Transformation): # pylint disable=R0902
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: dict) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> dict:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :type solution: dict
-        :return: solution transformed accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :param input_data: dictionary containing the solution
+        :type input_data: dict
+        :return: dictionary with solution transformed accordingly
+        :rtype: dict
         """
         depth = input_data["depth"]
         architecture_name = input_data["architecture_name"]
         n_qubits = input_data["n_qubits"]
         n_registers = self.transform_config["n_registers"]
-        KL_best_transformed = min(input_data["KL"])
+        kl_best_transformed = min(input_data["KL"])
         best_results = input_data["best_sample"]
         circuit_transpiled = input_data['circuit_transpiled']
 
@@ -195,7 +195,7 @@ class PIT(Transformation): # pylint disable=R0902
             "histogram_train": self.histogram_train,
             "histogram_generated_original": histogram_generated_original,
             "histogram_generated": histogram_generated_transformed,
-            "KL_best_transformed": KL_best_transformed,
+            "KL_best_transformed": kl_best_transformed,
             "store_dir_iter": input_data["store_dir_iter"],
             "circuit_transpiled": circuit_transpiled
         }
@@ -215,28 +215,27 @@ class PIT(Transformation): # pylint disable=R0902
         self.reverse_epit_lookup = self.reverse_epit_lookup.values
         return df.values
 
-    def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> List[float]:
+    def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> list[float]:
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
         # if we are an integer do not use linear interpolation
-        valuesL = np.floor(values).astype(int)
-        valuesH = np.ceil(values).astype(int)
+        values_l = np.floor(values).astype(int)
+        values_h = np.ceil(values).astype(int)
         # if we are an integer then floor and ceiling are the same
-        isIntMask = 1 - (valuesH - valuesL)
-        rowIndexer = np.arange(rows)
-        resultL = self.reverse_epit_lookup[
-            ([rowIndexer], [valuesL])]  # doing 2d lookup as [[index1.row, index2.row],[index1.column, index2.column]]
-        resultH = self.reverse_epit_lookup[
-            ([rowIndexer], [valuesH])]  # where 2d index tuple would be (index1.row, index1.column)
+        is_int_mask = 1 - (values_h - values_l)
+        row_indexer = np.arange(rows)
+        result_l = self.reverse_epit_lookup[
+            ([row_indexer], [values_l])]  # doing 2d lookup as [[index1.row, index2.row],[index1.column, index2.column]]
+        result_h = self.reverse_epit_lookup[
+            ([row_indexer], [values_h])]  # where 2d index tuple would be (index1.row, index1.column)
         # lookup int or do linear interpolation
-        return resultL * (isIntMask + values - valuesL) + resultH * (valuesH - values)
+        return result_l * (is_int_mask + values - values_l) + result_h * (values_h - values)
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
         res = [self._reverse_emp_integral_trans_single(row) for row in data]
         return np.array(res)[:, 0, :]
 
-    def emp_integral_trans(self, data: np.ndarray):
-
+    def emp_integral_trans(self, data: np.ndarray) -> np.ndarray:
         rank = np.argsort(data).argsort()  # Use np.argsort here
         length = data.size  # Rename 'len' to 'length' to avoid conflict with built-in len()
         ecdf = np.linspace(0, 1, length, dtype=np.float64)

@@ -107,10 +107,10 @@ class DiscreteData(DataHandler):
 
         :param gen_mod: Dictionary with collected information of the previous modules
         :type gen_mod: dict
-        :param config: Config specifying the paramters of the data handler
-        :type config: dict
-        :return: Must always return the mapped problem and the time it took to create the mapping
-        :rtype: tuple(any, float)
+        :param config: Config specifying the parameters of the data handler
+        :type config: Config
+        :return: dictionary including the mapped problem
+        :rtype: dict
         """
         dataset_name = "Cardinality_Constraint"
         self.n_qubits = gen_mod["n_qubits"]
@@ -145,9 +145,9 @@ class DiscreteData(DataHandler):
 
         application_config = {
             "dataset_name": dataset_name,
-            "binary_train":train_set_binary,
-            "binary_solution":solution_set_binary,
-            "train_size":self.train_size,
+            "binary_train": train_set_binary,
+            "binary_solution": solution_set_binary,
+            "train_size": self.train_size,
             "n_qubits": self.n_qubits,
             "n_registers": 2,
             "histogram_solution": self.histogram_solution,
@@ -165,15 +165,12 @@ class DiscreteData(DataHandler):
 
         return application_config
 
-    def generalisation(self) -> (dict, float):
+    def generalisation(self) -> tuple[dict, float]:
         """
         Calculate generalization metrics for the generated.
 
-        :param solution: A list representing the solution to be evaluated.
-        :type solution: list
-        :return: A tuple containing a dictionary of generalization metrics 
-                and the execution time in seconds.
-        :rtype: tuple
+        :return: a tuple containing a dictionary of generalization metrics and the execution time
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         results = self.generalization_metrics.get_metrics(self.samples)
@@ -182,18 +179,16 @@ class DiscreteData(DataHandler):
 
         return results, end_time_measurement(start)
 
-    def evaluate(self, solution: list) -> (dict, float):
+    def evaluate(self, solution: dict) -> tuple[dict, float]:
         """
-        Evaluates a given solution and calculates the histogram of generated samples 
-        and the minimum KL divergence value.
+        Evaluates a given solution and calculates the histogram of generated samples and the minimum KL divergence
+        value.
 
-        :param solution: A dictionary-like object containing the solution data,
-                         including generated samples and KL divergence values.
-        :type solution: list
-        :return: A tuple containing a dictionary with the histogram of generated samples 
-                and the minimum KL divergence value, and the time it took to evaluate
-                the solution in milliseconds.
-        :rtype: (dict, float)
+        :param solution: dictionary containing the solution data, including generated samples and KL divergence values.
+        :type solution: dict
+        :return: a tuple containing a dictionary with the histogram of generated samples and the minimum KL divergence
+                 value, and the time it took to evaluate the solution.
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         self.samples = solution["best_sample"]
@@ -202,9 +197,9 @@ class DiscreteData(DataHandler):
         histogram_generated = np.asarray(self.samples) / n_shots
         histogram_generated[histogram_generated == 0] = 1e-8
 
-        KL_list = solution["KL"]
-        KL_best = min(KL_list)
+        kl_list = solution["KL"]
+        kl_best = min(kl_list)
 
-        evaluate_dict = {"histogram_generated": histogram_generated, "KL_best": KL_best}
+        evaluate_dict = {"histogram_generated": histogram_generated, "KL_best": kl_best}
 
         return evaluate_dict, end_time_measurement(start)

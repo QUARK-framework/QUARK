@@ -57,8 +57,8 @@ class Inference(Training):
                                     "values": [False],
                                     "custom_input": True,
                                     "postproc": str,
-                                    "description": "Please provide the parameters of a pretrained model?"
-                                },
+                                    "description": "Please provide the parameters of a pretrained model."
+                                }
                             }
         """
         return {
@@ -66,8 +66,8 @@ class Inference(Training):
                 "values": [],
                 "custom_input": True,
                 "postproc": str,
-                "description": "Please provide the parameters of a pretrained model?"
-            },
+                "description": "Please provide the parameters of a pretrained model."
+            }
         }
 
     class Config(TypedDict):

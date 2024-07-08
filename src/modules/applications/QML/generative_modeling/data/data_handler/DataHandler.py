@@ -120,7 +120,7 @@ class DataHandler(Core, ABC):
 
         # Save metrics per iteration
         if "inference" not in input_data.keys():
-            DataHandler.tb_to_pd(logdir=store_dir_iter, rep=kwargs['rep_count'])
+            DataHandler.tb_to_pd(logdir=store_dir_iter, rep=str(kwargs['rep_count']))
             self.metrics.add_metric_batch(
                 {"metrics_pandas": os.path.relpath(f"{store_dir_iter}/data.pkl", current_directory)})
             if self.generalization_mark is not None:
@@ -186,8 +186,6 @@ class DataHandler(Core, ABC):
         """
         Compute generalisation metrics
 
-        :param solution:
-        :type solution: any
         :return: Evaluation and the time it took to create it
         :rtype: tuple(any, float)
 
@@ -200,7 +198,7 @@ class DataHandler(Core, ABC):
     @abstractmethod
     def evaluate(self, solution: any) -> (dict, float):
         """
-        Compute best loss values.
+        Compute the best loss values.
 
         :param solution:
         :type solution: any
@@ -218,11 +216,13 @@ class DataHandler(Core, ABC):
 
         :param logdir: path to the log directory containing TensorBoard event files
         :type logdir: str
-
+        :param rep: repetition counter
+        :type rep: str
         """
         event_acc = EventAccumulator(logdir)
         event_acc.Reload()
         tags = event_acc.Tags()
+        data = []
         tag_data = {}
         for tag in tags['scalars']:
             data = event_acc.Scalars(tag)

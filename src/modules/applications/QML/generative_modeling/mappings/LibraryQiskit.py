@@ -254,14 +254,14 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(quantum_circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
             -> callable:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
 
-        :param quantum_circuit: Qiskit implementation of the quantum circuit
-        :type quantum_circuit: qiskit.circuit.QuantumCircuit
+        :param circuit: Qiskit implementation of the quantum circuit
+        :type circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
         :type backend: qiskit.providers.Backend
         :param config: Name of a backend
@@ -272,15 +272,15 @@ class LibraryQiskit(Library):
         :rtype: callable
         """
         n_shots = config_dict["n_shots"]
-        n_qubits = quantum_circuit.num_qubits
-        circuit_transpiled = transpile(quantum_circuit, backend=backend)
+        n_qubits = circuit.num_qubits
+        circuit_transpiled = transpile(circuit, backend=backend)
 
         if config in ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu"]:
             circuit_transpiled.remove_final_measurements()
 
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                pmfs = np.asarray([Statevector(circuit).probabilities() for circuit in all_circuits])
+                pmfs = np.asarray([Statevector(c).probabilities() for c in all_circuits])
                 return pmfs, None
 
         elif config in ["ionQ_Harmony", "Amazon_SV1"]:

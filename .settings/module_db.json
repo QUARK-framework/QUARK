@@ -1,7 +1,7 @@
 {
-  "build_number": 9,
-  "build_date": "21-05-2024 10:16:52",
-  "git_revision_number": "16d427e5b1954cf0855dcea6c8aa5b13ee98a1f9",
+  "build_number": 10,
+  "build_date": "08-07-2024 11:17:25",
+  "git_revision_number": "93af15d4524755b5cafe28bed22747e04ed288ac",
   "modules": [
     {
       "name": "PVC",
@@ -1987,6 +1987,142 @@
       ]
     },
     {
+      "name": "ACL",
+      "class": "ACL",
+      "module": "modules.applications.optimization.ACL.ACL",
+      "submodules": [
+        {
+          "name": "MIPsolverACL",
+          "class": "MIPaclp",
+          "args": {},
+          "module": "modules.solvers.MIPsolverACL",
+          "requirements": [
+            {
+              "name": "pulp",
+              "version": "2.7.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "class": "Local",
+              "args": {},
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "QUBO",
+          "class": "Qubo",
+          "args": {},
+          "module": "modules.applications.optimization.ACL.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.23.5"
+            },
+            {
+              "name": "qiskit-optimization",
+              "version": "0.5.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "pulp",
+          "version": "2.7.0"
+        },
+        {
+          "name": "pandas",
+          "version": "2.1.0"
+        },
+        {
+          "name": "numpy",
+          "version": "1.23.5"
+        },
+        {
+          "name": "openpyxl",
+          "version": "3.1.2"
+        }
+      ]
+    },
+    {
+      "name": "MIS",
+      "class": "MIS",
+      "module": "modules.applications.optimization.MIS.MIS",
+      "submodules": [
+        {
+          "name": "NeutralAtom",
+          "class": "NeutralAtom",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "requirements": [
+            {
+              "name": "pulser",
+              "version": "0.16.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "NeutralAtomMIS",
+              "class": "NeutralAtomMIS",
+              "args": {},
+              "module": "modules.solvers.NeutralAtomMIS",
+              "requirements": [
+                {
+                  "name": "pulser",
+                  "version": "0.16.0"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "MockNeutralAtomDevice",
+                  "class": "MockNeutralAtomDevice",
+                  "args": {},
+                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "requirements": [
+                    {
+                      "name": "pulser",
+                      "version": "0.16.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
       "name": "GenerativeModeling",
       "class": "GenerativeModeling",
       "module": "modules.applications.QML.generative_modeling.GenerativeModeling",
@@ -2844,55 +2980,6 @@
                       "submodules": []
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "requirements": []
-    },
-    {
-      "name": "MIS",
-      "class": "MIS",
-      "module": "modules.applications.optimization.MIS.MIS",
-      "submodules": [
-        {
-          "name": "NeutralAtom",
-          "class": "NeutralAtom",
-          "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
-          "requirements": [
-            {
-              "name": "pulser",
-              "version": "0.16.0"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "NeutralAtomMIS",
-              "class": "NeutralAtomMIS",
-              "args": {},
-              "module": "modules.solvers.NeutralAtomMIS",
-              "requirements": [
-                {
-                  "name": "pulser",
-                  "version": "0.16.0"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "MockNeutralAtomDevice",
-                  "class": "MockNeutralAtomDevice",
-                  "args": {},
-                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
-                  "requirements": [
-                    {
-                      "name": "pulser",
-                      "version": "0.16.0"
-                    }
-                  ],
-                  "submodules": []
                 }
               ]
             }

@@ -74,7 +74,7 @@ class MinMax(Transformation): # pylint: disable=R0902
 
         return {}
 
-    def transform(self, input_data: dict, config: dict) -> (dict, float):
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Transforms the input dataset using MinMax transformation and computes histograms
         of the training dataset in the transformed space.
@@ -84,7 +84,7 @@ class MinMax(Transformation): # pylint: disable=R0902
         :param config: A dictionary with parameters specified in the Config class.
         :type config: dict
         :return: A tuple containing a dictionary with MinMax-transformed data.
-        :rtype: tuple(dict, float)
+        :rtype: dict
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
@@ -136,14 +136,14 @@ class MinMax(Transformation): # pylint: disable=R0902
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: dict) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> tuple[any, float]:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :type solution: dict
-        :return: solution transformed accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :param input_data: dictionary containing the solution
+        :type input_data: dict
+        :return: solution transformed accordingly
+        :rtype: dict
         """
         best_results = input_data["best_sample"]
         depth = input_data["depth"]

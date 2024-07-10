@@ -125,7 +125,7 @@ class GenerativeModeling(QML):
         :param kwargs: optional keyword arguments
         :type kwargs: dict
         :return: tuple with input_data and the function's computation time
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
 
         start = start_time_measurement()

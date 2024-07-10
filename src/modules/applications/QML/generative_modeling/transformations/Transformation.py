@@ -48,18 +48,18 @@ class Transformation(Core, ABC):
             }
         ]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs):
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         In this module, the preprocessing step is tansforming the data to the correct target format.
 
         :param input_data: Collected information of the benchmarking process
         :type input_data: dict
-        :param config: Config specifying the parameters of the transormation
+        :param config: Config specifying the parameters of the transformation
         :type config: dict
         :param kwargs:
         :type kwargs: dict
         :return: tuple with transformed problem and the time it took to map it
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
 
         start = start_time_measurement()
@@ -67,17 +67,18 @@ class Transformation(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         Does the reverse transformation
 
-        :param input_data:
+        :param input_data: Dictionary containing information of previously executed modules
         :type input_data: dict
-        :param config:
+        :param config: Dictionary containing additional information
         :type config: dict
-        :param kwargs:
+        :param kwargs: Dictionary containing additional information
         :type kwargs: dict
-        :return:
+        :return: tuple with the dictionary and the time the postprocessing took
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
 

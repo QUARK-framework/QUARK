@@ -61,7 +61,7 @@ class DataHandler(Core, ABC):
             }
         ]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs):
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
@@ -72,7 +72,7 @@ class DataHandler(Core, ABC):
         :param kwargs: optional additional settings
         :type kwargs: dict
         :return: tuple with transformed problem and the time it took to map it
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         output = self.data_load(input_data, config)
@@ -82,7 +82,7 @@ class DataHandler(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         In this module, the postprocessing step is transforming the data to the correct target format.
 
@@ -93,7 +93,7 @@ class DataHandler(Core, ABC):
         :param kwargs: optional additional settings
         :type kwargs: dict
         :return: tuple with an output_dictionary and the time it took
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         store_dir_iter = input_data["store_dir_iter"]
@@ -168,7 +168,7 @@ class DataHandler(Core, ABC):
         return input_data, end_time_measurement(start)
 
     @abstractmethod
-    def data_load(self, gen_mod: dict, config: dict) -> dict:
+    def data_load(self, gen_mod: dict, config: dict) -> tuple[any, float]:
         """
         Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
@@ -178,16 +178,16 @@ class DataHandler(Core, ABC):
         :param config: config specifying the parameters of the data handler
         :type config: dict
         :return: mapped problem and the time it took to create the mapping
-        :rtype: tuple(any, float)
+        :rtype: tuple[any, float]
         """
         pass
 
-    def generalisation(self) -> (dict, float):
+    def generalisation(self) -> tuple[dict, float]:
         """
         Compute generalisation metrics
 
         :return: Evaluation and the time it took to create it
-        :rtype: tuple(any, float)
+        :rtype: tuple[dict, float]
 
         """
         # Compute your metrics here
@@ -196,7 +196,7 @@ class DataHandler(Core, ABC):
         return metrics, time_taken
 
     @abstractmethod
-    def evaluate(self, solution: any) -> (dict, float):
+    def evaluate(self, solution: any) -> tuple[dict, float]:
         """
         Compute the best loss values.
 

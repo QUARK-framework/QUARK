@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 from abc import ABC, abstractmethod
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
@@ -38,7 +37,7 @@ class Circuit(Core, ABC):
         """
         pass
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs) -> (dict, float):
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         Library-agnostic implementation of the gate sequence, that will be mapped to backend such as Qiskit in the
          subsequent module.
@@ -51,7 +50,7 @@ class Circuit(Core, ABC):
         :type kwargs: dict
         :return: Dictionary including the dataset and gate sequence needed for circuit construction.  The time it took
                  generate the gate sequence.
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         circuit_constr = self.generate_gate_sequence(input_data, config)
@@ -60,7 +59,7 @@ class Circuit(Core, ABC):
             circuit_constr["generalization_metrics"] = input_data["generalization_metrics"]
         return circuit_constr, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs) -> (dict, float):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         Method that passes back information of the subsequent modules to the preceding modules. 
 
@@ -71,7 +70,7 @@ class Circuit(Core, ABC):
         :param kwargs: optional keyword arguments
         :type kwargs: dict
         :return: Same dictionary like input_data with architecture_name
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         input_data["architecture_name"] = self.architecture_name

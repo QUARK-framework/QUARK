@@ -75,7 +75,7 @@ class PIT(Transformation):  # pylint disable=R0902
         else:
             raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def transform(self, input_data: dict, config: dict) -> (dict, float):
+    def transform(self, input_data: dict, config: dict) -> tuple[dict, float]:
         """
         Transforms the input dataset using PIT transformation and computes histograms
         of the training dataset in the transformed space.
@@ -203,6 +203,15 @@ class PIT(Transformation):  # pylint disable=R0902
         return reverse_config_trans
 
     def fit_transform(self, data: np.ndarray) -> np.ndarray:
+        """
+        Takes the data points and applies the PIT
+
+        :param data: data samples
+        :type data: np.ndarray
+        :return: Transformed data points
+        :rtype: np.ndarray
+        """
+        
         df = pd.DataFrame(data)
         epit = df.copy(deep=True).transpose()
         self.reverse_epit_lookup = epit.copy(deep=True)
@@ -216,6 +225,14 @@ class PIT(Transformation):  # pylint disable=R0902
         return df.values
 
     def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> list[float]:
+        """
+        Takes one data point and applies the inverse PIT
+
+        :param values: data point
+        :type values: np.ndarray
+        :return: Data point after applying the inverse transformation
+        :rtype: list[float]
+        """
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
         # if we are an integer do not use linear interpolation
@@ -232,12 +249,21 @@ class PIT(Transformation):  # pylint disable=R0902
         return result_l * (is_int_mask + values - values_l) + result_h * (values_h - values)
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
+        """
+        Applies the inverse transformation to the full data set
+
+        :param data: data set
+        :type data: np.ndarray
+        :return: Data set after applying the inverse transformation
+        :rtype: np.ndarray
+        """
+
         res = [self._reverse_emp_integral_trans_single(row) for row in data]
         return np.array(res)[:, 0, :]
 
     def emp_integral_trans(self, data: np.ndarray) -> np.ndarray:
-        rank = np.argsort(data).argsort()  # Use np.argsort here
-        length = data.size  # Rename 'len' to 'length' to avoid conflict with built-in len()
+        rank = np.argsort(data).argsort()
+        length = data.size
         ecdf = np.linspace(0, 1, length, dtype=np.float64)
         ecdf_biject = ecdf[rank]
         return ecdf_biject

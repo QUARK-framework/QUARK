@@ -211,7 +211,7 @@ class PIT(Transformation):  # pylint disable=R0902
         :return: Transformed data points
         :rtype: np.ndarray
         """
-        
+
         df = pd.DataFrame(data)
         epit = df.copy(deep=True).transpose()
         self.reverse_epit_lookup = epit.copy(deep=True)

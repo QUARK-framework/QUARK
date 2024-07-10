@@ -418,7 +418,8 @@ class Discriminator(nn.Module):
 
     def forward(self, x) -> float:
         """
-        This function initialized the weight tensor of the linear layers with values using a Xavier uniform distribution.
+        This function initialized the weight tensor of the linear
+        layers with values using a Xavier uniform distribution.
 
         :param x: Input of the discriminator
         :type x: torch.Tensor
@@ -432,7 +433,8 @@ class Discriminator(nn.Module):
     @staticmethod
     def weights_init(m) -> None:
         """
-        This function initialized the weight tensor of the linear layers with values using a Xavier uniform distribution.
+        This function initialized the weight tensor of the linear
+        layers with values using a Xavier uniform distribution.
 
         :param m: Neural network layer
         :type m: nn.Linear
@@ -481,7 +483,8 @@ class QuantumGenerator:
 
         return samples, pdfs
 
-    def compute_gradient(self, params: np.ndarray, discriminator: torch.nn.Module, criterion: callable, label: torch.Tensor, device: str) -> np.ndarray:
+    def compute_gradient(self, params: np.ndarray, discriminator: torch.nn.Module,\
+                         criterion: callable, label: torch.Tensor, device: str) -> np.ndarray:
         """
         This function defines the forward pass of the generator
 

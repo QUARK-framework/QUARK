@@ -42,7 +42,7 @@ class CircuitCardinality(Circuit):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this Copula Circuit.
+        Returns the configurable settings for this circuit.
 
         :return:
                  .. code-block:: python
@@ -89,7 +89,7 @@ class CircuitCardinality(Circuit):
 
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
-        Returns gate sequence of copula architecture
+        Returns gate sequence of cardinality circuit architecture
     
         :param input_data: Collection of information from the previous modules
         :type input_data: dict

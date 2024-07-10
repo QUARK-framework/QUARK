@@ -73,7 +73,7 @@ class CircuitStandard(Circuit):
         }
 
     def get_default_submodule(self, option: str) -> \
-        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+            Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":

@@ -82,7 +82,7 @@ class CircuitCopula(Circuit):
         }
 
     def get_default_submodule(self, option: str) -> \
-        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+            Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":
@@ -162,7 +162,7 @@ class CircuitCopula(Circuit):
             "store_dir_iter": input_data["store_dir_iter"],
             "train_size": input_data["train_size"],
             "dataset_name": input_data["dataset_name"],
-            "binary_train":input_data["binary_train"]
+            "binary_train": input_data["binary_train"]
         }
 
         return output_dict

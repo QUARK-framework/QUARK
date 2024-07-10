@@ -144,7 +144,7 @@ class ContinuousData(DataHandler):
 
         return application_config
 
-    def evaluate(self, solution: dict, **kwargs) -> tuple[float, float]:
+    def evaluate(self, solution: dict) -> tuple[float, float]:
         """
         Calculate KL in original space.
 
@@ -170,7 +170,7 @@ class ContinuousData(DataHandler):
 
         return kl_divergence, end_time_measurement(start)
 
-    def kl_divergence(self, target, q) -> float:
+    def kl_divergence(self, target: np.ndarray, q: np.ndarray) -> float:
         """
         Function to calculate KL divergence
 

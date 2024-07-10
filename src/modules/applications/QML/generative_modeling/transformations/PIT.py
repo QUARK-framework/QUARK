@@ -12,8 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import List
-
 import numpy as np
 import pandas as pd
 
@@ -75,7 +73,7 @@ class PIT(Transformation):  # pylint disable=R0902
         else:
             raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def transform(self, input_data: dict, config: dict) -> tuple[dict, float]:
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Transforms the input dataset using PIT transformation and computes histograms
         of the training dataset in the transformed space.
@@ -84,8 +82,8 @@ class PIT(Transformation):  # pylint disable=R0902
         :type input_data: dict
         :param config: config with the parameters specified in Config class
         :type config: dict
-        :return: dict with MinMax transformation, time it took to map it
-        :rtype: tuple(dict, float)
+        :return: dict with PIT transformation, time it took to map it
+        :rtype: dict
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]

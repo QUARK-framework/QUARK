@@ -42,10 +42,10 @@ class GenerativeModeling(QML):
         """
         Returns requirements of this module
 
-        :return: list of dict with requirements of this module
+        :return: list of dicts with requirements of this module
         :rtype: list[dict]
         """
-        return []
+        return [{}]
 
     def get_solution_quality_unit(self) -> str:
         return "minimum KL"
@@ -95,7 +95,7 @@ class GenerativeModeling(QML):
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
         :param input_data: Usually not used for this method.
@@ -114,7 +114,7 @@ class GenerativeModeling(QML):
         output["store_dir_iter"] = f"{kwargs['store_dir']}/rep_{kwargs['rep_count']}"
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
+    def postprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Process the solution here, then validate and evaluate it.
 

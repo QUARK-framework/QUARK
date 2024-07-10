@@ -215,14 +215,14 @@ class QCBM(Training):
 
         return x0, options
 
-    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> dict:
+    def start_training(self, input_data: dict, config: dict, **kwargs: dict) -> dict:
         """
         This function finds the best parameters of the circuit on a transformed problem instance and returns a solution.
 
         :param input_data: A representation of the quantum machine learning model that will be trained
         :type input_data: dict
         :param config: Config specifying the parameters of the training
-        :type config: Config
+        :type config: dict
         :param kwargs: optional additional settings
         :type kwargs: dict
         :return: Dictionary including the information of previous modules as well as of the training

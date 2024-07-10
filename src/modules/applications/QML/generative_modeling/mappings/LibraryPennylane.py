@@ -203,10 +203,10 @@ class LibraryPennylane(Library):
         :type circuit: callable
         :param backend: Configured PennyLane device
         :type backend: pennylane.device
-        :param config: Name PennyLane device
+        :param config: Name of the PennyLane device
         :type config: str
         :param config_dict: Dictionary including the number of shots
-        :type config_dict: str
+        :type config_dict: dict
         :return: Method that executes the quantum circuit for a given set of parameters
         :rtype: callable
         """

@@ -48,15 +48,15 @@ class Transformation(Core, ABC):
             }
         ]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
-        In this module, the preprocessing step is tansforming the data to the correct target format.
+        In this module, the preprocessing step is transforming the data to the correct target format.
 
         :param input_data: Collected information of the benchmarking process
         :type input_data: dict
         :param config: Config specifying the parameters of the transformation
         :type config: dict
-        :param kwargs:
+        :param kwargs: Additional optional arguments
         :type kwargs: dict
         :return: tuple with transformed problem and the time it took to map it
         :rtype: tuple[dict, float]
@@ -101,7 +101,7 @@ class Transformation(Core, ABC):
         :return: Transformed data.
         :rtype: dict
         """
-        pass
+        return input_data
 
     def reverse_transform(self, input_data: dict) -> dict:
         """
@@ -197,7 +197,7 @@ class Transformation(Core, ABC):
         return points.astype(np.float32)
 
     @staticmethod
-    def generate_samples_efficient(results, bin_data, n_registers, noisy=True):
+    def generate_samples_efficient(results, bin_data: np.ndarray, n_registers: int, noisy: bool = True) -> np.ndarray:
         """
         Generate samples efficiently using numpy arrays based on measurement results and the grid bins
 

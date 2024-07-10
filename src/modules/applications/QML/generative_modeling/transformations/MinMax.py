@@ -21,7 +21,7 @@ from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 
 
-class MinMax(Transformation): # pylint: disable=R0902
+class MinMax(Transformation):  # pylint: disable=R0902
     """
     In min-max normalization each data point is shifted
     such that it lies between 0 and 1
@@ -105,7 +105,7 @@ class MinMax(Transformation): # pylint: disable=R0902
         histogram_transformed_1d = transformed_histogram_grid.flatten()
 
         solution_space = np.zeros(len(transformed_dataset), dtype=int)
-        #Initialize a variable to keep track of the current position in the result_array
+        # Initialize a variable to keep track of the current position in the result_array
         position = 0
         value = 0
         for count in histogram_transformed_1d:
@@ -136,7 +136,7 @@ class MinMax(Transformation): # pylint: disable=R0902
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: dict) -> tuple[any, float]:
+    def reverse_transform(self, input_data: dict) -> dict:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 

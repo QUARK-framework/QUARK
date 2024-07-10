@@ -196,17 +196,17 @@ class DataHandler(Core, ABC):
         return metrics, time_taken
 
     @abstractmethod
-    def evaluate(self, solution: any) -> tuple[dict, float]:
+    def evaluate(self, solution: any) -> tuple[any, float]:
         """
         Compute the best loss values.
 
-        :param solution:
+        :param solution: solution data
         :type solution: any
-        :return: bool and the time it took to create it
-        :rtype: tuple(bool, float)
+        :return: evaluation data and the time it took to create it
+        :rtype: tuple[any, float]
 
         """
-        pass
+        return None, 0.0
 
     @staticmethod
     def tb_to_pd(logdir: str, rep: str) -> None:

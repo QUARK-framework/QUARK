@@ -19,7 +19,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class Circuit(Core, ABC):
     """
-    This module is abstract base class for the libarary-agnostic gate sequence, that define a quantum circuit.
+    This module is abstract base class for the library-agnostic gate sequence, that define a quantum circuit.
     """
 
     def __init__(self, name):
@@ -30,10 +30,9 @@ class Circuit(Core, ABC):
         self.architecture_name = name
 
     @abstractmethod
-    def generate_gate_sequence(self, input_data: dict, config: dict) -> dict:
+    def generate_gate_sequence(self, input_data: dict, config: any) -> dict:
         """
         Generates the library agnostic gate sequence, a well-defined definition of the quantum circuit.
-
         """
         pass
 
@@ -45,11 +44,11 @@ class Circuit(Core, ABC):
         :param input_data: Collection of information from the previous modules
         :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
+        :type config: dict
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: Dictionary including the dataset and gate sequence needed for circuit construction.  The time it took
-                 generate the gate sequence.
+        :return: Dictionary including the dataset, the gate sequence needed for circuit construction, and the time it
+                 took generate the gate sequence.
         :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
@@ -66,7 +65,7 @@ class Circuit(Core, ABC):
         :param input_data: Collected information of the benchmarking process
         :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
+        :type config: dict
         :param kwargs: optional keyword arguments
         :type kwargs: dict
         :return: Same dictionary like input_data with architecture_name

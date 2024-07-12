@@ -45,7 +45,7 @@ class GenerativeModeling(QML):
         :return: list of dicts with requirements of this module
         :rtype: list[dict]
         """
-        return [{}]
+        return []
 
     def get_solution_quality_unit(self) -> str:
         return "minimum KL"

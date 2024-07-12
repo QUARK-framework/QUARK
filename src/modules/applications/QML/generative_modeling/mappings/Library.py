@@ -48,7 +48,7 @@ class Library(Core, ABC):
         backend: str
         n_shots: int
 
-    def preprocess(self, input_data: dict, config: Config, **kwargs):
+    def preprocess(self, input_data: dict, config: Config, **kwargs) -> tuple[dict, float]:
         """
         Base class for mapping the gate sequence to a library such as Qiskit.
 
@@ -58,18 +58,19 @@ class Library(Core, ABC):
         :type config: Config
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: Dictionary including the function to execute the quantum cicrcuit on a simulator or on quantum hardware
-        :rtype: (dict, float)
+        :return: tuple including dictionary with the function to execute the quantum circuit on a simulator or quantum
+                 hardware and the computation time of the function
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
 
         output = self.sequence_to_circuit(input_data)
-        backend = self.select_backend(config["backend"])
+        backend = self.select_backend(config["backend"], output["n_qubits"])
         output["execute_circuit"], output['circuit_transpiled'] = self.get_execute_circuit(
             output["circuit"],
             backend,
             config["backend"],
-            config_dict=config)
+            config)
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")
@@ -77,7 +78,7 @@ class Library(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         This method corresponds to the identity and passes the information of the subsequent module 
         back to the preceding module in the benchmarking process.
@@ -88,8 +89,8 @@ class Library(Core, ABC):
         :type config: Config
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: Same dictionary like input_data with architecture_name
-        :rtype: (dict, float)
+        :return: tuple with input dictionary and the computation time of the function
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         return input_data, end_time_measurement(start)
@@ -105,5 +106,5 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def select_backend(config: str):
-        pass
+    def select_backend(config: str, n_qubits: int) -> any:
+        return

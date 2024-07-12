@@ -14,14 +14,15 @@
 
 from typing import Union
 import logging
-# from qiskit_ibm_runtime import QiskitRuntimeService, Sampler
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
 from qiskit.compiler import transpile, assemble
 from qiskit.providers import Backend
+from qiskit.quantum_info import Statevector
 import numpy as np
 
 from modules.training.QCBM import QCBM
+from modules.training.QGAN import QGAN
 from modules.training.Inference import Inference
 from modules.applications.QML.generative_modeling.mappings.Library import Library
 
@@ -38,7 +39,7 @@ class LibraryQiskit(Library):
         Constructor method
         """
         super().__init__("LibraryQiskit")
-        self.submodule_options = ["QCBM", "Inference"]
+        self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -53,17 +54,9 @@ class LibraryQiskit(Library):
                 "name": "qiskit",
                 "version": "0.45.0"
             },
-            # {
-            #    "name": "qiskit_ibm_runtime",
-            #      "version": "0.10.0"
-            # },
             {
                 "name": "numpy",
                 "version": "1.23.5"
-            },
-            {
-                "name": "qiskit-ibmq-provider",
-                "version": "0.19.2"
             }
         ]
 
@@ -77,7 +70,7 @@ class LibraryQiskit(Library):
                         return {
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                           "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
+                           "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
                            "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1",
                            "simulator_statevector IBM Quantum Platform", "ibm_brisbane IBM Quantum Platform"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator\
@@ -90,18 +83,16 @@ class LibraryQiskit(Library):
                  (If the aer_statevector_simulator selected, only relevant for studying generalization)"
             }
         }
-
         """
+
         return {
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                           "cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_gpu",
+                           "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
                            "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1", "ibm_brisbane IBM Quantum Platform"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator\
                              uses the measurement probability vector, the others are shot based)"
             },
-            #TODO Discuss: Use IBM Eagle (so 1 of 3) or IBM Brisbane so one specific?
-
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
                 "description": "How many shots do you want use for estimating the PMF of the model?\
@@ -109,10 +100,12 @@ class LibraryQiskit(Library):
             }
         }
 
-    def get_default_submodule(self, option: str) -> Union[QCBM, Inference]:
+    def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
 
         if option == "QCBM":
             return QCBM()
+        elif option == "QGAN":
+            return QGAN()
         elif option == "Inference":
             return Inference()
         else:
@@ -125,7 +118,7 @@ class LibraryQiskit(Library):
 
         :param input_data: Collected information of the benchmarking process
         :type input_data: dict
-        :return: Same dictionary but the gate sequence is replaced by it Qiskit implementation
+        :return: Same dictionary but the gate sequence is replaced by its Qiskit implementation
         :rtype: dict
         """
         n_qubits = input_data["n_qubits"]
@@ -139,7 +132,7 @@ class LibraryQiskit(Library):
                 circuit.h(wires[0])
 
             elif gate == "CNOT":
-                circuit.cnot(wires[0], wires[1])
+                circuit.cx(wires[0], wires[1])
 
             elif gate == "RZ":
                 circuit.rz(Parameter(f"x_{param_counter:03d}"), wires[0])
@@ -180,21 +173,25 @@ class LibraryQiskit(Library):
 
         input_data["circuit"] = circuit
         input_data.pop("gate_sequence")
+        input_data["n_params"] = len(circuit.parameters)
+
         return input_data
 
     @staticmethod
-    def select_backend(config: str) -> dict:
+    def select_backend(config: str, n_qubits: int) -> any:
         """
         This method configures the backend
 
         :param config: Name of a backend
         :type config: str
+        :param n_qubits: Number of qubits
+        :type n_qubits: int
         :return: Configured qiskit backend
-        :rtype: qiskit.providers.Backend
+        :rtype: any
         """
-        if config == "cusvaer_simulator (only available in cuQuantum applicance)":
-            import cusvaer # pylint: disable=C0415
-            from qiskit.providers.aer import AerSimulator # pylint: disable=C0415
+        if config == "cusvaer_simulator (only available in cuQuantum appliance)":
+            import cusvaer  # pylint: disable=C0415
+            from qiskit.providers.aer import AerSimulator  # pylint: disable=C0415
             backend = AerSimulator(
                 method="statevector",
                 device="GPU",
@@ -206,36 +203,24 @@ class LibraryQiskit(Library):
             )
 
         elif config == "aer_simulator_gpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
 
         elif config == "aer_simulator_cpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
 
         elif config == "aer_statevector_simulator_gpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="GPU")
 
         elif config == "aer_statevector_simulator_cpu":
-            from qiskit import Aer # pylint: disable=C0415
+            from qiskit import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
-
-        # elif config == "simulator_statevector IBM Quantum Platform":
-            # define token here once
-            # service = QiskitRuntimeService(token='TOKEN')
-            # service = QiskitRuntimeService()
-            # backend = service.get_backend('simulator_statevector')
-
-        # elif config == "ibm_brisbane IBM Quantum Platform":
-            #define token here once
-            #service = QiskitRuntimeService(token='TOKEN')
-            # service = QiskitRuntimeService()
-            # backend = service.get_backend('ibm_brisbane')
 
         elif config == "ionQ_Harmony":
             from modules.devices.braket.Ionq import Ionq # pylint: disable=C0415
@@ -295,13 +280,12 @@ class LibraryQiskit(Library):
 
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobj = assemble(all_circuits, backend=backend)
-                jobs = backend.run(qobj)
-                pmfs = [jobs.result().get_statevector(circuit).probabilities() for circuit in all_circuits]
+                pmfs = np.asarray([Statevector(c).probabilities() for c in all_circuits])
                 return pmfs, None
 
         elif config in ["ionQ_Harmony", "Amazon_SV1"]:
-            import time as timetest # pylint: disable=C0415
+            import time as timetest  # pylint: disable=C0415
+
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
                 jobs = backend.run(all_circuits, shots=n_shots)
@@ -325,7 +309,7 @@ class LibraryQiskit(Library):
 
                 return pmfs, samples
 
-        elif config in ["cusvaer_simulator (only available in cuQuantum applicance)", "aer_simulator_cpu",
+        elif config in ["cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_cpu",
                                 "aer_simulator_gpu"]:
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
@@ -344,29 +328,6 @@ class LibraryQiskit(Library):
 
                 samples = np.asarray(samples)
                 pmfs = samples / n_shots
-                return pmfs, samples
-
-        elif config in ["simulator_statevector IBM Quantum Platform", "ibm_brisbane IBM Quantum Platform"]:
-            def execute_circuit(solutions, *kwargs):
-
-                """
-                This function will submit the circuits with different parameter individually.
-                If you want to deploy a circuit to ibm for inference, we recommend using a Jupyter Notebook.
-                """
-                # all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                # service = QiskitRuntimeService()
-                samples_dictionary = []
-                samples = []
-                for result in samples_dictionary:
-                    target_iter = np.zeros(2 ** n_qubits)
-                    result_keys = list(result.keys())
-                    result_vals = np.abs(list(result.values()))
-                    # To ensure no negative values from the quasi ditribution are taken.
-                    target_iter[result_keys] = result_vals
-                    target_iter = np.asarray(target_iter)
-                    samples.append(target_iter)
-                samples = np.asarray(samples)
-                pmfs = samples
                 return pmfs, samples
 
         return execute_circuit, circuit_transpiled

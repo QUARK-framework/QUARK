@@ -57,8 +57,8 @@ class Inference(Training):
                                     "values": [False],
                                     "custom_input": True,
                                     "postproc": str,
-                                    "description": "Please provide the parameters of a pretrained model?"
-                                },
+                                    "description": "Please provide the parameters of a pretrained model."
+                                }
                             }
         """
         return {
@@ -66,8 +66,8 @@ class Inference(Training):
                 "values": [],
                 "custom_input": True,
                 "postproc": str,
-                "description": "Please provide the parameters of a pretrained model?"
-            },
+                "description": "Please provide the parameters of a pretrained model."
+            }
         }
 
     class Config(TypedDict):
@@ -106,7 +106,6 @@ class Inference(Training):
         pmfs, samples = execute_circuit([parameters.get() if GPU else parameters])
         pmfs = np.asarray(pmfs)
         samples = self.sample_from_pmf(
-            n_states_range=self.n_states_range,
             pmf=pmfs[0],
             n_shots=input_data["n_shots"]) if samples is None else samples[0]
 

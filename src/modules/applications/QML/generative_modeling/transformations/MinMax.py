@@ -21,7 +21,7 @@ from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 
 
-class MinMax(Transformation):
+class MinMax(Transformation):  # pylint: disable=R0902
     """
     In min-max normalization each data point is shifted
     such that it lies between 0 and 1
@@ -71,21 +71,20 @@ class MinMax(Transformation):
         :return: empty dict
         :rtype: dict
         """
-        return {
 
-        }
+        return {}
 
-    def transform(self, input_data: dict, config: dict) -> (dict, float):
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Transforms the input dataset using MinMax transformation and computes histograms
         of the training dataset in the transformed space.
 
-        :param application_config: A dictionary containing information about the dataset and application configuration.
-        :type application_config: dict
+        :param input_data: A dictionary containing information about the dataset and application configuration.
+        :type input_data: dict
         :param config: A dictionary with parameters specified in the Config class.
         :type config: dict
         :return: A tuple containing a dictionary with MinMax-transformed data.
-        :rtype: tuple(dict, float)
+        :rtype: dict
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
@@ -98,7 +97,25 @@ class MinMax(Transformation):
         transformed_dataset = self.fit_transform(self.dataset)
         ranges_transformed = np.column_stack((np.min(transformed_dataset, axis=0), np.max(transformed_dataset, axis=0)))
 
-        # Compute histogram for the original dataset
+        # Compute histogram for the transformed dataset
+        transformed_histogram_grid = np.histogramdd(
+            transformed_dataset,
+            bins=self.grid_shape,
+            range=ranges_transformed)[0]
+        histogram_transformed_1d = transformed_histogram_grid.flatten()
+
+        solution_space = np.zeros(len(transformed_dataset), dtype=int)
+        # Initialize a variable to keep track of the current position in the result_array
+        position = 0
+        value = 0
+        for count in histogram_transformed_1d:
+            if count > 0:
+                solution_space[position:position+int(count)] = value
+                position += int(count)
+            value += 1
+
+        binary_strings = [np.binary_repr(x, width=self.n_qubits) for x in solution_space]
+        binary_transformed = np.array([list(map(int, s)) for s in binary_strings])
         learned_histogram = np.histogramdd(self.dataset, bins=self.grid_shape, range=ranges_original)
         self.histogram_train_original = learned_histogram[0] / np.sum(learned_histogram[0])
 
@@ -109,22 +126,24 @@ class MinMax(Transformation):
 
         self.transform_config = {
             "histogram_train": self.histogram_train,
+            "binary_train": binary_transformed,
             "dataset_name": self.dataset_name,
             "n_registers": n_registers,
             "n_qubits": self.n_qubits,
+            "train_size": input_data["train_size"],
             "store_dir_iter": input_data["store_dir_iter"]
         }
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: dict) -> (any, float):
+    def reverse_transform(self, input_data: dict) -> dict:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :type solution: dict
-        :return: solution transformed accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :param input_data: dictionary containing the solution
+        :type input_data: dict
+        :return: solution transformed accordingly
+        :rtype: dict
         """
         best_results = input_data["best_sample"]
         depth = input_data["depth"]
@@ -189,6 +208,7 @@ class MinMax(Transformation):
         self.min = data.min()
         self.max = data.max() - data.min()
         data = (data - self.min) / self.max
+
         return data
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
@@ -202,4 +222,5 @@ class MinMax(Transformation):
         """
         self.min = data.min()
         self.max = data.max() - data.min()
+
         return data * self.max + self.min

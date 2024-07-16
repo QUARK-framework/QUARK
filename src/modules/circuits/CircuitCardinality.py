@@ -12,13 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from typing import Union
 from typing import TypedDict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.QML.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
 from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
-
 
 
 class CircuitCardinality(Circuit):
@@ -33,11 +34,15 @@ class CircuitCardinality(Circuit):
         Constructor method
         """
         super().__init__("CircuitCardinality")
-        self.submodule_options = ["LibraryQiskit", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
+        self.submodule_options = [
+            "LibraryQiskit",
+            "LibraryPennylane",
+            "CustomQiskitNoisyBackend",
+            "PresetQiskitNoisyBackend"]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this Copula Circuit.
+        Returns the configurable settings for this circuit.
 
         :return:
                  .. code-block:: python
@@ -58,9 +63,12 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) -> LibraryQiskit:
+    def get_default_submodule(self, option: str) ->\
+        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
+        if option == "LibraryPennylane":
+            return LibraryPennylane()
         elif option == "PresetQiskitNoisyBackend":
             return PresetQiskitNoisyBackend()
         elif option == "CustomQiskitNoisyBackend":
@@ -81,7 +89,7 @@ class CircuitCardinality(Circuit):
 
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
-        Returns gate sequence of copula architecture
+        Returns gate sequence of cardinality circuit architecture
     
         :param input_data: Collection of information from the previous modules
         :type input_data: dict
@@ -125,11 +133,13 @@ class CircuitCardinality(Circuit):
             "gate_sequence": gate_sequence,
             "circuit_name": "Cardinality",
             "n_qubits": n_qubits,
-            "n_registers": None,
+            "n_registers": input_data["n_registers"],
             "depth": depth,
             "histogram_train": input_data["histogram_train"],
             "store_dir_iter": input_data["store_dir_iter"],
-            "dataset_name": input_data["dataset_name"]
+            "train_size": input_data["train_size"],
+            "dataset_name": input_data["dataset_name"],
+            "binary_train":input_data["binary_train"]
         }
 
         return output_dict

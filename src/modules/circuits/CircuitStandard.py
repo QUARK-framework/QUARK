@@ -12,10 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from typing import Union
 from typing import TypedDict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.QML.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
 from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
@@ -31,7 +33,11 @@ class CircuitStandard(Circuit):
         Constructor method
         """
         super().__init__("DiscreteStandard")
-        self.submodule_options = ["LibraryQiskit", "CustomQiskitNoisyBackend", "PresetQiskitNoisyBackend"]
+        self.submodule_options = [
+            "LibraryQiskit",
+            "LibraryPennylane",
+            "CustomQiskitNoisyBackend",
+            "PresetQiskitNoisyBackend"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -41,12 +47,7 @@ class CircuitStandard(Circuit):
         :return: list of dict with requirements of this module
         :rtype: list[dict]
         """
-        return [
-            {
-                "name": "scipy",
-                "version": "1.11.1"
-            }
-        ]
+        return []
 
     def get_parameter_options(self) -> dict:
         """
@@ -57,7 +58,7 @@ class CircuitStandard(Circuit):
 
                      return {
                                 "depth": {
-                                    "values": [1, 2, 3, 4, 5],
+                                    "values": [1, 2, 3],
                                     "description": "What depth do you want?"
                                 }
                             }
@@ -71,9 +72,12 @@ class CircuitStandard(Circuit):
             }
         }
 
-    def get_default_submodule(self, option: str) -> LibraryQiskit:
+    def get_default_submodule(self, option: str) -> \
+            Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
+        if option == "LibraryPennylane":
+            return LibraryPennylane()
         elif option == "PresetQiskitNoisyBackend":
             return PresetQiskitNoisyBackend()
         elif option == "CustomQiskitNoisyBackend":
@@ -132,7 +136,9 @@ class CircuitStandard(Circuit):
             "depth": depth,
             "histogram_train": input_data["histogram_train"],
             "store_dir_iter": input_data["store_dir_iter"],
-            "dataset_name": input_data["dataset_name"]
+            "train_size": input_data["train_size"],
+            "dataset_name": input_data["dataset_name"],
+            "binary_train":input_data["binary_train"]
         }
 
         return output_dict

@@ -14,7 +14,6 @@
 
 import math
 
-from typing import Tuple, Dict
 import numpy as np
 
 
@@ -22,13 +21,13 @@ class MetricsGeneralization:
     """
     A class to compute generalization metrics for generated samples based on train and solution sets.
 
-    :param train_set: Set of queries in the training set.
+    :param train_set: set of queries in the training set.
     :type train_set: np.array
-    :param train_size: The fraction of queries used for training.
+    :param train_size: the fraction of queries used for training.
     :type train_size: float
-    :param solution_set: Set of queries in the solution set.
+    :param solution_set: set of queries in the solution set.
     :type solution_set: np.array
-    :param n_qubits: The number of qubits.
+    :param n_qubits: the number of qubits.
     :type n_qubits: int
     """
 
@@ -49,12 +48,12 @@ class MetricsGeneralization:
 
         self.mask_new, self.mask_sol = self.get_masks()
 
-    def get_masks(self) -> Tuple[np.array, np.array]:
+    def get_masks(self) -> tuple[np.array, np.array]:
         """
         Method to determine the masks, on which the generalization metrics are based on 
 
-        :return: The masks needed to determine the generalization metrics for a given train and solution set
-        :rtype: tuple(np.array, np.array)
+        :return: masks needed to determine the generalization metrics for a given train and solution set
+        :rtype: tuple[np.array, np.array]
         """
 
         mask_new = np.ones(self.n_states, dtype=bool)
@@ -66,13 +65,13 @@ class MetricsGeneralization:
 
         return mask_new, mask_sol
 
-    def get_metrics(self, generated: np.array) -> Dict[str, float]:
+    def get_metrics(self, generated: np.array) -> dict:
         """
-        Method that determines all generalization metrics a given multiset of generated samples
+        Method that determines all generalization metrics of a given multiset of generated samples
 
-        :param generated: Generated samples
+        :param generated: generated samples
         :type generated: np.array
-        :return: Dictionary with generalization metrics
+        :return: dictionary with generalization metrics
         :rtype: dict
         """
         g_new = np.sum(generated[self.mask_new])
@@ -95,9 +94,9 @@ class MetricsGeneralization:
         """
         Method to determine the fidelity
 
-        :param g_new: Multi-subset of unseen queries (noisy or valid)
+        :param g_new: multi-subset of unseen queries (noisy or valid)
         :type g_new: float
-        :param g_sol: Multi-subset of unseen and valid queries
+        :param g_sol: multi-subset of unseen and valid queries
         :type g_sol: float
         :return: fidelity
         :rtype: float
@@ -108,7 +107,7 @@ class MetricsGeneralization:
         """
         Method to determine the coverage
 
-        :param g_sol_unique: Subset of unique unseen and valid queries
+        :param g_sol_unique: subset of unique unseen and valid queries
         :type g_sol_unique: float
         :return: coverage
         :rtype: float
@@ -119,7 +118,7 @@ class MetricsGeneralization:
         """
         Method to determine the normalized_rate
 
-        :param g_sol: Multi-subset of unseen and valid queries
+        :param g_sol: multi-subset of unseen and valid queries
         :type g_sol: float
         :return: normalized_rate
         :rtype: float
@@ -130,7 +129,7 @@ class MetricsGeneralization:
         """
         Method to determine the exploration
 
-        :param g_new: Multi-subset of unseen queries (noisy or valid)
+        :param g_new: multi-subset of unseen queries (noisy or valid)
         :type g_new: float
         :return: exploration
         :rtype: float
@@ -141,9 +140,9 @@ class MetricsGeneralization:
         """
         Method to determine the precision
 
-        :param g_sol: Multi-subset of unseen and valid queries
+        :param g_sol: multi-subset of unseen and valid queries
         :type g_sol: float
-        :param g_train: Number of queries that were memorized from the training set
+        :param g_train: number of queries that were memorized from the training set
         :type g_train: float
         :return: precision
         :rtype: float

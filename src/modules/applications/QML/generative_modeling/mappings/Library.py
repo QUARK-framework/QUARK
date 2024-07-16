@@ -15,8 +15,6 @@
 from abc import ABC, abstractmethod
 import logging
 from typing import TypedDict
-from qiskit import QuantumCircuit
-from qiskit.providers import Backend
 
 from utils import start_time_measurement, end_time_measurement
 
@@ -101,10 +99,37 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict):
+    def get_execute_circuit(circuit: any, backend: any, config: str, config_dict: dict) -> (
+            tuple)[any, any]:
+        """
+        This method combines the circuit implementation and the selected backend and returns a function that will be
+        called during training.
+
+        :param circuit: Implementation of the quantum circuit
+        :type circuit: any
+        :param backend: Configured backend
+        :type backend: any
+        :param config: Name of the PennyLane device
+        :type config: str
+        :param config_dict: Dictionary including the number of shots
+        :type config_dict: dict
+        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
+        transpiled circuit
+        :rtype: tuple[any, any]
+        """
         pass
 
     @staticmethod
     @abstractmethod
     def select_backend(config: str, n_qubits: int) -> any:
+        """
+        This method configures the backend
+
+        :param config: Name of a backend
+        :type config: str
+        :param n_qubits: Number of qubits
+        :type n_qubits: int
+        :return: Configured backend
+        :rtype: any
+        """
         return

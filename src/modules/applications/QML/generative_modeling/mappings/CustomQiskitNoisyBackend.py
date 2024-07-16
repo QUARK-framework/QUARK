@@ -91,54 +91,53 @@ class CustomQiskitNoisyBackend(Library):
                  .. code-block:: python
 
                         return {
-            "backend": {
-                "values": ["aer_simulator_gpu", "aer_simulator_cpu"],
-                "description": "Which backend do you want to use? "
-                               "In the NoisyQiskit module only aer_simulators can be used."
-            },
+                            "backend": {
+                                "values": ["aer_simulator_gpu", "aer_simulator_cpu"],
+                                "description": "Which backend do you want to use? "
+                                               "In the NoisyQiskit module only aer_simulators can be used."
+                            },
 
-            "simulation_method": {
-                "values": ["automatic", "statevector", "density_matrix", "cpu_mps"],  # TODO Change names!
-                "description": "What simulation method should be used?"
-            },
+                            "simulation_method": {
+                                "values": ["automatic", "statevector", "density_matrix", "cpu_mps"],  # TODO New names!
+                                "description": "What simulation method should be used?"
+                            },
 
-            "n_shots": {
-                "values": [100, 1000, 10000, 1000000],
-                "description": "How many shots do you want use for estimating the PMF of the model?"
-                # (If the aer_statevector_simulator selected, only relevant for studying generalization)"
-            },
+                            "n_shots": {
+                                "values": [100, 1000, 10000, 1000000],
+                                "description": "How many shots do you want use for estimating the PMF of the model?"
+                                # (If 'statevector' was selected as simulation_method, 'n_shots' is only relevant for
+                                # studying generalization)"
+                            },
 
-            "transpile_optimization_level": {
-                "values": [1, 2, 3, 0],
-                "description": "Switch between different optimization levels in the Qiskit transpile routine. "
-                               "1: light optimization, 2: heavy optimization, 3: even heavier optimization, "
-                               "0: no optimization. Level 1 recommended as standard option."
-            },
+                            "transpile_optimization_level": {
+                                "values": [1, 2, 3, 0],
+                                "description": "Switch between different optimization levels in the Qiskit transpile"
+                                "routine. 1: light optimization, 2: heavy optimization, 3: even heavier optimization,"
+                                "0: no optimization. Level 1 recommended as standard option."
+                            },
 
-            "noise_configuration": {
-                "values": ['Custom configurations', 'No noise'],
-                "description": "What noise configuration do you want to use?"
-            },
-            "custom_readout_error": {
-                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2],
-                "description": "Add a custom readout error."
-            },
-            "two_qubit_depolarizing_errors": {
-                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2]
-                ,
-                "description": "Add a custom 2-qubit gate depolarizing error."
-            },
-            "one_qubit_depolarizing_errors": {
-                "values": [0, 0.0001, 0.0005, 0.001, 0.005, 0.007, 0.01, 0.02]
-                ,
-                "description": "Add a 1-qubit gate depolarizing error."
-            },
-            "qubit_layout": {
-                # "values": [None, 'linear', 'circle', 'fully_connected', 'ibm_brisbane'],
-                "values": [None, 'linear', 'circle', 'fully_connected'],
-                "description": "How should the qubits be connected in the simulated chip: coupling_map "
-            }
-        }
+                            "noise_configuration": {
+                                "values": ['Custom configurations', 'No noise'],
+                                "description": "What noise configuration do you want to use?"
+                            },
+                            "custom_readout_error": {
+                                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2],
+                                "description": "Add a custom readout error."
+                            },
+                            "two_qubit_depolarizing_errors": {
+                                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2],
+                                "description": "Add a custom 2-qubit gate depolarizing error."
+                            },
+                            "one_qubit_depolarizing_errors": {
+                                "values": [0, 0.0001, 0.0005, 0.001, 0.005, 0.007, 0.01, 0.02],
+                                "description": "Add a 1-qubit gate depolarizing error."
+                            },
+                            "qubit_layout": {
+                                # "values": [None, 'linear', 'circle', 'fully_connected', 'ibm_brisbane'],
+                                "values": [None, 'linear', 'circle', 'fully_connected'],
+                                "description": "How should the qubits be connected in the simulated chip: coupling_map "
+                            }
+                        }
 
         """
         return {
@@ -149,20 +148,21 @@ class CustomQiskitNoisyBackend(Library):
             },
 
             "simulation_method": {
-                "values": ["automatic", "statevector", "density_matrix", "cpu_mps"],  # TODO Change names!
+                "values": ["automatic", "statevector", "density_matrix", "cpu_mps"],  # TODO New names!
                 "description": "What simulation method should be used?"
             },
 
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
                 "description": "How many shots do you want use for estimating the PMF of the model?"
-                # (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+                # (If 'statevector' was selected as simulation_method, 'n_shots' is only relevant for
+                # studying generalization)"
             },
 
             "transpile_optimization_level": {
                 "values": [1, 2, 3, 0],
-                "description": "Switch between different optimization levels in the Qiskit transpile routine. "
-                               "1: light optimization, 2: heavy optimization, 3: even heavier optimization, "
+                "description": "Switch between different optimization levels in the Qiskit transpile"
+                               "routine. 1: light optimization, 2: heavy optimization, 3: even heavier optimization,"
                                "0: no optimization. Level 1 recommended as standard option."
             },
 
@@ -175,13 +175,11 @@ class CustomQiskitNoisyBackend(Library):
                 "description": "Add a custom readout error."
             },
             "two_qubit_depolarizing_errors": {
-                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2]
-                ,
+                "values": [0, 0.005, 0.01, 0.02, 0.05, 0.07, 0.1, 0.2],
                 "description": "Add a custom 2-qubit gate depolarizing error."
             },
             "one_qubit_depolarizing_errors": {
-                "values": [0, 0.0001, 0.0005, 0.001, 0.005, 0.007, 0.01, 0.02]
-                ,
+                "values": [0, 0.0001, 0.0005, 0.001, 0.005, 0.007, 0.01, 0.02],
                 "description": "Add a 1-qubit gate depolarizing error."
             },
             "qubit_layout": {
@@ -289,8 +287,8 @@ class CustomQiskitNoisyBackend(Library):
 
         return backend
 
-    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
-            -> callable:  # pylint: disable=W0221
+    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend,  # pylint: disable=W0221
+                            config: str, config_dict: dict) -> tuple[any, any]:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
@@ -303,8 +301,9 @@ class CustomQiskitNoisyBackend(Library):
         :type config: str
         :param config_dict: Contains information about config
         :type config_dict: dict
-        :return: Method that executes the quantum circuit for a given set of parameters
-        :rtype: callable
+        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
+        transpiled circuit
+        :rtype: tuple[any, any]
         """
         n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits
@@ -340,6 +339,11 @@ class CustomQiskitNoisyBackend(Library):
                 pmfs = samples / n_shots
 
                 return pmfs, samples
+
+        else:
+            logging.error(f"Unknown backend option selected: {config}")
+            logging.error("Run terminates with Exception error.")
+            raise Exception
 
         return execute_circuit, circuit_transpiled
 

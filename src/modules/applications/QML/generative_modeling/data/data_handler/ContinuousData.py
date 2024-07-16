@@ -114,7 +114,7 @@ class ContinuousData(DataHandler):
         """
 
         data_set: int
-        train_size: int
+        train_size: float
 
     def data_load(self, gen_mod: dict, config: Config) -> dict:
 

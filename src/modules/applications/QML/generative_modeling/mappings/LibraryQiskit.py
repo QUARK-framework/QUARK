@@ -255,7 +255,7 @@ class LibraryQiskit(Library):
 
     @staticmethod
     def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
-            -> callable:  # pylint: disable=W0221,R0915
+            -> tuple[any, any]:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
@@ -268,8 +268,9 @@ class LibraryQiskit(Library):
         :type config: str
         :param config_dict: Contains information about config
         :type config_dict: dict
-        :return: Method that executes the quantum circuit for a given set of parameters
-        :rtype: callable
+        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
+        transpiled circuit
+        :rtype: tuple[any, any]
         """
         n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits
@@ -310,7 +311,7 @@ class LibraryQiskit(Library):
                 return pmfs, samples
 
         elif config in ["cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_cpu",
-                                "aer_simulator_gpu"]:
+                        "aer_simulator_gpu"]:
             def execute_circuit(solutions):
                 all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
                 qobjs = assemble(all_circuits, backend=backend)
@@ -329,5 +330,10 @@ class LibraryQiskit(Library):
                 samples = np.asarray(samples)
                 pmfs = samples / n_shots
                 return pmfs, samples
+
+        else:
+            logging.error(f"Unknown backend option selected: {config}")
+            logging.error("Run terminates with Exception error.")
+            raise Exception
 
         return execute_circuit, circuit_transpiled

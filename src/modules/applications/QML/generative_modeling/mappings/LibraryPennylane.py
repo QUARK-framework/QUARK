@@ -194,7 +194,7 @@ class LibraryPennylane(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: callable, backend: qml.device, config: str, config_dict: dict) -> callable:
+    def get_execute_circuit(circuit: callable, backend: qml.device, config: str, config_dict: dict) -> tuple[any, any]:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.
@@ -207,8 +207,8 @@ class LibraryPennylane(Library):
         :type config: str
         :param config_dict: Dictionary including the number of shots
         :type config_dict: dict
-        :return: Method that executes the quantum circuit for a given set of parameters
-        :rtype: callable
+        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters twice
+        :rtype: tuple[any, any]
         """
 
         n_shots = config_dict["n_shots"]

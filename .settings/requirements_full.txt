@@ -24,7 +24,10 @@ qiskit-optimization==0.5.0
 pyqubo==1.4.0
 dwave_networkx==0.8.13
 qiskit==0.45.0
+pulp==2.7.0
 pandas==1.5.2
+openpyxl==3.1.2
+pulser==0.16.0
 cma==3.3.0
 matplotlib==3.7.5
 tensorboard==2.13.0
@@ -34,4 +37,3 @@ jax==0.4.30
 jaxlib==0.4.30
 qiskit_aer==0.11.2
 qiskit-ibmq-provider==0.19.2
-pulser==0.16.0

@@ -61,7 +61,7 @@ class DataHandler(Core, ABC):
             }
         ]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs):
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
@@ -72,7 +72,7 @@ class DataHandler(Core, ABC):
         :param kwargs: optional additional settings
         :type kwargs: dict
         :return: tuple with transformed problem and the time it took to map it
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         output = self.data_load(input_data, config)
@@ -82,7 +82,7 @@ class DataHandler(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         In this module, the postprocessing step is transforming the data to the correct target format.
 
@@ -93,7 +93,7 @@ class DataHandler(Core, ABC):
         :param kwargs: optional additional settings
         :type kwargs: dict
         :return: tuple with an output_dictionary and the time it took
-        :rtype: (dict, float)
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         store_dir_iter = input_data["store_dir_iter"]
@@ -120,7 +120,7 @@ class DataHandler(Core, ABC):
 
         # Save metrics per iteration
         if "inference" not in input_data.keys():
-            DataHandler.tb_to_pd(logdir=store_dir_iter, rep=kwargs['rep_count'])
+            DataHandler.tb_to_pd(logdir=store_dir_iter, rep=str(kwargs['rep_count']))
             self.metrics.add_metric_batch(
                 {"metrics_pandas": os.path.relpath(f"{store_dir_iter}/data.pkl", current_directory)})
             if self.generalization_mark is not None:
@@ -148,6 +148,7 @@ class DataHandler(Core, ABC):
                 f"{store_dir_iter}/best_parameters_{kwargs['rep_count']}.npy", current_directory)})
 
             # Save training results
+            input_data.pop("circuit_transpiled")
             with open(f"{store_dir_iter}/training_results-{kwargs['rep_count']}.pkl", 'wb') as f:
                 pickle.dump(input_data, f)
 
@@ -167,7 +168,7 @@ class DataHandler(Core, ABC):
         return input_data, end_time_measurement(start)
 
     @abstractmethod
-    def data_load(self, gen_mod: dict, config: dict) -> dict:
+    def data_load(self, gen_mod: dict, config: dict) -> tuple[any, float]:
         """
         Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
@@ -177,18 +178,16 @@ class DataHandler(Core, ABC):
         :param config: config specifying the parameters of the data handler
         :type config: dict
         :return: mapped problem and the time it took to create the mapping
-        :rtype: tuple(any, float)
+        :rtype: tuple[any, float]
         """
         pass
 
-    def generalisation(self) -> (dict, float):
+    def generalisation(self) -> tuple[dict, float]:
         """
         Compute generalisation metrics
 
-        :param solution:
-        :type solution: any
         :return: Evaluation and the time it took to create it
-        :rtype: tuple(any, float)
+        :rtype: tuple[dict, float]
 
         """
         # Compute your metrics here
@@ -197,17 +196,17 @@ class DataHandler(Core, ABC):
         return metrics, time_taken
 
     @abstractmethod
-    def evaluate(self, solution: any) -> (dict, float):
+    def evaluate(self, solution: any) -> tuple[any, float]:
         """
-        Compute best loss values.
+        Compute the best loss values.
 
-        :param solution:
+        :param solution: solution data
         :type solution: any
-        :return: bool and the time it took to create it
-        :rtype: tuple(bool, float)
+        :return: evaluation data and the time it took to create it
+        :rtype: tuple[any, float]
 
         """
-        pass
+        return None, 0.0
 
     @staticmethod
     def tb_to_pd(logdir: str, rep: str) -> None:
@@ -217,11 +216,13 @@ class DataHandler(Core, ABC):
 
         :param logdir: path to the log directory containing TensorBoard event files
         :type logdir: str
-
+        :param rep: repetition counter
+        :type rep: str
         """
         event_acc = EventAccumulator(logdir)
         event_acc.Reload()
         tags = event_acc.Tags()
+        data = []
         tag_data = {}
         for tag in tags['scalars']:
             data = event_acc.Scalars(tag)

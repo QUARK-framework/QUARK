@@ -215,7 +215,12 @@ class QiskitQAOA(Solver):
                 algorithm = NumPyMinimumEigensolver()
 
         # run actual optimization algorithm
-        result = algorithm.compute_minimum_eigenvalue(ising_op)
+        try:
+            result = algorithm.compute_minimum_eigenvalue(ising_op)
+        except ValueError as e:
+            logging.error(f"The following ValueError occurred in module QiskitQAOA: {e}")
+            logging.error("The benchmarking run terminates with exception.")
+            raise Exception("Please refer to the logged error message.") from e
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
 

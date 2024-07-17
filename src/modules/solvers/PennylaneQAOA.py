@@ -62,11 +62,11 @@ class PennylaneQAOA(Solver):
         return [
             {
                 "name": "pennylane",
-                "version": "0.28.0"
+                "version": "0.36.0"
             },
             {
                 "name": "pennylane-lightning",
-                "version": "0.28.0"
+                "version": "0.36.0"
             },
             {
                 "name": "amazon-braket-pennylane-plugin",

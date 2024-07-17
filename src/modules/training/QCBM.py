@@ -28,7 +28,7 @@ comm = get_comm()
 
 class QCBM(Training):
     """
-    This module optmizes the paramters of quantum circuit using CMA-ES. 
+    This module optimizes the parameters of quantum circuit using CMA-ES.
     This training method is referred to as quantum circuit born machine (QCBM).
     """
 
@@ -63,6 +63,10 @@ class QCBM(Training):
             {
                 "name": "cma",
                 "version": "3.3.0"
+            },
+            {
+                "name": "matplotlib",
+                "version": "3.7.5"
             },
             {
                 "name": "tensorboard",
@@ -102,7 +106,7 @@ class QCBM(Training):
                         "values": [False],
                         "custom_input": True,
                         "postproc": str,
-                        "description": "Please provide the parameters of a pretrained model?"
+                        "description": "Please provide the parameters of a pretrained model."
                     },
 
                     "loss": {
@@ -131,7 +135,7 @@ class QCBM(Training):
                 "values": [False],
                 "custom_input": True,
                 "postproc": str,
-                "description": "Please provide the parameters of a pretrained model?"
+                "description": "Please provide the parameters of a pretrained model."
             },
 
             "loss": {
@@ -162,16 +166,16 @@ class QCBM(Training):
     def get_default_submodule(self, option: str) -> Core:
         raise ValueError("This module has no submodules.")
 
-    def setup_training(self, input_data, config) -> tuple:
+    def setup_training(self, input_data: dict, config: Config) -> tuple[float, dict]:
         """
         Method to configure the training setup including CMA-ES and tensorboard.
 
-        :param input_data: A representation of the quntum machine learning model that will be trained
+        :param input_data: a representation of the quantum machine learning model that will be trained
         :type input_data: dict
         :param config: Config specifying the parameters of the training
         :type config: dict
-        :return: Updated input_data 
-        :rtype: dict
+        :return: random initial parameter and options for CMA-ES
+        :rtype: tuple[float, dict]
         """
 
         logging.info(
@@ -182,7 +186,6 @@ class QCBM(Training):
         if self.study_generalization:
             self.generalization_metrics = input_data["generalization_metrics"]
             self.generalization_metrics.n_shots = input_data["n_shots"]
-            input_data["store_dir_iter"] += f"_alpha{self.generalization_metrics.train_size}_depth{input_data['depth']}"
 
         self.writer = SummaryWriter(input_data["store_dir_iter"])
 
@@ -195,7 +198,7 @@ class QCBM(Training):
         else:
             raise NotImplementedError("Loss function not implemented")
 
-        n_params = len(input_data["circuit"].parameters)
+        n_params = input_data["n_params"]
         x0 = (np.random.rand(n_params) - 0.5) * np.pi
         if config["pretrained"] != "False":
             parameters = np.load(config["pretrained"])
@@ -212,13 +215,13 @@ class QCBM(Training):
 
         return x0, options
 
-    def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> (dict, float):
+    def start_training(self, input_data: dict, config: dict, **kwargs: dict) -> dict:
         """
         This function finds the best parameters of the circuit on a transformed problem instance and returns a solution.
 
-        :param input_data: A representation of the quntum machine learning model that will be trained
+        :param input_data: A representation of the quantum machine learning model that will be trained
         :type input_data: dict
-        :param config: Config specifying the paramters of the training
+        :param config: Config specifying the parameters of the training
         :type config: dict
         :param kwargs: optional additional settings
         :type kwargs: dict
@@ -226,7 +229,7 @@ class QCBM(Training):
         :rtype: dict
         """
 
-        size = None # TODO: define correct mpi size
+        size = None
         input_data['MPI_size'] = size
         input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         x0, options = self.setup_training(input_data, config)
@@ -285,13 +288,11 @@ class QCBM(Training):
         self.writer.close()
 
         input_data["best_parameter"] = es.result[0]
-        best_sample = self.sample_from_pmf(self.n_states_range,
-                                           best_pmf.get() if GPU else best_pmf,  # pylint: disable=E0606
+        best_sample = self.sample_from_pmf(best_pmf.get() if GPU else best_pmf, # pylint: disable=E0606
                                            n_shots=input_data["n_shots"])
-        input_data["best_sample"] = best_sample.get() if GPU else best_sample  # pylint: disable=E1101
+        input_data["best_sample"] = best_sample.get() if GPU else best_sample # pylint: disable=E1101
 
         return input_data
-
 
     def data_visualization(self, loss_epoch, pmfs_model, samples, epoch):
         index = loss_epoch.argmin()
@@ -300,7 +301,6 @@ class QCBM(Training):
 
             if samples is None:
                 counts = self.sample_from_pmf(
-                    n_states_range=self.n_states_range,
                     pmf=best_pmf.get() if GPU else best_pmf,
                     n_shots=self.generalization_metrics.n_shots)
             else:

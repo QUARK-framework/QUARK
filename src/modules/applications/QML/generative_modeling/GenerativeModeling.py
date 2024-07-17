@@ -42,7 +42,7 @@ class GenerativeModeling(QML):
         """
         Returns requirements of this module
 
-        :return: list of dict with requirements of this module
+        :return: list of dicts with requirements of this module
         :rtype: list[dict]
         """
         return []
@@ -81,53 +81,51 @@ class GenerativeModeling(QML):
             }
         }
 
-    def generate_problem(self, config) -> dict:
+    def generate_problem(self, config: dict) -> dict:
 
         """
         The number of qubits is chosen for this problem.
 
-        :param config:
+        :param config: dictionary including the number of qubits
         :type config: dict
-        :return: n_qubits
+        :return: dictionary with the number of qubits
         :rtype: dict
         """
 
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs):
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
         :param input_data: Usually not used for this method.
         :type input_data: dict
-
         :param config: config for the problem creation.
-        :param config: 
-        
+        :type config: dict
         :param kwargs: Optional additional arguments
         :type kwargs: dict
-
         :param kwargs: optional additional arguments.
 
-        :return:
+        :return: tuple containing qubit number and the function's computation time
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         output = self.generate_problem(config)
         output["store_dir_iter"] = f"{kwargs['store_dir']}/rep_{kwargs['rep_count']}"
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
-        Process the solution here, then validate and evluate it.
+        Process the solution here, then validate and evaluate it.
 
-        :param input_data: A representation of the quntum machine learning model that will be trained
+        :param input_data: A representation of the quantum machine learning model that will be trained
         :type input_data: dict
         :param config: Config specifying the parameters of the training
         :type config: dict
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: tuple with same dictionary like input_data and the time it
-        :rtype: (dict, float)
+        :return: tuple with input_data and the function's computation time
+        :rtype: tuple[dict, float]
         """
 
         start = start_time_measurement()

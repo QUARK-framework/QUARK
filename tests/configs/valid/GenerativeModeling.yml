@@ -1,12 +1,15 @@
 application:
   config:
     n_qubits:
-    - 8
+    - 6
   name: GenerativeModeling
   submodules:
   - config:
       data_set:
-      - Stocks_2D
+      - MG_2D
+      train_size:
+      - 0.1
+      - 1.0
     name: Continuous Data
     submodules:
     - config: {}
@@ -19,7 +22,7 @@ application:
         submodules:
         - config:
             backend:
-            - aer_simulator_cpu
+            - aer_statevector_simulator_cpu
             n_shots:
             - 100
           name: LibraryQiskit
@@ -28,7 +31,122 @@ application:
               loss:
               - KL
               max_evaluations:
-              - 10
+              - 50
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+          - config:
+              batch_size:
+              - 2000
+              device:
+              - cpu
+              epochs:
+              - 2
+              learning_rate_discriminator:
+              - 0.1
+              learning_rate_generator:
+              - 0.1
+              loss:
+              - KL
+              pretrained:
+              - false
+            name: QGAN
+            submodules: []
+        - config:
+            backend:
+            - default.qubit
+            - lightning.qubit
+            n_shots:
+            - 1000
+          name: LibraryPennylane
+          submodules:
+          - config:
+              loss:
+              - KL
+              max_evaluations:
+              - 20
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+          - config:
+              batch_size:
+              - 2000
+              device:
+              - cpu
+              epochs:
+              - 2
+              learning_rate_discriminator:
+              - 0.1
+              learning_rate_generator:
+              - 0.1
+              loss:
+              - KL
+              pretrained:
+              - false
+            name: QGAN
+            submodules: []
+        - config:
+            backend:
+            - aer_simulator_cpu
+            custom_readout_error:
+            - 0.005
+            n_shots:
+            - 100
+            noise_configuration:
+            - Custom configurations
+            one_qubit_depolarizing_errors:
+            - 0.0001
+            qubit_layout:
+            - circle
+            simulation_method:
+            - density_matrix
+            transpile_optimization_level:
+            - 1
+            two_qubit_depolarizing_errors:
+            - 0.005
+          name: CustomQiskitNoisyBackend
+          submodules:
+          - config:
+              loss:
+              - KL
+              max_evaluations:
+              - 20
+              population_size:
+              - 5
+              pretrained:
+              - 'False'
+              sigma:
+              - 0.01
+            name: QCBM
+            submodules: []
+        - config:
+            backend:
+            - aer_simulator_cpu
+            n_shots:
+            - 100
+            noise_configuration:
+            - fake_almaden V2 20 Qubits
+            simulation_method:
+            - cpu_mps
+            transpile_optimization_level:
+            - 1
+          name: PresetQiskitNoisyBackend
+          submodules:
+          - config:
+              loss:
+              - NLL
+              max_evaluations:
+              - 20
               population_size:
               - 5
               pretrained:
@@ -42,46 +160,21 @@ application:
       submodules:
       - config:
           depth:
-          - 1
-        name: CircuitStandard
-        submodules:
-        - config:
-            backend:
-            - aer_statevector_simulator_cpu
-            n_shots:
-            - 100
-          name: LibraryQiskit
-          submodules:
-          - config:
-              loss:
-              - NLL
-              max_evaluations:
-              - 10
-              population_size:
-              - 5
-              pretrained:
-              - 'False'
-              sigma:
-              - 0.01
-            name: QCBM
-            submodules: []
-      - config:
-          depth:
           - 2
         name: CircuitCardinality
         submodules:
         - config:
             backend:
-            - aer_statevector_simulator_cpu
+            - lightning.qubit
             n_shots:
             - 100
-          name: LibraryQiskit
+          name: LibraryPennylane
           submodules:
           - config:
               loss:
               - KL
               max_evaluations:
-              - 10
+              - 20
               population_size:
               - 5
               pretrained:
@@ -92,8 +185,7 @@ application:
             submodules: []
   - config:
       train_size:
-      - 0.1
-      - 1.0
+      - 0.7
     name: Discrete Data
     submodules:
     - config:
@@ -103,22 +195,26 @@ application:
       submodules:
       - config:
           backend:
-          - aer_statevector_simulator_cpu
+          - aer_simulator_cpu
           n_shots:
           - 100
         name: LibraryQiskit
         submodules:
         - config:
+            batch_size:
+            - 2000
+            device:
+            - cpu
+            epochs:
+            - 2
+            learning_rate_discriminator:
+            - 0.1
+            learning_rate_generator:
+            - 0.1
             loss:
             - KL
-            max_evaluations:
-            - 10
-            population_size:
-            - 5
             pretrained:
-            - 'False'
-            sigma:
-            - 0.01
-          name: QCBM
+            - true
+          name: QGAN
           submodules: []
 repetitions: 1

@@ -15,8 +15,6 @@
 from abc import ABC, abstractmethod
 import logging
 from typing import TypedDict
-from qiskit import QuantumCircuit
-from qiskit.providers import Backend
 
 from utils import start_time_measurement, end_time_measurement
 
@@ -48,7 +46,7 @@ class Library(Core, ABC):
         backend: str
         n_shots: int
 
-    def preprocess(self, input_data: dict, config: Config, **kwargs):
+    def preprocess(self, input_data: dict, config: Config, **kwargs) -> tuple[dict, float]:
         """
         Base class for mapping the gate sequence to a library such as Qiskit.
 
@@ -58,18 +56,19 @@ class Library(Core, ABC):
         :type config: Config
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: Dictionary including the function to execute the quantum cicrcuit on a simulator or on quantum hardware
-        :rtype: (dict, float)
+        :return: tuple including dictionary with the function to execute the quantum circuit on a simulator or quantum
+                 hardware and the computation time of the function
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
 
         output = self.sequence_to_circuit(input_data)
-        backend = self.select_backend(config["backend"])
+        backend = self.select_backend(config["backend"], output["n_qubits"])
         output["execute_circuit"], output['circuit_transpiled'] = self.get_execute_circuit(
             output["circuit"],
             backend,
             config["backend"],
-            config_dict=config)
+            config)
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")
@@ -77,7 +76,7 @@ class Library(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         This method corresponds to the identity and passes the information of the subsequent module 
         back to the preceding module in the benchmarking process.
@@ -88,8 +87,8 @@ class Library(Core, ABC):
         :type config: Config
         :param kwargs: optional keyword arguments
         :type kwargs: dict
-        :return: Same dictionary like input_data with architecture_name
-        :rtype: (dict, float)
+        :return: tuple with input dictionary and the computation time of the function
+        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         return input_data, end_time_measurement(start)
@@ -100,10 +99,37 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict):
+    def get_execute_circuit(circuit: any, backend: any, config: str, config_dict: dict) -> (
+            tuple)[any, any]:
+        """
+        This method combines the circuit implementation and the selected backend and returns a function that will be
+        called during training.
+
+        :param circuit: Implementation of the quantum circuit
+        :type circuit: any
+        :param backend: Configured backend
+        :type backend: any
+        :param config: Name of the PennyLane device
+        :type config: str
+        :param config_dict: Dictionary including the number of shots
+        :type config_dict: dict
+        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
+        transpiled circuit
+        :rtype: tuple[any, any]
+        """
         pass
 
     @staticmethod
     @abstractmethod
-    def select_backend(config: str):
-        pass
+    def select_backend(config: str, n_qubits: int) -> any:
+        """
+        This method configures the backend
+
+        :param config: Name of a backend
+        :type config: str
+        :param n_qubits: Number of qubits
+        :type n_qubits: int
+        :return: Configured backend
+        :rtype: any
+        """
+        return

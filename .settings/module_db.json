@@ -1,7 +1,7 @@
 {
-  "build_number": 9,
-  "build_date": "21-05-2024 10:16:52",
-  "git_revision_number": "16d427e5b1954cf0855dcea6c8aa5b13ee98a1f9",
+  "build_number": 10,
+  "build_date": "12-07-2024 13:49:05",
+  "git_revision_number": "d53c6f4cef9b3cf0826a40608cab265da548f5eb",
   "modules": [
     {
       "name": "PVC",
@@ -181,11 +181,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -847,11 +847,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -1220,11 +1220,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -1626,11 +1626,11 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.36.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
@@ -1987,6 +1987,142 @@
       ]
     },
     {
+      "name": "ACL",
+      "class": "ACL",
+      "module": "modules.applications.optimization.ACL.ACL",
+      "submodules": [
+        {
+          "name": "MIPsolverACL",
+          "class": "MIPaclp",
+          "args": {},
+          "module": "modules.solvers.MIPsolverACL",
+          "requirements": [
+            {
+              "name": "pulp",
+              "version": "2.7.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "class": "Local",
+              "args": {},
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "QUBO",
+          "class": "Qubo",
+          "args": {},
+          "module": "modules.applications.optimization.ACL.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.23.5"
+            },
+            {
+              "name": "qiskit-optimization",
+              "version": "0.5.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "pulp",
+          "version": "2.7.0"
+        },
+        {
+          "name": "pandas",
+          "version": "2.1.0"
+        },
+        {
+          "name": "numpy",
+          "version": "1.23.5"
+        },
+        {
+          "name": "openpyxl",
+          "version": "3.1.2"
+        }
+      ]
+    },
+    {
+      "name": "MIS",
+      "class": "MIS",
+      "module": "modules.applications.optimization.MIS.MIS",
+      "submodules": [
+        {
+          "name": "NeutralAtom",
+          "class": "NeutralAtom",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "requirements": [
+            {
+              "name": "pulser",
+              "version": "0.16.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "NeutralAtomMIS",
+              "class": "NeutralAtomMIS",
+              "args": {},
+              "module": "modules.solvers.NeutralAtomMIS",
+              "requirements": [
+                {
+                  "name": "pulser",
+                  "version": "0.16.0"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "MockNeutralAtomDevice",
+                  "class": "MockNeutralAtomDevice",
+                  "args": {},
+                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "requirements": [
+                    {
+                      "name": "pulser",
+                      "version": "0.16.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
       "name": "GenerativeModeling",
       "class": "GenerativeModeling",
       "module": "modules.applications.QML.generative_modeling.GenerativeModeling",
@@ -2044,10 +2180,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2064,6 +2196,140 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2130,6 +2396,10 @@
                               "version": "3.3.0"
                             },
                             {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
                               "name": "tensorboard",
                               "version": "2.13.0"
                             },
@@ -2192,6 +2462,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2240,12 +2514,7 @@
                   "class": "CircuitStandard",
                   "args": {},
                   "module": "modules.circuits.CircuitStandard",
-                  "requirements": [
-                    {
-                      "name": "scipy",
-                      "version": "1.11.1"
-                    }
-                  ],
+                  "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
@@ -2260,10 +2529,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2280,6 +2545,140 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2346,6 +2745,10 @@
                               "version": "3.3.0"
                             },
                             {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
                               "name": "tensorboard",
                               "version": "2.13.0"
                             },
@@ -2408,6 +2811,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2457,10 +2864,6 @@
                         {
                           "name": "numpy",
                           "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
                         }
                       ],
                       "submodules": [
@@ -2477,6 +2880,140 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.36.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.13.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.23.5"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.0.1"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2543,6 +3080,10 @@
                               "version": "3.3.0"
                             },
                             {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
                               "name": "tensorboard",
                               "version": "2.13.0"
                             },
@@ -2605,6 +3146,10 @@
                             {
                               "name": "cma",
                               "version": "3.3.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
@@ -2670,10 +3215,6 @@
                     {
                       "name": "numpy",
                       "version": "1.23.5"
-                    },
-                    {
-                      "name": "qiskit-ibmq-provider",
-                      "version": "0.19.2"
                     }
                   ],
                   "submodules": [
@@ -2690,6 +3231,140 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "QGAN",
+                      "class": "QGAN",
+                      "args": {},
+                      "module": "modules.training.QGAN",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "torch",
+                          "version": "2.0.1"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "LibraryPennylane",
+                  "class": "LibraryPennylane",
+                  "args": {},
+                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                  "requirements": [
+                    {
+                      "name": "pennylane",
+                      "version": "0.36.0"
+                    },
+                    {
+                      "name": "pennylane-lightning",
+                      "version": "0.36.0"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.23.5"
+                    },
+                    {
+                      "name": "jax",
+                      "version": "0.4.30"
+                    },
+                    {
+                      "name": "jaxlib",
+                      "version": "0.4.30"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.13.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "QGAN",
+                      "class": "QGAN",
+                      "args": {},
+                      "module": "modules.training.QGAN",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.23.5"
+                        },
+                        {
+                          "name": "torch",
+                          "version": "2.0.1"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",
@@ -2756,6 +3431,10 @@
                           "version": "3.3.0"
                         },
                         {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
                           "name": "tensorboard",
                           "version": "2.13.0"
                         },
@@ -2818,6 +3497,10 @@
                         {
                           "name": "cma",
                           "version": "3.3.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",

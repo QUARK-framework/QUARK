@@ -21,8 +21,6 @@ Optionen hierfür wären beispielsweise:
 	\item Vergleich der Zielfunktionswerte der besten Quantencomputerlösungen mit Random-Sampling
 \end{itemize}
 
-
-
 \subsection{Kombinationen der Metriken}
 
 \subsubsection{Time-to-solution}
@@ -52,15 +50,15 @@ QPack ist auf folgende Optimierungsprobleme zugeschnitten:
 Der wesentliche Aspekt, der bei Q-Pack dazukommt, ist die Scalability, also die zusätzliche Auskunft über die Performance bei verschiedenen Problemgrößen.
 
 
-\subsection{Energie-verbrauch / -kosten}
-Die bei der Ausführung auf dem Quantencomputer verbrauchte Energie ist ebenfalls eine interessante Metrik. Jedoch ist dies schwer herauszufinden. (siehe Abbas, https://arxiv.org/abs/2312.02279 )
+\subsection{Energieverbrauch / -kosten}
+Die bei der Ausführung auf dem Quantencomputer verbrauchte Energie ist ebenfalls eine interessante Metrik. Jedoch ist dies schwer herauszufinden.\footnote{(siehe Abbas, https://arxiv.org/abs/2312.02279 )}
 
 
 \subsection{Hardware-spezifische Metriken}
 
 
 \subsubsection{Quantum Volume}
-Von IBM Quantum. [https://quantum-computing.ibm.com, 2021. accessed 2021-05-15] vorgestellt, ist das Quantum Volume genau $2^{n} $, wobei n die Länge als auch die Höhe des größten Quanten-Schaltkreises ist, der mit mehr als einer $ \frac{2}{3} $-Wahrscheinlichkeit erfolgreich ausgeführt wird.
+Von IBM Quantum\footnote{https://quantum-computing.ibm.com, 2021. accessed 2021-05-15} vorgestellt, ist das Quantum Volume genau $2^{n} $, wobei n die Länge als auch die Höhe des größten Quanten-Schaltkreises ist, der mit mehr als einer $ \frac{2}{3} $-Wahrscheinlichkeit erfolgreich ausgeführt wird.
 Beispielsweise, wenn ein QC einen Schaltkreis mit Länge und Höhe 5 erfolgreich ausführt, aber nicht mehr mit Länge und Höhe 6, dann ist das $ QV(QC) = 2^{5} = 32 $
 
 \subsubsection{Gate Error Rates}

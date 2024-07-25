@@ -1,7 +1,7 @@
 {
-  "build_number": 10,
-  "build_date": "12-07-2024 13:49:05",
-  "git_revision_number": "d53c6f4cef9b3cf0826a40608cab265da548f5eb",
+  "build_number": 11,
+  "build_date": "25-07-2024 14:35:24",
+  "git_revision_number": "509f42f13d6657fbc84365b61c543386374e85cb",
   "modules": [
     {
       "name": "PVC",
@@ -44,7 +44,7 @@
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.11.1"
                 },
                 {
                   "name": "numpy",
@@ -710,7 +710,7 @@
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.11.1"
                 },
                 {
                   "name": "numpy",
@@ -1083,7 +1083,7 @@
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.11.1"
                 },
                 {
                   "name": "numpy",
@@ -1489,7 +1489,7 @@
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.11.1"
                 },
                 {
                   "name": "numpy",
@@ -2061,7 +2061,7 @@
         },
         {
           "name": "pandas",
-          "version": "2.1.0"
+          "version": "1.5.2"
         },
         {
           "name": "numpy",
@@ -2224,7 +2224,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2325,7 +2325,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2573,7 +2573,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2674,7 +2674,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2908,7 +2908,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -3009,7 +3009,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.0.1"
+                              "version": "2.2.0"
                             },
                             {
                               "name": "matplotlib",
@@ -3259,7 +3259,7 @@
                         },
                         {
                           "name": "torch",
-                          "version": "2.0.1"
+                          "version": "2.2.0"
                         },
                         {
                           "name": "matplotlib",
@@ -3360,7 +3360,7 @@
                         },
                         {
                           "name": "torch",
-                          "version": "2.0.1"
+                          "version": "2.2.0"
                         },
                         {
                           "name": "matplotlib",

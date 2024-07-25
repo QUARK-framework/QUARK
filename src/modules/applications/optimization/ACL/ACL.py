@@ -69,7 +69,7 @@ assignment problem.
             },
             {
                 "name": "pandas",
-                "version": "2.1.0"
+                "version": "1.5.2"
             },
             {
                 "name": "numpy",

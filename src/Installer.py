@@ -56,7 +56,7 @@ class Installer:
             {"name": "inquirer", "version": "3.1.2"},
             {"name": "packaging", "version": "23.1"},
             {"name": "pyyaml", "version": "6.0"},
-            {"name": "typing-extensions", "version": "4.6.3"},
+            {"name": "typing-extensions", "version": "4.8.0"},
             {"name": "sphinx", "version": "6.2.1"},
             {"name": "sphinx-rtd-theme", "version": "1.2.0"},
         ]

@@ -3,7 +3,7 @@ networkx==2.8.8
 inquirer==3.1.2
 packaging==23.1
 pyyaml==6.0
-typing-extensions==4.6.3
+typing-extensions==4.8.0
 sphinx==6.2.1
 sphinx-rtd-theme==1.2.0
 numpy==1.23.5

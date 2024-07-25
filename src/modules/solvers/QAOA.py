@@ -53,7 +53,7 @@ class QAOA(Solver):
             },
             {
                 "name": "scipy",
-                "version": "1.10.1"
+                "version": "1.11.1"
             },
             {
                 "name": "numpy",

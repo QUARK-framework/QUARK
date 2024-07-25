@@ -91,7 +91,7 @@ class QGAN(Training): # pylint: disable=R0902
             },
             {
                 "name": "torch",
-                "version": "2.0.1"
+                "version": "2.2.0"
             },
             {
                 "name": "matplotlib",

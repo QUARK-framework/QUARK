@@ -4,7 +4,7 @@ name: Create and publish a QUARK Docker image
 # Configures this workflow to run every time a change is pushed to the branch called `main` or `dev`.
 on:
   push:
-    branches: ['main', 'dev']
+    branches: ['main', 'dev', 'dev_docker_bugfix']
   release:
     types: [ published ]
 

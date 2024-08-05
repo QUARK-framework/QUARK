@@ -1,1 +1,1 @@
-*.txt filter=lfs diff=lfs merge=lfs -text
+src/modules/applications/optimization/PVC/data/reference_data.txt filter=lfs diff=lfs merge=lfs -text

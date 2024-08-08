@@ -1,1 +1,6 @@
-src/modules/applications/optimization/PVC/data/reference_data.txt filter=lfs diff=lfs merge=lfs -text
+*.txt filter=lfs diff=lfs merge=lfs -text
+**\.settings\requirements_full.txt filter= diff= merge= text
+*.npy filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
+*.gpickle filter=lfs diff=lfs merge=lfs -text
+*.tsp filter=lfs diff=lfs merge=lfs -text

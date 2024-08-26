@@ -40,7 +40,7 @@ class MIS(Optimization):
         Constructor method
         """
         super().__init__("MIS")
-        self.submodule_options = ["NeutralAtom"]
+        self.submodule_options = ["QIRO","NeutralAtom"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -57,7 +57,10 @@ class MIS(Optimization):
         return "Set size"
 
     def get_default_submodule(self, option: str) -> Core:
-        if option == "NeutralAtom":
+        if option == "QIRO":
+            from modules.applications.optimization.MIS.mappings.QIRO import QIRO # pylint: disable=C0415
+            return QIRO()
+        elif option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
@@ -88,6 +91,18 @@ class MIS(Optimization):
 
         """
         return {
+            "graphType": {
+                "values": ["hexagonal", "erdosRenyi"],
+                "postproc": str,
+                "description": "Do you want a hexagonal or erdos-renyi Graph?"
+            },
+            "seed": {
+                "values": [0, 99, 137, 1205],
+                "custom_input": True,
+                "postproc": int,
+                "description": "Do you want to set a seed (0 == No)?"
+            },
+
             "size": {
                 "values": [1, 5, 10, 15],
                 "custom_input": True,
@@ -101,14 +116,14 @@ class MIS(Optimization):
                 "allow_ranges": True,
                 "postproc": float,
                 "description": "How much space do you want between your nodes,"
-                               " relative to Rydberg distance?"
+                               " relative to Rydberg distance? (p for Erdos-Renyi graph)"
             },
             "filling_fraction": {
                 "values": [x/10 for x in range(2, 11, 2)],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float,
-                "description": "What should the filling fraction be?"
+                "description": "What should the filling fraction be? (irrelevant for Erdos-Renyi graph)"
             },
         }
 
@@ -148,21 +163,40 @@ class MIS(Optimization):
             for x in ['size', 'spacing', 'filling_fraction']
         )
 
+        graphType = config.get('graphType')
+        gseed = config.get("seed")
         size = config.get('size')
-        spacing = config.get('spacing') * R_rydberg
+        spacing = config.get('spacing') 
         filling_fraction = config.get('filling_fraction')
 
-        graph = generate_hexagonal_graph(
+        if graphType =="erdosRenyi":
+            if gseed == 0:
+                graph = networkx.erdos_renyi_graph(size, spacing )
+
+            else:
+                graph = networkx.erdos_renyi_graph(size, spacing, seed = gseed )
+                
+        elif graphType =="hexagonal":
+        
+            graph = generate_hexagonal_graph(
             n_nodes=size,
-            spacing=spacing,
+            spacing=spacing * R_rydberg,
             filling_fraction=filling_fraction,
         )
+        
+        if graphType == "hexagonal":
+            logging.info("Created MIS problem with the generate hexagonal "
+                        "graph method, with the following attributes:")
+            logging.info(f" - Graph size: {size}")
+            logging.info(f" - Spacing: {spacing * R_rydberg}")
+            logging.info(f" - Filling fraction: {filling_fraction}")
+        else:
+            logging.info("Created MIS problem with the nx.erdos_renyi "
+                        "graph method, with the following attributes:")
+            logging.info(f" - Graph size: {size}")
+            logging.info(f" - p: {spacing}")
+            logging.info(f" - seed: {gseed}")
 
-        logging.info("Created MIS problem with the generate hexagonal "
-                     "graph method, with the following attributes:")
-        logging.info(f" - Graph size: {size}")
-        logging.info(f" - Spacing: {spacing}")
-        logging.info(f" - Filling fraction: {filling_fraction}")
 
         self.application = graph
         return graph.copy()

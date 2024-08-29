@@ -3,6 +3,7 @@
   "build_date": "25-07-2024 14:35:24",
   "git_revision_number": "509f42f13d6657fbc84365b61c543386374e85cb",
   "modules": [
+    
     {
       "name": "PVC",
       "class": "PVC",
@@ -2073,7 +2074,6 @@
         }
       ]
     },
-    
     {
       "name": "GenerativeModeling",
       "class": "GenerativeModeling",
@@ -3532,49 +3532,7 @@
               ]
             }
           ]
-        },
-        {
-          "name": "QIRO",
-          "class": "QIRO",
-          "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.QIRO",
-          "requirements": [
-            {
-              "name": "qrisp",
-              "version": "0.4"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "QIROMIS",
-              "class": "QIROSolver",
-              "args": {},
-              "module": "modules.solvers.QrispQIRO",
-              "requirements": [
-                {
-                  "name": "qrisp",
-                  "version": "0.4"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "QrispSimulator",
-                  "class": "QrispSimulator",
-                  "args": {},
-                  "module": "modules.devices.QrispSimulator.QrispSimulator",
-                  "requirements": [
-                    {
-                      "name": "qrisp",
-                      "version": "0.4"
-                    }
-                  ],
-                  "submodules": []
-                }
-              ]
-            }
-          ]
         }
-
       ],
       "requirements": []
     }

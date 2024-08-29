@@ -3493,6 +3493,46 @@
       "module": "modules.applications.optimization.MIS.MIS",
       "submodules": [
         {
+          "name": "QIRO",
+          "class": "QIRO",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.QIRO",
+          "requirements": [
+            {
+              "name": "qrisp",
+              "version": "0.4"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QIROSolver",
+              "class": "QIROSolver",
+              "args": {},
+              "module": "modules.solvers.QrispQIRO",
+              "requirements": [
+                {
+                  "name": "qrisp",
+              "version": "0.4"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "QrispSimulator",
+                  "class": "QrispSimulator",
+                  "args": {},
+                  "module": "modules.devices.QrispSimulator.QrispSimulator",
+                  "requirements": [
+                    {
+                      "name": "qrisp",
+                      "version": "0.4"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },{
           "name": "NeutralAtom",
           "class": "NeutralAtom",
           "args": {},

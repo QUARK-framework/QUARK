@@ -94,7 +94,7 @@ class QIRO(Mapping):
     def get_default_submodule(self, option: str) -> Core:
 
         if option == "QIRO":
-            from modules.solvers.QrispQIRO import QIRO  # pylint: disable=C0415
-            return QIRO()
+            from modules.solvers.QrispQIRO import QIROSolver  # pylint: disable=C0415
+            return QIROSolver()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

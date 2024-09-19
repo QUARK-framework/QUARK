@@ -3534,55 +3534,6 @@
         }
       ],
       "requirements": []
-    },
-    {
-      "name": "MIS",
-      "class": "MIS",
-      "module": "modules.applications.optimization.MIS.MIS",
-      "submodules": [
-        {
-          "name": "NeutralAtom",
-          "class": "NeutralAtom",
-          "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
-          "requirements": [
-            {
-              "name": "pulser",
-              "version": "0.16.0"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "NeutralAtomMIS",
-              "class": "NeutralAtomMIS",
-              "args": {},
-              "module": "modules.solvers.NeutralAtomMIS",
-              "requirements": [
-                {
-                  "name": "pulser",
-                  "version": "0.16.0"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "MockNeutralAtomDevice",
-                  "class": "MockNeutralAtomDevice",
-                  "args": {},
-                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
-                  "requirements": [
-                    {
-                      "name": "pulser",
-                      "version": "0.16.0"
-                    }
-                  ],
-                  "submodules": []
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "requirements": []
     }
   ]
 }

@@ -37,6 +37,8 @@ jobs:
           swap-storage: true
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Checkout LFS files
+        uses: git lfs pull
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx

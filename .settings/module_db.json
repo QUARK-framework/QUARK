@@ -1,7 +1,7 @@
 {
-  "build_number": 11,
-  "build_date": "25-07-2024 14:35:24",
-  "git_revision_number": "509f42f13d6657fbc84365b61c543386374e85cb",
+  "build_number": 12,
+  "build_date": "26-08-2024 15:42:55",
+  "git_revision_number": "3736d2cfe331ca476acaec1979e9dee24f58bc2f",
   "modules": [
     {
       "name": "PVC",
@@ -2111,6 +2111,50 @@
                     {
                       "name": "pulser",
                       "version": "0.16.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
+      "name": "SCP",
+      "class": "SCP",
+      "module": "modules.applications.optimization.SCP.SCP",
+      "submodules": [
+        {
+          "name": "qubovertQUBO",
+          "class": "QubovertQUBO",
+          "args": {},
+          "module": "modules.applications.optimization.SCP.mappings.qubovertQUBO",
+          "requirements": [
+            {
+              "name": "qubovert",
+              "version": "1.2.5"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.0.0"
                     }
                   ],
                   "submodules": []

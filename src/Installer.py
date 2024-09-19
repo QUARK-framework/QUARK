@@ -45,9 +45,9 @@ class Installer:
             {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+            {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"},
-            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [

@@ -124,11 +124,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -148,11 +148,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -246,11 +246,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -270,11 +270,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -790,11 +790,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -814,11 +814,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -912,11 +912,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -936,11 +936,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1163,11 +1163,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1187,11 +1187,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1285,11 +1285,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1309,11 +1309,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1569,11 +1569,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1593,11 +1593,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1691,11 +1691,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1715,11 +1715,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [

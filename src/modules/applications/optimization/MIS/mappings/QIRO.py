@@ -31,7 +31,7 @@ class QIRO(Mapping):
         Constructor method
         """
         super().__init__()
-        self.submodule_options = ["QIRO"]
+        self.submodule_options = ["QrispQIRO"]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -82,10 +82,6 @@ class QIRO(Mapping):
         """
         start = start_time_measurement()
 
-        #pos = networkx.get_node_attributes(problem, 'pos')
-        #register = pulser.Register(pos)
-        # wth is thius register
-        register = range(len(list(problem.nodes())))
         qiro_mapped_problem = {
             'graph': problem,
         }
@@ -93,7 +89,7 @@ class QIRO(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
 
-        if option == "QIRO":
+        if option == "QrispQIRO":
             from modules.solvers.QrispQIRO import QIRO  # pylint: disable=C0415
             return QIRO()
         else:

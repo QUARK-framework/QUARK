@@ -79,6 +79,7 @@ class ConfigManager:
         self.application = _get_instance_with_sub_options(app_modules, app_name)
 
         application_config = self.application.get_parameter_options()
+        more_app_config = {}
 
         application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
@@ -86,6 +87,12 @@ class ConfigManager:
         submodule_answer = checkbox(key='submodules',
                                     message="What submodule do you want?",
                                     choices=self.application.get_available_submodule_options())
+        for option in submodule_answer["submodules"]:
+            if self.application.depending_parameters:
+                more_app_config = self.application.get_depending_parameters(option, more_app_config)
+                more_app_config = (ConfigManager._query_for_config
+                                   (more_app_config, f"(Option for {self.application.__class__.__name__})"))
+                application_config = application_config | more_app_config
         self.config = {
             "application": {
                 "name": app_name,
@@ -121,6 +128,7 @@ class ConfigManager:
         module_config = ConfigManager._query_for_config(module_config,
                                                         f"(Option for {module.__class__.__name__})")
         available_submodules = module.get_available_submodule_options()
+        more_module_config = {}
 
         if available_submodules:
             if len(available_submodules) == 1:
@@ -131,6 +139,12 @@ class ConfigManager:
                 submodule_answer = checkbox(key='submodules',
                                             message="What submodule do you want?",
                                             choices=available_submodules)
+                for option in submodule_answer:
+                    if module.depending_parameters:
+                        more_module_config = module.get_depending_parameters(option, more_module_config)
+                        more_module_config = (ConfigManager._query_for_config
+                                              (more_module_config, f"(Option for {module.__class__.__name__})"))
+                        module_config = module_config | more_module_config
         else:
             submodule_answer = {"submodules": []}
 

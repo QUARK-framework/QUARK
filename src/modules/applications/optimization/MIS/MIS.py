@@ -11,7 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+import logging
 from typing import TypedDict
 import pickle
 
@@ -19,8 +19,7 @@ import networkx
 
 from modules.applications.Application import *
 from modules.applications.optimization.Optimization import Optimization
-from modules.applications.optimization.MIS.data.graph_layouts import \
-    generate_hexagonal_graph
+from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
 
 # define R_rydberg
@@ -40,7 +39,8 @@ class MIS(Optimization):
         Constructor method
         """
         super().__init__("MIS")
-        self.submodule_options = ["QIRO","NeutralAtom"]
+        self.submodule_options = ["QIRO", "NeutralAtom"]
+        self.depending_parameters = True
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -75,57 +75,91 @@ class MIS(Optimization):
 
                       return {
                                 "size": {
-                                    "values": list(range(1, 18)),
+                                    "values": [1, 5, 10, 15],
+                                    "custom_input": True,
+                                    "allow_ranges": True,
+                                    "postproc": int,
                                     "description": "How large should your graph be?"
-                                },
-                                "spacing": {
-                                    "values": [x/10 for x in range(1, 11)],
-                                    "description": "How much space do you want between your nodes,"
-                                                " relative to Rydberg distance?"
-                                },
-                                "filling_fraction": {
-                                    "values": [x/10 for x in range(1, 11)],
-                                    "description": "What should the filling fraction be?"
-                                },
+                                }
                             }
 
         """
         return {
-            "graphType": {
-                "values": ["hexagonal", "erdosRenyi"],
-                "postproc": str,
-                "description": "Do you want a hexagonal or erdos-renyi Graph?"
-            },
-            "seed": {
-                "values": [0, 99, 137, 1205],
-                "custom_input": True,
-                "postproc": int,
-                "description": "Do you want to set a seed (0 == No)?"
-            },
-
             "size": {
                 "values": [1, 5, 10, 15],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": int,
                 "description": "How large should your graph be?"
-            },
-            "spacing": {
-                "values": [x/10 for x in range(3, 11, 2)],
-                "custom_input": True,
-                "allow_ranges": True,
-                "postproc": float,
-                "description": "How much space do you want between your nodes,"
-                               " relative to Rydberg distance? (p for Erdos-Renyi graph)"
-            },
-            "filling_fraction": {
-                "values": [x/10 for x in range(2, 11, 2)],
-                "custom_input": True,
-                "allow_ranges": True,
-                "postproc": float,
-                "description": "What should the filling fraction be? (irrelevant for Erdos-Renyi graph)"
-            },
+            }
         }
+
+    def get_depending_parameters(self, option: str, config: dict) -> dict:
+        """
+        Returns parameters necessary for chosen problem option.
+
+        :param option: The chosen option
+        :type option: str
+        :param config: The current config
+        :type config: dict
+        :return: The parameters for the given option
+        :rtype: dict
+        """
+        if option == "QIRO":
+            more_params = {
+                "graph_type": {
+                    "values": ["hexagonal", "erdosRenyi"],
+                    "postproc": str,
+                    "description": "Do you want a hexagonal or an Erdos-Renyi graph"
+                                   "(currently only implemented for QIRO)?"
+                },
+                "seed": {
+                    "values": [0, 99, 137, 1205],
+                    "custom_input": True,
+                    "postproc": int,
+                    "description": "Do you want to set a seed (0 == No)?"
+                },
+                "spacing": {
+                    "values": [x/10 for x in range(3, 11, 2)],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": float,
+                    "description": "How much space do you want between your nodes,"
+                                   " relative to the Rydberg distance? (p for Erdos-Renyi graph)"
+                },
+                "filling_fraction": {
+                    "values": [x/10 for x in range(2, 11, 2)],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": float,
+                    "description": "What should the filling fraction be? (irrelevant for Erdos-Renyi graph)"
+                },
+            }
+        elif option == "NeutralAtom":
+            more_params = {
+                "spacing": {
+                    "values": [x / 10 for x in range(3, 11, 2)],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": float,
+                    "description": "How much space do you want between your nodes,"
+                                   " relative to Rydberg distance?"
+                },
+                "filling_fraction": {
+                    "values": [x / 10 for x in range(2, 11, 2)],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": float,
+                    "description": "What should the filling fraction be?"
+                },
+            }
+        else:
+            raise NotImplementedError(f"Option {option} not implemented")
+        param_to_return = {}
+        for key in more_params:
+            if key not in config:
+                param_to_return[key] = more_params[key]
+        return param_to_return
 
     class Config(TypedDict):
         """
@@ -153,52 +187,36 @@ class MIS(Optimization):
         """
 
         if config is None:
-            config = {"size": 3,
-                      "spacing": 1,
-                      "filling_fraction": 0.5}
+            logging.warning("No config provided, using default values: graph_type='hexagonal', size=3, spacing=1,"
+                            "filling_fraction=0.5")
+            config = {"graph_type": "hexagonal", "size": 3, "spacing": 1, "filling_fraction": 0.5}
 
-        # check if config has the necessary information
-        assert all(
-            x in config.keys()
-            for x in ['size', 'spacing', 'filling_fraction']
-        )
-
-        graphType = config.get('graphType')
-        gseed = config.get("seed")
+        graph_type = config.get('graph_type')
         size = config.get('size')
-        spacing = config.get('spacing') 
-        filling_fraction = config.get('filling_fraction')
+        spacing = config.get('spacing')
 
-        if graphType =="erdosRenyi":
+        if graph_type == "erdosRenyi":
+            gseed = config.get("seed")
             if gseed == 0:
-                graph = networkx.erdos_renyi_graph(size, spacing )
+                graph = networkx.erdos_renyi_graph(size, spacing)
 
             else:
-                graph = networkx.erdos_renyi_graph(size, spacing, seed = gseed )
-                
-        elif graphType =="hexagonal":
-        
-            graph = generate_hexagonal_graph(
-            n_nodes=size,
-            spacing=spacing * R_rydberg,
-            filling_fraction=filling_fraction,
-        )
-        
-        if graphType == "hexagonal":
-            logging.info("Created MIS problem with the generate hexagonal "
-                        "graph method, with the following attributes:")
-            logging.info(f" - Graph size: {size}")
-            logging.info(f" - Spacing: {spacing * R_rydberg}")
-            logging.info(f" - Filling fraction: {filling_fraction}")
-        else:
-            logging.info("Created MIS problem with the nx.erdos_renyi "
-                        "graph method, with the following attributes:")
+                graph = networkx.erdos_renyi_graph(size, spacing, seed=gseed)
+            logging.info("Created MIS problem with the nx.erdos_renyi graph method, with the following attributes:")
             logging.info(f" - Graph size: {size}")
             logging.info(f" - p: {spacing}")
             logging.info(f" - seed: {gseed}")
 
+        else:
+            filling_fraction = config.get('filling_fraction')
+            graph = generate_hexagonal_graph(n_nodes=size, spacing=spacing * R_rydberg, filling_fraction=
+                                             filling_fraction)
+            logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")
+            logging.info(f" - Graph size: {size}")
+            logging.info(f" - Spacing: {spacing * R_rydberg}")
+            logging.info(f" - Filling fraction: {filling_fraction}")
 
-        self.application = graph
+        self.graph = graph
         return graph.copy()
 
     def process_solution(self, solution: list) -> (list, float):
@@ -226,8 +244,8 @@ class MIS(Optimization):
         start = start_time_measurement()
         is_valid = True
 
-        nodes = list(self.application.nodes())
-        edges = list(self.application.edges())
+        nodes = list(self.graph.nodes())
+        edges = list(self.graph.edges())
 
         # TODO: Check if the solution is maximal?
 
@@ -276,4 +294,4 @@ class MIS(Optimization):
 
     def save(self, path: str, iter_count: int) -> None:
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
-            pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.graph, file, pickle.HIGHEST_PROTOCOL)

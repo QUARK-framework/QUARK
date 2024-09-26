@@ -37,6 +37,7 @@ class Core(ABC):
         """
         self.submodule_options = []
         self.sub_options = []
+        self.depending_parameters = False
         self.preprocessed_input = None
         self.postprocessed_input = None
         if name is None:
@@ -67,6 +68,20 @@ class Core(ABC):
         :return: Available settings for this application
         :rtype: dict
         """
+
+    def get_depending_parameters(self, option: str, config: dict) -> dict:
+        """
+        If the module has parameters depending on certain options, this method should return the parameters for the
+        given option.
+
+        :param option: The chosen option
+        :type option: str
+        :param config: Current config dictionary
+        :type config: dict
+        :return: The parameters for the given option
+        :rtype: dict
+        """
+        return {}
 
     @final
     def get_submodule(self, option: str) -> any:

@@ -118,22 +118,7 @@ class MIS(Optimization):
                     "custom_input": True,
                     "postproc": int,
                     "description": "Do you want to set a seed (0 == No)?"
-                },
-                "spacing": {
-                    "values": [x/10 for x in range(3, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "How much space do you want between your nodes,"
-                                   " relative to the Rydberg distance? (p for Erdos-Renyi graph)"
-                },
-                "filling_fraction": {
-                    "values": [x/10 for x in range(2, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "What should the filling fraction be? (irrelevant for Erdos-Renyi graph)"
-                },
+                }
             }
         elif option == "NeutralAtom":
             more_params = {

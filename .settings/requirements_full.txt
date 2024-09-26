@@ -18,7 +18,7 @@ amazon-braket-pennylane-plugin==1.5.2
 dwave-samplers==1.0.0
 nnf==0.4.1
 qubovert==1.2.5
-python-sat==0.1.7.dev26
+#python-sat==0.1.7.dev26
 more-itertools==9.0.0
 qiskit-optimization==0.5.0
 pyqubo==1.4.0
@@ -37,4 +37,4 @@ jax==0.4.30
 jaxlib==0.4.30
 qiskit_aer==0.11.2
 qiskit-ibmq-provider==0.19.2
-qrisp
+qrisp==0.4.12

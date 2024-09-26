@@ -49,7 +49,7 @@ class QIROSolver(Solver):
         return [
             {
                 "name": "qrisp",
-                "version": "0.49"
+                "version": "0.4.12"
             }
         ]
 

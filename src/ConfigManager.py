@@ -83,9 +83,11 @@ class ConfigManager:
         application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
 
-        submodule_answer = checkbox(key='submodules',
-                                    message="What submodule do you want?",
-                                    choices=self.application.get_available_submodule_options())
+        submodule_options = self.application.get_available_submodule_options()
+
+        submodule_answer = checkbox(key='submodules', message="What submodule do you want?",
+                                    choices=submodule_options)
+
         self.config = {
             "application": {
                 "name": app_name,
@@ -122,17 +124,8 @@ class ConfigManager:
                                                         f"(Option for {module.__class__.__name__})")
         available_submodules = module.get_available_submodule_options()
 
-        if available_submodules:
-            if len(available_submodules) == 1:
-                logging.info(
-                    f"Skipping asking for submodule, since only 1 option ({available_submodules[0]}) is available.")
-                submodule_answer = {"submodules": [available_submodules[0]]}
-            else:
-                submodule_answer = checkbox(key='submodules',
-                                            message="What submodule do you want?",
-                                            choices=available_submodules)
-        else:
-            submodule_answer = {"submodules": []}
+        submodule_answer = checkbox(key='submodules', message="What submodule do you want?",
+                                    choices=available_submodules)
 
         return {
             "name": module_friendly_name,

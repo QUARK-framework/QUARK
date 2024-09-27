@@ -102,11 +102,11 @@ Example for an application, which should reside under ``src/modules/applications
                 return [
                     {
                         "name": "networkx",
-                        "version": "2.8.8"
+                        "version": "3.2.1"
                     },
                     {
                         "name": "numpy",
-                        "version": "1.24.1"
+                        "version": "1.26.4"
                     }
                 ]
 

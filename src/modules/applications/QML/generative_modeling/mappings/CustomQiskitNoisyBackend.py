@@ -14,25 +14,21 @@
 from typing import Union
 import logging
 from time import perf_counter
-
-from qiskit import QuantumCircuit
-from qiskit.circuit import Parameter
-from qiskit.compiler import transpile, assemble
-from qiskit.transpiler import CouplingMap
-from qiskit.providers import Backend
-from qiskit import Aer
-from qiskit_aer import AerSimulator
-from qiskit_aer import noise
-from qiskit_aer.noise import NoiseModel
-# from qiskit_ibm_runtime import QiskitRuntimeService
 import numpy as np
+
+from qiskit.circuit import QuantumCircuit, Parameter
+from qiskit.compiler import transpile
+from qiskit.transpiler import PassManager, CouplingMap, Layout
+from qiskit.transpiler.passes import SetLayout
+from qiskit.providers import Backend
+from qiskit_aer import Aer, AerSimulator, noise
+from qiskit_aer.noise import NoiseModel
 
 from modules.training.QCBM import QCBM
 from modules.training.Inference import Inference
 from modules.applications.QML.generative_modeling.mappings.Library import Library
 
 logging.getLogger("NoisyQiskit").setLevel(logging.WARNING)
-
 
 def split_string(s):
     return s.split(' ', 1)[0]
@@ -63,23 +59,15 @@ class CustomQiskitNoisyBackend(Library):
         return [
             {
                 "name": "qiskit",
-                "version": "0.45.0"
+                "version": "1.1.0"
             },
-            # {
-            #    "name": "qiskit_ibm_runtime",
-            #      "version": "0.10.0"
-            # },
             {
                 "name": "qiskit_aer",
-                "version": "0.11.2"
+                "version": "0.15.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
-            },
-            {
-                "name": "qiskit-ibmq-provider",
-                "version": "0.19.2"
+                "version": "1.26.4"
             }
         ]
 
@@ -308,24 +296,35 @@ class CustomQiskitNoisyBackend(Library):
         n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits
         start = perf_counter()
-
         backend = self.decompile_noisy_config(config_dict, n_qubits)
         logging.info(f'Backend in Use: {backend=}')
         optimization_level = self.get_transpile_routine(config_dict['transpile_optimization_level'])
         seed_transp = 42 # Remove seed if wanted
         logging.info(f'Using {optimization_level=} with seed: {seed_transp}')
-        circuit_transpiled = transpile(circuit, backend=backend, optimization_level=optimization_level,
-                                       seed_transpiler=seed_transp)
+        coupling_map = self.get_coupling_map(config_dict, n_qubits)
+        print(f"Generated coupling map: {coupling_map}")
+        # Create a manual layout if needed (you can customize the layout based on your use case)
+        manual_layout = Layout({circuit.qubits[i]: i for i in range(n_qubits)})
+
+        # Define the PassManager
+        pass_manager = PassManager()
+        pass_manager.append(SetLayout(manual_layout))
+
+        # Run pass manager on the circuit manually (prior to transpiling)
+        circuit_passed = pass_manager.run(circuit)
+
+        # Now transpile the circuit after running the pass manager
+        circuit_transpiled = transpile(circuit_passed, backend=backend, optimization_level=optimization_level,
+                                       seed_transpiler=seed_transp,coupling_map=coupling_map)
         logging.info(f'Circuit operations before transpilation: {circuit.count_ops()}')
-        logging.info(f'Circuit operations before transpilation: {circuit_transpiled.count_ops()}')
+        logging.info(f'Circuit operations after transpilation: {circuit_transpiled.count_ops()}')
         logging.info(perf_counter() - start)
 
         if config in ["aer_simulator_cpu", "aer_simulator_gpu"]:
             def execute_circuit(solutions):
 
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobjs = assemble(all_circuits, backend=backend)
-                jobs = backend.run(qobjs, shots=n_shots)
+                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                jobs = backend.run(all_circuits, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
                 samples = []
                 for result in samples_dictionary:
@@ -425,9 +424,11 @@ class CustomQiskitNoisyBackend(Library):
         """
         noise_model = self.build_noise_model(config_dict)
         coupling_map = self.get_coupling_map(config_dict, num_qubits)
-        backend = AerSimulator(noise_model=noise_model,
-                               coupling_map=coupling_map) if coupling_map is not None else AerSimulator(
-            noise_model=noise_model)
+
+        if coupling_map is not None:
+            backend = AerSimulator(noise_model=noise_model, coupling_map=coupling_map)
+        else:
+            backend = AerSimulator(noise_model=noise_model)
         return backend
 
     def build_noise_model(self, config_dict: dict) -> NoiseModel:
@@ -439,7 +440,7 @@ class CustomQiskitNoisyBackend(Library):
         :return: Constructed noise model
         :rtype: NoiseModel
         """
-        noise_model = NoiseModel()
+        noise_model = noise.NoiseModel()
         if config_dict['custom_readout_error']:
             readout_error = config_dict['custom_readout_error']
             noise_model.add_all_qubit_readout_error(

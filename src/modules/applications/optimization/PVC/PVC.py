@@ -57,11 +57,11 @@ class PVC(Optimization):
         return [
             {
                 "name": "networkx",
-                "version": "2.8.8"
+                "version": "3.2.1"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 

@@ -118,7 +118,7 @@ class Plotter:
         """
 
         df = pd.DataFrame.from_dict(results)
-        df = df.fillna(0.0)
+        df = df.fillna(0.0).infer_objects(copy=False)
         df_melt = df.drop(df.filter(["application_config", "config_combo", "total_time",
                                      *required_application_score_keys]), axis=1)
         df_melt = pd.melt(frame=df_melt, id_vars='benchmark_backlog_item_number', var_name='module_config',

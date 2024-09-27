@@ -44,15 +44,15 @@ class LibraryPennylane(Library):
         return [
             {
                 "name": "pennylane",
-                "version": "0.36.0"
+                "version": "0.37.0"
             },
             {
                 "name": "pennylane-lightning",
-                "version": "0.36.0"
+                "version": "0.38.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "jax",

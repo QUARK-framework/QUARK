@@ -14,6 +14,7 @@
 import ast
 import inspect
 import json
+import logging
 import types
 from collections import Counter
 from functools import partial, wraps
@@ -62,19 +63,19 @@ class PennylaneQAOA(Solver):
         return [
             {
                 "name": "pennylane",
-                "version": "0.36.0"
+                "version": "0.37.0"
             },
             {
                 "name": "pennylane-lightning",
-                "version": "0.36.0"
+                "version": "0.38.0"
             },
             {
                 "name": "amazon-braket-pennylane-plugin",
-                "version": "1.5.2"
+                "version": "1.30.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 
@@ -225,16 +226,15 @@ class PennylaneQAOA(Solver):
         J /= scaling_factor
         t /= scaling_factor
 
-        sigzsigz_arr = np.array(
-            [[qml.PauliZ(i) @ qml.PauliZ(j) for i in range(len(J))]
-             for j in range(len(J))])
+        sigzsigz_arr = [
+            qml.PauliZ(i) @ qml.PauliZ(j) for i in range(len(J))
+             for j in range(len(J))
+             ]
 
         sigz_arr = [qml.PauliZ(i) for i in range(len(t))]
-        # one body terms (h_i * sig_z^(i))
-        # two body terms (J_ij * sig_z^(i) \otimes * sig_z^(j))
-        # total cost function
-        h_cost = qml.Hamiltonian([*t, *J.flatten()], [*sigz_arr, *sigzsigz_arr.flatten()],
-                                 simplify=True)
+        J_real = np.real(J.flatten())
+        t_real = np.real(t)
+        h_cost = qml.simplify(qml.Hamiltonian([*t_real, *J_real.flatten()], [*sigz_arr, *sigzsigz_arr]))
 
         # definition of the mixer hamiltonian
         h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(J)))
@@ -333,8 +333,13 @@ class PennylaneQAOA(Solver):
         # TODO Check the impact of this ast.walk
         # We do this ast walk to assess whether execute is called in batch_execute,
         # which is the case for some simulators. This would distort the timing
-        called_functions = [c.func.attr for c in ast.walk(ast.parse(inspect.getsource(dev.batch_execute).lstrip()))
-                            if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute)]
+        try:
+            called_functions = [c.func.attr for c in ast.walk(ast.parse(inspect.getsource(dev.batch_execute).lstrip()))
+                                if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute)]
+        except AttributeError as e:
+            logging.warning(f"{e} detected when trying to call pennylane.batch_execute.")
+            logging.warning("Instead, tapes will be executed in serial.")
+            called_functions = ['execute']
         dev.execute = real_decorator(dev.execute)
         if "execute" not in called_functions:
             dev.batch_execute = real_decorator(dev.batch_execute)
@@ -362,7 +367,14 @@ class PennylaneQAOA(Solver):
         for iteration in range(config['iterations']):
             t0 = start_time_measurement()
             # Evaluates the cost, then does a gradient step to new params
-            params, cost_before = optimizer.step_and_cost(cost_function, params)
+            try:
+                params, cost_before = optimizer.step_and_cost(cost_function, params)
+            except (ValueError, np.core._exceptions._ArrayMemoryError) as e:  # pylint: disable=W0212
+                logging.error(f"When trying to run {optimizer} on {device_wrapper.device}, the following error was "
+                              f"encountered")
+                logging.error(e)
+                logging.error("Run a smaller problem size or select another device.")
+                raise e
             # Convert cost_before to a float, so it's easier to handle
             cost_before = float(cost_before)
             if iteration == 0:

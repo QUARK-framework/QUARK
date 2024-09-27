@@ -23,9 +23,9 @@ Additionally, we rely on several pip dependencies, which you can install in two 
 
 For this installer to work, you need to install the following packages in the first place:
 
-* inquirer==3.1.2
-* pyyaml==6.0
-* packaging==23.1
+* inquirer==3.4.0
+* pyyaml==6.0.2
+* packaging==24.1
 
 To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
 You can select the modules of choice via:

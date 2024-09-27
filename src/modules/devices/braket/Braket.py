@@ -101,15 +101,15 @@ class Braket(Device, ABC):
         return [
             {
                 "name": "amazon-braket-sdk",
-                "version": "1.35.1"
+                "version": "1.87.0"
             },
             {
                 "name": "botocore",
-                "version": "1.25.7"
+                "version": "1.35.20"
             },
             {
                 "name": "boto3",
-                "version": "1.22.7"
+                "version": "1.35.20"
             }
         ]
 

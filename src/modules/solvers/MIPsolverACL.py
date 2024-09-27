@@ -57,7 +57,7 @@ class MIPaclp(Solver):
         return [
             {
                 "name": "pulp",
-                "version": "2.7.0"
+                "version": "2.9.0"
             },
         ]
 

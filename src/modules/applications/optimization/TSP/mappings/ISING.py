@@ -22,6 +22,7 @@ from more_itertools import locate
 from pyqubo import Array, Placeholder, Constraint
 from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
+from qiskit.quantum_info import SparsePauliOp
 
 from modules.applications.Mapping import *
 from modules.applications.optimization.TSP.mappings.QUBO import QUBO
@@ -54,23 +55,23 @@ class Ising(Mapping):
         return [
             {
                 "name": "networkx",
-                "version": "2.8.8"
+                "version": "3.2.1"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "dimod",
-                "version": "0.12.5"
+                "version": "0.12.17"
             },
             {
                 "name": "more-itertools",
-                "version": "9.0.0"
+                "version": "10.5.0"
             },
             {
                 "name": "qiskit-optimization",
-                "version": "0.5.0"
+                "version": "0.6.1"
             },
             {
                 "name": "pyqubo",
@@ -230,7 +231,7 @@ class Ising(Mapping):
         start = start_time_measurement()
         # cost_matrix = nx.to_numpy_matrix(graph) #self.get_tsp_matrix(graph)
         # cost_matrix = self.get_tsp_matrix(graph)
-        cost_matrix = np.array(nx.to_numpy_matrix(graph, weight="weight"))
+        cost_matrix = np.array(nx.to_numpy_array(graph, weight="weight"))
         model = self._create_pyqubo_model(cost_matrix)
         feed_dict = {'A': 2.0}
         if "lagrange_factor" in config:
@@ -330,11 +331,9 @@ class Ising(Mapping):
         qubitOp, _ = qubo.to_ising()
         # reverse generate J and t out of qubit PauliSumOperator from qiskit
         t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
-
         j_matrix = np.zeros((qubitOp.num_qubits, qubitOp.num_qubits), dtype=complex)
-
-        for i in qubitOp:
-            pauli_str, coeff = i.primitive.to_list()[0]
+        pauli_list = qubitOp.to_list()
+        for pauli_str, coeff in pauli_list:
             logging.info((pauli_str, coeff))
             pauli_str_list = list(pauli_str)
             index_pos_list = list(locate(pauli_str_list, lambda a: a == 'Z'))

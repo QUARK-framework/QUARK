@@ -65,19 +65,19 @@ assignment problem.
         return [
             {
                 "name": "pulp",
-                "version": "2.7.0"
+                "version": "2.9.0"
             },
             {
                 "name": "pandas",
-                "version": "1.5.2"
+                "version": "2.2.2"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "openpyxl",
-                "version": "3.1.2"
+                "version": "3.1.5"
             }
 
         ]

@@ -14,9 +14,8 @@
 
 from typing import Union
 import logging
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
-from qiskit.compiler import transpile, assemble
 from qiskit.providers import Backend
 from qiskit.quantum_info import Statevector
 import numpy as np
@@ -52,11 +51,11 @@ class LibraryQiskit(Library):
         return [
             {
                 "name": "qiskit",
-                "version": "0.45.0"
+                "version": "1.1.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 
@@ -191,7 +190,7 @@ class LibraryQiskit(Library):
         """
         if config == "cusvaer_simulator (only available in cuQuantum appliance)":
             import cusvaer  # pylint: disable=C0415
-            from qiskit.providers.aer import AerSimulator  # pylint: disable=C0415
+            from qiskit_aer import AerSimulator  # pylint: disable=C0415
             backend = AerSimulator(
                 method="statevector",
                 device="GPU",
@@ -203,22 +202,22 @@ class LibraryQiskit(Library):
             )
 
         elif config == "aer_simulator_gpu":
-            from qiskit import Aer  # pylint: disable=C0415
+            from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
 
         elif config == "aer_simulator_cpu":
-            from qiskit import Aer  # pylint: disable=C0415
+            from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
 
         elif config == "aer_statevector_simulator_gpu":
-            from qiskit import Aer  # pylint: disable=C0415
+            from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="GPU")
 
         elif config == "aer_statevector_simulator_cpu":
-            from qiskit import Aer  # pylint: disable=C0415
+            from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
 
@@ -280,7 +279,7 @@ class LibraryQiskit(Library):
             circuit_transpiled.remove_final_measurements()
 
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
+                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
                 pmfs = np.asarray([Statevector(c).probabilities() for c in all_circuits])
                 return pmfs, None
 
@@ -288,7 +287,7 @@ class LibraryQiskit(Library):
             import time as timetest  # pylint: disable=C0415
 
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
+                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
                 jobs = backend.run(all_circuits, shots=n_shots)
                 while not jobs.in_final_state():
                     logging.info("Waiting 10 seconds for task to finish")
@@ -313,9 +312,8 @@ class LibraryQiskit(Library):
         elif config in ["cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_cpu",
                         "aer_simulator_gpu"]:
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobjs = assemble(all_circuits, backend=backend)
-                jobs = backend.run(qobjs, shots=n_shots)
+                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                jobs = backend.run(all_circuits, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
 
                 samples = []

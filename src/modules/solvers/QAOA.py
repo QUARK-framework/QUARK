@@ -49,15 +49,15 @@ class QAOA(Solver):
         return [
             {
                 "name": "amazon-braket-sdk",
-                "version": "1.35.1"
+                "version": "1.87.0"
             },
             {
                 "name": "scipy",
-                "version": "1.11.1"
+                "version": "1.12.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 
@@ -310,6 +310,8 @@ def circuit(params, device, n_qubits, ising):
 
 
 # function that computes cost function for given params
+# pylint: disable=R0917
+# pylint: disable=R0913
 def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_folder, verbose):
     """
     objective function takes a list of variational parameters as input,
@@ -389,7 +391,7 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
 
 
 # The function to execute the training: run classical minimization.
-# pylint: disable=R0913
+# pylint: disable=R0917
 def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_folder, verbose=True):
     """
     function to run QAOA algorithm for given, fixed circuit depth p

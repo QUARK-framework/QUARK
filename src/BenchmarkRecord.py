@@ -26,6 +26,7 @@ class BenchmarkRecord:
     benchmark run.
     """
 
+    # pylint: disable=R0917
     def __init__(self, benchmark_backlog_item_number: int, timestamp: str, git_revision_number: str,
                  git_uncommitted_changes: str, repetition: int, total_repetitions: int):
         """

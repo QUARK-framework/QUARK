@@ -58,11 +58,11 @@ class QCBM(Training):
         return [
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "cma",
-                "version": "3.3.0"
+                "version": "4.0.0"
             },
             {
                 "name": "matplotlib",
@@ -70,11 +70,11 @@ class QCBM(Training):
             },
             {
                 "name": "tensorboard",
-                "version": "2.13.0"
+                "version": "2.17.0"
             },
             {
                 "name": "tensorboardX",
-                "version": "2.6.2"
+                "version": "2.6.2.2"
             }
         ]
 

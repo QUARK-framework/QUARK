@@ -12,15 +12,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, List, Tuple, Dict
 import pickle
+import logging
 
-import networkx
+import networkx as nx
 
-from modules.applications.Application import *
+from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
-from modules.applications.optimization.MIS.data.graph_layouts import \
-    generate_hexagonal_graph
+from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
 
 # define R_rydberg
@@ -29,8 +29,6 @@ R_rydberg = 9.75
 
 class MIS(Optimization):
     """
-    In planning problems, there will be tasks to be done, and some of them may be mutually exclusive.
-    We can translate this into a graph where the nodes are the tasks and the edges are the mutual exclusions.
     The maximum independent set (MIS) problem is a combinatorial optimization problem that seeks to find the largest
     subset of vertices in a graph such that no two vertices are adjacent.
     """
@@ -45,25 +43,35 @@ class MIS(Optimization):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
-        return [
-        ]
+        return []
 
     def get_solution_quality_unit(self) -> str:
+        """
+        Returns the unit of measurement for solution quality.
+
+        :return: The unit of measure for solution quality
+        """
         return "Set size"
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
+
+        :param option: Submodule option to retrieve
+        :return: Corresponding submodule object
+        :raises NotImplementedError: If the option is not implemented
+        """
         if option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this application
 
@@ -96,15 +104,14 @@ class MIS(Optimization):
                 "description": "How large should your graph be?"
             },
             "spacing": {
-                "values": [x/10 for x in range(3, 11, 2)],
+                "values": [x / 10 for x in range(3, 11, 2)],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float,
-                "description": "How much space do you want between your nodes,"
-                               " relative to Rydberg distance?"
+                "description": "How much space do you want between your nodes,relative to Rydberg distance?"
             },
             "filling_fraction": {
-                "values": [x/10 for x in range(2, 11, 2)],
+                "values": [x / 10 for x in range(2, 11, 2)],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float,
@@ -114,38 +121,31 @@ class MIS(Optimization):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Configuration attributes for generating an MIS problem
 
-        .. code-block:: python
-
-            size: int
-            spacing: float
-            filling_fraction: float
+        Attributes:
+            size (int): The number of nodes in the graph.
+            spacing (float): The spacing between nodes in the graph.
+            filling_fraction (float): The fraction of available places in the lattice filled with nodes
 
         """
         size: int
         spacing: float
         filling_fraction: float
 
-    def generate_problem(self, config: Config) -> networkx.Graph:
+    def generate_problem(self, config: Config) -> nx.Graph:
         """
-        Generates a graph to solve the MIS for.
+        Generates a graph to solve the MIS problem for.
 
         :param config: Config specifying the size and connectivity for the problem
-        :type config: Config
         :return: networkx graph representing the problem
-        :rtype: networkx.Graph
         """
-
         if config is None:
-            config = {"size": 3,
-                      "spacing": 1,
-                      "filling_fraction": 0.5}
+            config = {"size": 3, "spacing": 1, "filling_fraction": 0.5}
 
-        # check if config has the necessary information
+        # Ensure config has the necessary information
         assert all(
-            x in config.keys()
-            for x in ['size', 'spacing', 'filling_fraction']
+            key in config for key in ['size', 'spacing', 'filling_fraction']
         )
 
         size = config.get('size')
@@ -158,8 +158,7 @@ class MIS(Optimization):
             filling_fraction=filling_fraction,
         )
 
-        logging.info("Created MIS problem with the generate hexagonal "
-                     "graph method, with the following attributes:")
+        logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")
         logging.info(f" - Graph size: {size}")
         logging.info(f" - Spacing: {spacing}")
         logging.info(f" - Filling fraction: {filling_fraction}")
@@ -167,27 +166,22 @@ class MIS(Optimization):
         self.application = graph
         return graph.copy()
 
-    def process_solution(self, solution: list) -> (list, float):
+    def process_solution(self, solution: List) -> Tuple[List, float]:
         """
         Returns list of visited nodes and the time it took to process the solution
 
         :param solution: Unprocessed solution
-        :type solution: list
         :return: Processed solution and the time it took to process it
-        :rtype: tuple(list, float)
         """
         start_time = start_time_measurement()
-
         return solution, end_time_measurement(start_time)
 
-    def validate(self, solution: list) -> (bool, float):
+    def validate(self, solution: List) -> Tuple[bool, float]:
         """
         Checks if the solution is an independent set
 
         :param solution: List containing the nodes of the solution
-        :type solution: list
         :return: Boolean whether the solution is valid and time it took to validate
-        :rtype: tuple(bool, float)
         """
         start = start_time_measurement()
         is_valid = True
@@ -215,8 +209,8 @@ class MIS(Optimization):
             is_valid = False
 
         # Check if the solution is a subset of the original nodes
-        is_set = all(node in nodes for node in solution)
-        if is_set:
+        is_subset = all(node in nodes for node in solution)
+        if is_subset:
             logging.info("The solution is a subset of the problem")
         else:
             logging.warning("The solution is not a subset of the problem")
@@ -224,14 +218,12 @@ class MIS(Optimization):
 
         return is_valid, end_time_measurement(start)
 
-    def evaluate(self, solution: list) -> (int, float):
+    def evaluate(self, solution: List) -> Tuple[int, float]:
         """
         Calculates the size of the solution
 
         :param solution: List containing the nodes of the solution
-        :type solution: list
         :return: Set size, time it took to calculate the set size
-        :rtype: tuple(int, float)
         """
         start = start_time_measurement()
         set_size = len(solution)
@@ -241,5 +233,11 @@ class MIS(Optimization):
         return set_size, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Saves the generated problem graph to a file.
+
+        :param path: Path to save the problem graph
+        :param iter_count: Iteration count for file versioning
+        """
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)

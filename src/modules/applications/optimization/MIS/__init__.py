@@ -12,4 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for MIS"""
+"""
+Module for MIS mappings
+
+This module initialize the MIS package
+"""
+

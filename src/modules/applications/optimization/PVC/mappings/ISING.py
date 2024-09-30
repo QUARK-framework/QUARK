@@ -12,60 +12,51 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, Dict, Tuple
+import logging
 
-import networkx
+import networkx as nx
 import numpy as np
 from dimod import qubo_to_ising
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from modules.applications.optimization.PVC.mappings.QUBO import QUBO
 from utils import start_time_measurement, end_time_measurement
 
 
 class Ising(Mapping):
     """
-    Ising formulation for the PVC
+    Ising formulation for the PVC.
 
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA"]
         self.key_mapping = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> list[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: List of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dictionaries with requirements of this module
         """
         return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "dimod",
-                "version": "0.12.17"
-            },
+            {"name": "networkx", "version": "3.2.1"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "dimod", "version": "0.12.17"},
             *QUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this mapping
 
-        :return:
+        :return: Dictionary containing parameter options.
                  .. code-block:: python
 
                      return {
@@ -85,46 +76,44 @@ class Ising(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Configuration attributes for Ising mapping.
 
-        .. code-block:: python
-
-             lagrange_factor: float
-
+        Attributes:
+             lagrange_factor (float): Factor to multiply the Langrange.  
         """
         lagrange_factor: float
 
-    def map(self, problem: networkx.Graph, config: Config) -> (dict, float):
+    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Uses the PVC QUBO formulation and converts it to an Ising
 
-        :param problem: networkx graph
-        :type problem: networkx.Graph
-        :param config: Dict with the mapping config
-        :type config: Config
-        :return: Dict with the ising and time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: Networkx graph representing the PVC problem
+        :param config: Config dictionary with the mapping configuration
+        :return: Tuple containing a dictionary with the ising problem and time it took to map it
         """
         start = start_time_measurement()
+
+        # Convert the PVC problem to QUBO 
         qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(problem, config)
+
+        # Convert QUBO to ising using dimod
         t, j, _ = qubo_to_ising(q["Q"])
 
+        # Extract unique configuration and tool attributes from the graph
         config = [x[2]['c_start'] for x in problem.edges(data=True)]
         config = list(set(config + [x[2]['c_end'] for x in problem.edges(data=True)]))
-
         tool = [x[2]['t_start'] for x in problem.edges(data=True)]
         tool = list(set(tool + [x[2]['t_end'] for x in problem.edges(data=True)]))
 
-        # Convert Ising dict to matrix
-        timesteps = int((problem.number_of_nodes() - 1) / 2 + 1)  # G.number_of_nodes()
-
+        # Initialize J matrix and mapping
+        timesteps = int((problem.number_of_nodes() - 1) / 2 + 1)
         matrix_size = problem.number_of_nodes() * len(config) * len(tool) * timesteps
         j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
-
         self.key_mapping = {}
-        index_counter = 0
 
+        # Map J values to a matrix representation
+        index_counter = 0
         for key, value in j.items():
             if key[0] not in self.key_mapping:
                 self.key_mapping[key[0]] = index_counter
@@ -138,25 +127,28 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "t": np.array(list(t.values()))}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (dict, float):
+    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
         """
         Maps the solution back to the representation needed by the PVC class for validation/evaluation.
 
         :param solution: Dictionary containing the solution
-        :type solution: dict
-        :return: Solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :return: Tuple with the remapped solution and time it took to reverse map
         """
         start = start_time_measurement()
         logging.info(f"Key Mapping: {self.key_mapping}")
-        result = {}
-        for key, value in self.key_mapping.items():
-            result[key] = 1 if solution[value] == 1 else 0
 
+        result = {key: 1 if solution[self.key_mapping[key]] == 1 else 0 for key in self.key_mapping}
+            
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
 
+        :param option: The submodule option to retrieve
+        :return: The default submodule for the given option
+        :return NotImplementedError: If the submodule option is not implemented
+        """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()

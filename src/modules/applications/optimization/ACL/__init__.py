@@ -12,4 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-""" Module containing the ACL"""
+""" 
+Module containing the ACL
+
+This module initializes the ACL application, which is responsible for formulating
+and solving the ACL problem using various mappings and solvers.
+"""

@@ -14,23 +14,23 @@
 
 import itertools
 from collections import defaultdict
-from typing import TypedDict
+from typing import TypedDict, Dict, Tuple
+import logging
 
-import networkx
+import networkx as nx
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
 class QUBO(Mapping):
     """
-    QUBO formulation for the PVC
-
+    QUBO formulation for the PVC.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
@@ -38,23 +38,17 @@ class QUBO(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: list of dictionaries with requirements of this module
         """
-        return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            }
-        ]
+        return [{"name": "networkx", "version": "3.2.1"}]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this mapping
 
-        :return:
+        :return: Dictionary containing parameter options
                  .. code-block:: python
 
                      return {
@@ -74,36 +68,30 @@ class QUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Configuration attributes of QUBO mapping.
 
-        .. code-block:: python
-
-             lagrange_factor: float
+        Attributes:
+             lagrange_factor (float): Factor to multiply the Langrange.
 
         """
         lagrange_factor: float
 
-    def map(self, problem: networkx.Graph, config: Config) -> (dict, float):
+    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Maps the networkx graph to a QUBO formulation.
 
-        :param problem: a networkx graph
-        :type problem: networkx.Graph
-        :param config: config with the parameters specified in Config class
-        :type config: Config
-        :return: dict with the QUBO, time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: Networkx graph representing the PVC problem
+        :param config: config dictionary with the mapping configuration
+        :return: Tuple containing the QUBO dictionary and the time it took to map it
         """
-        start = start_time_measurement()
-        lagrange = None
-        lagrange_factor = config['lagrange_factor']
-        weight = 'weight'
-
         # Inspired by https://dnx.readthedocs.io/en/latest/_modules/dwave_networkx/algorithms/tsp.html
+        start = start_time_measurement()
+        lagrange_factor = config['lagrange_factor']
+
+        # Estimate lagrange if not provided
         n = problem.number_of_nodes()
-        # we only need this number of timesteps since we only need to visit 1 node per seam
-        # (plus we start and end at the base node)
         timesteps = int((n - 1) / 2 + 1)
+
         # Let`s get the number of different configs and tools
         config = [x[2]['c_start'] for x in problem.edges(data=True)]
         config = list(set(config + [x[2]['c_end'] for x in problem.edges(data=True)]))
@@ -111,25 +99,16 @@ class QUBO(Mapping):
         tool = [x[2]['t_start'] for x in problem.edges(data=True)]
         tool = list(set(tool + [x[2]['t_end'] for x in problem.edges(data=True)]))
 
-        if lagrange is None:
-            # If no lagrange parameter provided, set to 'average' tour length.
-            # Usually a good estimate for a lagrange parameter is between 75-150%
-            # of the objective function value, so we come up with an estimate for
-            # tour length and use that.
-            if problem.number_of_edges() > 0:
-                weights = [x[2]['weight'] for x in problem.edges(data=True)]
-                # At the moment we need to filter out the very high artificial values we added during generate_problem
-                # as this would mess up the lagrange
-                weights = list(filter(lambda a: a != max(weights), weights))
-                lagrange = sum(weights) / len(weights) * timesteps
-            else:
-                lagrange = 2
+        if problem.number_of_edges() > 0:
+            weights = [x[2]['weight'] for x in problem.edges(data=True)]
+            weights = list(filter(lambda a: a != max(weights), weights))
+            lagrange = sum(weights) / len(weights) * timesteps
+        else:
+            lagrange = 2
 
-        lagrange = lagrange * lagrange_factor
-
+        lagrange *= lagrange_factor
         logging.info(f"Selected lagrange is: {lagrange}")
 
-        # some input checking
         if n in (1, 2) or len(problem.edges) < n * (n - 1) // 2:
             msg = "graph must be a complete graph with at least 3 nodes or empty"
             raise ValueError(msg)
@@ -147,52 +126,36 @@ class QUBO(Mapping):
             for pos_1 in range(timesteps):  # for number of timesteps
                 for t_start in tool:
                     for c_start in config:
-                        q[((node, c_start, t_start, pos_1),
-                           (node, c_start, t_start,
-                            pos_1))] -= lagrange  # lagrange  # nodes to itself on the same timestep
+                        q[((node, c_start, t_start, pos_1), (node, c_start, t_start, pos_1))] -= lagrange
                         for t_end in tool:
                             # for all configs and tools
                             for c_end in config:
                                 if c_start != c_end or t_start != t_end:
-                                    q[((node, c_start, t_start, pos_1),
-                                       (node, c_end, t_end, pos_1))] += 1.0 * lagrange
-                                for pos_2 in range(pos_1 + 1,
-                                                   timesteps):  # For each following timestep set value for u -> u
+                                    q[((node, c_start, t_start, pos_1), (node, c_end, t_end, pos_1))] += 1.0 * lagrange
+                                for pos_2 in range(pos_1 + 1, timesteps):
                                     # penalize visiting same node again in another timestep
-                                    q[((node, c_start, t_start, pos_1),
-                                       (node, c_end, t_end,
-                                        pos_2))] += 2.0 * lagrange
-
+                                    q[((node, c_start, t_start, pos_1), (node, c_end, t_end, pos_2))] += 2.0 * lagrange
                                     # penalize visiting other node of same seam
                                     if node != (0, 0):
                                         # (0,0) is the base node, it is not a seam
                                         # get the other nodes of the same seam
-                                        other_seam_nodes = [x for x in problem.nodes if x[0] == node[0]
-                                                            and x[1] != node]
+                                        other_seam_nodes = [
+                                            x for x in problem.nodes if x[0] == node[0] and x[1] != node
+                                        ]
                                         for other_seam_node in other_seam_nodes:
                                             # penalize visiting other node of same seam
-                                            q[((node, c_start, t_start, pos_1),
-                                               (other_seam_node, c_end, t_end,
-                                                pos_2))] += 2.0 * lagrange
+                                            q[((node, c_start, t_start, pos_1), (other_seam_node, c_end, t_end, pos_2))] += 2.0 * lagrange
 
         # Constraint to only visit a single node in a single timestep
-        for pos in range(timesteps):  # for all timesteps
-            for node_1 in problem:  # for all nodes
+        for pos in range(timesteps):
+            for node_1 in problem:
                 for t_start in tool:
                     for c_start in config:
-                        q[((node_1, c_start, t_start, pos),
-                           (node_1, c_start, t_start, pos))] -= lagrange
+                        q[((node_1, c_start, t_start, pos), (node_1, c_start, t_start, pos))] -= lagrange
                         for t_end in tool:
                             for c_end in config:
-                                # if c_start != c_end or t_start != t_end:
-                                #     Q[((node_1, c_start, t_start, pos),
-                                #        (node_1, c_end, t_end, pos))] += lagrange
                                 for node_2 in set(problem) - {node_1}:  # for all nodes except node1 -> node1
-                                    # QUBO coefficient is 2*lagrange, but we are placing this value
-                                    # above *and* below the diagonal, so we put half in each position.
-                                    # penalize from node1 -> node2 in the same timestep
-                                    q[((node_1, c_start, t_start, pos), (node_2, c_end, t_end,
-                                                                         pos))] += lagrange
+                                    q[((node_1, c_start, t_start, pos), (node_2, c_end, t_end, pos))] += lagrange
 
         # Objective that minimizes distance
         for u, v in itertools.combinations(problem.nodes, 2):
@@ -202,25 +165,34 @@ class QUBO(Mapping):
                         for c_start in config:
                             for c_end in config:
                                 nextpos = (pos + 1) % timesteps
-                                edge_u_v = next(item for item in list(problem[u][v].values()) if
-                                                item["c_start"] == c_start and item["t_start"] == t_start and item[
-                                                    "c_end"] == c_end and item["t_end"] == t_end)
+                                edge_u_v = next(
+                                    item for item in list(problem[u][v].values()) 
+                                    if item["c_start"] == c_start and item["t_start"] == t_start and 
+                                    item["c_end"] == c_end and item["t_end"] == t_end
+                                )
                                 # since it is the other direction we switch start and end of tool and config
-                                edge_v_u = next(item for item in list(problem[v][u].values()) if
-                                                item["c_start"] == c_end and item["t_start"] == t_end and item[
-                                                    "c_end"] == c_start and item["t_end"] == t_start)
+                                edge_v_u = next(
+                                    item for item in list(problem[v][u].values()) 
+                                    if item["c_start"] == c_end and item["t_start"] == t_end and 
+                                    item["c_end"] == c_start and item["t_end"] == t_start
+                                )
                                 # going from u -> v
-                                q[((u, c_start, t_start, pos), (v, c_end, t_end, nextpos))] += edge_u_v[weight]
-
+                                q[((u, c_start, t_start, pos), (v, c_end, t_end, nextpos))] += edge_u_v['weight']
                                 # going from v -> u
-                                q[((v, c_end, t_end, pos), (u, c_start, t_start, nextpos))] += edge_v_u[weight]
+                                q[((v, c_end, t_end, pos), (u, c_start, t_start, nextpos))] += edge_v_u['weight']
 
         logging.info("Created Qubo")
 
         return {"Q": q}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
 
+        :param option: The submodule option to retrieve
+        :return: The default submodule for the given option
+        :return NotImplementedError: If the submodule option is not implemented
+        """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
             return Annealer()

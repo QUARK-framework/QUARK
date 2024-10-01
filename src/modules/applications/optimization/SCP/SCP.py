@@ -12,10 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Tuple, Set
 import pickle
+import os
 
-from modules.applications.Application import *
+from modules.applications.Application import Application
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
@@ -38,8 +39,7 @@ class SCP(Optimization):
     def get_solution_quality_unit(self) -> str:
         return "Number of selected subsets"
 
-    def get_default_submodule(self, option: str) -> Core:
-
+    def get_default_submodule(self, option: str) -> Application:
         if option == "qubovertQUBO":
             from modules.applications.optimization.SCP.mappings.qubovertQUBO import QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
@@ -72,14 +72,12 @@ class SCP(Optimization):
     class Config(TypedDict):
         model_select: str
 
-    def generate_problem(self, config: Config) -> (set, list):
+    def generate_problem(self, config: Config) -> Tuple[set, List]:
         """
         Generates predefined instances of the SCP.
 
         :param config: Config specifying the selected problem instances
-        :type config: Config
         :return: the union of all elements of an instance and a set of subsets, each covering a part of the union
-        :rtype: tuple(set, list)
         """
         model_select = config['model_select']
         self.application = {}
@@ -90,8 +88,10 @@ class SCP(Optimization):
 
         elif model_select == "Small":
             self.application["elements_to_cover"] = set(range(1, 15))
-            self.application["subsets"] = [{1, 3, 4, 6, 7, 13}, {4, 6, 8, 12}, {2, 5, 9, 11, 13}, {1, 2, 7, 14, 15},
-                                           {3, 10, 12, 14}, {7, 8, 14, 15}, {1, 2, 6, 11}, {1, 2, 4, 6, 8, 12}]
+            self.application["subsets"] = [
+                {1, 3, 4, 6, 7, 13}, {4, 6, 8, 12}, {2, 5, 9, 11, 13}, {1, 2, 7, 14, 15},
+                {3, 10, 12, 14}, {7, 8, 14, 15}, {1, 2, 6, 11}, {1, 2, 4, 6, 8, 12}
+            ]
 
         else:
             self.application["elements_to_cover"] = set(range(1, 100))
@@ -107,41 +107,35 @@ class SCP(Optimization):
 
         return self.application["elements_to_cover"], self.application["subsets"]
 
-    def process_solution(self, solution: list) -> (list, float):
+    def process_solution(self, solution: List) -> Tuple[List, float]:
         """
         Returns list of selected subsets and the time it took to process the solution.
 
         :param solution: Unprocessed solution
-        :type solution: list
         :return: Processed solution and the time it took to process it
-        :rtype: tuple(list, float)
         """
         start_time = start_time_measurement()
         selected_subsets = [list(self.application["subsets"][i]) for i in solution]
         return selected_subsets, end_time_measurement(start_time)
 
-    def validate(self, solution: list) -> (bool, float):
+    def validate(self, solution: List) -> Tuple[bool, float]:
         """
         Checks if the elements of the subsets that are part of the solution cover every element of the instance.
 
         :param solution: list containing all subsets that are part of the solution
-        :type solution: list
         :return: Boolean whether the solution is valid and time it took to validate
-        :rtype: tuple(bool, float)
         """
         start = start_time_measurement()
         covered = set.union(*[set(subset) for subset in solution])
 
         return covered == self.application["elements_to_cover"], end_time_measurement(start)
 
-    def evaluate(self, solution: list) -> (int, float):
+    def evaluate(self, solution: List) -> Tuple[int, float]:
         """
         Calculates the number of subsets that are of the solution.
 
         :param solution: List containing all subsets that are part of the solution
-        :type solution: list
         :return: Number of subsets and the time it took to calculate it
-        :rtype: tuple(int, float)
         """
         start = start_time_measurement()
         selected_num = len(solution)
@@ -149,5 +143,11 @@ class SCP(Optimization):
         return selected_num, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Saves the SCP instance to a file.
+
+        :param path: Path to save the SCP instance
+        :param iter_count: Iteration count
+        """
         with open(f"{path}/SCP_instance", "wb") as file:
             pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)

@@ -12,20 +12,22 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Any, Tuple
 import pickle
+import logging
+import os
 
 import networkx as nx
 import numpy as np
 
-from modules.applications.Application import *
+from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
 
 class TSP(Optimization):
     """
-    \"The famous travelling salesman problem (also called the travelling salesperson problem or in short TSP) is a
+    "The famous travelling salesman problem (also called the travelling salesperson problem or in short TSP) is a
     well-known NP-hard problem in combinatorial optimization, asking for the shortest possible route that visits each
     node exactly once, given a list of nodes and the distances between each pair of nodes. Applications of the
     TSP can be found in planning, logistics, and the manufacture of microchips. In these applications, the general
@@ -35,7 +37,7 @@ class TSP(Optimization):
     graph. Taking an undirected weighted graph, nodes correspond to the graph's nodes, with paths corresponding to the
     graph's edges, and a path's distance is the edge's weight. Typically, the graph is complete where each pair of nodes
     is connected by an edge. If no connection exists between two nodes, one can add an arbitrarily long edge to complete
-    the graph without affecting the optimal tour.\"
+    the graph without affecting the optimal tour."
     (source: https://github.com/aws/amazon-braket-examples/tree/main/examples)
     """
 
@@ -47,23 +49,32 @@ class TSP(Optimization):
         self.submodule_options = ["Ising", "QUBO", "GreedyClassicalTSP", "ReverseGreedyClassicalTSP", "RandomTSP"]
 
     @staticmethod
-    def get_requirements() -> list:
+    def get_requirements() -> List:
+        """
+        Return requirements of this module
+
+        :return: list of dict with requirements of this module
+        """
         return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "networkx", "version": "3.2.1"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_solution_quality_unit(self) -> str:
+        """
+        Returns the unit of measurement for the solution quality.
+
+        :return: The unit of measurement for the solution quality.
+        """
         return "Tour cost"
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the given option.
 
+        :param option: The chosen submodule option.
+        :return: The corresponding submodule instance.
+        """
         if option == "Ising":
             from modules.applications.optimization.TSP.mappings.ISING import Ising  # pylint: disable=C0415
             return Ising()
@@ -82,11 +93,11 @@ class TSP(Optimization):
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this application
 
-        :return:
+        :return: Dictionary with configurable settings.
                  .. code-block:: python
 
                       return {
@@ -124,10 +135,8 @@ class TSP(Optimization):
         """
         Creates distance matrix out of given coordinates.
 
-        :param graph:
-        :type graph: networkx.Graph
-        :return:
-        :rtype: np.ndarray
+        :param graph: The input graph
+        :return: Distance matrix
         """
         number_of_nodes = len(graph)
         matrix = np.zeros((number_of_nodes, number_of_nodes))
@@ -136,16 +145,15 @@ class TSP(Optimization):
             for j in distance_dist.items():
                 matrix[i[0] - 1][j[0] - 1] = j[1]
                 matrix[j[0] - 1][i[0] - 1] = matrix[i[0] - 1][j[0] - 1]
+
         return matrix
 
     def generate_problem(self, config: Config) -> nx.Graph:
         """
         Uses the reference graph to generate a problem for a given config.
 
-        :param config:
-        :type config: Config
-        :return: graph with the problem
-        :rtype: networkx.Graph
+        :param config: Configuration dictionary
+        :return: Graph with the problem
         """
 
         if config is None:
@@ -167,6 +175,7 @@ class TSP(Optimization):
 
         unwanted_nodes = nodes_in_graph[-len(nodes_in_graph) + nodes:]
         unwanted_nodes = [x for x in graph.nodes if x in unwanted_nodes]
+
         # Remove one node after another
         for node in unwanted_nodes:
             graph.remove_node(node)
@@ -180,24 +189,23 @@ class TSP(Optimization):
         graph = nx.from_numpy_array(cost_matrix)
 
         self.application = graph
+
         return graph
 
-    def process_solution(self, solution: dict) -> (list, float):
+    def process_solution(self, solution: Dict) -> Tuple[List, float]:
         """
         Convert dict to list of visited nodes.
 
-        :param solution:
-        :type solution: dict
+        :param solution: Dictionary with solution
         :return: processed solution and the time it took to process it
-        :rtype: tuple(list, float)
         """
         start_time = start_time_measurement()
         nodes = self.application.nodes()
         start = np.min(nodes)
         # fill route with None values
         route: list = [None] * len(self.application)
-        # get nodes from sample
-        # NOTE: Prevent duplicate node entries by enforcing only one occurrence per node along route
+
+        # Get nodes from sample
         logging.info(str(solution.items()))
 
         for (node, timestep), val in solution.items():
@@ -243,16 +251,15 @@ class TSP(Optimization):
         # print route
         parsed_route = ' ->\n'.join([f' Node {visit}' for visit in route])
         logging.info(f"Route found:\n{parsed_route}")
+
         return route, end_time_measurement(start_time)
 
-    def validate(self, solution: list) -> (bool, float):
+    def validate(self, solution: List) -> Tuple[bool, float]:
         """
         Checks if it is a valid TSP tour.
 
         :param solution: list containing the nodes of the solution
-        :type solution: list
         :return: Boolean whether the solution is valid, time it took to validate
-        :rtype: tuple(bool, float)
         """
         start = start_time_measurement()
         nodes = self.application.nodes()
@@ -266,14 +273,12 @@ class TSP(Optimization):
             logging.error(f"{len([node for node in list(nodes) if node not in solution])} nodes were NOT visited")
             return False, end_time_measurement(start)
 
-    def evaluate(self, solution: list) -> (float, float):
+    def evaluate(self, solution: List) -> Tuple[float, float]:
         """
         Find distance for given route e.g. [0, 4, 3, 1, 2] and original data.
 
-        :param solution:
-        :type solution: list
+        :param solution: List containing the nodes of the solution
         :return: Tour cost and the time it took to calculate it
-        :rtype: tuple(float, float)
         """
         start = start_time_measurement()
         # get the total distance without return
@@ -286,7 +291,6 @@ class TSP(Optimization):
 
         # add distance between start and end point to complete cycle
         return_distance = self.application[solution[0]][solution[-1]]['weight']
-        # logging.info('Distance between start and end: ' + return_distance)
 
         # get distance for full cycle
         distance_with_return = total_dist + return_distance
@@ -295,5 +299,11 @@ class TSP(Optimization):
         return distance_with_return, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Save the current application state to a file.
+
+        :param path: The directory path where the file will be saved
+        :param iter_count: The iteration count to include in the filename
+        """
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)

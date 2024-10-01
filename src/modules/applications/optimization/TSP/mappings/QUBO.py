@@ -12,12 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Tuple
+import logging
 
 import dwave_networkx as dnx
 import networkx
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -35,29 +36,22 @@ class QUBO(Mapping):
         self.submodule_options = ["Annealer"]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            },
-            {
-                "name": "dwave_networkx",
-                "version": "0.8.15"
-            }
+            {"name": "networkx", "version": "3.2.1"},
+            {"name": "dwave_networkx", "version": "0.8.15"}
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this mapping
 
-        :return:
+        :return: Dictionary with configurable settings
                  .. code-block:: python
 
                      return {
@@ -92,22 +86,18 @@ class QUBO(Mapping):
         """
         lagrange_factor: float
 
-    def map(self, problem: networkx.Graph, config: Config) -> (dict, float):
+    def map(self, problem: networkx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Maps the networkx graph to a QUBO formulation.
 
         :param problem: networkx graph
-        :type problem: networkx.Graph
         :param config: config with the parameters specified in Config class
-        :type config: Config
         :return: dict with QUBO, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         lagrange = None
         lagrange_factor = config['lagrange_factor']
         weight = 'weight'
-        # get corresponding QUBO step by step
 
         if lagrange is None:
             # If no lagrange parameter provided, set to 'average' tour length.
@@ -129,6 +119,12 @@ class QUBO(Mapping):
         return {"Q": q}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Get the default submodule based on the given option.
+
+        :param option: Submodule option
+        :return: Corresponding submodule
+        """
 
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

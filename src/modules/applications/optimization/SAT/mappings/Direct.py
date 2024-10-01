@@ -13,13 +13,14 @@
 #  limitations under the License.
 
 import io
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Tuple, Any
+import logging
 
 from nnf import And
 from nnf.dimacs import dump
 from pysat.formula import CNF, WCNF
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -36,34 +37,24 @@ class Direct(Mapping):
         self.submodule_options = ["ClassicalSAT", "RandomSAT"]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
         Return requirements of this module
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "nnf",
-                "version": "0.4.1"
-            },
-            {
-                "name": "python-sat",
-                "version": "1.8.dev13"
-            }
+            {"name": "nnf", "version": "0.4.1"},
+            {"name": "python-sat", "version": "1.8.dev13"}
         ]
 
-    def get_parameter_options(self):
+    def get_parameter_options(self) -> Dict:
         """
         Returns empty dict as this mapping has no configurable settings.
 
         :return: empty dict
-        :rtype: dict
         """
-        return {
-
-        }
+        return {}
 
     class Config(TypedDict):
         """
@@ -71,16 +62,13 @@ class Direct(Mapping):
         """
         pass
 
-    def map(self, problem: (And, list), config: Config) -> (WCNF, float):
+    def map(self, problem: Tuple[And, List], config: Config) -> Tuple[WCNF, float]:
         """
         We map from the nnf library into the python-sat library.
 
-        :param problem:
-        :type problem: (nnf.And, list)
-        :param config: empty dict
-        :type config: Config
+        :param problem: SAT problem
+        :param config: config with the parameters specified in Config class
         :return: mapped problem and the time it took to map it
-        :rtype: tuple(WCNF, float)
         """
         start = start_time_measurement()
         hard_constraints, soft_constraints = problem
@@ -111,7 +99,13 @@ class Direct(Mapping):
         return total_wcnf, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "ClassicalSAT":
             from modules.solvers.ClassicalSAT import ClassicalSAT  # pylint: disable=C0415
             return ClassicalSAT()
@@ -121,14 +115,12 @@ class Direct(Mapping):
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")
 
-    def reverse_map(self, solution: list) -> (dict, float):
+    def reverse_map(self, solution: List) -> Tuple[dict, float]:
         """
         Maps the solution returned by the pysat solver into the reference format.
 
-        :param solution: dictionary containing the solution
-        :type solution: list
+        :param solution: list containing the solution
         :return: solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
         """
 
         start = start_time_measurement()

@@ -13,7 +13,8 @@
 #  limitations under the License.
 
 import re
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Tuple, Any
+import logging
 
 import networkx as nx
 import numpy as np
@@ -24,7 +25,7 @@ from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
 from qiskit.quantum_info import SparsePauliOp
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from modules.applications.optimization.TSP.mappings.QUBO import QUBO
 from utils import start_time_measurement, end_time_measurement
 
@@ -45,42 +46,23 @@ class Ising(Mapping):
         self.config = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "dimod",
-                "version": "0.12.17"
-            },
-            {
-                "name": "more-itertools",
-                "version": "10.5.0"
-            },
-            {
-                "name": "qiskit-optimization",
-                "version": "0.6.1"
-            },
-            {
-                "name": "pyqubo",
-                "version": "1.4.0"
-            },
+            {"name": "networkx", "version": "3.2.1"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "dimod", "version": "0.12.17"},
+            {"name": "more-itertools", "version": "10.5.0"},
+            {"name": "qiskit-optimization", "version": "0.6.1"},
+            {"name": "pyqubo", "version": "1.4.0"},
             *QUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this mapping
 
@@ -123,16 +105,13 @@ class Ising(Mapping):
         lagrange_factor: float
         mapping: str
 
-    def map(self, problem: nx.Graph, config: Config) -> (dict, float):
+    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Maps the networkx graph to an Ising formulation.
 
         :param problem: networkx graph
-        :type problem: networkx.Graph
         :param config: config with the parameters specified in Config class
-        :param config: Config
         :return: dict with Ising, time it took to map it
-        :rtype: tuple(dict, float)
         """
         self.graph = problem
         self.config = config
@@ -149,14 +128,12 @@ class Ising(Mapping):
             raise ValueError(f"Unknown mapping {mapping}.")
 
     @staticmethod
-    def _create_pyqubo_model(cost_matrix: list) -> any:
+    def _create_pyqubo_model(cost_matrix: List) -> Any:
         """
         This PyQubo formulation of the TSP was kindly provided by AWS.
 
-        :param cost_matrix:
-        :type cost_matrix: list
-        :return:
-        :rtype: any
+        :param cost_matrix: cost matrix of the TSP
+        :return: compiled PyQubo model
         """
         n = len(cost_matrix)
         x = Array.create('c', (n, n), 'BINARY')
@@ -186,10 +163,11 @@ class Ising(Mapping):
 
         # Compile model
         model = H.compile()
+
         return model
 
     @staticmethod
-    def _get_matrix_index(ising_index_string: any, number_nodes: any) -> any:
+    def _get_matrix_index(ising_index_string: Any, number_nodes: Any) -> Any:
         """
         Converts dictionary index (e.g. 'c[0][2]') in PyQubo to matrix index.
 
@@ -199,12 +177,9 @@ class Ising(Mapping):
         ('c[1][0]', 'c[2][1]'): 0.720033199087941,
         ... }
 
-        :param ising_index_string:
-        :type ising_index_string: any
-        :param number_nodes:
-        :type number_nodes: any
-        :return:
-        :rtype: any
+        :param ising_index_string: Index string from PyQubo
+        :param number_nodes: Number of nodes in the graph
+        :return: Matrix index
         """
         x = 0
         y = 0
@@ -217,20 +192,15 @@ class Ising(Mapping):
 
         return idx
 
-    def _map_pyqubo(self, graph: nx.Graph, config: Config) -> (dict, float):
+    def _map_pyqubo(self, graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Use Qubo / Ising model defined in PyQubo.
 
         :param graph: networkx graph
-        :type graph: networkx.Graph
         :param config: config with the parameters specified in Config class
-        :type config: Config
         :return: dict with the Ising, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
-        # cost_matrix = nx.to_numpy_matrix(graph) #self.get_tsp_matrix(graph)
-        # cost_matrix = self.get_tsp_matrix(graph)
         cost_matrix = np.array(nx.to_numpy_array(graph, weight="weight"))
         model = self._create_pyqubo_model(cost_matrix)
         feed_dict = {'A': 2.0}
@@ -254,23 +224,17 @@ class Ising(Mapping):
             x = self._get_matrix_index(key[0], graph.number_of_nodes())
             y = self._get_matrix_index(key[1], graph.number_of_nodes())
             j_matrix[x][y] = value
-        # j_matrix = np.triu(j_matrix, k=1).astype(np.float64)
-        # print("Number items in Ising dict: {} Number of non-zero entries in matrix: {}".\
-        #       format(len(quad.items()), len(j_matrix.nonzero())))
 
         return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, end_time_measurement(start)
 
-    def _map_ocean(self, graph: nx.Graph, config: Config) -> (dict, float):
+    def _map_ocean(self, graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Use D-Wave/Ocean TSP QUBO/Ising model:
         https://docs.ocean.dwavesys.com/en/stable/docs_dnx/reference/algorithms/generated/dwave_networkx.algorithms.tsp.traveling_salesperson_qubo.html#dwave_networkx.algorithms.tsp.traveling_salesperson_qubo
 
         :param graph: networkx graph
-        :type graph: networkx.Graph
         :param config: config with the parameters specified in Config class
-        :param config: Config
         :return: dict with the Ising, time it took to map it
-        :rtype: tuple(dict, float)
         """
 
         start = start_time_measurement()
@@ -280,9 +244,6 @@ class Ising(Mapping):
 
         # Convert ISING dict to matrix
         timesteps = graph.number_of_nodes()
-
-        # number_of_edges = graph.number_of_edges()
-        # timesteps = len(Q)/number_of_edges
         matrix_size = graph.number_of_nodes() * timesteps
         j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
 
@@ -302,25 +263,19 @@ class Ising(Mapping):
 
         logging.info(j_matrix)
         logging.info(j_matrix.shape)
-        # j_matrix = self.convert_to_upper_triangular_form(j_matrix)
-        # logging.info("Upper triangle form: ")
-        # logging.info(j_matrix)
 
         return {"J": j_matrix, "t": np.array(list(t.values())), "J_dict": j}, end_time_measurement(start)
 
     @staticmethod
-    def _map_qiskit(graph: nx.Graph, config: Config) -> (dict, float):
+    def _map_qiskit(graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
         """
         Use Ising Mapping of Qiskit Optimize:
         TSP class: https://qiskit.org/documentation/optimization/stubs/qiskit_optimization.applications.Tsp.html
         Example notebook: https://qiskit.org/documentation/tutorials/optimization/6_examples_max_cut_and_tsp.html
 
         :param graph: networkx graph
-        :type graph: networkx.Graph
         :param config: config with the parameters specified in Config class
-        :type config: Config
         :return: dict with the Ising, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         tsp = Tsp(graph)
@@ -329,10 +284,12 @@ class Ising(Mapping):
         qp2qubo = QuadraticProgramToQubo()
         qubo = qp2qubo.convert(qp)
         qubitOp, _ = qubo.to_ising()
+
         # reverse generate J and t out of qubit PauliSumOperator from qiskit
         t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
         j_matrix = np.zeros((qubitOp.num_qubits, qubitOp.num_qubits), dtype=complex)
         pauli_list = qubitOp.to_list()
+
         for pauli_str, coeff in pauli_list:
             logging.info((pauli_str, coeff))
             pauli_str_list = list(pauli_str)
@@ -345,14 +302,12 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: any) -> (dict, float):
+    def reverse_map(self, solution: Any) -> Tuple[Dict, float]:
         """
         Maps the solution back to the representation needed by the TSP class for validation/evaluation.
 
         :param solution: list or array containing the solution
-        :type solution: any
         :return: solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         if -1 in solution:  # ising model output from Braket QAOA
@@ -377,30 +332,46 @@ class Ising(Mapping):
             for key, value in self.key_mapping.items():
                 result[key] = 1 if solution[value] == 1 else 0
 
-        logging.info(result)
         return result, end_time_measurement(start)
 
     @staticmethod
-    def _flip_bits_in_bitstring(solution: any) -> any:
-        # depending on used solver 0 or 1 can indicate a node per timestep
-        # if np.count_nonzero(solution) > n:
+    def _flip_bits_in_bitstring(solution: Any) -> Any:
+        """
+        Flip bits in the solution bitstring to unify different mappings.
+
+        :param solution: Solution bitstring
+        :return: Flipped solution bitstring
+        """
         solution = np.array(solution)
         with np.nditer(solution, op_flags=['readwrite']) as it:
             for x in it:
                 x[...] = 1 - x
+
         return solution
 
     @staticmethod
-    def _convert_ising_to_qubo(solution: any) -> any:
+    def _convert_ising_to_qubo(solution: Any) -> Any:
+        """
+        Convert Ising model output to QUBO format.
+
+        :param solution: Ising model output
+        :return: QUBO format solution
+        """
         solution = np.array(solution)
         with np.nditer(solution, op_flags=['readwrite']) as it:
             for x in it:
                 if x == -1:
                     x[...] = 0
+
         return solution
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Get the default submodule based on the given option.
 
+        :param option: Submodule option
+        :return: Corresponding submodule
+        """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()

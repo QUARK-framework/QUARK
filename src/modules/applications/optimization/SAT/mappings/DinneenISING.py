@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Tuple, Any
 
 import numpy as np
 from dimod import qubo_to_ising
 from nnf import And
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
 from utils import start_time_measurement, end_time_measurement
 
@@ -39,34 +39,24 @@ class DinneenIsing(Mapping):
         self.qubo_mapping = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
         Return requirements of this module
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "nnf",
-                "version": "0.4.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "dimod",
-                "version": "0.12.17"
-            },
+            {"name": "nnf", "version": "0.4.1"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "dimod", "version": "0.12.17"},
             *DinneenQUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this mapping
 
-        :return:
+        :return: dict with parameter options
                  .. code-block:: python
 
                      return {
@@ -96,16 +86,13 @@ class DinneenIsing(Mapping):
         """
         lagrange: float
 
-    def map(self, problem: any, config) -> (dict, float):
+    def map(self, problem: Any, config: Config) -> Tuple[Dict, float]:
         """
         Uses the DinneenQUBO formulation and converts it to an Ising.
 
         :param problem: the SAT problem
-        :type problem: any
         :param config: dictionary with the mapping config
-        :type config: Config
         :return: dict with the ising, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         self.problem = problem
@@ -127,20 +114,16 @@ class DinneenIsing(Mapping):
 
         return {"J": j_matrix, "t": t_vector}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (dict, float):
+    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
         :param solution: dictionary containing the solution
-        :type: dict
         :return: solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
         # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
-        solution_dict = {}
-        for i, el in enumerate(solution):
-            solution_dict[i] = el
+        solution_dict = {i: el for i, el in enumerate(solution) }
 
         # reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)
@@ -148,7 +131,12 @@ class DinneenIsing(Mapping):
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Return the default submodule based on the given option.
 
+        :param option: the submodule option
+        :return: the default submodule
+        """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()

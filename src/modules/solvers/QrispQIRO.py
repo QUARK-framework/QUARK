@@ -27,7 +27,7 @@ from utils import start_time_measurement, end_time_measurement
 class QIROSolver(Solver):
     """
     Qrisp QIRO.
-    run the QIRO implementation within the qrisp simulator Backend. Further Backends TBD
+    run the QIRO implementation within the Qrisp local simulator Backend. Further Backends TBD
     """
 
     def __init__(self):
@@ -49,7 +49,7 @@ class QIROSolver(Solver):
         return [
             {
                 "name": "qrisp",
-                "version": "0.49"
+                "version": "0.4.12"
             }
         ]
 
@@ -107,17 +107,17 @@ class QIROSolver(Solver):
                 "values": [5, 10, 20, 50, 75],
                 "description": "How many optimization iterations do you need?"
             },
-                        "depth": {
+            "depth": { # depth of original QAOA
                 "values": [2, 3, 4, 5, 10],
                 "description": "How many layers for QAOA (Parameter: p) do you want?"
             },
-                        "QIRO_reps": {
+            "QIRO_reps": { # number of QIRO reps
                 "values": [2, 3, 4, 5],
                 "description": "How QIRO reps (Parameter: n) do you want? Choose this parameter sensibly in relation to the graph size!"
             }
         }
 
-        ##############FURTHER OPTIONS TO BE INCLUDED
+        ##############FURTHER OPTIONS TO BE INCLUDED (MAYBE)
         """ 
             # do i want to do something here?
             "method": {
@@ -155,12 +155,12 @@ class QIROSolver(Solver):
         Run Qrisp QIRO on the local Qrisp simulator
 
         :param mapped_problem: dictionary with the keys 'graph' and 't'
-        :type mapped_problem: any
+        :type mapped_problem: nx.Graph
         :param device_wrapper: instance of device
         :type device_wrapper: any
         :param config:
         :type config: Config
-        :param kwargs: no additionally settings needed
+        :param kwargs: no additionally settings needed, may include the measurement kwargs
         :type kwargs: any
         :return: Solution, the time it took to compute it and optional additional information
         :rtype: tuple(list, float, dict)

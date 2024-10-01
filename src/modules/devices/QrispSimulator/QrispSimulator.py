@@ -26,7 +26,7 @@ from modules.devices.Device import Device
 
 class QrispSimulator(Device, ABC):
     """
-    Abstract class to use the Pulser devices.
+    Abstract class to use the Qrisp Simulator.
     """
 
     def __init__(self):
@@ -68,7 +68,7 @@ class QrispSimulator(Device, ABC):
         return [
             {
                 "name": "qrisp",
-                "version": "0.4"
+                "version": "0.4.12"
             },
         ]
 
@@ -83,7 +83,7 @@ class QrispSimulator(Device, ABC):
                 "description": "Simulate doppler noise? Has a large impact on performance!"
             }
         """
-        #maybe add some things here??
+        #TBD, once optional noisy simulation is done in qrisp
         return {
             
             
@@ -101,7 +101,7 @@ class QrispSimulator(Device, ABC):
         Returns backend configurations
 
         :return: backend config for the emulator
-        :rtype: pulser.backend.config.EmulatorConfig
+        :rtype: backend.config
         """
         noise_types = [key for key, value in self.config.items() if value]
         # obiviously need to do something here 

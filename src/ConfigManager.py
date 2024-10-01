@@ -81,22 +81,29 @@ class ConfigManager:
         application_config = self.application.get_parameter_options()
         more_app_config = {}
 
-        application_config = ConfigManager._query_for_config(
+        full_application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
-
+        depending_submodules = False
+        for parameter in application_config:
+            if ("depending_submodule" in application_config[parameter] and
+                    application_config[parameter]["depending_submodule"]):
+                available_submodules = self.application.get_available_submodules(full_application_config[parameter])
+                depending_submodules = True
+        if not depending_submodules:
+            available_submodules = self.application.get_available_submodule_options()
         submodule_answer = checkbox(key='submodules',
                                     message="What submodule do you want?",
-                                    choices=self.application.get_available_submodule_options())
+                                    choices=available_submodules)
         for option in submodule_answer["submodules"]:
             if self.application.depending_parameters:
                 more_app_config = self.application.get_depending_parameters(option, more_app_config)
                 more_app_config = (ConfigManager._query_for_config
                                    (more_app_config, f"(Option for {self.application.__class__.__name__})"))
-                application_config = application_config | more_app_config
+                full_application_config = full_application_config | more_app_config
         self.config = {
             "application": {
                 "name": app_name,
-                "config": application_config,
+                "config": full_application_config,
                 "submodules": [self.query_module(self.application.get_submodule(sm), sm) for sm in
                                submodule_answer["submodules"]],
             },
@@ -125,11 +132,16 @@ class ConfigManager:
         """
 
         module_config = module.get_parameter_options()
-        module_config = ConfigManager._query_for_config(module_config,
-                                                        f"(Option for {module.__class__.__name__})")
-        available_submodules = module.get_available_submodule_options()
+        full_module_config = ConfigManager._query_for_config(module_config, f"(Option for {module.__class__.__name__})")
+        depending_submodules = False
+        for parameter in module_config:
+            if ("depending_submodule" in module_config[parameter] and
+                    module_config[parameter]["depending_submodule"]):
+                available_submodules = module.get_available_submodules(full_module_config[parameter])
+                depending_submodules = True
+        if not depending_submodules:
+            available_submodules = module.get_available_submodule_options()
         more_module_config = {}
-
         if available_submodules:
             if len(available_submodules) == 1:
                 logging.info(
@@ -144,13 +156,13 @@ class ConfigManager:
                         more_module_config = module.get_depending_parameters(option, more_module_config)
                         more_module_config = (ConfigManager._query_for_config
                                               (more_module_config, f"(Option for {module.__class__.__name__})"))
-                        module_config = module_config | more_module_config
+                        full_module_config = full_module_config | more_module_config
         else:
             submodule_answer = {"submodules": []}
 
         return {
             "name": module_friendly_name,
-            "config": module_config,
+            "config": full_module_config,
             "submodules": [self.query_module(module.get_submodule(sm), sm) for sm in
                            submodule_answer["submodules"]]
 

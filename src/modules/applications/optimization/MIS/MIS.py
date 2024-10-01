@@ -80,6 +80,12 @@ class MIS(Optimization):
                                     "allow_ranges": True,
                                     "postproc": int,
                                     "description": "How large should your graph be?"
+                                },
+                                "graph_type": {
+                                    "values": ["hexagonal", "erdosRenyi"],
+                                    "postproc": str,
+                                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                                    "depending_submodule": True
                                 }
                             }
 
@@ -91,8 +97,28 @@ class MIS(Optimization):
                 "allow_ranges": True,
                 "postproc": int,
                 "description": "How large should your graph be?"
+            },
+            "graph_type": {
+                "values": ["hexagonal", "erdosRenyi"],
+                "postproc": str,
+                "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                "depending_submodule": True
             }
         }
+
+    def get_available_submodules(self, options: list) -> list:
+        """
+        Changes mapping options  based on selection of graphs.
+
+        :param options: List of chosen graph type
+        :type options: list
+        :return: List of available submodules
+        :rtype: list
+        """
+        if options == ["hexagonal"]:
+            return ["QIRO", "NeutralAtom"]
+        else:
+            return ["QIRO"]
 
     def get_depending_parameters(self, option: str, config: dict) -> dict:
         """
@@ -107,12 +133,6 @@ class MIS(Optimization):
         """
         if option == "QIRO":
             more_params = {
-                "graph_type": {
-                    "values": ["hexagonal", "erdosRenyi"],
-                    "postproc": str,
-                    "description": "Do you want a hexagonal or an Erdos-Renyi graph"
-                                   "(currently only implemented for QIRO)?"
-                },
                 "seed": {
                     "values": [0, 99, 137, 1205],
                     "custom_input": True,

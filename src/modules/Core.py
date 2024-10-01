@@ -69,6 +69,18 @@ class Core(ABC):
         :rtype: dict
         """
 
+    def get_available_submodules(self, option: list) -> list:
+        """
+        If the module has submodules depending on certain options, this method should adjust the submodule_options
+        accordingly.
+
+        :param option: List of chosen options
+        :type option: list
+        :return: List of available submodules
+        :rtype: list
+        """
+        return []
+
     def get_depending_parameters(self, option: str, config: dict) -> dict:
         """
         If the module has parameters depending on certain options, this method should return the parameters for the

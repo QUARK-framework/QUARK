@@ -50,15 +50,15 @@ class Ising(Mapping):
         return [
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "more-itertools",
-                "version": "9.0.0"
+                "version": "10.5.0"
             },
             {
                 "name": "qiskit-optimization",
-                "version": "0.5.0"
+                "version": "0.6.1"
             },
         ]
 

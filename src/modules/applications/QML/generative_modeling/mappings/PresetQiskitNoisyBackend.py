@@ -14,18 +14,15 @@
 from typing import Union
 import logging
 from time import perf_counter
-
-from qiskit import QuantumCircuit
-from qiskit.circuit import Parameter
-from qiskit.providers.fake_provider import FakeProviderForBackendV2
-from qiskit.providers.fake_provider import *
-from qiskit.compiler import transpile, assemble
-from qiskit.providers import Backend
-from qiskit import Aer
-from qiskit_aer import AerSimulator
-from qiskit_aer.noise import NoiseModel
-# from qiskit_ibm_runtime import QiskitRuntimeService
 import numpy as np
+
+from qiskit import QuantumCircuit, transpile
+from qiskit.circuit import Parameter
+from qiskit.providers import Backend
+from qiskit.providers.fake_provider import *
+from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
+from qiskit_aer import Aer, AerSimulator
+from qiskit_aer.noise import NoiseModel
 
 from modules.training.QCBM import QCBM
 from modules.training.Inference import Inference
@@ -59,23 +56,19 @@ class PresetQiskitNoisyBackend(Library):
         return [
             {
                 "name": "qiskit",
-                "version": "0.45.0"
+                "version": "1.1.0"
             },
-            # {
-            #    "name": "qiskit_ibm_runtime",
-            #      "version": "0.10.0"
-            # },
+            {
+                "name": "qiskit_ibm_runtime",
+                  "version": "0.29.0"
+            },
             {
                 "name": "qiskit_aer",
-                "version": "0.11.2"
+                "version": "0.15.0"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
-            },
-            {
-                "name": "qiskit-ibmq-provider",
-                "version": "0.19.2"
+                "version": "1.26.4"
             }
         ]
 
@@ -281,9 +274,8 @@ class PresetQiskitNoisyBackend(Library):
         if config in ["aer_simulator_cpu", "aer_simulator_gpu"]:
             def execute_circuit(solutions):
 
-                all_circuits = [circuit_transpiled.bind_parameters(solution) for solution in solutions]
-                qobjs = assemble(all_circuits, backend=backend)
-                jobs = backend.run(qobjs, shots=n_shots)
+                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                jobs = backend.run(all_circuits, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(c).int_outcomes() for c in all_circuits]
                 samples = []
                 for result in samples_dictionary:

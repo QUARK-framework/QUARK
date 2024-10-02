@@ -45,11 +45,11 @@ class QUBO(Mapping):
         return [
             {
                 "name": "networkx",
-                "version": "2.8.8"
+                "version": "3.2.1"
             },
             {
                 "name": "dwave_networkx",
-                "version": "0.8.13"
+                "version": "0.8.15"
             }
         ]
 

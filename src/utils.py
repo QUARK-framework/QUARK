@@ -115,10 +115,15 @@ def checkbox(key: str, message: str, choices: list) -> dict:
     :rtype: dict
     """
 
-    answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
+    if len(choices) > 1:
+        answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
+    else:
+        if len(choices) == 1:
+            logging.info(f"Skipping asking for submodule, since only 1 option ({choices[0]}) is available.")
+        return {key: choices}
 
     if not answer[key]:
-        logging.warning("You need to check at least one box! Please try again!")
+        logging.warning("You must check at least one box! Please try again!")
         return checkbox(key, message, choices)
 
     return answer

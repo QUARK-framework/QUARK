@@ -59,7 +59,7 @@ class SAT(Optimization):
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 
@@ -101,14 +101,23 @@ class SAT(Optimization):
                       return {
                                 "variables": {
                                     "values": list(range(10, 151, 10)),
+                                    "custom_input": True,
+                                    "allow_ranges": True,
+                                    "postproc": int,
                                     "description": "How many variables do you need?"
                                 },
                                 "clvar_ratio_cons": {
                                     "values": [2, 3, 4, 4.2, 5],
+                                    "custom_input": True,
+                                    "allow_ranges": True,
+                                    "postproc": int,
                                     "description": "What clause:variable ratio do you want for the (hard) constraints?"
                                 },
                                 "clvar_ratio_test": {
                                     "values": [2, 3, 4, 4.2, 5],
+                                    "custom_input": True,
+                                    "allow_ranges": True,
+                                    "postproc": int,
                                     "description": "What clause:variable ratio do you want for the tests (soft con.)?"
                                 },
                                 "problem_set": {
@@ -124,15 +133,24 @@ class SAT(Optimization):
         """
         return {
             "variables": {
-                "values": list(range(10, 151, 10)),
+                "values": list(range(10, 101, 10)),
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
                 "description": "How many variables do you need?"
             },
             "clvar_ratio_cons": {
                 "values": [2, 3, 4, 4.2, 5],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
                 "description": "What clause:variable ratio do you want for the (hard) constraints?"
             },
             "clvar_ratio_test": {
                 "values": [2, 3, 4, 4.2, 5],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
                 "description": "What clause:variable ratio do you want for the tests (soft constraints)?"
             },
             "problem_set": {

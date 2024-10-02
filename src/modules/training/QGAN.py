@@ -87,7 +87,7 @@ class QGAN(Training): # pylint: disable=R0902
         return [
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             },
             {
                 "name": "torch",
@@ -99,11 +99,11 @@ class QGAN(Training): # pylint: disable=R0902
             },
             {
                 "name": "tensorboard",
-                "version": "2.13.0"
+                "version": "2.17.0"
             },
             {
                 "name": "tensorboardX",
-                "version": "2.6.2"
+                "version": "2.6.2.2"
             }
         ]
 
@@ -483,6 +483,7 @@ class QuantumGenerator:
 
         return samples, pdfs
 
+    # pylint: disable=R0917
     def compute_gradient(self, params: np.ndarray, discriminator: torch.nn.Module, criterion: callable,
                          label: torch.Tensor, device: str) -> np.ndarray:
         """

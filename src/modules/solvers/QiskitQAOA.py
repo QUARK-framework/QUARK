@@ -65,7 +65,7 @@ class QiskitQAOA(Solver):
         """
         if option in ["qasm_simulator", "qasm_simulator_gpu"]:
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
-            return HelperClass(option)        
+            return HelperClass(option)
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
@@ -205,10 +205,10 @@ class QiskitQAOA(Solver):
             logging.error(f"The following ValueError occurred in module QiskitQAOA: {e}")
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.") from e
-        
+
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
-    
+
     def _get_best_solution(self, result) -> Any:
         """
         Gets the best solution from the result.
@@ -232,7 +232,7 @@ class QiskitQAOA(Solver):
                 eigvec = result.eigenstate
             else:
                 raise AttributeError("The result object does not have 'eigenstate'.")
-            
+
         best_bitstring = OptimizationApplication.sample_most_likely(eigvec)
         return best_bitstring
 

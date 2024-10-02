@@ -99,7 +99,7 @@ class Annealer(Solver):
             logging.error("Please select another solver module.")
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.")
-        
+
         response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 

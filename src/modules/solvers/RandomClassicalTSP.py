@@ -92,5 +92,5 @@ class RandomTSP(Solver):
 
         # Parse tour so that it can be processed later
         result = {(node, idx): 1 for idx, node in enumerate(tour)}
-        
+
         return result, end_time_measurement(start), {}

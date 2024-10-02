@@ -13,9 +13,11 @@
 #  limitations under the License.
 
 from typing import TypedDict, List, Dict, Tuple, Any
-import numpy as np
-from pysat.formula import WCNF
 import logging
+
+import numpy as np
+
+from pysat.formula import WCNF
 
 from modules.solvers.Solver import Solver
 from modules.Core import Core

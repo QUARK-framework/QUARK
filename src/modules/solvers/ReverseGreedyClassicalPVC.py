@@ -99,7 +99,7 @@ class ReverseGreedyClassicalPVC(Solver):
             next_node = max(
                 (
                     x for x in mapped_problem.edges(current_node[0], data=True)
-                    if x[2]['c_start'] == current_node[1] 
+                    if x[2]['c_start'] == current_node[1]
                     and x[2]['t_start'] == current_node[2]
                     and x[2]['weight'] != 100000
                 ),

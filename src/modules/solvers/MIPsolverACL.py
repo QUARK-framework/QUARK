@@ -105,5 +105,5 @@ class MIPaclp(Solver):
         for v in problem_instance.variables():
             variables[v.name] = v.varValue
             solution_data["variables"] = variables
-            
+
         return solution_data, end_time_measurement(start), {}

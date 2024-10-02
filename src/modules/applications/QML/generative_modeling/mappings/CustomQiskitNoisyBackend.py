@@ -263,7 +263,8 @@ class CustomQiskitNoisyBackend(Library):
 
         return backend
 
-    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) -> tuple[any, any]:
+    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict
+                            ) -> tuple[any, any]:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.

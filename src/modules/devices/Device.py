@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from abc import ABC
 from typing import Dict, Any, Tuple
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement

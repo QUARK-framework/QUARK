@@ -82,7 +82,7 @@ class ReverseGreedyClassicalTSP(Solver):
         :return: Solution, the time it took to compute it and optional additional information
         """
 
-        # Need to deep copy since we are modifying the graph in this function. 
+        # Need to deep copy since we are modifying the graph in this function.
         # Else the next repetition would work with a different graph
         mapped_problem = mapped_problem.copy()
 
@@ -100,5 +100,5 @@ class ReverseGreedyClassicalTSP(Solver):
 
         # Parse tour so that it can be processed later
         result = {(node, idx): 1 for idx, node in enumerate(tour)}
-    
+
         return result, end_time_measurement(start), {}

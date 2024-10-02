@@ -17,7 +17,7 @@ from typing import TypedDict, List, Dict, Tuple, Any
 import networkx as nx
 
 from modules.solvers.Solver import Solver
-from modules.Core import Core 
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -98,7 +98,7 @@ class GreedyClassicalPVC(Solver):
                     if x[2]['c_start'] == current_node[1] and x[2]['t_start'] == current_node[2]
                 ),
                 key=lambda x: x[2]['weight'])
-            
+
             next_node = (next_node[1], next_node[2]["c_end"], next_node[2]["t_end"])
 
             # Make the step - add distance to cost, add the best node to tour
@@ -108,7 +108,7 @@ class GreedyClassicalPVC(Solver):
             to_remove = [x for x in mapped_problem.nodes if x[0] == current_node[0][0]]
             for node in to_remove:
                 mapped_problem.remove_node(node)
-                
+
             current_node = next_node
             idx += 1
 

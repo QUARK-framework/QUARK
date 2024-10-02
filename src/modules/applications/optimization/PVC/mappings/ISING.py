@@ -93,7 +93,7 @@ class Ising(Mapping):
         """
         start = start_time_measurement()
 
-        # Convert the PVC problem to QUBO 
+        # Convert the PVC problem to QUBO
         qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(problem, config)
 
@@ -138,7 +138,7 @@ class Ising(Mapping):
         logging.info(f"Key Mapping: {self.key_mapping}")
 
         result = {key: 1 if solution[self.key_mapping[key]] == 1 else 0 for key in self.key_mapping}
-            
+
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:

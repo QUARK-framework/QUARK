@@ -19,7 +19,7 @@ from pysat.examples.rc2 import RC2
 from pysat.formula import WCNF
 
 from modules.solvers.Solver import Solver
-from modules.Core import Core 
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 

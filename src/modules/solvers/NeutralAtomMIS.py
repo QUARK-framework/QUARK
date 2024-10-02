@@ -96,7 +96,7 @@ class NeutralAtomMIS(Solver):
         graph = mapped_problem.get('graph')
         nodes = list(graph.nodes())
         edges = list(graph.edges())
-        
+
         logging.info(f"Got problem with {len(graph.nodes)} nodes, {len(graph.edges)} edges.")
 
         device = device_wrapper.get_device()

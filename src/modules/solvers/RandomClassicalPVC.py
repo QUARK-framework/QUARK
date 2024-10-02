@@ -96,8 +96,9 @@ class RandomPVC(Solver):
         while len(mapped_problem.nodes) > 2:
             # Get the random neighbor edge from the current node
             next_node = random.choice([
-                x for x in mapped_problem.edges(current_node[0], data=True) 
-                if x[1][0] != current_node[0][0] and x[2]['c_start'] == current_node[1] and x[2]['t_start'] == current_node[2]
+                x for x in mapped_problem.edges(current_node[0], data=True)
+                if x[1][0] != current_node[0][0] and x[2]['c_start'] == current_node[1] and x[2]['t_start'] \
+                == current_node[2]
             ])
             next_node = (next_node[1], next_node[2]["c_end"], next_node[2]["t_end"])
 
@@ -108,7 +109,7 @@ class RandomPVC(Solver):
             to_remove = [x for x in mapped_problem.nodes if x[0] == current_node[0][0]]
             for node in to_remove:
                 mapped_problem.remove_node(node)
-                
+
             current_node = next_node
             idx += 1
 

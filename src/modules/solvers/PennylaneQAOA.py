@@ -355,7 +355,7 @@ class PennylaneQAOA(Solver):
                 logging.error(e)
                 logging.error("Run a smaller problem size or select another device.")
                 raise e
-            
+
             # Convert cost_before to a float, so it's easier to handle
             cost_before = float(cost_before)
             if iteration == 0:

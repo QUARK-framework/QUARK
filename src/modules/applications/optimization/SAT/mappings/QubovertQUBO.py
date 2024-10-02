@@ -12,12 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from typing import TypedDict, List, Dict, Tuple, Any
+
 from qubovert.sat import NOT, OR, AND
 from nnf import And
+
 from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
-import logging
 
 
 class QubovertQUBO(Mapping):

@@ -246,8 +246,8 @@ class PVC(Optimization):
         visited_seams = {seam[0][0] for seam in solution if seam is not None}
 
         if len(visited_seams) == len(solution):
-            logging.info(f"All {len(solution) - 1} seams and 
-                         the base node got visited (We only need to visit 1 node per seam)")
+            logging.info(f"All {len(solution) - 1} seams and "
+                         "the base node got visited (We only need to visit 1 node per seam)")
             return True, end_time_measurement(start)
         else:
             logging.error(f"Only {len(visited_seams) - 1} got visited")

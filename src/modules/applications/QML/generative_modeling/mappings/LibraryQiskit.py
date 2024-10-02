@@ -11,8 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
-from typing import Union
+from typing import Union, Dict, List, Tuple, Any
 import logging
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
@@ -41,25 +40,18 @@ class LibraryQiskit(Library):
         self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "qiskit",
-                "version": "1.1.0"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "qiskit", "version": "1.1.0"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for the Qiskit Library.
 
@@ -100,7 +92,6 @@ class LibraryQiskit(Library):
         }
 
     def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
-
         if option == "QCBM":
             return QCBM()
         elif option == "QGAN":
@@ -110,15 +101,13 @@ class LibraryQiskit(Library):
         else:
             raise NotImplementedError(f"Option {option} not implemented")
 
-    def sequence_to_circuit(self, input_data: dict) -> dict:
+    def sequence_to_circuit(self, input_data: Dict) -> Dict:
         """
         Maps the gate sequence, that specifies the architecture of a quantum circuit
         to its Qiskit implementation. 
 
         :param input_data: Collected information of the benchmarking process
-        :type input_data: dict
         :return: Same dictionary but the gate sequence is replaced by its Qiskit implementation
-        :rtype: dict
         """
         n_qubits = input_data["n_qubits"]
         gate_sequence = input_data["gate_sequence"]
@@ -126,47 +115,35 @@ class LibraryQiskit(Library):
         circuit = QuantumCircuit(n_qubits, n_qubits)
         param_counter = 0
         for gate, wires in gate_sequence:
-
             if gate == "Hadamard":
                 circuit.h(wires[0])
-
             elif gate == "CNOT":
                 circuit.cx(wires[0], wires[1])
-
             elif gate == "RZ":
                 circuit.rz(Parameter(f"x_{param_counter:03d}"), wires[0])
                 param_counter += 1
-
             elif gate == "RX":
                 circuit.rx(Parameter(f"x_{param_counter:03d}"), wires[0])
                 param_counter += 1
-
             elif gate == "RY":
                 circuit.ry(Parameter(f"x_{param_counter:03d}"), wires[0])
                 param_counter += 1
-
             elif gate == "RXX":
                 circuit.rxx(Parameter(f"x_{param_counter:03d}"), wires[0], wires[1])
                 param_counter += 1
-
             elif gate == "RYY":
                 circuit.ryy(Parameter(f"x_{param_counter:03d}"), wires[0], wires[1])
                 param_counter += 1
-
             elif gate == "RZZ":
                 circuit.rzz(Parameter(f"x_{param_counter:03d}"), wires[0], wires[1])
                 param_counter += 1
-
             elif gate == "CRY":
                 circuit.cry(Parameter(f"x_{param_counter:03d}"), wires[0], wires[1])
                 param_counter += 1
-
             elif gate == "Barrier":
                 circuit.barrier()
-
             elif gate == "Measure":
                 circuit.measure(wires[0], wires[0])
-
             else:
                 raise NotImplementedError(f"Gate {gate} not implemented")
 
@@ -182,11 +159,8 @@ class LibraryQiskit(Library):
         This method configures the backend
 
         :param config: Name of a backend
-        :type config: str
         :param n_qubits: Number of qubits
-        :type n_qubits: int
         :return: Configured qiskit backend
-        :rtype: any
         """
         if config == "cusvaer_simulator (only available in cuQuantum appliance)":
             import cusvaer  # pylint: disable=C0415
@@ -253,23 +227,18 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
-            -> tuple[any, any]:  # pylint: disable=W0221,R0915
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: Dict) \
+            -> Tuple[Any, Any]:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
 
         :param circuit: Qiskit implementation of the quantum circuit
-        :type circuit: qiskit.circuit.QuantumCircuit
         :param backend: Configured qiskit backend
-        :type backend: qiskit.providers.Backend
         :param config: Name of a backend
-        :type config: str
         :param config_dict: Contains information about config
-        :type config_dict: dict
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
         transpiled circuit
-        :rtype: tuple[any, any]
         """
         n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits

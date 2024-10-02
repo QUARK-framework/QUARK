@@ -12,40 +12,47 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import os
 from braket.aws import AwsDevice
+from typing import Dict
 
-from modules.devices.braket.Braket import *
+from modules.devices.braket.Braket import Braket
 from modules.Core import Core
 
 
 class OQC(Braket):
     """
-    Class for using the Oxford Quantum Circuits (OQC) devices on Amazon Braket
+    Class for using the Oxford Quantum Circuits (OQC) devices on Amazon Braket.
     """
 
     def __init__(self, device_name: str, arn: str = 'arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy'):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(region="eu-west-2", device_name=device_name, arn=arn)
         self.submodule_options = []
+
         if 'SKIP_INIT' in os.environ:
             # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
-            #       of this section, which would be unnecessary. However, this should be done better in the future!
+            # of this section, which would be unnecessary. However, this should be done better in the future!
             return
+        
         self.init_s3_storage("oqc")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns an empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules.
+        """
         raise ValueError("This module has no submodules.")

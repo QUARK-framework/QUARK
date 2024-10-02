@@ -12,8 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
-from typing import TypedDict
+from typing import Union, TypedDict, Any, List, Tuple, Dict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
@@ -30,38 +29,38 @@ class CircuitStandard(Circuit):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("DiscreteStandard")
         self.submodule_options = [
             "LibraryQiskit",
             "LibraryPennylane",
             "CustomQiskitNoisyBackend",
-            "PresetQiskitNoisyBackend"]
+            "PresetQiskitNoisyBackend"
+        ]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return []
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this standard circuit.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of parameter options.
+        .. code-block:: python
 
-                     return {
-                                "depth": {
-                                    "values": [1, 2, 3],
-                                    "description": "What depth do you want?"
-                                }
-                            }
+            return {
+                    "depth": {
+                        "values": [1, 2, 3],
+                        "description": "What depth do you want?"
+                    }
+                }
 
         """
         return {
@@ -72,8 +71,15 @@ class CircuitStandard(Circuit):
             }
         }
 
-    def get_default_submodule(self, option: str) -> \
-            Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(
+            self, option: str
+    ) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        """
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":
@@ -87,7 +93,7 @@ class CircuitStandard(Circuit):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -96,16 +102,13 @@ class CircuitStandard(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
+    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
         """
-        Returns gate sequence of standard architecture
+        Returns gate sequence of standard architecture.
     
         :param input_data: Collection of information from the previous modules
-        :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
         :return: Dictionary including the gate sequence of the Standard Circuit
-        :rtype: dict
         """
         n_registers = input_data["n_registers"]
         n_qubits = input_data["n_qubits"]

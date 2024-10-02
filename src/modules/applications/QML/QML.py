@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from modules.applications.Application import *
+from abc import ABC, abstractmethod
+from typing import Any, Dict
+
+from modules.applications.Application import Application
 
 
 class QML(Application, ABC):
@@ -21,16 +24,20 @@ class QML(Application, ABC):
     """
 
     @abstractmethod
-    def generate_problem(self, config) -> any:
+    def generate_problem(self, config: Dict) -> Any:
         """
-        Creates a concrete problem and returns it
-        :param config:
-        :type config: dict
-        :return:
-        :rtype: any
+        Creates a concrete problem and returns it.
+
+        :param config: Configuration dictionary
+        :return: Generated problem
         """
         pass
 
     def save(self, path: str, iter_count: int) -> None:
-        # Transform tensorboard output file to pandas dataframe
+        """
+        Placeholder method for saving output to a file.
+
+        :param path: Path to save the file
+        :param iter_count: Iteration count
+        """
         pass

@@ -11,8 +11,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 import logging
-from typing import Tuple, TypedDict
+from typing import Tuple, TypedDict, Dict, Any, List
 
 import numpy as np
 
@@ -24,7 +25,8 @@ from qiskit_optimization.applications import OptimizationApplication
 from qiskit_algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit_algorithms.minimum_eigensolvers import VQE, QAOA, NumPyMinimumEigensolver
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 class QiskitQAOA(Solver):
@@ -34,88 +36,73 @@ class QiskitQAOA(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
-        # self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm_eagle"]
         self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu"]
         self.ry = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "qiskit",
-                "version": "1.1.0"
-            },
-            {
-                "name": "qiskit-optimization",
-                "version": "0.6.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "qiskit-algorithms",
-                "version": "0.3.0"
-            }
-
+            {"name": "qiskit", "version": "1.1.0"},
+            {"name": "qiskit-optimization", "version": "0.6.1"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "qiskit-algorithms", "version": "0.3.0"}
         ]
 
     def get_default_submodule(self, option: str) -> Core:
-        if option == "qasm_simulator":
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
+        if option in ["qasm_simulator", "qasm_simulator_gpu"]:
             from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
-            return HelperClass("qasm_simulator")
-        elif option == "qasm_simulator_gpu":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
-            return HelperClass("qasm_simulator_gpu")
-        # elif option == "ibm_eagle":
-        #     from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
-        #     return HelperClass("ibm_eagle")
+            return HelperClass(option)        
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this solver.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of configurable settings
+        .. code-block:: python
 
-                              return {
-                                        "shots": {  # number measurements to make on circuit
-                                            "values": list(range(10, 500, 30)),
-                                            "description": "How many shots do you need?"
-                                        },
-                                        "iterations": {  # number measurements to make on circuit
-                                            "values": [1, 5, 10, 20, 50, 75],
-                                            "description": "How many iterations do you need? Warning: When using\
-                                            the IBM Eagle Device you should only choose a lower number of\
-                                            iterations, since a high number would lead to a waiting time that\
-                                            could take up to mulitple days!"
-                                        },
-                                        "depth": {
-                                            "values": [2, 3, 4, 5, 10, 20],
-                                            "description": "How many layers for QAOA (Parameter: p) do you want?"
-                                        },
-                                        "method": {
-                                            "values": ["classic", "vqe", "qaoa"],
-                                            "description": "Which Qiskit solver should be used?"
-                                        },
-                                        "optimizer": {
-                                            "values": ["POWELL", "SPSA", "COBYLA"],
-                                            "description": "Which Qiskit solver should be used? Warning: When\
-                                            using the IBM Eagle Device you should not use the SPSA optimizer,\
-                                            since it is not suited for only one evaluation!"
-                                        }
-                                    }
+                    return {
+                            "shots": {  # number measurements to make on circuit
+                                "values": list(range(10, 500, 30)),
+                                "description": "How many shots do you need?"
+                            },
+                            "iterations": {  # number measurements to make on circuit
+                                "values": [1, 5, 10, 20, 50, 75],
+                                "description": "How many iterations do you need? Warning: When using\
+                                the IBM Eagle Device you should only choose a lower number of\
+                                iterations, since a high number would lead to a waiting time that\
+                                could take up to mulitple days!"
+                            },
+                            "depth": {
+                                "values": [2, 3, 4, 5, 10, 20],
+                                "description": "How many layers for QAOA (Parameter: p) do you want?"
+                            },
+                            "method": {
+                                "values": ["classic", "vqe", "qaoa"],
+                                "description": "Which Qiskit solver should be used?"
+                            },
+                            "optimizer": {
+                                "values": ["POWELL", "SPSA", "COBYLA"],
+                                "description": "Which Qiskit solver should be used? Warning: When\
+                                using the IBM Eagle Device you should not use the SPSA optimizer,\
+                                since it is not suited for only one evaluation!"
+                            }
+                        }
 
         """
         return {
@@ -164,39 +151,31 @@ class QiskitQAOA(Solver):
         method: str
 
     @staticmethod
-    def normalize_data(data: any, scale: float = 1.0) -> any:
+    def normalize_data(data: Any, scale: float = 1.0) -> Any:
         """
         Not used currently, as I just scale the coefficients in the qaoa_operators_from_ising.
 
-        :param data:
-        :type data: any
-        :param scale:
-        :type scale: float
-        :return: scaled data
-        :rtype: any
+        :param data: Data to normalize
+        :param scale: Scaling factor
+        :return: Normalized data
         """
         return scale * data / np.max(np.abs(data))
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, float):
+    def run(self, mapped_problem: Any, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Any, float]:
         """
         Run Qiskit QAOA algorithm on Ising.
 
         :param mapped_problem: dictionary with the keys 'J' and 't'
-        :type mapped_problem: any
-        :param device_wrapper: instance of device
-        :type device_wrapper: any
-        :param config:
-        :type config: Config
+        :param device_wrapper: Instance of device
+        :param config: Config object for the solver
         :param kwargs: no additionally settings needed
-        :type kwargs: any
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
         J = mapped_problem['J']
         t = mapped_problem['t']
         start = start_time_measurement()
         ising_op = self._get_pauli_op((t, J))
+
         if config["method"] == "classic":
             algorithm = NumPyMinimumEigensolver()
         else:
@@ -222,34 +201,21 @@ class QiskitQAOA(Solver):
         # run actual optimization algorithm
         try:
             result = algorithm.compute_minimum_eigenvalue(ising_op)
-            print('result',result)
         except ValueError as e:
             logging.error(f"The following ValueError occurred in module QiskitQAOA: {e}")
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.") from e
+        
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
+    
+    def _get_best_solution(self, result) -> Any:
+        """
+        Gets the best solution from the result.
 
-    @staticmethod
-    def _get_quantum_instance(device_wrapper: any) -> any:
-        backend = Aer.get_backend("qasm_simulator")
-        if device_wrapper.device == 'qasm_simulator_gpu':
-            logging.info("Using GPU simulator")
-            backend.set_options(device='GPU')
-            backend.set_options(method='statevector_gpu')
-        # elif device_wrapper.device == 'ibm_eagle':
-        #     logging.info("Using IBM Eagle")
-        #     ibm_quantum_token = os.environ.get('ibm_quantum_token')
-        #     service = QiskitRuntimeService(channel="ibm_quantum", token=ibm_quantum_token)
-        #     backend = service.least_busy(operational=True, simulator=False, min_num_qubits=127)
-        else:
-            logging.info("Using CPU simulator")
-            backend.set_options(device='CPU')
-            backend.set_options(method='statevector')
-            backend.set_options(max_parallel_threads=48)
-        return backend
-
-    def _get_best_solution(self, result) -> any:
+        :param result: Result from the quantum algorithm
+        :return: Best bitstring solution
+        """
         if self.ry is not None:
             if hasattr(result, "optimal_point"):
                 para_dict =  dict(zip(self.ry.parameters, result.optimal_point))
@@ -262,16 +228,22 @@ class QiskitQAOA(Solver):
             else:
                 raise AttributeError("The result object does not have 'optimal_point' or 'eigenstate' attributes.")
         else:
-        # If self.ry is None
             if hasattr(result, "eigenstate"):
                 eigvec = result.eigenstate
             else:
                 raise AttributeError("The result object does not have 'eigenstate'.")
+            
         best_bitstring = OptimizationApplication.sample_most_likely(eigvec)
         return best_bitstring
 
     @staticmethod
-    def _get_pauli_op(ising: Tuple[np.ndarray, np.ndarray]) -> object:
+    def _get_pauli_op(ising: Tuple[np.ndarray, np.ndarray]) -> SparsePauliOp:
+        """
+        Creates a Pauli operator from the given Ising model representation
+
+        :param ising: Tuple with linear and quandratic terms
+        .return: SparsePauliOp representing the Ising model
+        """
         pauli_list = []
         number_qubits = len(ising[0])
 
@@ -298,21 +270,6 @@ class QiskitQAOA(Solver):
             pauli_str_list[idx2] = "Z"
             pauli_str = "".join(pauli_str_list)
             pauli_list.append((pauli_str, complex(x)))
-
-        # for key, value in ising[0].items():
-        #     pauli_str = "I"*number_qubits
-        #     pauli_str_list = list(pauli_str)
-        #     pauli_str_list[key] = "Z"
-        #     pauli_str = "".join(pauli_str_list)
-        #     pauli_list.append((pauli_str, value))
-        #
-        # for key, value in ising[1].items():
-        #     pauli_str = "I"*number_qubits
-        #     pauli_str_list = list(pauli_str)
-        #     pauli_str_list[key[0]] = "Z"
-        #     pauli_str_list[key[1]] = "Z"
-        #     pauli_str = "".join(pauli_str_list)
-        #     pauli_list.append((pauli_str, value))
 
         isingOp =SparsePauliOp.from_list(pauli_list)
         return isingOp

@@ -11,8 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
-from typing import Union
+from typing import Union, Any, Dict, Tuple, List
 
 import numpy as np
 import pennylane as qml
@@ -34,41 +33,25 @@ class LibraryPennylane(Library):
         self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "pennylane",
-                "version": "0.37.0"
-            },
-            {
-                "name": "pennylane-lightning",
-                "version": "0.38.0"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "jax",
-                "version": "0.4.30"
-            },
-            {
-                "name": "jaxlib",
-                "version": "0.4.30"
-            }
+            {"name": "pennylane", "version": "0.37.0"},
+            {"name": "pennylane-lightning", "version": "0.38.0"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "jax", "version": "0.4.30"},
+            {"name": "jaxlib", "version": "0.4.30"}
         ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for the PennyLane Library.
 
-        :return:
+        :return: Dictionary with configurable settings.
                  .. code-block:: python
 
                         return {
@@ -89,7 +72,6 @@ class LibraryPennylane(Library):
                 "values": ["default.qubit", "default.qubit.jax", "lightning.qubit", "lightning.gpu"],
                 "description": "Which device do you want to use?"
             },
-
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
                 "description": "How many shots do you want use for estimating the PMF of the model?"
@@ -107,19 +89,19 @@ class LibraryPennylane(Library):
         else:
             raise NotImplementedError(f"Training option {option} not implemented")
 
-    def sequence_to_circuit(self, input_data: dict) -> dict:
+    def sequence_to_circuit(self, input_data: Dict) -> Dict:
         """
         Method that maps the gate sequence, that specifies the architecture of a quantum circuit
         to its PennyLane implementation.
 
         :param input_data: Collected information of the benchmarking process
-        :type input_data: dict
         :return: Same dictionary but the gate sequence is replaced by its PennyLane implementation
-        :rtype: dict
         """
         gate_sequence = input_data["gate_sequence"]
         n_qubits = input_data["n_qubits"]
-        num_parameters = sum(1 for gate, _ in gate_sequence if gate in ["RZ", "RX", "RY", "RXX", "RYY", "RZZ", "CRY"])
+        num_parameters = sum(
+            1 for gate, _ in gate_sequence if gate in ["RZ", "RX", "RY", "RXX", "RYY", "RZZ", "CRY"]
+        )
 
         def create_circuit(params):
             param_counter = 0
@@ -165,52 +147,41 @@ class LibraryPennylane(Library):
         return input_data
 
     @staticmethod
-    def select_backend(config: str, n_qubits: int) -> any:
+    def select_backend(config: str, n_qubits: int) -> Any:
         """
         This method configures the backend
 
         :param config: Name of a backend
-        :type config: str
         :param n_qubits: Number of qubits
-        :type n_qubits: int
         :return: Configured backend
-        :rtype: any
         """
         if config == "lightning.gpu":
             backend = qml.device(name="lightning.gpu", wires=n_qubits)
-
         elif config == "lightning.qubit":
             backend = qml.device(name="lightning.qubit", wires=n_qubits)
-
         elif config == "default.qubit":
             backend = qml.device(name="default.qubit", wires=n_qubits)
-
         elif config == "default.qubit.jax":
             backend = qml.device(name="default.qubit.jax", wires=n_qubits)
-
         else:
             raise NotImplementedError(f"Device Configuration {config} not implemented")
 
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: callable, backend: qml.device, config: str, config_dict: dict) -> tuple[any, any]:
+    def get_execute_circuit(
+        circuit: callable, backend: qml.device, config: str, config_dict: Dict
+    ) -> Tuple[any, any]:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.
 
         :param circuit: PennyLane implementation of the quantum circuit
-        :type circuit: callable
         :param backend: Configured PennyLane device
-        :type backend: pennylane.device
         :param config: Name of the PennyLane device
-        :type config: str
         :param config_dict: Dictionary including the number of shots
-        :type config_dict: dict
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters twice
-        :rtype: tuple[any, any]
         """
-
         n_shots = config_dict["n_shots"]
 
         if config == "default.qubit.jax":

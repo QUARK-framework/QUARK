@@ -12,8 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
-from typing import TypedDict
+from typing import Union, TypedDict, Any, Dict, Tuple, List
 from itertools import combinations
 
 from scipy.special import binom
@@ -46,24 +45,17 @@ class CircuitCopula(Circuit):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "scipy",
-                "version": "1.12.0"
-            }
-        ]
+        return [{"name": "scipy", "version": "1.12.0"}]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this Copula Circuit.
 
-        :return:
-
+        :return: Dictionary of parameter options
         .. code-block:: python
 
             return {
@@ -81,8 +73,16 @@ class CircuitCopula(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) -> \
-            Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(
+            self, option: str
+    ) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule.
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":
@@ -96,7 +96,7 @@ class CircuitCopula(Circuit):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -105,16 +105,13 @@ class CircuitCopula(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
+    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
         """
-        Returns gate sequence of copula architecture
+        Returns gate sequence of copula architecture.
     
         :param input_data: Collection of information from the previous modules
-        :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
         :return: Dictionary including the gate sequence of the Copula Circuit
-        :rtype: dict
         """
         n_registers = input_data["n_registers"]
         n_qubits = input_data["n_qubits"]

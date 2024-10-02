@@ -12,7 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from modules.Core import *
+from abc import ABC, abstractmethod
+from typing import Any
+from modules.Core import Core
 
 
 class Application(Core, ABC):
@@ -23,30 +25,26 @@ class Application(Core, ABC):
 
     def __init__(self, application_name: str):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(application_name)
         self.application_name = self.name
         self.application = None
 
-    def get_application(self) -> any:
+    def get_application(self) -> Any:
         """
-        Gets the application
+        Gets the application.
 
         :return: self.application
-        :rtype: any
         """
         return self.application
 
     @abstractmethod
     def save(self, path: str, iter_count: int) -> None:
         """
-        Saves the concrete problem
+        Saves the concrete problem.
+
         :param path: path of the experiment directory for this run
-        :type path: str
         :param iter_count: the iteration count
-        :type iter_count: int
-        :return:
-        :rtype: None
         """
         pass

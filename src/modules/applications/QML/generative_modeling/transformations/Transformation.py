@@ -13,10 +13,12 @@
 #  limitations under the License.
 
 from itertools import product
+from abc import ABC, abstractmethod
+from typing import Dict, Tuple, List
 
 import numpy as np
 
-from modules.Core import *
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -34,32 +36,22 @@ class Transformation(Core, ABC):
         self.transformation_name = name
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
         Returns requirements of this module
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
-        return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
-        ]
+        return [{"name": "numpy", "version": "1.26.4"}]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
+    def preprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
         :param input_data: Collected information of the benchmarking process
-        :type input_data: dict
         :param config: Config specifying the parameters of the transformation
-        :type config: dict
         :param kwargs: Additional optional arguments
-        :type kwargs: dict
         :return: tuple with transformed problem and the time it took to map it
-        :rtype: tuple[dict, float]
         """
 
         start = start_time_measurement()
@@ -67,52 +59,43 @@ class Transformation(Core, ABC):
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
+    def postprocess(self, input_data: Dict, config: Dict, **kwargs) -> Tuple[Dict, float]:
         """
         Does the reverse transformation
 
         :param input_data: Dictionary containing information of previously executed modules
-        :type input_data: dict
         :param config: Dictionary containing additional information
-        :type config: dict
         :param kwargs: Dictionary containing additional information
-        :type kwargs: dict
         :return: tuple with the dictionary and the time the postprocessing took
-        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
-
         output = self.reverse_transform(input_data)
         output["Transformation"] = True
         if "inference" in input_data:
             output["inference"] = input_data["inference"]
+
         return output, end_time_measurement(start)
 
     @abstractmethod
-    def transform(self, input_data: dict, config: dict) -> dict:
+    def transform(self, input_data: Dict, config: Dict) -> Dict:
         """
         Helps to ensure that the model can effectively learn the underlying 
         patterns and structure of the data, and produce high-quality outputs.
 
         :param input_data: Input data for transformation.
-        :type input_data: dict
         :param config: Configuration parameters for the transformation.
-        :type config: dict
         :return: Transformed data.
-        :rtype: dict
         """
         return input_data
 
-    def reverse_transform(self, input_data: dict) -> dict:
+    def reverse_transform(self, input_data: Dict) -> Dict:
         """
         Transforms the solution back to the original problem.
         This might not be necessary in all cases, so the default is to return the original solution.
         This might be needed to convert the solution to a representation needed for validation and evaluation.
 
         :param input_data: The input data to be transformed.
-        :type input_data: dict
         :return: Transformed data.
-        :rtype: dict
         """
         return input_data
 
@@ -122,11 +105,8 @@ class Transformation(Core, ABC):
         Compute discretization for the grid.
 
         :param n_qubits: Total number of qubits.
-        :type n_qubits: int
         :param n_registered: Number of qubits to be registered.
-        :type n_registered: int
         :return: Discretization data.
-        :rtype: np.ndarray
         """
         n = 2 ** (n_qubits // n_registered)
         n_bins = n ** n_registered
@@ -144,11 +124,8 @@ class Transformation(Core, ABC):
         Compute grid discretization.
 
         :param n_qubits: Total number of qubits.
-        :type n_qubits: int
         :param n_registers: Number of qubits to be registered.
-        :type n_registers: int
         :return: Discretization data.
-        :rtype: np.ndarray
         """
         n = 2 ** (n_qubits // n_registers)
         n_bins = n ** n_registers
@@ -170,15 +147,10 @@ class Transformation(Core, ABC):
         Generate samples based on measurement results and the grid bins.
 
         :param results: Results of measurements.
-        :type results: np.ndarray
         :param bin_data: Binned data.
-        :type bin_data: np.ndarray
         :param n_registers: Number of registers.
-        :type n_registers: int
         :param noisy: Flag indicating whether to add noise.
-        :type noisy: bool, optional
         :return: Generated samples.
-        :rtype: np.ndarray
         """
         n_shots = np.sum(results)
         width = 1 / len(bin_data) ** (1 / n_registers)
@@ -202,15 +174,10 @@ class Transformation(Core, ABC):
         Generate samples efficiently using numpy arrays based on measurement results and the grid bins
 
         :param results: Results of measurements.
-        :type results: np.ndarray
         :param bin_data: Binned data.
-        :type bin_data: np.ndarray
         :param n_registers: Number of registers.
-        :type n_registers: int
         :param noisy: Flag indicating whether to add noise.
-        :type noisy: bool, optional
         :return: Generated samples.
-        :rtype: np.ndarray
         """
         n_shots = np.sum(results)
         width = 1 / len(bin_data) ** (1 / n_registers)

@@ -13,13 +13,15 @@
 #  limitations under the License.
 
 from time import sleep
-from typing import TypedDict
+from typing import TypedDict, List, Dict, Any, Tuple
+import logging
 
 import numpy as np
 from braket.circuits import Circuit
 from scipy.optimize import minimize
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -30,38 +32,36 @@ class QAOA(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
-        self.submodule_options = ["LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
-                                  "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                                  "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
-                                  "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
+        self.submodule_options = [
+            "LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+            "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+            "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+            "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+        ]
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "amazon-braket-sdk",
-                "version": "1.87.0"
-            },
-            {
-                "name": "scipy",
-                "version": "1.12.0"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "amazon-braket-sdk", "version": "1.87.0"},
+            {"name": "scipy", "version": "1.12.0"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
             from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
@@ -81,27 +81,27 @@ class QAOA(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of parameter settings
+        .. code-block:: python
 
-                              return {
-                                        "shots": {  # number measurements to make on circuit
-                                            "values": list(range(10, 500, 30)),
-                                            "description": "How many shots do you need?"
-                                        },
-                                        "opt_method": {
-                                            "values": ["Powell", "Nelder-Mead"],
-                                            "description": "Which optimization method do you want?"
-                                        },
-                                        "depth": {
-                                            "values": [3],
-                                            "description": "Which circuit depth for QAOA do you want?"
-                                        }
-                                    }
+                    return {
+                            "shots": {  # number measurements to make on circuit
+                                "values": list(range(10, 500, 30)),
+                                "description": "How many shots do you need?"
+                            },
+                            "opt_method": {
+                                "values": ["Powell", "Nelder-Mead"],
+                                "description": "Which optimization method do you want?"
+                            },
+                            "depth": {
+                                "values": [3],
+                                "description": "Which circuit depth for QAOA do you want?"
+                            }
+                        }
 
         """
         return {
@@ -121,7 +121,7 @@ class QAOA(Solver):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -134,22 +134,16 @@ class QAOA(Solver):
         opt_method: str
         depth: int
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, float):
+    def run(self, mapped_problem: Any, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Any, float]:
         """
         Run QAOA algorithm on Ising.
 
         :param mapped_problem: dictionary with the keys 'J' and 't'
-        :type mapped_problem: any
-        :param device_wrapper: instance of device
-        :type device_wrapper: any
-        :param config:
-        :type config: Config
+        :param device_wrapper: Instance of device
+        :param config: Solver configuration settings
         :param kwargs: no additionally settings needed
-        :type kwargs: any
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
         j = mapped_problem['J']
         if np.any(np.iscomplex(j)):
             logging.warning("The problem matrix of the QAOA solver contains imaginary numbers."
@@ -161,7 +155,7 @@ class QAOA(Solver):
         n_qubits = j.shape[0]
 
         # User-defined hypers
-        depth = config['depth']  # circuit depth for QAOA
+        depth = config['depth']
         opt_method = config['opt_method']  # SLSQP, COBYLA, Nelder-Mead, BFGS, Powell, ...
 
         # initialize reference solution (simple guess)
@@ -194,23 +188,22 @@ class QAOA(Solver):
 
         # kick off training
         start = start_time_measurement()
-        # result_energy, result_angle, tracker
         _, _, tracker = train(
-            device=device_wrapper.get_device(), options=options, p=depth, ising=j, n_qubits=n_qubits,
+            device=device_wrapper.get_device(),
+            options=options,
+            p=depth, ising=j,
+            n_qubits=n_qubits,
             n_shots=config['shots'],
-            opt_method=opt_method, tracker=tracker, s3_folder=device_wrapper.s3_destination_folder, verbose=True)
+            opt_method=opt_method,
+            tracker=tracker,
+            s3_folder=device_wrapper.s3_destination_folder,
+            verbose=True
+        )
         time_to_solve = end_time_measurement(start)
 
-        # print execution time
-        # logging.info('Code execution time [sec]: ' + (end - start))
-
-        # print optimized results
+        # Log optimized results
         logging.info(f"Optimal energy: {tracker['optimal_energy']}")
         logging.info(f"Optimal classical bitstring: {tracker['optimal_bitstring']}")
-
-        # visualize the optimization process
-        # cycles = np.arange(1, tracker['count'])
-        # optim_classical = tracker['global_energies']
 
         # TODO maybe save this plot
         # plt.plot(cycles, optim_classical)
@@ -274,11 +267,10 @@ def cost_circuit(gamma, n_qubits, ising, device):
         # for Rigetti we decompose ZZ using CNOT gates
         if device.name in ["Rigetti", "Aspen-9"]:  # TODO make this more flexible
             gate = ZZgate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
-            circ.add(gate)
         # classical simulators and IonQ support ZZ gate
         else:
             gate = Circuit().zz(qubit_pair[0], qubit_pair[1], angle=2 * gamma * int_strength)
-            circ.add(gate)
+        circ.add(gate)
 
     return circ
 
@@ -330,15 +322,14 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
     if device.name in ["DefaultSimulator", "StateVectorSimulator"]:
         task = device.run(qaoa_circuit, shots=n_shots)
     else:
-        task = device.run(
-            qaoa_circuit, s3_folder, shots=n_shots, poll_timeout_seconds=3 * 24 * 60 * 60
-        )
+        task = device.run(qaoa_circuit, s3_folder, shots=n_shots, poll_timeout_seconds=3 * 24 * 60 * 60)
 
         # get ID and status of submitted task
         task_id = task.id
         status = task.state()
         logging.info(f"ID of task: {task_id}")
         logging.info(f"Status of task: {status}")
+
         # wait for job to complete
         while status != 'COMPLETED':
             status = task.state()
@@ -348,9 +339,6 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
     # get result for this task
     result = task.result()
     logging.info(result)
-
-    # get metadata
-    # metadata = result.task_metadata
 
     # convert results (0 and 1) to ising (-1 and 1)
     meas_ising = result.measurements
@@ -368,8 +356,7 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
 
     # store optimal (classical) result/bitstring
     if energy_min < tracker["optimal_energy"]:
-        tracker.update({"optimal_energy": energy_min})
-        tracker.update({"optimal_bitstring": optimal_string})
+        tracker.update({"optimal_energy": energy_min, "optimal_bitstring": optimal_string})
 
     # store global minimum
     tracker["global_energies"].append(tracker["optimal_energy"])
@@ -397,7 +384,6 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
     function to run QAOA algorithm for given, fixed circuit depth p
     """
     logging.info("Starting the training.")
-
     logging.info("==================================" * 2)
     logging.info(f"OPTIMIZATION for circuit depth p={p}")
 

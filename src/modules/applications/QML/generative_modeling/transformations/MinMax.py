@@ -12,11 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
+from typing import Union, List, Dict, Any, Tuple
 
 import numpy as np
 
-from modules.applications.QML.generative_modeling.transformations.Transformation import *
+from modules.applications.QML.generative_modeling.transformations.Transformation import Transformation
 from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 
@@ -41,22 +41,15 @@ class MinMax(Transformation):  # pylint: disable=R0902
         self.histogram_train_original = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
-        return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
-        ]
+        return [{"name": "numpy", "version": "1.26.4"}]
 
     def get_default_submodule(self, option: str) -> Union[CircuitStandard, CircuitCardinality]:
-
         if option == "CircuitStandard":
             return CircuitStandard()
         elif option == "CircuitCardinality":
@@ -64,27 +57,22 @@ class MinMax(Transformation):  # pylint: disable=R0902
         else:
             raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns empty dict as this transformation has no configurable settings
 
         :return: empty dict
-        :rtype: dict
         """
-
         return {}
 
-    def transform(self, input_data: dict, config: dict) -> dict:
+    def transform(self, input_data: Dict, config: Dict) -> Dict:
         """
         Transforms the input dataset using MinMax transformation and computes histograms
         of the training dataset in the transformed space.
 
         :param input_data: A dictionary containing information about the dataset and application configuration.
-        :type input_data: dict
         :param config: A dictionary with parameters specified in the Config class.
-        :type config: dict
         :return: A tuple containing a dictionary with MinMax-transformed data.
-        :rtype: dict
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
@@ -136,14 +124,12 @@ class MinMax(Transformation):  # pylint: disable=R0902
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: dict) -> dict:
+    def reverse_transform(self, input_data: Dict) -> Dict:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
         :param input_data: dictionary containing the solution
-        :type input_data: dict
         :return: solution transformed accordingly
-        :rtype: dict
         """
         best_results = input_data["best_sample"]
         depth = input_data["depth"]
@@ -201,13 +187,11 @@ class MinMax(Transformation):  # pylint: disable=R0902
         Method that performs the min max normalization
 
         :param data: Data to be fitted
-        :type data: np.ndarray
         :return: fitted data
-        :rtype: np.ndarray
         """
-        self.min = data.min()
-        self.max = data.max() - data.min()
-        data = (data - self.min) / self.max
+        self.data_min = data.min()
+        self.data_max = data.max() - self.data_min
+        data = (data - self.data_min) / self.data_max
 
         return data
 
@@ -216,11 +200,9 @@ class MinMax(Transformation):  # pylint: disable=R0902
         Method that performs the inverse min max normalization
 
         :param data: Data to be fitted
-        :type data: np.ndarray
         :return: data in original space
-        :rtype: np.ndarray
         """
-        self.min = data.min()
-        self.max = data.max() - data.min()
+        self.data_min = data.min()
+        self.data_max = data.max() - self.data_min
 
-        return data * self.max + self.min
+        return data * self.data_max + self.data_min

@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, Dict
 
 import pulser
 from pulser.devices import MockDevice
@@ -24,21 +24,23 @@ from modules.Core import Core
 
 class MockNeutralAtomDevice(Pulser):
     """
-    Class for using the local mock Pulser simulator for neutral atom devices
+    Class for using the local mock Pulser simulator for neutral atom devices.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(device_name="mock neutral atom device")
         self.device = MockDevice
         self.backend = QutipBackend
         self.submodule_options = []
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
+
+        :return: Configurable settings for the mock neutral atom device
         """
         return {
             "doppler": {
@@ -61,7 +63,7 @@ class MockNeutralAtomDevice(Pulser):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
         """
         doppler: bool
         amplitude: bool
@@ -70,10 +72,9 @@ class MockNeutralAtomDevice(Pulser):
 
     def get_backend_config(self) -> pulser.backend.config.EmulatorConfig:
         """
-        Returns backend configurations
+        Returns backend configurations.
 
         :return: backend config for the emulator
-        :rtype: pulser.backend.config.EmulatorConfig
         """
         noise_types = [key for key, value in self.config.items() if value]
         noise_model = pulser.backend.noise_model.NoiseModel(noise_types=noise_types)
@@ -81,4 +82,10 @@ class MockNeutralAtomDevice(Pulser):
         return emulator_config
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules.
+        """
         raise ValueError("This module has no submodules.")

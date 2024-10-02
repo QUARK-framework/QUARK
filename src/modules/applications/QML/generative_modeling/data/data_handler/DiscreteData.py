@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
+from typing import TypedDict, Any, List, Dict, Tuple
 import itertools
 import logging
 from pprint import pformat
@@ -20,7 +20,8 @@ from pprint import pformat
 import numpy as np
 
 from modules.circuits.CircuitCardinality import CircuitCardinality
-from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import *
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import DataHandler
 from modules.applications.QML.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
 
 
@@ -45,33 +46,27 @@ class DiscreteData(DataHandler):
         self.solution_set = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_default_submodule(self, option: str) -> CircuitCardinality:
-
         if option == "CircuitCardinality":
             return CircuitCardinality()
         else:
-            raise NotImplementedError(
-                f"Circuit Option {option} not implemented")
+            raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this application
 
-        :return:
+        :return: A dictionary of parameter options
                  .. code-block:: python
 
                     return {
@@ -101,16 +96,13 @@ class DiscreteData(DataHandler):
 
         train_size: int
 
-    def data_load(self, gen_mod: dict, config: Config) -> dict:
+    def data_load(self, gen_mod: dict, config: Config) -> Dict:
         """
         The cardinality constrained dataset is created and split into a training set.
 
         :param gen_mod: Dictionary with collected information of the previous modules
-        :type gen_mod: dict
         :param config: Config specifying the parameters of the data handler
-        :type config: Config
         :return: dictionary including the mapped problem
-        :rtype: dict
         """
         dataset_name = "Cardinality_Constraint"
         self.n_qubits = gen_mod["n_qubits"]
@@ -152,7 +144,8 @@ class DiscreteData(DataHandler):
             "n_registers": 2,
             "histogram_solution": self.histogram_solution,
             "histogram_train": self.histogram_train,
-            "store_dir_iter": gen_mod["store_dir_iter"]}
+            "store_dir_iter": gen_mod["store_dir_iter"]
+        }
 
         if self.train_size != 1:
             self.generalization_metrics = MetricsGeneralization(
@@ -165,12 +158,11 @@ class DiscreteData(DataHandler):
 
         return application_config
 
-    def generalisation(self) -> tuple[dict, float]:
+    def generalisation(self) -> Tuple[Dict, float]:
         """
         Calculate generalization metrics for the generated.
 
         :return: a tuple containing a dictionary of generalization metrics and the execution time
-        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         results = self.generalization_metrics.get_metrics(self.samples)
@@ -179,16 +171,14 @@ class DiscreteData(DataHandler):
 
         return results, end_time_measurement(start)
 
-    def evaluate(self, solution: dict) -> tuple[dict, float]:
+    def evaluate(self, solution: Dict) -> Tuple[Dict, float]:
         """
         Evaluates a given solution and calculates the histogram of generated samples and the minimum KL divergence
         value.
 
         :param solution: dictionary containing the solution data, including generated samples and KL divergence values.
-        :type solution: dict
         :return: a tuple containing a dictionary with the histogram of generated samples and the minimum KL divergence
                  value, and the time it took to evaluate the solution.
-        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
         self.samples = solution["best_sample"]

@@ -12,34 +12,41 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from typing import Dict
 from modules.devices.Device import Device
 from modules.Core import Core
 
 
 class HelperClass(Device):
     """
-    Some Solvers like Pennylane only needs strings for setting up the device and not a standalone class
+    Some Solvers like Pennylane, only needs strings for setting up the device and not a standalone class.
+
     TODO: Maybe refactor this once we think of a better structure for this
     """
 
     def __init__(self, device_name: str):
         """
-        Constructor method
+        Constructor method.
+
+        :param device_name: The name of the device
         """
         super().__init__(device_name=device_name)
         self.device = device_name
         self.submodule_options = []
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules.
+        """
         raise ValueError("This module has no submodules.")

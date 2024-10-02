@@ -12,8 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-
-from modules.Core import *
+from typing import List, Dict, Any, Tuple
+from abc import ABC, abstractmethod
+from modules.Core import Core
 
 
 class Solver(Core, ABC):
@@ -22,38 +23,29 @@ class Solver(Core, ABC):
     defined objective function.
     """
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
         """
         The actual solving process is done here, as we have the device, which got provided by the device submodule,
         and the problem data provided by the parent module.
 
         :param input_data: Data passed to the run function of the solver
-        :type input_data: any
-        :param config: solver config
-        :type config: dict
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
+        :param config: Solver config
+        :param kwargs: Optional keyword arguments
         :return: Output and time needed
-        :rtype: (any, float)
         """
         output, elapsed_time, additional_metrics = self.run(self.preprocessed_input, input_data, config, **kwargs)
         self.metrics.add_metric_batch(additional_metrics)
         return output, elapsed_time
 
     @abstractmethod
-    def run(self, mapped_problem, device_wrapper, config, **kwargs) -> (any, float, dict):
+    def run(self, mapped_problem, device_wrapper, config, **kwargs) -> Tuple[Any, float, Dict]:
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 
-        :param mapped_problem: a representation of the problem that the solver can solve
-        :type mapped_problem: any
-        :param device_wrapper: a device the solver can leverage for the algorithm
-        :type device_wrapper: any
-        :param config: settings for the solver such as hyperparameters
-        :type config: any
-        :param kwargs: optional additional settings
-        :type kwargs: any
+        :param mapped_problem: A representation of the problem that the solver can solve
+        :param device_wrapper: A device the solver can leverage for the algorithm
+        :param config: Settings for the solver such as hyperparameters
+        :param kwargs: Optional additional settings
         :return: Solution, the time it took to compute it and some optional additional information
-        :rtype: tuple(any, float, dict)
         """
         pass

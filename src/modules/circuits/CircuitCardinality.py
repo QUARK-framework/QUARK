@@ -12,8 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
-from typing import TypedDict
+from typing import Union, TypedDict, Any, Tuple, Dict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
@@ -38,13 +37,14 @@ class CircuitCardinality(Circuit):
             "LibraryQiskit",
             "LibraryPennylane",
             "CustomQiskitNoisyBackend",
-            "PresetQiskitNoisyBackend"]
+            "PresetQiskitNoisyBackend"
+        ]
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
         Returns the configurable settings for this circuit.
 
-        :return:
+        :return: Dictionary with parameter options
                  .. code-block:: python
 
                      return {
@@ -63,8 +63,9 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) ->\
-        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(
+            self, option: str
+    ) ->Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":
@@ -87,16 +88,13 @@ class CircuitCardinality(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
+    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
         """
-        Returns gate sequence of cardinality circuit architecture
+        Returns gate sequence of cardinality circuit architecture.
     
         :param input_data: Collection of information from the previous modules
-        :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
         :return: Dictionary including the gate sequence of the Cardinality Circuit
-        :rtype: dict
         """
         n_qubits = input_data["n_qubits"]
         depth = config["depth"] // 2

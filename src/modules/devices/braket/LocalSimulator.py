@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from braket.devices import LocalSimulator as LocalSimulatorBraket
+from typing import Dict
 
 from modules.devices.braket.Braket import Braket
 from modules.Core import Core
@@ -20,27 +21,32 @@ from modules.Core import Core
 
 class LocalSimulator(Braket):
     """
-    Class for using the local Amazon Braket simulator
+    Class for using the local Amazon Braket simulator.
     """
 
     def __init__(self, device_name: str):
         """
-        Constructor method
+        Constructor method for initializing the LocalSimulator class.
+
+        :param device_name: Name of the device.
         """
         super().__init__(device_name=device_name)
         self.device = LocalSimulatorBraket()
         self.submodule_options = []
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: An empty dictionary
         """
-        return {
-
-        }
+        return {}
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules.
+        """
         raise ValueError("This module has no submodules.")

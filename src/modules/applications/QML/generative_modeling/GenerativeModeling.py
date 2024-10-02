@@ -12,10 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
+from typing import Union, Dict, Tuple, List
 from utils import start_time_measurement, end_time_measurement
 
-from modules.applications.Application import *
+from modules.applications.Application import Application
 from modules.applications.QML.QML import QML
 from modules.applications.QML.generative_modeling.data.data_handler.DiscreteData import DiscreteData
 from modules.applications.QML.generative_modeling.data.data_handler.ContinuousData import ContinuousData
@@ -38,12 +38,11 @@ class GenerativeModeling(QML):
         self.data = None
 
     @staticmethod
-    def get_requirements() -> list[dict]:
+    def get_requirements() -> List[Dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dicts with requirements of this module
-        :rtype: list[dict]
         """
         return []
 
@@ -59,11 +58,11 @@ class GenerativeModeling(QML):
             raise NotImplementedError(f"Transformation Option {option} not implemented")
         return self.data
 
-    def get_parameter_options(self) -> dict:
+    def get_parameter_options(self) -> Dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
+        :return: Dictionary of configurable parameters
                  .. code-block:: python
 
                       return {
@@ -81,52 +80,41 @@ class GenerativeModeling(QML):
             }
         }
 
-    def generate_problem(self, config: dict) -> dict:
+    def generate_problem(self, config: Dict) -> Dict:
 
         """
         The number of qubits is chosen for this problem.
 
-        :param config: dictionary including the number of qubits
-        :type config: dict
-        :return: dictionary with the number of qubits
-        :rtype: dict
+        :param config: Dictionary including the number of qubits
+        :return: Dictionary with the number of qubits
         """
 
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
+    def preprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
-        :param input_data: Usually not used for this method.
-        :type input_data: dict
-        :param config: config for the problem creation.
-        :type config: dict
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :param kwargs: optional additional arguments.
 
-        :return: tuple containing qubit number and the function's computation time
-        :rtype: tuple[dict, float]
+        :param input_data: Usually not used for this method
+        :param config: Config for the problem creation
+        :param kwargs: Optional additional arguments
+        :param kwargs: optional additional arguments
+        :return: Tuple containing qubit number and the function's computation time
         """
         start = start_time_measurement()
         output = self.generate_problem(config)
         output["store_dir_iter"] = f"{kwargs['store_dir']}/rep_{kwargs['rep_count']}"
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
+    def postprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
         """
         Process the solution here, then validate and evaluate it.
 
         :param input_data: A representation of the quantum machine learning model that will be trained
-        :type input_data: dict
         :param config: Config specifying the parameters of the training
-        :type config: dict
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
-        :return: tuple with input_data and the function's computation time
-        :rtype: tuple[dict, float]
+        :param kwargs: Optional keyword arguments
+        :return: Tuple with input_data and the function's computation time
         """
-
         start = start_time_measurement()
         return input_data, end_time_measurement(start)

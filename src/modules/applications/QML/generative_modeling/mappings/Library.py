@@ -91,8 +91,7 @@ class Library(Core, ABC):
 
     @staticmethod
     @abstractmethod
-    def get_execute_circuit(circuit: Any, backend: Any, config: str, config_dict: Dict) -> (
-            tuple)[any, any]:
+    def get_execute_circuit(circuit: Any, backend: Any, config: str, config_dict: Dict) -> (tuple)[any, any]:
         """
         This method combines the circuit implementation and the selected backend and returns a function that will be
         called during training.

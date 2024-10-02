@@ -21,6 +21,7 @@ from qiskit_optimization import QuadraticProgram
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from modules.applications.Mapping import Mapping
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -112,7 +113,7 @@ class Ising(Mapping):
                 rhs=-1 * constraint["constant"],
                 name=constraint["name"]
             )
-            
+
         return qp
 
     def map(self, problem: dict, config: Config) -> tuple[dict, float]:
@@ -144,7 +145,7 @@ class Ising(Mapping):
         for pauli_op in qubit_op:
             pauli_str, coeff = pauli_op.primitive.to_list()[0]
             index_pos_list = list(locate(pauli_str, lambda a: a == 'Z'))
-            
+
             if len(index_pos_list) == 1:
                 t_matrix[index_pos_list[0]] = coeff
             elif len(index_pos_list) == 2:
@@ -163,7 +164,7 @@ class Ising(Mapping):
 
         if np.any(solution == "-1"):
             solution = self._convert_ising_to_qubo(solution)
-        
+
         result = {"status": [0]}
         variables = {}
         objective_value = 0

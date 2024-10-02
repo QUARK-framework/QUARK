@@ -167,12 +167,14 @@ class PVC(Optimization):
         all_possible_edges = [(edges[0], edges[1], t_start, t_end, c_start, c_end) for edges in all_possible_edges for
                               c_end in config for c_start in config for t_end in tool
                               for t_start in tool if edges[0] != edges[1]]
-      
+
         missing_edges = [item for item in all_possible_edges if item not in current_edges]
 
         # add these edges with very high values
         for edge in missing_edges:
-            graph.add_edge(edge[0], edge[1], c_start=edge[4], t_start=edge[2], c_end=edge[5], t_end=edge[3], weight=100000)
+            graph.add_edge(
+                edge[0], edge[1], c_start=edge[4], t_start=edge[2], c_end=edge[5], t_end=edge[3], weight=100000
+            )
 
         logging.info("Created PVC problem with the following attributes:")
         logging.info(f" - Number of seams: {seams}")
@@ -192,7 +194,6 @@ class PVC(Optimization):
         start_time = start_time_measurement()
         nodes = list(self.application.nodes())
         start = ((0, 0), 1, 1)
-   
         route: list = [None] * int((len(self.application) - 1) / 2 + 1)
         visited_seams = []
 
@@ -224,7 +225,11 @@ class PVC(Optimization):
             idx = route.index(start)
             route = route[idx:] + route[:idx]
 
-        parsed_route = ' ->\n'.join([f' Node {visit[0][1]} of Seam {visit[0][0]} using config {visit[1]} & tool {visit[2]}' for visit in route])
+        parsed_route = ' ->\n'.join(
+            [
+                f' Node {visit[0][1]} of Seam {visit[0][0]} using config {visit[1]} & tool {visit[2]}' for visit in route
+            ]
+        )
         logging.info(f"Route found:\n{parsed_route}")
 
         return route, end_time_measurement(start_time)
@@ -241,7 +246,8 @@ class PVC(Optimization):
         visited_seams = {seam[0][0] for seam in solution if seam is not None}
 
         if len(visited_seams) == len(solution):
-            logging.info(f"All {len(solution) - 1} seams and the base node got visited (We only need to visit 1 node per seam)")
+            logging.info(f"All {len(solution) - 1} seams and 
+                         the base node got visited (We only need to visit 1 node per seam)")
             return True, end_time_measurement(start)
         else:
             logging.error(f"Only {len(visited_seams) - 1} got visited")
@@ -252,7 +258,7 @@ class PVC(Optimization):
         Calculates the tour length for a given valid tour
 
         :param solution: List containing the nodes of the solution
-        :return: Tour length, time it took to calculate the tour lengt
+        :return: Tour length, time it took to calculate the tour length
         """
         start = start_time_measurement()
 
@@ -261,7 +267,7 @@ class PVC(Optimization):
         for idx, _ in enumerate(solution[:-1]):
             edge = next(
                 item for item in list(self.application[solution[idx][0]][solution[idx + 1][0]].values())
-                if item["c_start"] == solution[idx][1] and item["t_start"] == solution[idx][2] and 
+                if item["c_start"] == solution[idx][1] and item["t_start"] == solution[idx][2] and
                 item["c_end"] == solution[idx + 1][1] and item["t_end"] == solution[idx + 1][2]
             )
             dist = edge['weight']

@@ -388,5 +388,4 @@ class PresetQiskitNoisyBackend(Library):
         noise_model = NoiseModel.from_backend(backend)
         logging.info(f'Using {backend_name} with coupling map: {backend.coupling_map}')
         logging.info(f'Using {backend_name} with noise model: {noise_model}')
-        
         return AerSimulator.from_backend(backend)

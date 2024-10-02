@@ -144,7 +144,8 @@ class QUBO(Mapping):
                                         ]
                                         for other_seam_node in other_seam_nodes:
                                             # penalize visiting other node of same seam
-                                            q[((node, c_start, t_start, pos_1), (other_seam_node, c_end, t_end, pos_2))] += 2.0 * lagrange
+                                            q[((node, c_start, t_start, pos_1), (other_seam_node, c_end, t_end, pos_2))] \
+                                            += 2.0 * lagrange
 
         # Constraint to only visit a single node in a single timestep
         for pos in range(timesteps):
@@ -166,8 +167,8 @@ class QUBO(Mapping):
                             for c_end in config:
                                 nextpos = (pos + 1) % timesteps
                                 edge_u_v = next(
-                                    item for item in list(problem[u][v].values()) 
-                                    if item["c_start"] == c_start and item["t_start"] == t_start and 
+                                    item for item in list(problem[u][v].values())
+                                    if item["c_start"] == c_start and item["t_start"] == t_start and
                                     item["c_end"] == c_end and item["t_end"] == t_end
                                 )
                                 # since it is the other direction we switch start and end of tool and config

@@ -17,4 +17,3 @@ Module for MIS mappings
 
 This module initialize the MIS package
 """
-

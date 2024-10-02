@@ -189,9 +189,9 @@ class MinMax(Transformation):  # pylint: disable=R0902
         :param data: Data to be fitted
         :return: fitted data
         """
-        self.data_min = data.min()
-        self.data_max = data.max() - self.data_min
-        data = (data - self.data_min) / self.data_max
+        data_min = data.min()
+        data_max = data.max() - data_min
+        data = (data - data_min) / data_max
 
         return data
 
@@ -202,7 +202,7 @@ class MinMax(Transformation):  # pylint: disable=R0902
         :param data: Data to be fitted
         :return: data in original space
         """
-        self.data_min = data.min()
-        self.data_max = data.max() - self.data_min
+        data_min = data.min()
+        data_max = data.max() - data_min
 
-        return data * self.data_max + self.data_min
+        return data * data_max + data_min

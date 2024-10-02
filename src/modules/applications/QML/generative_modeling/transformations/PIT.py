@@ -245,5 +245,4 @@ class PIT(Transformation):  # pylint disable=R0902
         length = data.size
         ecdf = np.linspace(0, 1, length, dtype=np.float64)
         ecdf_biject = ecdf[rank]
-        
         return ecdf_biject

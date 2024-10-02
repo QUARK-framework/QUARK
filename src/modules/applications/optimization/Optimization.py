@@ -120,5 +120,5 @@ class Optimization(Application, ABC):
             "time_to_validation": time_to_validation,
             "time_to_evaluation": time_to_evaluation
         })
-        
+
         return solution_validity, sum(filter(None, [time_to_process_solution, time_to_validation, time_to_evaluation]))

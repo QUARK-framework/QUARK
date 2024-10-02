@@ -39,7 +39,7 @@ def generate_hexagonal_graph(
     Returns:
         nx.Graph: networkx Graph representing the hexagonal graph layout.
     """
-    if not (0.0 < filling_fraction <= 1.0):
+    if not 0.0 < filling_fraction <= 1.0:
         raise ValueError("The filling fraction must be in the domain of (0.0, 1.0].")
 
     # Create a layout large enough to contain the desired number of atoms at
@@ -77,19 +77,18 @@ def generate_hexagonal_graph(
 
     return hexagonal_graph
 
-def _generate_edges(
-    node_positions: Dict[int, List[float]],
-    radius: float = R_rydberg
-) -> list[tuple[int, int]]:
-    """Generate edges between vertices within a given distance 'radius', which
+def _generate_edges(node_positions: Dict[int, List[float]], radius: float = R_rydberg) -> list[tuple[int, int]]:
+    """
+    Generate edges between vertices within a given distance 'radius', which
     defaults to R_rydberg.
 
     Parameters:
     node_positions (dict): A dictionary with the node ids as keys, and the node coordinates as values.
     radius (float): When the distance between two nodes is smaller than this radius, an edge is generated between them.
-    
+
     Returns:
-    list[tuple]: A list of 2-tuples. Each 2-tuple contains two different node ids and represents an edge between those nodes.
+    list[tuple]: A list of 2-tuples. Each 2-tuple contains two different node ids and
+    represents an edge between those nodes.
     """
     edges = []
     vertex_keys = list(node_positions.keys())

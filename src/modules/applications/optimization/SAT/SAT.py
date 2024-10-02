@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from typing import TypedDict, List, Dict, Tuple, Any
 
 import nnf
@@ -22,7 +23,6 @@ from nnf.dimacs import dump
 from modules.applications.Application import Application
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
-import logging
 
 
 class SAT(Optimization):
@@ -300,7 +300,7 @@ class SAT(Optimization):
         """
         with open(f"{path}/constraints_iter_{iter_count}.cnf", "w") as f_cons:
             dump(
-                obj=self.application["constraints"], 
+                obj=self.application["constraints"],
                 fp=f_cons,
                 var_labels={str(literal): idx + 1 for idx, literal in enumerate(self.literals)}
             )

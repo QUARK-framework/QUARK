@@ -227,7 +227,7 @@ class ACL(Optimization):
         for t in plats_t:
             prob += pulp.lpSum(
                 weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[t] for v in vecs) <= wt[t]
-            
+
         self.application = prob
 
     def _generate_small_model(self, df, vehicles):
@@ -252,7 +252,7 @@ class ACL(Optimization):
         # max. weight on p, if sp is used
         wsp = [28, 28, 28]
 
-        class_list, length_list, height_list, weight_list = self._get_vehicle_params(df, vehicles)
+        _, length_list, height_list, weight_list = self._get_vehicle_params(df, vehicles)
 
         # Set of available cars
         vecs = set(range(len(vehicles)))
@@ -348,7 +348,7 @@ class ACL(Optimization):
         for p_t in plats_t:
             prob += pulp.lpSum(
                 weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[p_t] for v in vecs) <= wt[p_t]
-            
+
         self.application = prob
 
     def _generate_full_model(self, df, vehicles):
@@ -609,9 +609,9 @@ class ACL(Optimization):
                                     for v in vecs) \
                     <= hmax_trailer[h]
 
-   
+
         self.application = prob
-    
+
     def _get_vehicle_params(self, df, vehicles):
         """
         Extract vehicle parameters for the problem formulation
@@ -631,7 +631,7 @@ class ACL(Optimization):
             length_list[i] = int(df_new["Length"].iloc[0])
             height_list[i] = int(df_new["Height"].iloc[0])
             weight_list[i] = int(df_new["Weight"].iloc[0])
-        
+
         return class_list, length_list, height_list, weight_list
 
     def validate(self, solution: Any) -> Tuple[bool, float]:
@@ -669,7 +669,7 @@ class ACL(Optimization):
 
         variables = solution.get("variables", {})
         assignments = [key for key in variables if variables[key] > 0]
-        
+
         logging.info(f"vehicle-to-platform assignments (platform, vehicle): {assignments}")
         return objective_value, end_time_measurement(start)
 

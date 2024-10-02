@@ -12,17 +12,17 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Any, List, Dict, Tuple
 import itertools
 import logging
 from pprint import pformat
+from typing import TypedDict, List, Dict, Tuple
 
 import numpy as np
 
 from modules.circuits.CircuitCardinality import CircuitCardinality
-from utils import start_time_measurement, end_time_measurement
 from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import DataHandler
 from modules.applications.QML.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
+from utils import start_time_measurement, end_time_measurement
 
 
 class DiscreteData(DataHandler):

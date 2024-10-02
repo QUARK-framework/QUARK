@@ -17,3 +17,4 @@ Module for SAT mappings
 
 This module initializes the SAT application
 """
+

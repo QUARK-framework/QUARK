@@ -97,12 +97,12 @@ class DinneenQUBO(Mapping):
         lagrange *= len(soft)
 
         def _add_clause(
-                curr_qubo_dict: Dict[Tuple[int, int], float], 
-                clause: Any, 
-                pos: int, 
+                curr_qubo_dict: Dict[Tuple[int, int], float],
+                clause: Any,
+                pos: int,
                 weight: float
         ) -> Dict[Tuple[int, int], float]:
-        
+
             """
             Function that adds the QUBO terms corresponding to the clause and updates the QUBO dictionary
              accordingly. Additionally, the weight of the clause is taken into account.

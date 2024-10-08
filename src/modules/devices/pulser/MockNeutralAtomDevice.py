@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Dict
+from typing import TypedDict
 
 import pulser
 from pulser.devices import MockDevice
@@ -36,7 +36,7 @@ class MockNeutralAtomDevice(Pulser):
         self.backend = QutipBackend
         self.submodule_options = []
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this application.
 
@@ -74,7 +74,7 @@ class MockNeutralAtomDevice(Pulser):
         """
         Returns backend configurations.
 
-        :return: backend config for the emulator
+        :return: Backend config for the emulator
         """
         noise_types = [key for key, value in self.config.items() if value]
         noise_model = pulser.backend.noise_model.NoiseModel(noise_types=noise_types)

@@ -14,7 +14,6 @@
 
 from itertools import product
 from abc import ABC, abstractmethod
-from typing import Dict, Tuple, List
 
 import numpy as np
 
@@ -24,49 +23,48 @@ from utils import start_time_measurement, end_time_measurement
 
 class Transformation(Core, ABC):
     """
-    The task of the transformation module is to translate data and problem specification of the application into
-    preprocessed format.
+    The task of the transformation module is to translate data and problem
+    specification of the application into preprocessed format.
     """
 
     def __init__(self, name):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.transformation_name = name
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "numpy", "version": "1.26.4"}]
 
-    def preprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
         :param input_data: Collected information of the benchmarking process
         :param config: Config specifying the parameters of the transformation
         :param kwargs: Additional optional arguments
-        :return: tuple with transformed problem and the time it took to map it
+        :return: Tuple with transformed problem and the time it took to map it
         """
-
         start = start_time_measurement()
         output = self.transform(input_data, config)
 
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: Dict, config: Dict, **kwargs) -> Tuple[Dict, float]:
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
-        Does the reverse transformation
+        Does the reverse transformation.
 
         :param input_data: Dictionary containing information of previously executed modules
         :param config: Dictionary containing additional information
         :param kwargs: Dictionary containing additional information
-        :return: tuple with the dictionary and the time the postprocessing took
+        :return: Tuple with the dictionary and the time the postprocessing took
         """
         start = start_time_measurement()
         output = self.reverse_transform(input_data)
@@ -77,7 +75,7 @@ class Transformation(Core, ABC):
         return output, end_time_measurement(start)
 
     @abstractmethod
-    def transform(self, input_data: Dict, config: Dict) -> Dict:
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Helps to ensure that the model can effectively learn the underlying 
         patterns and structure of the data, and produce high-quality outputs.
@@ -88,7 +86,7 @@ class Transformation(Core, ABC):
         """
         return input_data
 
-    def reverse_transform(self, input_data: Dict) -> Dict:
+    def reverse_transform(self, input_data: dict) -> dict:
         """
         Transforms the solution back to the original problem.
         This might not be necessary in all cases, so the default is to return the original solution.
@@ -171,7 +169,7 @@ class Transformation(Core, ABC):
     @staticmethod
     def generate_samples_efficient(results, bin_data: np.ndarray, n_registers: int, noisy: bool = True) -> np.ndarray:
         """
-        Generate samples efficiently using numpy arrays based on measurement results and the grid bins
+        Generate samples efficiently using numpy arrays based on measurement results and the grid bins.
 
         :param results: Results of measurements.
         :param bin_data: Binned data.
@@ -183,8 +181,11 @@ class Transformation(Core, ABC):
         width = 1 / len(bin_data) ** (1 / n_registers)
 
         # Generate random noise or zeros
-        noise = 0.5 * width * np.random.uniform(low=-1, high=1, size=(n_shots, n_registers)) if noisy else np.zeros(
-            (n_shots, n_registers))
+        noise = (
+            0.5 * width * np.random.uniform(low=-1, high=1, size=(n_shots, n_registers))
+            if noisy 
+            else np.zeros((n_shots, n_registers))
+        )
 
         # Create an array of bin_coords for each result, then stack them vertically
         bin_coords = bin_data[:, 1:]

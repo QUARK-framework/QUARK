@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Tuple
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
@@ -33,7 +32,7 @@ class Circuit(Core, ABC):
         self.architecture_name = name
 
     @abstractmethod
-    def generate_gate_sequence(self, input_data: Dict, config: Any) -> Dict:
+    def generate_gate_sequence(self, input_data: dict, config: any) -> dict:
         """
         Generates the library agnostic gate sequence, a well-defined definition of the quantum circuit.
 
@@ -43,7 +42,7 @@ class Circuit(Core, ABC):
         """
         pass
 
-    def preprocess(self, input_data: Dict, config: Dict, **kwargs) -> Tuple[Dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         Library-agnostic implementation of the gate sequence, that will be mapped to backend such as Qiskit in the
          subsequent module.
@@ -62,13 +61,13 @@ class Circuit(Core, ABC):
 
         return circuit_constr, end_time_measurement(start)
 
-    def postprocess(self, input_data: Dict, config: Dict, **kwargs) -> Tuple[Dict, float]:
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
         Method that passes back information of the subsequent modules to the preceding modules. 
 
         :param input_data: Collected information of the benchmarking process
         :param config: Config specifying the number of qubits of the circuit
-        :param kwargs: optional keyword arguments
+        :param kwargs: Optional keyword arguments
         :return: Same dictionary like input_data with architecture_name
         """
         start = start_time_measurement()

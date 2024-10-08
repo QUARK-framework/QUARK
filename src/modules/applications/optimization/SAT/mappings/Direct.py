@@ -37,7 +37,7 @@ class Direct(Mapping):
         self.submodule_options = ["ClassicalSAT", "RandomSAT"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() ->list[dict]:
         """
         Return requirements of this module.
 

@@ -17,7 +17,6 @@ import logging
 import os
 from abc import ABC
 from datetime import datetime
-from typing import List, Dict, Tuple
 
 import boto3
 from botocore.config import Config
@@ -45,7 +44,7 @@ class Braket(Device, ABC):
             # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
             #       of this section, which would be unnecessary. However, this should be done better in the future!
             return
-        
+
         if device_name != "LocalSimulator":
             self._configure_aws_session(region)
 
@@ -133,7 +132,7 @@ class Braket(Device, ABC):
             raise Exception("Please refer to the logged error message.") from exc
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 

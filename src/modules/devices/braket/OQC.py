@@ -14,7 +14,6 @@
 
 import os
 from braket.aws import AwsDevice
-from typing import Dict
 
 from modules.devices.braket.Braket import Braket
 from modules.Core import Core
@@ -40,7 +39,7 @@ class OQC(Braket):
         self.init_s3_storage("oqc")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns an empty dictionary as this solver has no configurable settings.
 

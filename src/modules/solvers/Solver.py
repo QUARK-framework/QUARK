@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import List, Dict, Any, Tuple
 from abc import ABC, abstractmethod
 from modules.Core import Core
 
@@ -23,7 +22,7 @@ class Solver(Core, ABC):
     defined objective function.
     """
 
-    def postprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         The actual solving process is done here, as we have the device, which got provided by the device submodule,
         and the problem data provided by the parent module.
@@ -38,7 +37,7 @@ class Solver(Core, ABC):
         return output, elapsed_time
 
     @abstractmethod
-    def run(self, mapped_problem, device_wrapper, config, **kwargs) -> Tuple[Any, float, Dict]:
+    def run(self, mapped_problem, device_wrapper, config, **kwargs) -> tuple[any, float, dict]:
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 

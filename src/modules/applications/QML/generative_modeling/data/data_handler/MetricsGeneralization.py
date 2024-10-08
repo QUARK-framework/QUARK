@@ -20,13 +20,13 @@ class MetricsGeneralization:
     """
     A class to compute generalization metrics for generated samples based on train and solution sets.
 
-    :param train_set: set of queries in the training set.
+    :param train_set: Set of queries in the training set.
     :type train_set: np.array
-    :param train_size: the fraction of queries used for training.
+    :param train_size: The fraction of queries used for training.
     :type train_size: float
-    :param solution_set: set of queries in the solution set.
+    :param solution_set: Set of queries in the solution set.
     :type solution_set: np.array
-    :param n_qubits: the number of qubits.
+    :param n_qubits: The number of qubits.
     :type n_qubits: int
     """
 
@@ -56,10 +56,10 @@ class MetricsGeneralization:
 
     def get_metrics(self, generated: np.array) -> dict:
         """
-        Method that determines all generalization metrics of a given multiset of generated samples
+        Method that determines all generalization metrics of a given multiset of generated samples.
 
-        :param generated: generated samples
-        :return: dictionary with generalization metrics
+        :param generated: Generated samples
+        :return: Dictionary with generalization metrics
         """
         g_new = np.sum(generated[self.mask_new])
         g_sol = np.sum(generated[self.mask_sol])
@@ -79,47 +79,47 @@ class MetricsGeneralization:
 
     def fidelity(self, g_new: float, g_sol: float) -> float:
         """
-        Method to determine the fidelity
+        Method to determine the fidelity.
 
-        :param g_new: multi-subset of unseen queries (noisy or valid)
-        :param g_sol: multi-subset of unseen and valid queries
-        :return: fidelity
+        :param g_new: Multi-subset of unseen queries (noisy or valid)
+        :param g_sol: Multi-subset of unseen and valid queries
+        :return: Fidelity
         """
         return g_sol / g_new
 
     def coverage(self, g_sol_unique: float) -> float:
         """
-        Method to determine the coverage
+        Method to determine the coverage.
 
-        :param g_sol_unique: subset of unique unseen and valid queries
-        :return: coverage
+        :param g_sol_unique: Subset of unique unseen and valid queries
+        :return: Coverage
         """
         return g_sol_unique / (math.ceil(1 - self.train_size) * len(self.solution_set))
 
     def normalized_rate(self, g_sol: float) -> float:
         """
-        Method to determine the normalized_rate
+        Method to determine the normalized_rate.
 
-        :param g_sol: multi-subset of unseen and valid queries
-        :return: normalized_rate
+        :param g_sol: Multi-subset of unseen and valid queries
+        :return: Normalized_rate
         """
         return g_sol / ((1 - self.train_size) * self.n_shots)
 
     def exploration(self, g_new: float) -> float:
         """
-        Method to determine the exploration
+        Method to determine the exploration.
 
-        :param g_new: multi-subset of unseen queries (noisy or valid)
-        :return: exploration
+        :param g_new: Multi-subset of unseen queries (noisy or valid)
+        :return: Exploration
         """
         return g_new / self.n_shots
 
     def precision(self, g_sol: float, g_train: float) -> float:
         """
-        Method to determine the precision
+        Method to determine the precision.
 
-        :param g_sol: multi-subset of unseen and valid queries
-        :param g_train: number of queries that were memorized from the training set
-        :return: precision
+        :param g_sol: Multi-subset of unseen and valid queries
+        :param g_train: Number of queries that were memorized from the training set
+        :return: Precision
         """
         return (np.sum(g_sol) + np.sum(g_train)) / self.n_shots

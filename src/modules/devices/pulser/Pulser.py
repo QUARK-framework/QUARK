@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict
 
 from modules.devices.Device import Device
 
@@ -33,7 +32,7 @@ class Pulser(Device, ABC):
         self.device = None
         self.backend = None
 
-    def get_backend(self) -> Any:
+    def get_backend(self) -> any:
         """
         Returns backend.
 
@@ -42,7 +41,7 @@ class Pulser(Device, ABC):
         return self.backend
 
     @abstractmethod
-    def get_backend_config(self) -> Any:
+    def get_backend_config(self) -> any:
         """
         Returns backend configurations.
 
@@ -51,10 +50,10 @@ class Pulser(Device, ABC):
         pass
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "pulser","version": "0.19.0"}]

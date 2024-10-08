@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from time import sleep
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 import logging
 
 import numpy as np
@@ -43,7 +43,7 @@ class QAOA(Solver):
         ]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -81,7 +81,7 @@ class QAOA(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this solver.
 
@@ -134,14 +134,14 @@ class QAOA(Solver):
         opt_method: str
         depth: int
 
-    def run(self, mapped_problem: Any, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Any, float]:
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float]:
         """
         Run QAOA algorithm on Ising.
 
         :param mapped_problem: dictionary with the keys 'J' and 't'
         :param device_wrapper: Instance of device
         :param config: Solver configuration settings
-        :param kwargs: no additionally settings needed
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
         j = mapped_problem['J']
@@ -151,18 +151,18 @@ class QAOA(Solver):
         else:
             j = np.real(j)
 
-        # set up the problem
+        # Set up the problem
         n_qubits = j.shape[0]
 
         # User-defined hypers
         depth = config['depth']
         opt_method = config['opt_method']  # SLSQP, COBYLA, Nelder-Mead, BFGS, Powell, ...
 
-        # initialize reference solution (simple guess)
+        # Initialize reference solution (simple guess)
         bitstring_init = -1 * np.ones([n_qubits])
         energy_init = np.dot(bitstring_init, np.dot(j, bitstring_init))
 
-        # set tracker to keep track of results
+        # Set tracker to keep track of results
         tracker = {
             'count': 1,  # Elapsed optimization steps
             'optimal_energy': energy_init,  # Global optimal energy
@@ -175,18 +175,18 @@ class QAOA(Solver):
             'params': []  # Track parameters
         }
 
-        # set options for classical optimization
+        # Set options for classical optimization
         options = {'disp': True, 'maxiter': 100}
         # options = {'disp': True, 'ftol': 1e-08, 'maxiter': 100, 'maxfev': 50}  # example options
 
         ##################################################################################
-        # run QAOA optimization on graph
+        # Run QAOA optimization on graph
         ##################################################################################
 
         logging.info(f"Circuit depth hyperparameter:{depth}")
         logging.info(f"Problem size:{n_qubits}")
 
-        # kick off training
+        # Kick off training
         start = start_time_measurement()
         _, _, tracker = train(
             device=device_wrapper.get_device(),
@@ -217,30 +217,29 @@ class QAOA(Solver):
 # QAOA utils (source:
 # https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_quantum_algorithms/QAOA/utils_qaoa.py)
 
-# function to implement ZZ gate using CNOT gates
+# Function to implement ZZ gate using CNOT gates
 def ZZgate(q1, q2, gamma):
     """
-    function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported
+    function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported.
     """
-
-    # get a circuit
+    # Get a circuit
     circ_zz = Circuit()
 
-    # construct decomposition of ZZ
+    # Construct decomposition of ZZ
     circ_zz.cnot(q1, q2).rz(q2, gamma).cnot(q1, q2)
 
     return circ_zz
 
 
-# function to implement evolution with driver Hamiltonian
+# Function to implement evolution with driver Hamiltonian
 def driver(beta, n_qubits):
     """
-    Returns circuit for driver Hamiltonian U(Hb, beta)
+    Returns circuit for driver Hamiltonian U(Hb, beta).
     """
-    # instantiate circuit object
+    # Instantiate circuit object
     circ = Circuit()
 
-    # apply parametrized rotation around x to every qubit
+    # Apply parametrized rotation around x to every qubit
     for qubit in range(n_qubits):
         gate = Circuit().rx(qubit, 2 * beta)
         circ.add(gate)
@@ -248,26 +247,26 @@ def driver(beta, n_qubits):
     return circ
 
 
-# helper function for evolution with cost Hamiltonian
+# Helper function for evolution with cost Hamiltonian
 def cost_circuit(gamma, n_qubits, ising, device):
     """
-    returns circuit for evolution with cost Hamiltonian
+    returns circuit for evolution with cost Hamiltonian.
     """
-    # instantiate circuit object
+    # Instantiate circuit object
     circ = Circuit()
 
-    # get all non-zero entries (edges) from Ising matrix
+    # Get all non-zero entries (edges) from Ising matrix
     idx = ising.nonzero()
     edges = list(zip(idx[0], idx[1]))
 
-    # apply ZZ gate for every edge (with corresponding interaction strength)
+    # Apply ZZ gate for every edge (with corresponding interaction strength)
     for qubit_pair in edges:
-        # get interaction strength from Ising matrix
+        # Get interaction strength from Ising matrix
         int_strength = ising[qubit_pair[0], qubit_pair[1]]
-        # for Rigetti we decompose ZZ using CNOT gates
+        # For Rigetti we decompose ZZ using CNOT gates
         if device.name in ["Rigetti", "Aspen-9"]:  # TODO make this more flexible
             gate = ZZgate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
-        # classical simulators and IonQ support ZZ gate
+        # Classical simulators and IonQ support ZZ gate
         else:
             gate = Circuit().zz(qubit_pair[0], qubit_pair[1], angle=2 * gamma * int_strength)
         circ.add(gate)
@@ -275,25 +274,25 @@ def cost_circuit(gamma, n_qubits, ising, device):
     return circ
 
 
-# function to build the QAOA circuit with depth p
+# Function to build the QAOA circuit with depth p
 def circuit(params, device, n_qubits, ising):
     """
-    function to return full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend
+    function to return full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend.
     """
 
-    # initialize qaoa circuit with first Hadamard layer: for minimization start in |->
+    # Initialize qaoa circuit with first Hadamard layer: for minimization start in |->
     circ = Circuit()
     X_on_all = Circuit().x(range(0, n_qubits))
     circ.add(X_on_all)
     H_on_all = Circuit().h(range(0, n_qubits))
     circ.add(H_on_all)
 
-    # setup two parameter families
+    # Setup two parameter families
     circuit_length = int(len(params) / 2)
     gammas = params[:circuit_length]
     betas = params[circuit_length:]
 
-    # add QAOA circuit layer blocks
+    # Add QAOA circuit layer blocks
     for mm in range(circuit_length):
         circ.add(cost_circuit(gammas[mm], n_qubits, ising, device))
         circ.add(driver(betas[mm], n_qubits))
@@ -301,67 +300,67 @@ def circuit(params, device, n_qubits, ising):
     return circ
 
 
-# function that computes cost function for given params
+# Function that computes cost function for given params
 # pylint: disable=R0917
 # pylint: disable=R0913
 def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_folder, verbose):
     """
     objective function takes a list of variational parameters as input,
-    and returns the cost associated with those parameters
+    and returns the cost associated with those parameters.
     """
 
     if verbose:
         logging.info("==================================" * 2)
         logging.info(f"Calling the quantum circuit. Cycle: {tracker['count']}")
 
-    # get a quantum circuit instance from the parameters
+    # Get a quantum circuit instance from the parameters
     qaoa_circuit = circuit(params, device, n_qubits, ising)
 
-    # classically simulate the circuit
-    # execute the correct device.run call depending on whether the backend is local or cloud based
+    # Classically simulate the circuit
+    # Execute the correct device.run call depending on whether the backend is local or cloud based
     if device.name in ["DefaultSimulator", "StateVectorSimulator"]:
         task = device.run(qaoa_circuit, shots=n_shots)
     else:
         task = device.run(qaoa_circuit, s3_folder, shots=n_shots, poll_timeout_seconds=3 * 24 * 60 * 60)
 
-        # get ID and status of submitted task
+        # Get ID and status of submitted task
         task_id = task.id
         status = task.state()
         logging.info(f"ID of task: {task_id}")
         logging.info(f"Status of task: {status}")
 
-        # wait for job to complete
+        # Wait for job to complete
         while status != 'COMPLETED':
             status = task.state()
             logging.info(f"Status: {status}")
             sleep(10)
 
-    # get result for this task
+    # Get result for this task
     result = task.result()
     logging.info(result)
 
-    # convert results (0 and 1) to ising (-1 and 1)
+    # Convert results (0 and 1) to ising (-1 and 1)
     meas_ising = result.measurements
     meas_ising[meas_ising == 0] = -1
 
-    # get all energies (for every shot): (n_shots, 1) vector
+    # Get all energies (for every shot): (n_shots, 1) vector
     all_energies = np.diag(np.dot(meas_ising, np.dot(ising, np.transpose(meas_ising))))
 
-    # find minimum and corresponding classical string
+    # Find minimum and corresponding classical string
     energy_min = np.min(all_energies)
     tracker["opt_energies"].append(energy_min)
     optimal_string = meas_ising[np.argmin(all_energies)]
     tracker["opt_bitstrings"].append(optimal_string)
     logging.info(tracker["optimal_energy"])
 
-    # store optimal (classical) result/bitstring
+    # Store optimal (classical) result/bitstring
     if energy_min < tracker["optimal_energy"]:
         tracker.update({"optimal_energy": energy_min, "optimal_bitstring": optimal_string})
 
-    # store global minimum
+    # Store global minimum
     tracker["global_energies"].append(tracker["optimal_energy"])
 
-    # energy expectation value
+    # Energy expectation value
     energy_expect = np.sum(all_energies) / n_shots
 
     if verbose:
@@ -369,7 +368,7 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
         logging.info(f"Optimal classical string: {optimal_string}")
         logging.info(f"Energy expectation value (cost): {energy_expect}")
 
-    # update tracker
+    # Update tracker
     tracker.update({"count": tracker["count"] + 1, "res": result})
     tracker["costs"].append(energy_expect)
     tracker["params"].append(params)
@@ -381,7 +380,7 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
 # pylint: disable=R0917
 def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_folder, verbose=True):
     """
-    function to run QAOA algorithm for given, fixed circuit depth p
+    function to run QAOA algorithm for given, fixed circuit depth p.
     """
     logging.info("Starting the training.")
     logging.info("==================================" * 2)
@@ -391,22 +390,22 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
         logging.info('Param "verbose" set to False. Will not print intermediate steps.')
         logging.info("==================================" * 2)
 
-    # initialize
+    # Initialize
     cost_energy = []
 
-    # randomly initialize variational parameters within appropriate bounds
+    # Randomly initialize variational parameters within appropriate bounds
     gamma_initial = np.random.uniform(0, 2 * np.pi, p).tolist()
     beta_initial = np.random.uniform(0, np.pi, p).tolist()
     params0 = np.array(gamma_initial + beta_initial)
 
-    # set bounds for search space
+    # Set bounds for search space
     bnds_gamma = [(0, 2 * np.pi) for _ in range(int(len(params0) / 2))]
     bnds_beta = [(0, np.pi) for _ in range(int(len(params0) / 2))]
     bnds = bnds_gamma + bnds_beta
 
     tracker["params"].append(params0)
 
-    # run classical optimization (example: method='Nelder-Mead')
+    # Run classical optimization (example: method='Nelder-Mead')
     try:
         result = minimize(
             objective_function,
@@ -421,7 +420,7 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
         logging.error("The benchmarking run terminates with exception.")
         raise Exception("Please refer to the logged error message.") from e
 
-    # store result of classical optimization
+    # Store result of classical optimization
     result_energy = result.fun
     cost_energy.append(result_energy)
     logging.info(f"Final average energy (cost): {result_energy}")

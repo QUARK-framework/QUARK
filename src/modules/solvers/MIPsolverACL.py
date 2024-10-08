@@ -27,7 +27,7 @@
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 import pulp
 
 from modules.solvers.Solver import Solver
@@ -48,7 +48,7 @@ class MIPaclp(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -69,7 +69,7 @@ class MIPaclp(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 
@@ -83,7 +83,7 @@ class MIPaclp(Solver):
         """
         pass
 
-    def run(self, mapped_problem: Dict, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Dict, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
         """
         Solve the ACL problem as a mixed integer problem (MIP).
 

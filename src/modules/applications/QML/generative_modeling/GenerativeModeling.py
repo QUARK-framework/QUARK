@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, Dict, Tuple, List
+from typing import Union
 from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.Application import Application
@@ -31,18 +31,18 @@ class GenerativeModeling(QML):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("GenerativeModeling")
         self.submodule_options = ["Continuous Data", "Discrete Data"]
         self.data = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dicts with requirements of this module
+        :return: List of dicts with requirements of this module
         """
         return []
 
@@ -58,20 +58,19 @@ class GenerativeModeling(QML):
             raise NotImplementedError(f"Transformation Option {option} not implemented")
         return self.data
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this application.
 
         :return: Dictionary of configurable parameters
-                 .. code-block:: python
+        .. code-block:: python
 
-                      return {
-                                "n_qubits": {
-                                "values": [4, 6, 8, 10, 12],
-                                "description": "How many qubits do you want to use?"
-                                }
-                            }
-
+            return {
+                    "n_qubits": {
+                    "values": [4, 6, 8, 10, 12],
+                    "description": "How many qubits do you want to use?"
+                    }
+                }
         """
         return {
             "n_qubits": {
@@ -80,7 +79,7 @@ class GenerativeModeling(QML):
             }
         }
 
-    def generate_problem(self, config: Dict) -> Dict:
+    def generate_problem(self, config: dict) -> dict:
 
         """
         The number of qubits is chosen for this problem.
@@ -88,18 +87,16 @@ class GenerativeModeling(QML):
         :param config: Dictionary including the number of qubits
         :return: Dictionary with the number of qubits
         """
-
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
-    def preprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
 
         :param input_data: Usually not used for this method
         :param config: Config for the problem creation
         :param kwargs: Optional additional arguments
-        :param kwargs: optional additional arguments
         :return: Tuple containing qubit number and the function's computation time
         """
         start = start_time_measurement()
@@ -107,7 +104,7 @@ class GenerativeModeling(QML):
         output["store_dir_iter"] = f"{kwargs['store_dir']}/rep_{kwargs['rep_count']}"
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: Dict, config: Dict, **kwargs: Dict) -> Tuple[Dict, float]:
+    def postprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Process the solution here, then validate and evaluate it.
 

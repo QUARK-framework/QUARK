@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, TypedDict, Any, List, Tuple, Dict
+from typing import Union, TypedDict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
@@ -40,15 +40,15 @@ class CircuitStandard(Circuit):
         ]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return []
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this standard circuit.
 
@@ -102,7 +102,7 @@ class CircuitStandard(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
+    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of standard architecture.
     

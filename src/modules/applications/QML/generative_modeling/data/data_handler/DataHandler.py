@@ -33,7 +33,7 @@ class DataHandler(Core, ABC):
 
     def __init__(self, name: str):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.dataset_name = name
@@ -42,9 +42,9 @@ class DataHandler(Core, ABC):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
@@ -56,10 +56,10 @@ class DataHandler(Core, ABC):
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
-        :param input_data: collected information of the benchmarking process
-        :param config: config specifying the parameters of the training
-        :param kwargs: optional additional settings
-        :return: tuple with transformed problem and the time it took to map it
+        :param input_data: Collected information of the benchmarking process
+        :param config: Config specifying the parameters of the training
+        :param kwargs: Optional additional settings
+        :return: Tuple with transformed problem and the time it took to map it
         """
         start = start_time_measurement()
         output = self.data_load(input_data, config)
@@ -73,10 +73,10 @@ class DataHandler(Core, ABC):
         """
         In this module, the postprocessing step is transforming the data to the correct target format.
 
-        :param input_data: Any
-        :param config: config specifying the parameters of the training
-        :param kwargs: optional additional settings
-        :return: tuple with an output_dictionary and the time it took
+        :param input_data: any
+        :param config: Config specifying the parameters of the training
+        :param kwargs: Optional additional settings
+        :return: Tuple with an output_dictionary and the time it took
         """
         start = start_time_measurement()
         store_dir_iter = input_data["store_dir_iter"]
@@ -161,15 +161,15 @@ class DataHandler(Core, ABC):
         Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
 
-        :param gen_mod: dictionary with collected information of the previous modules
-        :param config: config specifying the parameters of the data handler
-        :return: mapped problem and the time it took to create the mapping
+        :param gen_mod: Dictionary with collected information of the previous modules
+        :param config: Config specifying the parameters of the data handler
+        :return: Mapped problem and the time it took to create the mapping
         """
         pass
 
     def generalisation(self) -> tuple[dict, float]:
         """
-        Compute generalisation metrics
+        Compute generalisation metrics.
 
         :return: Evaluation and the time it took to create it
         """
@@ -183,8 +183,8 @@ class DataHandler(Core, ABC):
         """
         Compute the best loss values.
 
-        :param solution: solution data
-        :return: evaluation data and the time it took to create it
+        :param solution: Solution data
+        :return: Evaluation data and the time it took to create it
         """
         return None, 0.0
 
@@ -194,8 +194,8 @@ class DataHandler(Core, ABC):
         Converts TensorBoard event files in the specified log directory
         into a pandas DataFrame and saves it as a pickle file.
 
-        :param logdir: path to the log directory containing TensorBoard event files
-        :param rep: repetition counter
+        :param logdir: Path to the log directory containing TensorBoard event files
+        :param rep: Repetition counter
         """
         event_acc = EventAccumulator(logdir)
         event_acc.Reload()

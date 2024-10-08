@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Any, Dict, Tuple
+from typing import TypedDict
 import random
 import networkx as nx
 
@@ -34,11 +34,11 @@ class RandomTSP(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "networkx", "version": "3.2.1"}]
 
@@ -49,11 +49,11 @@ class RandomTSP(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dict as this solver has no configurable settings.
 
-        :return: empty dict
+        :return: Empty dict
         """
         return {}
 
@@ -63,7 +63,7 @@ class RandomTSP(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
         """
         Solve the TSP graph in a greedy fashion.
 

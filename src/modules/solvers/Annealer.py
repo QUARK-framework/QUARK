@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Dict, Any, Tuple
+from typing import TypedDict
 import logging
 
 from modules.solvers.Solver import Solver
@@ -45,7 +45,7 @@ class Annealer(Solver):
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this solver.
 
@@ -78,11 +78,11 @@ class Annealer(Solver):
         """
         number_of_reads: int
 
-    def run(self, mapped_problem: Dict, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[dict, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
         """
         Annealing Solver.
 
-        :param mapped_problem: dictionary with the key 'Q' where its value should be the QUBO
+        :param mapped_problem: Dictionary with the key 'Q' where its value should be the QUBO
         :param device_wrapper: Annealing device
         :param config: Annealing settings
         :param kwargs: Additional keyword arguments
@@ -103,7 +103,7 @@ class Annealer(Solver):
         response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 
-        # take the result with the lowest energy:
+        # Take the result with the lowest energy:
         sample = response.lowest().first.sample
         logging.info(f'Annealing finished in {time_to_solve} ms.')
 

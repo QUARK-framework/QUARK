@@ -20,7 +20,7 @@ import types
 from collections import Counter
 from functools import partial, wraps
 from time import time
-from typing import TypedDict, Dict, Any, List, Tuple
+from typing import TypedDict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -57,7 +57,7 @@ class PennylaneQAOA(Solver):
         ]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -114,9 +114,9 @@ class PennylaneQAOA(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
         :return: Dictionary of configuration settings
         .. code-block:: python
@@ -190,7 +190,7 @@ class PennylaneQAOA(Solver):
         stepsize: float
 
     @staticmethod
-    def normalize_data(data: Any, scale: float = 1.0) -> Any:
+    def normalize_data(data: any, scale: float = 1.0) -> any:
         """
         Not used currently, as I just scale the coefficients in the qaoa_operators_from_ising.
 
@@ -201,7 +201,7 @@ class PennylaneQAOA(Solver):
         return scale * data / np.max(np.abs(data))
 
     @staticmethod
-    def qaoa_operators_from_ising(J: Any, t: Any, scale: float = 1.0) -> Tuple[Any, Any]:
+    def qaoa_operators_from_ising(J: any, t: any, scale: float = 1.0) -> tuple[any, any]:
         """
         Generates pennylane cost and mixer hamiltonians from the Ising matrix J and vector t.
 
@@ -209,7 +209,6 @@ class PennylaneQAOA(Solver):
         :param t: t vector
         :param scale: Scaling factor
         :return: Cost Hamiltonian and mixer Hamiltonian
-        :rtype: tuple(any, any)
         """
         # Define the scaling factor
         scaling_factor = scale * max(np.max(np.abs(J.flatten())), np.max(np.abs(t)))
@@ -233,14 +232,14 @@ class PennylaneQAOA(Solver):
         return h_cost, h_mixer
 
     # pylint: disable=R0915
-    def run(self, mapped_problem: Any, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Any, Any, float]:
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, any, float]:
         """
         Runs Pennylane QAOA on the Ising problem.
 
         :param mapped_problem: Ising
         :param device_wrapper: Device to run the problem on
         :param config: QAOA solver settings
-        :param kwargs: contains store_dir for the plot of the optimization
+        :param kwargs: Contains store_dir for the plot of the optimization
         :return: Solution, the time it took to compute it and optional additional information
         """
         J = mapped_problem['J']
@@ -455,9 +454,7 @@ class PennylaneQAOA(Solver):
 
 def monkey_init_array(self):
     """
-    Here we create the timings array where we later append the quantum timings
-    :param self:
-    :return:
+    Here we create the timings array where we later append the quantum timings.
     """
     self.timings = []
 
@@ -465,17 +462,17 @@ def monkey_init_array(self):
 def _pseudo_decor(fun, device):
     """
     Massive shoutout to this guy: https://stackoverflow.com/a/25827070/10456906
-    We use this decorator for measuring execute and batch_execute
+    We use this decorator for measuring execute and batch_execute.
     """
 
-    # magic sauce to lift the name and doc of the function
+    # Magic sauce to lift the name and doc of the function
     @wraps(fun)
     def ret_fun(*args, **kwargs):
-        # pre function execution stuff here
+        # Pre function execution stuff here
         from time import time  # pylint: disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
-        # post execution stuff here
+        # Post execution stuff here
         device.timings.append(round(time() * 1000 - start_timing, 3))
         return returned_value
 

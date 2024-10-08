@@ -11,7 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import Union, Any, List, Dict, Tuple
+from typing import Union
 import logging
 from time import perf_counter
 import numpy as np
@@ -38,7 +38,7 @@ class PresetQiskitNoisyBackend(Library):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("PresetQiskitNoisyBackend")
         self.submodule_options = ["QCBM", "Inference"]
@@ -46,11 +46,11 @@ class PresetQiskitNoisyBackend(Library):
     circuit_transpiled = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "qiskit", "version": "1.1.0"},
@@ -59,31 +59,30 @@ class PresetQiskitNoisyBackend(Library):
             {"name": "numpy", "version": "1.26.4"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for the Qiskit Library.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary with configurable settings.
+        .. code-block:: python
 
-                        return {
-                            "backend": {
-                                "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                                           "cusvaer_simulator (only available in cuQuantum applicance)",
-                                           "aer_simulator_gpu",
-                                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
-                                "description": "Which backend do you want to use? (aer_statevector_simulator
-                                                uses the measurement probability vector, the others are shot based)"
-                            },
+            return {
+                "backend": {
+                    "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
+                                "cusvaer_simulator (only available in cuQuantum applicance)",
+                                "aer_simulator_gpu",
+                                "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
+                    "description": "Which backend do you want to use? (aer_statevector_simulator
+                                    uses the measurement probability vector, the others are shot based)"
+                },
 
-                            "n_shots": {
-                                "values": [100, 1000, 10000, 1000000],
-                                "description": "How many shots do you want use for estimating the PMF of the model?
-                                                (If the aer_statevector_simulator selected,
-                                                only relevant for studying generalization)"
-                            }
-                        }
-
+                "n_shots": {
+                    "values": [100, 1000, 10000, 1000000],
+                    "description": "How many shots do you want use for estimating the PMF of the model?
+                                    (If the aer_statevector_simulator selected,
+                                    only relevant for studying generalization)"
+                }
+            }
         """
         provider = FakeProviderForBackendV2()
         backends = provider.backends()
@@ -131,7 +130,7 @@ class PresetQiskitNoisyBackend(Library):
         else:
             raise NotImplementedError(f"Option {option} not implemented")
 
-    def sequence_to_circuit(self, input_data: Dict) -> Dict:
+    def sequence_to_circuit(self, input_data: dict) -> dict:
         """
         Maps the gate sequence, that specifies the architecture of a quantum circuit
         to its Qiskit implementation.
@@ -193,7 +192,7 @@ class PresetQiskitNoisyBackend(Library):
     @staticmethod
     def select_backend(config: str, n_qubits: int) -> Backend:
         """
-        This method configures the backend
+        This method configures the backend.
 
         :param config: Name of a backend
         :param n_qubits: Number of qubits
@@ -211,7 +210,7 @@ class PresetQiskitNoisyBackend(Library):
         return backend
 
     def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend,  # pylint: disable=W0221
-                            config: str, config_dict: Dict) -> Tuple[Any, Any]:
+                            config: str, config_dict: dict) -> tuple[any, any]:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
@@ -240,7 +239,6 @@ class PresetQiskitNoisyBackend(Library):
 
         if config in ["aer_simulator_cpu", "aer_simulator_gpu"]:
             def execute_circuit(solutions):
-
                 all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
                 jobs = backend.run(all_circuits, shots=n_shots)
                 samples_dictionary = [jobs.result().get_counts(c).int_outcomes() for c in all_circuits]
@@ -254,7 +252,6 @@ class PresetQiskitNoisyBackend(Library):
                     samples.append(target_iter)
                 samples = np.asarray(samples)
                 pmfs = samples / n_shots
-
                 return pmfs, samples
 
         else:
@@ -306,17 +303,6 @@ class PresetQiskitNoisyBackend(Library):
         else:
             raise ValueError(f"Unknown noise configuration: {noise_configuration}")
 
-    # IBM backend will be added with release 2.1
-    # def get_ibm_backend(self, backend_name):
-        # service = QiskitRuntimeService()
-        # backend_identifier = backend_name.replace(' 127 Qubits', '').lower()
-        # backend = service.backend(backend_identifier)
-        # noise_model = NoiseModel.from_backend(backend)
-        # logging.info(f'Loaded with IBMQ Account {backend.name}, {backend.version}, {backend.num_qubits}')
-        # simulator = AerSimulator.from_backend(backend)
-        # simulator.noise_model = noise_model
-        # return simulator
-
     def configure_backend(self, backend: Backend, device: str, simulation_method: str) -> None:
         """
         This method configures the backend with the specified device and simulation method.
@@ -332,7 +318,7 @@ class PresetQiskitNoisyBackend(Library):
         logging.info(f'Backend configuration: {backend.configuration()}')
         logging.info(f'Simulation method: {backend.options.method}')
 
-    def get_simulation_method_and_device(self, device: str, simulation_config: str) -> Tuple[str, str]:
+    def get_simulation_method_and_device(self, device: str, simulation_config: str) -> tuple[str, str]:
         """
         This method determines the simulation method and device based on the provided configuration.
 
@@ -381,8 +367,8 @@ class PresetQiskitNoisyBackend(Library):
             backend = filtered_backends[0]
 
         if num_qubits > backend.num_qubits:
-            logging.warning(
-                f'Requested number of qubits ({num_qubits}) exceeds the backend capacity. Using default aer_simulator.')
+            logging.warning(f'Requested number of qubits ({num_qubits}) exceeds the backend capacity. '
+                            f'Using default aer_simulator.')
             return Aer.get_backend("aer_simulator")
 
         noise_model = NoiseModel.from_backend(backend)

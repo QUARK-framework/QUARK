@@ -26,8 +26,8 @@ class Solver(ABC):
         """
         Constructor method.
         """
-        self.device_options: list[str] = []
-        self.sub_options: list[dict] = None
+        self.device_options = []
+        self.sub_options = None
         super().__init__()
 
     @abstractmethod

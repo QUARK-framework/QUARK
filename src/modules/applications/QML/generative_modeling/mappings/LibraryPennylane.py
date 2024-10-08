@@ -11,7 +11,8 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import Union, Any, Dict, Tuple, List
+
+from typing import Union
 
 import numpy as np
 import pennylane as qml
@@ -33,11 +34,11 @@ class LibraryPennylane(Library):
         self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "pennylane", "version": "0.37.0"},
@@ -47,25 +48,24 @@ class LibraryPennylane(Library):
             {"name": "jaxlib", "version": "0.4.30"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for the PennyLane Library.
 
         :return: Dictionary with configurable settings.
-                 .. code-block:: python
+        .. code-block:: python
 
-                        return {
-                            "backend": {
-                                "values": ["default.qubit", "default.qubit.jax", "lightning.qubit", "lightning.gpu"],
-                                "description": "Which backend do you want to use?"
-                            },
+            return {
+                "backend": {
+                    "values": ["default.qubit", "default.qubit.jax", "lightning.qubit", "lightning.gpu"],
+                    "description": "Which backend do you want to use?"
+                },
 
-                            "n_shots": {
-                                "values": [100, 1000, 10000, 1000000],
-                                "description": "How many shots do you want use for estimating the PMF of the model?"
-                            }
-                        }
-
+                "n_shots": {
+                    "values": [100, 1000, 10000, 1000000],
+                    "description": "How many shots do you want use for estimating the PMF of the model?"
+                }
+            }
         """
         return {
             "backend": {
@@ -89,7 +89,7 @@ class LibraryPennylane(Library):
         else:
             raise NotImplementedError(f"Training option {option} not implemented")
 
-    def sequence_to_circuit(self, input_data: Dict) -> Dict:
+    def sequence_to_circuit(self, input_data: dict) -> dict:
         """
         Method that maps the gate sequence, that specifies the architecture of a quantum circuit
         to its PennyLane implementation.
@@ -147,9 +147,9 @@ class LibraryPennylane(Library):
         return input_data
 
     @staticmethod
-    def select_backend(config: str, n_qubits: int) -> Any:
+    def select_backend(config: str, n_qubits: int) -> any:
         """
-        This method configures the backend
+        This method configures the backend.
 
         :param config: Name of a backend
         :param n_qubits: Number of qubits
@@ -170,8 +170,8 @@ class LibraryPennylane(Library):
 
     @staticmethod
     def get_execute_circuit(
-        circuit: callable, backend: qml.device, config: str, config_dict: Dict
-    ) -> Tuple[any, any]:
+        circuit: callable, backend: qml.device, config: str, config_dict: dict
+    ) -> tuple[any, any]:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.

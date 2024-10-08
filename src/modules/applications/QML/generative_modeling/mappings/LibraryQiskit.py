@@ -11,13 +11,15 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import Union, Dict, List, Tuple, Any
+
 import logging
+from typing import Union
+import numpy as np
+
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit.providers import Backend
 from qiskit.quantum_info import Statevector
-import numpy as np
 
 from modules.training.QCBM import QCBM
 from modules.training.QGAN import QGAN
@@ -29,36 +31,36 @@ logging.getLogger("qiskit").setLevel(logging.WARNING)
 
 class LibraryQiskit(Library):
     """
-    This module maps a library-agnostic gate sequence to a qiskit circuit
+    This module maps a library-agnostic gate sequence to a qiskit circuit.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("LibraryQiskit")
         self.submodule_options = ["QCBM", "QGAN", "Inference"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "qiskit", "version": "1.1.0"},
             {"name": "numpy", "version": "1.26.4"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for the Qiskit Library.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary with configurable settings
+        .. code-block:: python
 
-                        return {
+        return {
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
@@ -101,10 +103,10 @@ class LibraryQiskit(Library):
         else:
             raise NotImplementedError(f"Option {option} not implemented")
 
-    def sequence_to_circuit(self, input_data: Dict) -> Dict:
+    def sequence_to_circuit(self, input_data: dict) -> dict:
         """
         Maps the gate sequence, that specifies the architecture of a quantum circuit
-        to its Qiskit implementation. 
+        to its Qiskit implementation.
 
         :param input_data: Collected information of the benchmarking process
         :return: Same dictionary but the gate sequence is replaced by its Qiskit implementation
@@ -156,7 +158,7 @@ class LibraryQiskit(Library):
     @staticmethod
     def select_backend(config: str, n_qubits: int) -> any:
         """
-        This method configures the backend
+        This method configures the backend.
 
         :param config: Name of a backend
         :param n_qubits: Number of qubits
@@ -179,22 +181,18 @@ class LibraryQiskit(Library):
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
-
         elif config == "aer_simulator_cpu":
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
-
         elif config == "aer_statevector_simulator_gpu":
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="GPU")
-
         elif config == "aer_statevector_simulator_cpu":
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
-
         elif config == "ionQ_Harmony":
             from modules.devices.braket.Ionq import Ionq # pylint: disable=C0415
             from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
@@ -207,7 +205,6 @@ class LibraryQiskit(Library):
                 online_date=device_wrapper.device.properties.service.updatedAt,
                 backend_version="2",
             )
-
         elif config == "Amazon_SV1":
             from modules.devices.braket.SV1 import SV1 # pylint: disable=C0415
             from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
@@ -227,8 +224,8 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: Dict) \
-            -> Tuple[Any, Any]:  # pylint: disable=W0221,R0915
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict
+    ) -> tuple[any, any]:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.
@@ -248,7 +245,9 @@ class LibraryQiskit(Library):
             circuit_transpiled.remove_final_measurements()
 
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                all_circuits = [
+                    circuit_transpiled.assign_parameters(solution) for solution in solutions
+                ]
                 pmfs = np.asarray([Statevector(c).probabilities() for c in all_circuits])
                 return pmfs, None
 
@@ -256,13 +255,17 @@ class LibraryQiskit(Library):
             import time as timetest  # pylint: disable=C0415
 
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                all_circuits = [
+                    circuit_transpiled.assign_parameters(solution) for solution in solutions
+                ]
                 jobs = backend.run(all_circuits, shots=n_shots)
                 while not jobs.in_final_state():
                     logging.info("Waiting 10 seconds for task to finish")
                     timetest.sleep(10)
 
-                samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
+                samples_dictionary = [
+                    jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits
+                ]
 
                 samples = []
                 for result in samples_dictionary:
@@ -278,12 +281,20 @@ class LibraryQiskit(Library):
 
                 return pmfs, samples
 
-        elif config in ["cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_cpu",
-                        "aer_simulator_gpu"]:
+        elif config in [
+            "cusvaer_simulator (only available in cuQuantum appliance)",
+            "aer_simulator_cpu",
+            "aer_simulator_gpu"
+        ]:
+
             def execute_circuit(solutions):
-                all_circuits = [circuit_transpiled.assign_parameters(solution) for solution in solutions]
+                all_circuits = [
+                    circuit_transpiled.assign_parameters(solution) for solution in solutions
+                ]
                 jobs = backend.run(all_circuits, shots=n_shots)
-                samples_dictionary = [jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits]
+                samples_dictionary = [
+                    jobs.result().get_counts(circuit).int_outcomes() for circuit in all_circuits
+                ]
 
                 samples = []
                 for result in samples_dictionary:

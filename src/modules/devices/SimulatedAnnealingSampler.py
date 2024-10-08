@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import List, Dict
 import dwave.samplers
 
 from modules.devices.Device import Device
@@ -33,7 +32,7 @@ class SimulatedAnnealingSampler(Device):
         self.submodule_options = []
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -41,7 +40,7 @@ class SimulatedAnnealingSampler(Device):
         """
         return [{"name": "dwave-samplers", "version": "1.3.0"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 

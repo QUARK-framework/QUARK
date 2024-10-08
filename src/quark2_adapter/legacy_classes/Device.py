@@ -27,9 +27,9 @@ class Device(ABC):
 
         :param device_name: Name of the device
         """
-        self.device: any = None
-        self.device_name: str = device_name
-        self.config: dict = None
+        self.device = None
+        self.device_name = device_name
+        self.config = None
 
     def get_parameter_options(self) -> dict:
         """

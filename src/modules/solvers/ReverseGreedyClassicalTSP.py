@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Dict, List, Any, Tuple
+from typing import TypedDict
 
 import networkx as nx
 from networkx.algorithms import approximation as approx
@@ -36,7 +36,7 @@ class ReverseGreedyClassicalTSP(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -57,7 +57,7 @@ class ReverseGreedyClassicalTSP(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dict as this solver has no configurable settings.
 
@@ -67,11 +67,11 @@ class ReverseGreedyClassicalTSP(Solver):
 
     class Config(TypedDict):
         """
-        Empty config as this solver has no configurable settings
+        Empty config as this solver has no configurable settings.
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: Any, config: Config, **kwargs: Any) -> Tuple[Dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: any) -> tuple[dict, float]:
         """
         Solve the TSP graph in a greedy fashion.
 
@@ -81,7 +81,6 @@ class ReverseGreedyClassicalTSP(Solver):
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
-
         # Need to deep copy since we are modifying the graph in this function.
         # Else the next repetition would work with a different graph
         mapped_problem = mapped_problem.copy()

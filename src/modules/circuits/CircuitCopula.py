@@ -12,9 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, TypedDict, Any, Dict, Tuple, List
+from typing import Union, TypedDict
 from itertools import combinations
-
 from scipy.special import binom
 
 from modules.circuits.Circuit import Circuit
@@ -33,14 +32,15 @@ class CircuitCopula(Circuit):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("DiscreteCopula")
         self.submodule_options = [
             "LibraryQiskit",
             "LibraryPennylane",
             "CustomQiskitNoisyBackend",
-            "PresetQiskitNoisyBackend"]
+            "PresetQiskitNoisyBackend"
+        ]
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -51,7 +51,7 @@ class CircuitCopula(Circuit):
         """
         return [{"name": "scipy", "version": "1.12.0"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this Copula Circuit.
 
@@ -105,7 +105,7 @@ class CircuitCopula(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
+    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of copula architecture.
     

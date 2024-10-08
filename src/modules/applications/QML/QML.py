@@ -13,18 +13,17 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict
 
 from modules.applications.Application import Application
 
 
 class QML(Application, ABC):
     """
-    QML Module for QUARK, is used by all QML applications
+    QML Module for QUARK, is used by all QML applications.
     """
 
     @abstractmethod
-    def generate_problem(self, config: Dict) -> Any:
+    def generate_problem(self, config: dict) -> any:
         """
         Creates a concrete problem and returns it.
 

@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from braket.devices import LocalSimulator as LocalSimulatorBraket
-from typing import Dict
 
 from modules.devices.braket.Braket import Braket
 from modules.Core import Core
@@ -34,7 +33,7 @@ class LocalSimulator(Braket):
         self.device = LocalSimulatorBraket()
         self.submodule_options = []
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 

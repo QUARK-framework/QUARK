@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 import os
-from typing import Dict
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import Braket
@@ -22,12 +21,12 @@ from modules.Core import Core
 
 class Ionq(Braket):
     """
-    Class for using the IonQ devices on Amazon Braket
+    Class for using the IonQ devices on Amazon Braket.
     """
 
     def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-east-1::device/qpu/ionq/Harmony'):
         """
-        Constructor method for initializing IonQ device on Amazon Braket
+        Constructor method for initializing IonQ device on Amazon Braket.
         """
         super().__init__(region="us-east-1", device_name=device_name, arn=arn)
         self.submodule_options = []
@@ -40,7 +39,7 @@ class Ionq(Braket):
         self.init_s3_storage("ionq")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 

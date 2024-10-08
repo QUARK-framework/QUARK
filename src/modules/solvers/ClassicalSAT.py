@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 import logging
 
 from pysat.examples.rc2 import RC2
@@ -36,11 +36,11 @@ class ClassicalSAT(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() ->   List[Dict]:
+    def get_requirements() ->   list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "python-sat", "version": "1.8.dev13"}]
 
@@ -57,7 +57,7 @@ class ClassicalSAT(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 
@@ -71,7 +71,7 @@ class ClassicalSAT(Solver):
         """
         pass
 
-    def run(self, mapped_problem: WCNF, device_wrapper: Any, config: Any, **kwargs: Dict) -> Tuple[List, float]:
+    def run(self, mapped_problem: WCNF, device_wrapper: any, config: any, **kwargs: dict) -> tuple[list, float]:
         """
         The given application is a problem instance from the pysat library. This uses the rc2 maxsat solver
         given in that library to return a solution.
@@ -79,7 +79,7 @@ class ClassicalSAT(Solver):
         :param mapped_problem: Problem instance from the pysat library
         :param device_wrapper: Local device
         :param config: Empty dict
-        :param kwargs: no additionally settings needed
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
 

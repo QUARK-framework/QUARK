@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, TypedDict, Any, Tuple, Dict
+from typing import Union, TypedDict
 
 from modules.circuits.Circuit import Circuit
 from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
@@ -30,7 +30,7 @@ class CircuitCardinality(Circuit):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("CircuitCardinality")
         self.submodule_options = [
@@ -40,20 +40,19 @@ class CircuitCardinality(Circuit):
             "PresetQiskitNoisyBackend"
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this circuit.
 
         :return: Dictionary with parameter options
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "depth": {
-                                    "values": [2, 4, 8, 16],
-                                    "description": "What depth do you want?"
-                                }
-                            }
-
+            return {
+                    "depth": {
+                        "values": [2, 4, 8, 16],
+                        "description": "What depth do you want?"
+                    }
+                }
         """
         return {
 
@@ -79,7 +78,7 @@ class CircuitCardinality(Circuit):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -88,7 +87,7 @@ class CircuitCardinality(Circuit):
         """
         depth: int
 
-    def generate_gate_sequence(self, input_data: Dict, config: Config) -> Dict:
+    def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of cardinality circuit architecture.
     

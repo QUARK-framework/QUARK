@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 import os
-from typing import Dict
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import Braket
@@ -45,14 +44,11 @@ class TN1(Braket):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dict as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     def get_default_submodule(self, option: str) -> Core:
         """

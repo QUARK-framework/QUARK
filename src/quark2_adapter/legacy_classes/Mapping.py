@@ -26,8 +26,8 @@ class Mapping(ABC):
         """
         Constructor method.
         """
-        self.solver_options: list[str] = []
-        self.sub_options: list[dict] = None
+        self.solver_options = []
+        self.sub_options = None
         super().__init__()
 
     @abstractmethod

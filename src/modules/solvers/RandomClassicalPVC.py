@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 import random
 import networkx as nx
 
@@ -34,11 +34,11 @@ class RandomPVC(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "networkx", "version": "3.2.1"}]
 
@@ -55,7 +55,7 @@ class RandomPVC(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 
@@ -69,7 +69,7 @@ class RandomPVC(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
         """
         Solve the PVC graph in a greedy fashion.
 
@@ -79,7 +79,6 @@ class RandomPVC(Solver):
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
-
         # Deep copy since we are modifying the graph. This ensures that the original graph remains unchanges
         # with a different graph
         mapped_problem = mapped_problem.copy()

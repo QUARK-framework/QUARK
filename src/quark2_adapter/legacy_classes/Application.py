@@ -32,11 +32,11 @@ class Application(ABC):
         """
         self.application_name = application_name
         self.application = None
-        self.mapping_options: list[str] = []
-        self.sub_options: list[dict]= []
+        self.mapping_options = []
+        self.sub_options = []
 
         self.problem = None
-        self.problems: dict = {}
+        self.problems = {}
         self.conf_idx = None
 
         super().__init__()

@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Any, Dict, List, Tuple
+from typing import TypedDict
 import logging
 
 import numpy as np
@@ -36,7 +36,7 @@ class NeutralAtomMIS(Solver):
         self.submodule_options = ["MockNeutralAtomDevice"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
@@ -57,7 +57,7 @@ class NeutralAtomMIS(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this solver.
 
@@ -81,7 +81,7 @@ class NeutralAtomMIS(Solver):
         """
         samples: int
 
-    def run(self, mapped_problem: Dict, device_wrapper: Any, config: Any, **kwargs: Dict) -> Tuple[List, float, Dict]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: any, **kwargs: dict) -> tuple[list, float, dict]:
         """
         The given application is a problem instance from the pysat library. This uses the rc2 maxsat solver
         given in that library to return a solution.
@@ -137,7 +137,7 @@ class NeutralAtomMIS(Solver):
             sequence.add(pulse, "Rydberg global")
         return sequence
 
-    def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> List[pulser.Pulse]:
+    def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
         """
         Creates pulses tuned to MIS problem.
 
@@ -181,7 +181,7 @@ class NeutralAtomMIS(Solver):
 
         return pulses
 
-    def _filter_invalid_states(self, state_counts:Dict, nodes:List, edges:List) -> Dict:
+    def _filter_invalid_states(self, state_counts:dict, nodes:list, edges:list) -> dict:
         """
         Filters out invalid states that do not meet the problem constraints.
 
@@ -204,7 +204,7 @@ class NeutralAtomMIS(Solver):
 
         return valid_state_counts
 
-    def _translate_state_to_nodes(self, state:str, nodes:List) -> List:
+    def _translate_state_to_nodes(self, state:str, nodes:list) -> list:
         """
         Translates a state string into the corresponding list of nodes.
 
@@ -214,7 +214,7 @@ class NeutralAtomMIS(Solver):
         """
         return [key for index, key in enumerate(nodes) if state[index] == '1']
 
-    def _select_best_state(self, states:Dict, nodes:List) -> str:
+    def _select_best_state(self, states:dict, nodes:list) -> str:
         """
         Selects the best state from the available valid states.
 
@@ -230,4 +230,5 @@ class NeutralAtomMIS(Solver):
             # TODO: Clean up this monstrocity
             n_nodes = len(nodes)
             best_state = "0" * n_nodes
+
         return best_state

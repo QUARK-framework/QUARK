@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import Tuple, TypedDict, Dict, Any, List
+from typing import TypedDict
 
 import numpy as np
 
@@ -43,11 +43,11 @@ class QiskitQAOA(Solver):
         self.ry = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "qiskit", "version": "1.1.0"},
@@ -69,7 +69,7 @@ class QiskitQAOA(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this solver.
 
@@ -151,7 +151,7 @@ class QiskitQAOA(Solver):
         method: str
 
     @staticmethod
-    def normalize_data(data: Any, scale: float = 1.0) -> Any:
+    def normalize_data(data: any, scale: float = 1.0) -> any:
         """
         Not used currently, as I just scale the coefficients in the qaoa_operators_from_ising.
 
@@ -161,14 +161,14 @@ class QiskitQAOA(Solver):
         """
         return scale * data / np.max(np.abs(data))
 
-    def run(self, mapped_problem: Any, device_wrapper: Any, config: Config, **kwargs: Dict) -> Tuple[Any, float]:
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float]:
         """
         Run Qiskit QAOA algorithm on Ising.
 
-        :param mapped_problem: dictionary with the keys 'J' and 't'
+        :param mapped_problem: Dictionary with the keys 'J' and 't'
         :param device_wrapper: Instance of device
         :param config: Config object for the solver
-        :param kwargs: no additionally settings needed
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
         J = mapped_problem['J']
@@ -198,7 +198,7 @@ class QiskitQAOA(Solver):
                 logging.warning("No method selected in QiskitQAOA. Continue with NumPyMinimumEigensolver.")
                 algorithm = NumPyMinimumEigensolver()
 
-        # run actual optimization algorithm
+        # Run actual optimization algorithm
         try:
             result = algorithm.compute_minimum_eigenvalue(ising_op)
         except ValueError as e:
@@ -209,7 +209,7 @@ class QiskitQAOA(Solver):
         best_bitstring = self._get_best_solution(result)
         return best_bitstring, end_time_measurement(start), {}
 
-    def _get_best_solution(self, result) -> Any:
+    def _get_best_solution(self, result) -> any:
         """
         Gets the best solution from the result.
 
@@ -237,9 +237,9 @@ class QiskitQAOA(Solver):
         return best_bitstring
 
     @staticmethod
-    def _get_pauli_op(ising: Tuple[np.ndarray, np.ndarray]) -> SparsePauliOp:
+    def _get_pauli_op(ising: tuple[np.ndarray, np.ndarray]) -> SparsePauliOp:
         """
-        Creates a Pauli operator from the given Ising model representation
+        Creates a Pauli operator from the given Ising model representation.
 
         :param ising: Tuple with linear and quandratic terms
         .return: SparsePauliOp representing the Ising model
@@ -247,7 +247,7 @@ class QiskitQAOA(Solver):
         pauli_list = []
         number_qubits = len(ising[0])
 
-        # linear terms
+        # Linear terms
         it = np.nditer(ising[0], flags=['multi_index'])
         for x in it:
             logging.debug(f"{x},{it.multi_index}")

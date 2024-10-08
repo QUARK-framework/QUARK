@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Tuple
 from modules.Core import Core
 
 
@@ -23,7 +22,7 @@ class Mapping(Core, ABC):
     e.g., the application into a mathematical formulation suitable the submodule, e.g., a solver.
     """
 
-    def preprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Maps the data to the correct target format.
 
@@ -35,7 +34,7 @@ class Mapping(Core, ABC):
         output, preprocessing_time = self.map(input_data, config)
         return output, preprocessing_time
 
-    def postprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Reverse transformation/mapping from the submodule's format to the mathematical formulation
         suitable for the parent module.
@@ -49,7 +48,7 @@ class Mapping(Core, ABC):
         return output, postprocessing_time
 
     @abstractmethod
-    def map(self, problem: Any, config: Dict) -> Tuple[Any, float]:
+    def map(self, problem: any, config: dict) -> tuple[any, float]:
         """
         Maps the given problem into a specific format suitable for the submodule, e.g., a solver.
 
@@ -59,7 +58,7 @@ class Mapping(Core, ABC):
         """
         pass
 
-    def reverse_map(self, solution: Any) -> Tuple[Any, float]:
+    def reverse_map(self, solution: any) -> tuple[any, float]:
         """
         Maps the solution back to the original problem. This might not be necessary in all cases, so the default is
         to return the original solution. This might be needed to convert the solution to a representation needed

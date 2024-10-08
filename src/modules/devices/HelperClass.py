@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Dict
 from modules.devices.Device import Device
 from modules.Core import Core
 
@@ -34,7 +33,7 @@ class HelperClass(Device):
         self.device = device_name
         self.submodule_options = []
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 

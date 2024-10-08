@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 import os
-from typing import Dict
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import Braket
@@ -40,7 +39,7 @@ class Rigetti(Braket):
         self.init_s3_storage("rigetti")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns an empty dictionary as this solver has no configurable settings.
 

@@ -11,7 +11,6 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import List, Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -40,22 +39,22 @@ class PIT(Transformation):  # pylint disable=R0902
         self.histogram_transformed = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
             {"name": "pandas", "version": "2.2.2"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this transformation has no configurable settings
+        Returns empty dict as this transformation has no configurable settings.
 
-        :return: empty dict
+        :return: Empty dict
         """
         return {}
 
@@ -65,14 +64,14 @@ class PIT(Transformation):  # pylint disable=R0902
         else:
             raise NotImplementedError(f"Circuit Option {option} not implemented")
 
-    def transform(self, input_data: dict, config: Dict) -> Dict:
+    def transform(self, input_data: dict, config: dict) -> dict:
         """
         Transforms the input dataset using PIT transformation and computes histograms
         of the training dataset in the transformed space.
 
-        :param input_data: dataset
-        :param config: config with the parameters specified in Config class
-        :return: dict with PIT transformation, time it took to map it
+        :param input_data: Dataset
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with PIT transformation, time it took to map it
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
@@ -130,12 +129,12 @@ class PIT(Transformation):  # pylint disable=R0902
 
         return self.transform_config
 
-    def reverse_transform(self, input_data: Dict) -> Dict:
+    def reverse_transform(self, input_data: dict) -> dict:
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param input_data: dictionary containing the solution
-        :return: dictionary with solution transformed accordingly
+        :param input_data: Dictionary containing the solution
+        :return: Dictionary with solution transformed accordingly
         """
         depth = input_data["depth"]
         architecture_name = input_data["architecture_name"]
@@ -189,12 +188,11 @@ class PIT(Transformation):  # pylint disable=R0902
 
     def fit_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Takes the data points and applies the PIT
+        Takes the data points and applies the PIT.
 
-        :param data: data samples
+        :param data: Data samples
         :return: Transformed data points
         """
-
         df = pd.DataFrame(data)
         epit = df.copy(deep=True).transpose()
         self.reverse_epit_lookup = epit.copy(deep=True)
@@ -207,18 +205,20 @@ class PIT(Transformation):  # pylint disable=R0902
         self.reverse_epit_lookup = self.reverse_epit_lookup.values
         return df.values
 
-    def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> List[float]:
+    def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> list[float]:
         """
-        Takes one data point and applies the inverse PIT
+        Takes one data point and applies the inverse PIT.
 
-        :param values: data point
+        :param values: Data point
         :return: Data point after applying the inverse transformation
         """
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
+
         # if we are an integer do not use linear interpolation
         values_l = np.floor(values).astype(int)
         values_h = np.ceil(values).astype(int)
+
         # if we are an integer then floor and ceiling are the same
         is_int_mask = 1 - (values_h - values_l)
         row_indexer = np.arange(rows)
@@ -231,9 +231,9 @@ class PIT(Transformation):  # pylint disable=R0902
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Applies the inverse transformation to the full data set
+        Applies the inverse transformation to the full data set.
 
-        :param data: data set
+        :param data: Data set
         :return: Data set after applying the inverse transformation
         """
         res = [self._reverse_emp_integral_trans_single(row) for row in data]
@@ -241,6 +241,12 @@ class PIT(Transformation):  # pylint disable=R0902
         return np.array(res)[:, 0, :]
 
     def emp_integral_trans(self, data: np.ndarray) -> np.ndarray:
+        """
+        Applies the empirical integral transformation to the given data.
+
+        :param data: Data points
+        :return: Empirically transformed data points
+        """
         rank = np.argsort(data).argsort()
         length = data.size
         ecdf = np.linspace(0, 1, length, dtype=np.float64)

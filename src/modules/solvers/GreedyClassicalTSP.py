@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 
 import networkx as nx
 from networkx.algorithms import approximation as approx
@@ -35,11 +35,11 @@ class GreedyClassicalTSP(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [{"name": "networkx", "version": "3.2.1"}]
 
@@ -56,7 +56,7 @@ class GreedyClassicalTSP(Solver):
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dictionary as this solver has no configurable settings.
 
@@ -70,17 +70,16 @@ class GreedyClassicalTSP(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: Any, config: Any, **kwargs: Dict) ->Tuple[Dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: any, **kwargs: dict) ->tuple[dict, float]:
         """
         Solve the TSP graph in a greedy fashion.
 
-        :param mapped_problem: graph representing a TSP
+        :param mapped_problem: Graph representing a TSP
         :param device_wrapper: Local device
         :param config: Empty dict
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
-
         # Deep copy to ensure modification don't affect future repetitions
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()

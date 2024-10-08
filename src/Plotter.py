@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from collections import defaultdict
-from typing import List, Dict
 import logging
 
 import matplotlib.pyplot as plt
@@ -31,7 +30,7 @@ class Plotter:
     """
 
     @staticmethod
-    def visualize_results(results: List[Dict], store_dir: str) -> None:
+    def visualize_results(results: list[dict], store_dir: str) -> None:
         """
         Function to plot the execution times of the benchmark.
 

@@ -20,7 +20,7 @@ from tensorboardX import SummaryWriter
 from matplotlib import figure, axes
 import matplotlib.pyplot as plt
 
-from modules.training.Training import Training, Core
+from modules.training.Training import Training, Core, GPU
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()
@@ -213,7 +213,7 @@ class QCBM(Training):
         input_data['MPI_size'] = size
         input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         x0, options = self.setup_training(input_data, config)
-        
+
         is_master = comm.Get_rank() == 0
         if is_master:
             self.target = np.asarray(input_data["histogram_train"])

@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC
-from typing import Dict, Any, Tuple
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
@@ -34,7 +33,7 @@ class Device(Core, ABC):
         self.config = None
         self.device_name = self.name
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the parameters to fine-tune the device.
 
@@ -60,7 +59,7 @@ class Device(Core, ABC):
         """
         self.config = config
 
-    def preprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Returns instance of device class (self) and time it takes to call config.
 
@@ -73,12 +72,12 @@ class Device(Core, ABC):
         self.config = config
         return self, end_time_measurement(start)
 
-    def postprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Returns input data and adds device name to the metrics class instance.
 
         :param input_data: Input data passed by the parent module
-        :param config: solver config
+        :param config: Solver config
         :param kwargs: Optional keyword arguments
         :return: Output and time needed
         """
@@ -86,7 +85,7 @@ class Device(Core, ABC):
         self.metrics.add_metric("device", self.get_device_name())
         return input_data, end_time_measurement(start)
 
-    def get_device(self) -> Any:
+    def get_device(self) -> any:
         """
         Returns device.
 

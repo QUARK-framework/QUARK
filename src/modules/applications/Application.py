@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from typing import Any
 from modules.Core import Core
 
 
@@ -31,7 +30,7 @@ class Application(Core, ABC):
         self.application_name = self.name
         self.application = None
 
-    def get_application(self) -> Any:
+    def get_application(self) -> any:
         """
         Gets the application.
 
@@ -44,7 +43,7 @@ class Application(Core, ABC):
         """
         Saves the concrete problem.
 
-        :param path: path of the experiment directory for this run
-        :param iter_count: the iteration count
+        :param path: Path of the experiment directory for this run
+        :param iter_count: The iteration count
         """
         pass

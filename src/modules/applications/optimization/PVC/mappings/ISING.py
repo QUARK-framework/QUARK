@@ -39,7 +39,7 @@ class Ising(Mapping):
         self.key_mapping = None
 
     @staticmethod
-    def get_requirements() -> list[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 

@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from abc import ABC, abstractmethod
-from typing import List, Dict, Tuple, Any
 import logging
 
 from modules.applications.Application import Application
@@ -25,55 +24,55 @@ class Optimization(Application, ABC):
     """
 
     @abstractmethod
-    def validate(self, solution: Any) -> Tuple[bool, float]:
+    def validate(self, solution: any) -> tuple[bool, float]:
         """
-        Checks if the solution is a valid solution
+        Checks if the solution is a valid solution.
 
         :param solution: Proposed solution
-        :return: bool value if solution is valid and the time it took to validate the solution
+        :return: Bool value if solution is valid and the time it took to validate the solution
         """
         pass
 
     @abstractmethod
     def get_solution_quality_unit(self) -> str:
         """
-        Returns the unit of the evaluation
+        Returns the unit of the evaluation.
 
         :return: String with the unit
         """
         pass
 
     @abstractmethod
-    def evaluate(self, solution: Any) -> Tuple[float, float]:
+    def evaluate(self, solution: any) -> tuple[float, float]:
         """
-        Checks how good the solution is
+        Checks how good the solution is.
 
         :param solution: Provided solution
-        :return: Evaluation and the time it took to create it
+        :return: Tuple witht the evaluation and the time it took to create it
         """
         pass
 
     @abstractmethod
-    def generate_problem(self, config: Dict) -> Any:
+    def generate_problem(self, config: dict) -> any:
         """
-        Creates a concrete problem and returns it
+        Creates a concrete problem and returns it.
 
         :param config: Configuration for problem creation
         :return: Generated problem
         """
         pass
 
-    def process_solution(self, solution: Any) -> Tuple[Any, float]:
+    def process_solution(self, solution: any) -> tuple[any, float]:
         """
         Most of the time the solution has to be processed before it can be validated and evaluated.
         This might not be necessary in all cases, so the default is to return the original solution.
 
         :param solution: Proposed solution
-        :return: Processed solution and the execution time to process it
+        :return: Tuple with processed solution and the execution time to process it
         """
         return solution, 0.0
 
-    def preprocess(self, input_data: Any, config: Dict, **kwargs) -> Tuple[Any, float]:
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         For optimization problems, we generate the actual problem instance in the preprocess function.
 
@@ -86,7 +85,7 @@ class Optimization(Application, ABC):
         output = self.generate_problem(config)
         return output, end_time_measurement(start)
 
-    def postprocess(self, input_data: Any, config: dict, **kwargs) -> Tuple[Any, float]:
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         For optimization problems, we process the solution here, then validate and evaluate it.
 
@@ -121,4 +120,6 @@ class Optimization(Application, ABC):
             "time_to_evaluation": time_to_evaluation
         })
 
-        return solution_validity, sum(filter(None, [time_to_process_solution, time_to_validation, time_to_evaluation]))
+        return solution_validity, sum(filter(None, [
+            time_to_process_solution, time_to_validation, time_to_evaluation
+        ]))

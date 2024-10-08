@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 import pickle
 import logging
 import os
@@ -43,17 +43,19 @@ class TSP(Optimization):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("TSP")
-        self.submodule_options = ["Ising", "QUBO", "GreedyClassicalTSP", "ReverseGreedyClassicalTSP", "RandomTSP"]
+        self.submodule_options = [
+            "Ising", "QUBO", "GreedyClassicalTSP", "ReverseGreedyClassicalTSP", "RandomTSP"
+        ]
 
     @staticmethod
-    def get_requirements() -> List:
+    def get_requirements() -> list:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "networkx", "version": "3.2.1"},
@@ -93,22 +95,21 @@ class TSP(Optimization):
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this application
 
         :return: Dictionary with configurable settings.
-                 .. code-block:: python
+        .. code-block:: python
 
-                      return {
-                                "nodes": {
-                                    "values": list([3, 4, 6, 8, 10, 14, 16]),
-                                    "allow_ranges": True,
-                                    "description": "How many nodes does your graph need?",
-                                    "postproc": int
-                                }
-                            }
-
+            return {
+                    "nodes": {
+                        "values": list([3, 4, 6, 8, 10, 14, 16]),
+                        "allow_ranges": True,
+                        "description": "How many nodes does your graph need?",
+                        "postproc": int
+                    }
+                }
         """
         return {
             "nodes": {
@@ -121,7 +122,7 @@ class TSP(Optimization):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -166,7 +167,6 @@ class TSP(Optimization):
             graph = pickle.load(file)
 
         # Remove seams until the target number of seams is reached
-        # Get number of seam in graph
         nodes_in_graph = list(graph.nodes)
         nodes_in_graph.sort()
 
@@ -184,7 +184,7 @@ class TSP(Optimization):
             logging.error("Graph is not connected!")
             raise ValueError("Graph is not connected!")
 
-        # normalize graph
+        # Normalize graph
         cost_matrix = self._get_tsp_matrix(graph)
         graph = nx.from_numpy_array(cost_matrix)
 
@@ -192,12 +192,12 @@ class TSP(Optimization):
 
         return graph
 
-    def process_solution(self, solution: Dict) -> Tuple[List, float]:
+    def process_solution(self, solution: dict) -> tuple[list, float]:
         """
         Convert dict to list of visited nodes.
 
         :param solution: Dictionary with solution
-        :return: processed solution and the time it took to process it
+        :return: Processed solution and the time it took to process it
         """
         start_time = start_time_measurement()
         nodes = self.application.nodes()
@@ -254,11 +254,11 @@ class TSP(Optimization):
 
         return route, end_time_measurement(start_time)
 
-    def validate(self, solution: List) -> Tuple[bool, float]:
+    def validate(self, solution: list) -> tuple[bool, float]:
         """
         Checks if it is a valid TSP tour.
 
-        :param solution: list containing the nodes of the solution
+        :param solution: List containing the nodes of the solution
         :return: Boolean whether the solution is valid, time it took to validate
         """
         start = start_time_measurement()
@@ -273,7 +273,7 @@ class TSP(Optimization):
             logging.error(f"{len([node for node in list(nodes) if node not in solution])} nodes were NOT visited")
             return False, end_time_measurement(start)
 
-    def evaluate(self, solution: List) -> Tuple[float, float]:
+    def evaluate(self, solution: list) -> tuple[float, float]:
         """
         Find distance for given route e.g. [0, 4, 3, 1, 2] and original data.
 
@@ -281,7 +281,7 @@ class TSP(Optimization):
         :return: Tour cost and the time it took to calculate it
         """
         start = start_time_measurement()
-        # get the total distance without return
+        # Get the total distance without return
         total_dist = 0
         for idx, _ in enumerate(solution[:-1]):
             dist = self.application[solution[idx + 1]][solution[idx]]
@@ -289,10 +289,10 @@ class TSP(Optimization):
 
         logging.info(f"Total distance (without return): {total_dist}")
 
-        # add distance between start and end point to complete cycle
+        # Add distance between start and end point to complete cycle
         return_distance = self.application[solution[0]][solution[-1]]['weight']
 
-        # get distance for full cycle
+        # Get distance for full cycle
         distance_with_return = total_dist + return_distance
         logging.info(f"Total distance (including return): {distance_with_return}")
 

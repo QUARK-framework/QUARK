@@ -14,12 +14,13 @@
 
 from typing import TypedDict
 import logging
+import numpy as np
 from cma import CMAEvolutionStrategy
 from tensorboardX import SummaryWriter
 from matplotlib import figure, axes
 import matplotlib.pyplot as plt
 
-from modules.training.Training import *
+from modules.training.Training import Training, Core
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()
@@ -34,12 +35,12 @@ class QCBM(Training):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("QCBM")
 
         self.n_states_range: list
-        self.target: np.array
+        self.target: np.ndarray
         self.study_generalization: bool
         self.generalization_metrics: dict
         self.writer: SummaryWriter
@@ -50,70 +51,54 @@ class QCBM(Training):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "cma",
-                "version": "4.0.0"
-            },
-            {
-                "name": "matplotlib",
-                "version": "3.7.5"
-            },
-            {
-                "name": "tensorboard",
-                "version": "2.17.0"
-            },
-            {
-                "name": "tensorboardX",
-                "version": "2.6.2.2"
-            }
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "cma", "version": "4.0.0"},
+            {"name": "matplotlib", "version": "3.7.5"},
+            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
 
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for the quantum circuit born machine
 
-        :return:
-            .. code-block:: python
+        :return: Configuration settings for QCBM
+        .. code-block:: python
 
-                return {
+            return {
 
-                    "population_size": {
-                        "values": [5, 10, 100, 200, 10000],
-                        "description": "What population size do you want?"
-                    },
+                "population_size": {
+                    "values": [5, 10, 100, 200, 10000],
+                    "description": "What population size do you want?"
+                },
 
-                    "max_evaluations": {
-                        "values": [100, 1000, 20000, 100000],
-                        "description": "What should be the maximum number of evaluations?"
-                    },
+                "max_evaluations": {
+                    "values": [100, 1000, 20000, 100000],
+                    "description": "What should be the maximum number of evaluations?"
+                },
 
-                    "sigma": {
-                        "values": [0.01, 0.5, 1, 2],
-                        "description": "Which sigma would you like to use?"
-                    },
+                "sigma": {
+                    "values": [0.01, 0.5, 1, 2],
+                    "description": "Which sigma would you like to use?"
+                },
 
-                    "pretrained": {
-                        "values": [False],
-                        "custom_input": True,
-                        "postproc": str,
-                        "description": "Please provide the parameters of a pretrained model."
-                    },
+                "pretrained": {
+                    "values": [False],
+                    "custom_input": True,
+                    "postproc": str,
+                    "description": "Please provide the parameters of a pretrained model."
+                },
 
-                    "loss": {
-                        "values": ["KL", "NLL"],
-                        "description": "Which loss function do you want to use?"
-                    }
+                "loss": {
+                    "values": ["KL", "NLL"],
+                    "description": "Which loss function do you want to use?"
                 }
+            }
         """
         return {
             "population_size": {
@@ -146,7 +131,7 @@ class QCBM(Training):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -170,17 +155,16 @@ class QCBM(Training):
         """
         Method to configure the training setup including CMA-ES and tensorboard.
 
-        :param input_data: a representation of the quantum machine learning model that will be trained
-        :type input_data: dict
+        :param input_data: A representation of the quantum machine learning model that will be trained
         :param config: Config specifying the parameters of the training
-        :type config: dict
-        :return: random initial parameter and options for CMA-ES
-        :rtype: tuple[float, dict]
+        :return: Random initial parameter and options for CMA-ES
         """
 
         logging.info(
-            f"Running config: [backend={input_data['backend']}] [n_qubits={input_data['n_qubits']}] "\
-            f"[population_size={config['population_size']}]")
+            f"Running config: [backend={input_data['backend']}] "
+            f"[n_qubits={input_data['n_qubits']}] "
+            f"[population_size={config['population_size']}]"
+        )
 
         self.study_generalization = "generalization_metrics" in list(input_data.keys())
         if self.study_generalization:
@@ -220,33 +204,33 @@ class QCBM(Training):
         This function finds the best parameters of the circuit on a transformed problem instance and returns a solution.
 
         :param input_data: A representation of the quantum machine learning model that will be trained
-        :type input_data: dict
         :param config: Config specifying the parameters of the training
-        :type config: dict
-        :param kwargs: optional additional settings
-        :type kwargs: dict
+        :param kwargs: Optional additional settings
         :return: Dictionary including the information of previous modules as well as of the training
-        :rtype: dict
         """
 
         size = None
         input_data['MPI_size'] = size
         input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         x0, options = self.setup_training(input_data, config)
-
-        if comm.Get_rank() == 0:
+        
+        is_master = comm.Get_rank() == 0
+        if is_master:
             self.target = np.asarray(input_data["histogram_train"])
             self.target[self.target == 0] = 1e-8
+
         self.n_states_range = range(2 ** input_data['n_qubits'])
         execute_circuit = input_data["execute_circuit"]
         timing = self.Timing()
 
         es = CMAEvolutionStrategy(x0.get() if GPU else x0, config['sigma'], options)
+
         for parameter in ["best_parameters", "time_circuit", "time_loss", "KL", "best_sample"]:
             input_data[parameter] = []
 
         best_loss = float("inf")
         self.fig, self.ax = plt.subplots()
+
         while not es.stop():
             solutions = es.ask()
             epoch = es.result[4]
@@ -258,10 +242,11 @@ class QCBM(Training):
             time_circ = timing.stop_recording()
 
             timing.start_recording()
-            if comm.Get_rank() == 0:
+            if is_master:
                 loss_epoch = self.loss_func(pmfs_model.reshape([config['population_size'], -1]), self.target)
             else:
                 loss_epoch = np.empty(config["population_size"])
+
             comm.Bcast(loss_epoch, root=0)
             comm.Barrier()
 
@@ -277,11 +262,12 @@ class QCBM(Training):
             input_data["KL"].append(float(es.result[1]))
 
             logging.info(
-                f"[Iteration {es.result[4]}] "
-                f"[{config['loss']}: {es.result[1]:.5f}] "\
-                f"[Circuit processing: {(time_circ):.3f} ms] "\
-                f"[{config['loss']} processing: {(time_loss):.3f} ms] "\
-                f"[sigma: {sigma:.5f}]")
+                f"[Iteration {epoch}] "
+                f"[{config['loss']}: {es.result[1]:.5f}] "
+                f"[Circuit processing: {(time_circ):.3f} ms] "
+                f"[{config['loss']} processing: {(time_loss):.3f} ms] "
+                f"[sigma: {sigma:.5f}]"
+            )
 
         plt.close()
         self.writer.flush()
@@ -295,10 +281,19 @@ class QCBM(Training):
         return input_data
 
     def data_visualization(self, loss_epoch, pmfs_model, samples, epoch):
+        """
+        Visualizes the data and metrics for training.
+
+        :param loss_epoch: Loss for the current epoch
+        :param pmfs_model: The probability mass functions from the model
+        :param samples: The samples from the model
+        :param epoch: The current epoch number
+        :return: Best probability mass function for visualization
+        """
         index = loss_epoch.argmin()
         best_pmf = pmfs_model[index] / pmfs_model[index].sum()
-        if self.study_generalization:
 
+        if self.study_generalization:
             if samples is None:
                 counts = self.sample_from_pmf(
                     pmf=best_pmf.get() if GPU else best_pmf,
@@ -307,23 +302,24 @@ class QCBM(Training):
                 counts = samples[int(index)]
 
             metrics = self.generalization_metrics.get_metrics(counts if GPU else counts)
-            for (key, value) in metrics.items():
+            for key, value in metrics.items():
                 self.writer.add_scalar(f"metrics/{key}", value, epoch)
 
         nll = self.nll(best_pmf.reshape([1, -1]), self.target)
         kl = self.kl_divergence(best_pmf.reshape([1, -1]), self.target)
         mmd = self.mmd(best_pmf.reshape([1, -1]), self.target)
+
         self.writer.add_scalar("metrics/NLL", nll.get() if GPU else nll, epoch)
         self.writer.add_scalar("metrics/KL", kl.get() if GPU else kl, epoch)
         self.writer.add_scalar("metrics/MMD", mmd.get() if GPU else mmd, epoch)
 
         self.ax.clear()
         self.ax.imshow(
-            best_pmf.reshape(int(np.sqrt(best_pmf.size)), int(np.sqrt(best_pmf.size))).get() if GPU
-            else best_pmf.reshape(int(np.sqrt(best_pmf.size)),
-                                    int(np.sqrt(best_pmf.size))),
+            best_pmf.reshape(int(np.sqrt(best_pmf.size)), int(np.sqrt(best_pmf.size))).get()
+            if GPU else best_pmf.reshape(int(np.sqrt(best_pmf.size)), int(np.sqrt(best_pmf.size))),
             cmap='binary',
-            interpolation='none')
+            interpolation='none'
+        )
         self.ax.set_title(f'Iteration {epoch}')
         self.writer.add_figure('grid_figure', self.fig, global_step=epoch)
 

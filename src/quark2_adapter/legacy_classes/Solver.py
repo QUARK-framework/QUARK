@@ -13,40 +13,33 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from time import time
 from utils import _get_instance_with_sub_options
-
 
 
 class Solver(ABC):
     """
-    The solver is responsible for finding feasible and high-quality solutions of the formulated problem, i.e., of the
-    defined objective function.
+    The solver is responsible for finding feasible and high-quality solutions
+    of the formulated problem, i.e., of the defined objective function.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
-        self.device_options = []
-        self.sub_options = None
+        self.device_options: list[str] = []
+        self.sub_options: list[dict] = None
         super().__init__()
 
     @abstractmethod
-    def run(self, mapped_problem, device, config, **kwargs) -> (any, float, dict):
+    def run(self, mapped_problem: any, device: any  , config: dict, **kwargs) -> tuple[any, float, dict]:
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 
-        :param mapped_problem: a representation of the problem that the solver can solve
-        :type mapped_problem: any
-        :param device: a device the solver can leverage for the algorithm
-        :type device: any
-        :param config: settings for the solver such as hyperparameters
-        :type config: any
-        :param kwargs: optional additional settings
-        :type kwargs: any
+        :param mapped_problem: A representation of the problem that the solver can solve
+        :param device: A device the solver can leverage for the algorithm
+        :param config: Settings for the solver such as hyperparameters
+        :param kwargs: Optional additional settings
         :return: Solution, the time it took to compute it and some optional additional information
-        :rtype: tuple(any, float, dict)
         """
         pass
 
@@ -67,7 +60,6 @@ class Solver(ABC):
            }
 
         :return: Available solver settings for this solver
-        :rtype: dict
         """
         pass
 
@@ -76,10 +68,8 @@ class Solver(ABC):
         If self.sub_options is not None, a device is instantiated according to the information given in
         self.sub_options. Otherwise, get_device is called as fall back.
 
-        :param device_option: String with the option
-        :type device_option: str
-        :return: instance of the device class
-        :rtype: any
+        :param device_option: The option for the device
+        :return: Instance of the device class
         """
         if self.sub_options is None:
             return self.get_device(device_option)
@@ -92,19 +82,16 @@ class Solver(ABC):
         Returns the default device based on string. This applies only if
         self.sub_options is None. See get_submodule.
 
-        :param device_option:
-        :type device_option: str
-        :return: instance of the device class
-        :rtype: any
+        :param device_option: Desired device option
+        :return: Instance of the device class
         """
         pass
 
     def get_available_device_options(self) -> list:
         """
-        Returns list of devices.
+        Returns the list of available devices.
 
-        :return: list of devices
-        :rtype: list
+        :return: List of devices
         """
         if self.sub_options is None:
             return self.device_options

@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import re
-from typing import TypedDict, List, Dict, Tuple, Any
+from typing import TypedDict
 import logging
 
 import networkx as nx
@@ -23,7 +23,6 @@ from more_itertools import locate
 from pyqubo import Array, Placeholder, Constraint
 from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
-from qiskit.quantum_info import SparsePauliOp
 
 from modules.applications.Mapping import Mapping, Core
 from modules.applications.optimization.TSP.mappings.QUBO import QUBO
@@ -37,7 +36,7 @@ class Ising(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA", "QiskitQAOA"]
@@ -46,11 +45,11 @@ class Ising(Mapping):
         self.config = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "networkx", "version": "3.2.1"},
@@ -62,24 +61,23 @@ class Ising(Mapping):
             *QUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary containing parameter options.
+        .. code-block:: python
 
-                     return {
-                                "lagrange_factor": {
-                                    "values": [0.75, 1.0, 1.25],
-                                    "description": "By which factor would you like to multiply your lagrange?"
-                                },
-                                "mapping": {
-                                    "values": ["ocean", "qiskit", "pyqubo"],
-                                    "description": "Which Ising formulation of the TSP problem should be used?"
-                                }
-                            }
-
+            return {
+                    "lagrange_factor": {
+                        "values": [0.75, 1.0, 1.25],
+                        "description": "By which factor would you like to multiply your lagrange?"
+                    },
+                    "mapping": {
+                        "values": ["ocean", "qiskit", "pyqubo"],
+                        "description": "Which Ising formulation of the TSP problem should be used?"
+                    }
+                }
         """
         return {
             "lagrange_factor": {
@@ -94,7 +92,7 @@ class Ising(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -105,17 +103,17 @@ class Ising(Mapping):
         lagrange_factor: float
         mapping: str
 
-    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Maps the networkx graph to an Ising formulation.
 
-        :param problem: networkx graph
-        :param config: config with the parameters specified in Config class
-        :return: dict with Ising, time it took to map it
+        :param problem: Networkx graph
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with Ising, time it took to map it
         """
         self.graph = problem
         self.config = config
-        # call mapping function defined in configuration
+        # Call mapping function defined in configuration
         mapping = self.config["mapping"]
         if mapping == "ocean":
             return self._map_ocean(problem, config)
@@ -128,12 +126,12 @@ class Ising(Mapping):
             raise ValueError(f"Unknown mapping {mapping}.")
 
     @staticmethod
-    def _create_pyqubo_model(cost_matrix: List) -> Any:
+    def _create_pyqubo_model(cost_matrix: list) -> any:
         """
         This PyQubo formulation of the TSP was kindly provided by AWS.
 
-        :param cost_matrix: cost matrix of the TSP
-        :return: compiled PyQubo model
+        :param cost_matrix: Cost matrix of the TSP
+        :return: Compiled PyQubo model
         """
         n = len(cost_matrix)
         x = Array.create('c', (n, n), 'BINARY')
@@ -167,7 +165,7 @@ class Ising(Mapping):
         return model
 
     @staticmethod
-    def _get_matrix_index(ising_index_string: Any, number_nodes: Any) -> Any:
+    def _get_matrix_index(ising_index_string: any, number_nodes: any) -> any:
         """
         Converts dictionary index (e.g. 'c[0][2]') in PyQubo to matrix index.
 
@@ -192,13 +190,13 @@ class Ising(Mapping):
 
         return idx
 
-    def _map_pyqubo(self, graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def _map_pyqubo(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Use Qubo / Ising model defined in PyQubo.
 
-        :param graph: networkx graph
-        :param config: config with the parameters specified in Config class
-        :return: dict with the Ising, time it took to map it
+        :param graph: Networkx graph
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the Ising, time it took to map it
         """
         start = start_time_measurement()
         cost_matrix = np.array(nx.to_numpy_array(graph, weight="weight"))
@@ -227,16 +225,15 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, end_time_measurement(start)
 
-    def _map_ocean(self, graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def _map_ocean(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
         """
-        Use D-Wave/Ocean TSP QUBO/Ising model:
+        Use D-Wave/Ocean TSP QUBO/Ising model.
         https://docs.ocean.dwavesys.com/en/stable/docs_dnx/reference/algorithms/generated/dwave_networkx.algorithms.tsp.traveling_salesperson_qubo.html#dwave_networkx.algorithms.tsp.traveling_salesperson_qubo
 
-        :param graph: networkx graph
-        :param config: config with the parameters specified in Config class
-        :return: dict with the Ising, time it took to map it
+        :param graph: Networkx graph
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the Ising, time it took to map it
         """
-
         start = start_time_measurement()
         qubo_mapping = QUBO()
         q, _ = qubo_mapping.map(graph, config)
@@ -261,21 +258,18 @@ class Ising(Mapping):
             v = self.key_mapping[key[1]]
             j_matrix[u][v] = value
 
-        logging.info(j_matrix)
-        logging.info(j_matrix.shape)
-
         return {"J": j_matrix, "t": np.array(list(t.values())), "J_dict": j}, end_time_measurement(start)
 
     @staticmethod
-    def _map_qiskit(graph: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def _map_qiskit(graph: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Use Ising Mapping of Qiskit Optimize:
         TSP class: https://qiskit.org/documentation/optimization/stubs/qiskit_optimization.applications.Tsp.html
         Example notebook: https://qiskit.org/documentation/tutorials/optimization/6_examples_max_cut_and_tsp.html
 
-        :param graph: networkx graph
-        :param config: config with the parameters specified in Config class
-        :return: dict with the Ising, time it took to map it
+        :param graph: Networkx graph
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the Ising, time it took to map it
         """
         start = start_time_measurement()
         tsp = Tsp(graph)
@@ -285,29 +279,27 @@ class Ising(Mapping):
         qubo = qp2qubo.convert(qp)
         qubitOp, _ = qubo.to_ising()
 
-        # reverse generate J and t out of qubit PauliSumOperator from qiskit
+        # Reverse generate J and t out of qubit PauliSumOperator from qiskit
         t_matrix = np.zeros(qubitOp.num_qubits, dtype=complex)
         j_matrix = np.zeros((qubitOp.num_qubits, qubitOp.num_qubits), dtype=complex)
         pauli_list = qubitOp.to_list()
 
         for pauli_str, coeff in pauli_list:
-            logging.info((pauli_str, coeff))
             pauli_str_list = list(pauli_str)
             index_pos_list = list(locate(pauli_str_list, lambda a: a == 'Z'))
             if len(index_pos_list) == 1:
-                # update t
                 t_matrix[index_pos_list[0]] = coeff
             elif len(index_pos_list) == 2:
                 j_matrix[index_pos_list[0]][index_pos_list[1]] = coeff
 
         return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Any) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: any) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the TSP class for validation/evaluation.
 
-        :param solution: list or array containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: List or array containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
         if -1 in solution:  # ising model output from Braket QAOA
@@ -335,7 +327,7 @@ class Ising(Mapping):
         return result, end_time_measurement(start)
 
     @staticmethod
-    def _flip_bits_in_bitstring(solution: Any) -> Any:
+    def _flip_bits_in_bitstring(solution: any) -> any:
         """
         Flip bits in the solution bitstring to unify different mappings.
 
@@ -350,7 +342,7 @@ class Ising(Mapping):
         return solution
 
     @staticmethod
-    def _convert_ising_to_qubo(solution: Any) -> Any:
+    def _convert_ising_to_qubo(solution: any) -> any:
         """
         Convert Ising model output to QUBO format.
 

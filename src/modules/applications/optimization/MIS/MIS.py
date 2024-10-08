@@ -12,9 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Tuple, Dict
 import pickle
 import logging
+from typing import TypedDict
 
 import networkx as nx
 
@@ -30,12 +30,23 @@ R_rydberg = 9.75
 class MIS(Optimization):
     """
     The maximum independent set (MIS) problem is a combinatorial optimization problem that seeks to find the largest
-    subset of vertices in a graph such that no two vertices are adjacent.
+    subset of vertices in a graph such that no two vertices are adjacent. MIS has numerous application in computer
+    science, network design, resource allocation, and even in physics, where finding optimal confiigurations can
+    solve fundamental problems related to stability and energy minimization.
+
+    In a graph, the maximum independent set represents a set of nodes such that no two nodes share an edge. This
+    property makes it a key element in various optimization scenarios. Due to the problem's combinatorial nature,
+    it becomes computationally challenging, especially for large graphs, often requiring heuristic or approximate
+    solutions.
+
+    In the context of QUARK, we employ quantum-inspired approaches and state-of-the-art classical algorithms to
+    tackle the problem. The graph is generated based on user-defined parameters such as size, spacing, and
+    filling fraction, which affect the complexity and properties of the generated instance. 
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("MIS")
         self.submodule_options = ["NeutralAtom"]
@@ -45,7 +56,7 @@ class MIS(Optimization):
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return []
 
@@ -71,28 +82,28 @@ class MIS(Optimization):
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
-                 .. code-block:: python
+        :return: Configuration dictionary for this application
+        .. code-block:: python
 
-                      return {
-                                "size": {
-                                    "values": list(range(1, 18)),
-                                    "description": "How large should your graph be?"
-                                },
-                                "spacing": {
-                                    "values": [x/10 for x in range(1, 11)],
-                                    "description": "How much space do you want between your nodes,"
-                                                " relative to Rydberg distance?"
-                                },
-                                "filling_fraction": {
-                                    "values": [x/10 for x in range(1, 11)],
-                                    "description": "What should the filling fraction be?"
-                                },
-                            }
+            return {
+                    "size": {
+                        "values": list(range(1, 18)),
+                        "description": "How large should your graph be?"
+                    },
+                    "spacing": {
+                        "values": [x/10 for x in range(1, 11)],
+                        "description": "How much space do you want between your nodes,"
+                                    " relative to Rydberg distance?"
+                    },
+                    "filling_fraction": {
+                        "values": [x/10 for x in range(1, 11)],
+                        "description": "What should the filling fraction be?"
+                    },
+                }
 
         """
         return {
@@ -121,13 +132,12 @@ class MIS(Optimization):
 
     class Config(TypedDict):
         """
-        Configuration attributes for generating an MIS problem
+        Configuration attributes for generating an MIS problem.
 
         Attributes:
             size (int): The number of nodes in the graph.
             spacing (float): The spacing between nodes in the graph.
             filling_fraction (float): The fraction of available places in the lattice filled with nodes
-
         """
         size: int
         spacing: float
@@ -138,15 +148,13 @@ class MIS(Optimization):
         Generates a graph to solve the MIS problem for.
 
         :param config: Config specifying the size and connectivity for the problem
-        :return: networkx graph representing the problem
+        :return: Networkx graph representing the problem
         """
         if config is None:
             config = {"size": 3, "spacing": 1, "filling_fraction": 0.5}
 
         # Ensure config has the necessary information
-        assert all(
-            key in config for key in ['size', 'spacing', 'filling_fraction']
-        )
+        assert all(key in config for key in ['size', 'spacing', 'filling_fraction'])
 
         size = config.get('size')
         spacing = config.get('spacing') * R_rydberg
@@ -166,9 +174,9 @@ class MIS(Optimization):
         self.application = graph
         return graph.copy()
 
-    def process_solution(self, solution: List) -> Tuple[List, float]:
+    def process_solution(self, solution: list) -> tuple[list, float]:
         """
-        Returns list of visited nodes and the time it took to process the solution
+        Returns list of visited nodes and the time it took to process the solution.
 
         :param solution: Unprocessed solution
         :return: Processed solution and the time it took to process it
@@ -176,9 +184,9 @@ class MIS(Optimization):
         start_time = start_time_measurement()
         return solution, end_time_measurement(start_time)
 
-    def validate(self, solution: List) -> Tuple[bool, float]:
+    def validate(self, solution: list) -> tuple[bool, float]:
         """
-        Checks if the solution is an independent set
+        Checks if the solution is an independent set.
 
         :param solution: List containing the nodes of the solution
         :return: Boolean whether the solution is valid and time it took to validate
@@ -218,9 +226,9 @@ class MIS(Optimization):
 
         return is_valid, end_time_measurement(start)
 
-    def evaluate(self, solution: List) -> Tuple[int, float]:
+    def evaluate(self, solution: list) -> tuple[int, float]:
         """
-        Calculates the size of the solution
+        Calculates the size of the solution.
 
         :param solution: List containing the nodes of the solution
         :return: Set size, time it took to calculate the set size

@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from itertools import combinations, product
-from typing import TypedDict, List, Dict, Tuple
+from typing import TypedDict
 import logging
 
 from nnf import Var, And
@@ -29,7 +29,7 @@ class ChoiQUBO(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
@@ -37,35 +37,32 @@ class ChoiQUBO(Mapping):
         self.reverse_dict = None
 
     @staticmethod
-    def get_requirements() -> list[Dict]:
+    def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
-        return [
-            {"name": "nnf", "version": "0.4.1"}
-        ]
+        return [{"name": "nnf", "version": "0.4.1"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
         :return: Dictionary with parameter options
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "hard_reward": {
-                                    "values": [0.1, 0.5, 0.9, 0.99],
-                                    "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
-                                },
-                                "soft_reward": {
-                                    "values": [0.1, 1, 2],
-                                    "description": "What Bh/Bs ratio do you want? This value is multiplied with the "
-                                    "number of tests."
-                                }
-                            }
-
+            return {
+                    "hard_reward": {
+                        "values": [0.1, 0.5, 0.9, 0.99],
+                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
+                    },
+                    "soft_reward": {
+                        "values": [0.1, 1, 2],
+                        "description": "What Bh/Bs ratio do you want? This value is multiplied with the "
+                        "number of tests."
+                    }
+                }
         """
         return {
             "hard_reward": {
@@ -86,7 +83,7 @@ class ChoiQUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -97,14 +94,14 @@ class ChoiQUBO(Mapping):
         hard_reward: float
         soft_reward: float
 
-    def map(self, problem: Tuple[And, List], config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: tuple[And, list], config: Config) -> tuple[dict, float]:
         """
-        Converts a MaxSAT instance with hard and soft constraints into a graph problem -- solving MaxSAT then
-        corresponds to solving an instance of the Maximal Independent Set problem. See Andrew Lucas (2014),
-        or the original publication by Choi (1004.2226).
+        Converts a MaxSAT instance with hard and soft constraints into a graph problem --
+        solving MaxSAT then corresponds to solving an instance of the Maximal Independent Set problem.
+        See Andrew Lucas (2014), or the original publication by Choi (1004.2226).
 
         :param problem: A tuple conatining hard and soft constraints
-        :param config: config with the parameters specified in Config class
+        :param config: Config with the parameters specified in Config class
         :return: Dictionary containing the QUBO representation and the time taken
         """
         start = start_time_measurement()
@@ -188,12 +185,12 @@ class ChoiQUBO(Mapping):
                      f" Bs={Bs}.")
         return {'Q': Q}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
         # we define the literals list, so that we can check the self-consistency of the solution. That is, we save all
@@ -202,6 +199,7 @@ class ChoiQUBO(Mapping):
         literals = []
         # assignments saves the actual solution
         assignments = []
+
         for node, tf in solution.items():
             # Check if node is included in the set (i.e. if tf is True (1))
             if tf:
@@ -220,6 +218,7 @@ class ChoiQUBO(Mapping):
                     lit = Var(lit_str)
                     assignments.append(Var(lit_str.split('-')[0]))
                 literals.append(lit)
+
         # Check for self-consistency of solution; Check that the assignments of all literals are consistent:
         if not And(set(literals)).satisfiable():
             logging.error('Generated solution is not self-consistent!')
@@ -238,10 +237,11 @@ class ChoiQUBO(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Return the default submodule based on the given option.
+        Returns the default submodule for the given option.
 
-        :param option: the submodule option
-        :return: the default submodule
+        :param option: The submodule option
+        :return: The default submodule for the given option
+        :return NotImplementedError: If the submodule option is not implemented
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

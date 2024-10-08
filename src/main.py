@@ -26,7 +26,7 @@ from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
 
 comm = get_comm()
 
-# add the paths
+# Add the paths
 install_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(install_dir)
 
@@ -39,9 +39,7 @@ def _filter_comments(file: Iterable) -> str:
     Returns the content of the filehandle, ignoring all lines starting with '#'.
 
     :param file: file to be read
-    :type file: Iterable
     :return: file content without comment lines
-    :rtype: str
     """
     lines = []
     for line in file:
@@ -53,10 +51,7 @@ def _filter_comments(file: Iterable) -> str:
 
 def setup_logging() -> None:
     """
-    Sets up the logging
-
-    :return:
-    :rtype: None
+    Sets up the logging.
     """
     logging.root.handlers = []
     logging.basicConfig(
@@ -78,18 +73,15 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
     logging.info("  A Framework for Quantum Computing Application Benchmarking  ")
     logging.info("                                                              ")
-    logging.info("        Licensed under the Apache License, Version 2.0        ")
+    logging.info("        Licensed under the Apache License, Version 2.1        ")
     logging.info(" ============================================================ ")
 
 
-def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fast: bool = False) -> None:
+def start_benchmark_run(config_file: str = None, store_dir: str = None,
+                        fail_fast: bool = False) -> None:
     """
-    Starts a benchmark run from the code
-
-    :return:
-    :rtype: None
+    Starts a benchmark run from the code.
     """
-
     setup_logging()
 
     # Helper for Hybrid Jobs
@@ -115,7 +107,9 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fas
     # Can be overridden by using the -m|--modules option
     installer = Installer()
     app_modules = installer.get_env(installer.get_active_env())
-    benchmark_manager.orchestrate_benchmark(config_manager, store_dir=store_dir, app_modules=app_modules)
+    benchmark_manager.orchestrate_benchmark(
+        config_manager, store_dir=store_dir, app_modules=app_modules
+    )
 
 
 def create_benchmark_parser(parser: argparse.ArgumentParser):
@@ -148,12 +142,9 @@ def create_env_parser(parser: argparse.ArgumentParser):
 
 def handle_benchmark_run(args: argparse.Namespace) -> None:
     """
-    Handles the different options of a benchmark run
+    Handles the different options of a benchmark run.
 
     :param args: Namespace with the arguments given by the user
-    :type args: argparse.Namespace
-    :return:
-    :rtype: None
     """
     from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
     from Plotter import Plotter  # pylint: disable=C0415
@@ -172,7 +163,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             #   + Replaces relative paths by taking them relative to the location of the modules configuration file
             base_dir = os.path.dirname(args.modules)
             with open(args.modules) as filehandler:
-                app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
+                app_modules = _expand_paths(json.loads(
+                    _filter_comments(filehandler)), base_dir
+                )
         else:
             # Gets current env here
             installer = Installer()
@@ -199,10 +192,13 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            interrupted_results_path = None if args.resume_dir is None else os.path.join(args.resume_dir,
-                                                                                         "results.json")
-            benchmark_manager.orchestrate_benchmark(config_manager, app_modules,
-                                                    interrupted_results_path=interrupted_results_path)
+            interrupted_results_path = None if args.resume_dir is None else os.path.join(
+                args.resume_dir, "results.json"
+            )
+            benchmark_manager.orchestrate_benchmark(
+                config_manager, app_modules,
+                interrupted_results_path=interrupted_results_path
+            )
             comm.Barrier()
             if comm.Get_rank() == 0:
                 results = benchmark_manager.load_results()
@@ -211,12 +207,9 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
 
 def handler_env_run(args: argparse.Namespace) -> None:
     """
-    Orchestrates the requests to the QUARK module environment
+    Orchestrates the requests to the QUARK module environment.
 
     :param args: Namespace with the arguments by the user
-    :type args: argparse.Namespace
-    :return:
-    :rtype: None
     """
     installer = Installer()
     if args.createmoduledb:

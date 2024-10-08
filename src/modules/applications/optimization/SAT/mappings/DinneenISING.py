@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Tuple, Any
+from typing import TypedDict
 
 import numpy as np
 from dimod import qubo_to_ising
@@ -26,12 +26,11 @@ from utils import start_time_measurement, end_time_measurement
 class DinneenIsing(Mapping):
     """
     Ising formulation for SAT using Dinneen QUBO.
-
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA"]
@@ -39,11 +38,11 @@ class DinneenIsing(Mapping):
         self.qubo_mapping = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "nnf", "version": "0.4.1"},
@@ -52,21 +51,20 @@ class DinneenIsing(Mapping):
             *DinneenQUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return: dict with parameter options
-                 .. code-block:: python
+        :return: Dictionary with parameter options
+        .. code-block:: python
 
-                     return {
-                                "lagrange": {
-                                    "values": [0.1, 1, 2],
-                                    "description": "What lagrange parameter to multiply with the number of (hard) "
-                                                   "constraints?"
-                                }
-                            }
-
+            return {
+                    "lagrange": {
+                        "values": [0.1, 1, 2],
+                        "description": "What lagrange parameter to multiply with the number of (hard) "
+                                        "constraints?"
+                    }
+                }
         """
         return {
             "lagrange": {
@@ -77,7 +75,7 @@ class DinneenIsing(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -86,16 +84,17 @@ class DinneenIsing(Mapping):
         """
         lagrange: float
 
-    def map(self, problem: Any, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: any, config: Config) -> tuple[dict, float]:
         """
         Uses the DinneenQUBO formulation and converts it to an Ising.
 
         :param problem: the SAT problem
-        :param config: dictionary with the mapping config
-        :return: dict with the ising, time it took to map it
+        :param config: Dictionary with the mapping config
+        :return: Dict with the ising, time it took to map it
         """
         start = start_time_measurement()
         self.problem = problem
+
         # call mapping function
         self.qubo_mapping = DinneenQUBO()
         q, _ = self.qubo_mapping.map(problem, config)
@@ -114,28 +113,30 @@ class DinneenIsing(Mapping):
 
         return {"J": j_matrix, "t": t_vector}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
-        # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
+
+        # Convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
         solution_dict = {i: el for i, el in enumerate(solution) }
 
-        # reverse map
+        # Reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)
 
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Return the default submodule based on the given option.
+        Returns the default submodule for the given option.
 
-        :param option: the submodule option
-        :return: the default submodule
+        :param option: The submodule option
+        :return: The default submodule for the given option
+        :return NotImplementedError: If the submodule option is not implemented
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

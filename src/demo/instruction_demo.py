@@ -17,6 +17,11 @@ class InstructionDemo(Application):
     def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple:
         """
         Preprocess input data with given configuration and instructions.
+
+        :param input_data: Data to be  processed.
+        :param config: Configuration for processing the data
+        :param kwargs: Additional keyword arguments
+        :return: Instruction, processed data, and processing time.
         """
         logging.info("%s", kwargs.keys())
         logging.info("previous_job_info: %s", kwargs.get("previous_job_info"))
@@ -44,7 +49,7 @@ class InstructionDemo(Application):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns parameter options for the preprocess methios.
+        Returns parameter options for the preprocess method.
         """
         return {
             "instruction": {
@@ -60,11 +65,20 @@ class InstructionDemo(Application):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option. 
+        Returns the default submodule for the given option.
+
+        :param option: The submodule option
+        :return: Default submodule
         """
         return Dummy()
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Saves the current state to the specified path.
+
+        :param path: Path where the state should be saved
+        :param iter_count: Iteration count.
+        """
         pass
 
 
@@ -74,7 +88,17 @@ class Dummy(Core):
     """
 
     def get_parameter_options(self) -> dict:
+        """
+        Returns parameter options for the Dummy module.
+
+        :return: Dictionary containing parameter options
+        """
         return {}
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
+
+        :param option: The submodule option
+        """
         pass

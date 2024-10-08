@@ -14,7 +14,6 @@
 
 import math
 import random
-from typing import Dict, List, Tuple
 
 import networkx as nx
 import pulser
@@ -37,7 +36,7 @@ def generate_hexagonal_graph(
             lattice to be filled with nodes. (default: 1.0)
 
     Returns:
-        nx.Graph: networkx Graph representing the hexagonal graph layout.
+        nx.Graph: Networkx Graph representing the hexagonal graph layout
     """
     if not 0.0 < filling_fraction <= 1.0:
         raise ValueError("The filling fraction must be in the domain of (0.0, 1.0].")
@@ -61,7 +60,6 @@ def generate_hexagonal_graph(
         traps.pop(atom_to_remove)
 
     # Rename the atoms
-    i = 0
     node_positions = {i: traps[trap] for i, trap in enumerate(traps.keys())} # pylint: disable=C0206
 
     # Create the graph
@@ -77,7 +75,8 @@ def generate_hexagonal_graph(
 
     return hexagonal_graph
 
-def _generate_edges(node_positions: Dict[int, List[float]], radius: float = R_rydberg) -> list[tuple[int, int]]:
+
+def _generate_edges(node_positions: dict[int, list[float]], radius: float = R_rydberg) -> list[tuple[int, int]]:
     """
     Generate edges between vertices within a given distance 'radius', which
     defaults to R_rydberg.
@@ -101,7 +100,8 @@ def _generate_edges(node_positions: Dict[int, List[float]], radius: float = R_ry
                 edges.append((vertex_key, neighbor_key))
     return edges
 
-def _vertex_distance(v0: Tuple[float, ...], v1: Tuple[float, ...]) -> float:
+
+def _vertex_distance(v0: tuple[float, ...], v1: tuple[float, ...]) -> float:
     """
     Calculates distance between two n-dimensional vertices.
     For 2 dimensions: distance = sqrt((x0 - x1)**2 + (y0 - y1)**2)
@@ -113,5 +113,8 @@ def _vertex_distance(v0: Tuple[float, ...], v1: Tuple[float, ...]) -> float:
     Returns:
         float: Distance between the vertices.
     """
-    squared_difference = sum((coordinate0 - coordinate1) ** 2 for coordinate0, coordinate1 in zip(v0, v1))
+    squared_difference = sum(
+        (coordinate0 - coordinate1) ** 2 for coordinate0, coordinate1 in zip(v0, v1)
+    )
+
     return math.sqrt(squared_difference)

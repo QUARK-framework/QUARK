@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import TypedDict, List, Dict, Tuple, Any
+from typing import TypedDict
 
 from qubovert.sat import NOT, OR, AND
 from nnf import And
@@ -29,7 +29,7 @@ class QubovertQUBO(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
@@ -37,31 +37,30 @@ class QubovertQUBO(Mapping):
         self.nr_vars = None
 
     @staticmethod
-    def get_requirements() -> list[Dict]:
+    def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "nnf", "version": "0.4.1"},
             {"name": "qubovert", "version": "1.2.5"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return: dict with configurable settings
-                 .. code-block:: python
+        :return: Dict with configurable settings
+        .. code-block:: python
 
-                     return {
-                                "lagrange": {
-                                    "values": [0.1, 1, 1.5, 2, 5, 10, 1000, 10000],
-                                    "description": "What lagrange for the qubo mapping? 1 the number of tests."
-                                }
-                            }
-
+            return {
+                    "lagrange": {
+                        "values": [0.1, 1, 1.5, 2, 5, 10, 1000, 10000],
+                        "description": "What lagrange for the qubo mapping? 1 the number of tests."
+                    }
+                }
         """
         return {
             "lagrange": {
@@ -72,7 +71,7 @@ class QubovertQUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -86,8 +85,8 @@ class QubovertQUBO(Mapping):
         """
         Converts the constraints nnf to a pubo in the qubovert library.
 
-        :param constraints: constraints in nnf format 
-        :return: constraints in qubovert format
+        :param constraints: Constraints in nnf format 
+        :return: Constraints in qubovert format
         """
         clauses = []
         for c in constraints.children:
@@ -100,8 +99,8 @@ class QubovertQUBO(Mapping):
         """
         Converts the list of test clauses in the nnf format to a pubo.
 
-        :param test_clauses: test clauses in nnf format
-        :return: sum of mapped test clauses
+        :param test_clauses: Test clauses in nnf format
+        :return: Sum of mapped test clauses
         """
         mapped_tests = []
 
@@ -110,20 +109,20 @@ class QubovertQUBO(Mapping):
 
         return sum(mapped_tests)
 
-    def map(self, problem: Any, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: any, config: Config) -> tuple[dict, float]:
         """
         Converts the problem to a Qubo in dictionary format. Problem is a CNF formula from the nnf library.
 
         :param problem: SAT problem
-        :param config: config with the parameters specified in Config class
-        :return: dict with the QUBO, time it took to map it
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the QUBO, time it took to map it
         """
         start = start_time_measurement()
         lagrange = config['lagrange']
 
         constraints, test_clauses = problem
 
-        # find number of the variables that appear in the tests and constraints, to verify the reverse mapping.
+        # Find number of the variables that appear in the tests and constraints, to verify the reverse mapping.
         self.nr_vars = len(constraints.vars().union(And(test_clauses).vars()))
 
         # Convert the constraints to qubovert:
@@ -134,9 +133,10 @@ class QubovertQUBO(Mapping):
         logging.info(f'{tests_pubo.to_qubo().num_terms} number of terms in tests qubo')
         lagrange *= len(test_clauses)
 
-        # define the total pubo problem:
+        # Define the total pubo problem:
         self.pubo_problem = -(tests_pubo + lagrange * constraints_pubo)
-        # convert to qubo:
+
+        # Convert to qubo:
         qubo_problem = self.pubo_problem.to_qubo()
         qubo_problem.normalize()
         logging.info(f"Converted to QUBO with {qubo_problem.num_binary_variables} Variables."
@@ -161,20 +161,20 @@ class QubovertQUBO(Mapping):
 
         return {"Q": q_dict}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
         pubo_sol = self.pubo_problem.convert_solution(solution)
 
-        # Let's check if all variables appear in the solution.
+        # Check if all variables appear in the solution.
         missing_vars = {f'L{i}' for i in range(self.nr_vars)} - set(pubo_sol.keys())
 
-        # add values for the missing variables -- if they do not appear, then their assignment does not matter.
+        # Add values for the missing variables -- if they do not appear, then their assignment does not matter.
         for missing_var in missing_vars:
             pubo_sol[missing_var] = True
 

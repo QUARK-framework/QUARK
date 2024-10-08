@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, List, Dict, Tuple
+from typing import TypedDict
 import logging
 
 import dwave_networkx as dnx
@@ -25,45 +25,43 @@ from utils import start_time_measurement, end_time_measurement
 class QUBO(Mapping):
     """
     QUBO formulation for the TSP.
-
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "networkx", "version": "3.2.1"},
             {"name": "dwave_networkx", "version": "0.8.15"}
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
         :return: Dictionary with configurable settings
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "lagrange_factor": {
-                                                    "values": [0.75, 1.0, 1.25],
-                                                    "description": "By which factor would you like to multiply your "
-                                                                    "lagrange?",
-                                                    "custom_input": True,
-                                                    "postproc": float
-                                }
-                            }
-
+            return {
+                    "lagrange_factor": {
+                                        "values": [0.75, 1.0, 1.25],
+                                        "description": "By which factor would you like to multiply your "
+                                                        "lagrange?",
+                                        "custom_input": True,
+                                        "postproc": float
+                    }
+                }
         """
         return {
             "lagrange_factor": {
@@ -77,7 +75,7 @@ class QUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -86,13 +84,13 @@ class QUBO(Mapping):
         """
         lagrange_factor: float
 
-    def map(self, problem: networkx.Graph, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: networkx.Graph, config: Config) -> tuple[dict, float]:
         """
         Maps the networkx graph to a QUBO formulation.
 
-        :param problem: networkx graph
-        :param config: config with the parameters specified in Config class
-        :return: dict with QUBO, time it took to map it
+        :param problem: Networkx graph
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with QUBO, time it took to map it
         """
         start = start_time_measurement()
         lagrange = None

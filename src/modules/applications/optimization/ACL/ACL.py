@@ -28,7 +28,7 @@
 
 import os
 import logging
-from typing import TypedDict, List, Dict, Any, Tuple
+from typing import TypedDict
 
 import pandas as pd
 import numpy as np
@@ -55,7 +55,7 @@ class ACL(Optimization):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("ACL")
         self.submodule_options = ["MIPsolverACL", "QUBO"]
@@ -109,7 +109,7 @@ class ACL(Optimization):
         model_select: str
 
     @staticmethod
-    def intersectset(p1: List, p2: List) -> List:
+    def intersectset(p1: list, p2: list) -> list:
         """
         Computes the intersection of two lists.
 
@@ -120,7 +120,7 @@ class ACL(Optimization):
         return np.intersect1d(p1, p2).tolist()
 
     @staticmethod
-    def diffset(p1: List, p2: List) -> List:
+    def diffset(p1: list, p2: list) -> list:
         """
         Computes the difference between two lists.
 
@@ -130,7 +130,7 @@ class ACL(Optimization):
         """
         return np.setdiff1d(p1, p2).tolist()
 
-    def generate_problem(self, config: Config) -> Dict:  # pylint: disable=R0915
+    def generate_problem(self, config: Config) -> dict:  # pylint: disable=R0915
         """
         This function includes three models: Full, small and tiny. Full refers to the original model with all of its
         constraints. Small refers to the simplified model suitable for solving it with QC methods.
@@ -616,7 +616,7 @@ class ACL(Optimization):
         """
         Extract vehicle parameters for the problem formulation
 
-        :param df : Dataframe containing vehicle data
+        :param df: Dataframe containing vehicle data
         :param vehicles: List of vehicle types to consider
         :return: Lists containing class, length, height, and weight of vehicles
         """
@@ -634,9 +634,9 @@ class ACL(Optimization):
 
         return class_list, length_list, height_list, weight_list
 
-    def validate(self, solution: Any) -> Tuple[bool, float]:
+    def validate(self, solution: any) -> tuple[bool, float]:
         """
-        Checks if the solution is a valid solution
+        Checks if the solution is a valid solution.
 :
         :param solution: Proposed solution
         :return: Tuple containing a boolean indicating if the solution is valid
@@ -655,7 +655,7 @@ class ACL(Optimization):
         """
         return "Number of loaded vehicles"
 
-    def evaluate(self, solution: Any) -> Tuple[float, float]:
+    def evaluate(self, solution: any) -> tuple[float, float]:
         """
         Checks how good the solution is.
 
@@ -682,5 +682,5 @@ class ACL(Optimization):
         """
         # Convert our problem instance from Dict to an LP problem and then to json
         _, problem_instance = pulp.LpProblem.from_dict(self.application)
-        # Save problem instance to json
+        # Save problem instance to JSON
         problem_instance.to_json(f"{path}/ACL_instance.json")

@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Dict, Tuple
+from typing import TypedDict
 
 import networkx as nx
 import pulser
@@ -28,7 +28,7 @@ class NeutralAtom(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["NeutralAtomMIS"]
@@ -38,7 +38,7 @@ class NeutralAtom(Mapping):
         """
         Return requirements of this module.
 
-        :return: list of requirements of this module
+        :return: List of requirements of this module
         """
         return [{"name": "pulser", "version": "0.19.0"}]
 
@@ -52,16 +52,16 @@ class NeutralAtom(Mapping):
 
     class Config(TypedDict):
         """
-        Configuration options for Neutral Atom MIS mapping
+        Configuration options for Neutral Atom MIS mapping.
         """
         pass
 
-    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Maps the networkx graph to a neutral atom MIS problem.
 
         :param problem: Networkx graph representing the MIS problem
-        :param config: config with the parameters specified in Config class
+        :param config: Config with the parameters specified in Config class
         :return: Tuple containing a dictionary with the neutral MIS and time it took to map it
         """
         start = start_time_measurement()
@@ -73,6 +73,7 @@ class NeutralAtom(Mapping):
             'graph': problem,
             'register': register
         }
+
         return neutral_atom_problem, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:

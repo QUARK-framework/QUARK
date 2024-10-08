@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import TypedDict, Dict, List, Tuple, Set
+from typing import TypedDict
 
 from qubovert.problems import SetCover
 from modules.applications.Mapping import Mapping, Core
@@ -27,40 +27,37 @@ class QubovertQUBO(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
-        return [
-            {"name": "qubovert", "version": "1.2.5"}
-        ]
+        return [{"name": "qubovert", "version": "1.2.5"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary containing configurable settings
+        .. code-block:: python
 
-                      return {
-                          "penalty_weight": {
-                              "values": [2, 5, 10, 25, 50, 100],
-                              "custom_input": True,
-                              "custom_range": True,
-                              "postproc": float,
-                              "description": "Please choose the weight of the penalties in the QUBO representation of
-                              the problem"
-                          }
-                      }
-
+            return {
+                "penalty_weight": {
+                    "values": [2, 5, 10, 25, 50, 100],
+                    "custom_input": True,
+                    "custom_range": True,
+                    "postproc": float,
+                    "description": "Please choose the weight of the penalties in the QUBO representation of
+                    the problem"
+                }
+            }
         """
         return {
             "penalty_weight": {
@@ -74,7 +71,7 @@ class QubovertQUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -83,14 +80,14 @@ class QubovertQUBO(Mapping):
         """
         penalty_weight: float
 
-    def map(self, problem: Tuple, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: tuple, config: Config) -> tuple[dict, float]:
         """
         Maps the SCP to a QUBO matrix.
 
-        :param problem: tuple containing the set of all elements of an instance and a list of subsets each covering some
-         of these elements
-        :param config: config with the parameters specified in Config class
-        :return: dict with QUBO matrix, time it took to map it
+        :param problem: Tuple containing the set of all elements of an instance and a list of subsets,
+                        each covering some of these elements
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with QUBO matrix, time it took to map it
         """
         start = start_time_measurement()
         penalty_weight = config['penalty_weight']
@@ -106,13 +103,13 @@ class QubovertQUBO(Mapping):
         q_dict = {}
 
         for key, val in self.SCP_qubo.items():
-            # interaction (quadratic) terms
+            # Interaction (quadratic) terms
             if len(key) == 2:
                 if (key[0], key[1]) not in q_dict:
                     q_dict[(key[0], key[1])] = float(val)
                 else:
                     q_dict[(key[0], key[1])] += float(val)
-            # local (linear) fields
+            # Local (linear) fields
             elif len(key) == 1:
                 if (key[0], key[0]) not in q_dict:
                     q_dict[(key[0], key[0])] = float(val)
@@ -121,12 +118,12 @@ class QubovertQUBO(Mapping):
 
         return {"Q": q_dict}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[set, float]:
+    def reverse_map(self, solution: dict) -> tuple[set, float]:
         """
         Maps the solution of the QUBO to a set of subsets included in the solution.
 
         :param solution: QUBO matrix in dict form
-        :return: tuple with set of subsets that are part of the solution and the time it took to map it
+        :return: Tuple with set of subsets that are part of the solution and the time it took to map it
         """
         start = start_time_measurement()
         sol = self.SCP_problem.convert_solution(solution)

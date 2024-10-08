@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import TypedDict, Any, Tuple
+from typing import TypedDict
 
 import numpy as np
 from more_itertools import locate
@@ -43,7 +43,7 @@ class Ising(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
         :return: list of dict with requirements of this module
         """
@@ -57,7 +57,7 @@ class Ising(Mapping):
         """
         Returns empty dict as this mapping has no configurable settings.
 
-        :return: empty dict
+        :return: Empty dict
         """
         return {}
 
@@ -72,7 +72,7 @@ class Ising(Mapping):
         Maps the problem dict to a quadratic program.
 
         :param problem: Problem formulation in dict form
-        :return: quadratic program in qiskit-optimization format
+        :return: Quadratic program in qiskit-optimization format
         """
         # Details at:
         # https://coin-or.github.io/pulp/guides/how_to_export_models.html
@@ -120,8 +120,8 @@ class Ising(Mapping):
         """
         Use Ising mapping of qiskit-optimize.
 
-        :param config: config with the parameters specified in Config class
-        :return: dict with the Ising, time it took to map it
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the Ising, time it took to map it
         """
         start = start_time_measurement()
 
@@ -153,12 +153,12 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "t": t_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> Tuple(dict, float):
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the ACL class for validation/evaluation.
 
         :param solution: bit_string containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
 
@@ -182,7 +182,7 @@ class Ising(Mapping):
         return result, end_time_measurement(start)
 
     @staticmethod
-    def _convert_ising_to_qubo(solution: Any) -> Any:
+    def _convert_ising_to_qubo(solution: any) -> any:
         solution = np.array(solution)
         with np.nditer(solution, op_flags=['readwrite']) as it:
             for x in it:
@@ -191,6 +191,12 @@ class Ising(Mapping):
         return solution
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
+
+        :param option: The submodule option
+        :return: Default submodule
+        """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()

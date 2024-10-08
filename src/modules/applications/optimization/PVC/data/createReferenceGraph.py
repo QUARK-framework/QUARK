@@ -21,10 +21,7 @@ graph = nx.MultiDiGraph()
 with open("reference_data.txt") as infile:
     for line in infile:
         line_elements = line.split()
-        
-        # Print line elements for debugging purposes
-        print(line_elements)
-        
+
         # Extract start and end attributes from line elements
         r_start, s_start, n_start, c_start, t_start, l_start = map(int, line_elements[1:7])
         r_end, s_end, n_end, c_end, t_end, l_end = map(int, line_elements[8:14])

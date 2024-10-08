@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Dict, Tuple
+from typing import TypedDict
 import logging
 
 import networkx as nx
@@ -52,20 +52,19 @@ class Ising(Mapping):
             *QUBO.get_requirements()
         ]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
         :return: Dictionary containing parameter options.
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "lagrange_factor": {
-                                    "values": [0.75, 1.0, 1.25],
-                                    "description": "By which factor would you like to multiply your lagrange?"
-                                }
-                            }
-
+            return {
+                    "lagrange_factor": {
+                        "values": [0.75, 1.0, 1.25],
+                        "description": "By which factor would you like to multiply your lagrange?"
+                    }
+                }
         """
         return {
             "lagrange_factor": {
@@ -83,9 +82,9 @@ class Ising(Mapping):
         """
         lagrange_factor: float
 
-    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: nx.Graph, config: Config) -> tuple[dict, float]:
         """
-        Uses the PVC QUBO formulation and converts it to an Ising
+        Uses the PVC QUBO formulation and converts it to an Ising representation.
 
         :param problem: Networkx graph representing the PVC problem
         :param config: Config dictionary with the mapping configuration
@@ -103,6 +102,7 @@ class Ising(Mapping):
         # Extract unique configuration and tool attributes from the graph
         config = [x[2]['c_start'] for x in problem.edges(data=True)]
         config = list(set(config + [x[2]['c_end'] for x in problem.edges(data=True)]))
+
         tool = [x[2]['t_start'] for x in problem.edges(data=True)]
         tool = list(set(tool + [x[2]['t_end'] for x in problem.edges(data=True)]))
 
@@ -127,7 +127,7 @@ class Ising(Mapping):
 
         return {"J": j_matrix, "t": np.array(list(t.values()))}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the PVC class for validation/evaluation.
 

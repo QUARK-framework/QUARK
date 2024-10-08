@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from itertools import combinations
-from typing import TypedDict, List, Dict, Tuple, Any
+from typing import TypedDict
 import logging
 
 from nnf import And
@@ -29,37 +29,34 @@ class DinneenQUBO(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
         self.nr_vars = None
 
     @staticmethod
-    def get_requirements() -> List[Dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
-        return [
-            {"name": "nnf", "version": "0.4.1"}
-        ]
+        return [{"name": "nnf", "version": "0.4.1"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return: dict with parameter options
-                 .. code-block:: python
+        :return: Dictionary with parameter options
+        .. code-block:: python
 
-                     return {
-                                "lagrange": {
-                                    "values": [0.1, 1, 2],
-                                    "description": "What lagrange param. to multiply with the number of (hard) constr.?"
-                                }
-                            }
-
+            return {
+                    "lagrange": {
+                        "values": [0.1, 1, 2],
+                        "description": "What lagrange param. to multiply with the number of (hard) constr.?"
+                    }
+                }
         """
         return {
             "lagrange": {
@@ -70,7 +67,7 @@ class DinneenQUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -79,50 +76,49 @@ class DinneenQUBO(Mapping):
         """
         lagrange: float
 
-    def map(self, problem: Tuple[And, List], config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: tuple[And, list], config: Config) -> tuple[dict, float]:
         """
         Performs the mapping into a QUBO formulation, as given by Dinneen. See also the QUARK paper.
-        
+
         :param problem: SAT problem
-        :param config: config with the parameters specified in Config class
-        :return: tuple with the QUBO, time it took to map it
+        :param config: Config with the parameters specified in Config class
+        :return: Tuple with the QUBO, time it took to map it
         """""
         start = start_time_measurement()
-        # extract hard and soft constraints from the generated problem
+
+        # Extract hard and soft constraints from the generated problem
         hard, soft = problem
-        # count the variables
+
+        # Count the variables
         self.nr_vars = len(hard.vars().union(And(soft).vars()))
         lagrange = config['lagrange']
-        # lagrange parameter is a factor of the number of soft constraints.
+        # Lagrange parameter is a factor of the number of soft constraints.
         lagrange *= len(soft)
 
-        def _add_clause(
-                curr_qubo_dict: Dict[Tuple[int, int], float],
-                clause: Any,
-                pos: int,
-                weight: float
-        ) -> Dict[Tuple[int, int], float]:
-
+        def _add_clause(curr_qubo_dict: dict[tuple[int, int], float],
+                        clause: any,
+                        pos: int,
+                        weight: float) -> dict[tuple[int, int], float]:
             """
             Function that adds the QUBO terms corresponding to the clause and updates the QUBO dictionary
              accordingly. Additionally, the weight of the clause is taken into account.
 
-            :param curr_qubo_dict: current QUBO dictionary
-            :param clause: clause to be added
-            :param pos: position of the auxiliary variable
-            :param weight: weight of the clause
-            :return: updated QUBO dictionary
+            :param curr_qubo_dict: Current QUBO dictionary
+            :param clause: Clause to be added
+            :param pos: Position of the auxiliary variable
+            :param weight: Weight of the clause
+            :return: Updated QUBO dictionary
             """
 
-            def _check_and_add(dictionary: Dict, key: Tuple[int, int], value: float) -> Dict:
+            def _check_and_add(dictionary: dict, key: tuple[int, int], value: float) -> dict:
                 """
                 Helper function that checks if key is present or not in dictionary and adds a value, adding the key
                 if missing.
 
-                :param dictionary: dictionary to be updated
-                :param key: key to check in the dictionary
-                :param value: value to add to the key
-                :return: updated dictionary
+                :param dictionary: Dictionary to be updated
+                :param key: Key to check in the dictionary
+                :param value: Value to add to the key
+                :return: Updated dictionary
                 """
                 key = tuple(sorted(key))
                 if key not in dictionary.keys():
@@ -134,20 +130,20 @@ class DinneenQUBO(Mapping):
             cl_dict = {}
             for variable in clause.children:
                 for variable_name in variable.vars():
-                    # transforms the negations (0,1) into signs (-1, 1)
+                    # Transforms the negations (0,1) into signs (-1, 1)
                     cl_dict[int(variable_name[1:])] = (int(variable.true) - 1 / 2) * 2
 
-            # add the linear term of the auxiliary variable w
+            # Add the linear term of the auxiliary variable w
             curr_qubo_dict = _check_and_add(curr_qubo_dict, (pos, pos), 2 * weight)
 
-            # add x linear terms and xw terms.
+            # Add x linear terms and xw terms.
             for qvar, val in cl_dict.items():
                 # qvar is the name of the var, val is the sign corresponding to whether the variable is negated or not.
                 # linear x term:
                 curr_qubo_dict = _check_and_add(curr_qubo_dict, (qvar, qvar), -weight * val)
                 # x * w (aux. var.) term
                 curr_qubo_dict = _check_and_add(curr_qubo_dict, (qvar, pos), -weight * val)
-            # add combinations
+            # Add combinations
             for q1, q2 in combinations(cl_dict.keys(), 2):
                 curr_qubo_dict = _check_and_add(curr_qubo_dict, (q1, q2), weight * cl_dict[q1] * cl_dict[q2])
 
@@ -157,20 +153,24 @@ class DinneenQUBO(Mapping):
         # Add the hard constraints and add the lagrange parameter as weight
         for clause_ind, hard_clause in enumerate(hard):
             qubo_dict = _add_clause(qubo_dict, hard_clause, self.nr_vars + clause_ind, lagrange)
+
         # Add the soft constraints and start the enumeration at the final index corresponding to hard cons.
         for clause_ind, soft_clause in enumerate(soft):
             qubo_dict = _add_clause(qubo_dict, soft_clause, self.nr_vars + clause_ind + len(hard), 1)
 
-        logging.info(f"Generate Dinneen QUBO with {self.nr_vars + len(hard) + len(soft)} binary variables."
-                     f" Lagrange parameter used was: {config['lagrange']}.")
+        logging.info(
+            f"Generate Dinneen QUBO with {self.nr_vars + len(hard) + len(soft)} binary variables."
+            f" Lagrange parameter used was: {config['lagrange']}."
+        )
+
         return {"Q": qubo_dict}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Reverse mapping of the solution obtained from the Dinneen QUBO.
 
-        :param solution: dictionary containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
         mapped_sol = {}
@@ -180,14 +180,15 @@ class DinneenQUBO(Mapping):
                 mapped_sol[f'L{i}'] = True
             else:
                 mapped_sol[f'L{i}'] = bool(solution[i])
+
         return mapped_sol, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
         """
         Return the default submodule based on the given option.
 
-        :param option: the submodule option
-        :return: the default submodule
+        :param option: The submodule option
+        :return: The default submodule
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

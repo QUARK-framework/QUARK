@@ -17,16 +17,19 @@ from abc import ABC
 
 class Device(ABC):
     """
-    The device class abstracts away details of the physical device, such as submitting a task to the quantum system.
+    The device class abstracts away details of the physical device,
+    such as submitting a task to the quantum system.
     """
 
     def __init__(self, device_name: str):
         """
-        Constructor method
+        Constructor method.
+
+        :param device_name: Name of the device
         """
-        self.device = None
-        self.device_name = device_name
-        self.config = None
+        self.device: any = None
+        self.device_name: str = device_name
+        self.config: dict = None
 
     def get_parameter_options(self) -> dict:
         """
@@ -44,28 +47,29 @@ class Device(ABC):
            }
 
         :return: Available device settings for this device
-        :rtype: dict
         """
-        return {
-        }
+        return {}
 
-    def set_config(self, config):
+    def set_config(self, config: dict) -> None:
+        """
+        Sets the device configuration.
+
+        :param config: Configuration dictionary
+        """
         self.config = config
 
     def get_device(self) -> any:
         """
-        Returns Device.
+        Returns the device instance.
 
-        :return: Instance of the device class
-        :rtype: any
+        :return: Instance of the device
         """
         return self.device
 
     def get_device_name(self) -> str:
         """
-        Returns Device name.
+        Returns the name of the Device.
 
         :return: Name of the device
-        :rtype: str
         """
         return self.device_name

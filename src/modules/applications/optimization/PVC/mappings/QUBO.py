@@ -14,7 +14,7 @@
 
 import itertools
 from collections import defaultdict
-from typing import TypedDict, Dict, Tuple
+from typing import TypedDict
 import logging
 
 import networkx as nx
@@ -40,23 +40,23 @@ class QUBO(Mapping):
         """
         Return requirements of this module.
 
-        :return: list of dictionaries with requirements of this module
+        :return: List of dictionaries with requirements of this module
         """
         return [{"name": "networkx", "version": "3.2.1"}]
 
-    def get_parameter_options(self) -> Dict:
+    def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
         :return: Dictionary containing parameter options
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "lagrange_factor": {
-                                    "values": [0.75, 1.0, 1.25],
-                                    "description": "By which factor would you like to multiply your lagrange?"
-                                }
-                            }
+            return {
+                    "lagrange_factor": {
+                        "values": [0.75, 1.0, 1.25],
+                        "description": "By which factor would you like to multiply your lagrange?"
+                    }
+                }
 
         """
         return {
@@ -76,7 +76,7 @@ class QUBO(Mapping):
         """
         lagrange_factor: float
 
-    def map(self, problem: nx.Graph, config: Config) -> Tuple[Dict, float]:
+    def map(self, problem: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Maps the networkx graph to a QUBO formulation.
 
@@ -92,7 +92,7 @@ class QUBO(Mapping):
         n = problem.number_of_nodes()
         timesteps = int((n - 1) / 2 + 1)
 
-        # Let`s get the number of different configs and tools
+        # Get the number of different configs and tools
         config = [x[2]['c_start'] for x in problem.edges(data=True)]
         config = list(set(config + [x[2]['c_end'] for x in problem.edges(data=True)]))
 

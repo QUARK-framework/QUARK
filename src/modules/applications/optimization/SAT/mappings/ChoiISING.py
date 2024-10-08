@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Any, Dict, Tuple
+from typing import TypedDict
 
 import numpy as np
 from dimod import qubo_to_ising
@@ -24,12 +24,12 @@ from utils import start_time_measurement, end_time_measurement
 
 class ChoiIsing(Mapping):
     """
-    Ising formulation for SAT problem using QUBO by Choi (1004.2226)
+    Ising formulation for SAT problem using QUBO by Choi (1004.2226).
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA"]
@@ -39,10 +39,9 @@ class ChoiIsing(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
@@ -52,23 +51,22 @@ class ChoiIsing(Mapping):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
         :return: Dictionary with parameter options
-                 .. code-block:: python
+        .. code-block:: python
 
-                     return {
-                                "hard_reward": {
-                                    "values": [0.1, 0.5, 0.9, 0.99],
-                                    "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
-                                },
-                                "soft_reward": {
-                                    "values": [0.1, 1, 2],
-                                    "description": "What Bh/Bs ratio do you want? This value is multiplied with the "
-                                                   "number of tests."
-                                }
-                            }
-
+            return {
+                    "hard_reward": {
+                        "values": [0.1, 0.5, 0.9, 0.99],
+                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
+                    },
+                    "soft_reward": {
+                        "values": [0.1, 1, 2],
+                        "description": "What Bh/Bs ratio do you want? This value is multiplied with the "
+                                        "number of tests."
+                    }
+                }
         """
         return {
             "hard_reward": {
@@ -83,7 +81,7 @@ class ChoiIsing(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -94,16 +92,17 @@ class ChoiIsing(Mapping):
         hard_reward: float
         soft_reward: float
 
-    def map(self, problem: Any, config: Config) -> Tuple[dict, float]:
+    def map(self, problem: any, config: Config) -> tuple[dict, float]:
         """
         Uses the ChoiQUBO formulation and converts it to an Ising.
 
         :param problem: the SAT problem
-        :param config: dictionary with the mapping config
-        :return: dict with the ising, time it took to map it
+        :param config: Dictionary with the mapping config
+        :return: Dict with the ising, time it took to map it
         """
         start = start_time_measurement()
         self.problem = problem
+
         # call mapping function
         self.qubo_mapping = ChoiQUBO()
         q, _ = self.qubo_mapping.map(problem, config)
@@ -122,19 +121,17 @@ class ChoiIsing(Mapping):
 
         return {"J": j_matrix, "t": t_vector}, end_time_measurement(start)
 
-    def reverse_map(self, solution: Dict) -> Tuple[Dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
 
         # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
-        solution_dict = {}
-        for i, el in enumerate(solution):
-            solution_dict[i] = el
+        solution_dict = {i: el for i, el in enumerate(solution)}
 
         # reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)
@@ -143,10 +140,11 @@ class ChoiIsing(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Return the default submodule based on the given option.
+        Returns the default submodule for the given option.
 
-        :param option: the submodule option
-        :return: the default submodule
+        :param option: The submodule option
+        :return: The default submodule for the given option
+        :return NotImplementedError: If the submodule option is not implemented
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

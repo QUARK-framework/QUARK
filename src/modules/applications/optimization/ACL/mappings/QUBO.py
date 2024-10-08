@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict, Any, List, Tuple
+from typing import TypedDict
 import re
 import logging
 
@@ -56,7 +56,7 @@ class Qubo(Mapping):
         """
         Returns empty dict as this mapping has no configurable settings.
 
-        :return: empty dictionary
+        :return: Empty dictionary
         """
         return {}
 
@@ -71,7 +71,7 @@ class Qubo(Mapping):
         Maps the problem dict to a quadratic program.
 
         :param problem: Problem formulation in dict form
-        :return: quadratic program in qiskit-optimization format
+        :return: Quadratic program in qiskit-optimization format
         """
         # Details at:
         # https://coin-or.github.io/pulp/guides/how_to_export_models.html
@@ -117,13 +117,13 @@ class Qubo(Mapping):
 
         return qp
 
-    def convert_string_to_arguments(self, input_string: str) -> List[Any]:
+    def convert_string_to_arguments(self, input_string: str) -> list[any]:
         """
         Converts QUBO in string format to a list of separated arguments,
         used to construct the QUBO matrix.
 
         :param input_string: QUBO in raw string format
-        :return: list of arguments
+        :return: List of arguments
         """
         terms = re.findall(r'[+\-]?[^+\-]+', input_string)
         # Convert the penalty string to a list of lists of the individual arguments in the penalty term
@@ -155,8 +155,8 @@ class Qubo(Mapping):
         """
         Creates QUBO matrix Q to solve linear problem of the form x^T * Q + x.
 
-        :param penalty: list of lists containing all non-zero elements of the QUBO matrix as strings
-        :param variables: listing of all variables used in the problem
+        :param penalty: List of lists containing all non-zero elements of the QUBO matrix as strings
+        :param variables: Listing of all variables used in the problem
         :return: QUBO in numpy array format
         """
         # Create empty qubo matrix
@@ -168,25 +168,21 @@ class Qubo(Mapping):
             for row, variable2 in enumerate(variables):
                 # Save the parameters (values in the qubo)
                 parameter = 0
-
                 for argument in penalty:
                     if isinstance(argument, list):
                         # squared variables in diagonals (x^2 == x)
-                        if len(argument) == 2:
-                            if any(isinstance(elem, str) and variable in elem for elem in argument) and col == row:
+                        if len(argument) == 2 and any(isinstance(elem, str) and variable in elem for elem in argument) and col == row:
                                 parameter += argument[0]
                         # Multiplication of different variables not on diagonal
-                        if len(argument) == 3:
-                            if variable in argument and variable2 in argument and variable > variable2:
+                        if len(argument) == 3 and variable in argument and variable2 in argument and variable > variable2:
                                 parameter += argument[0]
                                 # this value is already taking into account the factor 2 from quadratic term
                                 # For the variables on the diagonal, if the parameter is zero
                                 # we still have to check the sign in
                                 # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
-                    elif isinstance(argument, str):
-                        if variable in argument and variable2 in argument and variable == variable2:
-                            if "-" in argument:
-                                parameter += -1
+                    elif isinstance(argument, str) and variable in argument and variable2 in argument and variable == variable2:
+                        if "-" in argument:
+                            parameter += -1
 
                 qubo[col, row] = parameter
 
@@ -195,12 +191,12 @@ class Qubo(Mapping):
 
         return qubo
 
-    def map(self, problem: dict, config: Config) -> Tuple[dict, float]:
+    def map(self, problem: dict, config: Config) -> tuple[dict, float]:
         """
         Converts linear program created with pulp to quadratic program to Ising with qiskit to QUBO matrix.
 
-        :param config: config with the parameters specified in Config class
-        :return: dict with the QUBO, time it took to map it
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the QUBO, time it took to map it
         """
         start = start_time_measurement()
 
@@ -228,12 +224,12 @@ class Qubo(Mapping):
 
         return {"Q": qubo_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> Tuple[dict, float]:
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the ACL class for validation/evaluation.
 
         :param solution: bit_string containing the solution
-        :return: solution mapped accordingly, time it took to map it
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
 
@@ -241,13 +237,12 @@ class Qubo(Mapping):
         objective_value = 0
         variables = {}
         for bit in solution:
-            if solution[bit] > 0:
+            if solution[bit] > 0 and "x" in self.global_variables[bit]:
                 # We only care about assignments of vehicles to platforms:
                 # We map the solution to the original variables
-                if "x" in self.global_variables[bit]:
-                    variables[self.global_variables[bit]] = solution[bit]
-                    result["status"] = 'Optimal'  # TODO: I do not think every solution with at least one car is optimal
-                    objective_value += solution[bit]
+                variables[self.global_variables[bit]] = solution[bit]
+                result["status"] = 'Optimal'  # TODO: I do not think every solution with at least one car is optimal
+                objective_value += solution[bit]
 
         result["variables"] = variables
         result["obj_value"] = objective_value
@@ -255,6 +250,12 @@ class Qubo(Mapping):
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule for the given option.
+
+        :param option: The submodule option
+        :return: Default submodule
+        """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
             return Annealer()

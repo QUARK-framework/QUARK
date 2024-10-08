@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import itertools
-from typing import TypedDict, List, Tuple
+from typing import TypedDict
 import pickle
 import logging
 import os
@@ -28,32 +28,36 @@ from utils import start_time_measurement, end_time_measurement
 
 class PVC(Optimization):
     """
-    In modern vehicle manufacturing, robots
-    take on a significant workload, including performing welding
-    jobs, sealing welding joints, or applying paint to the car body.
-    While the robot’s tasks vary widely, the objective remains
-    the same: Perform a job with the highest possible quality in the
-    shortest amount of time. For instance, to protect a car’s underbody
-    from corrosion, exposed welding seams are sealed by applying
-    a polyvinyl chloride layer (PVC). The welding seams need to be
-    traversed by a robot to apply the material.
-    It is related to TSP, but different and even more complex in some
-    aspects.
+    In modern vehicle manufacturing, robots take on a significant workload, including performing welding
+    jobs, sealing welding joints, or applying paint to the car body. While the robot’s tasks vary widely,
+    the objective remains the same: Perform a job with the highest possible quality in the shortest amount
+    of time, optimizing efficiency and productivity on the manufacturing line. 
+    
+    For instance, to protect a car’s underbody from corrosion, exposed welding seams are sealed
+    by applying a polyvinyl chloride layer (PVC). The welding seams need to be traversed by a robot to
+    apply the material. It is related to TSP, but different and even more complex in some aspects.
+
+    The problem of determining the optimal route for robots to traverse all seams shares similarities
+    with Traveling Salesman Problem (TSP), as it involves finding the shortest possible route to 
+    visit multiple locations. However, it introduces additional complexities, such as different tool
+    and configuration requirements for each seam, making it an even more challenging problem to solve.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("PVC")
-        self.submodule_options = ["Ising", "QUBO", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"]
+        self.submodule_options = [
+            "Ising", "QUBO", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"
+        ]
 
     @staticmethod
-    def get_requirements() -> List[dict]:
+    def get_requirements() -> list[dict]:
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: List of dict with requirements of this module
         """
         return [
             {"name": "networkx", "version": "3.2.1"},
@@ -61,6 +65,11 @@ class PVC(Optimization):
         ]
 
     def get_solution_quality_unit(self) -> str:
+        """
+        Returns the unit of measure for solution quality.
+
+        :return: Unit of measure for solution quality
+        """
         return "Tour cost"
 
     def get_default_submodule(self, option: str) -> Core:
@@ -94,15 +103,14 @@ class PVC(Optimization):
         Returns the configurable settings for this application.
 
         :return: Dictionary containing parameter options
-                 .. code-block:: python
+        .. code-block:: python
 
-                      return {
-                                "seams": {
-                                    "values": list(range(1, 18)),
-                                    "description": "How many seams does your graph need?"
-                                }
-                            }
-
+            return {
+                    "seams": {
+                        "values": list(range(1, 18)),
+                        "description": "How many seams does your graph need?"
+                    }
+                }
         """
         return {
             "seams": {
@@ -126,7 +134,7 @@ class PVC(Optimization):
         Uses the reference graph to generate a problem for a given config.
 
         :param config: Config specifying the number of seams for the problem
-        :return: networkx graph representing the problem
+        :return: Networkx graph representing the problem
         """
         if config is None:
             config = {"seams": 3}
@@ -139,7 +147,7 @@ class PVC(Optimization):
         # Get number of seam in graph
         seams_in_graph = list({x[0] for x in graph.nodes})
         seams_in_graph.sort()
-        seams_in_graph.remove(0) # always need the base node 0 (which is not a seam)
+        seams_in_graph.remove(0) # Always need the base node 0 (which is not a seam)
 
         if len(seams_in_graph) < seams:
             logging.info("Too many seams! The original graph has less seams than that!")
@@ -161,12 +169,19 @@ class PVC(Optimization):
         tool = list(set(tool + [x[2]['t_end'] for x in graph.edges(data=True)]))
 
         # fill the rest of the missing edges with high values
-        current_edges = [(edge[0], edge[1], edge[2]['t_start'], edge[2]['t_end'], edge[2]['c_start'], edge[2]['c_end'])
-                         for edge in graph.edges(data=True)]
+        current_edges = [
+            (edge[0], edge[1], edge[2]['t_start'], edge[2]['t_end'], edge[2]['c_start'], edge[2]['c_end'])
+            for edge in graph.edges(data=True)
+        ]
         all_possible_edges = list(itertools.product(list(graph.nodes), repeat=2))
-        all_possible_edges = [(edges[0], edges[1], t_start, t_end, c_start, c_end) for edges in all_possible_edges for
-                              c_end in config for c_start in config for t_end in tool
-                              for t_start in tool if edges[0] != edges[1]]
+        all_possible_edges = [
+            (edges[0], edges[1], t_start, t_end, c_start, c_end)
+            for edges in all_possible_edges
+            for c_end in config 
+            for c_start in config
+            for t_end in tool
+            for t_start in tool if edges[0] != edges[1]
+        ]
 
         missing_edges = [item for item in all_possible_edges if item not in current_edges]
 
@@ -184,7 +199,7 @@ class PVC(Optimization):
         self.application = graph
         return graph.copy()
 
-    def process_solution(self, solution: dict) -> tuple[List, bool]:
+    def process_solution(self, solution: dict) -> tuple[list, bool]:
         """
         Converts solution dictionary to list of visited seams.
 
@@ -200,7 +215,7 @@ class PVC(Optimization):
         if sum(value == 1 for value in solution.values()) > len(route):
             logging.warning("Result is longer than route! This might be problematic!")
 
-        # NOTE: Prevent duplicate node entries by enforcing only one occurrence per node along route
+        # Prevent duplicate node entries by enforcing only one occurrence per node along route
         for (node, config, tool, timestep), val in solution.items():
             if val and (node[0] not in visited_seams):
                 if route[timestep] is not None:
@@ -255,14 +270,14 @@ class PVC(Optimization):
 
     def evaluate(self, solution: list) -> tuple[float, float]:
         """
-        Calculates the tour length for a given valid tour
+        Calculates the tour length for a given valid tour.
 
         :param solution: List containing the nodes of the solution
         :return: Tour length, time it took to calculate the tour length
         """
         start = start_time_measurement()
 
-        # get the total distance
+        # Get the total distance
         total_dist = 0
         for idx, _ in enumerate(solution[:-1]):
             edge = next(
@@ -274,7 +289,7 @@ class PVC(Optimization):
             total_dist += dist
         logging.info(f"Total distance (without return): {total_dist}")
 
-        # add distance between start and end point to complete cycle
+        # Add distance between start and end point to complete cycle
         return_edge = next(
             item for item in list(self.application[solution[0][0]][solution[-1][0]].values())
             if item["c_start"] == solution[0][1] and item["t_start"] == solution[0][2] and
@@ -283,7 +298,7 @@ class PVC(Optimization):
         return_distance = return_edge['weight']
         logging.info(f"Distance between start and end: {return_distance}")
 
-        # get distance for full cycle
+        # Get distance for full cycle
         distance = total_dist + return_distance
         logging.info(f"Total distance (including return): {distance}")
 

@@ -13,7 +13,8 @@
 #  limitations under the License.
 
 from typing import TypedDict
-from modules.training.Training import *
+import numpy as np
+from modules.training.Training import Training, Core
 
 
 class Inference(Training):
@@ -23,7 +24,7 @@ class Inference(Training):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("Inference")
 
@@ -33,33 +34,28 @@ class Inference(Training):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
+        :return: list of dict with requirements of this module.
         :rtype: list[dict]
         """
-        return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
-        ]
+        return [{"name": "numpy", "version": "1.26.4"}]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this circuit
+        Returns the configurable settings for this circuit.
 
-        :return:
-                 .. code-block:: python
+        :return: Configuration settings for the pretrained model.
+        .. code-block:: python
 
-                      return {
-                                "pretrained": {
-                                    "values": [False],
-                                    "custom_input": True,
-                                    "postproc": str,
-                                    "description": "Please provide the parameters of a pretrained model."
-                                }
-                            }
+            return {
+                    "pretrained": {
+                        "values": [False],
+                        "custom_input": True,
+                        "postproc": str,
+                        "description": "Please provide the parameters of a pretrained model."
+                    }
+                }
         """
         return {
             "pretrained": {
@@ -86,16 +82,12 @@ class Inference(Training):
 
     def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> dict:
         """
-        Method that uses a pretrained model for inference
+        Method that uses a pretrained model for inference.
 
         :param input_data: Dictionary with information needed for inference
-        :type input_data: dict
         :param config: Inference settings
-        :type config: Config
         :param kwargs: Optional additional arguments
-        :type kwargs: dict
         :return: Dictionary including the information of previous modules as well as of this module
-        :rtype: dict
         """
         self.n_states_range = range(2 ** input_data['n_qubits'])
         self.target = np.asarray(input_data["histogram_train"])
@@ -105,9 +97,11 @@ class Inference(Training):
 
         pmfs, samples = execute_circuit([parameters.get() if GPU else parameters])
         pmfs = np.asarray(pmfs)
-        samples = self.sample_from_pmf(
-            pmf=pmfs[0],
-            n_shots=input_data["n_shots"]) if samples is None else samples[0]
+        samples = (
+            self.sample_from_pmf(pmf=pmfs[0], n_shots=input_data["n_shots"]) 
+            if samples is None 
+            else samples[0]
+        )
 
         loss = self.kl_divergence(pmfs.reshape([-1, 1]), self.target)
 

@@ -145,7 +145,7 @@ class Application(ABC):
         return solution, 0
 
     @abstractmethod
-    def validate(self, solution) -> Tuple[bool, float]:
+    def validate(self, solution) -> tuple[bool, float]:
         """
         Check if the solution is valid.
 

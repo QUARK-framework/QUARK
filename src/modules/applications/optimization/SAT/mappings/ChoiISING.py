@@ -131,7 +131,7 @@ class ChoiIsing(Mapping):
         start = start_time_measurement()
 
         # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
-        solution_dict = {i: el for i, el in enumerate(solution)}
+        solution_dict = dict(enumerate(solution))
 
         # reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)

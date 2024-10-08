@@ -176,8 +176,8 @@ class ACL(Optimization):
         # Create empty lists for different vehicle parameters. This is required for proper indexing in the model
         weight_list = [0] * (len(vehicles))
 
-        for i in range(len(vehicles)):
-            df_new = df.loc[df['Type'] == vehicles[i]]
+        for i, vehicle in enumerate(vehicles):
+            df_new = df.loc[df['Type'] == vehicle]
             weight_list[i] = int(df_new["Weight"].iloc[0])
 
         # Set of available cars
@@ -351,7 +351,7 @@ class ACL(Optimization):
 
         self.application = prob
 
-    def _generate_full_model(self, df, vehicles):
+    def _generate_full_model(self, df, vehicles): # pylint: disable=R0915
         """
         Generate the problem model for the Full configuration.
         """

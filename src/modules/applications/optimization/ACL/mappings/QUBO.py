@@ -171,17 +171,24 @@ class Qubo(Mapping):
                 for argument in penalty:
                     if isinstance(argument, list):
                         # squared variables in diagonals (x^2 == x)
-                        if len(argument) == 2 and any(isinstance(elem, str) and variable in elem for elem in argument) \
-                            and col == row:
-                                parameter += argument[0]
+                        if (
+                             len(argument) == 2
+                             and any(isinstance(elem, str) and variable in elem for elem in argument)
+                             and col == row
+                        ):
+                            parameter += argument[0]
                         # Multiplication of different variables not on diagonal
-                        if len(argument) == 3 and variable in argument and variable2 in argument and variable > variable2:
-                                parameter += argument[0]
+                        if (
+                            len(argument) == 3
+                            and variable in argument and variable2 in argument and variable > variable2
+                        ):
+                            parameter += argument[0]
                                 # this value is already taking into account the factor 2 from quadratic term
                                 # For the variables on the diagonal, if the parameter is zero
                                 # we still have to check the sign in
                                 # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
-                    elif isinstance(argument, str) and variable in argument and variable2 in argument and variable == variable2:
+                    elif isinstance(argument, str) and variable in argument \
+                        and variable2 in argument and variable == variable2:
                         if "-" in argument:
                             parameter += -1
 

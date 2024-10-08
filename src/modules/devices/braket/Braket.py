@@ -39,6 +39,8 @@ class Braket(Device, ABC):
         self.device = None
         self.arn = arn
         self.s3_destination_folder = None
+        self.boto_session = None
+        self.aws_session = None
 
         if 'SKIP_INIT' in os.environ:
             # TODO: This is currently needed so create_module_db in the Installer does not execute the rest

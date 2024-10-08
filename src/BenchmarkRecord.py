@@ -121,7 +121,7 @@ class BenchmarkRecord:
     @final
     def start_linked_list_to_dict(self) -> dict:
         """
-        Helper function to start linked_list_to_dict function, which merges the various Metrics objects
+        Helper function to start linked_list_to_dict function which merges the various Metrics objects
         to one dictionary.
 
         :return: Resulting dictionary of linked_list_to_dict
@@ -132,7 +132,7 @@ class BenchmarkRecord:
     @final
     def get(self) -> dict:
         """
-        Returns a dictionary containing all benchmark information and a nested dictionary, in which each level
+        Returns a dictionary containing all benchmark information and a nested dictionary in which each level
         contains the metrics of the respective module.
 
         :return: Dictionary containing all the records of the benchmark

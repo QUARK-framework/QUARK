@@ -84,7 +84,7 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None,
     """
     setup_logging()
 
-    # Helper for Hybrid Jobs
+    # Helper for hybrid jobs
     if not config_file:
         config_file = os.environ["AMZN_BRAKET_HP_FILE"]
     if not store_dir:
@@ -209,7 +209,7 @@ def handler_env_run(args: argparse.Namespace) -> None:
     """
     Orchestrates the requests to the QUARK module environment.
 
-    :param args: Namespace with the arguments by the user
+    :param args: Namespace with the arguments given by the user
     """
     installer = Installer()
     if args.createmoduledb:

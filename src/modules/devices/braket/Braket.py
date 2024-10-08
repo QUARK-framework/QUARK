@@ -50,7 +50,7 @@ class Braket(Device, ABC):
         if device_name != "LocalSimulator":
             self._configure_aws_session(region)
 
-    def _configure_aws_session(self, region: str):
+    def _configure_aws_session(self, region: str) -> None:
         """
         Configures the AWS session for the Braket device.
 
@@ -64,7 +64,7 @@ class Braket(Device, ABC):
         self._initialize_aws_session(profile_name, region, my_config)
 
     @staticmethod
-    def _setup_proxy():
+    def _setup_proxy() -> any:
         """
         Sets up proxy configuration if available in the environment variables.
        
@@ -150,7 +150,7 @@ class Braket(Device, ABC):
         """
         Initializes an S3 storage bucket for Amazon Braket.
 
-        :param folder_name: Name of the s3 folder
+        :param folder_name: Name of the s3 bucket
         """
         run_timestamp = datetime.today().date()
         username = getpass.getuser()
@@ -161,12 +161,12 @@ class Braket(Device, ABC):
 
     @staticmethod
     def _create_s3_bucket(boto3_session: boto3.Session, bucket_name: str = 'quark-benchmark-framework',
-                          region: str = 'us-east-1'):
+                          region: str = 'us-east-1') -> None:
         """
         Creates an S3 bucket with specific configurations.
 
         :param boto3-session: Boto3 session
-        :param bucket_name: Name of the S3 bucket
+        :param bucket_name: Name of the s3 bucket
         :param region: AWS region
         """
         s3_client = boto3_session.client('s3', region_name=region)

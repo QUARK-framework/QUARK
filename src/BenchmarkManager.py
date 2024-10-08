@@ -47,15 +47,15 @@ class JobStatus(Enum):
     FAILED = 3
 
 
-def _prepend_instruction(result: tuple) -> tuple:
+def _prepend_instruction(result: tuple) -> tuple[Instruction, tuple]:
     """
-    If the given list does not contain an instruction as first entry a
+    If the given list does not contain an Instruction as first entry a
     PROCEED is inserted at position 0 such that it is guaranteed that
-    the first entry of the returned list is an INSTRUCTION with PROCEED
+    the first entry of the returned list is an Instruction with PROCEED
     as default.
 
-    :param result: The tuple to which the instruction is to be prepended
-    :return: The tuple with an INSTRUCTION as first entry
+    :param result: The tuple to which the Instruction is to be prepended
+    :return: The tuple with an Instruction as first entry
     """
     if isinstance(result[0], Instruction):
         return result
@@ -63,7 +63,7 @@ def _prepend_instruction(result: tuple) -> tuple:
         return Instruction.PROCEED, *result
 
 
-def postprocess(module_instance: Core, *args, **kwargs) -> tuple:
+def postprocess(module_instance: Core, *args, **kwargs) -> tuple[Instruction, tuple]:
     """
     Wraps module_instance.postprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
@@ -75,7 +75,7 @@ def postprocess(module_instance: Core, *args, **kwargs) -> tuple:
     return _prepend_instruction(result)
 
 
-def preprocess(module_instance: Core, *args, **kwargs) -> tuple:
+def preprocess(module_instance: Core, *args, **kwargs) -> tuple[Instruction, tuple]:
     """
     Wraps module_instance.preprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
@@ -159,9 +159,9 @@ class BenchmarkManager:
         """
         Executes the benchmarks according to the given settings.
 
-        :param benchmark_config_manager: Instance of BenchmarkConfigManager class, where config is already set.
-        :param app_modules: The list of application modules as specified in the application modules configuration.
-        :param store_dir: Target directory to store the results of the benchmark (if you decided to store it)
+        :param benchmark_config_manager: Instance of BenchmarkConfigManager class, where config is already set
+        :param app_modules: The list of application modules as specified in the application modules configuration
+        :param store_dir: Target directory to store the results of the benchmark (if user decided to store it)
         :param interrupted_results_path: Result file from which the information for the interrupted jobs will be read.
                                          If store_dir is None the parent directory of interrupted_results_path will
                                          be used as store_dir.
@@ -188,7 +188,7 @@ class BenchmarkManager:
             results = self._collect_all_results()
             self._save_as_json(results)
 
-    def run_benchmark(self, benchmark_backlog: list, repetitions: int) -> None: # pylint: disable=R0915
+    def run_benchmark(self, benchmark_backlog: list, repetitions: int) -> None:  # pylint: disable=R0915
         """
         Goes through the benchmark backlog, which contains all the benchmarks to execute.
 
@@ -213,7 +213,7 @@ class BenchmarkManager:
                 logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                              f" Iteration {i}/{repetitions}:")
 
-                # getting information of interrupted jobs
+                # Getting information of interrupted jobs
                 job_info_with_meta_data = {}
                 if interrupted_results:
                     for entry in interrupted_results:
@@ -280,7 +280,7 @@ class BenchmarkManager:
                     logging.exception(f"Error during benchmark run: {error}", exc_info=True)
                     quark_job_status = JobStatus.FAILED
                     if job_info:
-                        # restore results/infos from previous run
+                        # Restore results/infos from previous run
                         benchmark_records.append(job_info)
                     if self.fail_fast:
                         raise
@@ -313,7 +313,7 @@ class BenchmarkManager:
             if break_flag:
                 break
 
-        # print overall status information
+        # Log overall status information
         status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count_total.items()])
         logging.info(80 * "=")
         logging.info(f"====== Run {len(benchmark_backlog)} backlog items "
@@ -333,13 +333,13 @@ class BenchmarkManager:
 
     # pylint: disable=R0917
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info:
-                        dict = None) -> tuple[any, BenchmarkRecord]:
+                        dict = None) -> tuple[Instruction, any, BenchmarkRecord]:
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
         traverses up again. Once it reaches the root/application, a benchmark run is finished.
 
         :param module: Current module
-        :param input_data: The input data needed to execute the current module.
+        :param input_data: The input data needed to execute the current module
         :param path: Path in case the modules want to store anything
         :param rep_count: The iteration count
         :param previous_job_info: Information about previous job
@@ -352,7 +352,7 @@ class BenchmarkManager:
         submodule_job_info = None
         if previous_job_info and previous_job_info.get("submodule"):
             assert module['name'] == previous_job_info["submodule"]["module_name"], \
-                f"asyncronous job info given, but no information about module {module['name']} stored in it" #TODO!!
+                f"asyncronous job info given, but no information about module {module['name']} stored in it"  # TODO
             if 'submodule' in previous_job_info and previous_job_info['submodule']:
                 submodule_job_info = previous_job_info['submodule']
 

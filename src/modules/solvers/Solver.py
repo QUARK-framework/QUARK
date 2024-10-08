@@ -24,7 +24,7 @@ class Solver(Core, ABC):
 
     def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
-        The actual solving process is done here, as we have the device, which got provided by the device submodule,
+        The actual solving process is done here, using the device which is provided by the device submodule
         and the problem data provided by the parent module.
 
         :param input_data: Data passed to the run function of the solver
@@ -37,7 +37,7 @@ class Solver(Core, ABC):
         return output, elapsed_time
 
     @abstractmethod
-    def run(self, mapped_problem, device_wrapper, config, **kwargs) -> tuple[any, float, dict]:
+    def run(self, mapped_problem: any, device_wrapper: any, config: any, **kwargs) -> tuple[any, float, dict]:
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 

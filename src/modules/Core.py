@@ -65,6 +65,8 @@ class Core(ABC):
 
         :return: Available settings for this application
         """
+        raise NotImplementedError("Please don't use the base version of get_parameter_options. "
+                                  "Implement your own override instead.")
 
     @final
     def get_submodule(self, option: str) -> Core:
@@ -88,7 +90,7 @@ class Core(ABC):
         :param option: String with the chosen submodule
         :return: Module of type Core
         """
-        raise NotImplementedError("Please don't use the base version of this method. "
+        raise NotImplementedError("Please don't use the base version of get_default_submodule. "
                                   "Implement your own override instead.")
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:

@@ -220,7 +220,7 @@ class Plotter:
     @staticmethod
     def _extract_columns(config: dict, rest_result: dict) -> dict:
         """
-        Funtion to extract and summarize certain data fields like the time spent in every module
+        Function to extract and summarize certain data fields like the time spent in every module
         from the nested module chain.
         
         :param config: Dictionary containing multiple data fields like the config a module

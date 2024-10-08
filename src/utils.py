@@ -73,7 +73,7 @@ def _get_instance_with_sub_options(options: list[dict], name: str) -> any:
     raise ValueError(f"{name} not found in {options}")
 
 
-def _import_class(module_path: str, class_name: str, base_dir: str = None) -> type:
+def _import_class(module_path: str, class_name: str, base_dir: str = None) -> any:
     """
     Helper function which allows to replace hard-coded imports of the form
     'import MyClass from path.to.mypkg' by calling _import_class('path.to.mypkg', 'MyClass').
@@ -154,7 +154,7 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
 
     :param j: The JSON to be adapted - expected to be a QUARK modules configuration or a part of it
     :param base_dir: The base directory to be used for path expansion
-    :return: The adapted json
+    :return: The adapted JSON
     """
     assert type(j) in [dict, list], f"unexpected type:{type(j)}"
     if type(j) == list:

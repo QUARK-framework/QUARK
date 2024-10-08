@@ -29,7 +29,7 @@ from utils import _get_instance_with_sub_options, get_git_revision, checkbox
 
 class Installer:
     """
-    Installer class that can be used by the user to install certain QUARK modules and also return the required python
+    Installer class that can be used by the user to install certain QUARK modules and also return the required Python
     packages for the demanded modules.
     """
 
@@ -127,7 +127,7 @@ class Installer:
 
     def set_active_env(self, name: str) -> None:
         """
-        Sets active env to active_env.json.
+        Sets the active env to active_env.json.
 
         :param name: Name of the env
         """
@@ -291,17 +291,13 @@ class Installer:
         """
         Recursive helper function for create_module_db.
 
-        :param module: Modulen instance
+        :param module: Module instance
         :param name: Name of the module
         :return: Module dict
         """
         return {
             "name": name,
             "class": module.__class__.__name__,
-            # TODO Verify the following really works as intended
-            # Since some modules are initialized with parameters in their constructor, we need to check what these
-            # parameters were. Hence we check whether any parameters in the class instance match the one from
-            # the constructor.
             "args": {k: v for k, v in module.__dict__.items() if k in
                      inspect.signature(module.__init__).parameters.keys()},
             "module": module.__module__,
@@ -376,7 +372,7 @@ class Installer:
 
         :param requirements: Collected requirements
         :param name: Name of the conda env
-        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken.
         """
         if directory is None:
             directory = self.envs_dir
@@ -402,7 +398,7 @@ class Installer:
 
         :param requirements: Collected requirements
         :param name: Name of the env
-        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken.
         """
         if directory is None:
             directory = self.envs_dir

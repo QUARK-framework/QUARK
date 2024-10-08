@@ -36,8 +36,7 @@ class Inference(Training):
         """
         Returns requirements of this module.
 
-        :return: list of dict with requirements of this module.
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module.
         """
         return [{"name": "numpy", "version": "1.26.4"}]
 
@@ -45,7 +44,7 @@ class Inference(Training):
         """
         Returns the configurable settings for this circuit.
 
-        :return: Configuration settings for the pretrained model.
+        :return: Configuration settings for the pretrained model
         .. code-block:: python
 
             return {

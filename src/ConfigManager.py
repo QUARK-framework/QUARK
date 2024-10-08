@@ -152,7 +152,7 @@ class ConfigManager:
         Translates the QUARK 1 config format to QUARK 2 format.
 
         :param config: QUARK 1 config
-        :return: Translated Config
+        :return: Translated config
         """
         logging.info("Trying to translate QUARK 1 config to QUARK 2 config format")
         try:
@@ -232,7 +232,7 @@ class ConfigManager:
         """
         Returns the config.
 
-        :return: Returns the config
+        :return: config
         """
         return self.config
 
@@ -315,12 +315,12 @@ class ConfigManager:
     @staticmethod
     def _query_for_config(param_opts: dict, prefix: str = "") -> dict:
         """
-        For a given module config, queries users in an interactive mode, which of the options they would like to
+        For a given module config, queries users in an interactive mode which of the options they would like to
         include in the final benchmark config.
 
         :param param_opts: Dictionary containing the options for a parameter including a description
         :param prefix: Prefix string, which is attached when interacting with the user
-        :return: Dictionary containing the decisions of the user on what to include in the benchmark.
+        :return: Dictionary containing the decisions of the user on what to include in the benchmark
         """
         config = {}
         for key, config_answer in param_opts.items():

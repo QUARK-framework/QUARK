@@ -60,7 +60,7 @@ class MPIStreamHandler(logging.StreamHandler):
         MPI = is_running_mpi()
         self.rank = MPI.COMM_WORLD.Get_rank() if MPI else 0
 
-    def emit(self, record):
+    def emit(self, record) -> None:
         """
         Emits a log record if running on the root process.
 
@@ -81,7 +81,7 @@ class MPIFileHandler(logging.FileHandler):
         MPI = is_running_mpi()
         self.rank = MPI.COMM_WORLD.Get_rank() if MPI else 0
 
-    def emit(self, record):
+    def emit(self, record) -> None:
         """
         Emits a log record if running on the root process.
 
@@ -92,18 +92,17 @@ class MPIFileHandler(logging.FileHandler):
             super().emit(record)
 
 
-def get_comm():
+def get_comm() -> any:
     """
     Retrieves the MPI communicator if running in an MPI environment, otherwise provides a mock comm class.
 
     return: MPI communicator or a mock class with limited methods
-    rtype: MPI.Comm or class
     """
-    MPI = is_running_mpi()
-    if MPI:
-        comm = MPI.COMM_WORLD
+    mpi = is_running_mpi()
+    if mpi:
+        Comm = mpi.COMM_WORLD
     else:
-        class comm():
+        class Comm():
             @staticmethod
             def Get_rank():
                 return 0
@@ -116,4 +115,4 @@ def get_comm():
             def Barrier():
                 pass
 
-    return comm
+    return Comm

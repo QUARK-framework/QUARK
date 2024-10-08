@@ -65,7 +65,7 @@ class QCBM(Training):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for the quantum circuit born machine
+        This function returns the configurable settings for the quantum circuit born machine.
 
         :return: Configuration settings for QCBM
         .. code-block:: python
@@ -280,7 +280,8 @@ class QCBM(Training):
 
         return input_data
 
-    def data_visualization(self, loss_epoch, pmfs_model, samples, epoch):
+    def data_visualization(self, loss_epoch: np.ndarray, pmfs_model: np.ndarray, samples: any, epoch: int) -> (
+            np.ndarray):
         """
         Visualizes the data and metrics for training.
 

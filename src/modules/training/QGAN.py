@@ -18,20 +18,19 @@ import logging
 import torch
 from torch.utils.data import  DataLoader
 from torch import nn
-import torch.nn.functional as F
+import torch.nn.functional as funct
 from tensorboardX import SummaryWriter
 import numpy as np
 import matplotlib.pyplot as plt
 
 from modules.training.Training import Training, Core
-from modules.applications.QML.generative_modeling.transformations.Transformation import Transformation
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()
 comm = get_comm()
 
 
-class QGAN(Training): # pylint: disable=R0902
+class QGAN(Training):  # pylint: disable=R0902
     """
     Class for QGAN
     """
@@ -260,7 +259,7 @@ class QGAN(Training): # pylint: disable=R0902
         This function starts the training of the QGAN.
 
         :param input_data: Dictionary with the variables from the circuit needed to start the training
-        :param config: Annealing settings
+        :param config: Training settings
         :param kwargs: Optional additional arguments
         :return: Dictionary including the solution
         """
@@ -280,22 +279,22 @@ class QGAN(Training): # pylint: disable=R0902
                 # Data from real distribution for training the discriminator
                 real_data = data.float().to(self.device)
                 self.discriminator.zero_grad()
-                outD_real = self.discriminator(real_data).view(-1)
-                errD_real = self.criterion(outD_real, self.real_labels)
-                errD_real.backward()
+                out_d_real = self.discriminator(real_data).view(-1)
+                err_d_real = self.criterion(out_d_real, self.real_labels)
+                err_d_real.backward()
 
                 # Use Quantum Variational Circuit to generate fake samples
                 fake_data, _ = self.generator.execute(self.params, self.batch_size)
                 fake_data = fake_data.float().to(self.device)
-                outD_fake = self.discriminator(fake_data).view(-1)
-                errD_fake = self.criterion(outD_fake, self.fake_labels)
-                errD_fake.backward()
+                out_d_fake = self.discriminator(fake_data).view(-1)
+                err_d_fake = self.criterion(out_d_fake, self.fake_labels)
+                err_d_fake.backward()
 
-                errD = errD_real + errD_fake
+                err_d = err_d_real + err_d_fake
                 self.optimizer_discriminator.step()
 
-                outD_fake = self.discriminator(fake_data).view(-1)
-                errG = self.criterion(outD_fake, self.real_labels)
+                out_d_fake = self.discriminator(fake_data).view(-1)
+                err_g = self.criterion(out_d_fake, self.real_labels)
                 fake_data, _ = self.generator.execute(self.params,self.batch_size)
                 gradients= self.generator.compute_gradient(
                     self.params,
@@ -309,8 +308,8 @@ class QGAN(Training): # pylint: disable=R0902
                 self.params = updated_params
 
                 self.discriminator_weights = self.discriminator.state_dict()
-                generator_losses.append(errG.item())
-                discriminator_losses.append(errD.item())
+                generator_losses.append(err_g.item())
+                discriminator_losses.append(err_d.item())
 
                 # Calculate loss
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
@@ -324,8 +323,8 @@ class QGAN(Training): # pylint: disable=R0902
                 self.writer.add_scalar("metrics/KL_circuit_evals", loss, circuit_evals)
 
                 # Calculate and log the loss values at the end of each epoch
-                self.writer.add_scalar('Loss/GAN_Generator', errG.item(), circuit_evals)
-                self.writer.add_scalar('Loss/GAN_Discriminator', errD.item(), circuit_evals)
+                self.writer.add_scalar('Loss/GAN_Generator', err_g.item(), circuit_evals)
+                self.writer.add_scalar('Loss/GAN_Discriminator', err_d.item(), circuit_evals)
 
                 if loss < best_kl_divergence:
                     best_kl_divergence = loss
@@ -339,7 +338,7 @@ class QGAN(Training): # pylint: disable=R0902
                 log_message = (
                     f"Epoch: {epoch + 1}/{self.n_epochs}, "
                     f"Batch: {batch + 1}/{len(self.bins_train) // self.batch_size}, "
-                    f"Discriminator Loss: {errD.item()}, Generator Loss: {errG.item()}, KL Divergence: {loss} "
+                    f"Discriminator Loss: {err_d.item()}, Generator Loss: {err_g.item()}, KL Divergence: {loss} "
                 )
 
                 logging.info(log_message)
@@ -397,17 +396,16 @@ class Discriminator(nn.Module):
 
     def forward(self, x: torch.Tensor) -> float:
         """
-        InitializeS the weight tensor of the linear
-        layers with values using a Xavier uniform distribution.
+        Initializes the weight tensor of the linear layers with values using a Xavier uniform distribution.
 
         :param x: Input of the discriminator
         :type x: torch.Tensor
         :return: Probability fake/real sample
         :rtype: float
         """
-        h = F.leaky_relu(self.dense1(x))
-        h = F.leaky_relu(self.dense2(h))
-        return F.sigmoid(h)
+        h = funct.leaky_relu(self.dense1(x))
+        h = funct.leaky_relu(self.dense2(h))
+        return funct.sigmoid(h)
 
     @staticmethod
     def weights_init(m: nn.Linear) -> None:
@@ -467,8 +465,8 @@ class QuantumGenerator:
         :param discriminator: Discriminator of the QGAN
         :param criterion: Loss function
         :param label: Label indicating of sample is true or fake
-        :param device: torch device (e.g. CPU or CUDA)
-        :return: samples and the probability distribution generated by the quantum circuit
+        :param device: Torch device (e.g., CPU or CUDA)
+        :return: Samples and the probability distribution generated by the quantum circuit
         """
         shift = 0.5 * np.pi
         gradients = np.zeros(len(params))  # Initialize gradients as an array of zeros

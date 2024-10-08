@@ -154,7 +154,7 @@ class PVC(Optimization):
 
         unwanted_seams = seams_in_graph[-len(seams_in_graph) + seams:]
         unwanted_nodes = [x for x in graph.nodes if x[0] in unwanted_seams]
-    
+
         for node in unwanted_nodes:
             graph.remove_node(node)
 
@@ -177,7 +177,7 @@ class PVC(Optimization):
         all_possible_edges = [
             (edges[0], edges[1], t_start, t_end, c_start, c_end)
             for edges in all_possible_edges
-            for c_end in config 
+            for c_end in config
             for c_start in config
             for t_end in tool
             for t_start in tool if edges[0] != edges[1]
@@ -242,7 +242,9 @@ class PVC(Optimization):
 
         parsed_route = ' ->\n'.join(
             [
-                f' Node {visit[0][1]} of Seam {visit[0][0]} using config {visit[1]} & tool {visit[2]}' for visit in route
+                f' Node {visit[0][1]} of Seam {visit[0][0]} using config '
+                f' {visit[1]} & tool {visit[2]}'
+                for visit in route
             ]
         )
         logging.info(f"Route found:\n{parsed_route}")

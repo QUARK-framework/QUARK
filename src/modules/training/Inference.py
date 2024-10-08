@@ -14,7 +14,7 @@
 
 from typing import TypedDict
 import numpy as np
-from modules.training.Training import Training, Core
+from modules.training.Training import Training, Core, GPU
 
 
 class Inference(Training):
@@ -98,8 +98,8 @@ class Inference(Training):
         pmfs, samples = execute_circuit([parameters.get() if GPU else parameters])
         pmfs = np.asarray(pmfs)
         samples = (
-            self.sample_from_pmf(pmf=pmfs[0], n_shots=input_data["n_shots"]) 
-            if samples is None 
+            self.sample_from_pmf(pmf=pmfs[0], n_shots=input_data["n_shots"])
+            if samples is None
             else samples[0]
         )
 

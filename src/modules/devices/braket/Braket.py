@@ -174,7 +174,7 @@ class Braket(Device, ABC):
         else:
             location = {"LocationConstraint": region}
             s3_client.create_bucket(Bucket=bucket_name, CreateBucketConfiguration=location)
-            
+
         s3_client.put_public_access_block(
             Bucket=bucket_name,
             PublicAccessBlockConfiguration={

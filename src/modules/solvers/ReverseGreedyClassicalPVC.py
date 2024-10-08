@@ -79,7 +79,7 @@ class ReverseGreedyClassicalPVC(Solver):
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
-        # Need to deep copy since we are modifying the graph in this function. 
+        # Need to deep copy since we are modifying the graph in this function.
         # Else the next repetition would work with a different graph
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()

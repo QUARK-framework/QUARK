@@ -93,8 +93,8 @@ class Core(ABC):
 
     def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
-        Essential method for the benchmarking process. This is always executed before traversing down to the next module,
-        passing the data returned by this function.
+        Essential method for the benchmarking process. This is always executed before traversing down
+        to the next module, passing the data returned by this function.
 
         :param input_data: Data for the module, comes from the parent module if that exists
         :param config: Config for the module

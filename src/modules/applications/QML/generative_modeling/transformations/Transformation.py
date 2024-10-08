@@ -183,7 +183,7 @@ class Transformation(Core, ABC):
         # Generate random noise or zeros
         noise = (
             0.5 * width * np.random.uniform(low=-1, high=1, size=(n_shots, n_registers))
-            if noisy 
+            if noisy
             else np.zeros((n_shots, n_registers))
         )
 

@@ -38,7 +38,7 @@ class TN1(Braket):
             # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
             # of this section, which would be unnecessary. However, this should be done better in the future!
             return
-        
+
         self.init_s3_storage("tn1")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 

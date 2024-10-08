@@ -96,7 +96,7 @@ class ConfigManager:
                                     choices=available_submodules)
         for option in submodule_answer["submodules"]:
             if self.application.depending_parameters:
-                more_app_config = self.application.get_depending_parameters(option, more_app_config)
+                more_app_config = self.application.get_depending_parameters(option, full_application_config)
                 more_app_config = (ConfigManager._query_for_config
                                    (more_app_config, f"(Option for {self.application.__class__.__name__})"))
                 full_application_config = full_application_config | more_app_config
@@ -153,7 +153,7 @@ class ConfigManager:
                                             choices=available_submodules)
                 for option in submodule_answer:
                     if module.depending_parameters:
-                        more_module_config = module.get_depending_parameters(option, more_module_config)
+                        more_module_config = module.get_depending_parameters(option, full_module_config)
                         more_module_config = (ConfigManager._query_for_config
                                               (more_module_config, f"(Option for {module.__class__.__name__})"))
                         full_module_config = full_module_config | more_module_config

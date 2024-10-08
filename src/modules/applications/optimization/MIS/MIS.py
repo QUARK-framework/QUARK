@@ -131,54 +131,36 @@ class MIS(Optimization):
         :return: The parameters for the given option
         :rtype: dict
         """
+
+        more_params = {
+            "spacing": {
+                "values": [x / 10 for x in range(3, 11, 2)],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": float,
+                "description": "How much space do you want between your nodes,"
+                               " relative to Rydberg distance?"
+            }}
         if option == "QIRO":
-            more_params = {
-                "seed": {
-                    "values": [0, 99, 137, 1205],
+            more_params["seed"] = {
+                    "values": ["No"],
                     "custom_input": True,
-                    "postproc": int,
-                    "description": "Do you want to set a seed (0 == No)?"
-                },
-                "spacing": {
-                    "values": [x/10 for x in range(3, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "How much space do you want between your nodes,"
-                                   " relative to the Rydberg distance? (p for Erdos-Renyi graph)"
-                },
-            }
-            logging.info(f" - type: {type(more_params)}")
+                    "description": "Do you want to set a seed? If yes, please set an integer number"
+                }
             
         elif option == "NeutralAtom":
-            more_params = {
-                "spacing": {
-                    "values": [x / 10 for x in range(3, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "How much space do you want between your nodes,"
-                                   " relative to Rydberg distance?"
-                },
-                "filling_fraction": {
-                    "values": [x / 10 for x in range(2, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "What should the filling fraction be?"
-                },
-            }
+            pass  # No additional parameters needed at the moment
         else:
             raise NotImplementedError(f"Option {option} not implemented")
-        param_to_return = {}
-        """ if more_params["graph_type"] == "hexagonal":
+        if "hexagonal" in config["graph_type"]:
             more_params["filling_fraction"] = {
                     "values": [x/10 for x in range(2, 11, 2)],
                     "custom_input": True,
                     "allow_ranges": True,
                     "postproc": float,
-                    "description": "What should the filling fraction be? (irrelevant for Erdos-Renyi graph)"
-                } """
+                    "description": "What should be the filling fraction of the hexagonal graph?"
+                }
+        param_to_return = {}
         for key in more_params:
             if key not in config:
                 param_to_return[key] = more_params[key]
@@ -231,7 +213,7 @@ class MIS(Optimization):
             logging.info(f" - seed: {gseed}")
 
         else:
-            if config.get('filling_fraction') == None:
+            if config.get('filling_fraction') is None:
                 filling_fraction = 0.5
             else:
                 filling_fraction = config.get('filling_fraction')

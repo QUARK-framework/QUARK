@@ -11,7 +11,7 @@ Python Example
         import json
 
         # Load the results
-        filename = "benchmark_runs/tsp-2023-03-13-15-31-17/results.json"
+        filename = "benchmark_runs/tsp-2024-10-09-15-07-11/results.json"
         with open(filename) as f:
 
             results = json.load(f)

@@ -72,8 +72,9 @@ Installing Git LFS
 ~~~~~~~~~~~~~~~~~~~~
 1. Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/):
   - On Linux/macOS
-    .. code:: bash
-      git lfs install
+    ::
+
+       git lfs install
 
   - On Windows. Download and install Git LFS from the [Official page](https://git-lfs.com/)
 
@@ -97,66 +98,66 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
 ::
 
-(quark) % python src/main.py
-[?] What application do you want?: TSP
-   PVC
-   SAT
- > TSP
-   ACL
-   MIS
-   SCP
-   GenerativeModeling
+    (quark) % python src/main.py
+    [?] What application do you want?: TSP
+      PVC
+      SAT
+    > TSP
+      ACL
+      MIS
+      SCP
+      GenerativeModeling
 
-2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
-[?] (Option for TSP) How many nodes does you graph need?:
- > [X] 3
-   [ ] 4
-   [ ] 6
-   [ ] 8
-   [ ] 10
-   [ ] 14
-   [ ] 16
-   [ ] Custom Range
+    2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
+    [?] (Option for TSP) How many nodes does you graph need?:
+    > [X] 3
+      [ ] 4
+      [ ] 6
+      [ ] 8
+      [ ] 10
+      [ ] 14
+      [ ] 16
+      [ ] Custom Range
 
-[?] What submodule do you want?:
-   [ ] Ising
-   [ ] Qubo
- > [X] GreedyClassicalTSP
-   [ ] ReverseGreedyClassicalTSP
-   [ ] RandomTSP
+    [?] What submodule do you want?:
+      [ ] Ising
+      [ ] Qubo
+    > [X] GreedyClassicalTSP
+      [ ] ReverseGreedyClassicalTSP
+      [ ] RandomTSP
 
-2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
-2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
-2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
-2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
-[?] How many repetitions do you want?: 1P
-2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
-2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
-2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
-2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
-2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
-2024-10-09 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
-2024-10-09 15:07:12,386 [INFO] Route found:
- Node 0 ->
- Node 2 ->
- Node 1
-2024-10-09 15:07:12,386 [INFO] All 3 nodes got visited
-2024-10-09 15:07:12,386 [INFO] Total distance (without return): 727223.0
-2024-10-09 15:07:12,386 [INFO] Total distance (including return): 1436368.0
-2024-10-09 15:07:12,386 [INFO]
-2024-10-09 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
-2024-10-09 15:07:12,387 [INFO]
-2024-10-09 15:07:12,387 [INFO] =============== Run finished ===============
-2024-10-09 15:07:12,387 [INFO]
-2024-10-09 15:07:12,387 [INFO] ================================================================================
-2024-10-09 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
-2024-10-09 15:07:12,387 [INFO] ================================================================================
-2024-10-09 15:07:12,395 [INFO]
-2024-10-09 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2024-10-09-15-07-11/results.json
-2024-10-09 15:07:12,942 [INFO] Finished creating plots.
-2024-10-09 15:07:12,943 [INFO] ============================================================ 
-2024-10-09 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
-2024-10-09 15:07:12,944 [INFO] ============================================================
+    2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
+    2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
+    2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
+    2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
+    [?] How many repetitions do you want?: 1P
+    2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
+    2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
+    2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
+    2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
+    2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
+    2024-10-09 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
+    2024-10-09 15:07:12,386 [INFO] Route found:
+    Node 0 ->
+    Node 2 ->
+    Node 1
+    2024-10-09 15:07:12,386 [INFO] All 3 nodes got visited
+    2024-10-09 15:07:12,386 [INFO] Total distance (without return): 727223.0
+    2024-10-09 15:07:12,386 [INFO] Total distance (including return): 1436368.0
+    2024-10-09 15:07:12,386 [INFO]
+    2024-10-09 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
+    2024-10-09 15:07:12,387 [INFO]
+    2024-10-09 15:07:12,387 [INFO] =============== Run finished ===============
+    2024-10-09 15:07:12,387 [INFO]
+    2024-10-09 15:07:12,387 [INFO] ================================================================================
+    2024-10-09 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+    2024-10-09 15:07:12,387 [INFO] ================================================================================
+    2024-10-09 15:07:12,395 [INFO]
+    2024-10-09 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2024-10-09-15-07-11/results.json
+    2024-10-09 15:07:12,942 [INFO] Finished creating plots.
+    2024-10-09 15:07:12,943 [INFO] ============================================================ 
+    2024-10-09 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
+    2024-10-09 15:07:12,944 [INFO] ============================================================
 
 
 All used config files, logs and results are stored in a folder in the

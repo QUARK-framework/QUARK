@@ -62,6 +62,17 @@ Content of the environment:
 In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
 You can find the documentation in the respective Read the Docs section.
 
+## Git Large File Storage (LFS)
+Some files in this repository are large and tracked using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
+
+### Installing Git LFS
+1. Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/):
+  - On Linux/macOS
+    ```bash
+    git lfs install
+    ```
+  - On Windows. Download and install Git LFS from the [Official page](https://git-lfs.com/)
+
 ## Running a Benchmark
 
 ```bash
@@ -84,6 +95,10 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    PVC
    SAT
  > TSP
+   ACL
+   MIS
+   SCP
+   GenerativeModeling
 
 2023-03-21 09:18:36,440 [INFO] Import module modules.applications.optimization.TSP.TSP
 [?] (Option for TSP) How many nodes does you graph need?:
@@ -94,6 +109,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    [ ] 10
    [ ] 14
    [ ] 16
+   [ ] Custom Range
 
 [?] What submodule do you want?:
    [ ] Ising
@@ -116,11 +132,20 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 2023-03-21 09:18:51,388 [INFO] All 3 nodes got visited
 2023-03-21 09:18:51,388 [INFO] Total distance (without return): 727223.0
 2023-03-21 09:18:51,388 [INFO] Total distance (including return): 1436368.0
+2023-03-21 09:18:51,388 [INFO]
+2023-03-21 09:18:51,388 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
 2023-03-21 09:18:51,389 [INFO]
-2023-03-21 09:18:51,389 [INFO]  ============================================================
+2023-03-21 09:18:51,389 [INFO] =============== Run finished ===============
+2023-03-21 09:18:51,389 [INFO]
+2023-03-21 09:18:51,389 [INFO] ================================================================================
+2023-03-21 09:18:51,389 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+2023-03-21 09:18:51,389 [INFO] ================================================================================
 2023-03-21 09:18:51,389 [INFO]
 2023-03-21 09:18:51,389 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50/results.json
 2023-03-21 09:18:51,746 [INFO] Finished creating plots.
+2023-03-21 09:18:51,389 [INFO] ============================================================ 
+2023-03-21 09:18:51,389 [INFO] ====================  QUARK finished!   ====================
+2023-03-21 09:18:51,389 [INFO] ============================================================
 
 ```
 

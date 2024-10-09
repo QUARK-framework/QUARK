@@ -72,9 +72,9 @@ Installing Git LFS
 ~~~~~~~~~~~~~~~~~~~~
 1. Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/):
   - On Linux/macOS
-    ```bash
-    git lfs install
-    ```
+    .. code:: bash
+      git lfs install
+
   - On Windows. Download and install Git LFS from the [Official page](https://git-lfs.com/)
 
 Running a Benchmark

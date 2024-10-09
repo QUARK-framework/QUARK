@@ -71,13 +71,13 @@ Some files in this repository are large and tracked using **Git LFS**. If you ar
 
 Installing Git LFS
 ^^^^^^^^^^^^^^^^^^^
-1. Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/):
+1. Install Git LFS by following the instructions on `Git LFS <https://git-lfs.com/>`_
   - On Linux/macOS
     ::
 
        git lfs install
 
-  - On Windows. Download and install Git LFS from the [Official page](https://git-lfs.com/)
+  - On Windows. Download and install Git LFS from the `Official page <https://git-lfs.com/>`_
 
 Running a Benchmark
 ~~~~~~~~~~~~~~~~~~~~

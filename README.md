@@ -100,7 +100,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    SCP
    GenerativeModeling
 
-2023-03-21 09:18:36,440 [INFO] Import module modules.applications.optimization.TSP.TSP
+2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
 [?] (Option for TSP) How many nodes does you graph need?:
  > [X] 3
    [ ] 4
@@ -118,34 +118,38 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    [ ] ReverseGreedyClassicalTSP
    [ ] RandomTSP
 
-2023-03-21 09:18:49,563 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
-2023-03-21 09:18:49,566 [INFO] Submodule configuration finished
-[?] How many repetitions do you want?: 1
-2023-03-21 09:18:50,577 [INFO] Import module modules.applications.optimization.TSP.TSP
-2023-03-21 09:18:50,948 [INFO] Created Benchmark run directory /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50
-2023-03-21 09:18:51,025 [INFO] Codebase is based on revision 075201825fa71c24b5567e1290966081be7dbdc0 and has some uncommitted changes
-2023-03-21 09:18:51,026 [INFO] Running backlog item 1/1, Iteration 1/1:
-2023-03-21 09:18:51,388 [INFO] Route found:
+2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
+2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
+2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
+2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
+[?] How many repetitions do you want?: 1P
+2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
+2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
+2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
+2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
+2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
+2024-10-09 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
+2024-10-09 15:07:12,386 [INFO] Route found:
  Node 0 ->
  Node 2 ->
  Node 1
-2023-03-21 09:18:51,388 [INFO] All 3 nodes got visited
-2023-03-21 09:18:51,388 [INFO] Total distance (without return): 727223.0
-2023-03-21 09:18:51,388 [INFO] Total distance (including return): 1436368.0
-2023-03-21 09:18:51,388 [INFO]
-2023-03-21 09:18:51,388 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
-2023-03-21 09:18:51,389 [INFO]
-2023-03-21 09:18:51,389 [INFO] =============== Run finished ===============
-2023-03-21 09:18:51,389 [INFO]
-2023-03-21 09:18:51,389 [INFO] ================================================================================
-2023-03-21 09:18:51,389 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
-2023-03-21 09:18:51,389 [INFO] ================================================================================
-2023-03-21 09:18:51,389 [INFO]
-2023-03-21 09:18:51,389 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50/results.json
-2023-03-21 09:18:51,746 [INFO] Finished creating plots.
-2023-03-21 09:18:51,389 [INFO] ============================================================ 
-2023-03-21 09:18:51,389 [INFO] ====================  QUARK finished!   ====================
-2023-03-21 09:18:51,389 [INFO] ============================================================
+2024-10-09 15:07:12,386 [INFO] All 3 nodes got visited
+2024-10-09 15:07:12,386 [INFO] Total distance (without return): 727223.0
+2024-10-09 15:07:12,386 [INFO] Total distance (including return): 1436368.0
+2024-10-09 15:07:12,386 [INFO]
+2024-10-09 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
+2024-10-09 15:07:12,387 [INFO]
+2024-10-09 15:07:12,387 [INFO] =============== Run finished ===============
+2024-10-09 15:07:12,387 [INFO]
+2024-10-09 15:07:12,387 [INFO] ================================================================================
+2024-10-09 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+2024-10-09 15:07:12,387 [INFO] ================================================================================
+2024-10-09 15:07:12,395 [INFO]
+2024-10-09 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2024-10-09-15-07-11/results.json
+2024-10-09 15:07:12,942 [INFO] Finished creating plots.
+2024-10-09 15:07:12,943 [INFO] ============================================================ 
+2024-10-09 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
+2024-10-09 15:07:12,944 [INFO] ============================================================
 
 ```
 

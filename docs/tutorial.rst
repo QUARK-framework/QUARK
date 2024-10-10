@@ -2,7 +2,8 @@ QUARK: A Framework for Quantum Computing Application Benchmarking
 =================================================================
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers.
-QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case.
+QUARK supports various applications such as the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, robot path optimization in the PVC sealing use case 
+as well as new additions like the Maximum Independent Set (MIS), Set Cover Problem (SCP) and Auto Carrier Loading (ACL).
 It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 

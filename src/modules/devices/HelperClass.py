@@ -18,7 +18,7 @@ from modules.Core import Core
 
 class HelperClass(Device):
     """
-    Some Solvers like Pennylane, only needs strings for setting up the device and not a standalone class.
+    Some solvers like Pennylane, only needs strings for setting up the device and not a standalone class.
 
     TODO: Maybe refactor this once we think of a better structure for this
     """
@@ -41,11 +41,11 @@ class HelperClass(Device):
         """
         return {}
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

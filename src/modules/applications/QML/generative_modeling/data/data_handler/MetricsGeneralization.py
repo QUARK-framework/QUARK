@@ -19,18 +19,15 @@ import numpy as np
 class MetricsGeneralization:
     """
     A class to compute generalization metrics for generated samples based on train and solution sets.
-
-    :param train_set: Set of queries in the training set.
-    :type train_set: np.array
-    :param train_size: The fraction of queries used for training.
-    :type train_size: float
-    :param solution_set: Set of queries in the solution set.
-    :type solution_set: np.array
-    :param n_qubits: The number of qubits.
-    :type n_qubits: int
     """
 
-    def __init__(self, train_set, train_size, solution_set, n_qubits) -> None:
+    def __init__(self, train_set: np.array, train_size: float, solution_set: np.array, n_qubits: int):
+        """
+        :param train_set: Set of queries in the training set
+        :param train_size: The fraction of queries used for training
+        :param solution_set: Set of queries in the solution set
+        :param n_qubits: The number of qubits.
+        """
         self.train_set = train_set
         self.train_size = train_size
         self.solution_set = solution_set

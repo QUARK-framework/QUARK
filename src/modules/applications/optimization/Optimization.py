@@ -20,7 +20,7 @@ from utils import start_time_measurement, end_time_measurement
 
 class Optimization(Application, ABC):
     """
-    Optimization Module for QUARK, is used by all Optimization applications
+    Optimization Module for QUARK, is used by all Optimization applications.
     """
 
     @abstractmethod
@@ -48,7 +48,7 @@ class Optimization(Application, ABC):
         Checks how good the solution is.
 
         :param solution: Provided solution
-        :return: Tuple witht the evaluation and the time it took to create it
+        :return: Tuple with the evaluation and the time it took to create it
         """
         pass
 

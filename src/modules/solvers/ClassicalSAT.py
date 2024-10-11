@@ -71,7 +71,7 @@ class ClassicalSAT(Solver):
         """
         pass
 
-    def run(self, mapped_problem: WCNF, device_wrapper: any, config: any, **kwargs: dict) -> tuple[list, float]:
+    def run(self, mapped_problem: WCNF, device_wrapper: any, config: any, **kwargs: dict) -> tuple[list, float, dict]:
         """
         The given application is a problem instance from the pysat library. This uses the rc2 maxsat solver
         given in that library to return a solution.
@@ -89,7 +89,7 @@ class ClassicalSAT(Solver):
         )
 
         start = start_time_measurement()
-        # we use rc2 solver to compute the optimal solution
+        # We use rc2 solver to compute the optimal solution
         with RC2(mapped_problem) as rc2:
             sol = rc2.compute()
 

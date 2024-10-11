@@ -146,7 +146,7 @@ class Plotter:
     def plot_application_score(application_name: str, application_axis: str, results: list[dict],
                                store_dir: str) -> None:
         """
-        Funtion to create plots showing the application score.
+        Function to create plots showing the application score.
 
         :param application_name: Name of the application
         :param application_axis: Name of the application axis
@@ -223,7 +223,7 @@ class Plotter:
         Function to extract and summarize certain data fields like the time spent in every module
         from the nested module chain.
         
-        :param config: Dictionary containing multiple data fields like the config a module
+        :param config: Dictionary containing multiple data fields like the config of a module
         :param rest_result: Rest of the module chain
         :return: Extracted data
         """

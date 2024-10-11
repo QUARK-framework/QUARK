@@ -79,9 +79,9 @@ class ACL(Optimization):
         """
         Returns the default submodule based on the provided option.
 
-        :param option: The submodule option to retrieve
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "MIPsolverACL":
             from modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
@@ -161,19 +161,22 @@ class ACL(Optimization):
         self.application = problem_instance
         return self.application
 
-    def _generate_tiny_model(self, df, vehicles):
+    def _generate_tiny_model(self, df: any, vehicles: list) -> None:
         """
         Generate the problem model for the Tiny configurations.
+
+        :param df: Datafile
+        :param vehicles: List of vehicle types
         """
         # Weight parameters
-        # max. total weight on truck / trailer
+        # Max. total weight on truck / trailer
         wt = [100]
-        # max. weight on the four levels
+        # Max. weight on the four levels
         wl = [50, 60]
-        # max. weights on platforms p, if not angled
+        # Max. weights on platforms p, if not angled
         wp = [23, 23, 23, 26, 17]
 
-        # Create empty lists for different vehicle parameters. This is required for proper indexing in the model
+        # Create empty lists for different vehicle parameters. This is required for proper indexing in the model.
         weight_list = [0] * (len(vehicles))
 
         for i, vehicle in enumerate(vehicles):
@@ -230,9 +233,12 @@ class ACL(Optimization):
 
         self.application = prob
 
-    def _generate_small_model(self, df, vehicles):
+    def _generate_small_model(self, df: any, vehicles: list) -> None:
         """
         Generate the problem model for the Small configuration
+
+        :param df: Datafile
+        :param vehicles: List of vehicle types
         """
         # Parameters for the small model (2 levels with 3 and 2 platforms each)
 
@@ -243,13 +249,13 @@ class ACL(Optimization):
         # Considers base truck height and height distance between vehicles (~10cm)
         hmax_truck = [34, 34, 33, 36, 32, 36]
         # Weight parameters
-        # max. total weight on truck / trailer
+        # Max. total weight on truck / trailer
         wt = [100]
-        # max. weight on the two levels
+        # Max. weight on the two levels
         wl = [65, 50]
-        # max. weights on platforms p, if not angled
+        # Max. weights on platforms p, if not angled
         wp = [23, 23, 23, 26, 17]
-        # max. weight on p, if sp is used
+        # Max. weight on p, if sp is used
         wsp = [28, 28, 28]
 
         _, length_list, height_list, weight_list = self._get_vehicle_params(df, vehicles)
@@ -314,7 +320,7 @@ class ACL(Optimization):
         # Checks that vehicles v on platforms p that belong to level L are shorter than the maximum available length
         for L in plats_l:
             prob += (pulp.lpSum(x[p, v] * length_list[v] for p in platforms_level_array[L] for v in vecs)
-                        <= lmax_l[L])
+                     <= lmax_l[L])
 
         # (6) Height constraints for truck and trailer, analogue to length constraints
         # Truck
@@ -351,9 +357,12 @@ class ACL(Optimization):
 
         self.application = prob
 
-    def _generate_full_model(self, df, vehicles): # pylint: disable=R0915
+    def _generate_full_model(self, df: any, vehicles: list) -> None:  # pylint: disable=R0915
         """
         Generate the problem model for the Full configuration.
+
+        :param df: Datafile
+        :param vehicles: List of vehicle types
         """
         # Horizontal Coefficients: Length reduction
         # 1 = forward, 0 = backward
@@ -363,8 +372,8 @@ class ACL(Optimization):
 
         # Vertical Coefficients: Height increase
         h_coef = np.array([[0.40, 1, 1, 1],
-                            [0.17, 0.22, 0.21, 0.22],
-                            [0.17, 0.38, 0.32, 0.32]])
+                           [0.17, 0.22, 0.21, 0.22],
+                           [0.17, 0.38, 0.32, 0.32]])
 
         # Length parameters
         # Level 1 (Truck up), 2 (Truck down), 3 (Trailer up), 4 (Trailer down)
@@ -376,17 +385,17 @@ class ACL(Optimization):
         hmax_trailer = [36, 32, 32, 34]
 
         # Weight parameters
-        # max. total weight
+        # Max. total weight
         wmax = 180
-        # max. total weight on truck / trailer
+        # Max. total weight on truck / trailer
         wt = [100, 100]
-        # max. weight on the four levels
+        # Max. weight on the four levels
         wl = [50, 60, 50, 90]
-        # max. weights on platforms p, if not angled
+        # Max. weights on platforms p, if not angled
         wp = [23, 23, 23, 26, 17, 26, 26, 26, 23, 26]
-        # max. weights on p, angled (if possible: 1, 2, 4, 7, 8, 9):
+        # Max. weights on p, angled (if possible: 1, 2, 4, 7, 8, 9):
         wpa = [20, 22, 17, 18, 19, 22]
-        # max. weight on p, if sp is used
+        # Max. weight on p, if sp is used
         wsp = [28, 28, 28, 28, 28, 28]
 
         class_list, length_list, height_list, weight_list = self._get_vehicle_params(df, vehicles)
@@ -458,7 +467,7 @@ class ACL(Optimization):
 
         # (3) If a split platform q in plats_sp is used, only one of its "sub platforms" can be used
         for q in plats_sp:
-            prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs)\
+            prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs) \
                     <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
 
         # (3.1) It is always only possible to use a single split-platform for any given p
@@ -516,37 +525,37 @@ class ACL(Optimization):
         # platform v(p)
         for L in plats_l:
             prob += pulp.lpSum(x[p, v] * length_list[v]
-                                - xay1[platforms_angled_array.index(p), v] *
-                                int(v_coef[class_list[v]][0]*length_list[v])
-                                - xay2[platforms_angled_array.index(p), v] *
-                                int(v_coef[class_list[v]][1]*length_list[v])
-                                - xay3[platforms_angled_array.index(p), v] *
-                                int(v_coef[class_list[v]][2]*length_list[v])
-                                - xay4[platforms_angled_array.index(p), v]
-                                * int(v_coef[class_list[v]][3]*length_list[v])
-                                for p in self.intersectset(platforms_angled_array, platforms_level_array[L])
-                                for v in vecs)\
+                               - xay1[platforms_angled_array.index(p), v] *
+                               int(v_coef[class_list[v]][0] * length_list[v])
+                               - xay2[platforms_angled_array.index(p), v] *
+                               int(v_coef[class_list[v]][1] * length_list[v])
+                               - xay3[platforms_angled_array.index(p), v] *
+                               int(v_coef[class_list[v]][2] * length_list[v])
+                               - xay4[platforms_angled_array.index(p), v]
+                               * int(v_coef[class_list[v]][3] * length_list[v])
+                               for p in self.intersectset(platforms_angled_array, platforms_level_array[L])
+                               for v in vecs) \
                     + pulp.lpSum(x[p, v] * length_list[v]
-                                    for p in self.diffset(platforms_level_array[L], platforms_angled_array)
-                                    for v in vecs) \
+                                 for p in self.diffset(platforms_level_array[L], platforms_angled_array)
+                                 for v in vecs) \
                     <= lmax_l[L]
 
         # (5) Platforms can not be angled, if they are part of a split platform
         for q in plats_sp:
             prob += pulp.lpSum(a_p[platforms_angled_array.index(p)]
-                                for p in self.intersectset(platforms_angled_array, split_platforms_array[q]))\
+                               for p in self.intersectset(platforms_angled_array, split_platforms_array[q])) \
                     <= len(split_platforms_array[q]) * (1 - sp[q])
 
         # (6) Weight constraint if split platform is used, gamma == 1
         for q in plats_sp:
             prob += pulp.lpSum(sp[q] + x[p, v] for p in self.intersectset(split_platforms_array[q], platforms_array)
-                                for v in vecs) >= 2 * gamma[q]
+                               for v in vecs) >= 2 * gamma[q]
 
         # If split platform is used, weight limit == wsp, if not, then weight limit == wp
         for q in plats_sp:
             for p in split_platforms_array[q]:
                 prob += (pulp.lpSum(weight_list[v] * x[p, v] for v in vecs) <= gamma[q] * wsp[q] + (1 - gamma[q]) *
-                            wp[p])
+                         wp[p])
 
         # (7) If a platform that can be angled is angled, weight limit == wpa
         # Need another linearization for that:
@@ -563,12 +572,12 @@ class ACL(Optimization):
         # (8) Weight constraint for every level
         for p_l in plats_l:
             prob += (pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <=
-                        wl[p_l])
+                     wl[p_l])
 
         # (9) Weight constraint for truck and trailer
         for p_t in plats_t:
             prob += (pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_truck_trailer_array[p_t] for v in vecs)
-                        <= wt[p_t])
+                     <= wt[p_t])
 
         # (10) Weight constraint for entire auto carrier
         prob += pulp.lpSum(weight_list[v] * x[p, v] for p in plats for v in vecs) <= wmax
@@ -577,42 +586,41 @@ class ACL(Optimization):
         # Truck
         for h in plats_h1:
             prob += pulp.lpSum(x[p, v] * height_list[v]
-                                - xay1[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][0]*height_list[v])
-                                - xay2[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][1]*height_list[v])
-                                - xay3[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][2]*height_list[v])
-                                - xay4[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][3]*height_list[v])
-                                for p in self.intersectset(platforms_angled_array, platforms_height_array_truck[h])
-                                for v in vecs)\
+                               - xay1[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][0] * height_list[v])
+                               - xay2[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][1] * height_list[v])
+                               - xay3[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][2] * height_list[v])
+                               - xay4[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][3] * height_list[v])
+                               for p in self.intersectset(platforms_angled_array, platforms_height_array_truck[h])
+                               for v in vecs) \
                     + pulp.lpSum(x[p, v] * height_list[v]
-                                    for p in self.diffset(platforms_height_array_truck[h], platforms_angled_array)
-                                    for v in vecs) \
+                                 for p in self.diffset(platforms_height_array_truck[h], platforms_angled_array)
+                                 for v in vecs) \
                     <= hmax_truck[h]
         # Trailer
         for h in plats_h2:
             prob += pulp.lpSum(x[p, v] * height_list[v]
-                                - xay1[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][0]*height_list[v])
-                                - xay2[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][1]*height_list[v])
-                                - xay3[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][2]*height_list[v])
-                                - xay4[platforms_angled_array.index(p), v] *
-                                int(h_coef[class_list[v]][3]*height_list[v])
-                                for p in self.intersectset(platforms_angled_array, platforms_height_array_trailer[h])
-                                for v in vecs)\
+                               - xay1[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][0] * height_list[v])
+                               - xay2[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][1] * height_list[v])
+                               - xay3[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][2] * height_list[v])
+                               - xay4[platforms_angled_array.index(p), v] *
+                               int(h_coef[class_list[v]][3] * height_list[v])
+                               for p in self.intersectset(platforms_angled_array, platforms_height_array_trailer[h])
+                               for v in vecs) \
                     + pulp.lpSum(x[p, v] * height_list[v]
-                                    for p in self.diffset(platforms_height_array_trailer[h], platforms_angled_array)
-                                    for v in vecs) \
+                                 for p in self.diffset(platforms_height_array_trailer[h], platforms_angled_array)
+                                 for v in vecs) \
                     <= hmax_trailer[h]
-
 
         self.application = prob
 
-    def _get_vehicle_params(self, df, vehicles):
+    def _get_vehicle_params(self, df: any, vehicles: list) -> tuple[list, list, list, list]:
         """
         Extract vehicle parameters for the problem formulation
 

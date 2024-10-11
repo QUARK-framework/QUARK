@@ -37,7 +37,7 @@ class GreedyClassicalTSP(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module.
+        Returns requirements of this module.
 
         :return: List of dict with requirements of this module
         """
@@ -70,7 +70,8 @@ class GreedyClassicalTSP(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: any, **kwargs: dict) ->tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: any, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the TSP graph in a greedy fashion.
 
@@ -84,11 +85,10 @@ class GreedyClassicalTSP(Solver):
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()
 
-        #Use NetworkX approximation for a greedy TSP solution
+        # Use NetworkX approximation for a greedy TSP solution
         tour = approx.greedy_tsp(mapped_problem)
 
         # Remove the duplicate node as we don't want a cycle
-        # Reference: https://stackoverflow.com/a/7961390/10456906
         tour = list(dict.fromkeys(tour))
 
         # Parse tour so that it can be processed later

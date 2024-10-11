@@ -69,7 +69,8 @@ class GreedyClassicalPVC(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: any, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: any, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the PVC graph in a greedy fashion.
 
@@ -82,7 +83,7 @@ class GreedyClassicalPVC(Solver):
         # Deep copy to ensure modification don't affect future repetitions
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()
-        #Start at the base node
+        # Start at the base node
         current_node = ((0, 0), 1, 1)
         idx = 1
 

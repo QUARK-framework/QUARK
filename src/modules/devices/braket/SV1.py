@@ -27,6 +27,9 @@ class SV1(Braket):
     def __init__(self, device_name: str, arn: str = 'arn:aws:braket:::device/quantum-simulator/amazon/sv1'):
         """
         Constructor method.
+
+        :param device_name: Name of the device
+        :param arn: Amazon resource name for the SV1 simulator
         """
         super().__init__(device_name=device_name, arn=arn)
         self.submodule_options = []
@@ -41,18 +44,17 @@ class SV1(Braket):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dicionary as this solver has no configurable settings.
+        Returns empty dictionary as this solver has no configurable settings.
 
         :return: Empty dict
         """
-        return {
-}
+        return {}
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

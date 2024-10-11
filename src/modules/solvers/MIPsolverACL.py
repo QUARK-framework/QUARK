@@ -83,7 +83,8 @@ class MIPaclp(Solver):
         """
         pass
 
-    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the ACL problem as a mixed integer problem (MIP).
 

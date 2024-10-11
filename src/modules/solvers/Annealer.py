@@ -78,18 +78,19 @@ class Annealer(Solver):
         """
         number_of_reads: int
 
-    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
-        Annealing Solver.
+        Run the annealing solver.
 
-        :param mapped_problem: Dictionary with the key 'Q' where its value should be the QUBO
+        :param mapped_problem: Dict with the key 'Q' where its value should be the QUBO
         :param device_wrapper: Annealing device
         :param config: Annealing settings
         :param kwargs: Additional keyword arguments
         :return: Solution, the time it took to compute it and optional additional information
         """
 
-        Q = mapped_problem['Q']
+        q = mapped_problem['Q']
         additional_solver_information = {}
         device = device_wrapper.get_device()
         start = start_time_measurement()
@@ -100,7 +101,7 @@ class Annealer(Solver):
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.")
 
-        response = device.sample_qubo(Q, num_reads=config['number_of_reads'])
+        response = device.sample_qubo(q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 
         # Take the result with the lowest energy:

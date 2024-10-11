@@ -96,9 +96,9 @@ class Library(Core, ABC):
         This method combines the circuit implementation and the selected backend and returns a function that will be
         called during training.
 
-        :param circuit: Implementation of the quantum circuiT
+        :param circuit: Implementation of the quantum circuit
         :param backend: Configured backend
-        :param config: Name of the PennyLane devicE
+        :param config: Name of the PennyLane device
         :param config_dict: Dictionary including the number of shots
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
         transpiled circuit

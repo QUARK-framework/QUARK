@@ -58,14 +58,14 @@ class QubovertQUBO(Mapping):
             return {
                     "lagrange": {
                         "values": [0.1, 1, 1.5, 2, 5, 10, 1000, 10000],
-                        "description": "What lagrange for the qubo mapping? 1 the number of tests."
+                        "description": "By which factor would you like to multiply your Lagrange?"
                     }
                 }
         """
         return {
             "lagrange": {
                 "values": [0.1, 1, 1.5, 2, 5, 10, 1000, 10000],
-                "description": "What lagrange for the qubo mapping? 1 the number of tests."
+                "description": "By which factor would you like to multiply your Lagrange?"
             }
         }
 
@@ -81,9 +81,9 @@ class QubovertQUBO(Mapping):
         lagrange: float
 
     @staticmethod
-    def _constraints2qubovert(constraints: dict) -> AND:
+    def _constraints2qubovert(constraints: any) -> AND:
         """
-        Converts the constraints nnf to a pubo in the qubovert library.
+        Converts the constraints nnf to a PUBO in the qubovert library.
 
         :param constraints: Constraints in nnf format 
         :return: Constraints in qubovert format
@@ -97,7 +97,7 @@ class QubovertQUBO(Mapping):
     @staticmethod
     def _tests2qubovert(test_clauses: dict) -> sum:
         """
-        Converts the list of test clauses in the nnf format to a pubo.
+        Converts the list of test clauses in the nnf format to a PUBO.
 
         :param test_clauses: Test clauses in nnf format
         :return: Sum of mapped test clauses
@@ -111,7 +111,7 @@ class QubovertQUBO(Mapping):
 
     def map(self, problem: any, config: Config) -> tuple[dict, float]:
         """
-        Converts the problem to a Qubo in dictionary format. Problem is a CNF formula from the nnf library.
+        Converts the problem to a QUBO in dictionary format. Problem is a CNF formula from the nnf library.
 
         :param problem: SAT problem
         :param config: Config with the parameters specified in Config class
@@ -133,7 +133,7 @@ class QubovertQUBO(Mapping):
         logging.info(f'{tests_pubo.to_qubo().num_terms} number of terms in tests qubo')
         lagrange *= len(test_clauses)
 
-        # Define the total pubo problem:
+        # Define the total PUBO problem:
         self.pubo_problem = -(tests_pubo + lagrange * constraints_pubo)
 
         # Convert to qubo:

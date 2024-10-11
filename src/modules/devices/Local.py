@@ -18,8 +18,7 @@ from modules.Core import Core
 
 class Local(Device):
     """
-    Some Solvers (often classical) also can run on a normal local environment without any specific device or
-    setting needed.
+    Some solvers (often classical) run on a local environment without any specific device or setting needed.
     """
 
     def __init__(self):
@@ -38,11 +37,11 @@ class Local(Device):
         """
         return {}
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

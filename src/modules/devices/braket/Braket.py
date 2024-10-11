@@ -113,7 +113,7 @@ class Braket(Device, ABC):
             logging.info(f"No AWS_PROFILE specified, using default profile: {profile_name}")
             return profile_name
 
-    def _initialize_aws_session(self, profile_name: str, region: str, my_config: Config):
+    def _initialize_aws_session(self, profile_name: str, region: str, my_config: Config) -> None:
         """
         Initializes the AWS session for interacting with Amazon Braket.
 

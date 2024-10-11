@@ -80,8 +80,8 @@ class Transformation(Core, ABC):
         Helps to ensure that the model can effectively learn the underlying 
         patterns and structure of the data, and produce high-quality outputs.
 
-        :param input_data: Input data for transformation.
-        :param config: Configuration parameters for the transformation.
+        :param input_data: Input data for transformation
+        :param config: Configuration parameters for the transformation
         :return: Transformed data.
         """
         return input_data
@@ -92,8 +92,8 @@ class Transformation(Core, ABC):
         This might not be necessary in all cases, so the default is to return the original solution.
         This might be needed to convert the solution to a representation needed for validation and evaluation.
 
-        :param input_data: The input data to be transformed.
-        :return: Transformed data.
+        :param input_data: The input data to be transformed
+        :return: Transformed data
         """
         return input_data
 
@@ -102,9 +102,9 @@ class Transformation(Core, ABC):
         """
         Compute discretization for the grid.
 
-        :param n_qubits: Total number of qubits.
-        :param n_registered: Number of qubits to be registered.
-        :return: Discretization data.
+        :param n_qubits: Total number of qubits
+        :param n_registered: Number of qubits to be registered
+        :return: Discretization data
         """
         n = 2 ** (n_qubits // n_registered)
         n_bins = n ** n_registered
@@ -121,9 +121,9 @@ class Transformation(Core, ABC):
         """
         Compute grid discretization.
 
-        :param n_qubits: Total number of qubits.
-        :param n_registers: Number of qubits to be registered.
-        :return: Discretization data.
+        :param n_qubits: Total number of qubits
+        :param n_registers: Number of qubits to be registered
+        :return: Discretization data
         """
         n = 2 ** (n_qubits // n_registers)
         n_bins = n ** n_registers
@@ -144,11 +144,11 @@ class Transformation(Core, ABC):
         """
         Generate samples based on measurement results and the grid bins.
 
-        :param results: Results of measurements.
-        :param bin_data: Binned data.
-        :param n_registers: Number of registers.
-        :param noisy: Flag indicating whether to add noise.
-        :return: Generated samples.
+        :param results: Results of measurements
+        :param bin_data: Binned data
+        :param n_registers: Number of registers
+        :param noisy: Flag indicating whether to add noise
+        :return: Generated samples
         """
         n_shots = np.sum(results)
         width = 1 / len(bin_data) ** (1 / n_registers)
@@ -171,11 +171,11 @@ class Transformation(Core, ABC):
         """
         Generate samples efficiently using numpy arrays based on measurement results and the grid bins.
 
-        :param results: Results of measurements.
-        :param bin_data: Binned data.
-        :param n_registers: Number of registers.
-        :param noisy: Flag indicating whether to add noise.
-        :return: Generated samples.
+        :param results: Results of measurements
+        :param bin_data: Binned data
+        :param n_registers: Number of registers
+        :param noisy: Flag indicating whether to add noise
+        :return: Generated samples
         """
         n_shots = np.sum(results)
         width = 1 / len(bin_data) ** (1 / n_registers)

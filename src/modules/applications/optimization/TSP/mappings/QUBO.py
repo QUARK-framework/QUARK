@@ -57,7 +57,7 @@ class QUBO(Mapping):
                     "lagrange_factor": {
                                         "values": [0.75, 1.0, 1.25],
                                         "description": "By which factor would you like to multiply your "
-                                                        "lagrange?",
+                                                        "Lagrange?",
                                         "custom_input": True,
                                         "postproc": float
                     }
@@ -66,7 +66,7 @@ class QUBO(Mapping):
         return {
             "lagrange_factor": {
                 "values": [0.75, 1.0, 1.25],
-                "description": "By which factor would you like to multiply your lagrange?",
+                "description": "By which factor would you like to multiply your Lagrange?",
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float  # Since we allow custom input here we need to parse it to float (input is str)
@@ -122,6 +122,7 @@ class QUBO(Mapping):
 
         :param option: Submodule option
         :return: Corresponding submodule
+        :raises NotImplemented: If the provided option is not implemented
         """
 
         if option == "Annealer":

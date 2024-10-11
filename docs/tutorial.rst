@@ -68,11 +68,11 @@ You can find the documentation in the Dynamic Imports section.
 
 Git Large File Storage (LFS)
 ~~~~~~~~~~~~~~~~~~~~
-Some files in this repository are large and tracked using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
+QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
 
 Installing Git LFS
 ^^^^^^^^^^^^^^^^^^^
-1. Install Git LFS by following the instructions on `Git LFS <https://git-lfs.com/>`_
+Install Git LFS by following the instructions on `Git LFS <https://git-lfs.com/>`_
   - On Linux/macOS
     ::
 

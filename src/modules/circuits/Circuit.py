@@ -26,7 +26,7 @@ class Circuit(Core, ABC):
         """
         Constructor method.
 
-        :param name : The name of the circuit architecture
+        :param name: The name of the circuit architecture
         """
         super().__init__()
         self.architecture_name = name
@@ -68,7 +68,7 @@ class Circuit(Core, ABC):
         :param input_data: Collected information of the benchmarking process
         :param config: Config specifying the number of qubits of the circuit
         :param kwargs: Optional keyword arguments
-        :return: Same dictionary like input_data with architecture_name
+        :return: Same dictionary like input_data with architecture_name and execution time
         """
         start = start_time_measurement()
         input_data["architecture_name"] = self.architecture_name

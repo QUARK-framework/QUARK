@@ -18,6 +18,7 @@ import logging
 
 import numpy as np
 from braket.circuits import Circuit
+from braket.aws import AwsDevice
 from scipy.optimize import minimize
 
 from modules.solvers.Solver import Solver
@@ -105,7 +106,7 @@ class QAOA(Solver):
 
         """
         return {
-            "shots": {  # number measurements to make on circuit
+            "shots": {  # number of measurements to make on circuit
                 "values": list(range(10, 500, 30)),
                 "description": "How many shots do you need?"
             },
@@ -134,11 +135,11 @@ class QAOA(Solver):
         opt_method: str
         depth: int
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
         Run QAOA algorithm on Ising.
 
-        :param mapped_problem: dictionary with the keys 'J' and 't'
+        :param mapped_problem: Dict containing problem parameters mapped to the Ising model
         :param device_wrapper: Instance of device
         :param config: Solver configuration settings
         :param kwargs: No additionally settings needed
@@ -218,9 +219,14 @@ class QAOA(Solver):
 # https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_quantum_algorithms/QAOA/utils_qaoa.py)
 
 # Function to implement ZZ gate using CNOT gates
-def ZZgate(q1, q2, gamma):
+def zz_gate(q1: any, q2: any, gamma: float) -> Circuit:
     """
-    function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported.
+    Function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported.
+
+    :param q1: Qubit 1 (control)
+    :param q2: Qubit 2 (target)
+    :param gamma: Gamma parameter (angle)
+    :return: ZZ gate
     """
     # Get a circuit
     circ_zz = Circuit()
@@ -232,9 +238,13 @@ def ZZgate(q1, q2, gamma):
 
 
 # Function to implement evolution with driver Hamiltonian
-def driver(beta, n_qubits):
+def driver(beta: float, n_qubits: int) -> Circuit:
     """
     Returns circuit for driver Hamiltonian U(Hb, beta).
+
+    :param beta: Beta parameter (angle)
+    :param n_qubits: Number of qubits
+    :return: Circuit with rotated qubits
     """
     # Instantiate circuit object
     circ = Circuit()
@@ -248,9 +258,14 @@ def driver(beta, n_qubits):
 
 
 # Helper function for evolution with cost Hamiltonian
-def cost_circuit(gamma, n_qubits, ising, device):
+def cost_circuit(gamma: float, ising: np.ndarray, device: AwsDevice) -> Circuit:
     """
-    returns circuit for evolution with cost Hamiltonian.
+    Returns circuit for evolution with cost Hamiltonian.
+
+    :param gamma: Gamma parameter (angle)
+    :param ising: Ising matrix
+    :param device: Device to run the circuit on
+    :return: Circuit representing the cost Hamiltonian
     """
     # Instantiate circuit object
     circ = Circuit()
@@ -265,7 +280,7 @@ def cost_circuit(gamma, n_qubits, ising, device):
         int_strength = ising[qubit_pair[0], qubit_pair[1]]
         # For Rigetti we decompose ZZ using CNOT gates
         if device.name in ["Rigetti", "Aspen-9"]:  # TODO make this more flexible
-            gate = ZZgate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
+            gate = zz_gate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
         # Classical simulators and IonQ support ZZ gate
         else:
             gate = Circuit().zz(qubit_pair[0], qubit_pair[1], angle=2 * gamma * int_strength)
@@ -275,17 +290,23 @@ def cost_circuit(gamma, n_qubits, ising, device):
 
 
 # Function to build the QAOA circuit with depth p
-def circuit(params, device, n_qubits, ising):
+def circuit(params: np.array, device: AwsDevice, n_qubits: int, ising: np.ndarray) -> Circuit:
     """
-    function to return full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend.
+    Function to return the full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend.
+
+    :param params: Array containing the beta and gamma parameters
+    :param device: Device to run the circuit on
+    :param n_qubits: Number of qubits
+    :param ising: Ising matrix
+    :return: QAOA Circuit
     """
 
-    # Initialize qaoa circuit with first Hadamard layer: for minimization start in |->
+    # Initialize QAOA circuit with first Hadamard layer
     circ = Circuit()
-    X_on_all = Circuit().x(range(0, n_qubits))
-    circ.add(X_on_all)
-    H_on_all = Circuit().h(range(0, n_qubits))
-    circ.add(H_on_all)
+    x_on_all = Circuit().x(range(0, n_qubits))
+    circ.add(x_on_all)
+    h_on_all = Circuit().h(range(0, n_qubits))
+    circ.add(h_on_all)
 
     # Setup two parameter families
     circuit_length = int(len(params) / 2)
@@ -294,7 +315,7 @@ def circuit(params, device, n_qubits, ising):
 
     # Add QAOA circuit layer blocks
     for mm in range(circuit_length):
-        circ.add(cost_circuit(gammas[mm], n_qubits, ising, device))
+        circ.add(cost_circuit(gammas[mm], ising, device))
         circ.add(driver(betas[mm], n_qubits))
 
     return circ
@@ -303,10 +324,21 @@ def circuit(params, device, n_qubits, ising):
 # Function that computes cost function for given params
 # pylint: disable=R0917
 # pylint: disable=R0913
-def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_folder, verbose):
+def objective_function(params: np.array, device: AwsDevice, ising: np.ndarray, n_qubits: int, n_shots: int,
+                       tracker: dict, s3_folder: tuple[str,str], verbose: bool) -> float:
     """
-    objective function takes a list of variational parameters as input,
+    Objective function takes a list of variational parameters as input,
     and returns the cost associated with those parameters.
+
+    :param params: Array containing beta and gamma parameters
+    :param device: Device to run the circuit on
+    :param ising: Ising matrix
+    :param n_qubits: Number of qubits
+    :param n_shots: Number of measurements to make on the circuit
+    :param tracker: Keeps track of the runs on the circuit
+    :param s3_folder: AWS S3 bucket
+    :param verbose: Controls degree of detail in logs
+    :return: Energy expectation value
     """
 
     if verbose:
@@ -378,9 +410,22 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
 
 # The function to execute the training: run classical minimization.
 # pylint: disable=R0917
-def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_folder, verbose=True):
+def train(device: AwsDevice, options: dict, p: int, ising: np.ndarray, n_qubits: int, n_shots: int, opt_method: str,
+          tracker: dict, s3_folder: tuple[str,str], verbose: bool = True) -> tuple[float, np.ndarray, dict]:
     """
-    function to run QAOA algorithm for given, fixed circuit depth p.
+    Function to run QAOA algorithm for given, fixed circuit depth p.
+
+    :param device: Device to run the circuit on
+    :param options: Dict containing parameters of classical part of the QAOA
+    :param p: Circuit depth
+    :param ising: Ising matrix
+    :param n_qubits: Number of qubits
+    :param n_shots: Number of measurements to make on the circuit
+    :param opt_method: Controls degree of detail in logs
+    :param tracker: Keeps track of the runs on the circuit
+    :param s3_folder: AWS S3 bucket
+    :param verbose: Controls degree of detail in logs
+    :return: Results of the training as a tuple of the energy, the angle and the tracker
     """
     logging.info("Starting the training.")
     logging.info("==================================" * 2)

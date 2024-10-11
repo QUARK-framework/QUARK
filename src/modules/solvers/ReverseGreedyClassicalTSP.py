@@ -71,7 +71,8 @@ class ReverseGreedyClassicalTSP(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: any) -> tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: any) \
+            -> tuple[dict, float, dict]:
         """
         Solve the TSP graph in a greedy fashion.
 

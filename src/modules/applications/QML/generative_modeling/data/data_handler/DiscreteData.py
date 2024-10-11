@@ -29,7 +29,7 @@ class DiscreteData(DataHandler):
     """
     A data handler for discrete datasets with cardinality constraints.
     This class creates a dataset with a cardinality constraint and provides
-    methods for generalisation metrics computing and evaluation.
+    methods for generalization metrics computing and evaluation.
     """
 
     def __init__(self):
@@ -161,11 +161,11 @@ class DiscreteData(DataHandler):
 
         return application_config
 
-    def generalisation(self) -> tuple[dict, float]:
+    def generalization(self) -> tuple[dict, float]:
         """
         Calculate generalization metrics for the generated.
 
-        :return: A tuple containing a dictionary of generalization metrics and the execution time
+        :return: Tuple containing a dictionary of generalization metrics and the execution time
         """
         start = start_time_measurement()
         results = self.generalization_metrics.get_metrics(self.samples)
@@ -179,9 +179,9 @@ class DiscreteData(DataHandler):
         Evaluates a given solution and calculates the histogram of generated samples and the minimum KL divergence
         value.
 
-        :param solution: Dictionary containing the solution data, including generated samples and KL divergence values.
-        :return: A tuple containing a dictionary with the histogram of generated samples and the minimum KL divergence
-                 value, and the time it took to evaluate the solution.
+        :param solution: Dictionary containing the solution data, including generated samples and KL divergence values
+        :return: Tuple containing a dictionary with the histogram of generated samples and the minimum KL divergence
+                 value, and the time it took to evaluate the solution
         """
         start = start_time_measurement()
         self.samples = solution["best_sample"]

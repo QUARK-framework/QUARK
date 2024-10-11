@@ -54,7 +54,7 @@ class QUBO(Mapping):
             return {
                     "lagrange_factor": {
                         "values": [0.75, 1.0, 1.25],
-                        "description": "By which factor would you like to multiply your lagrange?"
+                        "description": "By which factor would you like to multiply your Lagrange?"
                     }
                 }
 
@@ -62,7 +62,7 @@ class QUBO(Mapping):
         return {
             "lagrange_factor": {
                 "values": [0.75, 1.0, 1.25],
-                "description": "By which factor would you like to multiply your lagrange?"
+                "description": "By which factor would you like to multiply your Lagrange?"
             }
         }
 
@@ -81,7 +81,7 @@ class QUBO(Mapping):
         Maps the networkx graph to a QUBO formulation.
 
         :param problem: Networkx graph representing the PVC problem
-        :param config: config dictionary with the mapping configuration
+        :param config: Config dictionary with the mapping configuration
         :return: Tuple containing the QUBO dictionary and the time it took to map it
         """
         # Inspired by https://dnx.readthedocs.io/en/latest/_modules/dwave_networkx/algorithms/tsp.html
@@ -128,25 +128,24 @@ class QUBO(Mapping):
                     for c_start in config:
                         q[((node, c_start, t_start, pos_1), (node, c_start, t_start, pos_1))] -= lagrange
                         for t_end in tool:
-                            # for all configs and tools
+                            # For all configs and tools
                             for c_end in config:
                                 if c_start != c_end or t_start != t_end:
                                     q[((node, c_start, t_start, pos_1), (node, c_end, t_end, pos_1))] += 1.0 * lagrange
                                 for pos_2 in range(pos_1 + 1, timesteps):
-                                    # penalize visiting same node again in another timestep
+                                    # Penalize visiting same node again in another timestep
                                     q[((node, c_start, t_start, pos_1), (node, c_end, t_end, pos_2))] += 2.0 * lagrange
-                                    # penalize visiting other node of same seam
+                                    # Penalize visiting other node of same seam
                                     if node != (0, 0):
                                         # (0,0) is the base node, it is not a seam
-                                        # get the other nodes of the same seam
+                                        # Get the other nodes of the same seam
                                         other_seam_nodes = [
                                             x for x in problem.nodes if x[0] == node[0] and x[1] != node
                                         ]
                                         for other_seam_node in other_seam_nodes:
-                                            # penalize visiting other node of same seam
-                                            q[(
-                                                (node, c_start, t_start, pos_1), (other_seam_node, c_end, t_end, pos_2))
-                                            ] += 2.0 * lagrange
+                                            # Penalize visiting other node of same seam
+                                            q[((node, c_start, t_start, pos_1),
+                                               (other_seam_node, c_end, t_end, pos_2))] += 2.0 * lagrange
 
         # Constraint to only visit a single node in a single timestep
         for pos in range(timesteps):
@@ -172,15 +171,15 @@ class QUBO(Mapping):
                                     if item["c_start"] == c_start and item["t_start"] == t_start and
                                     item["c_end"] == c_end and item["t_end"] == t_end
                                 )
-                                # since it is the other direction we switch start and end of tool and config
+                                # Since it is the other direction we switch start and end of tool and config
                                 edge_v_u = next(
                                     item for item in list(problem[v][u].values())
                                     if item["c_start"] == c_end and item["t_start"] == t_end and
                                     item["c_end"] == c_start and item["t_end"] == t_start
                                 )
-                                # going from u -> v
+                                # Going from u -> v
                                 q[((u, c_start, t_start, pos), (v, c_end, t_end, nextpos))] += edge_u_v['weight']
-                                # going from v -> u
+                                # Going from v -> u
                                 q[((v, c_end, t_end, pos), (u, c_start, t_start, nextpos))] += edge_v_u['weight']
 
         logging.info("Created Qubo")
@@ -189,11 +188,11 @@ class QUBO(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option to retrieve
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

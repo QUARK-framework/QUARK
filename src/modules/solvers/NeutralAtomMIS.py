@@ -121,8 +121,8 @@ class NeutralAtomMIS(Solver):
 
         return state_nodes, end_time_measurement(start), {}
 
-    def _create_sequence(self, register:pulser.Register, device:pulser.devices._device_datacls.Device) -> (
-            pulser.Sequence):
+    def _create_sequence(self, register: pulser.Register, device: pulser.devices._device_datacls.Device) \
+            -> pulser.Sequence:
         """
         Creates a pulser sequence from a register and a device.
 
@@ -137,7 +137,7 @@ class NeutralAtomMIS(Solver):
             sequence.add(pulse, "Rydberg global")
         return sequence
 
-    def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
+    def _create_pulses(self, device: pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
         """
         Creates pulses tuned to MIS problem.
 
@@ -150,13 +150,13 @@ class NeutralAtomMIS(Solver):
         :param device: The device being used
         :return: List of pulses
         """
-        Omega_max = 2.3 * 2 * np.pi
+        omega_max = 2.3 * 2 * np.pi
         delta_factor = 2 * np.pi
 
         channel = device.channels['rydberg_global']
         max_amp = channel.max_amp
-        if max_amp is not None and max_amp < Omega_max:
-            Omega_max = max_amp
+        if max_amp is not None and max_amp < omega_max:
+            omega_max = max_amp
 
         delta_0 = -3 * delta_factor
         delta_f = 1 * delta_factor
@@ -166,13 +166,13 @@ class NeutralAtomMIS(Solver):
         t_sweep = (delta_f - delta_0) / (2 * np.pi * 10) * 5000
 
         rise = pulser.Pulse.ConstantDetuning(
-            pulser.waveforms.RampWaveform(t_rise, 0.0, Omega_max), delta_0, 0.0
+            pulser.waveforms.RampWaveform(t_rise, 0.0, omega_max), delta_0, 0.0
         )
         sweep = pulser.Pulse.ConstantAmplitude(
-            Omega_max, pulser.waveforms.RampWaveform(t_sweep, delta_0, delta_f), 0.0
+            omega_max, pulser.waveforms.RampWaveform(t_sweep, delta_0, delta_f), 0.0
         )
         fall = pulser.Pulse.ConstantDetuning(
-            pulser.waveforms.RampWaveform(t_fall, Omega_max, 0.0), delta_f, 0.0
+            pulser.waveforms.RampWaveform(t_fall, omega_max, 0.0), delta_f, 0.0
         )
         pulses = [rise, sweep, fall]
 
@@ -204,7 +204,7 @@ class NeutralAtomMIS(Solver):
 
         return valid_state_counts
 
-    def _translate_state_to_nodes(self, state:str, nodes:list) -> list:
+    def _translate_state_to_nodes(self, state: str, nodes: list) -> list:
         """
         Translates a state string into the corresponding list of nodes.
 
@@ -214,7 +214,7 @@ class NeutralAtomMIS(Solver):
         """
         return [key for index, key in enumerate(nodes) if state[index] == '1']
 
-    def _select_best_state(self, states:dict, nodes:list) -> str:
+    def _select_best_state(self, states: dict, nodes: list) -> str:
         """
         Selects the best state from the available valid states.
 
@@ -225,9 +225,9 @@ class NeutralAtomMIS(Solver):
         # TODO: Implement the samplers
         try:
             best_state = max(states, key=lambda k: states[k])
-        except:  # pylint: disable=W0702
+        except Exception:  # pylint: disable=W0702
             # TODO: Specify error
-            # TODO: Clean up this monstrocity
+            # TODO: Clean this up
             n_nodes = len(nodes)
             best_state = "0" * n_nodes
 

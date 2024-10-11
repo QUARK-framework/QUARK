@@ -26,9 +26,7 @@ class SCP(Optimization):
     The set cover problem (SCP) is a classical combinatorial optimization problem where the objective is to find the
     smallest subset of given elements that covers all required elements in a collection. This can be formulated as
     selecting the minimum number of sets from a collection such that the union of the selected sets contains all
-    elements from the universe of the problem instance. SCP is known for being computationally challenging due to its
-    NP-hard nature, which means finding an optimal solution becomes exponentially more difficult as the size of the
-    problem grows.
+    elements from the universe of the problem instance.
 
     SCP has widespread applications in various fields, including sensor positioning, resource allocation, and network
     design. For example, in sensor positioning, SCP can help determine the fewest number of sensors required to cover

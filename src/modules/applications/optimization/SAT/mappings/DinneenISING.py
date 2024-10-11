@@ -61,7 +61,7 @@ class DinneenIsing(Mapping):
             return {
                     "lagrange": {
                         "values": [0.1, 1, 2],
-                        "description": "What lagrange parameter to multiply with the number of (hard) "
+                        "description": "What Lagrange parameter to multiply with the number of (hard) "
                                         "constraints?"
                     }
                 }
@@ -69,7 +69,7 @@ class DinneenIsing(Mapping):
         return {
             "lagrange": {
                 "values": [0.1, 1, 2],
-                "description": "What lagrange parameter to multiply with the number of (hard) constraints?"
+                "description": "What Lagrange parameter to multiply with the number of (hard) constraints?"
             }
         }
 
@@ -88,7 +88,7 @@ class DinneenIsing(Mapping):
         """
         Uses the DinneenQUBO formulation and converts it to an Ising.
 
-        :param problem: the SAT problem
+        :param problem: SAT problem
         :param config: Dictionary with the mapping config
         :return: Dict with the ising, time it took to map it
         """
@@ -132,11 +132,11 @@ class DinneenIsing(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

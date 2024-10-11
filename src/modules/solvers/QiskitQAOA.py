@@ -86,7 +86,7 @@ class QiskitQAOA(Solver):
                                 "description": "How many iterations do you need? Warning: When using\
                                 the IBM Eagle Device you should only choose a lower number of\
                                 iterations, since a high number would lead to a waiting time that\
-                                could take up to mulitple days!"
+                                could take up to multiple days!"
                             },
                             "depth": {
                                 "values": [2, 3, 4, 5, 10, 20],
@@ -112,13 +112,13 @@ class QiskitQAOA(Solver):
             },
             "iterations": {  # number measurements to make on circuit
                 "values": [1, 5, 10, 20, 50, 75],
-                "description": "How many iterations do you need? Warning: When using the IBM Eagle Device you\
-                should only choose a lower number of iterations, since a high number would lead to a waiting \
-                ime that could take up to mulitple days!"
+                "description": "How many iterations do you need? Warning: When using the IBM Eagle device you\
+                should only choose a low number of iterations, since a high number would lead to a waiting \
+                time that could take up to multiple days!"
             },
             "depth": {
                 "values": [2, 3, 4, 5, 10, 20],
-                "description": "How many layers for QAOA (Parameter: p) do you want?"
+                "description": "How many layers for QAOA (parameter: p) do you want?"
             },
             "method": {
                 "values": ["classic", "vqe", "qaoa"],
@@ -126,7 +126,7 @@ class QiskitQAOA(Solver):
             },
             "optimizer": {
                 "values": ["POWELL", "SPSA", "COBYLA"],
-                "description": "Which Qiskit solver should be used? Warning: When using the IBM Eagle Device\
+                "description": "Which Qiskit solver should be used? Warning: When using the IBM Eagle device\
                 you should not use the SPSA optimizer for a low number of iterations!"
             }
         }
@@ -142,6 +142,7 @@ class QiskitQAOA(Solver):
             iterations: int
             layers: int
             method: str
+            optimizer: str
 
         """
         shots: int
@@ -149,6 +150,7 @@ class QiskitQAOA(Solver):
         iterations: int
         layers: int
         method: str
+        optimizer: str
 
     @staticmethod
     def normalize_data(data: any, scale: float = 1.0) -> any:
@@ -161,7 +163,7 @@ class QiskitQAOA(Solver):
         """
         return scale * data / np.max(np.abs(data))
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float]:
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
         Run Qiskit QAOA algorithm on Ising.
 
@@ -184,7 +186,7 @@ class QiskitQAOA(Solver):
                 optimizer = COBYLA(maxiter=config["iterations"])
             elif config["optimizer"] == "POWELL":
                 optimizer = POWELL(maxiter=config["iterations"], maxfev=config["iterations"] if
-                device_wrapper.device == 'ibm_eagle' else None)
+                                   device_wrapper.device == 'ibm_eagle' else None)
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
             if config["method"] == "vqe":
@@ -218,7 +220,7 @@ class QiskitQAOA(Solver):
         """
         if self.ry is not None:
             if hasattr(result, "optimal_point"):
-                para_dict =  dict(zip(self.ry.parameters, result.optimal_point))
+                para_dict = dict(zip(self.ry.parameters, result.optimal_point))
                 unbound_para = set(self.ry.parameters) - set(para_dict.keys())
                 for param in unbound_para:
                     para_dict[param] = 0.0
@@ -271,5 +273,5 @@ class QiskitQAOA(Solver):
             pauli_str = "".join(pauli_str_list)
             pauli_list.append((pauli_str, complex(x)))
 
-        isingOp =SparsePauliOp.from_list(pauli_list)
-        return isingOp
+        ising_op = SparsePauliOp.from_list(pauli_list)
+        return ising_op

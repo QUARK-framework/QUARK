@@ -183,6 +183,12 @@ class QGAN(Training):  # pylint: disable=R0902
         loss: str
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")
 
     def setup_training(self, input_data: dict, config: dict) -> None:

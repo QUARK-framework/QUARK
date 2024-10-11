@@ -73,6 +73,7 @@ class PIT(Transformation):  # pylint disable=R0902
         :param config: Config with the parameters specified in Config class
         :return: Dict with PIT transformation, time it took to map it
         """
+        # TODO: PIT.transform is almost identical to MinMax.transform -> function should be moved to Transformation.py
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
         self.n_qubits = input_data["n_qubits"]

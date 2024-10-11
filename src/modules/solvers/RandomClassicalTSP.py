@@ -63,7 +63,8 @@ class RandomTSP(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the TSP graph in a greedy fashion.
 
@@ -87,7 +88,6 @@ class RandomTSP(Solver):
         tour.append(tour[0])
 
         # Remove the duplicate node as we don't want a cycle
-        # https://stackoverflow.com/a/7961390/10456906
         tour = list(dict.fromkeys(tour))
 
         # Parse tour so that it can be processed later

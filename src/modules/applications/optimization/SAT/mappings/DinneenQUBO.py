@@ -54,14 +54,14 @@ class DinneenQUBO(Mapping):
             return {
                     "lagrange": {
                         "values": [0.1, 1, 2],
-                        "description": "What lagrange param. to multiply with the number of (hard) constr.?"
+                        "description": "What Lagrange param. to multiply with the number of (hard) constr.?"
                     }
                 }
         """
         return {
             "lagrange": {
                 "values": [0.1, 1, 2],
-                "description": "What lagrange parameter to multiply with the number of (hard) constraints?"
+                "description": "What Lagrange parameter to multiply with the number of (hard) constraints?"
             }
         }
 
@@ -185,10 +185,11 @@ class DinneenQUBO(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Return the default submodule based on the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: The default submodule
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

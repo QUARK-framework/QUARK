@@ -59,7 +59,7 @@ class ChoiIsing(Mapping):
             return {
                     "hard_reward": {
                         "values": [0.1, 0.5, 0.9, 0.99],
-                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
+                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard constraints)"
                     },
                     "soft_reward": {
                         "values": [0.1, 1, 2],
@@ -71,7 +71,7 @@ class ChoiIsing(Mapping):
         return {
             "hard_reward": {
                 "values": [0.1, 0.5, 0.9, 0.99],
-                "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
+                "description": "What Bh/A ratio do you want? (How strongly to enforce hard constraints)"
             },
             "soft_reward": {
                 "values": [0.1, 1, 2],
@@ -96,7 +96,7 @@ class ChoiIsing(Mapping):
         """
         Uses the ChoiQUBO formulation and converts it to an Ising.
 
-        :param problem: the SAT problem
+        :param problem: SAT problem
         :param config: Dictionary with the mapping config
         :return: Dict with the ising, time it took to map it
         """
@@ -140,11 +140,11 @@ class ChoiIsing(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

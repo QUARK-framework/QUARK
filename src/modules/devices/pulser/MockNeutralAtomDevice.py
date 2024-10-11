@@ -81,11 +81,11 @@ class MockNeutralAtomDevice(Pulser):
         emulator_config = pulser.backend.config.EmulatorConfig(noise_model=noise_model)
         return emulator_config
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

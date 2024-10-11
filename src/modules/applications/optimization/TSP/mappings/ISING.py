@@ -167,13 +167,7 @@ class Ising(Mapping):
     @staticmethod
     def _get_matrix_index(ising_index_string: any, number_nodes: any) -> any:
         """
-        Converts dictionary index (e.g. 'c[0][2]') in PyQubo to matrix index.
-
-        (e.g. 2
-        {('c[0][2]', 'c[2][1]'): 0.06161479507592913,
-        ('c[0][0]', 'c[0][1]'): 20.0,
-        ('c[1][0]', 'c[2][1]'): 0.720033199087941,
-        ... }
+        Converts dictionary index in PyQubo to matrix index.
 
         :param ising_index_string: Index string from PyQubo
         :param number_nodes: Number of nodes in the graph
@@ -228,7 +222,6 @@ class Ising(Mapping):
     def _map_ocean(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Use D-Wave/Ocean TSP QUBO/Ising model.
-        https://docs.ocean.dwavesys.com/en/stable/docs_dnx/reference/algorithms/generated/dwave_networkx.algorithms.tsp.traveling_salesperson_qubo.html#dwave_networkx.algorithms.tsp.traveling_salesperson_qubo
 
         :param graph: Networkx graph
         :param config: Config with the parameters specified in Config class
@@ -363,6 +356,7 @@ class Ising(Mapping):
 
         :param option: Submodule option
         :return: Corresponding submodule
+        :raises NotImplemented: If the provided option is not implemented
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

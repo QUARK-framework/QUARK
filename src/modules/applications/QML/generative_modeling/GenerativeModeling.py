@@ -50,6 +50,13 @@ class GenerativeModeling(QML):
         return "minimum KL"
 
     def get_default_submodule(self, option: str) -> Union[ContinuousData, DiscreteData]:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "Continuous Data":
             self.data = ContinuousData()
         elif option == "Discrete Data":

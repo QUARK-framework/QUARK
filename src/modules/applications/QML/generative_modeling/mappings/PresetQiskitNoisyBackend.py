@@ -123,6 +123,13 @@ class PresetQiskitNoisyBackend(Library):
         }
 
     def get_default_submodule(self, option: str) -> Union[QCBM, Inference]:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "QCBM":
             return QCBM()
         elif option == "Inference":
@@ -138,6 +145,7 @@ class PresetQiskitNoisyBackend(Library):
         :param input_data: Collected information of the benchmarking process
         :return: Same dictionary but the gate sequence is replaced by it Qiskit implementation
         """
+        # TODO: Identical to CustomQiskitNoisyBackend.sequence_to_circuit -> move to Library
         n_qubits = input_data["n_qubits"]
         gate_sequence = input_data["gate_sequence"]
         circuit = QuantumCircuit(n_qubits, n_qubits)
@@ -198,6 +206,7 @@ class PresetQiskitNoisyBackend(Library):
         :param n_qubits: Number of qubits
         :return: Configured qiskit backend
         """
+        # TODO: Identical to CustomQiskitNoisyBackend.select_backend -> move to Library
         if config == "aer_simulator_gpu":
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="GPU")
@@ -222,6 +231,7 @@ class PresetQiskitNoisyBackend(Library):
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
         transpiled circuit
         """
+        # TODO: Identical to CustomQiskitNoisyBackend.get_execute_circuit -> move to Library
         n_shots = config_dict["n_shots"]
         n_qubits = circuit.num_qubits
         start = perf_counter()

@@ -62,14 +62,14 @@ class Ising(Mapping):
             return {
                     "lagrange_factor": {
                         "values": [0.75, 1.0, 1.25],
-                        "description": "By which factor would you like to multiply your lagrange?"
+                        "description": "By which factor would you like to multiply your Lagrange?"
                     }
                 }
         """
         return {
             "lagrange_factor": {
                 "values": [0.75, 1.0, 1.25],
-                "description": "By which factor would you like to multiply your lagrange?"
+                "description": "By which factor would you like to multiply your Lagrange?"
             }
         }
 
@@ -143,11 +143,11 @@ class Ising(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option to retrieve
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

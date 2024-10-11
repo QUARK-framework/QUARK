@@ -32,6 +32,7 @@ from modules.applications.QML.generative_modeling.mappings.Library import Librar
 
 logging.getLogger("NoisyQiskit").setLevel(logging.WARNING)
 
+
 def split_string(s):
     return s.split(' ', 1)[0]
 
@@ -174,6 +175,7 @@ class CustomQiskitNoisyBackend(Library):
 
         :param option: The option to select the submodule
         :return: The selected submodule
+        :raises NotImplemented: If the provided option is not implemented
         """
         if option == "QCBM":
             return QCBM()

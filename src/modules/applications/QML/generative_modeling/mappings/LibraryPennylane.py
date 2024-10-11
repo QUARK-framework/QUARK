@@ -79,6 +79,13 @@ class LibraryPennylane(Library):
         }
 
     def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The option to select the submodule
+        :return: The selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
 
         if option == "QCBM":
             return QCBM()
@@ -169,9 +176,8 @@ class LibraryPennylane(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(
-        circuit: callable, backend: qml.device, config: str, config_dict: dict
-    ) -> tuple[any, any]:
+    def get_execute_circuit(circuit: callable, backend: qml.device, config: str, config_dict: dict) \
+            -> tuple[any, any]:
         """
         This method combines the PennyLane circuit implementation and the selected backend and returns a function
         that will be called during training.

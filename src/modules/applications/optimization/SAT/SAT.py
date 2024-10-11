@@ -20,7 +20,7 @@ import numpy as np
 from nnf import Var, And, Or
 from nnf.dimacs import dump
 
-from modules.applications.Application import Application
+from modules.Core import Core
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
@@ -79,7 +79,7 @@ class SAT(Optimization):
     def get_solution_quality_unit(self) -> str:
         return "Evaluation"
 
-    def get_default_submodule(self, option: str) -> Application:
+    def get_default_submodule(self, option: str) -> Core:
         """
         Returns the default submodule based on the provided option.
 
@@ -114,7 +114,7 @@ class SAT(Optimization):
         """
         Returns the configurable settings for this application.
 
-        :return: Dictionary with cnfigurable settings
+        :return: Dictionary with configurable settings
         .. code-block:: python
 
             return {
@@ -130,14 +130,14 @@ class SAT(Optimization):
                         "custom_input": True,
                         "allow_ranges": True,
                         "postproc": int,
-                        "description": "What clause:variable ratio do you want for the (hard) constraints?"
+                        "description": "What clause-to-variable ratio do you want for the (hard) constraints?"
                     },
                     "clvar_ratio_test": {
                         "values": [2, 3, 4, 4.2, 5],
                         "custom_input": True,
                         "allow_ranges": True,
                         "postproc": int,
-                        "description": "What clause:variable ratio do you want for the tests (soft con.)?"
+                        "description": "What clause-to-variable ratio do you want for the tests (soft con.)?"
                     },
                     "problem_set": {
                         "values": list(range(10)),
@@ -145,7 +145,7 @@ class SAT(Optimization):
                     },
                     "max_tries": {
                         "values": [100],
-                        "description": "Maximum number of tries to create problem"
+                        "description": "Maximum number of tries to create problem?"
                     }
                 }
         """
@@ -162,14 +162,14 @@ class SAT(Optimization):
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": int,
-                "description": "What clause:variable ratio do you want for the (hard) constraints?"
+                "description": "What clause-to-variable ratio do you want for the (hard) constraints?"
             },
             "clvar_ratio_test": {
                 "values": [2, 3, 4, 4.2, 5],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": int,
-                "description": "What clause:variable ratio do you want for the tests (soft constraints)?"
+                "description": "What clause-to-variable ratio do you want for the tests (soft constraints)?"
             },
             "problem_set": {
                 "values": list(range(10)),
@@ -177,7 +177,7 @@ class SAT(Optimization):
             },
             "max_tries": {
                 "values": [100],
-                "description": "Maximum number of tries to create problem"
+                "description": "Maximum number of tries to create problem?"
             }
         }
 
@@ -219,9 +219,9 @@ class SAT(Optimization):
         self.application = {}
 
         def _generate_3sat_clauses(nr_clauses, nr_vars, satisfiable, rseed, nr_tries):
-            # iterate over the desired number of attempts: break if we find a solvable instance.
+            # Iterate over the desired number of attempts: break if we find a solvable instance.
             for attempt in range(nr_tries):
-                # initialize random number generator -- multiply the attempt to traverse distinct random seeds
+                # Initialize random number generator -- multiply the attempt to traverse distinct random seeds
                 # for the hard and soft constraints, respectively (since rseed of the hard and soft constraints differs
                 # by 1).
                 rng = np.random.default_rng(rseed + attempt * 2)
@@ -280,7 +280,7 @@ class SAT(Optimization):
         Validate a given solution against the constraints.
 
         :param solution: The solution to validate
-        :return: True if the solution is valid, False otherwise, time it took to complete
+        :return: True if the solution is valid, False otherwise, and time it took to complete
         """
         start = start_time_measurement()
 

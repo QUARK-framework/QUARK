@@ -69,7 +69,8 @@ class RandomPVC(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the PVC graph in a greedy fashion.
 
@@ -79,7 +80,7 @@ class RandomPVC(Solver):
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """
-        # Deep copy since we are modifying the graph. This ensures that the original graph remains unchanges
+        # Deep copy since we are modifying the graph. This ensures that the original graph remains unchanged
         # with a different graph
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()

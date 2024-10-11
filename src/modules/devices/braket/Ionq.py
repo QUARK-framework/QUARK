@@ -27,6 +27,9 @@ class Ionq(Braket):
     def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-east-1::device/qpu/ionq/Harmony'):
         """
         Constructor method for initializing IonQ device on Amazon Braket.
+
+        :param device_name: Name of the device
+        :param arn: Amazon resource name for the IonQ device
         """
         super().__init__(region="us-east-1", device_name=device_name, arn=arn)
         self.submodule_options = []
@@ -47,11 +50,11 @@ class Ionq(Braket):
         """
         return {}
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

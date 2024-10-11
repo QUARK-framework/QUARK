@@ -55,7 +55,7 @@ class ChoiQUBO(Mapping):
             return {
                     "hard_reward": {
                         "values": [0.1, 0.5, 0.9, 0.99],
-                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard cons.)"
+                        "description": "What Bh/A ratio do you want? (How strongly to enforce hard constraints)"
                     },
                     "soft_reward": {
                         "values": [0.1, 1, 2],
@@ -69,7 +69,7 @@ class ChoiQUBO(Mapping):
                 "values": [0.1, 0.5, 0.9, 0.99],
                 "description": (
                     "What Bh/A ratio do you want?" 
-                    "(How strongly to enforce hard cons.)"
+                    "(How strongly to enforce hard constraints)"
                 )
             },
             "soft_reward": {
@@ -100,18 +100,18 @@ class ChoiQUBO(Mapping):
         solving MaxSAT then corresponds to solving an instance of the Maximal Independent Set problem.
         See Andrew Lucas (2014), or the original publication by Choi (1004.2226).
 
-        :param problem: A tuple conatining hard and soft constraints
+        :param problem: A tuple containing hard and soft constraints
         :param config: Config with the parameters specified in Config class
         :return: Dictionary containing the QUBO representation and the time taken
         """
         start = start_time_measurement()
 
         hard_constraints, soft_constraints = problem
-        A = 1
-        Bh = config['hard_reward'] * A
+        a = 1
+        bh = config['hard_reward'] * a
         # divide Bh by the number of test clauses, such that fulfilling a test result is less favourable than
         # satisfying a constraint, which aim to prioritize.
-        Bs = Bh * config['soft_reward'] / len(soft_constraints)
+        bs = bh * config['soft_reward'] / len(soft_constraints)
 
         # Count the number of different variables that appear in the vehicle options problem:
         self.nr_vars = len(hard_constraints.vars().union(And(soft_constraints).vars()))
@@ -125,7 +125,7 @@ class ChoiQUBO(Mapping):
             # Connect the literals within one clause
             for cmb in combinations(literals, 2):
                 # Add a weight for each edge within clause
-                curr_edges[cmb] = A
+                curr_edges[cmb] = a
             # Add the occurrences of the variables to the occurrences dictionary
             for var in clause.children:
                 if var.name not in curr_lit_occ.keys():
@@ -152,7 +152,7 @@ class ChoiQUBO(Mapping):
                     # Employ the notation from nnf, where the tilde symbol ~ corresponds to negation.
                     lit_true, lit_false = f"{literal}-{pos_true}", f"~{literal}-{pos_false}"
                     # Add a penalty for each such edge:
-                    edges[(lit_true, lit_false)] = A
+                    edges[(lit_true, lit_false)] = a
 
         # Collect all different nodes that we have in our graph, omitting repetitions:
         node_set = set([])
@@ -169,21 +169,21 @@ class ChoiQUBO(Mapping):
             """Small helper function that maps the nodes of an edge to binary variables"""
             return relabel_dict[pair[0]], relabel_dict[pair[1]]
 
-        # Save the Qubo corresponding to the graph.
-        Q = {_remap_pair(key): val for key, val in edges.items()}
+        # Save the QUBO corresponding to the graph.
+        q = {_remap_pair(key): val for key, val in edges.items()}
 
         for v in node_list:
             # Add different energy rewards depending on whether it is a hard or a soft constraint
             if int(v.split('-')[-1]) < constraints_max_ind:
                 # if hard cons, add -Bh as the reward
-                Q[_remap_pair((v, v))] = -Bh
+                q[_remap_pair((v, v))] = -bh
             else:
                 # for soft constraints, add -Bs
-                Q[_remap_pair((v, v))] = -Bs
+                q[_remap_pair((v, v))] = -bs
 
-        logging.info(f"Converted to Choi Qubo with {len(node_list)} binary variables. Bh={config['hard_reward']},"
-                     f" Bs={Bs}.")
-        return {'Q': Q}, end_time_measurement(start)
+        logging.info(f"Converted to Choi QUBO with {len(node_list)} binary variables. Bh={config['hard_reward']},"
+                     f" Bs={bs}.")
+        return {'Q': q}, end_time_measurement(start)
 
     def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
@@ -193,28 +193,28 @@ class ChoiQUBO(Mapping):
         :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
-        # we define the literals list, so that we can check the self-consistency of the solution. That is, we save all
+        # We define the literals list, so that we can check the self-consistency of the solution. That is, we save all
         # assignments proposed by the annealer, and see if there is no contradiction. (In principle a solver
         # could mandate L3 = True and L3 = False, resulting in a contradiction.)
         literals = []
-        # assignments saves the actual solution
+        # Assignments saves the actual solution
         assignments = []
 
         for node, tf in solution.items():
             # Check if node is included in the set (i.e. if tf is True (1))
             if tf:
-                # convert back to the language of literals
+                # Convert back to the language of literals
                 lit_str = self.reverse_dict[node]
                 # Check if the literal is negated:
                 if lit_str.startswith('~'):
-                    # remove the negation symbol
+                    # Remove the negation symbol
                     lit_str = lit_str.replace('~', '')
-                    # save a negated literal object, will be used for self-consistency check
+                    # Save a negated literal object, will be used for self-consistency check
                     lit = Var(lit_str).negate()
-                    # add the negated literal to the assignments, removing the (irrelevant) position part
+                    # Add the negated literal to the assignments, removing the (irrelevant) position part
                     assignments.append(Var(lit_str.split('-')[0]).negate())
                 else:
-                    # if literal is true, no ~ symbol needs to be removed:
+                    # If literal is true, no ~ symbol needs to be removed:
                     lit = Var(lit_str)
                     assignments.append(Var(lit_str.split('-')[0]))
                 literals.append(lit)
@@ -226,10 +226,10 @@ class ChoiQUBO(Mapping):
 
         # If the solution is consistent, find and add potentially missing variables:
         assignments = sorted(set(assignments))
-        # find missing vars, or more precisely, their labels:
+        # Find missing vars, or more precisely, their labels:
         missing_vars = set(range(self.nr_vars)) - {int(str(a).replace('L', '').replace('~', '')) for a in assignments}
 
-        # add the variables that found were missing:
+        # Add the variables that found were missing:
         for nr in missing_vars:
             assignments.append(Var(f'L{nr}'))
 
@@ -237,11 +237,11 @@ class ChoiQUBO(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

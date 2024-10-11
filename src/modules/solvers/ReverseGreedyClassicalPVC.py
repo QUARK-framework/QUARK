@@ -69,13 +69,14 @@ class ReverseGreedyClassicalPVC(Solver):
         """
         pass
 
-    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float]:
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the PVC graph in a greedy fashion. We take the worst choice at each step.
 
         :param mapped_problem: Graph representing a PVC problem
         :param device_wrapper: Local device
-        :param config: Empty dicT
+        :param config: Empty dict
         :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
         """

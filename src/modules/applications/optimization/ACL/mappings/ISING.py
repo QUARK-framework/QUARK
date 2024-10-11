@@ -36,7 +36,7 @@ class Ising(Mapping):
         """
         super().__init__()
         self.submodule_options = ["QAOA", "QiskitQAOA"]
-        self.global_variables = 0
+        self.global_variables = []
         logging.warning("Currently, all scenarios are too large to be solved with an Ising model.")
         logging.warning("Consider using another mapping until the modelling is refined.")
 
@@ -120,6 +120,7 @@ class Ising(Mapping):
         """
         Use Ising mapping of qiskit-optimize.
 
+        :param problem: Dict containing the problem parameters
         :param config: Config with the parameters specified in Config class
         :return: Dict with the Ising, time it took to map it
         """
@@ -157,7 +158,7 @@ class Ising(Mapping):
         """
         Maps the solution back to the representation needed by the ACL class for validation/evaluation.
 
-        :param solution: bit_string containing the solution
+        :param solution: Dict with a bit_string containing the solution
         :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
@@ -192,10 +193,11 @@ class Ising(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: Default submodule
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415

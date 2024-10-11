@@ -74,11 +74,11 @@ class PVC(Optimization):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option to retrieve
-        :return: The default submodule for the given option
-        :return NotImplementedError: If the submodule option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "Ising":
             from modules.applications.optimization.PVC.mappings.ISING import Ising  # pylint: disable=C0415
@@ -108,7 +108,7 @@ class PVC(Optimization):
             return {
                     "seams": {
                         "values": list(range(1, 18)),
-                        "description": "How many seams does your graph need?"
+                        "description": "How many seams should be sealed?"
                     }
                 }
         """
@@ -116,7 +116,7 @@ class PVC(Optimization):
             "seams": {
                 "values": list(range(1, 18)),
                 # In the current implementation the graph can only be as large as the reference input graph
-                "description": "How many seams does you graph need?"
+                "description": "How many seams should be sealed?"
             }
         }
 
@@ -162,13 +162,13 @@ class PVC(Optimization):
             logging.error("Graph is not connected!")
             raise ValueError("Graph is not connected!")
 
-        #Gather unique configurations and tools
+        # Gather unique configurations and tools
         config = [x[2]['c_start'] for x in graph.edges(data=True)]
         config = list(set(config + [x[2]['c_end'] for x in graph.edges(data=True)]))
         tool = [x[2]['t_start'] for x in graph.edges(data=True)]
         tool = list(set(tool + [x[2]['t_end'] for x in graph.edges(data=True)]))
 
-        # fill the rest of the missing edges with high values
+        # Fill the rest of the missing edges with high values
         current_edges = [
             (edge[0], edge[1], edge[2]['t_start'], edge[2]['t_end'], edge[2]['c_start'], edge[2]['c_end'])
             for edge in graph.edges(data=True)
@@ -185,7 +185,7 @@ class PVC(Optimization):
 
         missing_edges = [item for item in all_possible_edges if item not in current_edges]
 
-        # add these edges with very high values
+        # Add these edges with very high values
         for edge in missing_edges:
             graph.add_edge(
                 edge[0], edge[1], c_start=edge[4], t_start=edge[2], c_end=edge[5], t_end=edge[3], weight=100000
@@ -199,7 +199,7 @@ class PVC(Optimization):
         self.application = graph
         return graph.copy()
 
-    def process_solution(self, solution: dict) -> tuple[list, bool]:
+    def process_solution(self, solution: dict) -> tuple[list, float]:
         """
         Converts solution dictionary to list of visited seams.
 
@@ -235,7 +235,7 @@ class PVC(Optimization):
                 if node is None:
                     route[idx] = nodes_unassigned.pop(0)
 
-        # cycle solution to start at provided start location
+        # Cycle solution to start at provided start location
         if start is not None and route[0] != start:
             idx = route.index(start)
             route = route[idx:] + route[:idx]

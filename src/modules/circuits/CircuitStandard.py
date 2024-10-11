@@ -71,14 +71,14 @@ class CircuitStandard(Circuit):
             }
         }
 
-    def get_default_submodule(
-            self, option: str
-    ) -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(self, option: str) \
+            -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         """
         Returns the default submodule based on the given option.
 
         :param option: The submodule option to select
         :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
         """
         if option == "LibraryQiskit":
             return LibraryQiskit()

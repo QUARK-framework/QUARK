@@ -35,9 +35,7 @@ class TSP(Optimization):
 
     TSP as graph problem: The solution to the TSP can be viewed as a specific ordering of the vertices in a weighted
     graph. Taking an undirected weighted graph, nodes correspond to the graph's nodes, with paths corresponding to the
-    graph's edges, and a path's distance is the edge's weight. Typically, the graph is complete where each pair of nodes
-    is connected by an edge. If no connection exists between two nodes, one can add an arbitrarily long edge to complete
-    the graph without affecting the optimal tour."
+    graph's edges, and a path's distance is the edge's weight."
     (source: https://github.com/aws/amazon-braket-examples/tree/main/examples)
     """
 
@@ -66,7 +64,7 @@ class TSP(Optimization):
         """
         Returns the unit of measurement for the solution quality.
 
-        :return: The unit of measurement for the solution quality.
+        :return: Unit of measurement for the solution quality
         """
         return "Tour cost"
 
@@ -74,8 +72,9 @@ class TSP(Optimization):
         """
         Returns the default submodule based on the given option.
 
-        :param option: The chosen submodule option.
-        :return: The corresponding submodule instance.
+        :param option: The chosen submodule option
+        :return: The corresponding submodule instance
+        :raises NotImplemented: If the provided option is not implemented
         """
         if option == "Ising":
             from modules.applications.optimization.TSP.mappings.ISING import Ising  # pylint: disable=C0415
@@ -214,7 +213,7 @@ class TSP(Optimization):
             if val and (node not in route):
                 route[timestep] = node
 
-        # check whether every timestep has only 1 node flagged
+        # Check whether every timestep has only 1 node flagged
         for i in nodes:
             relevant_nodes = []
             relevant_timesteps = []
@@ -227,12 +226,12 @@ class TSP(Optimization):
                 # timestep or nodes have more than 1 or 0 flags
                 return None, end_time_measurement(start_time)
 
-        # check validity of solution
+        # Check validity of solution
         if sum(value == 1 for value in solution.values()) > len(route):
             logging.warning("Result is longer than route! This might be problematic!")
             return None, end_time_measurement(start_time)
 
-        # run heuristic replacing None values
+        # Run heuristic replacing None values
         if None in route:
             # get not assigned nodes
             nodes_unassigned = [node for node in list(nodes) if node not in route]
@@ -242,13 +241,13 @@ class TSP(Optimization):
                     route[idx] = nodes_unassigned[0]
                     nodes_unassigned.remove(route[idx])
 
-        # cycle solution to start at provided start location
+        # Cycle solution to start at provided start location
         if start is not None and route[0] != start:
-            # rotate to put the start in front
+            # Rotate to put the start in front
             idx = route.index(start)
             route = route[idx:] + route[:idx]
 
-        # print route
+        # Log route
         parsed_route = ' ->\n'.join([f' Node {visit}' for visit in route])
         logging.info(f"Route found:\n{parsed_route}")
 
@@ -275,7 +274,7 @@ class TSP(Optimization):
 
     def evaluate(self, solution: list) -> tuple[float, float]:
         """
-        Find distance for given route e.g. [0, 4, 3, 1, 2] and original data.
+        Find distance for given route and original data.
 
         :param solution: List containing the nodes of the solution
         :return: Tour cost and the time it took to calculate it

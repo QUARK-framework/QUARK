@@ -201,51 +201,51 @@ class PennylaneQAOA(Solver):
         return scale * data / np.max(np.abs(data))
 
     @staticmethod
-    def qaoa_operators_from_ising(J: any, t: any, scale: float = 1.0) -> tuple[any, any]:
+    def qaoa_operators_from_ising(j: any, t: any, scale: float = 1.0) -> tuple[any, any]:
         """
-        Generates pennylane cost and mixer hamiltonians from the Ising matrix J and vector t.
+        Generates pennylane cost and mixer Hamiltonians from the Ising matrix J and vector t.
 
-        :param J: J matrix
+        :param j: J matrix
         :param t: t vector
         :param scale: Scaling factor
         :return: Cost Hamiltonian and mixer Hamiltonian
         """
         # Define the scaling factor
-        scaling_factor = scale * max(np.max(np.abs(J.flatten())), np.max(np.abs(t)))
+        scaling_factor = scale * max(np.max(np.abs(j.flatten())), np.max(np.abs(t)))
 
         # Scale the coefficients
-        J /= scaling_factor
+        j /= scaling_factor
         t /= scaling_factor
 
         sigzsigz_arr = [
-            qml.PauliZ(i) @ qml.PauliZ(j) for i in range(len(J)) for j in range(len(J))
+            qml.PauliZ(i) @ qml.PauliZ(k) for i in range(len(j)) for k in range(len(j))
         ]
 
         sigz_arr = [qml.PauliZ(i) for i in range(len(t))]
-        J_real = np.real(J.flatten())
+        j_real = np.real(j.flatten())
         t_real = np.real(t)
-        h_cost = qml.simplify(qml.Hamiltonian([*t_real, *J_real.flatten()], [*sigz_arr, *sigzsigz_arr]))
+        h_cost = qml.simplify(qml.Hamiltonian([*t_real, *j_real.flatten()], [*sigz_arr, *sigzsigz_arr]))
 
         # Definition of the mixer hamiltonian
-        h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(J)))
+        h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(j)))
 
         return h_cost, h_mixer
 
     # pylint: disable=R0915
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, any, float]:
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
         Runs Pennylane QAOA on the Ising problem.
 
-        :param mapped_problem: Ising
+        :param mapped_problem: Dict containing problem parameters mapped to the Ising model
         :param device_wrapper: Device to run the problem on
         :param config: QAOA solver settings
         :param kwargs: Contains store_dir for the plot of the optimization
         :return: Solution, the time it took to compute it and optional additional information
         """
-        J = mapped_problem['J']
+        j = mapped_problem['J']
         t = mapped_problem['t']
-        wires = J.shape[0]
-        cost_h, mixer_h = self.qaoa_operators_from_ising(J, t, scale=config['coeff_scale'])
+        wires = j.shape[0]
+        cost_h, mixer_h = self.qaoa_operators_from_ising(j, t, scale=config['coeff_scale'])
 
         # set up the problem
         try:
@@ -275,13 +275,13 @@ class PennylaneQAOA(Solver):
             if device_wrapper.device == 'qulacs.simulator':
                 dev = qml.device(device_wrapper.device, wires=wires, shots=config['shots'], gpu=True)
             elif device_wrapper.device in ['lightning.qubit', 'lightning.gpu']:
-                # no number shots as diff method will be adjoint backprop for these devices
+                # No number shots as diff method will be adjoint backprop for these devices
                 if diff_method in ["adjoint", "backprop"]:
                     dev = qml.device(device_wrapper.device, wires=wires, shots=None, batch_obs=True)
                 else:
                     dev = qml.device(device_wrapper.device, wires=wires, batch_obs=True, shots=config['shots'])
             elif device_wrapper.device == 'default.qubit':
-                # no number shots as diff method will be adjoint backprop for these devices
+                # No number shots as diff method will be adjoint backprop for these devices
                 if diff_method in ["adjoint", "backprop"]:
                     dev = qml.device(device_wrapper.device, shots=None, wires=wires)
                 else:
@@ -339,7 +339,7 @@ class PennylaneQAOA(Solver):
                      f"Optimization start...")
 
         additional_solver_information = {}
-        min_param, min_cost, cost_pt, params_list, x= None, None, [], [], []
+        min_param, min_cost, cost_pt, params_list, x = None, None, [], [], []
         run_id = round(time())
         start = start_time_measurement()
 
@@ -415,7 +415,6 @@ class PennylaneQAOA(Solver):
             best_bitstring = max(probs, key=probs.get)
             return best_bitstring, probs
 
-        best_bitstring, probs = None, None
         if config['shots'] is None or diff_method in ["backprop", "adjoint"]:
             best_bitstring, probs = evaluate_params_probs(params)
         else:
@@ -438,7 +437,7 @@ class PennylaneQAOA(Solver):
             bitstring_list.append(bitstring)
 
         # Save the cost, best bitstring, variational parameters per iteration as well as the final prob. distribution
-        # TODO: Maybe this can be done more efficient, e.g. only saving the circuit and its weights?
+        # TODO: Maybe this can be done more efficient, e.g., only saving the circuit and its weights?
         json_data = {
             'cost': cost_pt,
             'bitstrings': bitstring_list,
@@ -461,18 +460,17 @@ def monkey_init_array(self):
 
 def _pseudo_decor(fun, device):
     """
-    Massive shoutout to this guy: https://stackoverflow.com/a/25827070/10456906
     We use this decorator for measuring execute and batch_execute.
     """
 
-    # Magic sauce to lift the name and doc of the function
+    # Lift the name and doc of the function
     @wraps(fun)
     def ret_fun(*args, **kwargs):
-        # Pre function execution stuff here
+        # Pre function execution here
         from time import time  # pylint: disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
-        # Post execution stuff here
+        # Post execution here
         device.timings.append(round(time() * 1000 - start_timing, 3))
         return returned_value
 

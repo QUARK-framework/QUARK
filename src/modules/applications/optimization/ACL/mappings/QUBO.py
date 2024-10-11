@@ -26,6 +26,8 @@ from qiskit_optimization.converters import (
 from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
+# TODO Large chunks of this code is duplicated in ACL.mappings.ISING -> unify
+
 
 class Qubo(Mapping):
     """
@@ -38,7 +40,7 @@ class Qubo(Mapping):
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
-        self.global_variables = 0
+        self.global_variables = []
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -93,7 +95,7 @@ class Qubo(Mapping):
                     qp.integer_var(lowerbound=lb, upperbound=ub, name=name)
 
         # Objective function
-        obj_arguments = {arg["name"]: arg["value"] for arg in problem["objective"]["coefficients"] }
+        obj_arguments = {arg["name"]: arg["value"] for arg in problem["objective"]["coefficients"]}
 
         # Maximize
         if problem["parameters"]["sense"] == -1:
@@ -183,12 +185,12 @@ class Qubo(Mapping):
                             and variable in argument and variable2 in argument and variable > variable2
                         ):
                             parameter += argument[0]
-                                # this value is already taking into account the factor 2 from quadratic term
-                                # For the variables on the diagonal, if the parameter is zero
-                                # we still have to check the sign in
-                                # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
-                    elif isinstance(argument, str) and variable in argument \
-                        and variable2 in argument and variable == variable2:
+                            # This value is already taking into account the factor 2 from quadratic term
+                            # For the variables on the diagonal, if the parameter is zero
+                            # We still have to check the sign in
+                            # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
+                    elif (isinstance(argument, str) and variable in argument
+                          and variable2 in argument and variable == variable2):
                         if "-" in argument:
                             parameter += -1
 
@@ -203,6 +205,7 @@ class Qubo(Mapping):
         """
         Converts linear program created with pulp to quadratic program to Ising with qiskit to QUBO matrix.
 
+        :param problem: Dict containing the problem parameters
         :param config: Config with the parameters specified in Config class
         :return: Dict with the QUBO, time it took to map it
         """
@@ -259,10 +262,11 @@ class Qubo(Mapping):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: The submodule option
-        :return: Default submodule
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415

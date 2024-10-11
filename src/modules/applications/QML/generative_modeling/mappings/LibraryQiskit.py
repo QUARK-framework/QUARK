@@ -83,17 +83,24 @@ class LibraryQiskit(Library):
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
                            "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1", "ibm_brisbane IBM Quantum Platform"],
-                "description": "Which backend do you want to use? (aer_statevector_simulator\
-                             uses the measurement probability vector, the others are shot based)"
+                "description": "Which backend do you want to use? (aer_statevector_simulator uses the measurement "
+                               "probability vector, the others are shot based)"
             },
             "n_shots": {
                 "values": [100, 1000, 10000, 1000000],
-                "description": "How many shots do you want use for estimating the PMF of the model?\
-                 (If the aer_statevector_simulator selected, only relevant for studying generalization)"
+                "description": "How many shots do you want use for estimating the PMF of the model? "
+                               "(If the aer_statevector_simulator selected, only relevant for studying generalization)"
             }
         }
 
     def get_default_submodule(self, option: str) -> Union[QCBM, QGAN, Inference]:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The option to select the submodule
+        :return: The selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "QCBM":
             return QCBM()
         elif option == "QGAN":
@@ -194,8 +201,8 @@ class LibraryQiskit(Library):
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
         elif config == "ionQ_Harmony":
-            from modules.devices.braket.Ionq import Ionq # pylint: disable=C0415
-            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
+            from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
+            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider  # pylint: disable=C0415
             device_wrapper = Ionq("ionQ", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
             backend = AWSBraketBackend(
                 device=device_wrapper.device,
@@ -206,8 +213,8 @@ class LibraryQiskit(Library):
                 backend_version="2",
             )
         elif config == "Amazon_SV1":
-            from modules.devices.braket.SV1 import SV1 # pylint: disable=C0415
-            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider # pylint: disable=C0415
+            from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
+            from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider  # pylint: disable=C0415
             device_wrapper = SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
             backend = AWSBraketBackend(
                 device=device_wrapper.device,
@@ -224,8 +231,8 @@ class LibraryQiskit(Library):
         return backend
 
     @staticmethod
-    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict
-    ) -> tuple[any, any]:  # pylint: disable=W0221,R0915
+    def get_execute_circuit(circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict) \
+            -> tuple[any, any]:  # pylint: disable=W0221,R0915
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
         that will be called during training.

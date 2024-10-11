@@ -28,7 +28,7 @@ from utils import start_time_measurement, end_time_measurement
 class DataHandler(Core, ABC):
     """
     The task of the DataHandler module is to translate the application’s data
-    and problem specification into preproccesed format.
+    and problem specification into preprocessed format.
     """
 
     def __init__(self, name: str):
@@ -52,7 +52,7 @@ class DataHandler(Core, ABC):
             {"name": "tensorboard", "version": "2.17.0"}
         ]
 
-    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[any, float]:
         """
         In this module, the preprocessing step is transforming the data to the correct target format.
 
@@ -73,7 +73,7 @@ class DataHandler(Core, ABC):
         """
         In this module, the postprocessing step is transforming the data to the correct target format.
 
-        :param input_data: any
+        :param input_data: Original data
         :param config: Config specifying the parameters of the training
         :param kwargs: Optional additional settings
         :return: Tuple with an output_dictionary and the time it took
@@ -90,13 +90,13 @@ class DataHandler(Core, ABC):
 
         if self.generalization_mark is not None:
             self.metrics.add_metric_batch({"KL_best": evaluation["KL_best"]})
-            metrics, _ = self.generalisation()
+            metrics, _ = self.generalization()
 
-            # Save generalisation metrics
+            # Save generalization metrics
             with open(f"{store_dir_iter}/record_gen_metrics_{kwargs['rep_count']}.pkl", 'wb') as f:
                 pickle.dump(metrics, f)
 
-            self.metrics.add_metric_batch({"generalisation_metrics": metrics})
+            self.metrics.add_metric_batch({"generalization_metrics": metrics})
 
         else:
             self.metrics.add_metric_batch({"KL_best": evaluation})
@@ -167,9 +167,9 @@ class DataHandler(Core, ABC):
         """
         pass
 
-    def generalisation(self) -> tuple[dict, float]:
+    def generalization(self) -> tuple[dict, float]:
         """
-        Compute generalisation metrics.
+        Computes generalization metrics.
 
         :return: Evaluation and the time it took to create it
         """
@@ -181,7 +181,7 @@ class DataHandler(Core, ABC):
     @abstractmethod
     def evaluate(self, solution: any) -> tuple[any, float]:
         """
-        Compute the best loss values.
+        Computes the best loss values.
 
         :param solution: Solution data
         :return: Evaluation data and the time it took to create it

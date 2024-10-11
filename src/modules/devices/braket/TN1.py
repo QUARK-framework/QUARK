@@ -29,7 +29,7 @@ class TN1(Braket):
         Constructor method.
 
         :param device_name: Name of the device
-        :param arn: Amazon Resource Name for the TN1 simulator.
+        :param arn: Amazon resource name for the TN1 simulator
         """
         super().__init__(device_name=device_name, arn=arn)
         self.submodule_options = []
@@ -50,11 +50,11 @@ class TN1(Braket):
         """
         return {}
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> None:
         """
         Raises ValueError as this module has no submodules.
 
         :param option: Option name
-        :raises ValueError: If called, since this module has no submodules.
+        :raises ValueError: If called, since this module has no submodules
         """
         raise ValueError("This module has no submodules.")

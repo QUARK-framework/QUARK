@@ -19,6 +19,7 @@ import tsplib95
 # Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
 filename = "dsj1000.tsp"
 
+
 def main():
     """
     Load a TSP problem, remove unnecessary edges, and save the reference graph.
@@ -41,6 +42,7 @@ def main():
         pickle.dump(graph, file, pickle.HIGHEST_PROTOCOL)
 
     print("Saved graph as reference_graph.gpickle")
+
 
 if __name__ == '__main__':
     main()

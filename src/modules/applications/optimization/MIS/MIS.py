@@ -31,7 +31,7 @@ class MIS(Optimization):
     """
     The maximum independent set (MIS) problem is a combinatorial optimization problem that seeks to find the largest
     subset of vertices in a graph such that no two vertices are adjacent. MIS has numerous application in computer
-    science, network design, resource allocation, and even in physics, where finding optimal confiigurations can
+    science, network design, resource allocation, and even in physics, where finding optimal configurations can
     solve fundamental problems related to stability and energy minimization.
 
     In a graph, the maximum independent set represents a set of nodes such that no two nodes share an edge. This
@@ -70,11 +70,11 @@ class MIS(Optimization):
 
     def get_default_submodule(self, option: str) -> Core:
         """
-        Returns the default submodule for the given option.
+        Returns the default submodule based on the provided option.
 
-        :param option: Submodule option to retrieve
-        :return: Corresponding submodule object
-        :raises NotImplementedError: If the option is not implemented
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
         """
         if option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415

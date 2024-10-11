@@ -62,9 +62,15 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(
-            self, option: str
-    ) ->Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(self, option: str) \
+            -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":

@@ -69,7 +69,8 @@ class RandomSAT(Solver):
         """
         pass
 
-    def run(self, mapped_problem: WCNF, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[list, float]:
+    def run(self, mapped_problem: WCNF, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[list, float, dict]:
         """
         The given application is a problem instance from the pysat library. 
         This generates a random solution to the problem.
@@ -81,7 +82,7 @@ class RandomSAT(Solver):
         :return: Solution, the time it took to compute it and optional additional information
         """
         logging.info(
-            f"Got problem with {mapped_problem.nv} variables, {len(mapped_problem.hard)} constraints and"
+            f"Got SAT problem with {mapped_problem.nv} variables, {len(mapped_problem.hard)} constraints and"
             f" {len(mapped_problem.soft)} tests."
         )
 

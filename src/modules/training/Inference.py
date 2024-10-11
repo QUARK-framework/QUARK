@@ -77,6 +77,12 @@ class Inference(Training):
         pretrained: str
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")
 
     def start_training(self, input_data: dict, config: Config, **kwargs: dict) -> dict:

@@ -97,7 +97,7 @@ def _import_class(module_path: str, class_name: str, base_dir: str = None) -> an
 
 def checkbox(key: str, message: str, choices: list) -> dict:
     """
-    Wrapper method to avoid empty responses in checkbox.
+    Wrapper method to avoid empty responses in checkboxes.
 
     :param key: Key for response dict
     :param message: Message for the user
@@ -157,12 +157,12 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     :return: The adapted JSON
     """
     assert type(j) in [dict, list], f"unexpected type:{type(j)}"
-    if type(j) == list:
+    if type(j) is list:
         for entry in j:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-            if type(j[attr]) == "submodules":
+            if type(j[attr]) is "submodules":
                 _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]

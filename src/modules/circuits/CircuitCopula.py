@@ -17,10 +17,10 @@ from itertools import combinations
 from scipy.special import binom
 
 from modules.circuits.Circuit import Circuit
-from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
-from modules.applications.QML.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
-from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
-from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
+from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
+from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
+from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
 class CircuitCopula(Circuit):

@@ -24,7 +24,7 @@ from qiskit.quantum_info import Statevector
 from modules.training.QCBM import QCBM
 from modules.training.QGAN import QGAN
 from modules.training.Inference import Inference
-from modules.applications.QML.generative_modeling.mappings.Library import Library
+from modules.applications.qml.generative_modeling.mappings.Library import Library
 
 logging.getLogger("qiskit").setLevel(logging.WARNING)
 

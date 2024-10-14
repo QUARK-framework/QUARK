@@ -15,7 +15,7 @@
 import numpy as np
 import pandas as pd
 
-from modules.applications.QML.generative_modeling.transformations.Transformation import Transformation
+from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.circuits.CircuitCopula import CircuitCopula
 
 

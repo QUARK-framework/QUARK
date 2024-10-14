@@ -20,8 +20,8 @@ from typing import TypedDict
 import numpy as np
 
 from modules.circuits.CircuitCardinality import CircuitCardinality
-from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import DataHandler
-from modules.applications.QML.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
+from modules.applications.qml.generative_modeling.data.data_handler.DataHandler import DataHandler
+from modules.applications.qml.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
 from utils import start_time_measurement, end_time_measurement
 
 

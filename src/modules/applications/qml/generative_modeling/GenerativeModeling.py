@@ -16,9 +16,9 @@ from typing import Union
 from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.Application import Application
-from modules.applications.QML.QML import QML
-from modules.applications.QML.generative_modeling.data.data_handler.DiscreteData import DiscreteData
-from modules.applications.QML.generative_modeling.data.data_handler.ContinuousData import ContinuousData
+from modules.applications.qml.QML import QML
+from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
+from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 
 
 class GenerativeModeling(QML):
@@ -74,8 +74,8 @@ class GenerativeModeling(QML):
 
             return {
                     "n_qubits": {
-                    "values": [4, 6, 8, 10, 12],
-                    "description": "How many qubits do you want to use?"
+                        "values": [4, 6, 8, 10, 12],
+                        "description": "How many qubits do you want to use?"
                     }
                 }
         """

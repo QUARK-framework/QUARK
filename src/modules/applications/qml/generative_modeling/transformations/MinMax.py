@@ -15,7 +15,7 @@
 from typing import Union
 import numpy as np
 
-from modules.applications.QML.generative_modeling.transformations.Transformation import Transformation
+from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 

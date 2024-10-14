@@ -73,7 +73,7 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
     logging.info("  A Framework for Quantum Computing Application Benchmarking  ")
     logging.info("                                                              ")
-    logging.info("        Licensed under the Apache License, Version 2.1        ")
+    logging.info("        Licensed under the Apache License, Version 2.0        ")
     logging.info(" ============================================================ ")
 
 

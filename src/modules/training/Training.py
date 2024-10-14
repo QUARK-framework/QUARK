@@ -78,7 +78,7 @@ class Training(Core, ABC):
     @abstractmethod
     def start_training(self, input_data: dict, config: any, **kwargs: dict) -> dict:
         """
-        This function starts the training of QML model or deploys a pretrained model.
+        This function starts the training of qml model or deploys a pretrained model.
 
         :param input_data: A representation of the quantum machine learning model that will be trained
         :param config: Config specifying the parameters of the training (dict-like Config type defined in children)

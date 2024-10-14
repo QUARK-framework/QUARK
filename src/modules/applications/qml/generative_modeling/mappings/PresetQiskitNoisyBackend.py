@@ -26,7 +26,7 @@ from qiskit_aer.noise import NoiseModel
 
 from modules.training.QCBM import QCBM
 from modules.training.Inference import Inference
-from modules.applications.QML.generative_modeling.mappings.Library import Library
+from modules.applications.qml.generative_modeling.mappings.Library import Library
 
 logging.getLogger("NoisyQiskit").setLevel(logging.WARNING)
 
@@ -63,24 +63,36 @@ class PresetQiskitNoisyBackend(Library):
         """
         Returns the configurable settings for the Qiskit Library.
 
-        :return: Dictionary with configurable settings.
-        .. code-block:: python
+            :return: Dictionary with configurable settings.
+            .. code-block:: python
 
-            return {
+                {
                 "backend": {
-                    "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
-                                "cusvaer_simulator (only available in cuQuantum applicance)",
-                                "aer_simulator_gpu",
-                                "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1"],
-                    "description": "Which backend do you want to use? (aer_statevector_simulator
-                                    uses the measurement probability vector, the others are shot based)"
+                    "values": ["aer_simulator_gpu", "aer_simulator_cpu"],
+                    "description": "Which backend do you want to use? "
+                                   "In the NoisyQiskit Module only aer_simulators can be used."
+                },
+
+                "simulation_method": {
+                    "values": ["automatic", "statevector", "density_matrix", "cpu_mps"],  # TODO Change names
+                    "description": "What simulation methode should be used"
                 },
 
                 "n_shots": {
                     "values": [100, 1000, 10000, 1000000],
-                    "description": "How many shots do you want use for estimating the PMF of the model?
-                                    (If the aer_statevector_simulator selected,
-                                    only relevant for studying generalization)"
+                    "description": "How many shots do you want use for estimating the PMF of the model?"
+                },
+
+                "transpile_optimization_level": {
+                    "values": [1, 2, 3, 0],
+                    "description": "Switch between different optimization levels in the Qiskit transpile routine. "
+                                   "1: light optimization, 2: heavy optimization, 3: even heavier optimization, "
+                                   "0: no optimization. Level 1 recommended as standard option."
+                },
+
+                "noise_configuration": {
+                    "values": value_list,
+                    "description": "What noise configuration do you want to use?"
                 }
             }
         """

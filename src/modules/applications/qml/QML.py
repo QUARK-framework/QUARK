@@ -19,7 +19,7 @@ from modules.applications.Application import Application
 
 class QML(Application, ABC):
     """
-    QML Module for QUARK, is used by all QML applications.
+    qml Module for QUARK, is used by all qml applications.
     """
 
     @abstractmethod

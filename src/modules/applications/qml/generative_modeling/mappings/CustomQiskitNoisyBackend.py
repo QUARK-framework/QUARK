@@ -264,7 +264,7 @@ class CustomQiskitNoisyBackend(Library):
 
         return backend
 
-    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict # pylint: disable=W0221
+    def get_execute_circuit(self, circuit: QuantumCircuit, backend: Backend, config: str, config_dict: dict  # pylint: disable=W0221
                             ) -> tuple[any, any]:
         """
         This method combines the qiskit circuit implementation and the selected backend and returns a function,
@@ -283,7 +283,7 @@ class CustomQiskitNoisyBackend(Library):
         backend = self.decompile_noisy_config(config_dict, n_qubits)
         logging.info(f'Backend in Use: {backend=}')
         optimization_level = self.get_transpile_routine(config_dict['transpile_optimization_level'])
-        seed_transp = 42 # Remove seed if wanted
+        seed_transp = 42  # Remove seed if wanted
         logging.info(f'Using {optimization_level=} with seed: {seed_transp}')
         coupling_map = self.get_coupling_map(config_dict, n_qubits)
 
@@ -299,7 +299,7 @@ class CustomQiskitNoisyBackend(Library):
 
         # Now transpile the circuit after running the pass manager
         circuit_transpiled = transpile(circuit_passed, backend=backend, optimization_level=optimization_level,
-                                       seed_transpiler=seed_transp,coupling_map=coupling_map)
+                                       seed_transpiler=seed_transp, coupling_map=coupling_map)
         logging.info(f'Circuit operations before transpilation: {circuit.count_ops()}')
         logging.info(f'Circuit operations after transpilation: {circuit_transpiled.count_ops()}')
         logging.info(perf_counter() - start)
@@ -363,8 +363,8 @@ class CustomQiskitNoisyBackend(Library):
         """
         This method specifies the simulation methode and processing unit.
 
-        :param device: Contains information about processing unit  
-        :param simulation_config: Contains information about qiskit simulation method 
+        :param device: Contains information about processing unit
+        :param simulation_config: Contains information about qiskit simulation method
         :return: Tuple containing the simulation method and device
         """
         simulation_method = {

@@ -67,7 +67,7 @@ class Braket(Device, ABC):
     def _setup_proxy() -> any:
         """
         Sets up proxy configuration if available in the environment variables.
-       
+
         :return: Proxy definitions
         """
         if 'HTTP_PROXY' in os.environ:
@@ -86,7 +86,7 @@ class Braket(Device, ABC):
     def _set_region(region: str) -> str:
         """
         Sets the AWS region from the environment variable or defaults to 'us-east-1'.
-       
+
         :param region: Provided region
         :return: Final region to be used
         """
@@ -99,7 +99,7 @@ class Braket(Device, ABC):
     def _set_profile() -> str:
         """
         Determines the AWS profile to use for the session.
-       
+
         :return: AWS profile name
         """
         if 'AWS_PROFILE' in os.environ:

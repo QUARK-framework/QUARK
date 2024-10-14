@@ -77,7 +77,7 @@ class Transformation(Core, ABC):
     @abstractmethod
     def transform(self, input_data: dict, config: dict) -> dict:
         """
-        Helps to ensure that the model can effectively learn the underlying 
+        Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
 
         :param input_data: Input data for transformation

@@ -34,7 +34,7 @@ def main():
     for edge in graph.edges:
         if edge[0] == edge[1]:
             graph.remove_edge(edge[0], edge[1])
-            
+
     print("Loaded graph:")
     print(nx.info(graph))
 

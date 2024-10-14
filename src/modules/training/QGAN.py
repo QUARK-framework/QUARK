@@ -16,7 +16,7 @@ from typing import TypedDict
 import logging
 
 import torch
-from torch.utils.data import  DataLoader
+from torch.utils.data import DataLoader
 from torch import nn
 import torch.nn.functional as funct
 from tensorboardX import SummaryWriter
@@ -223,7 +223,7 @@ class QGAN(Training):  # pylint: disable=R0902
         self.bins_train = input_data["binary_train"]
         if input_data["dataset_name"] == "Cardinality_Constraint":
             new_size = 1000
-            self.bins_train = np.repeat(self.bins_train,new_size,axis=0)
+            self.bins_train = np.repeat(self.bins_train, new_size, axis=0)
 
         self.study_generalization = "generalization_metrics" in list(input_data.keys())
         if self.study_generalization:
@@ -301,8 +301,8 @@ class QGAN(Training):  # pylint: disable=R0902
 
                 out_d_fake = self.discriminator(fake_data).view(-1)
                 err_g = self.criterion(out_d_fake, self.real_labels)
-                fake_data, _ = self.generator.execute(self.params,self.batch_size)
-                gradients= self.generator.compute_gradient(
+                fake_data, _ = self.generator.execute(self.params, self.batch_size)
+                gradients = self.generator.compute_gradient(
                     self.params,
                     self.discriminator,
                     self.criterion,
@@ -321,7 +321,7 @@ class QGAN(Training):  # pylint: disable=R0902
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
                 pmfs_model = np.asarray(pmfs_model.copy())
 
-                loss= self.loss_func(pmfs_model[None,], self.target)
+                loss = self.loss_func(pmfs_model[None,], self.target)
                 self.accuracy.append(loss)
 
                 self.writer.add_scalar("metrics/KL", loss, epoch * n_batches + batch)

@@ -107,7 +107,7 @@ class CircuitCopula(Circuit):
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of copula architecture.
-    
+
         :param input_data: Collection of information from the previous modules
         :param config: Config specifying the number of qubits of the circuit
         :return: Dictionary including the gate sequence of the Copula Circuit

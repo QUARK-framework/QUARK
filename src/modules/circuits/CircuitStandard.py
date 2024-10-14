@@ -105,7 +105,7 @@ class CircuitStandard(Circuit):
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of standard architecture.
-    
+
         :param input_data: Collection of information from the previous modules
         :param config: Config specifying the number of qubits of the circuit
         :return: Dictionary including the gate sequence of the Standard Circuit
@@ -141,7 +141,7 @@ class CircuitStandard(Circuit):
             "store_dir_iter": input_data["store_dir_iter"],
             "train_size": input_data["train_size"],
             "dataset_name": input_data["dataset_name"],
-            "binary_train":input_data["binary_train"]
+            "binary_train": input_data["binary_train"]
         }
 
         return output_dict

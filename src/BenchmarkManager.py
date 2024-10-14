@@ -117,7 +117,7 @@ class BenchmarkManager:
         """
         if self.interrupted_results_path is None or not os.path.exists(self.interrupted_results_path):
             return None
-        with open(self.interrupted_results_path, encoding='utf-8') as results_file :
+        with open(self.interrupted_results_path, encoding='utf-8') as results_file:
             results = json.load(results_file)
         return results
 
@@ -328,7 +328,7 @@ class BenchmarkManager:
                 rel_path = self.store_dir
             logging.info("====== There are interrupted jobs. You may resume them by running QUARK with")
             logging.info(f"====== --resume-dir={rel_path}")
-        logging.info(80*"=")
+        logging.info(80 * "=")
         logging.info("")
 
     # pylint: disable=R0917
@@ -374,11 +374,11 @@ class BenchmarkManager:
             if not module["submodule"]:
                 # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
                 instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(
-                        module_instance,
-                        module_instance.preprocessed_input,
-                        module["config"], store_dir=path,
-                        rep_count=rep_count,
-                        previous_job_info=submodule_job_info
+                    module_instance,
+                    module_instance.preprocessed_input,
+                    module["config"], store_dir=path,
+                    rep_count=rep_count,
+                    previous_job_info=submodule_job_info
                 )
                 output = module_instance.postprocessed_input
             else:

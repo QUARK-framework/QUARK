@@ -97,7 +97,7 @@ class ConfigManager:
 
         repetitions_answer = inquirer.prompt(
             [inquirer.Text('repetitions', message="How many repetitions do you want?",
-                           validate=lambda _, x: re.match("\\d", x),default=1)])
+                           validate=lambda _, x: re.match("\\d", x), default=1)])
         self.config["repetitions"] = int(repetitions_answer["repetitions"])
 
     def query_module(self, module: Core, module_friendly_name: str) -> ConfigModule:
@@ -359,7 +359,7 @@ class ConfigManager:
                     choices.append("Custom Range")
 
                  # Add custom_input if it is specified in the parameters
-                answer = checkbox(key=key,message=f"{prefix} {config_answer['description']}", choices=choices)
+                answer = checkbox(key=key, message=f"{prefix} {config_answer['description']}", choices=choices)
                 values = answer[key]
 
                 if "Custom Input" in values:

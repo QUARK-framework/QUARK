@@ -56,4 +56,4 @@ class Pulser(Device, ABC):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "pulser","version": "0.19.0"}]
+        return [{"name": "pulser", "version": "0.19.0"}]

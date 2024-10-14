@@ -181,7 +181,7 @@ class NeutralAtomMIS(Solver):
 
         return pulses
 
-    def _filter_invalid_states(self, state_counts:dict, nodes:list, edges:list) -> dict:
+    def _filter_invalid_states(self, state_counts: dict, nodes: list, edges: list) -> dict:
         """
         Filters out invalid states that do not meet the problem constraints.
 

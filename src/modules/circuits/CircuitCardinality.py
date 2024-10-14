@@ -24,7 +24,7 @@ from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBack
 class CircuitCardinality(Circuit):
     """
     This class generates a library-agnostic gate sequence, i.e. a list containing information
-    about the gates and the wires they act on. 
+    about the gates and the wires they act on.
     The circuit follows the implementation by Gili et al. https://arxiv.org/abs/2207.13645
     """
 
@@ -96,7 +96,7 @@ class CircuitCardinality(Circuit):
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
         Returns gate sequence of cardinality circuit architecture.
-    
+
         :param input_data: Collection of information from the previous modules
         :param config: Config specifying the number of qubits of the circuit
         :return: Dictionary including the gate sequence of the Cardinality Circuit
@@ -142,7 +142,7 @@ class CircuitCardinality(Circuit):
             "store_dir_iter": input_data["store_dir_iter"],
             "train_size": input_data["train_size"],
             "dataset_name": input_data["dataset_name"],
-            "binary_train":input_data["binary_train"]
+            "binary_train": input_data["binary_train"]
         }
 
         return output_dict

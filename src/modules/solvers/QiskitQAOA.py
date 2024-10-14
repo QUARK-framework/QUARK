@@ -29,6 +29,7 @@ from modules.solvers.Solver import Solver
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
+
 class QiskitQAOA(Solver):
     """
     Qiskit QAOA.

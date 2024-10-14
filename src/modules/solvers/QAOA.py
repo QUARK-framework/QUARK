@@ -325,7 +325,7 @@ def circuit(params: np.array, device: AwsDevice, n_qubits: int, ising: np.ndarra
 # pylint: disable=R0917
 # pylint: disable=R0913
 def objective_function(params: np.array, device: AwsDevice, ising: np.ndarray, n_qubits: int, n_shots: int,
-                       tracker: dict, s3_folder: tuple[str,str], verbose: bool) -> float:
+                       tracker: dict, s3_folder: tuple[str, str], verbose: bool) -> float:
     """
     Objective function takes a list of variational parameters as input,
     and returns the cost associated with those parameters.
@@ -411,7 +411,7 @@ def objective_function(params: np.array, device: AwsDevice, ising: np.ndarray, n
 # The function to execute the training: run classical minimization.
 # pylint: disable=R0917
 def train(device: AwsDevice, options: dict, p: int, ising: np.ndarray, n_qubits: int, n_shots: int, opt_method: str,
-          tracker: dict, s3_folder: tuple[str,str], verbose: bool = True) -> tuple[float, np.ndarray, dict]:
+          tracker: dict, s3_folder: tuple[str, str], verbose: bool = True) -> tuple[float, np.ndarray, dict]:
     """
     Function to run QAOA algorithm for given, fixed circuit depth p.
 

@@ -87,7 +87,6 @@ class GenerativeModeling(QML):
         }
 
     def generate_problem(self, config: dict) -> dict:
-
         """
         The number of qubits is chosen for this problem.
 

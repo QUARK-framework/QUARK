@@ -74,7 +74,7 @@ class Library(Core, ABC):
 
     def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
-        This method corresponds to the identity and passes the information of the subsequent module 
+        This method corresponds to the identity and passes the information of the subsequent module
         back to the preceding module in the benchmarking process.
 
         :param input_data: Collected information of the benchmarking procesS

@@ -52,7 +52,7 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
         """
         Constructor method.
         """
-        logging.warning(WARNING_MSG,  self.__class__.__name__)
+        logging.warning(WARNING_MSG, self.__class__.__name__)
         Application_NEW.__init__(self, application_name)
         Application_OLD.__init__(self, application_name)
         self.args = args
@@ -100,8 +100,8 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
 
         rep_count = kwargs["rep_count"]
 
-        #create a hash value for identifying the problem configuration
-        #compare https://stackoverflow.com/questions/5884066/hashing-a-dictionary
+        # create a hash value for identifying the problem configuration
+        # compare https://stackoverflow.com/questions/5884066/hashing-a-dictionary
         problem_conf_hash = json.dumps(config, sort_keys=True)
 
         if self.problem_conf_hash != problem_conf_hash:
@@ -207,7 +207,7 @@ class MappingAdapter(Mapping_NEW, Mapping_OLD, ABC):
         return processed_solution, postprocessing_time
 
 
-def recursive_replace_dict_keys(obj: any)-> any:
+def recursive_replace_dict_keys(obj: any) -> any:
     """
     Replace values used as dictionary keys by their string representation
     to make the object JSON-compatible.
@@ -298,7 +298,7 @@ class SolverAdapter(Solver_NEW, Solver_OLD, ABC):
         :return: Output and time needed
         """
         run_kwargs = {
-            "store_dir": kwargs["store_dir"], 
+            "store_dir": kwargs["store_dir"],
             "repetition": kwargs["rep_count"]
         }
         raw_solution, runtime, additional_solver_information = self.run(

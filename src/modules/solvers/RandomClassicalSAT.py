@@ -72,7 +72,7 @@ class RandomSAT(Solver):
     def run(self, mapped_problem: WCNF, device_wrapper: any, config: Config, **kwargs: dict) \
             -> tuple[list, float, dict]:
         """
-        The given application is a problem instance from the pysat library. 
+        The given application is a problem instance from the pysat library.
         This generates a random solution to the problem.
 
         :param mapped_problem: The WCNF representation of the SAT problem

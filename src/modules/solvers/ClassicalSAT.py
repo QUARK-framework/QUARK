@@ -36,7 +36,7 @@ class ClassicalSAT(Solver):
         self.submodule_options = ["Local"]
 
     @staticmethod
-    def get_requirements() ->   list[dict]:
+    def get_requirements() -> list[dict]:
         """
         Return requirements of this module.
 

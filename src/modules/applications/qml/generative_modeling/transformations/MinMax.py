@@ -97,7 +97,7 @@ class MinMax(Transformation):  # pylint: disable=R0902
         value = 0
         for count in histogram_transformed_1d:
             if count > 0:
-                solution_space[position:position+int(count)] = value
+                solution_space[position:position + int(count)] = value
                 position += int(count)
             value += 1
 

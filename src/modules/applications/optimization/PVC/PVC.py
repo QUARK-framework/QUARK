@@ -31,14 +31,14 @@ class PVC(Optimization):
     In modern vehicle manufacturing, robots take on a significant workload, including performing welding
     jobs, sealing welding joints, or applying paint to the car body. While the robot’s tasks vary widely,
     the objective remains the same: Perform a job with the highest possible quality in the shortest amount
-    of time, optimizing efficiency and productivity on the manufacturing line. 
-    
+    of time, optimizing efficiency and productivity on the manufacturing line.
+
     For instance, to protect a car’s underbody from corrosion, exposed welding seams are sealed
     by applying a polyvinyl chloride layer (PVC). The welding seams need to be traversed by a robot to
     apply the material. It is related to TSP, but different and even more complex in some aspects.
 
     The problem of determining the optimal route for robots to traverse all seams shares similarities
-    with Traveling Salesman Problem (TSP), as it involves finding the shortest possible route to 
+    with Traveling Salesman Problem (TSP), as it involves finding the shortest possible route to
     visit multiple locations. However, it introduces additional complexities, such as different tool
     and configuration requirements for each seam, making it an even more challenging problem to solve.
     """
@@ -147,7 +147,7 @@ class PVC(Optimization):
         # Get number of seam in graph
         seams_in_graph = list({x[0] for x in graph.nodes})
         seams_in_graph.sort()
-        seams_in_graph.remove(0) # Always need the base node 0 (which is not a seam)
+        seams_in_graph.remove(0)  # Always need the base node 0 (which is not a seam)
 
         if len(seams_in_graph) < seams:
             logging.info("Too many seams! The original graph has less seams than that!")

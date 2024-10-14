@@ -68,7 +68,7 @@ class ChoiQUBO(Mapping):
             "hard_reward": {
                 "values": [0.1, 0.5, 0.9, 0.99],
                 "description": (
-                    "What Bh/A ratio do you want?" 
+                    "What Bh/A ratio do you want?"
                     "(How strongly to enforce hard constraints)"
                 )
             },

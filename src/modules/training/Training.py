@@ -130,7 +130,7 @@ class Training(Core, ABC):
         :return: Maximum mean discrepancy
         """
         pmf_model[pmf_model == 0] = 1e-8
-        sigma = 1/pmf_model.shape[1]
+        sigma = 1 / pmf_model.shape[1]
         kernel_distance = np.exp((-np.square(pmf_model - pmf_target) / (sigma ** 2)))
         mmd = 2 - 2 * np.mean(kernel_distance, axis=1)
         return mmd

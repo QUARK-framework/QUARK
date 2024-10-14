@@ -280,9 +280,9 @@ class QCBM(Training):
         self.writer.close()
 
         input_data["best_parameter"] = es.result[0]
-        best_sample = self.sample_from_pmf(best_pmf.get() if GPU else best_pmf, # pylint: disable=E0606
+        best_sample = self.sample_from_pmf(best_pmf.get() if GPU else best_pmf,  # pylint: disable=E0606
                                            n_shots=input_data["n_shots"])
-        input_data["best_sample"] = best_sample.get() if GPU else best_sample # pylint: disable=E1101
+        input_data["best_sample"] = best_sample.get() if GPU else best_sample  # pylint: disable=E1101
 
         return input_data
 

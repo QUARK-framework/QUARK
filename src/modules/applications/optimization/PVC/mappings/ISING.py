@@ -78,7 +78,7 @@ class Ising(Mapping):
         Configuration attributes for Ising mapping.
 
         Attributes:
-             lagrange_factor (float): Factor to multiply the Langrange.  
+             lagrange_factor (float): Factor to multiply the Langrange.
         """
         lagrange_factor: float
 

@@ -63,7 +63,7 @@ class Circuit(Core, ABC):
 
     def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
-        Method that passes back information of the subsequent modules to the preceding modules. 
+        Method that passes back information of the subsequent modules to the preceding modules.
 
         :param input_data: Collected information of the benchmarking process
         :param config: Config specifying the number of qubits of the circuit

@@ -174,9 +174,9 @@ class Qubo(Mapping):
                     if isinstance(argument, list):
                         # squared variables in diagonals (x^2 == x)
                         if (
-                             len(argument) == 2
-                             and any(isinstance(elem, str) and variable in elem for elem in argument)
-                             and col == row
+                            len(argument) == 2
+                            and any(isinstance(elem, str) and variable in elem for elem in argument)
+                            and col == row
                         ):
                             parameter += argument[0]
                         # Multiplication of different variables not on diagonal

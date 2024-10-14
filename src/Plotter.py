@@ -222,7 +222,7 @@ class Plotter:
         """
         Function to extract and summarize certain data fields like the time spent in every module
         from the nested module chain.
-        
+
         :param config: Dictionary containing multiple data fields like the config of a module
         :param rest_result: Rest of the module chain
         :return: Extracted data

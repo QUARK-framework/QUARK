@@ -33,7 +33,7 @@ class ContinuousData(DataHandler):
 
     def __init__(self):
         """
-        The continuous data class loads a dataset from the path 
+        The continuous data class loads a dataset from the path
         src/modules/applications/qml/generative_modeling/data
         """
         super().__init__("")

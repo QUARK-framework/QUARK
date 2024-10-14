@@ -41,7 +41,7 @@ class MIS(Optimization):
 
     In the context of QUARK, we employ quantum-inspired approaches and state-of-the-art classical algorithms to
     tackle the problem. The graph is generated based on user-defined parameters such as size, spacing, and
-    filling fraction, which affect the complexity and properties of the generated instance. 
+    filling fraction, which affect the complexity and properties of the generated instance.
     """
 
     def __init__(self):

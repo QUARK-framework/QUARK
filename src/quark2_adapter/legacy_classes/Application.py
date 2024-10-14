@@ -93,7 +93,7 @@ class Application(ABC):
         return False
 
     @final
-    def init_problem(self, config: dict, conf_idx: int, iter_count: int, path: str) ->any:
+    def init_problem(self, config: dict, conf_idx: int, iter_count: int, path: str) -> any:
         """
         This method is called on every iteration and calls generate_problem if necessary.
         conf_idx identifies the application configuration.

@@ -19,7 +19,7 @@ from modules.training.Training import Training, Core, GPU
 
 class Inference(Training):
     """
-    This module executes a quantum circuit with parameters of a pretrained model. 
+    This module executes a quantum circuit with parameters of a pretrained model.
     """
 
     def __init__(self):

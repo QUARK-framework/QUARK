@@ -21,7 +21,7 @@ from modules.circuits.CircuitCopula import CircuitCopula
 
 class PIT(Transformation):  # pylint disable=R0902
     """
-    The transformation of the original probability distribution to 
+    The transformation of the original probability distribution to
     the distribution of its uniformly distributed cumulative marginals is known as the copula.
     """
 
@@ -100,7 +100,7 @@ class PIT(Transformation):  # pylint disable=R0902
         value = 0
         for count in histogram_transformed_1d:
             if count > 0:
-                solution_space[position:position+int(count)] = value
+                solution_space[position:position + int(count)] = value
                 position += int(count)
             value += 1
 

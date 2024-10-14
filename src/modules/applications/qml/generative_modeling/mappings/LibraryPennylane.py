@@ -12,6 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from modules.applications.qml.generative_modeling.mappings.Library import Library
+from modules.training.Inference import Inference
+from modules.training.QGAN import QGAN
+from modules.training.QCBM import QCBM
 from typing import Union
 
 import numpy as np
@@ -20,11 +24,6 @@ from jax import numpy as jnp
 import jax
 
 jax.config.update("jax_enable_x64", True)
-
-from modules.training.QCBM import QCBM
-from modules.training.QGAN import QGAN
-from modules.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.Library import Library
 
 
 class LibraryPennylane(Library):

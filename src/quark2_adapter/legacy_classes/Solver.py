@@ -31,7 +31,7 @@ class Solver(ABC):
         super().__init__()
 
     @abstractmethod
-    def run(self, mapped_problem: any, device: any  , config: dict, **kwargs) -> tuple[any, float, dict]:
+    def run(self, mapped_problem: any, device: any, config: dict, **kwargs) -> tuple[any, float, dict]:
         """
         This function runs the solving algorithm on a mapped problem instance and returns a solution.
 

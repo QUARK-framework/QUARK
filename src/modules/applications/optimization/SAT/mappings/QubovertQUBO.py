@@ -85,7 +85,7 @@ class QubovertQUBO(Mapping):
         """
         Converts the constraints nnf to a PUBO in the qubovert library.
 
-        :param constraints: Constraints in nnf format 
+        :param constraints: Constraints in nnf format
         :return: Constraints in qubovert format
         """
         clauses = []

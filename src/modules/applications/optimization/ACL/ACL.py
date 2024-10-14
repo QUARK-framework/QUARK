@@ -43,13 +43,13 @@ class ACL(Optimization):
     """
     The distribution of passenger vehicles is a complex task and a high cost factor for automotive original
     equipment manufacturers (OEMs). Vehicles travel long distance on different carriers, such as ships,
-    trains, and trucks, from the production plant to the customer. 
-    
-    To save costs, OEMs and logistics service providers aim to maximize their loading capacities. 
-    Modern auto carriers are flexible, allowing individual platforms to be rotated, extended, or combined 
-    to accommodate vehicles of different shapes and weights in a space-efficient manner. 
-    
-    In practice, finding feasible combinations is often based on heuristics or personal experience. 
+    trains, and trucks, from the production plant to the customer.
+
+    To save costs, OEMs and logistics service providers aim to maximize their loading capacities.
+    Modern auto carriers are flexible, allowing individual platforms to be rotated, extended, or combined
+    to accommodate vehicles of different shapes and weights in a space-efficient manner.
+
+    In practice, finding feasible combinations is often based on heuristics or personal experience.
     We formulate the problem as a mixed integer quadratically constrained assignment problem.
     """
 
@@ -224,7 +224,7 @@ class ACL(Optimization):
         # (4) Weight constraint for every level
         for p_l in plats_l:
             prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <= \
-                    wl[p_l]
+                wl[p_l]
 
         # (5) Weight constraint for truck and trailer
         for t in plats_t:
@@ -306,7 +306,7 @@ class ACL(Optimization):
         # (3) If a split platform q in plats_sp is used, only one of its "sub platforms" can be used
         for q in plats_sp:
             prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs) \
-                    <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
+                <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
 
         # (4) It is always only possible to use a single split-platform for any given p
         for q in plats_sp:
@@ -326,7 +326,7 @@ class ACL(Optimization):
         # Truck
         for h in plats_h1:
             prob += pulp.lpSum(x[p, v] * height_list[v] for p in platforms_height_array_truck[h] for v in vecs) \
-                    <= hmax_truck[h]
+                <= hmax_truck[h]
 
         # (7) Linearization constraint -> gamma == 1, if split platform is used
         for q in plats_sp:
@@ -343,12 +343,12 @@ class ACL(Optimization):
         for q in plats_sp:
             for p in split_platforms_array[q]:
                 prob += pulp.lpSum(weight_list[v] * x[p, v] for v in vecs) <= gamma[q] * wsp[q] \
-                        + (1 - gamma[q]) * wp[p]
+                    + (1 - gamma[q]) * wp[p]
 
         # (10) Weight constraint for every level
         for p_l in plats_l:
             prob += pulp.lpSum(weight_list[v] * x[p, v] for p in platforms_level_array[p_l] for v in vecs) <= \
-                    wl[p_l]
+                wl[p_l]
 
         # (11) Weight constraint for truck and trailer
         for p_t in plats_t:
@@ -468,7 +468,7 @@ class ACL(Optimization):
         # (3) If a split platform q in plats_sp is used, only one of its "sub platforms" can be used
         for q in plats_sp:
             prob += pulp.lpSum(x[p, v] for p in split_platforms_array[q] for v in vecs) \
-                    <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
+                <= len(split_platforms_array[q]) * (1 - sp[q]) + sp[q]
 
         # (3.1) It is always only possible to use a single split-platform for any given p
         for q in plats_sp:
@@ -535,16 +535,16 @@ class ACL(Optimization):
                                * int(v_coef[class_list[v]][3] * length_list[v])
                                for p in self.intersectset(platforms_angled_array, platforms_level_array[L])
                                for v in vecs) \
-                    + pulp.lpSum(x[p, v] * length_list[v]
-                                 for p in self.diffset(platforms_level_array[L], platforms_angled_array)
-                                 for v in vecs) \
-                    <= lmax_l[L]
+                + pulp.lpSum(x[p, v] * length_list[v]
+                             for p in self.diffset(platforms_level_array[L], platforms_angled_array)
+                             for v in vecs) \
+                <= lmax_l[L]
 
         # (5) Platforms can not be angled, if they are part of a split platform
         for q in plats_sp:
             prob += pulp.lpSum(a_p[platforms_angled_array.index(p)]
                                for p in self.intersectset(platforms_angled_array, split_platforms_array[q])) \
-                    <= len(split_platforms_array[q]) * (1 - sp[q])
+                <= len(split_platforms_array[q]) * (1 - sp[q])
 
         # (6) Weight constraint if split platform is used, gamma == 1
         for q in plats_sp:
@@ -567,7 +567,7 @@ class ACL(Optimization):
 
         for p in platforms_angled_array:
             prob += pulp.lpSum(weight_list[v] * apx[platforms_angled_array.index(p), v] for v in vecs) \
-                    <= wpa[platforms_angled_array.index(p)]
+                <= wpa[platforms_angled_array.index(p)]
 
         # (8) Weight constraint for every level
         for p_l in plats_l:
@@ -596,10 +596,10 @@ class ACL(Optimization):
                                int(h_coef[class_list[v]][3] * height_list[v])
                                for p in self.intersectset(platforms_angled_array, platforms_height_array_truck[h])
                                for v in vecs) \
-                    + pulp.lpSum(x[p, v] * height_list[v]
-                                 for p in self.diffset(platforms_height_array_truck[h], platforms_angled_array)
-                                 for v in vecs) \
-                    <= hmax_truck[h]
+                + pulp.lpSum(x[p, v] * height_list[v]
+                             for p in self.diffset(platforms_height_array_truck[h], platforms_angled_array)
+                             for v in vecs) \
+                <= hmax_truck[h]
         # Trailer
         for h in plats_h2:
             prob += pulp.lpSum(x[p, v] * height_list[v]
@@ -613,10 +613,10 @@ class ACL(Optimization):
                                int(h_coef[class_list[v]][3] * height_list[v])
                                for p in self.intersectset(platforms_angled_array, platforms_height_array_trailer[h])
                                for v in vecs) \
-                    + pulp.lpSum(x[p, v] * height_list[v]
-                                 for p in self.diffset(platforms_height_array_trailer[h], platforms_angled_array)
-                                 for v in vecs) \
-                    <= hmax_trailer[h]
+                + pulp.lpSum(x[p, v] * height_list[v]
+                             for p in self.diffset(platforms_height_array_trailer[h], platforms_angled_array)
+                             for v in vecs) \
+                <= hmax_trailer[h]
 
         self.application = prob
 

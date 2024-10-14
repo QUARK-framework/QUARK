@@ -150,6 +150,7 @@ def get_git_revision(git_dir: str) -> tuple[str, str]:
     return git_revision_number, git_uncommitted_changes
 
 
+#autopep8: off
 def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
     """
     Expands the paths given as value of the 'dir' attribute appearing in the QUARK modules
@@ -165,9 +166,8 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-
-
-if isinstance(j[attr],             if )                _expand_paths(j[attr], base_dir)
+            if type(j[attr]) == "submodules":
+                _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]
                 if not os.path.isabs(p):
@@ -203,7 +203,7 @@ def stop_watch(position: int = None) -> Callable:
     def run(input_data,...):
         return processed_data
     ```
-    results in valid:
+    results in valid:    
     ```
     processed_data, time_to_process = run(input,...)
     ```

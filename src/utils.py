@@ -38,13 +38,15 @@ def _get_instance_with_sub_options(options: list[dict], name: str) -> any:
         clazz = _import_class(opt["module"], class_name, opt.get("dir"))
         sub_options = opt.get("submodules", None)
 
-        # In case the class requires some arguments in its constructor they can be defined in the "args" dict
+        # In case the class requires some arguments in its constructor
+        # they can be defined in the "args" dict
         if "args" in opt and opt["args"]:
             instance = clazz(**opt["args"])
         else:
             instance = clazz()
 
-        # _get_instance_with_sub_options is mostly called when using the --modules option, so it makes sense to also
+        # _get_instance_with_sub_options is mostly called when using the --modules option,
+        # so it makes sense to also
         # save the git revision of the given module, since it can be in a different git
 
         # Directory of this file
@@ -108,7 +110,8 @@ def checkbox(key: str, message: str, choices: list) -> dict:
         answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
     else:
         if len(choices) == 1:
-            logging.info(f"Skipping asking for submodule, since only 1 option ({choices[0]}) is available.")
+            logging.info(f"Skipping asking for submodule"
+                         "since only 1 option ({choices[0]}) is available.")
         return {key: choices}
 
     if not answer[key]:
@@ -120,17 +123,17 @@ def checkbox(key: str, message: str, choices: list) -> dict:
 
 def get_git_revision(git_dir: str) -> tuple[str, str]:
     """
-    Collects git revision number and checks if there are uncommitted changes to allow user to analyze which
-    codebase was used.
+    Collects git revision number and checks if there are uncommitted changes
+    to allow user to analyze which codebase was used.
 
     :param git_dir: Directory of the git repository
     :return: Tuple with git_revision_number, git_uncommitted_changes
     """
     try:
-        # '-C', git_dir ensures that the following commands also work when QUARK is started from other working
-        # directories
-        git_revision_number = subprocess.check_output(['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode(
-            'ascii').strip()
+        # '-C', git_dir ensures that the following commands also work
+        # when QUARK is started from other working directories
+        git_revision_number = subprocess.check_output(
+            ['git', '-C', git_dir, 'rev-parse', 'HEAD']).decode('ascii').strip()
         git_uncommitted_changes = bool(subprocess.check_output(
             ['git', '-C', git_dir, 'status', '--porcelain', '--untracked-files=no']).decode(
             'ascii').strip())
@@ -162,9 +165,8 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-
-
-if isinstance(j[attr],             if )                _expand_paths(j[attr], base_dir)
+            if type(j[attr]) == "submodules":
+                _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]
                 if not os.path.isabs(p):
@@ -200,7 +202,7 @@ def stop_watch(position: int = None) -> Callable:
     def run(input_data,...):
         return processed_data
     ```
-    results in valid:
+    results in valid:    
     ```
     processed_data, time_to_process = run(input,...)
     ```
@@ -209,7 +211,7 @@ def stop_watch(position: int = None) -> Callable:
     measured time is to be inserted in the return tuple.
 
     :param position: The position at which the measured time gets inserted in the return tuple.
-                     If not specified the measured time will be appended to the original return value.
+    If not specified the measured time will be appended to the original return value.
     :return: The wrapper function
     """
     def wrap(func):

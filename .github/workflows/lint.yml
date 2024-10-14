@@ -36,7 +36,7 @@ jobs:
         run: git config lfs.https://github.com/QUARK-framework/QUARK.git/info/lfs.locksverify false
 
       - name: Run autopep8 (fix PEP8 issues automatically)
-        run: autopep8 --in-place --recursive --aggressive --aggressive --max-line-length 120 -v .
+        run: autopep8 --in-place --recursive --aggressive --max-line-length 120 -v .
       
       - name: Commit changes
         run: |

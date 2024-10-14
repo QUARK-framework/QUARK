@@ -165,8 +165,9 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-            if type(j[attr]) == "submodules":
-                _expand_paths(j[attr], base_dir)
+
+
+if isinstance(j[attr],             if )                _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]
                 if not os.path.isabs(p):
@@ -202,7 +203,7 @@ def stop_watch(position: int = None) -> Callable:
     def run(input_data,...):
         return processed_data
     ```
-    results in valid:    
+    results in valid:
     ```
     processed_data, time_to_process = run(input,...)
     ```

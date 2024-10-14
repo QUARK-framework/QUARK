@@ -41,7 +41,7 @@ jobs:
           git config --global user.email "action@github.com"
           git add .
           git commit -m "Apply autopep8 formatting"
-          git push
+          git push origin HEAD:&{{ github.ref }}
 
       - name: Run pylint
         uses: wearerequired/lint-action@v2

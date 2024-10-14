@@ -382,9 +382,11 @@ class BenchmarkManager:
                 )
                 output = module_instance.postprocessed_input
             else:
-                instruction, processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                        module_instance.preprocessed_input, path,
-                                                                        rep_count, previous_job_info=submodule_job_info)
+                instruction, processed_input, benchmark_record = self.traverse_config(
+                    module["submodule"],
+                    module_instance.preprocessed_input, path,
+                    rep_count, previous_job_info=submodule_job_info
+                )
 
                 if instruction == Instruction.PROCEED:
                     instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(

@@ -162,7 +162,7 @@ def _expand_paths(j: Union[dict, list], base_dir: str) -> Union[dict, list]:
             _expand_paths(entry, base_dir)
     else:
         for attr in j:
-            if type(j[attr]) is "submodules":
+            if type(j[attr]) == "submodules":
                 _expand_paths(j[attr], base_dir)
             elif attr == "dir":
                 p = j[attr]

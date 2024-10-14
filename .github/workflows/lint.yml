@@ -33,7 +33,15 @@ jobs:
         run: pip install pylint autopep8
 
       - name: Run autopep8 (fix PEP8 issues automatically)
-        run: autopep8 --in-place --recursive --aggressive --aggressive --max-line-length 120 .
+        run: autopep8 --in-place --recursive --aggressive --aggressive --max-line-length 120 -v .
+      
+      - name: Commit changes
+        run: |
+          git config --global user.name "Github Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "Apply autopep8 formatting"
+          git push
 
       - name: Run pylint
         uses: wearerequired/lint-action@v2

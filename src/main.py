@@ -102,10 +102,6 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None,
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
 
-    TestVariable = 1
-    logging.info(f"TestVariable (={TestVariable}) should be changed to testvariable in main.py. Check and delete!")
-    logging.info("Blank line should be removed and ")
-
     benchmark_manager = BenchmarkManager(fail_fast=fail_fast)
 
     # Can be overridden by using the -m|--modules option

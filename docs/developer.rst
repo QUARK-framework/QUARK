@@ -195,7 +195,7 @@ Example for an application, which should reside under ``src/modules/applications
 
                 :param config: The configuration dictionary
                 :param iter_count: The iteration count
-                :returns: The generated problem.
+                :returns: The generated problem
                 """
                 size = config['size']
 
@@ -224,7 +224,7 @@ Example for an application, which should reside under ``src/modules/applications
                 Evaluates the solution.
 
                 :param solution: The solution to evaluate
-                :return: A tuple containing the evaluation metric and the time taken for evaluation.
+                :return: A tuple containing the evaluation metric and the time taken for evaluation
                 """
                 start = start_time_measurement()
 
@@ -236,8 +236,8 @@ Example for an application, which should reside under ``src/modules/applications
                 """
                 Saves the application state.
 
-                :param path: The path where the application state should be saved.
-                :param iter_count: The iteration count.
+                :param path: The path where the application state should be saved
+                :param iter_count: The iteration count
                 :returns:None
                 """
                 save_your_application(self.application, f"{path}/application.txt")

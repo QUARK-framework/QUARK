@@ -133,13 +133,12 @@ class MIS(Optimization):
         """
 
         more_params = {
-            "spacing": {
-                "values": [x / 10 for x in range(3, 11, 2)],
-                "custom_input": True,
-                "allow_ranges": True,
-                "postproc": float,
-                "description": "How much space do you want between your nodes,"
-                               " relative to Rydberg distance?"
+            "filling_fraction": {
+                "values": [x/10 for x in range(2, 11, 2)],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": float,
+                    "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
             }}
         if option == "QIRO":
             more_params["seed"] = {
@@ -153,13 +152,14 @@ class MIS(Optimization):
         else:
             raise NotImplementedError(f"Option {option} not implemented")
         if "hexagonal" in config["graph_type"]:
-            more_params["filling_fraction"] = {
-                    "values": [x/10 for x in range(2, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "What should be the filling fraction of the hexagonal graph?"
-                }
+            more_params["spacing"] =  {
+                "values": [x / 10 for x in range(3, 11, 2)],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": float,
+                "description": "How much space do you want between your nodes,"
+                               " relative to Rydberg distance?  "
+            }
         param_to_return = {}
         for key in more_params:
             if key not in config:
@@ -198,25 +198,26 @@ class MIS(Optimization):
 
         graph_type = config.get('graph_type')
         size = config.get('size')
-        spacing = config.get('spacing')
+        filling_fraction = config.get('filling_fraction')
 
         if graph_type == "erdosRenyi":
             gseed = config.get("seed")
-            if gseed == 0:
-                graph = networkx.erdos_renyi_graph(size, spacing)
+
+            if gseed == "No":
+                graph = networkx.erdos_renyi_graph(size, filling_fraction)
 
             else:
-                graph = networkx.erdos_renyi_graph(size, spacing, seed=gseed)
+                graph = networkx.erdos_renyi_graph(size, filling_fraction, seed=gseed)
             logging.info("Created MIS problem with the nx.erdos_renyi graph method, with the following attributes:")
             logging.info(f" - Graph size: {size}")
-            logging.info(f" - p: {spacing}")
+            logging.info(f" - p: {filling_fraction}")
             logging.info(f" - seed: {gseed}")
 
         else:
-            if config.get('filling_fraction') is None:
-                filling_fraction = 0.5
+            if config.get('spacing') is None:
+                spacing = 0.5
             else:
-                filling_fraction = config.get('filling_fraction')
+                spacing = config.get('spacing')
             graph = generate_hexagonal_graph(n_nodes=size, spacing=spacing * R_rydberg, filling_fraction=
                                              filling_fraction)
             logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")

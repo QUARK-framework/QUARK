@@ -24,6 +24,7 @@ from abc import ABC, abstractmethod
 
 from modules.devices.Device import Device
 
+
 class QrispSimulator(Device, ABC):
     """
     Abstract class to use the Qrisp Simulator.
@@ -33,9 +34,7 @@ class QrispSimulator(Device, ABC):
         """
         Constructor method
         """
-        super().__init__(device_name="QrispSimulator")
-        #self.device = MockDevice
-        #self.backend = BackendServer()
+        super().__init__(device_name="qrisp_simulator")
         self.submodule_options = []
 
     def get_backend(self) -> any:
@@ -46,16 +45,6 @@ class QrispSimulator(Device, ABC):
         :rtype: any
         """
         return self.backend
-
-    @abstractmethod
-    def get_backend_config(self) -> any:
-        """
-        Returns backend configurations
-
-        :return: Instance of the backend config class
-        :rtype: any
-        """
-        pass
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -72,8 +61,6 @@ class QrispSimulator(Device, ABC):
             },
         ]
 
-
-
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this application, not Applicable for Qrisp Simulator for now.
@@ -83,18 +70,14 @@ class QrispSimulator(Device, ABC):
                 "description": "Simulate doppler noise? Has a large impact on performance!"
             }
         """
-        #TBD, once optional noisy simulation is done in qrisp
-        return {
-            
-            
-        }
+        # TODO once optional noisy simulation is done in qrisp
+        return {}
 
     class Config(TypedDict):
         """
         Attributes of a valid config
         """
         doppler: bool
-
 
     def get_backend_config(self):
         """
@@ -103,10 +86,14 @@ class QrispSimulator(Device, ABC):
         :return: backend config for the emulator
         :rtype: backend.config
         """
-        noise_types = [key for key, value in self.config.items() if value]
-        # obiviously need to do something here 
-        backendconfig = self.backend.config
-        return backendconfig
+        return self.backend.config
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         raise ValueError("This module has no submodules.")

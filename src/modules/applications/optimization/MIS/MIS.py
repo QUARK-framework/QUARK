@@ -11,6 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 import logging
 from typing import TypedDict
 import pickle
@@ -58,7 +59,7 @@ class MIS(Optimization):
 
     def get_default_submodule(self, option: str) -> Core:
         if option == "QIRO":
-            from modules.applications.optimization.MIS.mappings.QIRO import QIRO # pylint: disable=C0415
+            from modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
             return QIRO()
         elif option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
@@ -134,7 +135,7 @@ class MIS(Optimization):
 
         more_params = {
             "filling_fraction": {
-                "values": [x/10 for x in range(2, 11, 2)],
+                    "values": [x/10 for x in range(2, 11, 2)],
                     "custom_input": True,
                     "allow_ranges": True,
                     "postproc": float,
@@ -144,7 +145,6 @@ class MIS(Optimization):
             more_params["seed"] = {
                     "values": ["No"],
                     "custom_input": True,
-                    "postproc": int,
                     "description": "Do you want to set a seed? If yes, please set an integer number"
                 }
             
@@ -153,13 +153,12 @@ class MIS(Optimization):
         else:
             raise NotImplementedError(f"Option {option} not implemented")
         if "hexagonal" in config["graph_type"]:
-            more_params["spacing"] =  {
+            more_params["spacing"] = {
                 "values": [x / 10 for x in range(3, 11, 2)],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float,
-                "description": "How much space do you want between your nodes,"
-                               " relative to Rydberg distance?  "
+                "description": "How much space do you want between your nodes, relative to Rydberg distance?"
             }
         param_to_return = {}
         for key in more_params:
@@ -208,6 +207,12 @@ class MIS(Optimization):
                 graph = networkx.erdos_renyi_graph(size, filling_fraction)
 
             else:
+                try:
+                    gseed = int(gseed)
+                except ValueError:
+                    logging.warning(f"Please select an integer number as seed for the Erdos-Renyi graph instead of "
+                                    f"'{gseed}'. The seed is instead set to 0.")
+                    gseed = 0
                 graph = networkx.erdos_renyi_graph(size, filling_fraction, seed=gseed)
             logging.info("Created MIS problem with the nx.erdos_renyi graph method, with the following attributes:")
             logging.info(f" - Graph size: {size}")
@@ -219,8 +224,9 @@ class MIS(Optimization):
                 spacing = 0.5
             else:
                 spacing = config.get('spacing')
-            graph = generate_hexagonal_graph(n_nodes=size, spacing=spacing * R_rydberg, filling_fraction=
-                                             filling_fraction)
+            graph = generate_hexagonal_graph(n_nodes=size,
+                                             spacing=spacing * R_rydberg,
+                                             filling_fraction=filling_fraction)
             logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")
             logging.info(f" - Graph size: {size}")
             logging.info(f" - Spacing: {spacing * R_rydberg}")

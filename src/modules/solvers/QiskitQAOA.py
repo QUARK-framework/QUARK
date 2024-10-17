@@ -12,22 +12,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import logging
-from typing import Tuple
-from typing import TypedDict
+from typing import Tuple, TypedDict
 
-import os
 import numpy as np
-from qiskit import Aer
-from qiskit.algorithms import VQE, QAOA, NumPyMinimumEigensolver
-from qiskit.algorithms.optimizers import POWELL, SPSA, COBYLA
+
+from qiskit_aer import Aer
 from qiskit.circuit.library import TwoLocal
-from qiskit.opflow import PauliSumOp
+from qiskit.primitives import Sampler, Estimator
+from qiskit.quantum_info import SparsePauliOp, Statevector
 from qiskit_optimization.applications import OptimizationApplication
-# from qiskit_ibm_runtime import QiskitRuntimeService
+from qiskit_algorithms.optimizers import POWELL, SPSA, COBYLA
+from qiskit_algorithms.minimum_eigensolvers import VQE, QAOA, NumPyMinimumEigensolver
 
 from modules.solvers.Solver import *
 from utils import start_time_measurement, end_time_measurement
-
 
 class QiskitQAOA(Solver):
     """
@@ -41,6 +39,7 @@ class QiskitQAOA(Solver):
         super().__init__()
         # self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu", "ibm_eagle"]
         self.submodule_options = ["qasm_simulator", "qasm_simulator_gpu"]
+        self.ry = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -53,16 +52,21 @@ class QiskitQAOA(Solver):
         return [
             {
                 "name": "qiskit",
-                "version": "0.45.0"
+                "version": "1.1.0"
             },
             {
                 "name": "qiskit-optimization",
-                "version": "0.5.0"
+                "version": "0.6.1"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
+            },
+            {
+                "name": "qiskit-algorithms",
+                "version": "0.3.0"
             }
+
         ]
 
     def get_default_submodule(self, option: str) -> Core:
@@ -205,11 +209,12 @@ class QiskitQAOA(Solver):
             elif config["optimizer"] == "SPSA":
                 optimizer = SPSA(maxiter=config["iterations"])
             if config["method"] == "vqe":
-                ry = TwoLocal(ising_op.num_qubits, "ry", "cz", reps=config["depth"], entanglement="full")
-                algorithm = VQE(ry, optimizer=optimizer, quantum_instance=self._get_quantum_instance(device_wrapper))
+                self.ry = TwoLocal(ising_op.num_qubits, "ry", "cz", reps=config["depth"], entanglement="full")
+                estimator = Estimator()
+                algorithm = VQE(ansatz=self.ry, optimizer=optimizer, estimator=estimator)
             elif config["method"] == "qaoa":
-                algorithm = QAOA(reps=config["depth"], optimizer=optimizer,
-                                 quantum_instance=self._get_quantum_instance(device_wrapper))
+                sampler = Sampler()
+                algorithm = QAOA(reps=config["depth"], optimizer=optimizer, sampler=sampler)
             else:
                 logging.warning("No method selected in QiskitQAOA. Continue with NumPyMinimumEigensolver.")
                 algorithm = NumPyMinimumEigensolver()
@@ -217,6 +222,7 @@ class QiskitQAOA(Solver):
         # run actual optimization algorithm
         try:
             result = algorithm.compute_minimum_eigenvalue(ising_op)
+            print('result',result)
         except ValueError as e:
             logging.error(f"The following ValueError occurred in module QiskitQAOA: {e}")
             logging.error("The benchmarking run terminates with exception.")
@@ -243,9 +249,25 @@ class QiskitQAOA(Solver):
             backend.set_options(max_parallel_threads=48)
         return backend
 
-    @staticmethod
-    def _get_best_solution(result: any) -> any:
-        best_bitstring = OptimizationApplication.sample_most_likely(result.eigenstate)
+    def _get_best_solution(self, result) -> any:
+        if self.ry is not None:
+            if hasattr(result, "optimal_point"):
+                para_dict =  dict(zip(self.ry.parameters, result.optimal_point))
+                unbound_para = set(self.ry.parameters) - set(para_dict.keys())
+                for param in unbound_para:
+                    para_dict[param] = 0.0
+                eigvec = Statevector(self.ry.assign_parameters(para_dict))
+            elif hasattr(result, "eigenstate"):
+                eigvec = result.eigenstate
+            else:
+                raise AttributeError("The result object does not have 'optimal_point' or 'eigenstate' attributes.")
+        else:
+        # If self.ry is None
+            if hasattr(result, "eigenstate"):
+                eigvec = result.eigenstate
+            else:
+                raise AttributeError("The result object does not have 'eigenstate'.")
+        best_bitstring = OptimizationApplication.sample_most_likely(eigvec)
         return best_bitstring
 
     @staticmethod
@@ -292,5 +314,5 @@ class QiskitQAOA(Solver):
         #     pauli_str = "".join(pauli_str_list)
         #     pauli_list.append((pauli_str, value))
 
-        isingOp = PauliSumOp.from_list(pauli_list)
+        isingOp =SparsePauliOp.from_list(pauli_list)
         return isingOp

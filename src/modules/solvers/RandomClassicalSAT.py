@@ -43,11 +43,11 @@ class RandomSAT(Solver):
         return [
             {
                 "name": "python-sat",
-                "version": "0.1.7.dev26"
+                "version": "1.8.dev13"
             },
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 

@@ -45,20 +45,20 @@ class Installer:
             {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+            {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"},
-            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [
-            {"name": "seaborn", "version": "0.13.0"},
-            {"name": "networkx", "version": "2.8.8"},
-            {"name": "inquirer", "version": "3.1.2"},
-            {"name": "packaging", "version": "23.1"},
-            {"name": "pyyaml", "version": "6.0"},
-            {"name": "typing-extensions", "version": "4.8.0"},
-            {"name": "sphinx", "version": "6.2.1"},
-            {"name": "sphinx-rtd-theme", "version": "1.2.0"},
+            {"name": "seaborn", "version": "0.13.2"},
+            {"name": "networkx", "version": "3.2.1"},
+            {"name": "inquirer", "version": "3.4.0"},
+            {"name": "packaging", "version": "24.1"},
+            {"name": "pyyaml", "version": "6.0.2"},
+            {"name": "typing-extensions", "version": "4.12.2"},
+            {"name": "sphinx", "version": "7.4.7"},
+            {"name": "sphinx-rtd-theme", "version": "2.0.0"},
         ]
         Path(self.envs_dir).mkdir(parents=True, exist_ok=True)
 

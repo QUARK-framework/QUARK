@@ -50,7 +50,7 @@ class Direct(Mapping):
             },
             {
                 "name": "python-sat",
-                "version": "0.1.7.dev26"
+                "version": "1.8.dev13"
             }
         ]
 

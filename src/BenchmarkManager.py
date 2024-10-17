@@ -337,7 +337,7 @@ class BenchmarkManager:
         logging.info(80*"=")
         logging.info("")
 
-
+    # pylint: disable=R0917
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info:
                         dict = None) -> (any, BenchmarkRecord):
         """
@@ -352,6 +352,8 @@ class BenchmarkManager:
         :type path: str
         :param rep_count: The iteration count
         :type rep_count: int
+        :param previous_job_info: information about previous job
+        :type previous_job_info: dict
         :return: tuple with the output of this step and the according BenchmarkRecord
         :rtype: tuple(any, BenchmarkRecord)
         """

@@ -43,7 +43,7 @@ class GreedyClassicalPVC(Solver):
         return [
             {
                 "name": "networkx",
-                "version": "2.8.8"
+                "version": "3.2.1"
             }
         ]
 

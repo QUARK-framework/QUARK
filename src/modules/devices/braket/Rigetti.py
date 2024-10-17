@@ -23,7 +23,7 @@ class Rigetti(Braket):
     Class for using the Rigetti devices on Amazon Braket
     """
 
-    def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3'):
+    def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2'):
         """
         Constructor method
         """

@@ -51,7 +51,7 @@ class MinMax(Transformation):  # pylint: disable=R0902
         return [
             {
                 "name": "numpy",
-                "version": "1.23.5"
+                "version": "1.26.4"
             }
         ]
 

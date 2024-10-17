@@ -1,7 +1,7 @@
 {
-  "build_number": 11,
-  "build_date": "25-07-2024 14:35:24",
-  "git_revision_number": "509f42f13d6657fbc84365b61c543386374e85cb",
+  "build_number": 13,
+  "build_date": "25-09-2024 22:08:09",
+  "git_revision_number": "150c71668c47ab9c98665d485437f6e9c7bb5e5f",
   "modules": [
     
     {
@@ -17,19 +17,19 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -41,15 +41,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.11.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -63,15 +63,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -87,15 +87,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -111,63 +111,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -182,19 +182,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.36.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.36.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -209,15 +209,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -233,63 +233,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -305,15 +305,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -390,7 +390,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -409,7 +409,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -426,7 +426,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -448,7 +448,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -470,7 +470,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -488,11 +488,11 @@
       "requirements": [
         {
           "name": "networkx",
-          "version": "2.8.8"
+          "version": "3.2.1"
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
     },
@@ -532,7 +532,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -553,7 +553,7 @@
             },
             {
               "name": "python-sat",
-              "version": "0.1.7.dev26"
+              "version": "1.8.dev13"
             }
           ],
           "submodules": [
@@ -565,7 +565,7 @@
               "requirements": [
                 {
                   "name": "python-sat",
-                  "version": "0.1.7.dev26"
+                  "version": "1.8.dev13"
                 }
               ],
               "submodules": [
@@ -587,11 +587,11 @@
               "requirements": [
                 {
                   "name": "python-sat",
-                  "version": "0.1.7.dev26"
+                  "version": "1.8.dev13"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -634,7 +634,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -670,7 +670,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -687,11 +687,11 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "nnf",
@@ -707,15 +707,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.11.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -729,15 +729,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -753,15 +753,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -777,63 +777,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -848,19 +848,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.36.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.36.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -875,15 +875,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -899,63 +899,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -971,15 +971,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1060,11 +1060,11 @@
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "nnf",
@@ -1080,15 +1080,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.11.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1102,15 +1102,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1126,15 +1126,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1150,63 +1150,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1221,19 +1221,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.36.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.36.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1248,15 +1248,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1272,63 +1272,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1344,15 +1344,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1429,7 +1429,7 @@
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
     },
@@ -1446,23 +1446,23 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "more-itertools",
-              "version": "9.0.0"
+              "version": "10.5.0"
             },
             {
               "name": "qiskit-optimization",
-              "version": "0.5.0"
+              "version": "0.6.1"
             },
             {
               "name": "pyqubo",
@@ -1470,11 +1470,11 @@
             },
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "dwave_networkx",
-              "version": "0.8.13"
+              "version": "0.8.15"
             }
           ],
           "submodules": [
@@ -1486,15 +1486,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.11.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1508,15 +1508,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1532,15 +1532,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1556,63 +1556,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Aspen-9",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "device_name": "Rigetti Ankaa-2",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1627,19 +1627,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.36.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.36.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1654,15 +1654,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1678,63 +1678,63 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1750,15 +1750,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1833,15 +1833,15 @@
               "requirements": [
                 {
                   "name": "qiskit",
-                  "version": "0.45.0"
+                  "version": "1.1.0"
                 },
                 {
                   "name": "qiskit-optimization",
-                  "version": "0.5.0"
+                  "version": "0.6.1"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1877,11 +1877,11 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "dwave_networkx",
-              "version": "0.8.13"
+              "version": "0.8.15"
             }
           ],
           "submodules": [
@@ -1900,7 +1900,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -1917,7 +1917,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1939,7 +1939,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1961,7 +1961,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1979,11 +1979,11 @@
       "requirements": [
         {
           "name": "networkx",
-          "version": "2.8.8"
+          "version": "3.2.1"
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
     },
@@ -2000,7 +2000,7 @@
           "requirements": [
             {
               "name": "pulp",
-              "version": "2.7.0"
+              "version": "2.9.0"
             }
           ],
           "submodules": [
@@ -2022,11 +2022,11 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "qiskit-optimization",
-              "version": "0.5.0"
+              "version": "0.6.1"
             }
           ],
           "submodules": [
@@ -2045,7 +2045,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -2058,19 +2058,19 @@
       "requirements": [
         {
           "name": "pulp",
-          "version": "2.7.0"
+          "version": "2.9.0"
         },
         {
           "name": "pandas",
-          "version": "1.5.2"
+          "version": "2.2.2"
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         },
         {
           "name": "openpyxl",
-          "version": "3.1.2"
+          "version": "3.1.5"
         }
       ]
     },
@@ -2087,7 +2087,7 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             }
           ],
           "submodules": [
@@ -2099,11 +2099,11 @@
               "requirements": [
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 },
                 {
                   "name": "pandas",
-                  "version": "1.5.2"
+                  "version": "2.2.2"
                 }
               ],
               "submodules": [
@@ -2115,7 +2115,7 @@
                   "requirements": [
                     {
                       "name": "scipy",
-                      "version": "1.11.1"
+                      "version": "1.12.0"
                     }
                   ],
                   "submodules": [
@@ -2127,11 +2127,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2143,11 +2143,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2155,11 +2155,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2172,7 +2172,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2184,11 +2184,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2201,7 +2201,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2216,15 +2216,15 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.36.0"
+                          "version": "0.37.0"
                         },
                         {
                           "name": "pennylane-lightning",
-                          "version": "0.36.0"
+                          "version": "0.38.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "jax",
@@ -2244,11 +2244,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2256,11 +2256,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2273,7 +2273,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2285,11 +2285,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2302,7 +2302,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2317,19 +2317,15 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2341,11 +2337,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2353,11 +2349,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2370,7 +2366,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2385,19 +2381,19 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2409,11 +2405,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2421,11 +2417,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2438,7 +2434,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2457,7 +2453,7 @@
               "requirements": [
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -2476,11 +2472,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2492,11 +2488,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2504,11 +2500,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2521,7 +2517,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2533,11 +2529,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2550,7 +2546,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2565,15 +2561,15 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.36.0"
+                          "version": "0.37.0"
                         },
                         {
                           "name": "pennylane-lightning",
-                          "version": "0.36.0"
+                          "version": "0.38.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "jax",
@@ -2593,11 +2589,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2605,11 +2601,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2622,7 +2618,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2634,11 +2630,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2651,7 +2647,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2666,19 +2662,15 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2690,11 +2682,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2702,11 +2694,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2719,7 +2711,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2734,19 +2726,19 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2758,11 +2750,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2770,11 +2762,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2787,7 +2779,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2811,11 +2803,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2827,11 +2819,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2839,11 +2831,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2856,7 +2848,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2868,11 +2860,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2885,7 +2877,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2900,15 +2892,15 @@
                       "requirements": [
                         {
                           "name": "pennylane",
-                          "version": "0.36.0"
+                          "version": "0.37.0"
                         },
                         {
                           "name": "pennylane-lightning",
-                          "version": "0.36.0"
+                          "version": "0.38.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "jax",
@@ -2928,11 +2920,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -2940,11 +2932,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2957,7 +2949,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "torch",
@@ -2969,11 +2961,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2986,7 +2978,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -3001,19 +2993,15 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -3025,11 +3013,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -3037,11 +3025,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -3054,7 +3042,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -3069,19 +3057,19 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.45.0"
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
                         },
                         {
                           "name": "qiskit_aer",
-                          "version": "0.11.2"
+                          "version": "0.15.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
-                        },
-                        {
-                          "name": "qiskit-ibmq-provider",
-                          "version": "0.19.2"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -3093,11 +3081,11 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
                             },
                             {
                               "name": "matplotlib",
@@ -3105,11 +3093,11 @@
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -3122,7 +3110,7 @@
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -3143,7 +3131,7 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             }
           ],
           "submodules": [
@@ -3162,11 +3150,11 @@
                   "requirements": [
                     {
                       "name": "qiskit",
-                      "version": "0.45.0"
+                      "version": "1.1.0"
                     },
                     {
                       "name": "numpy",
-                      "version": "1.23.5"
+                      "version": "1.26.4"
                     }
                   ],
                   "submodules": [
@@ -3178,11 +3166,11 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "cma",
-                          "version": "3.3.0"
+                          "version": "4.0.0"
                         },
                         {
                           "name": "matplotlib",
@@ -3190,11 +3178,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3207,7 +3195,7 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "torch",
@@ -3219,11 +3207,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3236,7 +3224,7 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": []
@@ -3251,15 +3239,15 @@
                   "requirements": [
                     {
                       "name": "pennylane",
-                      "version": "0.36.0"
+                      "version": "0.37.0"
                     },
                     {
                       "name": "pennylane-lightning",
-                      "version": "0.36.0"
+                      "version": "0.38.0"
                     },
                     {
                       "name": "numpy",
-                      "version": "1.23.5"
+                      "version": "1.26.4"
                     },
                     {
                       "name": "jax",
@@ -3279,11 +3267,11 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "cma",
-                          "version": "3.3.0"
+                          "version": "4.0.0"
                         },
                         {
                           "name": "matplotlib",
@@ -3291,11 +3279,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3308,7 +3296,7 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "torch",
@@ -3320,11 +3308,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3337,7 +3325,7 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": []
@@ -3352,19 +3340,15 @@
                   "requirements": [
                     {
                       "name": "qiskit",
-                      "version": "0.45.0"
+                      "version": "1.1.0"
                     },
                     {
                       "name": "qiskit_aer",
-                      "version": "0.11.2"
+                      "version": "0.15.0"
                     },
                     {
                       "name": "numpy",
-                      "version": "1.23.5"
-                    },
-                    {
-                      "name": "qiskit-ibmq-provider",
-                      "version": "0.19.2"
+                      "version": "1.26.4"
                     }
                   ],
                   "submodules": [
@@ -3376,11 +3360,11 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "cma",
-                          "version": "3.3.0"
+                          "version": "4.0.0"
                         },
                         {
                           "name": "matplotlib",
@@ -3388,11 +3372,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3405,7 +3389,7 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": []
@@ -3420,19 +3404,19 @@
                   "requirements": [
                     {
                       "name": "qiskit",
-                      "version": "0.45.0"
+                      "version": "1.1.0"
+                    },
+                    {
+                      "name": "qiskit_ibm_runtime",
+                      "version": "0.29.0"
                     },
                     {
                       "name": "qiskit_aer",
-                      "version": "0.11.2"
+                      "version": "0.15.0"
                     },
                     {
                       "name": "numpy",
-                      "version": "1.23.5"
-                    },
-                    {
-                      "name": "qiskit-ibmq-provider",
-                      "version": "0.19.2"
+                      "version": "1.26.4"
                     }
                   ],
                   "submodules": [
@@ -3444,11 +3428,11 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "cma",
-                          "version": "3.3.0"
+                          "version": "4.0.0"
                         },
                         {
                           "name": "matplotlib",
@@ -3456,11 +3440,11 @@
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -3473,101 +3457,12 @@
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": []
                     }
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "requirements": []
-    },
-    {
-      "name": "MIS",
-      "class": "MIS",
-      "module": "modules.applications.optimization.MIS.MIS",
-      "submodules": [
-        {
-          "name": "QIRO",
-          "class": "QIRO",
-          "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.QIRO",
-          "requirements": [
-            {
-              "name": "qrisp",
-              "version": "0.4.12"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "QIROSolver",
-              "class": "QIROSolver",
-              "args": {},
-              "module": "modules.solvers.QrispQIRO",
-              "requirements": [
-                {
-                  "name": "qrisp",
-              "version": "0.4.12"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "QrispSimulator",
-                  "class": "QrispSimulator",
-                  "args": {},
-                  "module": "modules.devices.QrispSimulator.QrispSimulator",
-                  "requirements": [
-                    {
-                      "name": "qrisp",
-                      "version": "0.4.12"
-                    }
-                  ],
-                  "submodules": []
-                }
-              ]
-            }
-          ]
-        },{
-          "name": "NeutralAtom",
-          "class": "NeutralAtom",
-          "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
-          "requirements": [
-            {
-              "name": "pulser",
-              "version": "0.16.0"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "NeutralAtomMIS",
-              "class": "NeutralAtomMIS",
-              "args": {},
-              "module": "modules.solvers.NeutralAtomMIS",
-              "requirements": [
-                {
-                  "name": "pulser",
-                  "version": "0.16.0"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "MockNeutralAtomDevice",
-                  "class": "MockNeutralAtomDevice",
-                  "args": {},
-                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
-                  "requirements": [
-                    {
-                      "name": "pulser",
-                      "version": "0.16.0"
-                    }
-                  ],
-                  "submodules": []
                 }
               ]
             }

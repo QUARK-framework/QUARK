@@ -19,10 +19,9 @@ import numpy as np
 import pkg_resources
 
 from utils import start_time_measurement, end_time_measurement
-
-from modules.applications.QML.generative_modeling.transformations.MinMax import MinMax
-from modules.applications.QML.generative_modeling.transformations.PIT import PIT
-from modules.applications.QML.generative_modeling.data.data_handler.DataHandler import *
+from modules.applications.qml.generative_modeling.transformations.MinMax import MinMax
+from modules.applications.qml.generative_modeling.transformations.PIT import PIT
+from modules.applications.qml.generative_modeling.data.data_handler.DataHandler import DataHandler
 
 
 class ContinuousData(DataHandler):
@@ -34,8 +33,8 @@ class ContinuousData(DataHandler):
 
     def __init__(self):
         """
-        The continuous data class loads a dataset from the path 
-        src/modules/applications/QML/generative_modeling/data
+        The continuous data class loads a dataset from the path
+        src/modules/applications/qml/generative_modeling/data
         """
         super().__init__("")
         self.submodule_options = ["PIT", "MinMax"]
@@ -48,17 +47,11 @@ class ContinuousData(DataHandler):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
-        ]
+        return [{"name": "numpy", "version": "1.26.4"}]
 
     def get_default_submodule(self, option: str) -> Union[PIT, MinMax]:
         if option == "MinMax":
@@ -71,24 +64,22 @@ class ContinuousData(DataHandler):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
+        :return: Dictionary of parameter options
+        .. code-block:: python
 
-                 .. code-block:: python
+            return {
+                "data_set": {
+                    "values": ["X_2D", "O_2D", "MG_2D", "Stocks_2D"],
+                    "description": "Which dataset do you want to use?"
+                },
 
-                        return {
-                            "data_set": {
-                                "values": ["X_2D", "O_2D", "MG_2D", "Stocks_2D"],
-                                "description": "Which dataset do you want to use?"
-                            },
-
-                            "train_size": {
-                                "values": [0.1, 0.3, 0.5, 0.7, 1.0],
-                                "description": "What percentage of the dataset do you want to use for training?"
-                            }
-                        }
-
+                "train_size": {
+                    "values": [0.1, 0.3, 0.5, 0.7, 1.0],
+                    "description": "What percentage of the dataset do you want to use for training?"
+                }
+            }
         """
         return {
             "data_set": {
@@ -105,7 +96,7 @@ class ContinuousData(DataHandler):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -117,22 +108,20 @@ class ContinuousData(DataHandler):
         train_size: float
 
     def data_load(self, gen_mod: dict, config: Config) -> dict:
-
         """
         The chosen dataset is loaded and split into a training set.
 
         :param gen_mod: Dictionary with collected information of the previous modules
-        :type gen_mod: dict
         :param config: Config specifying the parameters of the data handler
-        :type config: Config
-        :return: dictionary including the mapped problem
-        :rtype: dict
+        :return: Dictionary including the mapped problem
         """
         self.dataset_name = config["data_set"]
         self.n_qubits = gen_mod["n_qubits"]
 
-        filename = pkg_resources.resource_filename('modules.applications.QML.generative_modeling.data',
-                                                   f"{self.dataset_name}.npy")
+        filename = pkg_resources.resource_filename(
+            'modules.applications.qml.generative_modeling.data',
+            f"{self.dataset_name}.npy"
+        )
         self.dataset = np.load(filename)
 
         application_config = {
@@ -146,13 +135,11 @@ class ContinuousData(DataHandler):
 
     def evaluate(self, solution: dict) -> tuple[float, float]:
         """
-        Calculate KL in original space.
+        Calculates KL in original space.
 
         :param solution: a dictionary containing the solution data, including histogram_generated_original
                          and histogram_train_original
-        :type solution: dict
         :return: Kullback-Leibler (KL) divergence for the generated samples and the time it took to calculate it
-        :rtype: tuple[float, float]
         """
         start = start_time_measurement()
 
@@ -172,13 +159,10 @@ class ContinuousData(DataHandler):
 
     def kl_divergence(self, target: np.ndarray, q: np.ndarray) -> float:
         """
-        Function to calculate KL divergence
+        Function to calculate KL divergence.
 
         :param target: Probability mass function of the target distribution
-        :type target: np.ndarray
         :param q: Probability mass function generated by the quantum circuit
-        :type q: np.ndarray
         :return: Kullback-Leibler divergence
-        :rtype: float
         """
         return np.sum(target * np.log(target / q))

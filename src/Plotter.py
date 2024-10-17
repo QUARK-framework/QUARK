@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from collections import defaultdict
-from typing import List, Dict
 import logging
 
 import matplotlib.pyplot as plt
@@ -27,30 +26,26 @@ sns.set(style="darkgrid")
 
 class Plotter:
     """
-    Plotter class which generates some general plots
+    Plotter class which generates some general plots.
     """
 
     @staticmethod
-    def visualize_results(results: List[Dict], store_dir: str) -> None:
+    def visualize_results(results: list[dict], store_dir: str) -> None:
         """
         Function to plot the execution times of the benchmark.
 
-        :param results: dict containing the results
-        :type results: list[dict]
-        :param store_dir: directory where the plots are stored
-        :type store_dir: str
-        :return:
-        :rtype: None
+        :param results: Dict containing the results
+        :param store_dir: Directory where the plots are stored
         """
-
         if results is None or len(results) == 0:
             logging.info("Nothing to plot since results are empty.")
             return
 
         processed_results_with_application_score = []
         processed_results_rest = []
-        required_application_score_keys = ["application_score_value", "application_score_unit",
-                                           "application_score_type"]
+        required_application_score_keys = [
+            "application_score_value", "application_score_unit", "application_score_type"
+        ]
         application_name = None
         application_axis = None
         static_keys, changing_keys = Plotter._get_config_keys(results)
@@ -66,17 +61,19 @@ class Plotter:
                 application_config = ', '.join(
                     [f"{key}: {value}" for (key, value) in sorted(result["module"]["module_config"].items(),
                                                                   key=lambda key_value_pair:
-                                                                  key_value_pair[0]) if key not in static_keys])
+                                                                  key_value_pair[0]) if key not in static_keys]
+                )
             if len(static_keys) > 0:
                 # Include the static items in the axis name
                 application_axis += "(" + ', '.join(
-                    [f"{key}: {result['module']['module_config'][key]}" for key in static_keys]) + ")"
+                    [f"{key}: {result['module']['module_config'][key]}" for key in static_keys]
+                ) + ")"
 
-            processed_item = Plotter._extract_columns({"benchmark_backlog_item_number":
-                                                       result["benchmark_backlog_item_number"],
-                                                       "total_time": result["total_time"],
-                                                       "application_config": application_config},
-                                                      result["module"])
+            processed_item = Plotter._extract_columns({
+                "benchmark_backlog_item_number": result["benchmark_backlog_item_number"],
+                "total_time": result["total_time"],
+                "application_config": application_config
+            }, result["module"])
 
             if all(k in result["module"] for k in required_application_score_keys):
                 # Check if all required keys are present to create application score plots
@@ -88,12 +85,15 @@ class Plotter:
 
         if len(processed_results_with_application_score) > 0:
             logging.info("Found results with an application score, generating according plots.")
-            Plotter.plot_application_score(application_name, application_axis,
-                                           processed_results_with_application_score, store_dir)
+            Plotter.plot_application_score(
+                application_name, application_axis, processed_results_with_application_score, store_dir
+            )
 
-        Plotter.plot_times(application_name, application_axis, [*processed_results_with_application_score,
-                                                                *processed_results_rest], store_dir,
-                           required_application_score_keys)
+        Plotter.plot_times(
+            application_name, application_axis,
+            [*processed_results_with_application_score, *processed_results_rest],
+            store_dir, required_application_score_keys
+        )
 
         logging.info("Finished creating plots.")
 
@@ -103,18 +103,11 @@ class Plotter:
         """
         Function to plot execution times of the different modules in a benchmark.
 
-        :param application_name: name of the application
-        :type application_name: str
-        :param application_axis: name of the application axis
-        :type application_axis: str
-        :param results: dict containing the results
-        :type results: list[dict]
-        :param store_dir: directory where the plots are stored
-        :type store_dir: str
-        :param required_application_score_keys: list of keys which have to be present to calculate an application score
-        :type required_application_score_keys: list
-        :return:
-        :rtype: None
+        :param application_name: Name of the application
+        :param application_axis: Name of the application axis
+        :param results: Dict containing the results
+        :param store_dir: Directory where the plots are stored
+        :param required_application_score_keys: List of keys which have to be present to calculate an application score
         """
 
         df = pd.DataFrame.from_dict(results)
@@ -140,7 +133,7 @@ class Plotter:
         # Put the legend out of the figure
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="Modules used")
         plt.title(application_name)
-        matplotlib.pyplot.sca(ax)
+        plt.sca(ax)
         # If column values are very long and of type string rotate the ticks
         if (pd.api.types.is_string_dtype(df.application_config.dtype) or pd.api.types.is_object_dtype(
                 df.application_config.dtype)) and df.application_config.str.len().max() > 10:
@@ -153,20 +146,13 @@ class Plotter:
     def plot_application_score(application_name: str, application_axis: str, results: list[dict],
                                store_dir: str) -> None:
         """
-        Funtion to create plots showing the application score.
+        Function to create plots showing the application score.
 
-        :param application_name: name of the application
-        :type application_name: str
-        :param application_axis: name of the application axis
-        :type application_axis: str
-        :param results: dict containing the results
-        :type results: list[dict]
-        :param store_dir: directory where the plots are stored
-        :type store_dir: str
-        :return:
-        :rtype: None
+        :param application_name: Name of the application
+        :param application_axis: Name of the application axis
+        :param results: Dict containing the results
+        :param store_dir: Directory where the plots are stored
         """
-
         df = pd.DataFrame.from_dict(results)
         application_score_units = df["application_score_unit"].unique()
         count_invalid_rows = pd.isna(df['application_score_value']).sum()
@@ -178,18 +164,24 @@ class Plotter:
             logging.info(f"{count_invalid_rows} out of {len(df)} benchmark runs have an invalid application score.")
 
         if len(application_score_units) != 1:
-            logging.warning(f"Found more or less than exactly 1 application_score_unit in {application_score_units}."
-                            f" This might lead to incorrect plots!")
+            logging.warning(
+                f"Found more or less than exactly 1 application_score_unit in {application_score_units}."
+                f" This might lead to incorrect plots!"
+            )
 
         ax = sns.barplot(x="application_config", y="application_score_value", data=df, hue="config_combo")
         ax.set(xlabel=application_axis, ylabel=application_score_units[0])
         # Put the legend out of the figure
         plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="Modules used")
-        ax.text(1.03, 0.5, f"{len(df) - count_invalid_rows}/{len(df)} runs have a valid \napplication score",
-                transform=ax.transAxes, fontsize=12, verticalalignment='top', bbox={"boxstyle": "round", "alpha": 0.15})
+        ax.text(
+            1.03, 0.5,
+            f"{len(df) - count_invalid_rows}/{len(df)} runs have a valid \napplication score",
+            transform=ax.transAxes, fontsize=12, verticalalignment='top',
+            bbox={"boxstyle": "round", "alpha": 0.15}
+        )
         plt.title(application_name)
 
-        matplotlib.pyplot.sca(ax)
+        plt.sca(ax)
         # If column values are very long and of type string, rotate the ticks
         if (pd.api.types.is_string_dtype(df.application_config.dtype) or pd.api.types.is_object_dtype(
                 df.application_config.dtype)) and df.application_config.str.len().max() > 10:
@@ -197,18 +189,15 @@ class Plotter:
 
         plt.savefig(f"{store_dir}/application_score.pdf", dpi=300, bbox_inches='tight')
         logging.info(f"Saved {f'{store_dir}/application_score.pdf'}.")
-
         plt.clf()
 
     @staticmethod
-    def _get_config_keys(results: list[dict]) -> (list, list):
+    def _get_config_keys(results: list[dict]) -> tuple[list, list]:
         """
         Function that extracts config keys.
 
-        :param results: results of a benchmark run
-        :type results: list[dict]
-        :return: tuple with list of static keys and list of changing keys
-        :rtype: (list, list)
+        :param results: Results of a benchmark run
+        :return: Tuple with list of static keys and list of changing keys
         """
         static_keys = []
         changing_keys = []
@@ -231,17 +220,13 @@ class Plotter:
     @staticmethod
     def _extract_columns(config: dict, rest_result: dict) -> dict:
         """
-        Funtion to extract and summarize certain data fields like the time spent in every module
+        Function to extract and summarize certain data fields like the time spent in every module
         from the nested module chain.
-        
-        :param config: dictionary containing multiple data fields like the config a module
-        :type config: dict
-        :param rest_result: rest of the module chain
-        :type rest_result: dict
-        :return: extracted data
-        :rtype: dict
-        """
 
+        :param config: Dictionary containing multiple data fields like the config of a module
+        :param rest_result: Rest of the module chain
+        :return: Extracted data
+        """
         if rest_result:
             module_name = rest_result["module_name"]
             for key, value in sorted(rest_result["module_config"].items(),
@@ -253,8 +238,8 @@ class Plotter:
                 {
                     **config,
                     "config_combo": config_combo,
-                    module_name: rest_result["total_time"] if module_name not in config else config[module_name] +
-                                                                                             rest_result["total_time"]
+                    module_name: rest_result["total_time"]
+                    if module_name not in config else config[module_name] + rest_result["total_time"]
                 },
                 rest_result["submodule"]
             )

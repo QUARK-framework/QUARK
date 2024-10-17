@@ -15,25 +15,24 @@
 from __future__ import annotations  # Needed if you want to type hint a method with the type of the enclosing class
 
 import os
-from abc import ABC, abstractmethod
-import logging
-from typing import final
 import sys
+import logging
+from abc import ABC, abstractmethod
+from typing import final
 from utils import _get_instance_with_sub_options
-
 from Metrics import Metrics
 
 
 class Core(ABC):
     """
-    Core Module for QUARK used by all other Modules that are part of a benchmark process
+    Core Module for QUARK, used by all other Modules that are part of a benchmark process.
     """
 
     def __init__(self, name: str = None):
         """
-        Constructor method
+        Constructor method.
+
         :param name: name used to identify this QUARK module. If not specified class name will be used as default.
-        :type name: str
         """
         self.submodule_options = []
         self.sub_options = []
@@ -48,7 +47,7 @@ class Core(ABC):
     @abstractmethod
     def get_parameter_options(self) -> dict:
         """
-        Returns the parameters for a given module
+        Returns the parameters for a given module.
 
         Should always be in this format:
 
@@ -66,8 +65,9 @@ class Core(ABC):
             }
 
         :return: Available settings for this application
-        :rtype: dict
         """
+        raise NotImplementedError("Please don't use the base version of get_parameter_options. "
+                                  "Implement your own override instead.")
 
     def get_available_submodules(self, option: list) -> list:
         """
@@ -96,15 +96,13 @@ class Core(ABC):
         return {}
 
     @final
-    def get_submodule(self, option: str) -> any:
+    def get_submodule(self, option: str) -> Core:
         """
         Submodule is instantiated according to the information given in self.sub_options.
         If self.sub_options is None, get_default_submodule is called as a fallback.
 
         :param option: String with the options
-        :type option: str
         :return: Instance of a module
-        :rtype: any
         """
         if self.sub_options is None or not self.sub_options:
             return self.get_default_submodule(option)
@@ -114,60 +112,49 @@ class Core(ABC):
     @abstractmethod
     def get_default_submodule(self, option: str) -> Core:
         """
-        Given an option string by the user, this returns a submodule
+        Given an option string by the user, this returns a submodule.
 
         :param option: String with the chosen submodule
-        :type option: str
         :return: Module of type Core
-        :rtype: Core
         """
-        raise NotImplementedError("Please don't use the base version of this method. "
+        raise NotImplementedError("Please don't use the base version of get_default_submodule. "
                                   "Implement your own override instead.")
 
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
-        Essential method for the benchmarking process. Is always executed before traversing down to the next module,
-        passing the data returned by this function.
+        Essential method for the benchmarking process. This is always executed before traversing down
+        to the next module, passing the data returned by this function.
 
         :param input_data: Data for the module, comes from the parent module if that exists
-        :type input_data: any
         :param config: Config for the module
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the preprocessing and the time it took to preprocess
-        :rtype: (any, float)
         """
         return input_data, 0.0
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Essential Method for the benchmarking process. Is always executed after the submodule is finished. The data by
         this method is passed up to the parent module.
 
         :param input_data: Input data comes from the submodule if that exists
-        :type input_data: any
         :param config: Config for the module
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the postprocessing and the time it took to postprocess
-        :rtype: (any, float)
         """
         return input_data, 0.0
 
     @final
     def get_available_submodule_options(self) -> list:
         """
-        Gets list of available options
+        Gets the list of available options.
 
         :return: List of module options
-        :rtype: list
         """
         if self.sub_options is None or not self.sub_options:
             return self.submodule_options
         else:
-            return [o["name"] for o in self.sub_options]
+            return [option["name"] for option in self.sub_options]
 
     @staticmethod
     def get_requirements() -> list:
@@ -175,6 +162,5 @@ class Core(ABC):
         Returns the required pip packages for this module. Optionally, version requirements can be added.
 
         :return: List of dictionaries
-        :rtype: list
         """
         return []

@@ -15,10 +15,12 @@
 import logging
 from typing import TypedDict
 import pickle
+import logging
+from typing import TypedDict
 
-import networkx
+import networkx as nx
 
-from modules.applications.Application import *
+from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
 from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
@@ -29,15 +31,24 @@ R_rydberg = 9.75
 
 class MIS(Optimization):
     """
-    In planning problems, there will be tasks to be done, and some of them may be mutually exclusive.
-    We can translate this into a graph where the nodes are the tasks and the edges are the mutual exclusions.
     The maximum independent set (MIS) problem is a combinatorial optimization problem that seeks to find the largest
-    subset of vertices in a graph such that no two vertices are adjacent.
+    subset of vertices in a graph such that no two vertices are adjacent. MIS has numerous application in computer
+    science, network design, resource allocation, and even in physics, where finding optimal configurations can
+    solve fundamental problems related to stability and energy minimization.
+
+    In a graph, the maximum independent set represents a set of nodes such that no two nodes share an edge. This
+    property makes it a key element in various optimization scenarios. Due to the problem's combinatorial nature,
+    it becomes computationally challenging, especially for large graphs, often requiring heuristic or approximate
+    solutions.
+
+    In the context of QUARK, we employ quantum-inspired approaches and state-of-the-art classical algorithms to
+    tackle the problem. The graph is generated based on user-defined parameters such as size, spacing, and
+    filling fraction, which affect the complexity and properties of the generated instance.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("MIS")
         self.submodule_options = ["QIRO", "NeutralAtom"]
@@ -46,18 +57,28 @@ class MIS(Optimization):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-        ]
+        return []
 
     def get_solution_quality_unit(self) -> str:
+        """
+        Returns the unit of measurement for solution quality.
+
+        :return: The unit of measure for solution quality
+        """
         return "Set size"
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "QIRO":
             from modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
             return QIRO()
@@ -69,10 +90,10 @@ class MIS(Optimization):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
-                 .. code-block:: python
+        :return: Configuration dictionary for this application
+        .. code-block:: python
 
                       return {
                                 "size": {
@@ -89,7 +110,6 @@ class MIS(Optimization):
                                     "depending_submodule": True
                                 }
                             }
-
         """
         return {
             "size": {
@@ -168,29 +188,24 @@ class MIS(Optimization):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Configuration attributes for generating an MIS problem.
 
-        .. code-block:: python
-
-            size: int
-            spacing: float
-            filling_fraction: float
-
+        Attributes:
+            size (int): The number of nodes in the graph.
+            spacing (float): The spacing between nodes in the graph.
+            filling_fraction (float): The fraction of available places in the lattice filled with nodes
         """
         size: int
         spacing: float
         filling_fraction: float
 
-    def generate_problem(self, config: Config) -> networkx.Graph:
+    def generate_problem(self, config: Config) -> nx.Graph:
         """
-        Generates a graph to solve the MIS for.
+        Generates a graph to solve the MIS problem for.
 
         :param config: Config specifying the size and connectivity for the problem
-        :type config: Config
-        :return: networkx graph representing the problem
-        :rtype: networkx.Graph
+        :return: Networkx graph representing the problem
         """
-
         if config is None:
             logging.warning("No config provided, using default values: graph_type='hexagonal', size=3, spacing=1,"
                             "filling_fraction=0.5")
@@ -235,27 +250,22 @@ class MIS(Optimization):
         self.graph = graph
         return graph.copy()
 
-    def process_solution(self, solution: list) -> (list, float):
+    def process_solution(self, solution: list) -> tuple[list, float]:
         """
-        Returns list of visited nodes and the time it took to process the solution
+        Returns list of visited nodes and the time it took to process the solution.
 
         :param solution: Unprocessed solution
-        :type solution: list
         :return: Processed solution and the time it took to process it
-        :rtype: tuple(list, float)
         """
         start_time = start_time_measurement()
-
         return solution, end_time_measurement(start_time)
 
-    def validate(self, solution: list) -> (bool, float):
+    def validate(self, solution: list) -> tuple[bool, float]:
         """
-        Checks if the solution is an independent set
+        Checks if the solution is an independent set.
 
         :param solution: List containing the nodes of the solution
-        :type solution: list
         :return: Boolean whether the solution is valid and time it took to validate
-        :rtype: tuple(bool, float)
         """
         start = start_time_measurement()
         is_valid = True
@@ -283,8 +293,8 @@ class MIS(Optimization):
             is_valid = False
 
         # Check if the solution is a subset of the original nodes
-        is_set = all(node in nodes for node in solution)
-        if is_set:
+        is_subset = all(node in nodes for node in solution)
+        if is_subset:
             logging.info("The solution is a subset of the problem")
         else:
             logging.warning("The solution is not a subset of the problem")
@@ -292,14 +302,12 @@ class MIS(Optimization):
 
         return is_valid, end_time_measurement(start)
 
-    def evaluate(self, solution: list) -> (int, float):
+    def evaluate(self, solution: list) -> tuple[int, float]:
         """
-        Calculates the size of the solution
+        Calculates the size of the solution.
 
         :param solution: List containing the nodes of the solution
-        :type solution: list
         :return: Set size, time it took to calculate the set size
-        :rtype: tuple(int, float)
         """
         start = start_time_measurement()
         set_size = len(solution)
@@ -309,5 +317,11 @@ class MIS(Optimization):
         return set_size, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Saves the generated problem graph to a file.
+
+        :param path: Path to save the problem graph
+        :param iter_count: Iteration count for file versioning
+        """
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.graph, file, pickle.HIGHEST_PROTOCOL)

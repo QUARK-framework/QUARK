@@ -15,10 +15,10 @@
 from typing import Union
 from utils import start_time_measurement, end_time_measurement
 
-from modules.applications.Application import *
-from modules.applications.QML.QML import QML
-from modules.applications.QML.generative_modeling.data.data_handler.DiscreteData import DiscreteData
-from modules.applications.QML.generative_modeling.data.data_handler.ContinuousData import ContinuousData
+from modules.applications.Application import Application
+from modules.applications.qml.QML import QML
+from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
+from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 
 
 class GenerativeModeling(QML):
@@ -31,7 +31,7 @@ class GenerativeModeling(QML):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("GenerativeModeling")
         self.submodule_options = ["Continuous Data", "Discrete Data"]
@@ -40,10 +40,9 @@ class GenerativeModeling(QML):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dicts with requirements of this module
-        :rtype: list[dict]
+        :return: List of dicts with requirements of this module
         """
         return []
 
@@ -51,6 +50,13 @@ class GenerativeModeling(QML):
         return "minimum KL"
 
     def get_default_submodule(self, option: str) -> Union[ContinuousData, DiscreteData]:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "Continuous Data":
             self.data = ContinuousData()
         elif option == "Discrete Data":
@@ -61,18 +67,17 @@ class GenerativeModeling(QML):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of configurable parameters
+        .. code-block:: python
 
-                      return {
-                                "n_qubits": {
-                                "values": [4, 6, 8, 10, 12],
-                                "description": "How many qubits do you want to use?"
-                                }
-                            }
-
+            return {
+                    "n_qubits": {
+                        "values": [4, 6, 8, 10, 12],
+                        "description": "How many qubits do you want to use?"
+                    }
+                }
         """
         return {
             "n_qubits": {
@@ -82,32 +87,23 @@ class GenerativeModeling(QML):
         }
 
     def generate_problem(self, config: dict) -> dict:
-
         """
         The number of qubits is chosen for this problem.
 
-        :param config: dictionary including the number of qubits
-        :type config: dict
-        :return: dictionary with the number of qubits
-        :rtype: dict
+        :param config: Dictionary including the number of qubits
+        :return: Dictionary with the number of qubits
         """
-
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
     def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
-        :param input_data: Usually not used for this method.
-        :type input_data: dict
-        :param config: config for the problem creation.
-        :type config: dict
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :param kwargs: optional additional arguments.
 
-        :return: tuple containing qubit number and the function's computation time
-        :rtype: tuple[dict, float]
+        :param input_data: Usually not used for this method
+        :param config: Config for the problem creation
+        :param kwargs: Optional additional arguments
+        :return: Tuple containing qubit number and the function's computation time
         """
         start = start_time_measurement()
         output = self.generate_problem(config)
@@ -119,14 +115,9 @@ class GenerativeModeling(QML):
         Process the solution here, then validate and evaluate it.
 
         :param input_data: A representation of the quantum machine learning model that will be trained
-        :type input_data: dict
         :param config: Config specifying the parameters of the training
-        :type config: dict
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
-        :return: tuple with input_data and the function's computation time
-        :rtype: tuple[dict, float]
+        :param kwargs: Optional keyword arguments
+        :return: Tuple with input_data and the function's computation time
         """
-
         start = start_time_measurement()
         return input_data, end_time_measurement(start)

@@ -17,17 +17,15 @@ from typing import final
 
 class Metrics:
     """
-    Metrics Module, used by every QUARK module
+    Metrics Module, used by every QUARK module.
     """
 
     def __init__(self, module_name: str, module_src: str):
         """
-        Constructor for Metrics class
+        Constructor for Metrics class.
 
         :param module_name: Name of the module this metrics object belongs to
-        :type module_name: str
         :param module_src: Source file of the module this metrics object belongs to
-        :type module_src: str
         """
         self.module_name = module_name
         self.module_src = module_src
@@ -44,83 +42,65 @@ class Metrics:
     def validate(self) -> None:
         """
         Validates whether the mandatory metrics got recorded, then sets total time.
-        
-        :return:
-        :rtype: None
         """
-        assert self.preprocessing_time is not None, "preprocessing time must not be None!"
-        assert self.postprocessing_time is not None, "postprocessing time must not be None!"
+        assert self.preprocessing_time is not None, (
+            "preprocessing time must not be None!"
+        )
+        assert self.postprocessing_time is not None, (
+            "postprocessing time must not be None!"
+        )
         self.total_time = self.preprocessing_time + self.postprocessing_time
 
     @final
     def set_preprocessing_time(self, value: float) -> None:
         """
-        Sets the preprocessing time
+        Sets the preprocessing time.
 
         :param value: Time
-        :type value: float
-        :return:
-        :rtype: None
         """
         self.preprocessing_time = value
 
     @final
     def set_module_config(self, config: dict) -> None:
         """
-        Sets the config of the module this metrics object belongs to
+        Sets the config of the module this metrics object belongs to.
 
         :param config: Config of the QUARK module
-        :type config: dict
-        :return:
-        :rtype: None
         """
         self.module_config = config
 
     @final
     def set_postprocessing_time(self, value: float) -> None:
         """
-        Sets the postprocessing time
+        Sets the postprocessing time.
 
         :param value: Time
-        :type value: float
-        :return:
-        :rtype: None
         """
         self.postprocessing_time = value
 
     @final
     def add_metric(self, name: str, value: any) -> None:
         """
-        Adds a single metric
+        Adds a single metric.
 
         :param name: Name of the metric
-        :type name: str
         :param value: Value of the metric
-        :type value: any
-        :return:
-        :rtype: None
         """
         self.additional_metrics.update({name: value})
 
     @final
     def add_metric_batch(self, key_values: dict) -> None:
         """
-        Adds a dictionary containing metrics to the existing metrics
+        Adds a dictionary containing metrics to the existing metrics.
 
-        :param key_values: dict containing metrics
-        :type key_values: dict
-        :return:
-        :rtype: None
+        :param key_values: Dict containing metrics
         """
         self.additional_metrics.update(key_values)
 
     @final
     def reset(self) -> None:
         """
-        Resets all recorded metrics
-        
-        :return:
-        :rtype: None
+        Resets all recorded metrics.
         """
         self.preprocessing_time = None
         self.postprocessing_time = None
@@ -129,10 +109,9 @@ class Metrics:
     @final
     def get(self) -> dict:
         """
-        Returns all recorded metrics
+        Returns all recorded metrics.
 
         :return: Metrics as a dict
-        :rtype: dict
         """
         return {
             "module_name": self.module_name,

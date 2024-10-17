@@ -15,13 +15,13 @@
 import numpy as np
 import pandas as pd
 
-from modules.applications.QML.generative_modeling.transformations.Transformation import *
+from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.circuits.CircuitCopula import CircuitCopula
 
 
 class PIT(Transformation):  # pylint disable=R0902
     """
-    The transformation of the original probability distribution to 
+    The transformation of the original probability distribution to
     the distribution of its uniformly distributed cumulative marginals is known as the copula.
     """
 
@@ -41,33 +41,24 @@ class PIT(Transformation):  # pylint disable=R0902
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "pandas",
-                "version": "2.2.2"
-            }
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "pandas", "version": "2.2.2"}
         ]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this transformation has no configurable settings
+        Returns empty dict as this transformation has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
         return {}
 
     def get_default_submodule(self, option: str) -> CircuitCopula:
-
         if option == "CircuitCopula":
             return CircuitCopula()
         else:
@@ -78,13 +69,11 @@ class PIT(Transformation):  # pylint disable=R0902
         Transforms the input dataset using PIT transformation and computes histograms
         of the training dataset in the transformed space.
 
-        :param input_data: dataset
-        :type input_data: dict
-        :param config: config with the parameters specified in Config class
-        :type config: dict
-        :return: dict with PIT transformation, time it took to map it
-        :rtype: dict
+        :param input_data: Dataset
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with PIT transformation, time it took to map it
         """
+        # TODO: PIT.transform is almost identical to MinMax.transform -> function should be moved to Transformation.py
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
         self.n_qubits = input_data["n_qubits"]
@@ -111,7 +100,7 @@ class PIT(Transformation):  # pylint disable=R0902
         value = 0
         for count in histogram_transformed_1d:
             if count > 0:
-                solution_space[position:position+int(count)] = value
+                solution_space[position:position + int(count)] = value
                 position += int(count)
             value += 1
 
@@ -145,10 +134,8 @@ class PIT(Transformation):  # pylint disable=R0902
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param input_data: dictionary containing the solution
-        :type input_data: dict
-        :return: dictionary with solution transformed accordingly
-        :rtype: dict
+        :param input_data: Dictionary containing the solution
+        :return: Dictionary with solution transformed accordingly
         """
         depth = input_data["depth"]
         architecture_name = input_data["architecture_name"]
@@ -202,14 +189,11 @@ class PIT(Transformation):  # pylint disable=R0902
 
     def fit_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Takes the data points and applies the PIT
+        Takes the data points and applies the PIT.
 
-        :param data: data samples
-        :type data: np.ndarray
+        :param data: Data samples
         :return: Transformed data points
-        :rtype: np.ndarray
         """
-
         df = pd.DataFrame(data)
         epit = df.copy(deep=True).transpose()
         self.reverse_epit_lookup = epit.copy(deep=True)
@@ -224,18 +208,18 @@ class PIT(Transformation):  # pylint disable=R0902
 
     def _reverse_emp_integral_trans_single(self, values: np.ndarray) -> list[float]:
         """
-        Takes one data point and applies the inverse PIT
+        Takes one data point and applies the inverse PIT.
 
-        :param values: data point
-        :type values: np.ndarray
+        :param values: Data point
         :return: Data point after applying the inverse transformation
-        :rtype: list[float]
         """
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
+
         # if we are an integer do not use linear interpolation
         values_l = np.floor(values).astype(int)
         values_h = np.ceil(values).astype(int)
+
         # if we are an integer then floor and ceiling are the same
         is_int_mask = 1 - (values_h - values_l)
         row_indexer = np.arange(rows)
@@ -248,18 +232,22 @@ class PIT(Transformation):  # pylint disable=R0902
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Applies the inverse transformation to the full data set
+        Applies the inverse transformation to the full data set.
 
-        :param data: data set
-        :type data: np.ndarray
+        :param data: Data set
         :return: Data set after applying the inverse transformation
-        :rtype: np.ndarray
         """
-
         res = [self._reverse_emp_integral_trans_single(row) for row in data]
+
         return np.array(res)[:, 0, :]
 
     def emp_integral_trans(self, data: np.ndarray) -> np.ndarray:
+        """
+        Applies the empirical integral transformation to the given data.
+
+        :param data: Data points
+        :return: Empirically transformed data points
+        """
         rank = np.argsort(data).argsort()
         length = data.size
         ecdf = np.linspace(0, 1, length, dtype=np.float64)

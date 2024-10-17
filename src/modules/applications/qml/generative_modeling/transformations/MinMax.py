@@ -13,10 +13,9 @@
 #  limitations under the License.
 
 from typing import Union
-
 import numpy as np
 
-from modules.applications.QML.generative_modeling.transformations.Transformation import *
+from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.circuits.CircuitStandard import CircuitStandard
 from modules.circuits.CircuitCardinality import CircuitCardinality
 
@@ -24,7 +23,7 @@ from modules.circuits.CircuitCardinality import CircuitCardinality
 class MinMax(Transformation):  # pylint: disable=R0902
     """
     In min-max normalization each data point is shifted
-    such that it lies between 0 and 1
+    such that it lies between 0 and 1.
     """
 
     def __init__(self):
@@ -43,20 +42,13 @@ class MinMax(Transformation):  # pylint: disable=R0902
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
-        ]
+        return [{"name": "numpy", "version": "1.26.4"}]
 
     def get_default_submodule(self, option: str) -> Union[CircuitStandard, CircuitCardinality]:
-
         if option == "CircuitStandard":
             return CircuitStandard()
         elif option == "CircuitCardinality":
@@ -66,12 +58,10 @@ class MinMax(Transformation):  # pylint: disable=R0902
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this transformation has no configurable settings
+        Returns empty dict as this transformation has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-
         return {}
 
     def transform(self, input_data: dict, config: dict) -> dict:
@@ -80,11 +70,8 @@ class MinMax(Transformation):  # pylint: disable=R0902
         of the training dataset in the transformed space.
 
         :param input_data: A dictionary containing information about the dataset and application configuration.
-        :type input_data: dict
         :param config: A dictionary with parameters specified in the Config class.
-        :type config: dict
         :return: A tuple containing a dictionary with MinMax-transformed data.
-        :rtype: dict
         """
         self.dataset_name = input_data["dataset_name"]
         self.dataset = input_data["dataset"]
@@ -110,7 +97,7 @@ class MinMax(Transformation):  # pylint: disable=R0902
         value = 0
         for count in histogram_transformed_1d:
             if count > 0:
-                solution_space[position:position+int(count)] = value
+                solution_space[position:position + int(count)] = value
                 position += int(count)
             value += 1
 
@@ -140,10 +127,8 @@ class MinMax(Transformation):  # pylint: disable=R0902
         """
         Transforms the solution back to the representation needed for validation/evaluation.
 
-        :param input_data: dictionary containing the solution
-        :type input_data: dict
-        :return: solution transformed accordingly
-        :rtype: dict
+        :param input_data: Dictionary containing the solution
+        :return: Solution transformed accordingly
         """
         best_results = input_data["best_sample"]
         depth = input_data["depth"]
@@ -198,29 +183,25 @@ class MinMax(Transformation):  # pylint: disable=R0902
 
     def fit_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Method that performs the min max normalization
+        Method that performs the min max normalization.
 
         :param data: Data to be fitted
-        :type data: np.ndarray
-        :return: fitted data
-        :rtype: np.ndarray
+        :return: Fitted data
         """
-        self.min = data.min()
-        self.max = data.max() - data.min()
-        data = (data - self.min) / self.max
+        data_min = data.min()
+        data_max = data.max() - data_min
+        data = (data - data_min) / data_max
 
         return data
 
     def inverse_transform(self, data: np.ndarray) -> np.ndarray:
         """
-        Method that performs the inverse min max normalization
+        Method that performs the inverse min max normalization.
 
         :param data: Data to be fitted
-        :type data: np.ndarray
-        :return: data in original space
-        :rtype: np.ndarray
+        :return: Data in original space
         """
-        self.min = data.min()
-        self.max = data.max() - data.min()
+        data_min = data.min()
+        data_max = data.max() - data_min
 
-        return data * self.max + self.min
+        return data * data_max + data_min

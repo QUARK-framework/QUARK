@@ -29,8 +29,8 @@ from utils import _get_instance_with_sub_options, get_git_revision, checkbox
 
 class Installer:
     """
-    Installer class that can be used by the user to install certain QUARK modules and also return the required python
-    packages for the demanded modules
+    Installer class that can be used by the user to install certain QUARK modules and also return the required Python
+    packages for the demanded modules.
     """
 
     def __init__(self):
@@ -47,7 +47,7 @@ class Installer:
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
             {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.QML.generative_modeling.GenerativeModeling"}
+             "module": "modules.applications.qml.generative_modeling.GenerativeModeling"}
         ]
 
         self.core_requirements = [
@@ -64,14 +64,10 @@ class Installer:
 
     def configure(self, env_name="default") -> None:
         """
-        Configures a new QUARK environment or overwrites an existing one
+        Configures a new QUARK environment or overwrites an existing one.
 
         :param env_name: Name of the env to configure
-        :type env_name: str
-        :return:
-        :rtype: None
         """
-
         configured_envs = self.check_for_configs()
 
         if env_name in configured_envs:
@@ -88,8 +84,7 @@ class Installer:
         chosen_config_type = inquirer.prompt([
             inquirer.List("config",
                           message="Do you want to use the default configuration or a custom environment?",
-                          choices=["Default", "Custom"],
-                          )])["config"]
+                          choices=["Default", "Custom"])])["config"]
         logging.info(f"You chose {chosen_config_type}")
 
         module_db = self.get_module_db()
@@ -117,52 +112,44 @@ class Installer:
         activate_answer = inquirer.prompt([
             inquirer.List("activate",
                           message="Do you want to activate the QUARK module environment?",
-                          choices=["Yes", "No"],
-                          )])["activate"]
+                          choices=["Yes", "No"])])["activate"]
 
         if activate_answer == "Yes":
             self.set_active_env(env_name)
 
     def check_for_configs(self) -> list:
         """
-        Checks if QUARK is already configured and if yes, which environments
+        Checks if QUARK is already configured and if yes, which environments.
 
         :return: Returns the configured QUARK envs in a list
-        :rtype: list
         """
         return list(p.stem for p in Path(self.envs_dir).glob("*.json"))
 
     def set_active_env(self, name: str) -> None:
         """
-        Sets active env to active_env.json
+        Sets the active env to active_env.json.
 
         :param name: Name of the env
-        :type name: str
-        :return:
-        :rtype: None
         """
         self._check_if_env_exists(name)
         with open(f"{self.settings_dir}/active_env.json", "w") as jsonFile:
-            data = {"name": name}
-            json.dump(data, jsonFile, indent=2)
+            json.dump({"name": name}, jsonFile, indent=2)
 
         logging.info(f"Set active QUARK module environment to {name}")
 
     def check_active_env(self) -> bool:
         """
-        Checks if .settings/active_env.json exists
+        Checks if .settings/active_env.json exists.
 
         :return: True if active_env.json exists
-        :rtype: bool
         """
         return Path(f"{self.settings_dir}/active_env.json").is_file()
 
     def get_active_env(self) -> str:
         """
-        Returns the current active environment
+        Returns the current active environment.
 
         :return: Returns the name of the active env
-        :rtype: str
         """
         if not self.check_active_env():
             logging.warning("No active QUARK module environment found, using default")
@@ -176,12 +163,10 @@ class Installer:
 
     def get_env(self, name: str) -> list[dict]:
         """
-        Loads the env from file and returns it
+        Loads the env from file and returns it.
 
         :param name: Name of the env
-        :type name: dict
         :return: Returns the modules of the env
-        :rtype: list[dict]
         """
         file = f"{self.envs_dir}/{name}.json"
         self._check_if_env_exists(name)
@@ -200,12 +185,10 @@ class Installer:
 
     def _check_if_env_exists(self, name: str) -> str:
         """
-        Checks if a given env exists, returns the location of the associated JSON file and raises an error otherwise
+        Checks if a given env exists, returns the location of the associated JSON file and raises an error otherwise.
 
         :param name: Name of the env
-        :type name: str
         :return: Returns location of the JSON file associated with the env if it exists
-        :rtype: str
         """
         file = f"{self.envs_dir}/{name}.json"
         if not Path(file).is_file():
@@ -214,16 +197,11 @@ class Installer:
 
     def save_env(self, env: dict, name: str) -> None:
         """
-        Saves a created env to a file with the name of choice
+        Saves a created env to a file with the name of choice.
 
         :param env: Env which should be saved
-        :type env: dict
         :param name: Name of the env
-        :type name: str
-        :return:
-        :rtype: None
         """
-
         with open(f"{self.envs_dir}/{name}.json", "w") as jsonFile:
             json.dump(env, jsonFile, indent=2)
 
@@ -231,14 +209,11 @@ class Installer:
 
     def start_query_user(self, module_db: dict) -> dict:
         """
-        Queries the user which applications and submodules to include
+        Queries the user which applications and submodules to include.
 
         :param module_db: module_db file
-        :type module_db: dict
         :return: Returns the module_db with selected (sub)modules
-        :rtype: dict
         """
-
         answer_apps = checkbox("apps", "Which application would you like to include?",
                                [m["name"] for m in module_db["modules"]])["apps"]
 
@@ -254,13 +229,8 @@ class Installer:
         Queries the user which submodules to include
 
         :param submodules: Submodules for the module
-        :type submodules: dict
         :param name: Name of the module
-        :type name: str
-        :return:
-        :rtype: None
         """
-
         if submodules["submodules"]:
             answer_submodules = \
                 checkbox("submodules", f"Which submodule would you like to include for {name}?",
@@ -272,20 +242,16 @@ class Installer:
 
     def get_module_db(self) -> dict:
         """
-        Returns the module database that contains all module possibilities
+        Returns the module database that contains all module possibilities.
 
         :return: Module Database
-        :rtype: dict
         """
         with open(f"{self.settings_dir}/module_db.json", "r") as filehandler:
             return json.load(filehandler)
 
     def create_module_db(self) -> None:
         """
-        Creates module database by automatically going through the available submodules for each module
-
-        :return:
-        :rtype: None
+        Creates module database by automatically going through the available submodules for each module.
         """
         logging.info("Creating Module Database")
 
@@ -323,23 +289,15 @@ class Installer:
     @staticmethod
     def _create_module_db_helper(module: Core, name: str) -> dict:
         """
-        Recursive helper function for create_module_db
+        Recursive helper function for create_module_db.
 
-        :param module: module
-        :type module: Core
+        :param module: Module instance
         :param name: Name of the module
-        :type name: str
-        :return: module dict
-        :rtype: dict
+        :return: Module dict
         """
-
         return {
             "name": name,
             "class": module.__class__.__name__,
-            # TODO Verify the following really works as intended
-            # Since some modules are initialized with parameters in their constructor, we need to check what these
-            # parameters were. Hence we check whether any parameters in the class instance match the one from
-            # the constructor.
             "args": {k: v for k, v in module.__dict__.items() if k in
                      inspect.signature(module.__init__).parameters.keys()},
             "module": module.__module__,
@@ -350,12 +308,10 @@ class Installer:
 
     def get_module_db_build_number(self) -> int:
         """
-        Returns the build number of the module_db
+        Returns the build number of the module_db.
 
         :return: Returns the build number of the module_db if it exists, otherwise 0
-        :rtype: int
         """
-
         if Path(f"{self.settings_dir}/module_db.json").is_file():
             module_db = self.get_module_db()
             return module_db["build_number"]
@@ -364,14 +320,11 @@ class Installer:
 
     def collect_requirements(self, env: list[dict]) -> dict:
         """
-        Collects requirements of the different modules in the given env file
+        Collects requirements of the different modules in the given env file.
 
-        :param env: env file
-        :type env: list[dict]
+        :param env: Environment configuration
         :return: Collected requirements
-        :rtype: dict
         """
-
         requirements: list[dict] = self.core_requirements
         for app in env:
             requirements.extend(Installer._collect_requirements_helper(app))
@@ -402,14 +355,11 @@ class Installer:
     @staticmethod
     def _collect_requirements_helper(module: dict) -> list[dict]:
         """
-        Helper function for collect_requirements_helper that recursively checks modules for requirements
+        Helper function for collect_requirements_helper that recursively checks modules for requirements.
 
-        :param module: module dict
-        :type module: dict
+        :param module: Module dict
         :return: List of dicts with the requirements
-        :rtype: list[dict]
         """
-
         requirements = module["requirements"]
         for submodule in module["submodules"]:
             requirements.extend(Installer._collect_requirements_helper(submodule))
@@ -418,16 +368,11 @@ class Installer:
 
     def create_conda_file(self, requirements: dict, name: str, directory: str = None) -> None:
         """
-        Creates conda yaml file based on the requirements
+        Creates conda yaml file based on the requirements.
 
         :param requirements: Collected requirements
-        :type requirements: dict
         :param name: Name of the conda env
-        :type name: str
-        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
-        :type directory: str
-        :return:
-        :rtype: None
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken.
         """
         if directory is None:
             directory = self.envs_dir
@@ -449,16 +394,11 @@ class Installer:
 
     def create_req_file(self, requirements: dict, name: str, directory: str = None) -> None:
         """
-        Creates pip txt file based on the requirements
+        Creates pip txt file based on the requirements.
 
         :param requirements: Collected requirements
-        :type requirements: dict
         :param name: Name of the env
-        :type name: str
-        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken
-        :type directory: str
-        :return:
-        :rtype: None
+        :param directory: Directory where the file should be saved. If None self.envs_dir will be taken.
         """
         if directory is None:
             directory = self.envs_dir
@@ -472,12 +412,8 @@ class Installer:
 
     def list_envs(self) -> None:
         """
-        List all existing envs
-
-        :return:
-        :rtype: None
+        List all existing environments.
         """
-
         logging.info("Existing environments:")
         for env in self.check_for_configs():
             logging.info(f"  -  {env}")
@@ -485,12 +421,9 @@ class Installer:
     @staticmethod
     def show(env: list[dict]) -> None:
         """
-        Visualize the env
+        Visualize the env.
 
-        :param env: env
-        :type env: list[dict]
-        :return:
-        :rtype: None
+        :param env: Environment configuration
         """
         space = "    "
         branch = "|   "
@@ -500,16 +433,12 @@ class Installer:
         def tree(modules: list[dict], prefix: str = ""):
             """
              A recursive function that generates a tree from the modules.
-             This function is based on https://stackoverflow.com/a/59109706, but modified to the needs here
+             This function is based on https://stackoverflow.com/a/59109706, but modified to the needs here.
 
-            :param modules: Modules
-            :type modules: list[dict]
+            :param modules: Modules list
             :param prefix: Prefix for the indentation
-            :type prefix: str
-            :return:
-            :rtype:
+            :return: Generator yielding formatted lines of the environment tree
             """
-
             # Modules in the middle/beginning get a |--, the final leaf >--
             pointers = [connector] * (len(modules) - 1) + [leaf]
             for pointer, module in zip(pointers, modules):

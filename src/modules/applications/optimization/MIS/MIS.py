@@ -144,6 +144,7 @@ class MIS(Optimization):
             more_params["seed"] = {
                     "values": ["No"],
                     "custom_input": True,
+                    "postproc": int,
                     "description": "Do you want to set a seed? If yes, please set an integer number"
                 }
             

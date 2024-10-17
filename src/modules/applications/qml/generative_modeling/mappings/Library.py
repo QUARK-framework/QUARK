@@ -17,25 +17,24 @@ import logging
 from typing import TypedDict
 
 from utils import start_time_measurement, end_time_measurement
-
 from modules.Core import Core
 
 
 class Library(Core, ABC):
     """
-    This class is an abstract base class for mapping a library-agnostic gate sequence to a library such as Qiskit 
+    This class is an abstract base class for mapping a library-agnostic gate sequence to a library such as Qiskit.
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         """
-        Constructor method
+        Constructor method.
         """
         self.name = name
         super().__init__()
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -51,14 +50,10 @@ class Library(Core, ABC):
         Base class for mapping the gate sequence to a library such as Qiskit.
 
         :param input_data: Collection of information from the previous modules
-        :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
-        :return: tuple including dictionary with the function to execute the quantum circuit on a simulator or quantum
+        :param kwargs: Optional keyword arguments
+        :return: Tuple including dictionary with the function to execute the quantum circuit on a simulator or quantum
                  hardware and the computation time of the function
-        :rtype: tuple[dict, float]
         """
         start = start_time_measurement()
 
@@ -68,7 +63,8 @@ class Library(Core, ABC):
             output["circuit"],
             backend,
             config["backend"],
-            config)
+            config
+        )
         output["backend"] = config["backend"]
         output["n_shots"] = config["n_shots"]
         logging.info("Library created")
@@ -78,44 +74,34 @@ class Library(Core, ABC):
 
     def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
-        This method corresponds to the identity and passes the information of the subsequent module 
+        This method corresponds to the identity and passes the information of the subsequent module
         back to the preceding module in the benchmarking process.
 
-        :param input_data: Collected information of the benchmarking process
-        :type input_data: dict
+        :param input_data: Collected information of the benchmarking procesS
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
-        :return: tuple with input dictionary and the computation time of the function
-        :rtype: tuple[dict, float]
+        :param kwargs: Optional keyword arguments
+        :return: Tuple with input dictionary and the computation time of the function
         """
         start = start_time_measurement()
         return input_data, end_time_measurement(start)
 
     @abstractmethod
-    def sequence_to_circuit(self, input_data):
+    def sequence_to_circuit(self, input_data: dict) -> dict:
         pass
 
     @staticmethod
     @abstractmethod
-    def get_execute_circuit(circuit: any, backend: any, config: str, config_dict: dict) -> (
-            tuple)[any, any]:
+    def get_execute_circuit(circuit: any, backend: any, config: str, config_dict: dict) -> tuple[any, any]:
         """
         This method combines the circuit implementation and the selected backend and returns a function that will be
         called during training.
 
         :param circuit: Implementation of the quantum circuit
-        :type circuit: any
         :param backend: Configured backend
-        :type backend: any
         :param config: Name of the PennyLane device
-        :type config: str
         :param config_dict: Dictionary including the number of shots
-        :type config_dict: dict
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
         transpiled circuit
-        :rtype: tuple[any, any]
         """
         pass
 
@@ -123,13 +109,10 @@ class Library(Core, ABC):
     @abstractmethod
     def select_backend(config: str, n_qubits: int) -> any:
         """
-        This method configures the backend
+        This method configures the backend.
 
         :param config: Name of a backend
-        :type config: str
         :param n_qubits: Number of qubits
-        :type n_qubits: int
         :return: Configured backend
-        :rtype: any
         """
         return

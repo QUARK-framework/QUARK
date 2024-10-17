@@ -16,28 +16,28 @@ from typing import TypedDict
 import logging
 
 import torch
-from torch.utils.data import  DataLoader
+from torch.utils.data import DataLoader
 from torch import nn
-import torch.nn.functional as F
+import torch.nn.functional as funct
 from tensorboardX import SummaryWriter
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.training.Training import *
-from modules.applications.QML.generative_modeling.transformations.Transformation import *
-
+from modules.training.Training import Training, Core
 from utils_mpi import is_running_mpi, get_comm
+
 MPI = is_running_mpi()
 comm = get_comm()
 
-class QGAN(Training): # pylint: disable=R0902
+
+class QGAN(Training):  # pylint: disable=R0902
     """
     Class for QGAN
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("QGAN")
 
@@ -79,69 +79,53 @@ class QGAN(Training): # pylint: disable=R0902
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "torch",
-                "version": "2.2.0"
-            },
-            {
-                "name": "matplotlib",
-                "version": "3.7.5"
-            },
-            {
-                "name": "tensorboard",
-                "version": "2.17.0"
-            },
-            {
-                "name": "tensorboardX",
-                "version": "2.6.2.2"
-            }
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "torch", "version": "2.2.0"},
+            {"name": "matplotlib", "version": "3.7.5"},
+            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this circuit
+        Returns the configurable settings for this circuit.
 
-        :return:
-                 .. code-block:: python
-                    return {
-                        "epochs": {
-                            "values": [2, 100, 200, 10000],
-                            "description": "How many epochs do you want?"
-                        },
-                        "batch_size": {
-                            "values": [10, 20, 100, 2000],
-                            "description": "What batch size do you want?"
-                        },
-                        "learning_rate_generator": {
-                            "values": [0.1, 0.2],
-                            "description": "What learning rate do you want to set for the generator?"
-                        },
-                        "learning_rate_discriminator": {
-                            "values": [0.1, 0.05],
-                            "description": "What learning rate do you want to set for the discriminator?"
-                        },
-                        "device": {
-                            "values": ["cpu", "gpu"],
-                            "description": "Where do you want to run the discriminator?"
-                        },
-                        "pretrained": {
-                            "values": [True, False],
-                            "description": "Do you want to use parameters of a pretrained model?"
-                        },
-                        "loss": {
-                            "values": ["KL", "NLL"],
-                            "description": "Which loss function do you want to use?"
-                        }
+        :return: Configuration settings for QGAN
+        .. code-block:: python
+        return {
+            "epochs": {
+                "values": [2, 100, 200, 10000],
+                "description": "How many epochs do you want?"
+            },
+            "batch_size": {
+                "values": [10, 20, 100, 2000],
+                "description": "What batch size do you want?"
+            },
+            "learning_rate_generator": {
+                "values": [0.1, 0.2],
+                "description": "What learning rate do you want to set for the generator?"
+            },
+            "learning_rate_discriminator": {
+                "values": [0.1, 0.05],
+                "description": "What learning rate do you want to set for the discriminator?"
+            },
+            "device": {
+                "values": ["cpu", "gpu"],
+                "description": "Where do you want to run the discriminator?"
+            },
+            "pretrained": {
+                "values": [True, False],
+                "description": "Do you want to use parameters of a pretrained model?"
+            },
+            "loss": {
+                "values": ["KL", "NLL"],
+                "description": "Which loss function do you want to use?"
+            }
                     }
         """
         return {
@@ -199,16 +183,21 @@ class QGAN(Training): # pylint: disable=R0902
         loss: str
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Raises ValueError as this module has no submodules.
+
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")
 
     def setup_training(self, input_data: dict, config: dict) -> None:
         """
-        :param input_data: dictionary with the variables from the circuit needed to start the training
-        :type input_data: dict
-        :param config: 
-        :type config: dict
-        """
+        Sets up the training configuration.
 
+        :param input_data: dictionary with the variables from the circuit needed to start the training
+        :param config: Configurations for the QGAN training.
+        """
         self.beta_1 = 0.5
         self.real_label = 1.
         self.fake_label = 0.
@@ -234,7 +223,8 @@ class QGAN(Training): # pylint: disable=R0902
         self.bins_train = input_data["binary_train"]
         if input_data["dataset_name"] == "Cardinality_Constraint":
             new_size = 1000
-            self.bins_train = np.repeat(self.bins_train,new_size,axis=0)
+            self.bins_train = np.repeat(self.bins_train, new_size, axis=0)
+
         self.study_generalization = "generalization_metrics" in list(input_data.keys())
         if self.study_generalization:
             self.generalization_metrics = input_data["generalization_metrics"]
@@ -248,15 +238,15 @@ class QGAN(Training): # pylint: disable=R0902
         self.discriminator.apply(Discriminator.weights_init)
 
         self.params = np.random.rand(self.n_params) * np.pi
-
         self.generator = QuantumGenerator(self.n_qubits, self.execute_circuit, self.batch_size)
-        self.accuracy = []
 
+        self.accuracy = []
         self.criterion = torch.nn.BCELoss()
         self.optimizer_discriminator = torch.optim.Adam(
             self.discriminator.parameters(),
             lr=config["learning_rate_discriminator"],
-            betas=(self.beta_1, 0.999))
+            betas=(self.beta_1, 0.999)
+        )
 
         self.real_labels = torch.full((self.batch_size,), 1.0, dtype=torch.float, device=self.device)
         self.fake_labels = torch.full((self.batch_size,), 0.0, dtype=torch.float, device=self.device)
@@ -272,16 +262,12 @@ class QGAN(Training): # pylint: disable=R0902
 
     def start_training(self, input_data: dict, config: dict, **kwargs: dict) -> dict:  # pylint: disable=R0915
         """
-        This function starts the training of the QGAN
+        This function starts the training of the QGAN.
 
-        :param input_data: dictionary with the variables from the circuit needed to start the training
-        :type input_data: dict
-        :param config: annealing settings
-        :type config: dict
-        :param kwargs: optional additional arguments
-        :type kwargs: dict
-        :return: dictionary including the solution
-        :rtype: dict
+        :param input_data: Dictionary with the variables from the circuit needed to start the training
+        :param config: Training settings
+        :param kwargs: Optional additional arguments
+        :return: Dictionary including the solution
         """
         self.setup_training(input_data, config)
         generator_losses = []
@@ -297,47 +283,45 @@ class QGAN(Training): # pylint: disable=R0902
             for batch, data in enumerate(self.dataloader):
                 # Training the discriminator
                 # Data from real distribution for training the discriminator
-
                 real_data = data.float().to(self.device)
                 self.discriminator.zero_grad()
-                outD_real = self.discriminator(real_data).view(-1)
-                errD_real = self.criterion(outD_real, self.real_labels)
-                errD_real.backward()
+                out_d_real = self.discriminator(real_data).view(-1)
+                err_d_real = self.criterion(out_d_real, self.real_labels)
+                err_d_real.backward()
 
                 # Use Quantum Variational Circuit to generate fake samples
                 fake_data, _ = self.generator.execute(self.params, self.batch_size)
                 fake_data = fake_data.float().to(self.device)
+                out_d_fake = self.discriminator(fake_data).view(-1)
+                err_d_fake = self.criterion(out_d_fake, self.fake_labels)
+                err_d_fake.backward()
 
-                outD_fake = self.discriminator(fake_data).view(-1)
-                errD_fake = self.criterion(outD_fake, self.fake_labels)
-                errD_fake.backward()
-
-                errD = errD_real + errD_fake
+                err_d = err_d_real + err_d_fake
                 self.optimizer_discriminator.step()
 
-                outD_fake = self.discriminator(fake_data).view(-1)
-                errG = self.criterion(outD_fake, self.real_labels)
-                fake_data, _ = self.generator.execute(self.params,self.batch_size)
-                gradients= self.generator.compute_gradient(
+                out_d_fake = self.discriminator(fake_data).view(-1)
+                err_g = self.criterion(out_d_fake, self.real_labels)
+                fake_data, _ = self.generator.execute(self.params, self.batch_size)
+                gradients = self.generator.compute_gradient(
                     self.params,
                     self.discriminator,
                     self.criterion,
                     self.real_labels,
-                    self.device)
+                    self.device
+                )
 
                 updated_params = self.params - self.learning_rate_generator * gradients
                 self.params = updated_params
 
                 self.discriminator_weights = self.discriminator.state_dict()
-
-                generator_losses.append(errG.item())
-                discriminator_losses.append(errD.item())
+                generator_losses.append(err_g.item())
+                discriminator_losses.append(err_d.item())
 
                 # Calculate loss
                 _, pmfs_model = self.generator.execute(self.params, self.n_shots)
                 pmfs_model = np.asarray(pmfs_model.copy())
 
-                loss= self.loss_func(pmfs_model[None,], self.target)
+                loss = self.loss_func(pmfs_model[None,], self.target)
                 self.accuracy.append(loss)
 
                 self.writer.add_scalar("metrics/KL", loss, epoch * n_batches + batch)
@@ -345,8 +329,8 @@ class QGAN(Training): # pylint: disable=R0902
                 self.writer.add_scalar("metrics/KL_circuit_evals", loss, circuit_evals)
 
                 # Calculate and log the loss values at the end of each epoch
-                self.writer.add_scalar('Loss/GAN_Generator', errG.item(), circuit_evals)
-                self.writer.add_scalar('Loss/GAN_Discriminator', errD.item(), circuit_evals)
+                self.writer.add_scalar('Loss/GAN_Generator', err_g.item(), circuit_evals)
+                self.writer.add_scalar('Loss/GAN_Discriminator', err_d.item(), circuit_evals)
 
                 if loss < best_kl_divergence:
                     best_kl_divergence = loss
@@ -360,7 +344,7 @@ class QGAN(Training): # pylint: disable=R0902
                 log_message = (
                     f"Epoch: {epoch + 1}/{self.n_epochs}, "
                     f"Batch: {batch + 1}/{len(self.bins_train) // self.batch_size}, "
-                    f"Discriminator Loss: {errD.item()}, Generator Loss: {errG.item()}, KL Divergence: {loss} "
+                    f"Discriminator Loss: {err_d.item()}, Generator Loss: {err_g.item()}, KL Divergence: {loss} "
                 )
 
                 logging.info(log_message)
@@ -399,7 +383,6 @@ class QGAN(Training): # pylint: disable=R0902
 
         input_data["best_parameter"] = best_generator_params
         input_data["best_sample"] = best_sample
-
         input_data["KL"] = self.accuracy
         input_data["generator_loss"] = generator_losses
         input_data["discriminator_loss"] = discriminator_losses
@@ -409,8 +392,9 @@ class QGAN(Training): # pylint: disable=R0902
 
 class Discriminator(nn.Module):
     """
-    This class defines the discriminator of the QGAN
+    This class defines the discriminator of the QGAN.
     """
+
     def __init__(self, input_length: int):
         super().__init__()
         self.dense1 = nn.Linear(int(input_length), 2 * int(input_length))
@@ -418,29 +402,25 @@ class Discriminator(nn.Module):
 
     def forward(self, x: torch.Tensor) -> float:
         """
-        This function initialized the weight tensor of the linear
-        layers with values using a Xavier uniform distribution.
+        Initializes the weight tensor of the linear layers with values using a Xavier uniform distribution.
 
         :param x: Input of the discriminator
         :type x: torch.Tensor
         :return: Probability fake/real sample
         :rtype: float
         """
-        h = F.leaky_relu(self.dense1(x))
-        h = F.leaky_relu(self.dense2(h))
-        return F.sigmoid(h)
+        h = funct.leaky_relu(self.dense1(x))
+        h = funct.leaky_relu(self.dense2(h))
+        return funct.sigmoid(h)
 
     @staticmethod
     def weights_init(m: nn.Linear) -> None:
         """
-        This function initialized the weight tensor of the linear
+        Initializes the weight tensor of the linear
         layers with values using a Xavier uniform distribution.
 
         :param m: Neural network layer
-        :type m: nn.Linear
         """
-        print(type(m))
-        print(m)
         if isinstance(m, nn.Linear):
             nn.init.xavier_uniform_(m.weight.data, gain=10)
             nn.init.constant_(m.bias.data, 1)
@@ -448,8 +428,9 @@ class Discriminator(nn.Module):
 
 class QuantumGenerator:
     """
-    This class defines the generator of the QGAN
+    This class defines the generator of the QGAN.
     """
+
     def __init__(self, n_qubits, execute_circuit, batch_size):
         self.n_qubits = n_qubits
         self.execute_circuit = execute_circuit
@@ -457,14 +438,11 @@ class QuantumGenerator:
 
     def execute(self, params: np.ndarray, n_shots: int) -> tuple[torch.Tensor, np.ndarray]:
         """
-        This function defines the forward pass of the generator
+        Forward pass of the generator.
 
         :param params: Parameters of the quantum circuit
-        :type params: np.ndarray
         :param n_shots: Number of shots
-        :type n_shots: int
         :return: samples and the probability distribution generated by the quantum circuit
-        :rtype: tuple[torch.Tensor, np.ndarray]
         """
 
         # Call the quantum circuit and obtain probability distributions
@@ -487,20 +465,14 @@ class QuantumGenerator:
     def compute_gradient(self, params: np.ndarray, discriminator: torch.nn.Module, criterion: callable,
                          label: torch.Tensor, device: str) -> np.ndarray:
         """
-        This function defines the forward pass of the generator
+        This function defines the forward pass of the generator.
 
         :param params: Parameters of the quantum circuit
-        :type params: np.ndarray
         :param discriminator: Discriminator of the QGAN
-        :type discriminator: torch.nn.Module
         :param criterion: Loss function
-        :type criterion: callable
         :param label: Label indicating of sample is true or fake
-        :type label: torch.Tensor
-        :param device: torch device (e.g. CPU or CUDA)
-        :type device: str
-        :return: samples and the probability distribution generated by the quantum circuit
-        :rtype: np.ndarray
+        :param device: Torch device (e.g., CPU or CUDA)
+        :return: Samples and the probability distribution generated by the quantum circuit
         """
         shift = 0.5 * np.pi
         gradients = np.zeros(len(params))  # Initialize gradients as an array of zeros

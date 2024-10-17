@@ -14,12 +14,15 @@
 
 from time import sleep
 from typing import TypedDict
+import logging
 
 import numpy as np
 from braket.circuits import Circuit
+from braket.aws import AwsDevice
 from scipy.optimize import minimize
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -30,38 +33,36 @@ class QAOA(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
-        self.submodule_options = ["LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
-                                  "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                                  "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
-                                  "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"]
+        self.submodule_options = [
+            "LocalSimulator", "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+            "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+            "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+            "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+        ]
 
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "amazon-braket-sdk",
-                "version": "1.87.0"
-            },
-            {
-                "name": "scipy",
-                "version": "1.12.0"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "amazon-braket-sdk", "version": "1.87.0"},
+            {"name": "scipy", "version": "1.12.0"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
             from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
@@ -83,29 +84,29 @@ class QAOA(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of parameter settings
+        .. code-block:: python
 
-                              return {
-                                        "shots": {  # number measurements to make on circuit
-                                            "values": list(range(10, 500, 30)),
-                                            "description": "How many shots do you need?"
-                                        },
-                                        "opt_method": {
-                                            "values": ["Powell", "Nelder-Mead"],
-                                            "description": "Which optimization method do you want?"
-                                        },
-                                        "depth": {
-                                            "values": [3],
-                                            "description": "Which circuit depth for QAOA do you want?"
-                                        }
-                                    }
+                    return {
+                            "shots": {  # number measurements to make on circuit
+                                "values": list(range(10, 500, 30)),
+                                "description": "How many shots do you need?"
+                            },
+                            "opt_method": {
+                                "values": ["Powell", "Nelder-Mead"],
+                                "description": "Which optimization method do you want?"
+                            },
+                            "depth": {
+                                "values": [3],
+                                "description": "Which circuit depth for QAOA do you want?"
+                            }
+                        }
 
         """
         return {
-            "shots": {  # number measurements to make on circuit
+            "shots": {  # number of measurements to make on circuit
                 "values": list(range(10, 500, 30)),
                 "description": "How many shots do you need?"
             },
@@ -121,7 +122,7 @@ class QAOA(Solver):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -134,22 +135,16 @@ class QAOA(Solver):
         opt_method: str
         depth: int
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, float):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
         Run QAOA algorithm on Ising.
 
-        :param mapped_problem: dictionary with the keys 'J' and 't'
-        :type mapped_problem: any
-        :param device_wrapper: instance of device
-        :type device_wrapper: any
-        :param config:
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param mapped_problem: Dict containing problem parameters mapped to the Ising model
+        :param device_wrapper: Instance of device
+        :param config: Solver configuration settings
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
         j = mapped_problem['J']
         if np.any(np.iscomplex(j)):
             logging.warning("The problem matrix of the QAOA solver contains imaginary numbers."
@@ -157,18 +152,18 @@ class QAOA(Solver):
         else:
             j = np.real(j)
 
-        # set up the problem
+        # Set up the problem
         n_qubits = j.shape[0]
 
         # User-defined hypers
-        depth = config['depth']  # circuit depth for QAOA
+        depth = config['depth']
         opt_method = config['opt_method']  # SLSQP, COBYLA, Nelder-Mead, BFGS, Powell, ...
 
-        # initialize reference solution (simple guess)
+        # Initialize reference solution (simple guess)
         bitstring_init = -1 * np.ones([n_qubits])
         energy_init = np.dot(bitstring_init, np.dot(j, bitstring_init))
 
-        # set tracker to keep track of results
+        # Set tracker to keep track of results
         tracker = {
             'count': 1,  # Elapsed optimization steps
             'optimal_energy': energy_init,  # Global optimal energy
@@ -181,36 +176,35 @@ class QAOA(Solver):
             'params': []  # Track parameters
         }
 
-        # set options for classical optimization
+        # Set options for classical optimization
         options = {'disp': True, 'maxiter': 100}
         # options = {'disp': True, 'ftol': 1e-08, 'maxiter': 100, 'maxfev': 50}  # example options
 
         ##################################################################################
-        # run QAOA optimization on graph
+        # Run QAOA optimization on graph
         ##################################################################################
 
         logging.info(f"Circuit depth hyperparameter:{depth}")
         logging.info(f"Problem size:{n_qubits}")
 
-        # kick off training
+        # Kick off training
         start = start_time_measurement()
-        # result_energy, result_angle, tracker
         _, _, tracker = train(
-            device=device_wrapper.get_device(), options=options, p=depth, ising=j, n_qubits=n_qubits,
+            device=device_wrapper.get_device(),
+            options=options,
+            p=depth, ising=j,
+            n_qubits=n_qubits,
             n_shots=config['shots'],
-            opt_method=opt_method, tracker=tracker, s3_folder=device_wrapper.s3_destination_folder, verbose=True)
+            opt_method=opt_method,
+            tracker=tracker,
+            s3_folder=device_wrapper.s3_destination_folder,
+            verbose=True
+        )
         time_to_solve = end_time_measurement(start)
 
-        # print execution time
-        # logging.info('Code execution time [sec]: ' + (end - start))
-
-        # print optimized results
+        # Log optimized results
         logging.info(f"Optimal energy: {tracker['optimal_energy']}")
         logging.info(f"Optimal classical bitstring: {tracker['optimal_bitstring']}")
-
-        # visualize the optimization process
-        # cycles = np.arange(1, tracker['count'])
-        # optim_classical = tracker['global_energies']
 
         # TODO maybe save this plot
         # plt.plot(cycles, optim_classical)
@@ -224,30 +218,38 @@ class QAOA(Solver):
 # QAOA utils (source:
 # https://github.com/aws/amazon-braket-examples/blob/main/examples/hybrid_quantum_algorithms/QAOA/utils_qaoa.py)
 
-# function to implement ZZ gate using CNOT gates
-def ZZgate(q1, q2, gamma):
+# Function to implement ZZ gate using CNOT gates
+def zz_gate(q1: any, q2: any, gamma: float) -> Circuit:
     """
-    function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported
-    """
+    Function that returns a circuit implementing exp(-i \\gamma Z_i Z_j) using CNOT gates if ZZ not supported.
 
-    # get a circuit
+    :param q1: Qubit 1 (control)
+    :param q2: Qubit 2 (target)
+    :param gamma: Gamma parameter (angle)
+    :return: ZZ gate
+    """
+    # Get a circuit
     circ_zz = Circuit()
 
-    # construct decomposition of ZZ
+    # Construct decomposition of ZZ
     circ_zz.cnot(q1, q2).rz(q2, gamma).cnot(q1, q2)
 
     return circ_zz
 
 
-# function to implement evolution with driver Hamiltonian
-def driver(beta, n_qubits):
+# Function to implement evolution with driver Hamiltonian
+def driver(beta: float, n_qubits: int) -> Circuit:
     """
-    Returns circuit for driver Hamiltonian U(Hb, beta)
+    Returns circuit for driver Hamiltonian U(Hb, beta).
+
+    :param beta: Beta parameter (angle)
+    :param n_qubits: Number of qubits
+    :return: Circuit with rotated qubits
     """
-    # instantiate circuit object
+    # Instantiate circuit object
     circ = Circuit()
 
-    # apply parametrized rotation around x to every qubit
+    # Apply parametrized rotation around x to every qubit
     for qubit in range(n_qubits):
         gate = Circuit().rx(qubit, 2 * beta)
         circ.add(gate)
@@ -255,126 +257,142 @@ def driver(beta, n_qubits):
     return circ
 
 
-# helper function for evolution with cost Hamiltonian
-def cost_circuit(gamma, n_qubits, ising, device):
+# Helper function for evolution with cost Hamiltonian
+def cost_circuit(gamma: float, ising: np.ndarray, device: AwsDevice) -> Circuit:
     """
-    returns circuit for evolution with cost Hamiltonian
+    Returns circuit for evolution with cost Hamiltonian.
+
+    :param gamma: Gamma parameter (angle)
+    :param ising: Ising matrix
+    :param device: Device to run the circuit on
+    :return: Circuit representing the cost Hamiltonian
     """
-    # instantiate circuit object
+    # Instantiate circuit object
     circ = Circuit()
 
-    # get all non-zero entries (edges) from Ising matrix
+    # Get all non-zero entries (edges) from Ising matrix
     idx = ising.nonzero()
     edges = list(zip(idx[0], idx[1]))
 
-    # apply ZZ gate for every edge (with corresponding interaction strength)
+    # Apply ZZ gate for every edge (with corresponding interaction strength)
     for qubit_pair in edges:
-        # get interaction strength from Ising matrix
+        # Get interaction strength from Ising matrix
         int_strength = ising[qubit_pair[0], qubit_pair[1]]
-        # for Rigetti we decompose ZZ using CNOT gates
+        # For Rigetti we decompose ZZ using CNOT gates
         if device.name in ["Rigetti", "Aspen-9"]:  # TODO make this more flexible
-            gate = ZZgate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
-            circ.add(gate)
-        # classical simulators and IonQ support ZZ gate
+            gate = zz_gate(qubit_pair[0], qubit_pair[1], gamma * int_strength)
+        # Classical simulators and IonQ support ZZ gate
         else:
             gate = Circuit().zz(qubit_pair[0], qubit_pair[1], angle=2 * gamma * int_strength)
-            circ.add(gate)
+        circ.add(gate)
 
     return circ
 
 
-# function to build the QAOA circuit with depth p
-def circuit(params, device, n_qubits, ising):
+# Function to build the QAOA circuit with depth p
+def circuit(params: np.array, device: AwsDevice, n_qubits: int, ising: np.ndarray) -> Circuit:
     """
-    function to return full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend
+    Function to return the full QAOA circuit; depends on device as ZZ implementation depends on gate set of backend.
+
+    :param params: Array containing the beta and gamma parameters
+    :param device: Device to run the circuit on
+    :param n_qubits: Number of qubits
+    :param ising: Ising matrix
+    :return: QAOA Circuit
     """
 
-    # initialize qaoa circuit with first Hadamard layer: for minimization start in |->
+    # Initialize QAOA circuit with first Hadamard layer
     circ = Circuit()
-    X_on_all = Circuit().x(range(0, n_qubits))
-    circ.add(X_on_all)
-    H_on_all = Circuit().h(range(0, n_qubits))
-    circ.add(H_on_all)
+    x_on_all = Circuit().x(range(0, n_qubits))
+    circ.add(x_on_all)
+    h_on_all = Circuit().h(range(0, n_qubits))
+    circ.add(h_on_all)
 
-    # setup two parameter families
+    # Setup two parameter families
     circuit_length = int(len(params) / 2)
     gammas = params[:circuit_length]
     betas = params[circuit_length:]
 
-    # add QAOA circuit layer blocks
+    # Add QAOA circuit layer blocks
     for mm in range(circuit_length):
-        circ.add(cost_circuit(gammas[mm], n_qubits, ising, device))
+        circ.add(cost_circuit(gammas[mm], ising, device))
         circ.add(driver(betas[mm], n_qubits))
 
     return circ
 
 
-# function that computes cost function for given params
+# Function that computes cost function for given params
 # pylint: disable=R0917
 # pylint: disable=R0913
-def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_folder, verbose):
+def objective_function(params: np.array, device: AwsDevice, ising: np.ndarray, n_qubits: int, n_shots: int,
+                       tracker: dict, s3_folder: tuple[str, str], verbose: bool) -> float:
     """
-    objective function takes a list of variational parameters as input,
-    and returns the cost associated with those parameters
+    Objective function takes a list of variational parameters as input,
+    and returns the cost associated with those parameters.
+
+    :param params: Array containing beta and gamma parameters
+    :param device: Device to run the circuit on
+    :param ising: Ising matrix
+    :param n_qubits: Number of qubits
+    :param n_shots: Number of measurements to make on the circuit
+    :param tracker: Keeps track of the runs on the circuit
+    :param s3_folder: AWS S3 bucket
+    :param verbose: Controls degree of detail in logs
+    :return: Energy expectation value
     """
 
     if verbose:
         logging.info("==================================" * 2)
         logging.info(f"Calling the quantum circuit. Cycle: {tracker['count']}")
 
-    # get a quantum circuit instance from the parameters
+    # Get a quantum circuit instance from the parameters
     qaoa_circuit = circuit(params, device, n_qubits, ising)
 
-    # classically simulate the circuit
-    # execute the correct device.run call depending on whether the backend is local or cloud based
+    # Classically simulate the circuit
+    # Execute the correct device.run call depending on whether the backend is local or cloud based
     if device.name in ["DefaultSimulator", "StateVectorSimulator"]:
         task = device.run(qaoa_circuit, shots=n_shots)
     else:
-        task = device.run(
-            qaoa_circuit, s3_folder, shots=n_shots, poll_timeout_seconds=3 * 24 * 60 * 60
-        )
+        task = device.run(qaoa_circuit, s3_folder, shots=n_shots, poll_timeout_seconds=3 * 24 * 60 * 60)
 
-        # get ID and status of submitted task
+        # Get ID and status of submitted task
         task_id = task.id
         status = task.state()
         logging.info(f"ID of task: {task_id}")
         logging.info(f"Status of task: {status}")
-        # wait for job to complete
+
+        # Wait for job to complete
         while status != 'COMPLETED':
             status = task.state()
             logging.info(f"Status: {status}")
             sleep(10)
 
-    # get result for this task
+    # Get result for this task
     result = task.result()
     logging.info(result)
 
-    # get metadata
-    # metadata = result.task_metadata
-
-    # convert results (0 and 1) to ising (-1 and 1)
+    # Convert results (0 and 1) to ising (-1 and 1)
     meas_ising = result.measurements
     meas_ising[meas_ising == 0] = -1
 
-    # get all energies (for every shot): (n_shots, 1) vector
+    # Get all energies (for every shot): (n_shots, 1) vector
     all_energies = np.diag(np.dot(meas_ising, np.dot(ising, np.transpose(meas_ising))))
 
-    # find minimum and corresponding classical string
+    # Find minimum and corresponding classical string
     energy_min = np.min(all_energies)
     tracker["opt_energies"].append(energy_min)
     optimal_string = meas_ising[np.argmin(all_energies)]
     tracker["opt_bitstrings"].append(optimal_string)
     logging.info(tracker["optimal_energy"])
 
-    # store optimal (classical) result/bitstring
+    # Store optimal (classical) result/bitstring
     if energy_min < tracker["optimal_energy"]:
-        tracker.update({"optimal_energy": energy_min})
-        tracker.update({"optimal_bitstring": optimal_string})
+        tracker.update({"optimal_energy": energy_min, "optimal_bitstring": optimal_string})
 
-    # store global minimum
+    # Store global minimum
     tracker["global_energies"].append(tracker["optimal_energy"])
 
-    # energy expectation value
+    # Energy expectation value
     energy_expect = np.sum(all_energies) / n_shots
 
     if verbose:
@@ -382,7 +400,7 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
         logging.info(f"Optimal classical string: {optimal_string}")
         logging.info(f"Energy expectation value (cost): {energy_expect}")
 
-    # update tracker
+    # Update tracker
     tracker.update({"count": tracker["count"] + 1, "res": result})
     tracker["costs"].append(energy_expect)
     tracker["params"].append(params)
@@ -392,12 +410,24 @@ def objective_function(params, device, ising, n_qubits, n_shots, tracker, s3_fol
 
 # The function to execute the training: run classical minimization.
 # pylint: disable=R0917
-def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_folder, verbose=True):
+def train(device: AwsDevice, options: dict, p: int, ising: np.ndarray, n_qubits: int, n_shots: int, opt_method: str,
+          tracker: dict, s3_folder: tuple[str, str], verbose: bool = True) -> tuple[float, np.ndarray, dict]:
     """
-    function to run QAOA algorithm for given, fixed circuit depth p
+    Function to run QAOA algorithm for given, fixed circuit depth p.
+
+    :param device: Device to run the circuit on
+    :param options: Dict containing parameters of classical part of the QAOA
+    :param p: Circuit depth
+    :param ising: Ising matrix
+    :param n_qubits: Number of qubits
+    :param n_shots: Number of measurements to make on the circuit
+    :param opt_method: Controls degree of detail in logs
+    :param tracker: Keeps track of the runs on the circuit
+    :param s3_folder: AWS S3 bucket
+    :param verbose: Controls degree of detail in logs
+    :return: Results of the training as a tuple of the energy, the angle and the tracker
     """
     logging.info("Starting the training.")
-
     logging.info("==================================" * 2)
     logging.info(f"OPTIMIZATION for circuit depth p={p}")
 
@@ -405,22 +435,22 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
         logging.info('Param "verbose" set to False. Will not print intermediate steps.')
         logging.info("==================================" * 2)
 
-    # initialize
+    # Initialize
     cost_energy = []
 
-    # randomly initialize variational parameters within appropriate bounds
+    # Randomly initialize variational parameters within appropriate bounds
     gamma_initial = np.random.uniform(0, 2 * np.pi, p).tolist()
     beta_initial = np.random.uniform(0, np.pi, p).tolist()
     params0 = np.array(gamma_initial + beta_initial)
 
-    # set bounds for search space
+    # Set bounds for search space
     bnds_gamma = [(0, 2 * np.pi) for _ in range(int(len(params0) / 2))]
     bnds_beta = [(0, np.pi) for _ in range(int(len(params0) / 2))]
     bnds = bnds_gamma + bnds_beta
 
     tracker["params"].append(params0)
 
-    # run classical optimization (example: method='Nelder-Mead')
+    # Run classical optimization (example: method='Nelder-Mead')
     try:
         result = minimize(
             objective_function,
@@ -435,7 +465,7 @@ def train(device, options, p, ising, n_qubits, n_shots, opt_method, tracker, s3_
         logging.error("The benchmarking run terminates with exception.")
         raise Exception("Please refer to the logged error message.") from e
 
-    # store result of classical optimization
+    # Store result of classical optimization
     result_energy = result.fun
     cost_energy.append(result_energy)
     logging.info(f"Final average energy (cost): {result_energy}")

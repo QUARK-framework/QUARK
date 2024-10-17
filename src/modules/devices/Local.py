@@ -18,13 +18,12 @@ from modules.Core import Core
 
 class Local(Device):
     """
-    Some Solvers (often classical) also can run on a normal local environment without any specific device or
-    setting needed.
+    Some solvers (often classical) run on a local environment without any specific device or setting needed.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(device_name="local")
         self.device = None
@@ -32,14 +31,17 @@ class Local(Device):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
+        return {}
 
-        }
+    def get_default_submodule(self, option: str) -> None:
+        """
+        Raises ValueError as this module has no submodules.
 
-    def get_default_submodule(self, option: str) -> Core:
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")

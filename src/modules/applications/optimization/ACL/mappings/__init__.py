@@ -12,4 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for ACL mappings"""
+"""
+Module for ACL mappings.
+
+This module provides initializations for ACL related
+mappings that are used in the QUARK framework.
+"""

@@ -12,4 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for SAT mappings"""
+"""
+Module for SAT mappings
+
+This module initializes the SAT application
+"""

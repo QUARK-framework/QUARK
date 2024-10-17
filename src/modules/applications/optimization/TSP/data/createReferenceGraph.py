@@ -18,19 +18,31 @@ import tsplib95
 
 # Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/
 filename = "dsj1000.tsp"
-print(f"Loading {filename}")
-# Load the problem from .tsp file
-problem = tsplib95.load(filename)
-graph = problem.get_graph()
 
-# We don't needed edges from e.g. node0 -> node0
-for edge in graph.edges:
-    if edge[0] == edge[1]:
-        graph.remove_edge(edge[0], edge[1])
-print("Loaded graph:")
-print(nx.info(graph))
 
-with open("reference_graph.gpickle", "wb") as file:
-    pickle.dump(graph, file, pickle.HIGHEST_PROTOCOL)
+def main():
+    """
+    Load a TSP problem, remove unnecessary edges, and save the reference graph.
+    """
+    print(f"Loading {filename}")
 
-print("Saved graph as reference_graph.gpickle")
+    # Load the problem from .tsp file
+    problem = tsplib95.load(filename)
+    graph = problem.get_graph()
+
+    # We don't needed edges from e.g. node0 -> node0
+    for edge in graph.edges:
+        if edge[0] == edge[1]:
+            graph.remove_edge(edge[0], edge[1])
+
+    print("Loaded graph:")
+    print(nx.info(graph))
+
+    with open("reference_graph.gpickle", "wb") as file:
+        pickle.dump(graph, file, pickle.HIGHEST_PROTOCOL)
+
+    print("Saved graph as reference_graph.gpickle")
+
+
+if __name__ == '__main__':
+    main()

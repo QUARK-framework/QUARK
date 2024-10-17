@@ -12,48 +12,47 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
-from typing import TypedDict
+from typing import Union, TypedDict
 
 from modules.circuits.Circuit import Circuit
-from modules.applications.QML.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
-from modules.applications.QML.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
-from modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
-from modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
+from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
+from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
+from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
 class CircuitCardinality(Circuit):
     """
     This class generates a library-agnostic gate sequence, i.e. a list containing information
-    about the gates and the wires they act on. 
+    about the gates and the wires they act on.
     The circuit follows the implementation by Gili et al. https://arxiv.org/abs/2207.13645
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("CircuitCardinality")
         self.submodule_options = [
             "LibraryQiskit",
             "LibraryPennylane",
             "CustomQiskitNoisyBackend",
-            "PresetQiskitNoisyBackend"]
+            "PresetQiskitNoisyBackend"
+        ]
 
     def get_parameter_options(self) -> dict:
         """
         Returns the configurable settings for this circuit.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary with parameter options
+        .. code-block:: python
 
-                     return {
-                                "depth": {
-                                    "values": [2, 4, 8, 16],
-                                    "description": "What depth do you want?"
-                                }
-                            }
-
+            return {
+                    "depth": {
+                        "values": [2, 4, 8, 16],
+                        "description": "What depth do you want?"
+                    }
+                }
         """
         return {
 
@@ -63,8 +62,15 @@ class CircuitCardinality(Circuit):
             },
         }
 
-    def get_default_submodule(self, option: str) ->\
-        Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+    def get_default_submodule(self, option: str) \
+            -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
         if option == "LibraryQiskit":
             return LibraryQiskit()
         if option == "LibraryPennylane":
@@ -78,7 +84,7 @@ class CircuitCardinality(Circuit):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -89,14 +95,11 @@ class CircuitCardinality(Circuit):
 
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
-        Returns gate sequence of cardinality circuit architecture
-    
+        Returns gate sequence of cardinality circuit architecture.
+
         :param input_data: Collection of information from the previous modules
-        :type input_data: dict
         :param config: Config specifying the number of qubits of the circuit
-        :type config: Config
         :return: Dictionary including the gate sequence of the Cardinality Circuit
-        :rtype: dict
         """
         n_qubits = input_data["n_qubits"]
         depth = config["depth"] // 2
@@ -139,7 +142,7 @@ class CircuitCardinality(Circuit):
             "store_dir_iter": input_data["store_dir_iter"],
             "train_size": input_data["train_size"],
             "dataset_name": input_data["dataset_name"],
-            "binary_train":input_data["binary_train"]
+            "binary_train": input_data["binary_train"]
         }
 
         return output_dict

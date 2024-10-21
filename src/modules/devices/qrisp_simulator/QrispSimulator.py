@@ -57,7 +57,7 @@ class QrispSimulator(Device, ABC):
         return [
             {
                 "name": "qrisp",
-                "version": "0.4.12"
+                "version": "0.4.15"
             },
         ]
 

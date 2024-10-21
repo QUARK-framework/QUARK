@@ -219,7 +219,7 @@ class MIS(Optimization):
             gseed = config.get("seed")
 
             if gseed == "No":
-                graph = networkx.erdos_renyi_graph(size, filling_fraction)
+                graph = nx.erdos_renyi_graph(size, filling_fraction)
 
             else:
                 try:

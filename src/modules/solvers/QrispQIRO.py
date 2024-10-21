@@ -15,11 +15,11 @@
 import logging
 from typing import TypedDict
 
-from qrisp.qiro import (QIROProblem, qiro_init_function, qiro_RXMixer, create_maxIndep_replacement_routine,
-                        create_maxIndep_cost_operator_reduced)
-from qrisp.qaoa.problems.maxIndepSetInfrastr import maxIndepSetclCostfct
 from qrisp import QuantumVariable
-
+from qrisp.qiro import (QIROProblem, create_max_indep_replacement_routine, create_max_indep_cost_operator_reduced, qiro_RXMixer, qiro_init_function)
+from qrisp.qaoa import create_max_indep_set_cl_cost_function
+import matplotlib.pyplot as plt
+import networkx as nx
 from modules.solvers.Solver import *
 from utils import start_time_measurement, end_time_measurement
 
@@ -46,7 +46,7 @@ class QIROSolver(Solver):
         return [
             {
                 "name": "qrisp",
-                "version": "0.4.12"
+                "version": "0.4.15"
             }
         ]
 
@@ -158,15 +158,17 @@ class QIROSolver(Solver):
 
         g = mapped_problem['graph']
         start = start_time_measurement()
-        
+
         qiro_instance = QIROProblem(g,
-                                    replacement_routine=create_maxIndep_replacement_routine,
-                                    cost_operator=create_maxIndep_cost_operator_reduced,
+                                    replacement_routine=create_max_indep_replacement_routine,
+                                    cost_operator=create_max_indep_cost_operator_reduced,
                                     mixer=qiro_RXMixer,
-                                    cl_cost_function=maxIndepSetclCostfct,
+                                    cl_cost_function=create_max_indep_set_cl_cost_function,
                                     init_function=qiro_init_function
                                     )
+        
         qarg = QuantumVariable(g.number_of_nodes())
+
         # Run actual optimization algorithm
         try:
             res_qiro = qiro_instance.run_qiro(qarg=qarg, depth=p, n_recursions=n, mes_kwargs={"shots": shots},
@@ -175,7 +177,7 @@ class QIROSolver(Solver):
             logging.error(f"The following ValueError occurred in module QrispQIRO: {e}")
             logging.error("The benchmarking run terminates with exception.")
             raise Exception("Please refer to the logged error message.") from e
-        best_bitstring = self._qiro_select_best_state(res_qiro, maxIndepSetclCostfct(g))
+        best_bitstring = self._qiro_select_best_state(res_qiro, create_max_indep_set_cl_cost_function(g))
 
         def _translate_state_to_nodes(state: str, nodes: list) -> list:
             return [key for index, key in enumerate(nodes) if state[index] == '1']

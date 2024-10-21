@@ -228,7 +228,7 @@ class MIS(Optimization):
                     logging.warning(f"Please select an integer number as seed for the Erdos-Renyi graph instead of "
                                     f"'{gseed}'. The seed is instead set to 0.")
                     gseed = 0
-                graph = networkx.erdos_renyi_graph(size, filling_fraction, seed=gseed)
+                graph = nx.erdos_renyi_graph(size, filling_fraction, seed=gseed)
             logging.info("Created MIS problem with the nx.erdos_renyi graph method, with the following attributes:")
             logging.info(f" - Graph size: {size}")
             logging.info(f" - p: {filling_fraction}")

@@ -186,9 +186,14 @@ class QIROSolver(Solver):
 
         return winner_state, end_time_measurement(start), {}
 
-    # post_processing: find the best solution out of the 10 most likely ones.
-    # QIRO is an optimization algo, the most_likely solution is mostly of bad quality, unless the problem is complex
     def _qiro_select_best_state(self, res_qiro, cost_func) -> str:
+        """
+        This function is used for post_processing, i.e. finding the best solution out of the 10 most likely ones.
+        Since QIRO is an optimization algorithm, the most_likely solution can be of bad quality, depending on the problem cost landscape.
+    
+        :param res_qiro: Dictionary containing the QIRO optimization routine results, i.e. the final state.
+        :param cost_func: classical cost function of the problem instance
+        """
         maxfive = sorted(res_qiro, key=res_qiro.get, reverse=True)[:10]
         max_cost = 0 
         best_state = "0" * len(maxfive[0])

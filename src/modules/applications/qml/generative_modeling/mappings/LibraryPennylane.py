@@ -12,16 +12,17 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from modules.applications.qml.generative_modeling.mappings.Library import Library
-from modules.training.Inference import Inference
-from modules.training.QGAN import QGAN
-from modules.training.QCBM import QCBM
 from typing import Union
 
 import numpy as np
 import pennylane as qml
 from jax import numpy as jnp
 import jax
+
+from modules.applications.qml.generative_modeling.mappings.Library import Library
+from modules.training.Inference import Inference
+from modules.training.QGAN import QGAN
+from modules.training.QCBM import QCBM
 
 jax.config.update("jax_enable_x64", True)
 

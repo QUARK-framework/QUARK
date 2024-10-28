@@ -14,18 +14,17 @@
 
 import pickle
 import os
-from abc import ABC, abstractmethod
+from abc import ABC
 from qiskit import qpy
 
 import numpy as np
-import pandas as pd
-from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 from modules.Core import Core
+from modules.applications.qml.DataHandler import DataHandler
 from utils import start_time_measurement, end_time_measurement
 
 
-class DataHandler(Core, ABC):
+class DataHandlerGenerative(Core, DataHandler, ABC):
     """
     The task of the DataHandler module is to translate the application’s data
     and problem specification into preprocessed format.
@@ -103,7 +102,7 @@ class DataHandler(Core, ABC):
 
         # Save metrics per iteration
         if "inference" not in input_data.keys():
-            DataHandler.tb_to_pd(logdir=store_dir_iter, rep=str(kwargs['rep_count']))
+            self.tb_to_pd(logdir=store_dir_iter, rep=str(kwargs['rep_count']))
             self.metrics.add_metric_batch(
                 {"metrics_pandas": os.path.relpath(f"{store_dir_iter}/data.pkl", current_directory)}
             )
@@ -155,18 +154,6 @@ class DataHandler(Core, ABC):
 
         return input_data, end_time_measurement(start)
 
-    @abstractmethod
-    def data_load(self, gen_mod: dict, config: dict) -> tuple[any, float]:
-        """
-        Helps to ensure that the model can effectively learn the underlying
-        patterns and structure of the data, and produce high-quality outputs.
-
-        :param gen_mod: Dictionary with collected information of the previous modules
-        :param config: Config specifying the parameters of the data handler
-        :return: Mapped problem and the time it took to create the mapping
-        """
-        pass
-
     def generalization(self) -> tuple[dict, float]:
         """
         Computes generalization metrics.
@@ -177,34 +164,3 @@ class DataHandler(Core, ABC):
         metrics = {}  # Replace with actual metric calculations
         time_taken = 0.0  # Replace with actual time calculation
         return metrics, time_taken
-
-    @abstractmethod
-    def evaluate(self, solution: any) -> tuple[any, float]:
-        """
-        Computes the best loss values.
-
-        :param solution: Solution data
-        :return: Evaluation data and the time it took to create it
-        """
-        return None, 0.0
-
-    @staticmethod
-    def tb_to_pd(logdir: str, rep: str) -> None:
-        """
-        Converts TensorBoard event files in the specified log directory
-        into a pandas DataFrame and saves it as a pickle file.
-
-        :param logdir: Path to the log directory containing TensorBoard event files
-        :param rep: Repetition counter
-        """
-        event_acc = EventAccumulator(logdir)
-        event_acc.Reload()
-        tags = event_acc.Tags()
-        data = []
-        tag_data = {}
-        for tag in tags['scalars']:
-            data = event_acc.Scalars(tag)
-            tag_values = [d.value for d in data]
-            tag_data[tag] = tag_values
-        data = pd.DataFrame(tag_data, index=[d.step for d in data])
-        data.to_pickle(f"{logdir}/data_{rep}.pkl")

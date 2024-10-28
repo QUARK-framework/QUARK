@@ -20,14 +20,14 @@ from tensorboardX import SummaryWriter
 from matplotlib import figure, axes
 import matplotlib.pyplot as plt
 
-from modules.training.Training import Training, Core, GPU
+from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()
 comm = get_comm()
 
 
-class QCBM(Training):
+class QCBM(TrainingGenerative):
     """
     This module optimizes the parameters of quantum circuit using CMA-ES.
     This training method is referred to as quantum circuit born machine (QCBM).

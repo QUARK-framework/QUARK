@@ -19,15 +19,15 @@ import pennylane as qml
 from jax import numpy as jnp
 import jax
 
-from modules.applications.qml.generative_modeling.mappings.Library import Library
-from modules.training.Inference import Inference
-from modules.training.QGAN import QGAN
-from modules.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
+from modules.applications.qml.generative_modeling.training.Inference import Inference
+from modules.applications.qml.generative_modeling.training.QGAN import QGAN
+from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 
 jax.config.update("jax_enable_x64", True)
 
 
-class LibraryPennylane(Library):
+class LibraryPennylane(LibraryGenerative):
 
     def __init__(self):
         super().__init__("LibraryPennylane")

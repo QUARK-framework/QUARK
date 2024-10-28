@@ -14,10 +14,10 @@
 
 from typing import TypedDict
 import numpy as np
-from modules.training.Training import Training, Core, GPU
+from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 
 
-class Inference(Training):
+class Inference(TrainingGenerative):
     """
     This module executes a quantum circuit with parameters of a pretrained model.
     """

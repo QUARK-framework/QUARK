@@ -38,8 +38,8 @@ class Model(ABC):
         called during training.
 
         :param circuit: Implementation of the quantum circuit
-        :param backend: Configured backend
-        :param config: Name of the PennyLane device
+        :param backend: Configured qiskit backend
+        :param config: Name of a backend
         :param config_dict: Dictionary including the number of shots
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
         transpiled circuit

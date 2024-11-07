@@ -14,21 +14,23 @@
 
 from typing import TypedDict
 
-import networkx
+import networkx as nx
 from networkx.algorithms import approximation as approx
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
 class ReverseGreedyClassicalTSP(Solver):
     """
-    Classical Reverse Greedy Solver for the TSP. We take the worst choice at each step.
+    Classical Reverse Greedy Solver for the TSP.
+    We take the worst choice at each step.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Local"]
@@ -36,19 +38,19 @@ class ReverseGreedyClassicalTSP(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "networkx",
-                "version": "3.2.1"
-            }
-        ]
+        return [{"name": "networkx", "version": "3.2.1"}]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415
             return Local()
@@ -57,43 +59,37 @@ class ReverseGreedyClassicalTSP(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dict as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     class Config(TypedDict):
         """
-        Empty config as this solver has no configurable settings
+        Empty config as this solver has no configurable settings.
         """
         pass
 
-    def run(self, mapped_problem: networkx.Graph, device_wrapper: any, config: Config, **kwargs: any) -> (dict, float):
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: any) \
+            -> tuple[dict, float, dict]:
         """
         Solve the TSP graph in a greedy fashion.
 
-        :param mapped_problem: graph representing a TSP
-        :type mapped_problem: networkx.Graph
+        :param mapped_problem: Graph representing a TSP
         :param device_wrapper: Local device
-        :type device_wrapper: any
-        :param config: empty dict
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param config: Empty dict
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
-        # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
-        # with a different graph
+        # Need to deep copy since we are modifying the graph in this function.
+        # Else the next repetition would work with a different graph
         mapped_problem = mapped_problem.copy()
+
         # Let's flip the edge weights to take the worst node every time instead of the best
         for _, _, d in mapped_problem.edges(data=True):
             d['weight'] = -1.0 * d['weight']
+
         start = start_time_measurement()
 
         tour = approx.greedy_tsp(mapped_problem)
@@ -103,8 +99,6 @@ class ReverseGreedyClassicalTSP(Solver):
         tour = list(dict.fromkeys(tour))
 
         # Parse tour so that it can be processed later
-        result = {}
-        for idx, node in enumerate(tour):
-            result[(node, idx)] = 1
-        # Tour needs to look like
+        result = {(node, idx): 1 for idx, node in enumerate(tour)}
+
         return result, end_time_measurement(start), {}

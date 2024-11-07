@@ -2,7 +2,8 @@ QUARK: A Framework for Quantum Computing Application Benchmarking
 =================================================================
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers.
-QUARK supports various applications, like the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, or the robot path optimization in the PVC sealing use case.
+QUARK supports various applications such as the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, robot path optimization in the PVC sealing use case 
+as well as new additions like the Maximum Independent Set (MIS), Set Cover Problem (SCP) and Auto Carrier Loading (ACL).
 It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
@@ -65,9 +66,22 @@ You can also visualize the contents of your QUARK environment:
 In case you want to use custom modules files (for example to use external modules from other repositories), you can still use the ``--modules`` option.
 You can find the documentation in the Dynamic Imports section.
 
+Git Large File Storage (LFS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
+
+Installing Git LFS
+^^^^^^^^^^^^^^^^^^^
+Install Git LFS by following the instructions on `Git LFS <https://git-lfs.com/>`_
+  - On Linux/macOS
+    ::
+
+       git lfs install
+
+  - On Windows. Download and install Git LFS from the `Official page <https://git-lfs.com/>`_
 
 Running a Benchmark
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
@@ -88,46 +102,64 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
     (quark) % python src/main.py
     [?] What application do you want?: TSP
-       PVC
-       SAT
-     > TSP
+      PVC
+      SAT
+    > TSP
+      ACL
+      MIS
+      SCP
+      GenerativeModeling
 
-    2023-03-21 09:18:36,440 [INFO] Import module modules.applications.optimization.TSP.TSP
+    2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
     [?] (Option for TSP) How many nodes does you graph need?:
-     > [X] 3
-       [ ] 4
-       [ ] 6
-       [ ] 8
-       [ ] 10
-       [ ] 14
-       [ ] 16
+    > [X] 3
+      [ ] 4
+      [ ] 6
+      [ ] 8
+      [ ] 10
+      [ ] 14
+      [ ] 16
+      [ ] Custom Range
 
     [?] What submodule do you want?:
-       [ ] Ising
-       [ ] Qubo
-     > [X] GreedyClassicalTSP
-       [ ] ReverseGreedyClassicalTSP
-       [ ] RandomTSP
+      [ ] Ising
+      [ ] Qubo
+    > [X] GreedyClassicalTSP
+      [ ] ReverseGreedyClassicalTSP
+      [ ] RandomTSP
 
-    2023-03-21 09:18:49,563 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
-    2023-03-21 09:18:49,566 [INFO] Submodule configuration finished
-    [?] How many repetitions do you want?: 1
-    2023-03-21 09:18:50,577 [INFO] Import module modules.applications.optimization.TSP.TSP
-    2023-03-21 09:18:50,948 [INFO] Created Benchmark run directory /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50
-    2023-03-21 09:18:51,025 [INFO] Codebase is based on revision 075201825fa71c24b5567e1290966081be7dbdc0 and has some uncommitted changes
-    2023-03-21 09:18:51,026 [INFO] Running backlog item 1/1, Iteration 1/1:
-    2023-03-21 09:18:51,388 [INFO] Route found:
-     Node 0 ->
-     Node 2 ->
-     Node 1
-    2023-03-21 09:18:51,388 [INFO] All 3 nodes got visited
-    2023-03-21 09:18:51,388 [INFO] Total distance (without return): 727223.0
-    2023-03-21 09:18:51,388 [INFO] Total distance (including return): 1436368.0
-    2023-03-21 09:18:51,389 [INFO]
-    2023-03-21 09:18:51,389 [INFO]  ============================================================
-    2023-03-21 09:18:51,389 [INFO]
-    2023-03-21 09:18:51,389 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2023-03-21-09-18-50/results.json
-    2023-03-21 09:18:51,746 [INFO] Finished creating plots.
+    2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
+    2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
+    2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
+    2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
+    [?] How many repetitions do you want?: 1P
+    2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
+    2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
+    2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
+    2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
+    2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
+    2024-10-09 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
+    2024-10-09 15:07:12,386 [INFO] Route found:
+    Node 0 ->
+    Node 2 ->
+    Node 1
+    2024-10-09 15:07:12,386 [INFO] All 3 nodes got visited
+    2024-10-09 15:07:12,386 [INFO] Total distance (without return): 727223.0
+    2024-10-09 15:07:12,386 [INFO] Total distance (including return): 1436368.0
+    2024-10-09 15:07:12,386 [INFO]
+    2024-10-09 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
+    2024-10-09 15:07:12,387 [INFO]
+    2024-10-09 15:07:12,387 [INFO] =============== Run finished ===============
+    2024-10-09 15:07:12,387 [INFO]
+    2024-10-09 15:07:12,387 [INFO] ================================================================================
+    2024-10-09 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+    2024-10-09 15:07:12,387 [INFO] ================================================================================
+    2024-10-09 15:07:12,395 [INFO]
+    2024-10-09 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2024-10-09-15-07-11/results.json
+    2024-10-09 15:07:12,942 [INFO] Finished creating plots.
+    2024-10-09 15:07:12,943 [INFO] ============================================================ 
+    2024-10-09 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
+    2024-10-09 15:07:12,944 [INFO] ============================================================
 
 
 All used config files, logs and results are stored in a folder in the

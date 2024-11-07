@@ -12,40 +12,49 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import os
 from braket.aws import AwsDevice
 
-from modules.devices.braket.Braket import *
+from modules.devices.braket.Braket import Braket
 from modules.Core import Core
 
 
 class Rigetti(Braket):
     """
-    Class for using the Rigetti devices on Amazon Braket
+    Class for using the Rigetti devices on Amazon Braket.
     """
 
     def __init__(self, device_name: str, arn: str = 'arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2'):
         """
-        Constructor method
+        Constructor method.
+
+        :param device_name: Name of the device
+        :param arn: Amazon resource name for the Rigetti device
         """
         super().__init__(region="us-west-1", device_name=device_name, arn=arn)
         self.submodule_options = []
+
         if 'SKIP_INIT' in os.environ:
             # TODO: This is currently needed so create_module_db in the Installer does not execute the rest
-            #       of this section, which would be unnecessary. However, this should be done better in the future!
+            # of this section, which would be unnecessary. However, this should be done better in the future!
             return
+
         self.init_s3_storage("rigetti")
         self.device = AwsDevice(arn, aws_session=self.aws_session)
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns an empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
+        return {}
 
-        }
+    def get_default_submodule(self, option: str) -> None:
+        """
+        Raises ValueError as this module has no submodules.
 
-    def get_default_submodule(self, option: str) -> Core:
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")

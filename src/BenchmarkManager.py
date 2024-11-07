@@ -21,7 +21,7 @@ from copy import deepcopy
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Optional
 
 import numpy as np
 
@@ -30,7 +30,6 @@ from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
 from Plotter import Plotter
 from modules.Core import Core
 from utils import get_git_revision
-
 from utils_mpi import get_comm
 
 comm = get_comm()
@@ -48,17 +47,15 @@ class JobStatus(Enum):
     FAILED = 3
 
 
-def _prepend_instruction(result: tuple) -> tuple:
+def _prepend_instruction(result: tuple) -> tuple[Instruction, tuple]:
     """
-    If the given list does not contain an instruction as first entry a
+    If the given list does not contain an Instruction as first entry a
     PROCEED is inserted at position 0 such that it is guaranteed that
-    the first entry of the returned list is an INSTRUCTION with PROCEED
+    the first entry of the returned list is an Instruction with PROCEED
     as default.
 
-    :param result: the list to which the instruction is to be prepended
-    :type result: tuple
-    :return: the list with an INSTRUCTION as first entry
-    :rtype: tuple
+    :param result: The tuple to which the Instruction is to be prepended
+    :return: The tuple with an Instruction as first entry
     """
     if isinstance(result[0], Instruction):
         return result
@@ -66,29 +63,25 @@ def _prepend_instruction(result: tuple) -> tuple:
         return Instruction.PROCEED, *result
 
 
-def postprocess(module_instance: Core, *args, **kwargs) -> tuple:
+def postprocess(module_instance: Core, *args, **kwargs) -> tuple[Instruction, tuple]:
     """
     Wraps module_instance.postprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
 
-    :param module_instance: the QUARK module on which to call postprocess
-    :type module_instance: Core
-    :return: the result list of module_instance.postprocess with an Instruction as first entry.
-    :rtype: tuple
+    :param module_instance: The QUARK module on which to call postprocess
+    :return: The result list of module_instance.postprocess with an Instruction as first entry.
     """
     result = module_instance.postprocess(*args, **kwargs)
     return _prepend_instruction(result)
 
 
-def preprocess(module_instance: Core, *args, **kwargs) -> tuple:
+def preprocess(module_instance: Core, *args, **kwargs) -> tuple[Instruction, tuple]:
     """
     Wraps module_instance.preprocess such that the first entry of the
     result list is guaranteed to be an Instruction. See _prepend_instruction.
 
-    :param module_instance: the QUARK module on which to call preprocess
-    :type module_instance: Core
-    :return: the result list of module_instance.preprocess with an Instruction as first entry.
-    :rtype: tuple
+    :param module_instance: The QUARK module on which to call preprocess
+    :return: The result list of module_instance.preprocess with an Instruction as first entry.
     """
     result = module_instance.preprocess(*args, **kwargs)
     return _prepend_instruction(result)
@@ -104,9 +97,9 @@ class BenchmarkManager:
 
     def __init__(self, fail_fast: bool = False):
         """
-        Constructor method
+        Constructor method.
+
         :param fail_fast: Boolean whether a single failed benchmark run causes QUARK to fail
-        :type fail_fast: bool
         """
         self.fail_fast = fail_fast
         self.application = None
@@ -118,12 +111,13 @@ class BenchmarkManager:
 
     def load_interrupted_results(self) -> Optional[list]:
         """
-        :return: the content of the results file from the QUARK run to be resumed or None.
-        :rtype: Optional[list]
+        Loads the interrupted results if available.
+
+        :return: The content of the results file from the QUARK run to be resumed or None.
         """
         if self.interrupted_results_path is None or not os.path.exists(self.interrupted_results_path):
             return None
-        with open(self.interrupted_results_path, encoding='utf-8') as results_file :
+        with open(self.interrupted_results_path, encoding='utf-8') as results_file:
             results = json.load(results_file)
         return results
 
@@ -132,11 +126,7 @@ class BenchmarkManager:
         Creates directory for a benchmark run.
 
         :param store_dir: Directory where the new directory should be created
-        :type store_dir: str
-        :param tag: prefix of the new directory
-        :type tag: str
-        :return:
-        :rtype: None
+        :param tag: Prefix of the new directory
         """
         if store_dir is None:
             store_dir = Path.cwd()
@@ -145,12 +135,19 @@ class BenchmarkManager:
         Path(self.store_dir).mkdir(parents=True, exist_ok=True)
         self._set_logger()
 
-    def _resume_store_dir(self, store_dir) -> None:
+    def _resume_store_dir(self, store_dir: str) -> None:
+        """
+        Resumes the existing store directory.
+
+        :param store-dir: Directory to be resumed
+        """
         self.store_dir = store_dir
         self._set_logger()
 
     def _set_logger(self) -> None:
-        # Also store the log file to the benchmark dir
+        """
+        Sets up the logger to also write to a file in the store directory.
+        """
         logger = logging.getLogger()
         formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
         filehandler = logging.FileHandler(f"{self.store_dir}/logging.log")
@@ -162,23 +159,19 @@ class BenchmarkManager:
         """
         Executes the benchmarks according to the given settings.
 
-        :param benchmark_config_manager: Instance of BenchmarkConfigManager class, where config is already set.
-        :type benchmark_config_manager: ConfigManager
-        :param app_modules: the list of application modules as specified in the application modules configuration.
-        :type app_modules: list of dict
-        :param store_dir: target directory to store the results of the benchmark (if you decided to store it)
-        :type store_dir: str
-        :param interrupted_results_path: result file from which the information for the interrupted jobs will be read.
+        :param benchmark_config_manager: Instance of BenchmarkConfigManager class, where config is already set
+        :param app_modules: The list of application modules as specified in the application modules configuration
+        :param store_dir: Target directory to store the results of the benchmark (if user decided to store it)
+        :param interrupted_results_path: Result file from which the information for the interrupted jobs will be read.
                                          If store_dir is None the parent directory of interrupted_results_path will
                                          be used as store_dir.
-        :type interrupted_results_path: str
-        :rtype: None
         """
         self.interrupted_results_path = interrupted_results_path
         if interrupted_results_path and not store_dir:
             self._resume_store_dir(os.path.dirname(interrupted_results_path))
         else:
             self._create_store_dir(store_dir, tag=benchmark_config_manager.get_config()["application"]["name"].lower())
+
         benchmark_config_manager.save(self.store_dir)
         benchmark_config_manager.load_config(app_modules)
         self.application = benchmark_config_manager.get_app()
@@ -187,7 +180,6 @@ class BenchmarkManager:
         logging.info(f"Created Benchmark run directory {self.store_dir}")
 
         benchmark_backlog = benchmark_config_manager.start_create_benchmark_backlog()
-
         self.run_benchmark(benchmark_backlog, benchmark_config_manager.get_reps())
 
         # Wait until all MPI processes have finished and save results on rank 0
@@ -196,15 +188,12 @@ class BenchmarkManager:
             results = self._collect_all_results()
             self._save_as_json(results)
 
-    def run_benchmark(self, benchmark_backlog: list, repetitions: int): # pylint: disable=R0915
+    def run_benchmark(self, benchmark_backlog: list, repetitions: int) -> None:  # pylint: disable=R0915
         """
         Goes through the benchmark backlog, which contains all the benchmarks to execute.
 
         :param repetitions: Number of repetitions
-        :type repetitions: int
         :param benchmark_backlog: List with the benchmark items to run
-        :type benchmark_backlog: list
-        :return:
         """
         git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
         git_revision_number, git_uncommitted_changes = get_git_revision(git_dir)
@@ -219,10 +208,12 @@ class BenchmarkManager:
             with open(f"{path}/application_config.json", 'w') as filehandler:
                 json.dump(backlog_item["config"], filehandler, indent=2)
             job_status_count = {}
+
             for i in range(1, repetitions + 1):
                 logging.info(f"Running backlog item {idx_backlog + 1}/{len(benchmark_backlog)},"
                              f" Iteration {i}/{repetitions}:")
-                # getting information of interrupted jobs
+
+                # Getting information of interrupted jobs
                 job_info_with_meta_data = {}
                 if interrupted_results:
                     for entry in interrupted_results:
@@ -231,6 +222,7 @@ class BenchmarkManager:
                             break
                 job_info = job_info_with_meta_data['module'] if job_info_with_meta_data else {}
                 quark_job_status_name = job_info.get("quark_job_status")
+
                 if quark_job_status_name in (JobStatus.FINISHED.name, JobStatus.FAILED.name):
                     quark_job_status = JobStatus.FINISHED if quark_job_status_name == JobStatus.FINISHED.name \
                         else JobStatus.FAILED
@@ -241,20 +233,21 @@ class BenchmarkManager:
                     continue
 
                 try:
-
-                    self.benchmark_record_template = BenchmarkRecord(idx_backlog,
-                                                                     datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
-                                                                     git_revision_number, git_uncommitted_changes,
-                                                                     i, repetitions)
+                    self.benchmark_record_template = BenchmarkRecord(
+                        idx_backlog,
+                        datetime.today().strftime('%Y-%m-%d-%H-%M-%S'),
+                        git_revision_number, git_uncommitted_changes,
+                        i, repetitions
+                    )
                     self.application.metrics.set_module_config(backlog_item["config"])
-                    instruction, problem, preprocessing_time = preprocess(self.application, None,
-                                                                          backlog_item["config"],
-                                                                          store_dir=path, rep_count=i,
-                                                                          previous_job_info=job_info)
+                    instruction, problem, preprocessing_time = preprocess(
+                        self.application, None, backlog_item["config"],
+                        store_dir=path, rep_count=i, previous_job_info=job_info
+                    )
                     self.application.metrics.set_preprocessing_time(preprocessing_time)
                     self.application.save(path, i)
 
-                    postprocessing_time = 0.
+                    postprocessing_time = 0.0
                     benchmark_record = self.benchmark_record_template.copy()
                     if instruction == Instruction.PROCEED:
                         instruction, processed_input, benchmark_record = \
@@ -269,10 +262,11 @@ class BenchmarkManager:
                         quark_job_status = JobStatus.INTERRUPTED
                     else:
                         quark_job_status = JobStatus.FINISHED
-                    self.application.metrics.add_metric("quark_job_status", quark_job_status.name)
 
+                    self.application.metrics.add_metric("quark_job_status", quark_job_status.name)
                     self.application.metrics.set_postprocessing_time(postprocessing_time)
                     self.application.metrics.validate()
+
                     if benchmark_record is not None:
                         benchmark_record.append_module_record_left(deepcopy(self.application.metrics))
                         benchmark_records.append(benchmark_record)
@@ -286,7 +280,7 @@ class BenchmarkManager:
                     logging.exception(f"Error during benchmark run: {error}", exc_info=True)
                     quark_job_status = JobStatus.FAILED
                     if job_info:
-                        # restore results/infos from previous run
+                        # Restore results/infos from previous run
                         benchmark_records.append(job_info)
                     if self.fail_fast:
                         raise
@@ -319,7 +313,7 @@ class BenchmarkManager:
             if break_flag:
                 break
 
-        # print overall status information
+        # Log overall status information
         status_report = " ".join([f"{status.name}:{count}" for status, count in job_status_count_total.items()])
         logging.info(80 * "=")
         logging.info(f"====== Run {len(benchmark_backlog)} backlog items "
@@ -334,30 +328,23 @@ class BenchmarkManager:
                 rel_path = self.store_dir
             logging.info("====== There are interrupted jobs. You may resume them by running QUARK with")
             logging.info(f"====== --resume-dir={rel_path}")
-        logging.info(80*"=")
+        logging.info(80 * "=")
         logging.info("")
 
     # pylint: disable=R0917
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info:
-                        dict = None) -> (any, BenchmarkRecord):
+                        dict = None) -> tuple[Instruction, any, BenchmarkRecord]:
         """
         Executes a benchmark by traversing down the initialized config recursively until it reaches the end. Then
         traverses up again. Once it reaches the root/application, a benchmark run is finished.
 
         :param module: Current module
-        :type module: dict
-        :param input_data: The input data needed to execute the current module.
-        :type input_data: any
+        :param input_data: The input data needed to execute the current module
         :param path: Path in case the modules want to store anything
-        :type path: str
         :param rep_count: The iteration count
-        :type rep_count: int
-        :param previous_job_info: information about previous job
-        :type previous_job_info: dict
-        :return: tuple with the output of this step and the according BenchmarkRecord
-        :rtype: tuple(any, BenchmarkRecord)
+        :param previous_job_info: Information about previous job
+        :return: Tuple with the output of this step and the according BenchmarkRecord
         """
-
         # Only the value of the dict is needed (dict has only one key)
         module = module[next(iter(module))]
         module_instance: Core = module["instance"]
@@ -365,45 +352,49 @@ class BenchmarkManager:
         submodule_job_info = None
         if previous_job_info and previous_job_info.get("submodule"):
             assert module['name'] == previous_job_info["submodule"]["module_name"], \
-                f"asyncronous job info given, but no information about module {module['name']} stored in it" #TODO!!
+                f"asyncronous job info given, but no information about module {module['name']} stored in it"  # TODO
             if 'submodule' in previous_job_info and previous_job_info['submodule']:
                 submodule_job_info = previous_job_info['submodule']
 
         module_instance.metrics.set_module_config(module["config"])
-        instruction, module_instance.preprocessed_input, preprocessing_time\
-            = preprocess(module_instance, input_data,
-                                                        module["config"],
-                                                        store_dir=path,
-                                                        rep_count=rep_count,
-                                                        previous_job_info=submodule_job_info)
+        instruction, module_instance.preprocessed_input, preprocessing_time = preprocess(
+            module_instance, input_data,
+            module["config"], store_dir=path,
+            rep_count=rep_count,
+            previous_job_info=submodule_job_info
+        )
 
         module_instance.metrics.set_preprocessing_time(preprocessing_time)
         output = None
         benchmark_record = self.benchmark_record_template.copy()
         postprocessing_time = 0.0
+
         if instruction == Instruction.PROCEED:
             # Check if end of the chain is reached
             if not module["submodule"]:
                 # If we reach the end of the chain we create the benchmark record, fill it and then pass it up
-                instruction, module_instance.postprocessed_input, postprocessing_time = \
-                    postprocess( module_instance,
-                                 module_instance.preprocessed_input,
-                                 module["config"], store_dir=path,
-                                 rep_count=rep_count,
-                                 previous_job_info=submodule_job_info)
+                instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(
+                    module_instance,
+                    module_instance.preprocessed_input,
+                    module["config"], store_dir=path,
+                    rep_count=rep_count,
+                    previous_job_info=submodule_job_info
+                )
                 output = module_instance.postprocessed_input
             else:
-                instruction, processed_input, benchmark_record = self.traverse_config(module["submodule"],
-                                                                        module_instance.preprocessed_input, path,
-                                                                        rep_count, previous_job_info=submodule_job_info)
+                instruction, processed_input, benchmark_record = self.traverse_config(
+                    module["submodule"],
+                    module_instance.preprocessed_input, path,
+                    rep_count, previous_job_info=submodule_job_info
+                )
 
                 if instruction == Instruction.PROCEED:
-                    instruction, module_instance.postprocessed_input, postprocessing_time = \
-                        postprocess(module_instance, processed_input,
-                                    module["config"],
-                                    store_dir=path,
-                                    rep_count=rep_count,
-                                    previous_job_info=submodule_job_info)
+                    instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(
+                        module_instance, processed_input,
+                        module["config"], store_dir=path,
+                        rep_count=rep_count,
+                        previous_job_info=submodule_job_info
+                    )
                     output = module_instance.postprocessed_input
                 else:
                     output = processed_input
@@ -414,12 +405,11 @@ class BenchmarkManager:
 
         return instruction, output, benchmark_record
 
-    def _collect_all_results(self) -> List[Dict]:
+    def _collect_all_results(self) -> list[dict]:
         """
         Collect all results from the multiple results.json.
 
-        :return: list of dicts with results
-        :rtype: List[Dict]
+        :return: List of dicts with results
         """
         results = []
         for filename in glob.glob(f"{self.store_dir}/**/results.json"):
@@ -431,6 +421,11 @@ class BenchmarkManager:
         return results
 
     def _save_as_json(self, results: list) -> None:
+        """
+        Saves benchmark results to a JSON file.
+
+        :param results: Benchmark results to be saved
+        """
         logging.info(f"Saving {len(results)} benchmark records to {self.store_dir}/results.json")
         with open(f"{self.store_dir}/results.json", 'w') as filehandler:
             json.dump(results, filehandler, indent=2)
@@ -439,9 +434,7 @@ class BenchmarkManager:
         """
         Helper function to summarize multiple experiments.
 
-        :param input_dirs: list of directories
-        :type input_dirs: list
-        :rtype: None
+        :param input_dirs: List of directories
         """
         self._create_store_dir(tag="summary")
         logging.info(f"Summarizing {len(input_dirs)} benchmark directories")
@@ -454,11 +447,8 @@ class BenchmarkManager:
         Load results from one or more results.json files.
 
         :param input_dirs: If you want to load more than 1 results.json (default is just 1, the one from the experiment)
-        :type input_dirs: list
-        :return: a list
-        :rtype: list
+        :return: A list
         """
-
         if input_dirs is None:
             input_dirs = [self.store_dir]
 
@@ -473,7 +463,7 @@ class BenchmarkManager:
 
 class NumpyEncoder(json.JSONEncoder):
     """
-    Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems
+    Encoder that is used for json.dump(...) since numpy value items in dictionary might cause problems.
     """
 
     def default(self, o: any):

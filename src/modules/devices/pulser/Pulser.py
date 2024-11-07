@@ -24,7 +24,9 @@ class Pulser(Device, ABC):
 
     def __init__(self, device_name: str):
         """
-        Constructor method
+        Constructor method.
+
+        :param device_name: Name of the Pulser device.
         """
         super().__init__(device_name)
         self.device = None
@@ -32,34 +34,26 @@ class Pulser(Device, ABC):
 
     def get_backend(self) -> any:
         """
-        Returns backend
+        Returns backend.
 
         :return: Instance of the backend class
-        :rtype: any
         """
         return self.backend
 
     @abstractmethod
     def get_backend_config(self) -> any:
         """
-        Returns backend configurations
+        Returns backend configurations.
 
         :return: Instance of the backend config class
-        :rtype: any
         """
         pass
 
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "pulser",
-                "version": "0.19.0"
-            },
-        ]
+        return [{"name": "pulser", "version": "0.19.0"}]

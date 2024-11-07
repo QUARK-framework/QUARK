@@ -12,22 +12,26 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from abc import ABC, abstractmethod
+from abc import ABC
 import logging
 from typing import TypedDict
 
 from utils import start_time_measurement, end_time_measurement
 from modules.Core import Core
+from modules.applications.qml.Model import Model
 
 
-class Library(Core, ABC):
+class LibraryGenerative(Core, Model, ABC):
     """
     This class is an abstract base class for mapping a library-agnostic gate sequence to a library such as Qiskit.
+    It provides no concrete implementations of abstract methods and is intended to be extended by specific libraries.
     """
 
     def __init__(self, name: str):
         """
         Constructor method.
+
+        :param name: Name of the model
         """
         self.name = name
         super().__init__()
@@ -84,35 +88,3 @@ class Library(Core, ABC):
         """
         start = start_time_measurement()
         return input_data, end_time_measurement(start)
-
-    @abstractmethod
-    def sequence_to_circuit(self, input_data: dict) -> dict:
-        pass
-
-    @staticmethod
-    @abstractmethod
-    def get_execute_circuit(circuit: any, backend: any, config: str, config_dict: dict) -> tuple[any, any]:
-        """
-        This method combines the circuit implementation and the selected backend and returns a function that will be
-        called during training.
-
-        :param circuit: Implementation of the quantum circuit
-        :param backend: Configured backend
-        :param config: Name of the PennyLane device
-        :param config_dict: Dictionary including the number of shots
-        :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters and the
-        transpiled circuit
-        """
-        pass
-
-    @staticmethod
-    @abstractmethod
-    def select_backend(config: str, n_qubits: int) -> any:
-        """
-        This method configures the backend.
-
-        :param config: Name of a backend
-        :param n_qubits: Number of qubits
-        :return: Configured backend
-        """
-        return

@@ -12,12 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
+from modules.applications.qml.Circuit import Circuit
 
-class Circuit(Core, ABC):
+
+class CircuitGenerative(Circuit, Core, ABC):
     """
     This module is abstract base class for the library-agnostic gate sequence, that define a quantum circuit.
     """
@@ -30,17 +32,6 @@ class Circuit(Core, ABC):
         """
         super().__init__()
         self.architecture_name = name
-
-    @abstractmethod
-    def generate_gate_sequence(self, input_data: dict, config: any) -> dict:
-        """
-        Generates the library agnostic gate sequence, a well-defined definition of the quantum circuit.
-
-        :param input_data: Input data required to generate the gate sequence
-        :param config: Configuration for the gate sequence
-        :return: Generated gate sequence
-        """
-        pass
 
     def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """

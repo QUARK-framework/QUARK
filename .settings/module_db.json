@@ -1,7 +1,7 @@
 {
-  "build_number": 14,
-  "build_date": "14-10-2024 14:33:46",
-  "git_revision_number": "81265cfafef1726474dcfc1ed8c6ae04513236dc",
+  "build_number": 15,
+  "build_date": "28-10-2024 09:38:32",
+  "git_revision_number": "62a87b5b3c81a449424964c1672d9b32bc678c1a",
   "modules": [
     {
       "name": "PVC",
@@ -124,11 +124,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -148,11 +148,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Ankaa-2",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -246,11 +246,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -270,11 +270,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -790,11 +790,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -814,11 +814,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Ankaa-2",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -912,11 +912,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -936,11 +936,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1163,11 +1163,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1187,11 +1187,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Ankaa-2",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1285,11 +1285,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1309,11 +1309,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1569,11 +1569,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionQ",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1593,11 +1593,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
-                    "device_name": "Rigetti Ankaa-2",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -1691,11 +1691,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1",
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
                   "class": "Ionq",
                   "args": {
                     "device_name": "ionq",
-                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Aria-1"
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
                   "module": "modules.devices.braket.Ionq",
                   "requirements": [
@@ -1715,11 +1715,11 @@
                   "submodules": []
                 },
                 {
-                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2",
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
                   "class": "Rigetti",
                   "args": {
                     "device_name": "Rigetti",
-                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Ankaa-2"
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
                   "module": "modules.devices.braket.Rigetti",
                   "requirements": [
@@ -2207,7 +2207,7 @@
                   "name": "CircuitCopula",
                   "class": "CircuitCopula",
                   "args": {},
-                  "module": "modules.circuits.CircuitCopula",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCopula",
                   "requirements": [
                     {
                       "name": "scipy",
@@ -2235,7 +2235,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2264,7 +2264,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2293,7 +2293,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2336,7 +2336,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2365,7 +2365,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2394,7 +2394,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2429,7 +2429,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2458,7 +2458,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2497,7 +2497,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2526,7 +2526,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2557,7 +2557,7 @@
                   "name": "CircuitStandard",
                   "class": "CircuitStandard",
                   "args": {},
-                  "module": "modules.circuits.CircuitStandard",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitStandard",
                   "requirements": [],
                   "submodules": [
                     {
@@ -2580,7 +2580,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2609,7 +2609,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2638,7 +2638,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2681,7 +2681,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2710,7 +2710,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2739,7 +2739,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2774,7 +2774,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2803,7 +2803,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2842,7 +2842,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2871,7 +2871,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2888,7 +2888,7 @@
                   "name": "CircuitCardinality",
                   "class": "CircuitCardinality",
                   "args": {},
-                  "module": "modules.circuits.CircuitCardinality",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
                   "requirements": [],
                   "submodules": [
                     {
@@ -2911,7 +2911,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2940,7 +2940,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2969,7 +2969,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3012,7 +3012,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3041,7 +3041,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3070,7 +3070,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3105,7 +3105,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3134,7 +3134,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3173,7 +3173,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3202,7 +3202,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3235,7 +3235,7 @@
               "name": "CircuitCardinality",
               "class": "CircuitCardinality",
               "args": {},
-              "module": "modules.circuits.CircuitCardinality",
+              "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
               "requirements": [],
               "submodules": [
                 {
@@ -3258,7 +3258,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3287,7 +3287,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3316,7 +3316,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3359,7 +3359,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3388,7 +3388,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3417,7 +3417,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3452,7 +3452,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3481,7 +3481,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3520,7 +3520,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3549,7 +3549,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",

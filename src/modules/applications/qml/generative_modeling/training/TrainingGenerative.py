@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC
 import time
 
 try:
@@ -26,10 +26,11 @@ except ModuleNotFoundError:
     logging.info("CuPy not available, using vanilla numpy, data processing on CPU")
 
 from modules.Core import Core
+from modules.applications.qml.Training import Training
 from utils import start_time_measurement, end_time_measurement
 
 
-class Training(Core, ABC):
+class TrainingGenerative(Core, Training, ABC):
     """
     The Training module is the base class fot both finding (QCBM) and executing trained models (Inference).
     """
@@ -74,18 +75,6 @@ class Training(Core, ABC):
         postprocessing_time = end_time_measurement(start)
         logging.info(f"Training finished in {postprocessing_time / 1000} s.")
         return training_results, postprocessing_time
-
-    @abstractmethod
-    def start_training(self, input_data: dict, config: any, **kwargs: dict) -> dict:
-        """
-        This function starts the training of qml model or deploys a pretrained model.
-
-        :param input_data: A representation of the quantum machine learning model that will be trained
-        :param config: Config specifying the parameters of the training (dict-like Config type defined in children)
-        :param kwargs: Optional additional settings
-        :return: Solution, the time it took to compute it and some optional additional information
-        """
-        pass
 
     def sample_from_pmf(self, pmf: np.ndarray, n_shots: int) -> np.ndarray:
         """

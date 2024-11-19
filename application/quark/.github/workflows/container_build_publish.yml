@@ -5,6 +5,8 @@ name: Create and publish a QUARK Docker image
 on:
   push:
     branches: ['main', 'dev']
+  release:
+    types: [ published ]
 
 # Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
 env:
@@ -22,8 +24,21 @@ jobs:
       packages: write
       #
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # Set to "false" if necessary for your workflow
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: true
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Checkout LFS files
+        run: git lfs pull
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx

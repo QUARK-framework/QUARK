@@ -12,7 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from modules.Core import *
+from abc import ABC
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -23,20 +24,20 @@ class Device(Core, ABC):
 
     def __init__(self, device_name: str):
         """
-        Constructor method
+        Constructor method.
+
+        :param device_name: Name of the device
         """
         super().__init__(device_name)
         self.device = None
         self.config = None
         self.device_name = self.name
-        self.config = None
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the parameters to fine-tune the device
+        Returns the parameters to fine-tune the device.
 
         Should always be in this format:
-
         .. code-block:: json
 
            {
@@ -47,42 +48,38 @@ class Device(Core, ABC):
            }
 
         :return: Available device settings for this device
-        :rtype: dict
         """
         return {}
 
     def set_config(self, config):
+        """
+        Sets the device configuration.
+
+        :param config: Configuration settings for the device
+        """
         self.config = config
 
-    def preprocess(self, input_data, config, **kwargs):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
-        Returns instance of device class (self) and time it takes to call config
+        Returns instance of device class (self) and time it takes to call config.
 
         :param input_data: Input data (not used)
-        :type input_data: any
         :param config: Config for the device
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: Output and time needed
-        :rtype: (any, float)
         """
         start = start_time_measurement()
         self.config = config
         return self, end_time_measurement(start)
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
-        Returns input data and adds device name to the metrics class instance
+        Returns input data and adds device name to the metrics class instance.
 
         :param input_data: Input data passed by the parent module
-        :type input_data: any
-        :param config: solver config
-        :type config: dict
+        :param config: Solver config
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: Output and time needed
-        :rtype: (any, float)
         """
         start = start_time_measurement()
         self.metrics.add_metric("device", self.get_device_name())
@@ -90,18 +87,16 @@ class Device(Core, ABC):
 
     def get_device(self) -> any:
         """
-        Returns device
+        Returns device.
 
         :return: Instance of the device class
-        :rtype: any
         """
         return self.device
 
     def get_device_name(self) -> str:
         """
-        Returns device name
+        Returns the device name.
 
         :return: Name of the device
-        :rtype: str
         """
         return self.device_name

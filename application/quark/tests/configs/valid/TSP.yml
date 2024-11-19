@@ -1,0 +1,25 @@
+application:
+  config:
+    nodes:
+    - 6
+  name: TSP
+  submodules:
+  - config: {}
+    name: GreedyClassicalTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+  - config: {}
+    name: ReverseGreedyClassicalTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+  - config: {}
+    name: RandomTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+repetitions: 2

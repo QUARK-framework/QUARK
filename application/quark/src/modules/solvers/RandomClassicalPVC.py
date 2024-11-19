@@ -14,9 +14,10 @@
 
 from typing import TypedDict
 import random
-import networkx
+import networkx as nx
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -27,7 +28,7 @@ class RandomPVC(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Local"]
@@ -35,19 +36,19 @@ class RandomPVC(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "networkx",
-                "version": "2.8.8"
-            }
-        ]
+        return [{"name": "networkx", "version": "3.2.1"}]
 
-    def get_default_submodule(self, option: str) -> any:
+    def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415
             return Local()
@@ -56,41 +57,34 @@ class RandomPVC(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     class Config(TypedDict):
         """
-        Empty config as this solver has no configurable settings
+        Empty config as this solver has no configurable settings.
         """
         pass
 
-    def run(self, mapped_problem: networkx.Graph, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float):
+    def run(self, mapped_problem: nx.Graph, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
         Solve the PVC graph in a greedy fashion.
 
-        :param mapped_problem: graph representing a PVC problem
-        :type mapped_problem: networkx.Graph
+        :param mapped_problem: Graph representing a PVC problem
         :param device_wrapper: Local device
-        :type device_wrapper: any
-        :param config: empty dict
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param config: Empty dict
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
-        # Need to deep copy since we are modifying the graph in this function. Else the next repetition would work
+        # Deep copy since we are modifying the graph. This ensures that the original graph remains unchanged
         # with a different graph
         mapped_problem = mapped_problem.copy()
         start = start_time_measurement()
+
         # We always start at the base node
         current_node = ((0, 0), 1, 1)
         idx = 1
@@ -101,8 +95,11 @@ class RandomPVC(Solver):
         # to the same seam
         while len(mapped_problem.nodes) > 2:
             # Get the random neighbor edge from the current node
-            next_node = random.choice([x for x in mapped_problem.edges(current_node[0], data=True) if
-                                       x[2]['c_start'] == current_node[1] and x[2]['t_start'] == current_node[2]])
+            next_node = random.choice([
+                x for x in mapped_problem.edges(current_node[0], data=True)
+                if x[1][0] != current_node[0][0] and x[2]['c_start'] == current_node[1] and x[2]['t_start']
+                == current_node[2]
+            ])
             next_node = (next_node[1], next_node[2]["c_end"], next_node[2]["t_end"])
 
             # Make the step - add distance to cost, add the best node to tour,
@@ -112,6 +109,7 @@ class RandomPVC(Solver):
             to_remove = [x for x in mapped_problem.nodes if x[0] == current_node[0][0]]
             for node in to_remove:
                 mapped_problem.remove_node(node)
+
             current_node = next_node
             idx += 1
 

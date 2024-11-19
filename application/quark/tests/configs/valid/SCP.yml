@@ -1,0 +1,23 @@
+application:
+  config:
+    model_select:
+    - Tiny
+    - Large
+  name: SCP
+  submodules:
+  - config:
+      penalty_weight:
+      - 2.0
+      - 10.0
+      - 100.0
+    name: qubovertQUBO
+    submodules:
+    - config:
+        number_of_reads:
+        - 100
+      name: Annealer
+      submodules:
+      - config: {}
+        name: Simulated Annealer
+        submodules: []
+repetitions: 2

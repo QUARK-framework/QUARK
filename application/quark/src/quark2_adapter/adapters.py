@@ -15,8 +15,8 @@
 
 from abc import ABC
 import json
-from time import time
 import logging
+from time import time
 
 from modules.Core import Core
 from modules.applications.Application import Application as Application_NEW
@@ -48,11 +48,11 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
     to get your Application running with QUARK2.
     """
 
-    def __init__(self, application_name, *args, **kwargs):
+    def __init__(self, application_name: str, *args, **kwargs):
         """
-        Constructor method
+        Constructor method.
         """
-        logging.warning(WARNING_MSG,  self.__class__.__name__)
+        logging.warning(WARNING_MSG, self.__class__.__name__)
         Application_NEW.__init__(self, application_name)
         Application_OLD.__init__(self, application_name)
         self.args = args
@@ -62,8 +62,10 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
         self.problems = {}
 
     @property
-    def submodule_options(self):
-        """Maps the old attribute mapping_options to the new attribute submodule_options."""
+    def submodule_options(self) -> list[str]:
+        """
+        Maps the old attribute mapping_options to the new attribute submodule_options.
+        """
         return self.mapping_options
 
     @submodule_options.setter
@@ -71,7 +73,7 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
         """
         Maps the old attribute mapping_options to the new attribute submodule_options.
 
-        :param options: list[str]
+        :param options: List of submodule options
         """
         self.mapping_options = options
 
@@ -80,32 +82,26 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
         Maps the old method get_mapping to the new get_default_submodule.
 
         :param option: String with the chosen submodule
-        :type option: str
         :return: Module of type Core
-        :rtype: Core
         """
         return self.get_mapping(option)
 
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Application_NEW.preprocess using the Application_OLD interface.
 
         :param input_data: Data for the module, comes from the parent module if that exists
-        :type input_data: any
         :param config: Config for the module
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the preprocessing and the time it took to preprocess
-        :rtype: (any, float)
         """
         start = time()
         logging.warning(WARNING_MSG, self.__class__.__name__)
 
         rep_count = kwargs["rep_count"]
 
-        #create a hash value for identifying the problem configuration
-        #compare https://stackoverflow.com/questions/5884066/hashing-a-dictionary
+        # create a hash value for identifying the problem configuration
+        # compare https://stackoverflow.com/questions/5884066/hashing-a-dictionary
         problem_conf_hash = json.dumps(config, sort_keys=True)
 
         if self.problem_conf_hash != problem_conf_hash:
@@ -117,39 +113,34 @@ class ApplicationAdapter(Application_NEW, Application_OLD, ABC):
             self.problem, creation_time = self.problems[problem_key]
         else:
             start = time()
-            logging.info("generate new problem instance")
+            logging.info("Generating new problem instance")
             self.problem = self.generate_problem(config, rep_count)
-            creation_time = (time() - start)*1000
+            creation_time = (time() - start) * 1000
             self.problems[problem_key] = (self.problem, creation_time)
+
         return self.problem, creation_time
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Application_NEW.postprocess using the Application_OLD interface.
 
         :param input_data: Input data comes from the submodule if that exists
-        :type input_data: any
         :param config: Config for the module
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the postprocessing and the time it took to postprocess
-        :rtype: (any, float)
         """
-
         processed_solution, time_processing = self.process_solution(input_data)
         solution_validity, time_validate = self.validate(processed_solution)
-        if solution_validity:
-            solution_quality, time_evaluate = self.evaluate(processed_solution)
-        else:
-            solution_quality, time_evaluate = None, 0.0
+        solution_quality, time_evaluate = (self.evaluate(processed_solution)
+                                           if solution_validity else (None, 0.0))
 
         self.metrics.add_metric("time_to_validation", time_validate)
         self.metrics.add_metric("time_to_validation_unit", "ms")
         self.metrics.add_metric("solution_validity", solution_validity)
         self.metrics.add_metric("solution_quality", solution_quality)
         self.metrics.add_metric("solution_quality_unit", self.get_solution_quality_unit())
-        return (solution_validity, solution_quality), time_validate+time_evaluate+time_processing
+
+        return (solution_validity, solution_quality), time_validate + time_evaluate + time_processing
 
 
 class MappingAdapter(Mapping_NEW, Mapping_OLD, ABC):
@@ -168,24 +159,26 @@ class MappingAdapter(Mapping_NEW, Mapping_OLD, ABC):
     to get your Mapping running with QUARK2.
     """
 
-    def __init__(self,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
-        Constructor method
+        Constructor method.
         """
         Mapping_NEW.__init__(self)
         Mapping_OLD.__init__(self)
 
     @property
-    def submodule_options(self):
-        """Maps the old attribute solver_options to the new attribute submodule_options."""
+    def submodule_options(self) -> list[str]:
+        """
+        Maps the old attribute solver_options to the new attribute submodule_options.
+        """
         return self.solver_options
 
     @submodule_options.setter
-    def submodule_options(self, options):
+    def submodule_options(self, options: list[str]):
         """
         Maps the old attribute solver_options to the new attribute submodule_options.
 
-        :param options: list[str]
+        :param options: List of solver options
         """
         self.solver_options = options
 
@@ -194,47 +187,39 @@ class MappingAdapter(Mapping_NEW, Mapping_OLD, ABC):
         Maps the old method get_solver to the new get_default_submodule.
 
         :param option: String with the chosen submodule
-        :type option: str
         :return: Module of type Core
-        :rtype: Core
         """
         return self.get_solver(option)
 
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Mapping_NEW.preprocess using the Mapping_OLD interface.
         """
         logging.warning(WARNING_MSG, self.__class__.__name__)
         return self.map(input_data, config=config)
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Mapping_NEW.postprocess using the Mapping_OLD interface.
         """
         logging.info("Calling %s.reverse_map", __class__.__name__)
         processed_solution, postprocessing_time = self.reverse_map(input_data)
-
-        # self.metrics.add_metric("processed_solution", ["%s: %s" % (
-        #     sol.__class__.__name__, sol) for sol in processed_solution])
         return processed_solution, postprocessing_time
 
 
-def recursive_replace_dict_keys(obj: any)-> any:
+def recursive_replace_dict_keys(obj: any) -> any:
     """
-    Replace values used as dict-keys by its str(), to make the object json compatible.
+    Replace values used as dictionary keys by their string representation
+    to make the object JSON-compatible.
 
-    :param obj: the object
-    :type obj: any
+    :param obj: The object to convert
+    .return: The object with all dictionary keys converted to strings
     """
     obj_new = None
     if isinstance(obj, dict):
-        obj_new = {}
-        for key in obj:
-            obj_new[str(key)] = recursive_replace_dict_keys(obj[key])
+        obj_new = {str(key): recursive_replace_dict_keys(value) for key, value in obj.items()}
     elif isinstance(obj, list):
-        obj_new = []
-        for element in obj:
-            obj_new.append(recursive_replace_dict_keys(element))
+        obj_new = [recursive_replace_dict_keys(element) for element in obj]
     elif isinstance(obj, tuple):
         obj_new = tuple(recursive_replace_dict_keys(element) for element in obj)
     else:
@@ -259,24 +244,26 @@ class SolverAdapter(Solver_NEW, Solver_OLD, ABC):
     to get your Solver running with QUARK2.
     """
 
-    def __init__(self,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
-        Constructor method
+        Constructor method.
         """
         Solver_NEW.__init__(self)
         Solver_OLD.__init__(self)
 
     @property
-    def submodule_options(self):
-        """Maps the old attribute device_options to the new attribute submodule_options."""
+    def submodule_options(self) -> list[str]:
+        """
+        Maps the old attribute device_options to the new attribute submodule_options.
+        """
         return self.device_options
 
     @submodule_options.setter
-    def submodule_options(self, options):
+    def submodule_options(self, options: list[str]):
         """
         Maps the old attribute device_options to the new attribute submodule_options.
 
-        :param options: list[str]
+        :param options: List of device options
         """
         self.device_options = options
 
@@ -285,49 +272,49 @@ class SolverAdapter(Solver_NEW, Solver_OLD, ABC):
         Maps the old method get_device to the new get_default_submodule.
 
         :param option: String with the chosen submodule
-        :type option: str
         :return: Module of type Core
-        :rtype: Core
         """
         return self.get_device(option)
 
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Solver_NEW.preprocess using the Solver_OLD interface.
 
         :param input_data: Data for the module, comes from the parent module if that exists
-        :type input_data: any
         :param config: Config for the module
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the preprocessing and the time it took to preprocess
-        :rtype: (any, float)
         """
         logging.warning(WARNING_MSG, self.__class__.__name__)
         return input_data, 0.0
 
-    def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Solver_NEW.postprocess using the Solver_OLD interface.
 
         :param input_data: Data passed to the run function of the solver
-        :type input_data: any
-        :param config: solver config
-        :type config: dict
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
+        :param config: Solver config
+        :param kwargs: Optional keyword arguments
         :return: Output and time needed
-        :rtype: (any, float)
         """
         run_kwargs = {
-            "store_dir": kwargs["store_dir"], "repetition": kwargs["rep_count"]}
-        raw_solution, runtime, additional_solver_information = self.run(input_data["mapped_problem"],
-                                                                        device_wrapper=input_data["device"],
-                                                                        config=config, **run_kwargs)
-        self.metrics.add_metric("additional_solver_information", dict(
-            additional_solver_information))
-        self.metrics.add_metric("solution_raw", self.raw_solution_to_json(raw_solution))
+            "store_dir": kwargs["store_dir"],
+            "repetition": kwargs["rep_count"]
+        }
+        raw_solution, runtime, additional_solver_information = self.run(
+            input_data["mapped_problem"],
+            device_wrapper=input_data["device"],
+            config=config,
+            **run_kwargs
+        )
+
+        self.metrics.add_metric(
+            "additional_solver_information", dict(additional_solver_information)
+        )
+        self.metrics.add_metric(
+            "solution_raw", self.raw_solution_to_json(raw_solution)
+        )
+
         return raw_solution, runtime
 
     def raw_solution_to_json(self, raw_solution: any) -> any:
@@ -337,9 +324,8 @@ class SolverAdapter(Solver_NEW, Solver_OLD, ABC):
         to json.
         Note that using 'recursive_replace_dict_keys' provided by this module might help.
 
-        :param raw_solution: the raw solution
-        :type raw_solution: any
-        :rtype: any
+        :param raw_solution: The raw solution
+        :return: JSON-compatible representation of the raw solution
         """
         return raw_solution
 
@@ -360,9 +346,9 @@ class DeviceAdapter(Device_NEW, Device_OLD):
     to get your Device running with QUARK2.
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         """
-        Constructor method
+        Constructor method.
         """
         Device_NEW.__init__(self, name)
         Device_OLD.__init__(self, name)
@@ -374,24 +360,18 @@ class DeviceAdapter(Device_NEW, Device_OLD):
         could not have submodules.
 
         :param option: String with the chosen submodule
-        :type option: str
         :return: None
-        :rtype: Core
         """
         return None
 
-    def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+    def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
         """
         Implements Device_NEW.preprocess using the Device_OLD interface.
 
         :param input_data: Data for the module, comes from the parent module if that exists
-        :type input_data: any
         :param config: Config for the device
-        :type config: dict
         :param kwargs: Optional keyword arguments
-        :type kwargs: dict
         :return: The output of the preprocessing and the time it took to preprocess
-        :rtype: (any, float)
         """
         logging.warning(WARNING_MSG, self.__class__.__name__)
         self.set_config(config)
@@ -416,7 +396,7 @@ class LocalAdapter(DeviceAdapter):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         DeviceAdapter.__init__(self, name="local")
         self.device = None

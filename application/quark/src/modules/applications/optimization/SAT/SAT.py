@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from typing import TypedDict
 
 import nnf
@@ -19,26 +20,45 @@ import numpy as np
 from nnf import Var, And, Or
 from nnf.dimacs import dump
 
-from modules.applications.Application import *
+from modules.Core import Core
 from modules.applications.optimization.Optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
 
 class SAT(Optimization):
     """
-    Before a new vehicle model can be deployed for production, several tests have to be carried out on pre-series
-    vehicles to ensure the feasibility and gauge the functionality of specific configurations of components.
-    Naturally, the manufacturer wants to save resources and produce as few pre-series vehicles as possible while
-    still performing all desired tests. Further, not all feature configurations can realistically be implemented in
-    all vehicles, leading to constraints that the produced vehicles must satisfy. This can be modeled as a SAT problem.
+    The SAT (Satisfiability) problem plays a crucial role in the field of computational optimization. In the context
+    of vehicle manufacturing, it is essential to test various pre-series vehicle configurations to ensure they meet
+    specific requirements before production begins. This testing involves making sure that each vehicle configuration
+    complies with several hard constraints related to safety, performance, and buildability while also fulfilling
+    soft constraints such as feature combinations or specific requirements for testing. The SAT problem models these
+    constraints in a way that enables a systematic approach to determine feasible vehicle configurations and minimize
+    the need for excessive physical prototypes.
+
+    This problem is modeled as a Max-SAT problem, where the aim is to find a configuration that satisfies as many
+    constraints as possible while balancing between the number of satisfied hard and soft constraints. The formulation
+    uses a conjunctive normal form (CNF) representation of logical expressions to model the dependencies and
+    incompatibilities between various features and components in vehicle assembly. By leveraging optimization
+    algorithms, the SAT module aims to produce a minimal but sufficient set of configurations, ensuring that all
+    necessary tests are performed while minimizing resource usage. This approach helps in creating a robust testing
+    framework and reducing the overall cost of vehicle development.
+
+    To solve the SAT problem, various approaches are employed, including translating the CNF representation into
+    different quantum and classical optimization mappings such as QUBO (Quadratic Unconstrained Binary Optimization)
+    or Ising formulations. These mappings make the SAT problem suitable for solving on quantum computers and
+    classical annealers. The SAT problem in this module is implemented with a flexible interface, allowing integration
+    with a range of solvers that can exploit different computational paradigms, making it adaptable for a variety of
+    hardware and optimization backends.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("SAT")
-        self.submodule_options = ["QubovertQUBO", "Direct", "ChoiQUBO", "DinneenQUBO", "ChoiIsing", "DinneenIsing"]
+        self.submodule_options = [
+            "QubovertQUBO", "Direct", "ChoiQUBO", "DinneenQUBO", "ChoiIsing", "DinneenIsing"
+        ]
         self.literals = None
         self.num_tests = None
         self.num_constraints = None
@@ -47,27 +67,26 @@ class SAT(Optimization):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "nnf",
-                "version": "0.4.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.23.5"
-            }
+            {"name": "nnf", "version": "0.4.1"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_solution_quality_unit(self) -> str:
         return "Evaluation"
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "QubovertQUBO":
             from modules.applications.optimization.SAT.mappings.QubovertQUBO import \
                 QubovertQUBO  # pylint: disable=C0415
@@ -93,47 +112,64 @@ class SAT(Optimization):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this application
+        Returns the configurable settings for this application.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary with configurable settings
+        .. code-block:: python
 
-                      return {
-                                "variables": {
-                                    "values": list(range(10, 151, 10)),
-                                    "description": "How many variables do you need?"
-                                },
-                                "clvar_ratio_cons": {
-                                    "values": [2, 3, 4, 4.2, 5],
-                                    "description": "What clause:variable ratio do you want for the (hard) constraints?"
-                                },
-                                "clvar_ratio_test": {
-                                    "values": [2, 3, 4, 4.2, 5],
-                                    "description": "What clause:variable ratio do you want for the tests (soft con.)?"
-                                },
-                                "problem_set": {
-                                    "values": list(range(10)),
-                                    "description": "Which problem set do you want to use?"
-                                },
-                                "max_tries": {
-                                    "values": [100],
-                                    "description": "Maximum number of tries to create problem"
-                                }
-                            }
-
+            return {
+                    "variables": {
+                        "values": list(range(10, 151, 10)),
+                        "custom_input": True,
+                        "allow_ranges": True,
+                        "postproc": int,
+                        "description": "How many variables do you need?"
+                    },
+                    "clvar_ratio_cons": {
+                        "values": [2, 3, 4, 4.2, 5],
+                        "custom_input": True,
+                        "allow_ranges": True,
+                        "postproc": int,
+                        "description": "What clause-to-variable ratio do you want for the (hard) constraints?"
+                    },
+                    "clvar_ratio_test": {
+                        "values": [2, 3, 4, 4.2, 5],
+                        "custom_input": True,
+                        "allow_ranges": True,
+                        "postproc": int,
+                        "description": "What clause-to-variable ratio do you want for the tests (soft con.)?"
+                    },
+                    "problem_set": {
+                        "values": list(range(10)),
+                        "description": "Which problem set do you want to use?"
+                    },
+                    "max_tries": {
+                        "values": [100],
+                        "description": "Maximum number of tries to create problem?"
+                    }
+                }
         """
         return {
             "variables": {
-                "values": list(range(10, 151, 10)),
+                "values": list(range(10, 101, 10)),
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
                 "description": "How many variables do you need?"
             },
             "clvar_ratio_cons": {
                 "values": [2, 3, 4, 4.2, 5],
-                "description": "What clause:variable ratio do you want for the (hard) constraints?"
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
+                "description": "What clause-to-variable ratio do you want for the (hard) constraints?"
             },
             "clvar_ratio_test": {
                 "values": [2, 3, 4, 4.2, 5],
-                "description": "What clause:variable ratio do you want for the tests (soft constraints)?"
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": int,
+                "description": "What clause-to-variable ratio do you want for the tests (soft constraints)?"
             },
             "problem_set": {
                 "values": list(range(10)),
@@ -141,13 +177,13 @@ class SAT(Optimization):
             },
             "max_tries": {
                 "values": [100],
-                "description": "Maximum number of tries to create problem"
+                "description": "Maximum number of tries to create problem?"
             }
         }
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -164,33 +200,28 @@ class SAT(Optimization):
         problem_set: int
         max_tries: int
 
-    def generate_problem(self, config: Config, **kwargs) -> (nnf.And, list):
+    def generate_problem(self, config: Config) -> tuple[nnf.And, list]:
         """
-        Generates a vehicle configuration problem out of a given config. Returns buildability constraints (hard
-        constraints) and tests (soft constraints), the successful evaluation of which we try to maximize. Both
-        are given in nnf form, which we then convert accordingly.
+        Generates a vehicle configuration problem out of a given config.
+        Returns buildability constraints (hard constraints) and tests (soft
+        constraints), the successful evaluation of which we try to maximize.
+        Both are given in nnf form, which we then convert accordingly.
 
-        :param config: config with the parameters specified in Config class
-        :type config: Config
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :return:
-        :rtype: tuple(nnf.And, list)
+        :param config: Configuration parameters for problem generation
+        :return: A tuple containing the problem, number of variables, and other details
         """
 
         self.num_variables = config["variables"]
         num_constraints = round(config["clvar_ratio_cons"] * self.num_variables)
         num_tests = round(config["clvar_ratio_test"] * self.num_variables)
-
         max_tries = config["max_tries"]
         self.literals = [Var(f"L{i}") for i in range(self.num_variables)]
-
         self.application = {}
 
         def _generate_3sat_clauses(nr_clauses, nr_vars, satisfiable, rseed, nr_tries):
-            # iterate over the desired number of attempts: we break if we find a solvable instance.
+            # Iterate over the desired number of attempts: break if we find a solvable instance.
             for attempt in range(nr_tries):
-                # initialize random number generator -- we multiply the attempt to traverse distinct random seeds
+                # Initialize random number generator -- multiply the attempt to traverse distinct random seeds
                 # for the hard and soft constraints, respectively (since rseed of the hard and soft constraints differs
                 # by 1).
                 rng = np.random.default_rng(rseed + attempt * 2)
@@ -198,45 +229,44 @@ class SAT(Optimization):
                 # generate literal list to sample from
                 lit_vars = [Var(f"L{i}") for i in range(nr_vars)]
                 for _ in range(nr_clauses):
-                    # we select three (non-repeated) literals and negate them randomly -- together constituting a clause
+                    # Select three (non-repeated) literals and negate them randomly -- together constituting a clause
                     chosen_literals = rng.choice(lit_vars, 3, replace=False)
                     negate_literals = rng.choice([True, False], 3, replace=True)
-                    clause = []
-                    # we perform the random negations and append to clause:
-                    for lit, neg in zip(chosen_literals, negate_literals):
-                        if neg:
-                            clause.append(lit.negate())
-                        else:
-                            clause.append(lit)
-                    # append the generated clause to the total container
+                    # Perform the random negations and append to clause:
+                    clause = [
+                        lit.negate() if neg else lit
+                        for lit, neg in zip(chosen_literals, negate_literals)
+                    ]
+                    # Append the generated clause to the total container
                     clause_list.append(Or(clause))
-                # we generate the conjunction of the problem, such that we can use the nnf native function and test its
-                # satisfiability.
                 prob = And(clause_list)
-
                 if not satisfiable or prob.satisfiable():
                     return clause_list
 
-            # loop ran out of tries
+            # Loop ran out of tries
             logging.error("Unable to generate valid solutions. Consider increasing max_tries or decreasing "
                           "the clause:variable ratio.")
             raise ValueError("Unable to generate valid solution.")
 
-        # we choose a random seed -- since we try at most max_tries times to generate a solvable instance,
-        # we space the initial random seeds by 2 * max_tries (because we need both hard and soft constraints).
+        # Choose a random seed -- since we try at most max_tries times to generate a solvable instance,
+        # Space the initial random seeds by 2 * max_tries (because we need both hard and soft constraints).
         random_seed = 2 * config["problem_set"] * max_tries
-        # generate hard  & soft constraints. We make both satisfiable, but this can in principle be tuned.
-        hard = And(_generate_3sat_clauses(num_constraints, self.num_variables,
-                                          satisfiable=True, rseed=random_seed, nr_tries=max_tries))
-        # the random_seed + 1 ensures that a different set of seeds is sampled compared to the hard constraints.
-        soft = _generate_3sat_clauses(num_tests, self.num_variables, satisfiable=True, rseed=random_seed + 1,
-                                      nr_tries=config["max_tries"])
+        # Generate hard  & soft constraints. Make both satisfiable, but this can in principle be tuned.
+        hard = And(_generate_3sat_clauses(
+            num_constraints, self.num_variables, satisfiable=True,
+            rseed=random_seed, nr_tries=max_tries
+        ))
+        # The random_seed + 1 ensures that a different set of seeds is sampled compared to the hard constraints.
+        soft = _generate_3sat_clauses(
+            num_tests, self.num_variables, satisfiable=True,
+            rseed=random_seed + 1, nr_tries=config["max_tries"]
+        )
         if (hard is None) or (soft is None):
             raise ValueError("Unable to generate satisfiable")
-        # saving constraints and tests
+        # Saving constraints and tests
         self.application["constraints"] = hard
         self.application["tests"] = soft
-        # and their cardinalities:
+        # And their cardinalities:
         self.num_constraints = len(hard)
         self.num_tests = len(soft)
 
@@ -245,47 +275,36 @@ class SAT(Optimization):
                      f" and {self.num_tests} tests")
         return hard, soft
 
-    def validate(self, solution: dict, **kwargs) -> (bool, float):
+    def validate(self, solution: dict) -> tuple[bool, float]:
         """
-        Checks given solution.
+        Validate a given solution against the constraints.
 
-        :param solution:
-        :type solution: dict
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :return: Boolean whether the solution is valid, time it took to validate
-        :rtype: tuple(bool, float)
+        :param solution: The solution to validate
+        :return: True if the solution is valid, False otherwise, and time it took to complete
         """
         start = start_time_measurement()
 
         logging.info("Checking validity of solution:")
-        # logging.info(solution)
         nr_satisfied_hardcons = len(*np.where(
             [c.satisfied_by(solution) for c in self.application["constraints"].children]
         ))
         ratio = nr_satisfied_hardcons / self.num_constraints
         is_valid = ratio == 1.0
-        # prints the ratio of satisfied constraints and prints if all constraints are satisfied
         logging.info(f"Ratio of satisfied constraints: {ratio}\nSuccess:{['no', 'yes'][int(is_valid)]}")
+
         return is_valid, end_time_measurement(start)
 
-    def evaluate(self, solution: dict, **kwargs) -> (float, float):
+    def evaluate(self, solution: dict) -> tuple[float, float]:
         """
         Calculates the quality of the solution.
 
-        :param solution:
-        :type solution: dict
-        :param kwargs: Optional additional arguments
-        :type kwargs: dict
+        :param solution: Dictionary containing the solution
         :return: Tour length, time it took to calculate the tour length
-        :rtype: tuple(float, float)
         """
         start = start_time_measurement()
-
         logging.info("Checking the quality of the solution:")
-        # logging.info(solution)
 
-        # count the number of satisfied clauses
+        # Count the number of satisfied clauses
         nr_satisfied_tests = len(*np.where([test.satisfied_by(solution) for test in self.application["tests"]]))
 
         ratio_satisfied = nr_satisfied_tests / self.num_tests
@@ -294,13 +313,21 @@ class SAT(Optimization):
         return ratio_satisfied, end_time_measurement(start)
 
     def save(self, path: str, iter_count: int) -> None:
+        """
+        Save the constraints and tests to files in CNF format.
+
+        :param path: The directory path where the files will be saved.
+        :param iter_count: The iteration count to include in the filenames.
+        """
         with open(f"{path}/constraints_iter_{iter_count}.cnf", "w") as f_cons:
             dump(
-                obj=self.application["constraints"], fp=f_cons,
+                obj=self.application["constraints"],
+                fp=f_cons,
                 var_labels={str(literal): idx + 1 for idx, literal in enumerate(self.literals)}
             )
         with open(f"{path}/tests_iter_{iter_count}.cnf", "w") as f_test:
             dump(
-                obj=Or(self.application["tests"]), fp=f_test,
+                obj=Or(self.application["tests"]),
+                fp=f_test,
                 var_labels={str(literal): idx + 1 for idx, literal in enumerate(self.literals)}
             )

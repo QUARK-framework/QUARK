@@ -19,18 +19,43 @@ jobs:
     defaults:
       run:
         shell: bash -el {0}
+    permissions:
+      contents: write
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.9.16'
           token: ${{ secrets.QUARK_GH_GITHUB_COM_TOKEN }}
 
-      - name: Install pylint
-        run: pip install pylint
+      - name: Install pylint and autopep8
+        run: pip install pylint autopep8
+      
+      - name: Disable Git LFS locking
+        run: git config lfs.https://github.com/QUARK-framework/QUARK.git/info/lfs.locksverify false
+
+      - name: Run autopep8 (fix PEP8 issues automatically)
+        run: autopep8 --in-place --recursive --aggressive --max-line-length 120 -v .
+
+      - name: Clean the workspace
+        if: github.event_name == 'pull_request'
+        run: git reset --hard
+        
+      - name: Commit changes if any
+        if: github.event_name == 'push'
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "Apply autopep8 formatting"
+            git push origin HEAD:${{ github.ref }}
+          fi
 
       - name: Run pylint
         uses: wearerequired/lint-action@v2

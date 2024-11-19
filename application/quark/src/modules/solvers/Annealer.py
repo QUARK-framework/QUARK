@@ -13,9 +13,10 @@
 #  limitations under the License.
 
 from typing import TypedDict
-import pdb
+import logging
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -26,46 +27,44 @@ class Annealer(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
-        self.submodule_options = ["Simulated Annealer", "Quantum Annealer"]
+        self.submodule_options = ["Simulated Annealer"]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
         if option == "Simulated Annealer":
             from modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
             return SimulatedAnnealingSampler()
-        elif option == "Quantum Annealer":
-            from modules.devices.QuantumAnnealingSampler import QuantumAnnealingSampler
-            return QuantumAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of parameter options
+        .. code-block:: python
 
-                      return {
-                                "number_of_reads": {
-                                    "values": [100, 250, 500, 750, 1000],
-                                    "description": "How many reads do you need?"
-                                }
-                            }
+            return {
+                    "number_of_reads": {
+                        "values": [100, 250, 500, 750, 1000],
+                        "description": "How many reads do you need?"
+                    }
+                }
 
         """
         return {
             "number_of_reads": {
                 "values": [100, 250, 500, 750, 1000],
                 "description": "How many reads do you need?"
-                },
-            "annealing_time": {
-                "values": [10, 20, 40, 100],
-                "description": "How long should be annealed"
-                }
-            
+            }
         }
 
     class Config(TypedDict):
@@ -79,66 +78,34 @@ class Annealer(Solver):
         """
         number_of_reads: int
 
-    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
-        Annealing Solver.
+        Run the annealing solver.
 
-        :param mapped_problem: dictionary with the key 'Q' where its value should be the QUBO
-        :type mapped_problem: dict
+        :param mapped_problem: Dict with the key 'Q' where its value should be the QUBO
         :param device_wrapper: Annealing device
-        :type device_wrapper: any
         :param config: Annealing settings
-        :type config: Config
-        :param kwargs:
-        :type kwargs: any
+        :param kwargs: Additional keyword arguments
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-        pdb.set_trace()
 
-        qubo_dict = mapped_problem['Q']
+        q = mapped_problem['Q']
         additional_solver_information = {}
         device = device_wrapper.get_device()
         start = start_time_measurement()
-        if device_wrapper.device_name == "simulated annealer":
-            # This is for D-Wave simulated Annealer
-            response = device.sample_qubo(Q = qubo_dict, 
-                                          num_reads=config['number_of_reads']
-                                          )
-        
-        elif device_wrapper.device_name == "quantum annealer dwave":
-            # This is for D-Wave quantum Annealer
-            response = device.sample_qubo(Q = qubo_dict, 
-                                     num_reads = config["number_of_reads"],
-                                     annealing_time = config["annealing_time"]
-                                     )
-        else:
-            logging.warning("Only simulated annealer available at the moment!")
-            # TODO: Check what to do with this..
-            # This section was used to leverage the D-Wave devices previously available on Amazon Braket
 
-            # Embed QUBO
-            # start_embedding = time() * 1000
-            # __, target_edgelist, target_adjacency = device.structure
-            # emb = find_embedding(Q, target_edgelist, verbose=1)
-            # sampler = FixedEmbeddingComposite(device, emb)
-            # additional_solver_information["embedding_time"] = round(time() * 1000 - start_embedding, 3)
-            #
-            # additional_solver_information["logical_qubits"] = len(emb.keys())
-            # additional_solver_information["physical_qubits"] = sum(len(chain) for chain in emb.values())
-            # logging.info(f"Number of logical variables: {additional_solver_information['logical_qubits']}")
-            # logging.info(f"Number of physical qubits used in embedding: "
-            #             f"{additional_solver_information['physical_qubits']}")
-            #
-            # response = sampler.sample_qubo(Q, num_reads=config['number_of_reads'], answer_mode="histogram")
-            # # Add timings https://docs.dwavesys.com/docs/latest/c_qpu_timing.html
-            # additional_solver_information.update(response.info["additionalMetadata"]["dwaveMetadata"]["timing"])
-            
+        if device_wrapper.device_name != "simulated annealer":
+            logging.error("Only simulated annealer available at the moment!")
+            logging.error("Please select another solver module.")
+            logging.error("The benchmarking run terminates with exception.")
+            raise Exception("Please refer to the logged error message.")
+
+        response = device.sample_qubo(q, num_reads=config['number_of_reads'])
         time_to_solve = end_time_measurement(start)
 
-        # take the result with the lowest energy:
+        # Take the result with the lowest energy:
         sample = response.lowest().first.sample
-        # logging.info("Result:" + str({k: v for k, v in sample.items() if v == 1}))
         logging.info(f'Annealing finished in {time_to_solve} ms.')
 
         return sample, time_to_solve, additional_solver_information

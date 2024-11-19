@@ -18,7 +18,7 @@ import numpy as np
 from dimod import qubo_to_ising
 from nnf import And
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
 from utils import start_time_measurement, end_time_measurement
 
@@ -26,12 +26,11 @@ from utils import start_time_measurement, end_time_measurement
 class DinneenIsing(Mapping):
     """
     Ising formulation for SAT using Dinneen QUBO.
-
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["QAOA", "PennylaneQAOA"]
@@ -41,53 +40,42 @@ class DinneenIsing(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "nnf",
-                "version": "0.4.1"
-            },
-            {
-                "name": "numpy",
-                "version": "1.23.5"
-            },
-            {
-                "name": "dimod",
-                "version": "0.12.5"
-            },
+            {"name": "nnf", "version": "0.4.1"},
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "dimod", "version": "0.12.17"},
             *DinneenQUBO.get_requirements()
         ]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary with parameter options
+        .. code-block:: python
 
-                     return {
-                                "lagrange": {
-                                    "values": [0.1, 1, 2],
-                                    "description": "What lagrange parameter to multiply with the number of (hard) "
-                                                   "constraints?"
-                                }
-                            }
-
+            return {
+                    "lagrange": {
+                        "values": [0.1, 1, 2],
+                        "description": "What Lagrange parameter to multiply with the number of (hard) "
+                                        "constraints?"
+                    }
+                }
         """
         return {
             "lagrange": {
                 "values": [0.1, 1, 2],
-                "description": "What lagrange parameter to multiply with the number of (hard) constraints?"
+                "description": "What Lagrange parameter to multiply with the number of (hard) constraints?"
             }
         }
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -96,59 +84,60 @@ class DinneenIsing(Mapping):
         """
         lagrange: float
 
-    def map(self, problem: any, config) -> (dict, float):
+    def map(self, problem: any, config: Config) -> tuple[dict, float]:
         """
         Uses the DinneenQUBO formulation and converts it to an Ising.
 
-        :param problem: the SAT problem
-        :type problem: any
-        :param config: dictionary with the mapping config
-        :type config: Config
-        :return: dict with the ising, time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: SAT problem
+        :param config: Dictionary with the mapping config
+        :return: Dict with the ising, time it took to map it
         """
         start = start_time_measurement()
         self.problem = problem
+
         # call mapping function
         self.qubo_mapping = DinneenQUBO()
         q, _ = self.qubo_mapping.map(problem, config)
-        linear, quadr, offset = qubo_to_ising(q["Q"])
+        t, j, _ = qubo_to_ising(q["Q"])
 
         # Convert Ising dict to matrix
         n = (len(problem[0]) + len(problem[1])) + len(problem[0].vars().union(And(problem[1]).vars()))
-        h_vector = np.zeros(n, dtype=float)
+        t_vector = np.zeros(n, dtype=float)
         j_matrix = np.zeros((n, n), dtype=float)
 
-        for key, value in linear.items():
-            h_vector[key] = value
+        for key, value in t.items():
+            t_vector[key] = value
 
-        for key, value in quadr.items():
+        for key, value in j.items():
             j_matrix[key[0]][key[1]] = value
 
-        return {"J": j_matrix, "h": h_vector, "c": offset}, end_time_measurement(start)
+        return {"J": j_matrix, "t": t_vector}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (dict, float):
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the SAT class for validation/evaluation.
 
-        :param solution: dictionary containing the solution
-        :type: dict
-        :return: solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :param solution: Dictionary containing the solution
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
-        # convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
-        solution_dict = {}
-        for i, el in enumerate(solution):
-            solution_dict[i] = el
 
-        # reverse map
+        # Convert raw solution into the right format to use reverse_map() of ChoiQUBO.py
+        solution_dict = dict(enumerate(solution))
+
+        # Reverse map
         result, _ = self.qubo_mapping.reverse_map(solution_dict)
 
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "QAOA":
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()

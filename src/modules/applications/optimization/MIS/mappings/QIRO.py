@@ -44,7 +44,7 @@ class QIRO(Mapping):
         return [
             {
                 "name": "qrisp",
-                "version": "0.4.15"
+                "version": "0.5"
            }
         ]
 

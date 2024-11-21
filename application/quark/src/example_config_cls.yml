@@ -1,0 +1,26 @@
+application:
+  config:
+    n_qubits:
+    - 4
+  name: Classification
+  submodules:
+  - config:
+      data_set:
+      - Concrete_Crack
+      n_classes:
+      - 2
+      n_images_per_class:
+      - 500
+      noise_sigma:
+      - 0.0
+
+    name: Image Data
+    submodules:
+    - config:
+        n_epochs:
+        - 10
+        n_reduced_features:
+        - 4
+      name: Hybrid
+      submodules: []
+repetitions: 1

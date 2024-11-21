@@ -1,0 +1,37 @@
+application:
+  config:
+    n_qubits:
+    - 6
+  name: GenerativeModeling
+  submodules:
+  - config:
+      train_size:
+      - 0.3
+    name: Discrete Data
+    submodules:
+    - config:
+        depth:
+        - 8
+      name: CircuitCardinality
+      submodules:
+      - config:
+          backend:
+          - aer_statevector_simulator_cpu
+          n_shots:
+          - 1000
+        name: LibraryQiskit
+        submodules:
+        - config:
+            loss:
+            - KL
+            max_evaluations:
+            - 5000
+            population_size:
+            - 5
+            pretrained:
+            - 'False'
+            sigma:
+            - 0.01
+          name: QCBM
+          submodules: []
+repetitions: 1

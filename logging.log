@@ -1,0 +1,79 @@
+2024-11-21 17:41:40,825 [INFO]  ============================================================ 
+2024-11-21 17:41:40,825 [INFO]              ___    _   _      _      ____    _  __           
+2024-11-21 17:41:40,826 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2024-11-21 17:41:40,826 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2024-11-21 17:41:40,826 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2024-11-21 17:41:40,827 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2024-11-21 17:41:40,827 [INFO]                                                               
+2024-11-21 17:41:40,827 [INFO]  ============================================================ 
+2024-11-21 17:41:40,827 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2024-11-21 17:41:40,827 [INFO]                                                               
+2024-11-21 17:41:40,827 [INFO]         Licensed under the Apache License, Version 2.0        
+2024-11-21 17:41:40,828 [INFO]  ============================================================ 
+2024-11-21 17:41:43,123 [INFO] You chose Default
+2024-11-21 17:41:43,162 [INFO] Saved myenv QUARK module environment.
+2024-11-21 17:41:43,162 [WARNING] Different version requirements for networkx: ['3.2.1', '2.8.8']. Will try to take the newer version 3.2.1, but this might cause problems at QUARK runtime!
+2024-11-21 17:41:43,163 [WARNING] Different version requirements for scipy: ['1.10.1', '1.11.1']. Will try to take the newer version 1.11.1, but this might cause problems at QUARK runtime!
+2024-11-21 17:41:50,554 [WARNING] You must check at least one box! Please try again!
+2024-11-21 17:41:53,357 [INFO] Saved pip txt file, if you like to install it run:
+2024-11-21 17:41:53,358 [INFO] pip install -r /home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/../.settings/envs/requirements_myenv.txt
+2024-11-21 17:41:58,454 [INFO] Set active QUARK module environment to myenv
+2024-11-21 17:41:58,454 [INFO]  ============================================================ 
+2024-11-21 17:41:58,455 [INFO]  ====================  QUARK finished!   ==================== 
+2024-11-21 17:41:58,455 [INFO]  ============================================================ 
+2024-11-21 17:43:01,703 [INFO]  ============================================================ 
+2024-11-21 17:43:01,704 [INFO]              ___    _   _      _      ____    _  __           
+2024-11-21 17:43:01,704 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2024-11-21 17:43:01,704 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2024-11-21 17:43:01,705 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2024-11-21 17:43:01,705 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2024-11-21 17:43:01,706 [INFO]                                                               
+2024-11-21 17:43:01,707 [INFO]  ============================================================ 
+2024-11-21 17:43:01,707 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2024-11-21 17:43:01,708 [INFO]                                                               
+2024-11-21 17:43:01,708 [INFO]         Licensed under the Apache License, Version 2.0        
+2024-11-21 17:43:01,709 [INFO]  ============================================================ 
+2024-11-21 17:43:01,711 [INFO] Existing environments:
+2024-11-21 17:43:01,711 [INFO]   -  default
+2024-11-21 17:43:01,712 [INFO]   -  myenv
+2024-11-21 17:43:01,712 [INFO]  ============================================================ 
+2024-11-21 17:43:01,713 [INFO]  ====================  QUARK finished!   ==================== 
+2024-11-21 17:43:01,713 [INFO]  ============================================================ 
+2024-11-21 17:43:16,600 [INFO]  ============================================================ 
+2024-11-21 17:43:16,600 [INFO]              ___    _   _      _      ____    _  __           
+2024-11-21 17:43:16,600 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2024-11-21 17:43:16,600 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2024-11-21 17:43:16,601 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2024-11-21 17:43:16,601 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2024-11-21 17:43:16,602 [INFO]                                                               
+2024-11-21 17:43:16,602 [INFO]  ============================================================ 
+2024-11-21 17:43:16,602 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2024-11-21 17:43:16,603 [INFO]                                                               
+2024-11-21 17:43:16,603 [INFO]         Licensed under the Apache License, Version 2.0        
+2024-11-21 17:43:16,604 [INFO]  ============================================================ 
+2024-11-21 17:43:16,607 [INFO] Set active QUARK module environment to myenv
+2024-11-21 17:43:16,607 [INFO]  ============================================================ 
+2024-11-21 17:43:16,607 [INFO]  ====================  QUARK finished!   ==================== 
+2024-11-21 17:43:16,608 [INFO]  ============================================================ 
+2024-11-21 17:43:42,062 [INFO]  ============================================================ 
+2024-11-21 17:43:42,062 [INFO]              ___    _   _      _      ____    _  __           
+2024-11-21 17:43:42,062 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2024-11-21 17:43:42,062 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2024-11-21 17:43:42,063 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2024-11-21 17:43:42,063 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2024-11-21 17:43:42,063 [INFO]                                                               
+2024-11-21 17:43:42,063 [INFO]  ============================================================ 
+2024-11-21 17:43:42,063 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2024-11-21 17:43:42,064 [INFO]                                                               
+2024-11-21 17:43:42,064 [INFO]         Licensed under the Apache License, Version 2.0        
+2024-11-21 17:43:42,064 [INFO]  ============================================================ 
+2024-11-21 17:43:44,227 [INFO] You chose Default
+2024-11-21 17:43:44,238 [INFO] Saved quark_new2 QUARK module environment.
+2024-11-21 17:43:44,238 [WARNING] Different version requirements for networkx: ['3.2.1', '2.8.8']. Will try to take the newer version 3.2.1, but this might cause problems at QUARK runtime!
+2024-11-21 17:43:44,238 [WARNING] Different version requirements for scipy: ['1.10.1', '1.11.1']. Will try to take the newer version 1.11.1, but this might cause problems at QUARK runtime!
+2024-11-21 17:43:45,624 [INFO] Saved conda env file, if you like to install it run:
+2024-11-21 17:43:45,624 [INFO] conda env create -f /home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/../.settings/envs/conda_quark_new2.yml
+2024-11-21 17:43:46,765 [INFO] Set active QUARK module environment to quark_new2
+2024-11-21 17:43:46,765 [INFO]  ============================================================ 
+2024-11-21 17:43:46,766 [INFO]  ====================  QUARK finished!   ==================== 
+2024-11-21 17:43:46,766 [INFO]  ============================================================ 

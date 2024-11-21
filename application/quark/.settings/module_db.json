@@ -1,7 +1,7 @@
 {
-  "build_number": 6,
-  "build_date": "22-11-2023 13:47:42",
-  "git_revision_number": "5ea1fcf56c438df4b32fcc318dcb6e2c8e58447b",
+  "build_number": 15,
+  "build_date": "28-10-2024 09:38:32",
+  "git_revision_number": "62a87b5b3c81a449424964c1672d9b32bc678c1a",
   "modules": [
     {
       "name": "PVC",
@@ -16,19 +16,19 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -40,15 +40,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -62,15 +62,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -86,15 +86,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -110,15 +110,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -134,15 +134,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -158,15 +158,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -181,19 +181,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -208,15 +208,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -232,15 +232,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -256,15 +256,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -280,15 +280,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -304,15 +304,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -389,7 +389,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -408,7 +408,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -425,7 +425,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -447,7 +447,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -469,7 +469,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -487,11 +487,11 @@
       "requirements": [
         {
           "name": "networkx",
-          "version": "2.8.8"
+          "version": "3.2.1"
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
     },
@@ -531,7 +531,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -552,7 +552,7 @@
             },
             {
               "name": "python-sat",
-              "version": "0.1.7.dev26"
+              "version": "1.8.dev13"
             }
           ],
           "submodules": [
@@ -564,7 +564,7 @@
               "requirements": [
                 {
                   "name": "python-sat",
-                  "version": "0.1.7.dev26"
+                  "version": "1.8.dev13"
                 }
               ],
               "submodules": [
@@ -586,11 +586,11 @@
               "requirements": [
                 {
                   "name": "python-sat",
-                  "version": "0.1.7.dev26"
+                  "version": "1.8.dev13"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -633,7 +633,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -669,7 +669,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -686,11 +686,11 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "nnf",
@@ -706,15 +706,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -728,15 +728,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -752,15 +752,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -776,15 +776,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -800,15 +800,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -824,15 +824,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -847,19 +847,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -874,15 +874,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -898,15 +898,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -922,15 +922,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -946,15 +946,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -970,15 +970,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1059,11 +1059,11 @@
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "nnf",
@@ -1079,15 +1079,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1101,15 +1101,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1125,15 +1125,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1149,15 +1149,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1173,15 +1173,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1197,15 +1197,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1220,19 +1220,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1247,15 +1247,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1271,15 +1271,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1295,15 +1295,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1319,15 +1319,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1343,15 +1343,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1428,7 +1428,7 @@
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
     },
@@ -1445,23 +1445,23 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             },
             {
               "name": "dimod",
-              "version": "0.12.5"
+              "version": "0.12.17"
             },
             {
               "name": "more-itertools",
-              "version": "9.0.0"
+              "version": "10.5.0"
             },
             {
               "name": "qiskit-optimization",
-              "version": "0.5.0"
+              "version": "0.6.1"
             },
             {
               "name": "pyqubo",
@@ -1469,11 +1469,11 @@
             },
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "dwave_networkx",
-              "version": "0.8.13"
+              "version": "0.8.15"
             }
           ],
           "submodules": [
@@ -1485,15 +1485,15 @@
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
-                  "version": "1.35.1"
+                  "version": "1.87.0"
                 },
                 {
                   "name": "scipy",
-                  "version": "1.10.1"
+                  "version": "1.12.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1507,15 +1507,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1531,15 +1531,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1555,15 +1555,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1579,15 +1579,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1603,15 +1603,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1626,19 +1626,19 @@
               "requirements": [
                 {
                   "name": "pennylane",
-                  "version": "0.28.0"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pennylane-lightning",
-                  "version": "0.28.0"
+                  "version": "0.38.0"
                 },
                 {
                   "name": "amazon-braket-pennylane-plugin",
-                  "version": "1.5.2"
+                  "version": "1.30.0"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -1653,15 +1653,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1677,15 +1677,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1701,15 +1701,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1725,15 +1725,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1749,15 +1749,15 @@
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
-                      "version": "1.35.1"
+                      "version": "1.87.0"
                     },
                     {
                       "name": "botocore",
-                      "version": "1.25.7"
+                      "version": "1.35.20"
                     },
                     {
                       "name": "boto3",
-                      "version": "1.22.7"
+                      "version": "1.35.20"
                     }
                   ],
                   "submodules": []
@@ -1832,15 +1832,19 @@
               "requirements": [
                 {
                   "name": "qiskit",
-                  "version": "0.40.0"
+                  "version": "1.1.0"
                 },
                 {
                   "name": "qiskit-optimization",
-                  "version": "0.5.0"
+                  "version": "0.6.1"
                 },
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
+                },
+                {
+                  "name": "qiskit-algorithms",
+                  "version": "0.3.0"
                 }
               ],
               "submodules": [
@@ -1876,11 +1880,11 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             },
             {
               "name": "dwave_networkx",
-              "version": "0.8.13"
+              "version": "0.8.15"
             }
           ],
           "submodules": [
@@ -1899,7 +1903,7 @@
                   "requirements": [
                     {
                       "name": "dwave-samplers",
-                      "version": "1.0.0"
+                      "version": "1.3.0"
                     }
                   ],
                   "submodules": []
@@ -1916,7 +1920,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1938,7 +1942,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1960,7 +1964,7 @@
           "requirements": [
             {
               "name": "networkx",
-              "version": "2.8.8"
+              "version": "3.2.1"
             }
           ],
           "submodules": [
@@ -1978,13 +1982,193 @@
       "requirements": [
         {
           "name": "networkx",
-          "version": "2.8.8"
+          "version": "3.2.1"
         },
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         }
       ]
+    },
+    {
+      "name": "ACL",
+      "class": "ACL",
+      "module": "modules.applications.optimization.ACL.ACL",
+      "submodules": [
+        {
+          "name": "MIPsolverACL",
+          "class": "MIPaclp",
+          "args": {},
+          "module": "modules.solvers.MIPsolverACL",
+          "requirements": [
+            {
+              "name": "pulp",
+              "version": "2.9.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Local",
+              "class": "Local",
+              "args": {},
+              "module": "modules.devices.Local",
+              "requirements": [],
+              "submodules": []
+            }
+          ]
+        },
+        {
+          "name": "QUBO",
+          "class": "Qubo",
+          "args": {},
+          "module": "modules.applications.optimization.ACL.mappings.QUBO",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "qiskit-optimization",
+              "version": "0.6.1"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.3.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "pulp",
+          "version": "2.9.0"
+        },
+        {
+          "name": "pandas",
+          "version": "2.2.2"
+        },
+        {
+          "name": "numpy",
+          "version": "1.26.4"
+        },
+        {
+          "name": "openpyxl",
+          "version": "3.1.5"
+        }
+      ]
+    },
+    {
+      "name": "MIS",
+      "class": "MIS",
+      "module": "modules.applications.optimization.MIS.MIS",
+      "submodules": [
+        {
+          "name": "NeutralAtom",
+          "class": "NeutralAtom",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "requirements": [
+            {
+              "name": "pulser",
+              "version": "0.19.0"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "NeutralAtomMIS",
+              "class": "NeutralAtomMIS",
+              "args": {},
+              "module": "modules.solvers.NeutralAtomMIS",
+              "requirements": [
+                {
+                  "name": "pulser",
+                  "version": "0.19.0"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "MockNeutralAtomDevice",
+                  "class": "MockNeutralAtomDevice",
+                  "args": {},
+                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "requirements": [
+                    {
+                      "name": "pulser",
+                      "version": "0.19.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
+      "name": "SCP",
+      "class": "SCP",
+      "module": "modules.applications.optimization.SCP.SCP",
+      "submodules": [
+        {
+          "name": "qubovertQUBO",
+          "class": "QubovertQUBO",
+          "args": {},
+          "module": "modules.applications.optimization.SCP.mappings.qubovertQUBO",
+          "requirements": [
+            {
+              "name": "qubovert",
+              "version": "1.2.5"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.Annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.3.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
     },
     {
       "name": "GenerativeModeling",
@@ -1999,7 +2183,7 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             }
           ],
           "submodules": [
@@ -2011,11 +2195,11 @@
               "requirements": [
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 },
                 {
                   "name": "pandas",
-                  "version": "1.5.2"
+                  "version": "2.2.2"
                 }
               ],
               "submodules": [
@@ -2023,11 +2207,11 @@
                   "name": "CircuitCopula",
                   "class": "CircuitCopula",
                   "args": {},
-                  "module": "modules.circuits.CircuitCopula",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCopula",
                   "requirements": [
                     {
                       "name": "scipy",
-                      "version": "1.11.1"
+                      "version": "1.12.0"
                     }
                   ],
                   "submodules": [
@@ -2039,11 +2223,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2051,23 +2235,56 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2076,11 +2293,244 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.37.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.38.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2099,7 +2549,7 @@
               "requirements": [
                 {
                   "name": "numpy",
-                  "version": "1.23.5"
+                  "version": "1.26.4"
                 }
               ],
               "submodules": [
@@ -2107,13 +2557,8 @@
                   "name": "CircuitStandard",
                   "class": "CircuitStandard",
                   "args": {},
-                  "module": "modules.circuits.CircuitStandard",
-                  "requirements": [
-                    {
-                      "name": "scipy",
-                      "version": "1.11.1"
-                    }
-                  ],
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitStandard",
+                  "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
@@ -2123,11 +2568,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2135,23 +2580,56 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2160,11 +2638,244 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.37.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.38.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2177,7 +2888,7 @@
                   "name": "CircuitCardinality",
                   "class": "CircuitCardinality",
                   "args": {},
-                  "module": "modules.circuits.CircuitCardinality",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
                   "requirements": [],
                   "submodules": [
                     {
@@ -2188,11 +2899,11 @@
                       "requirements": [
                         {
                           "name": "qiskit",
-                          "version": "0.40.0"
+                          "version": "1.1.0"
                         },
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": [
@@ -2200,23 +2911,56 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
                             },
                             {
                               "name": "cma",
-                              "version": "3.3.0"
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
                             },
                             {
                               "name": "tensorboard",
-                              "version": "2.13.0"
+                              "version": "2.17.0"
                             },
                             {
                               "name": "tensorboardX",
-                              "version": "2.6.2"
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
                             }
                           ],
                           "submodules": []
@@ -2225,11 +2969,244 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
-                              "version": "1.23.5"
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "LibraryPennylane",
+                      "class": "LibraryPennylane",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "requirements": [
+                        {
+                          "name": "pennylane",
+                          "version": "0.37.0"
+                        },
+                        {
+                          "name": "pennylane-lightning",
+                          "version": "0.38.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "jax",
+                          "version": "0.4.30"
+                        },
+                        {
+                          "name": "jaxlib",
+                          "version": "0.4.30"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "QGAN",
+                          "class": "QGAN",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "torch",
+                              "version": "2.2.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "CustomQiskitNoisyBackend",
+                      "class": "CustomQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            }
+                          ],
+                          "submodules": []
+                        }
+                      ]
+                    },
+                    {
+                      "name": "PresetQiskitNoisyBackend",
+                      "class": "PresetQiskitNoisyBackend",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "requirements": [
+                        {
+                          "name": "qiskit",
+                          "version": "1.1.0"
+                        },
+                        {
+                          "name": "qiskit_ibm_runtime",
+                          "version": "0.29.0"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.0"
+                        },
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": [
+                        {
+                          "name": "QCBM",
+                          "class": "QCBM",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
+                            },
+                            {
+                              "name": "cma",
+                              "version": "4.0.0"
+                            },
+                            {
+                              "name": "matplotlib",
+                              "version": "3.7.5"
+                            },
+                            {
+                              "name": "tensorboard",
+                              "version": "2.17.0"
+                            },
+                            {
+                              "name": "tensorboardX",
+                              "version": "2.6.2.2"
+                            }
+                          ],
+                          "submodules": []
+                        },
+                        {
+                          "name": "Inference",
+                          "class": "Inference",
+                          "args": {},
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "requirements": [
+                            {
+                              "name": "numpy",
+                              "version": "1.26.4"
                             }
                           ],
                           "submodules": []
@@ -2250,7 +3227,7 @@
           "requirements": [
             {
               "name": "numpy",
-              "version": "1.23.5"
+              "version": "1.26.4"
             }
           ],
           "submodules": [
@@ -2258,7 +3235,7 @@
               "name": "CircuitCardinality",
               "class": "CircuitCardinality",
               "args": {},
-              "module": "modules.circuits.CircuitCardinality",
+              "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
               "requirements": [],
               "submodules": [
                 {
@@ -2269,11 +3246,11 @@
                   "requirements": [
                     {
                       "name": "qiskit",
-                      "version": "0.40.0"
+                      "version": "1.1.0"
                     },
                     {
                       "name": "numpy",
-                      "version": "1.23.5"
+                      "version": "1.26.4"
                     }
                   ],
                   "submodules": [
@@ -2281,23 +3258,56 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
                         },
                         {
                           "name": "cma",
-                          "version": "3.3.0"
+                          "version": "4.0.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
                         },
                         {
                           "name": "tensorboard",
-                          "version": "2.13.0"
+                          "version": "2.17.0"
                         },
                         {
                           "name": "tensorboardX",
-                          "version": "2.6.2"
+                          "version": "2.6.2.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "QGAN",
+                      "class": "QGAN",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "torch",
+                          "version": "2.2.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.17.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2.2"
                         }
                       ],
                       "submodules": []
@@ -2306,11 +3316,244 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
-                          "version": "1.23.5"
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "LibraryPennylane",
+                  "class": "LibraryPennylane",
+                  "args": {},
+                  "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                  "requirements": [
+                    {
+                      "name": "pennylane",
+                      "version": "0.37.0"
+                    },
+                    {
+                      "name": "pennylane-lightning",
+                      "version": "0.38.0"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.26.4"
+                    },
+                    {
+                      "name": "jax",
+                      "version": "0.4.30"
+                    },
+                    {
+                      "name": "jaxlib",
+                      "version": "0.4.30"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "4.0.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.17.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "QGAN",
+                      "class": "QGAN",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "torch",
+                          "version": "2.2.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.17.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "CustomQiskitNoisyBackend",
+                  "class": "CustomQiskitNoisyBackend",
+                  "args": {},
+                  "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                  "requirements": [
+                    {
+                      "name": "qiskit",
+                      "version": "1.1.0"
+                    },
+                    {
+                      "name": "qiskit_aer",
+                      "version": "0.15.0"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.26.4"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "4.0.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.17.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        }
+                      ],
+                      "submodules": []
+                    }
+                  ]
+                },
+                {
+                  "name": "PresetQiskitNoisyBackend",
+                  "class": "PresetQiskitNoisyBackend",
+                  "args": {},
+                  "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                  "requirements": [
+                    {
+                      "name": "qiskit",
+                      "version": "1.1.0"
+                    },
+                    {
+                      "name": "qiskit_ibm_runtime",
+                      "version": "0.29.0"
+                    },
+                    {
+                      "name": "qiskit_aer",
+                      "version": "0.15.0"
+                    },
+                    {
+                      "name": "numpy",
+                      "version": "1.26.4"
+                    }
+                  ],
+                  "submodules": [
+                    {
+                      "name": "QCBM",
+                      "class": "QCBM",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
+                        },
+                        {
+                          "name": "cma",
+                          "version": "4.0.0"
+                        },
+                        {
+                          "name": "matplotlib",
+                          "version": "3.7.5"
+                        },
+                        {
+                          "name": "tensorboard",
+                          "version": "2.17.0"
+                        },
+                        {
+                          "name": "tensorboardX",
+                          "version": "2.6.2.2"
+                        }
+                      ],
+                      "submodules": []
+                    },
+                    {
+                      "name": "Inference",
+                      "class": "Inference",
+                      "args": {},
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "requirements": [
+                        {
+                          "name": "numpy",
+                          "version": "1.26.4"
                         }
                       ],
                       "submodules": []

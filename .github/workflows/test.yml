@@ -7,7 +7,7 @@ on:
     branches: [ 'main', 'dev' ]
 
 jobs:
-  lint:
+  test:
     name: Run Unit Tests
     runs-on: [ 'ubuntu-latest' ]
     env:
@@ -33,7 +33,14 @@ jobs:
       - name: Install Dependencies
         run: pip install -r .settings/requirements_full.txt
 
-      - name: Run tests with unittest
-        run: python -m unittest discover .
+      - name: Run Unit Tests
+        run: python -m unittest discover -s tests -p "test_*.py" > unittest_results.log
+
+      - name: Upload Test Logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unittest-logs
+          path: unittest_results.log
             
 

@@ -65,9 +65,9 @@ class TestQCBM(unittest.TestCase):
             "n_params": 16,
             "generalization_metrics": MagicMock(),
             "n_shots": 1000,
-            "histogram_train": np.full(16, 1/16),  # Uniform distribution
+            "histogram_train": np.full(16, 1 / 16),  # Uniform distribution
             "execute_circuit": MagicMock(
-                return_value=(np.tile(np.full(16, 1/16), (10, 1)), None)  # Valid PMF (10x16)
+                return_value=(np.tile(np.full(16, 1 / 16), (10, 1)), None)  # Valid PMF (10x16)
             ),
             "dataset_name": "test_dataset",
         }
@@ -95,8 +95,6 @@ class TestQCBM(unittest.TestCase):
             print(f"PMF sum: {np.sum(input_data['execute_circuit'].return_value[0], axis=1)}")
             print(f"Population size: {config['population_size']}")
             raise e
-
-
 
     def test_data_visualization(self):
         import matplotlib.pyplot as plt
@@ -134,8 +132,6 @@ class TestQCBM(unittest.TestCase):
         self.qcbm_instance.writer.add_scalar.assert_called()
         self.qcbm_instance.writer.add_figure.assert_called_with('grid_figure', self.qcbm_instance.fig, global_step=1)
 
-
-
     def test_loss_function_assignment(self):
         # Mock input data and configuration
         input_data = {
@@ -164,5 +160,3 @@ class TestQCBM(unittest.TestCase):
         self.assertIn("bounds", options, "Options should include 'bounds'.")
         self.assertEqual(options["popsize"], config["population_size"], "Population size does not match.")
         self.assertEqual(options["maxfevals"], config["max_evaluations"], "Max evaluations do not match.")
-
-

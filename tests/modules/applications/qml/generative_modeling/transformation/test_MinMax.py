@@ -92,8 +92,6 @@ class TestMinMax(unittest.TestCase):
     #         places=5, msg="Reversed histogram should sum to 1."
     #     )
 
-
-
     def test_fit_transform(self):
         sample_data = np.random.rand(50, 3)
         transformed_data = self.minmax_instance.fit_transform(sample_data)

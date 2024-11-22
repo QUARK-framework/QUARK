@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from modules.applications.qml.generative_modeling.transformations.PIT import PIT
 
+
 class TestPIT(unittest.TestCase):
 
     @classmethod
@@ -61,6 +62,7 @@ class TestPIT(unittest.TestCase):
         self.pit_instance.fit_transform(data)
         inverse_data = self.pit_instance.inverse_transform(data)
         self.assertEqual(inverse_data.shape, data.shape, "Inverse-transformed data should match the input shape.")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,7 +5,6 @@ import pickle
 from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom
 
 
-
 class TestNeutralAtom(unittest.TestCase):
 
     @classmethod

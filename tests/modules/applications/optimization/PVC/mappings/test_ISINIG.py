@@ -39,13 +39,13 @@ class TestIsing(unittest.TestCase):
         config = {"lagrange_factor": 1.0}
         # Run map function
         ising_mapping, mapping_time = self.ising_instance.map(self.graph, config)
-        
+
         self.assertIn("J", ising_mapping)
         self.assertIn("t", ising_mapping)
         self.assertIsInstance(ising_mapping["J"], np.ndarray)
         self.assertIsInstance(ising_mapping["t"], np.ndarray)
         self.assertGreater(mapping_time, 0, "Mapping time should be greater than zero.")
-        
+
         j_matrix_shape = ising_mapping["J"].shape
         self.assertEqual(j_matrix_shape[0], j_matrix_shape[1], "J matrix should be square.")
         self.assertGreater(j_matrix_shape[0], 0, "J matrix should have positive dimensions.")
@@ -54,9 +54,9 @@ class TestIsing(unittest.TestCase):
     def test_reverse_map(self):
         self.ising_instance.key_mapping = {(0, 0): 0, (1, 1): 1}
         mock_solution = {0: 1, 1: 0}
-        
+
         reverse_mapped_solution, reverse_mapping_time = self.ising_instance.reverse_map(mock_solution)
-    
+
         expected_solution = {(0, 0): 1, (1, 1): 0}
         self.assertEqual(reverse_mapped_solution, expected_solution)
         self.assertGreater(reverse_mapping_time, 0, "Reverse mapping time should be greater than zero.")

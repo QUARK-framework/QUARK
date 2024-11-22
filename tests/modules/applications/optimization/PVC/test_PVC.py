@@ -13,7 +13,7 @@ class TestPVC(unittest.TestCase):
         cls.pvc_instance = PVC()
 
     def setUp(self):
-        #refresh the problem before each test to avoid interdependency
+        # refresh the problem before each test to avoid interdependency
         self.pvc_instance.generate_problem({"seams": 3})
 
     @classmethod
@@ -25,7 +25,7 @@ class TestPVC(unittest.TestCase):
         self.assertEqual(self.pvc_instance.submodule_options, [
             "Ising", "QUBO", "GreedyClassicalPVC", "ReverseGreedyClassicalPVC", "RandomPVC"
         ])
-  
+
     def test_get_requirements(self):
         requirements = self.pvc_instance.get_requirements()
         expected_requirements = [
@@ -74,7 +74,7 @@ class TestPVC(unittest.TestCase):
             self.assertGreater(len(graph.nodes), 0, "Generated graph should have at least one node.")
 
     def test_process_solution(self):
-       
+
         solution = {
             ((0, 0), 1, 1, 0): 1,
             ((1, 0), 1, 1, 1): 1,
@@ -111,13 +111,9 @@ class TestPVC(unittest.TestCase):
     def test_save(self):
         with TemporaryDirectory() as temp_dir:
             self.pvc_instance.save(temp_dir, 1)
-            
+
             file_path = f"{temp_dir}/graph_iter_1.gpickle"
             self.assertTrue(os.path.isfile(file_path), "The file was not created as expected.")
 
             file_extension = os.path.splitext(file_path)[-1].lower()
             self.assertEqual(file_extension, ".gpickle", "The file extension is incorrect.")
-
-
-
-

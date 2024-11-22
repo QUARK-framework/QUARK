@@ -9,13 +9,13 @@ from modules.applications.optimization.TSP.TSP import TSP
 
 
 class TestTSP(unittest.TestCase):
-    
+
     @classmethod
     def setUpClass(cls):
         cls.tsp_instance = TSP()
         cls.config = {"nodes": 3}
         cls.graph = cls.tsp_instance.generate_problem(cls.config)
-    
+
     @classmethod
     def tearDownClass(cls):
         del cls.tsp_instance
@@ -38,7 +38,7 @@ class TestTSP(unittest.TestCase):
     def test_get_parameter_options(self):
         options = self.tsp_instance.get_parameter_options()
         self.assertIn("nodes", options)
-    
+
     def test_generate_problem(self):
         graph = self.tsp_instance.generate_problem(self.config)
         self.assertIsInstance(graph, nx.Graph)
@@ -62,7 +62,8 @@ class TestTSP(unittest.TestCase):
 
         result_matrix = self.tsp_instance._get_tsp_matrix(graph)
 
-        self.assertTrue(np.allclose(result_matrix, expected_matrix), "The generated matrix does not match the expected matrix.")
+        self.assertTrue(np.allclose(result_matrix, expected_matrix),
+                        "The generated matrix does not match the expected matrix.")
 
     def test_process_solution(self):
         right_solution = {(0, 0): 1, (2, 1): 1, (1, 2): 1}

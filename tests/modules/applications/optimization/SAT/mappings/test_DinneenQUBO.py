@@ -26,7 +26,7 @@ class TestDinneenQUBO(unittest.TestCase):
         qubo_mapping, mapping_time = self.dinneen_qubo_instance.map(self.problem, self.config)
 
         self.assertIn("Q", qubo_mapping)
-        
+
         q_matrix = qubo_mapping["Q"]
         self.assertIsInstance(q_matrix, dict)
         for key, value in q_matrix.items():
@@ -37,7 +37,7 @@ class TestDinneenQUBO(unittest.TestCase):
 
     def test_reverse_map(self):
         mock_solution = {i: 1 if i % 2 == 0 else 0 for i in range(self.dinneen_qubo_instance.nr_vars)}
-        
+
         reverse_mapped_solution, reverse_mapping_time = self.dinneen_qubo_instance.reverse_map(mock_solution)
 
         self.assertIsInstance(reverse_mapped_solution, dict)

@@ -200,7 +200,6 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         mock_logging.assert_any_call("Backend configuration: {'dummy': 'config'}")
         mock_logging.assert_any_call("Simulation method: statevector")
 
-
     # @patch("qiskit_ibm_runtime.fake_provider.FakeProviderForBackendV2.get_backend")
     # def test_get_fake_backend(self, mock_get_backend):
     #     from qiskit_ibm_runtime.fake_provider import FakeManilaV2
@@ -225,7 +224,6 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
     #     mock_configuration.num_qubits = 2  # Simulate insufficient qubits
     #     returned_backend = self.backend_instance.get_FakeBackend("fake_backend", 4)
     #     self.assertEqual(returned_backend.name(), "aer_simulator")
-
 
 
 if __name__ == "__main__":

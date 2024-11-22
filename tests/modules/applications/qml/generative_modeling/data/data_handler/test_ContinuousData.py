@@ -4,6 +4,7 @@ import numpy as np
 from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 from modules.applications.qml.generative_modeling.transformations.PIT import PIT
 
+
 class TestContinuousData(unittest.TestCase):
 
     @classmethod

@@ -74,10 +74,10 @@ class TestIsing(unittest.TestCase):
         solution_size = len(self.ising_instance.key_mapping)
         mock_solution = [1 if i % 2 == 0 else 0 for i in range(solution_size)]
         reverse_mapped_solution, reverse_mapping_time = self.ising_instance.reverse_map(mock_solution)
-        
+
         self.assertIsInstance(reverse_mapped_solution, dict)
         self.assertGreater(reverse_mapping_time, 0, "Reverse mapping time should be positive.")
-    
+
     def test_flip_bits_in_bitstring(self):
         # Input with alternating 0s and 1s
         solution = [0, 1, 0, 1, 0, 1]
@@ -102,7 +102,8 @@ class TestIsing(unittest.TestCase):
         solution = [-1, 1, -1, 1]
         expected_converted = [0, 1, 0, 1]
         qubo_solution = self.ising_instance._convert_ising_to_qubo(solution)
-        self.assertTrue(np.array_equal(qubo_solution, expected_converted), "Ising to QUBO conversion failed for -1s and 1s.")
+        self.assertTrue(np.array_equal(qubo_solution, expected_converted),
+                        "Ising to QUBO conversion failed for -1s and 1s.")
 
         # Input with no -1s
         solution = [0, 1, 0, 1]
@@ -114,8 +115,8 @@ class TestIsing(unittest.TestCase):
         solution = [-1, -1, -1, -1]
         expected_converted = [0, 0, 0, 0]
         qubo_solution = self.ising_instance._convert_ising_to_qubo(solution)
-        self.assertTrue(np.array_equal(qubo_solution, expected_converted), "Ising to QUBO conversion failed for all -1s.")
-
+        self.assertTrue(np.array_equal(qubo_solution, expected_converted),
+                        "Ising to QUBO conversion failed for all -1s.")
 
     def test_get_default_submodule(self):
         # Test valid submodules

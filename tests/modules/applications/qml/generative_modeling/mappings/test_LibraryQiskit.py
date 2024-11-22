@@ -128,7 +128,6 @@ class TestLibraryQiskit(unittest.TestCase):
     #     with self.assertRaises(NotImplementedError):
     #         self.library_instance.select_backend("invalid_backend", 2)
 
-
     # @patch("qiskit.quantum_info.Statevector.probabilities")
     # @patch("qiskit.transpile")
     # def test_get_execute_circuit(self, mock_transpile, mock_probabilities):
@@ -180,9 +179,6 @@ class TestLibraryQiskit(unittest.TestCase):
     #     self.assertIsInstance(pmfs, np.ndarray)
     #     self.assertEqual(len(pmfs), len(solutions))
     #     self.assertAlmostEqual(np.sum(pmfs[0]), 1.0, places=6)
-
-
-
 
 
 if __name__ == "__main__":

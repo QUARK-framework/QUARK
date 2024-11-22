@@ -32,7 +32,7 @@ class TestDinneenIsing(unittest.TestCase):
         # Check that mapping results contain the expected "J" and "t" keys
         self.assertIn("J", ising_mapping)
         self.assertIn("t", ising_mapping)
-        
+
         # Check that J and t are numpy arrays
         j_matrix = ising_mapping["J"]
         t_vector = ising_mapping["t"]
@@ -45,7 +45,7 @@ class TestDinneenIsing(unittest.TestCase):
 
     def test_reverse_map(self):
         mock_solution = {i: 1 if i % 2 == 0 else 0 for i in range(len(self.dinneen_ising_instance.problem[0].vars()))}
-        
+
         reverse_mapped_solution, reverse_mapping_time = self.dinneen_ising_instance.reverse_map(mock_solution)
 
         # Verify that the output of reverse_map is a dictionary

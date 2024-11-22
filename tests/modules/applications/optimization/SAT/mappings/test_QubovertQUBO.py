@@ -27,7 +27,7 @@ class TestQubovertQUBO(unittest.TestCase):
         qubo_mapping, mapping_time = self.qubovert_instance.map(self.problem, self.config)
 
         self.assertIn("Q", qubo_mapping)
-        
+
         q_dict = qubo_mapping["Q"]
         self.assertIsInstance(q_dict, dict)
         for key, value in q_dict.items():
@@ -38,7 +38,7 @@ class TestQubovertQUBO(unittest.TestCase):
 
     def test_reverse_map(self):
         mock_solution = {i: 1 if i % 2 == 0 else 0 for i in range(self.qubovert_instance.nr_vars)}
-        
+
         reverse_mapped_solution, reverse_mapping_time = self.qubovert_instance.reverse_map(mock_solution)
 
         self.assertIsInstance(reverse_mapped_solution, dict)

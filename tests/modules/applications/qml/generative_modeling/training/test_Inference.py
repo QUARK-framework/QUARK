@@ -23,7 +23,7 @@ class TestInference(unittest.TestCase):
         # Mock np.load to return mock parameters
         mock_np_load.return_value = self.mock_parameters
 
-         # Update the execute_circuit mock to return a PMF with the correct size
+        # Update the execute_circuit mock to return a PMF with the correct size
         n_states = 2 ** self.input_data["n_qubits"]
         pmf_mock = np.full(n_states, 1 / n_states)  # Uniform distribution over all states
         self.input_data["execute_circuit"].return_value = ([pmf_mock], None)

@@ -95,17 +95,16 @@ class TestLibraryPennylane(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             self.library_instance.select_backend("invalid.backend", 2)
 
-
-
     @patch("pennylane.QNode")
     def test_get_execute_circuit(self, mock_qnode):
         mock_qnode.return_value = lambda x: np.array([0.5, 0.5])  # Mock the qnode
 
         mock_backend = MagicMock()
         config_dict = {"n_shots": 100}
-        circuit = lambda x: x  # Placeholder circuit function
+        def circuit(x): return x  # Placeholder circuit function
 
-        execute_circuit, _ = self.library_instance.get_execute_circuit(circuit, mock_backend, "default.qubit", config_dict)
+        execute_circuit, _ = self.library_instance.get_execute_circuit(
+            circuit, mock_backend, "default.qubit", config_dict)
 
         solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
         pmfs, samples = execute_circuit(solutions)

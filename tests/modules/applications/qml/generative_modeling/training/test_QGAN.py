@@ -84,14 +84,6 @@ class TestQGAN(unittest.TestCase):
         drop_last = self.qgan_instance.dataloader.drop_last
         self.assertTrue(drop_last, "drop_last should be True to avoid partial batches.")
 
-
-
-
-
-
-
-
-
     def test_start_training(self):
         # Mock the execute_circuit to return expected values
         self.input_data["execute_circuit"] = MagicMock(
@@ -116,7 +108,6 @@ class TestQGAN(unittest.TestCase):
         flattened_output = output.view(-1)
         self.assertEqual(flattened_output.shape, (10,), "The flattened output shape should be (10,).")
 
-
     def test_discriminator_weights_init(self):
         discriminator = Discriminator(input_length=self.input_length)
         # Apply the weights initialization
@@ -133,25 +124,23 @@ class TestQGAN(unittest.TestCase):
                 # Check if biases are initialized to 1
                 self.assertTrue(torch.allclose(bias, torch.tensor(1.0)), "Biases should be initialized to 1.")
 
-
     def test_quantum_generator_execute(self):
         # Mock the execute_circuit to return a valid PMF and no additional output
         execute_circuit_mock = MagicMock(return_value=(np.random.random(16), None))
-        
+
         # Initialize the QuantumGenerator
         generator = QuantumGenerator(n_qubits=4, execute_circuit=execute_circuit_mock, batch_size=10)
-        
+
         # Use n_shots equal to batch_size
         n_shots = 100  # Match the original execute method's expected n_shots
         params = np.random.random(10)
-        
+
         # Execute the QuantumGenerator
         samples, pdfs = generator.execute(params, n_shots=n_shots)
-        
+
         # Assertions
         self.assertEqual(pdfs.shape, (16,), "Expected PMF size to match the number of qubits (2^n_qubits).")
         self.assertEqual(samples.shape[0], n_shots, f"Expected number of samples to match n_shots ({n_shots}).")
-
 
     def test_quantum_generator_compute_gradient(self):
         # Create a mock generator with mocked execute method
@@ -160,7 +149,7 @@ class TestQGAN(unittest.TestCase):
             execute_circuit=self.input_data["execute_circuit"],
             batch_size=self.config["batch_size"]
         )
-        
+
         # Mock the execute method to return a PyTorch tensor for `pdfs`
         generator.execute = MagicMock(
             return_value=(
@@ -168,11 +157,11 @@ class TestQGAN(unittest.TestCase):
                 torch.rand(2 ** self.input_data["n_qubits"])
             )
         )
-        
+
         discriminator = Discriminator(input_length=4)
         criterion = torch.nn.BCELoss()
         label = torch.ones(self.config["batch_size"])
-        
+
         # Compute gradients
         params = np.random.rand(16)
         gradients = generator.compute_gradient(
@@ -182,7 +171,7 @@ class TestQGAN(unittest.TestCase):
             label=label,
             device="cpu"
         )
-        
+
         # Assertions
         self.assertEqual(len(gradients), len(params), "Gradient size should match number of parameters.")
         self.assertTrue(np.all(np.isfinite(gradients)), "All gradients should be finite.")

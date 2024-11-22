@@ -75,9 +75,9 @@ class TestQubo(unittest.TestCase):
         variables = ["x_0", "x_1"]
         qubo_matrix = self.qubo_instance.construct_qubo(arguments, variables)
         expected_matrix = np.array([
-        [-3.0, 0.0],  # Diagonal terms and no interaction (negative due to minimization problem)
-        [2.0, -4.0]   # Off-diagonal term and diagonal term for x_1
-    ])
+            [-3.0, 0.0],  # Diagonal terms and no interaction (negative due to minimization problem)
+            [2.0, -4.0]   # Off-diagonal term and diagonal term for x_1
+        ])
         np.testing.assert_array_almost_equal(qubo_matrix, expected_matrix, err_msg="QUBO matrix construction failed.")
 
     def test_map(self):
@@ -98,4 +98,3 @@ class TestQubo(unittest.TestCase):
         self.assertIsNotNone(submodule, "Expected 'Annealer' submodule to be returned.")
         with self.assertRaises(NotImplementedError):
             self.qubo_instance.get_default_submodule("InvalidSubmodule")
-

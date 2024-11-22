@@ -14,11 +14,11 @@ class TestSAT(unittest.TestCase):
         cls.sat_instance = SAT()
         cls.problem = cls.sat_instance.generate_problem(
             {"variables": 10, "clvar_ratio_cons": 2, "clvar_ratio_test": 2, "problem_set": 5, "max_tries": 100})
-        
+
     @classmethod
     def tearDownClass(cls):
         del cls.sat_instance
-    
+
     def test_get_requirements(self):
         requirements = self.sat_instance.get_requirements()
         self.assertIn({"name": "nnf", "version": "0.4.1"}, requirements)
@@ -61,9 +61,9 @@ class TestSAT(unittest.TestCase):
         # Validate the structure and cardinalities
         hard_clauses = list(hard)  # Extract the list of clauses from the And object
         self.assertEqual(len(hard_clauses), round(config["clvar_ratio_cons"] * config["variables"]),
-                        "Incorrect number of hard constraints.")
+                         "Incorrect number of hard constraints.")
         self.assertEqual(len(soft), round(config["clvar_ratio_test"] * config["variables"]),
-                        "Incorrect number of soft constraints.")
+                         "Incorrect number of soft constraints.")
 
     def test_validate(self):
         self.sat_instance.generate_problem(
@@ -85,7 +85,7 @@ class TestSAT(unittest.TestCase):
         partial_solution = {'L1': 1, 'L2': 0}
         with self.assertRaises(ValueError):
             self.sat_instance.validate(partial_solution)
-    
+
     def test_evaluate(self):
         solution = {'L5': 1, 'L8': 0, 'L7': 0, 'L1': 1, 'L4': 1, 'L0': 1, 'L9': 1, 'L3': 1, 'L6': 1, 'L2': 1}
         self.assertAlmostEqual(self.sat_instance.evaluate(solution)[0], 0.95, delta=0.05)
@@ -112,4 +112,3 @@ class TestSAT(unittest.TestCase):
 
                 file_length = os.stat(file_path).st_size == 0
                 self.assertFalse(file_length)
-    

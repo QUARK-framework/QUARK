@@ -48,7 +48,10 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         for option, expected_type in submodules.items():
             with self.subTest(option=option):
                 submodule = self.backend_instance.get_default_submodule(option)
-                self.assertIsInstance(submodule, expected_type, f"Expected {option} to return an instance of {expected_type.__name__}")
+                self.assertIsInstance(
+                    submodule,
+                    expected_type,
+                    f"Expected {option} to return an instance of {expected_type.__name__}")
 
         # Test invalid option
         with self.assertRaises(NotImplementedError, msg="Expected NotImplementedError for invalid option"):
@@ -99,7 +102,8 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.transpile")
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.AerSimulator")
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.decompile_noisy_config")
-    def test_get_execute_circuit(self, mock_decompile_noisy_config, mock_aer_simulator, mock_transpile, mock_pass_manager, mock_layout):
+    def test_get_execute_circuit(self, mock_decompile_noisy_config, mock_aer_simulator,
+                                 mock_transpile, mock_pass_manager, mock_layout):
         # Mock Configurations
         from unittest.mock import ANY
         mock_backend = MagicMock(spec=AerSimulator)
@@ -165,12 +169,12 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         )
         mock_backend.run.assert_called_once()
 
-
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.build_noise_model")
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.get_coupling_map")
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.Aer.get_backend")
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.log_backend_options")
-    def test_decompile_noisy_config(self, mock_log_backend_options, mock_get_backend, mock_get_coupling_map, mock_build_noise_model):
+    def test_decompile_noisy_config(self, mock_log_backend_options, mock_get_backend,
+                                    mock_get_coupling_map, mock_build_noise_model):
         # Mock simulation method and device
         simulation_method = "statevector"
         device = "CPU"
@@ -219,8 +223,6 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         mock_build_noise_model.assert_called_once_with(config_dict)
         mock_get_coupling_map.assert_called_once_with(config_dict, num_qubits)
 
-
-
     def test_build_noise_model(self):
         config_dict = {
             "custom_readout_error": 0.01,
@@ -263,7 +265,6 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         simulation_method, device = self.backend_instance.get_simulation_method_and_device("GPU", "unknown_method")
         self.assertEqual(simulation_method, "automatic", "Expected 'automatic' for unknown simulation methods.")
         self.assertEqual(device, "GPU", "Device should remain unchanged for unknown simulation methods.")
-
 
     def test_get_transpile_routine(self):
         self.assertEqual(self.backend_instance.get_transpile_routine(2), 2)

@@ -29,17 +29,17 @@ class TestQUBO(unittest.TestCase):
 
     def test_map(self):
         config = {"lagrange_factor": 1.0}
-        
+
         qubo_mapping, mapping_time = self.qubo_instance.map(self.graph, config)
-        
+
         # Check Q dictionary presence and type
         self.assertIn("Q", qubo_mapping)
         self.assertIsInstance(qubo_mapping["Q"], dict)
-        
+
         # Ensure QUBO matrix contains entries
         q_matrix = qubo_mapping["Q"]
         self.assertGreater(len(q_matrix), 0, "QUBO matrix should contain entries")
-        
+
         # Confirm tuple keys and float values in QUBO matrix
         for key, value in q_matrix.items():
             self.assertIsInstance(key, tuple)
@@ -51,6 +51,6 @@ class TestQUBO(unittest.TestCase):
     def test_get_default_submodule(self):
         submodule = self.qubo_instance.get_default_submodule("Annealer")
         self.assertIsNotNone(submodule, "Annealer submodule should not be None")
-        
+
         with self.assertRaises(NotImplementedError):
             self.qubo_instance.get_default_submodule("InvalidSubmodule")

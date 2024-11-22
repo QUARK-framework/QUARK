@@ -1,6 +1,6 @@
 import unittest
 import io
-from nnf import And, Var, Or 
+from nnf import And, Var, Or
 from pysat.formula import WCNF
 
 from modules.applications.optimization.SAT.mappings.Direct import Direct
@@ -16,7 +16,7 @@ class TestDirect(unittest.TestCase):
         cls.hard_constraints = And([Or([Var("L0")]), Or([~Var("L1")])])  # A ∧ ¬B
 
         # Soft constraints as CNF: List of disjunctions
-        cls.soft_constraints = [Or([Var("L2")]), Or([~Var("L3")])] 
+        cls.soft_constraints = [Or([Var("L2")]), Or([~Var("L3")])]
         cls.problem = (cls.hard_constraints, cls.soft_constraints)
 
     def test_get_requirements(self):
@@ -35,7 +35,7 @@ class TestDirect(unittest.TestCase):
     def test_map(self):
         # Map the SAT problem to pysat
         mapped_problem, mapping_time = self.direct_instance.map(self.problem, config={})
-        
+
         # Check that the result is a WCNF instance
         self.assertIsInstance(mapped_problem, WCNF, "Expected a WCNF instance.")
         self.assertGreater(mapping_time, 0, "Mapping time should be positive.")

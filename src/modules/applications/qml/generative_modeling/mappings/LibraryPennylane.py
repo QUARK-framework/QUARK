@@ -183,8 +183,8 @@ class LibraryPennylane(LibraryGenerative):
         that will be called during training.
 
         :param circuit: PennyLane implementation of the quantum circuit
-        :param backend: Configured PennyLane device
-        :param config: Name of the PennyLane device
+        :param backend: Configured qiskit backend
+        :param config: Name of a backend
         :param config_dict: Dictionary including the number of shots
         :return: Tuple that contains a method that executes the quantum circuit for a given set of parameters twice
         """

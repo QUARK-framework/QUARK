@@ -157,7 +157,6 @@ class TestLibraryQiskit(unittest.TestCase):
     #     self.assertIsNotNone(backend)
     #     self.assertEqual(backend.name, device_wrapper.device.name)
 
-
     @patch("modules.devices.braket.Ionq.Ionq")
     @patch("qiskit_braket_provider.AWSBraketBackend")
     def test_ionq_harmony(self, mock_aws_braket_backend, mock_ionq):
@@ -173,7 +172,7 @@ class TestLibraryQiskit(unittest.TestCase):
             self.library_instance.select_backend("invalid.backend", 4)
         self.assertIn("Device Configuration invalid.backend not implemented", str(context.exception))
 
-    #get_execute_circuit function
+    # get_execute_circuit function
     # @patch("qiskit.transpiler.transpile")
     # @patch("qiskit.quantum_info.Statevector")
     # def test_aer_statevector_simulator(self, mock_statevector, mock_transpile):

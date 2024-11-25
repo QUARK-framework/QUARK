@@ -74,7 +74,7 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         mock_backend.set_options = MagicMock()
         mock_get_backend.return_value = mock_backend
 
-         # Test CPU configuration
+        # Test CPU configuration
         backend = self.backend_instance.select_backend("aer_simulator_cpu", 3)
         self.assertEqual(backend, mock_backend)
         mock_get_backend.assert_called_once_with("aer_simulator")
@@ -292,7 +292,7 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
             mock_noise_model.add_all_qubit_quantum_error.assert_any_call(mock_one_qubit_error, gate)
 
     def test_get_coupling_map(self):
-         # Test linear coupling map
+        # Test linear coupling map
         config_dict = {"qubit_layout": "linear"}
         coupling_map = self.backend_instance.get_coupling_map(config_dict, num_qubits=4)
         self.assertIsNotNone(coupling_map)

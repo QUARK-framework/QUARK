@@ -109,4 +109,3 @@ class TestContinuousData(unittest.TestCase):
 
         kl_divergence, _ = self.data_handler.evaluate(solution)
         self.assertAlmostEqual(kl_divergence, expected_kl, places=6, msg="KL divergence with zeros is incorrect.")
-

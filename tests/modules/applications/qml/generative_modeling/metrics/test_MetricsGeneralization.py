@@ -32,7 +32,6 @@ class TestMetricsGeneralization(unittest.TestCase):
     def test_get_masks(self):
         mask_new, mask_sol = self.metrics_instance.get_masks()
 
-        # Verify `mask_new` excludes training indices
         self.assertFalse(mask_new[self.train_set].any())
 
         # Verify `mask_sol` includes solution indices but excludes training indices

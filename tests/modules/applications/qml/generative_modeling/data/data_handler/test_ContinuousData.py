@@ -1,8 +1,7 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 import numpy as np
 from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
-from modules.applications.qml.generative_modeling.transformations.PIT import PIT
 
 
 class TestContinuousData(unittest.TestCase):
@@ -66,6 +65,12 @@ class TestContinuousData(unittest.TestCase):
 
         result = self.data_handler.data_load(gen_mod, config)
 
+        mock_resource_filename.assert_called_once_with(
+            'modules.applications.qml.generative_modeling.data',
+            "X_2D.npy"
+        )
+        mock_np_load.assert_called_once_with("/mock/path/X_2D.npy")
+
         self.assertEqual(result["dataset_name"], "X_2D")
         self.assertEqual(result["n_qubits"], 2)
         self.assertEqual(result["train_size"], 0.5)
@@ -91,6 +96,17 @@ class TestContinuousData(unittest.TestCase):
         expected_kl_divergence = np.sum(target * np.log(target / generated))
         self.assertAlmostEqual(kl_divergence, expected_kl_divergence, places=6)
 
+    def test_evaluate_with_zeros(self):
+        # Test handling of zeros in histograms
+        solution = {
+            "histogram_generated_original": np.array([[0.2, 0.0], [0.0, 0.4]]),
+            "histogram_train_original": np.array([[0.25, 0.0], [0.0, 0.25]])
+        }
 
-if __name__ == "__main__":
-    unittest.main()
+        generated = np.array([[0.2, 1e-8], [1e-8, 0.4]])
+        target = np.array([[0.25, 1e-8], [1e-8, 0.25]])
+        expected_kl = np.sum(target.ravel() * np.log(target.ravel() / generated.ravel()))
+
+        kl_divergence, _ = self.data_handler.evaluate(solution)
+        self.assertAlmostEqual(kl_divergence, expected_kl, places=6, msg="KL divergence with zeros is incorrect.")
+

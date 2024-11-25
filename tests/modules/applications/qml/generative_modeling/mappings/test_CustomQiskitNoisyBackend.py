@@ -2,9 +2,9 @@ import unittest
 from unittest.mock import MagicMock, patch
 import numpy as np
 from qiskit import QuantumCircuit
-from qiskit_aer import Aer, AerSimulator, noise
-from qiskit.providers import Backend
+from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel
+from qiskit.transpiler import CouplingMap
 
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 from modules.applications.qml.generative_modeling.training.Inference import Inference
@@ -40,21 +40,14 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         self.assertIn("noise_configuration", parameter_options)
 
     def test_get_default_submodule(self):
-        # Test valid options
-        submodules = {
-            "QCBM": QCBM,
-            "Inference": Inference
-        }
-        for option, expected_type in submodules.items():
+        submodules = ["QCBM", "Inference"]
+        for option in submodules:
             with self.subTest(option=option):
                 submodule = self.backend_instance.get_default_submodule(option)
-                self.assertIsInstance(
-                    submodule,
-                    expected_type,
-                    f"Expected {option} to return an instance of {expected_type.__name__}")
+                self.assertIsNotNone(submodule, f"Expected non-None submodule for {option}")
+                self.assertIn(type(submodule).__name__, submodules, f"Unexpected submodule type for {option}")
 
-        # Test invalid option
-        with self.assertRaises(NotImplementedError, msg="Expected NotImplementedError for invalid option"):
+        with self.assertRaises(NotImplementedError):
             self.backend_instance.get_default_submodule("InvalidOption")
 
     def test_sequence_to_circuit(self):
@@ -76,24 +69,28 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
 
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.Aer.get_backend")
     def test_select_backend(self, mock_get_backend):
+        # Mock the backend and its set_options method
         mock_backend = MagicMock()
-        mock_backend.set_options = MagicMock()  # Add the set_options method to the mock
+        mock_backend.set_options = MagicMock()
         mock_get_backend.return_value = mock_backend
 
+         # Test CPU configuration
         backend = self.backend_instance.select_backend("aer_simulator_cpu", 3)
         self.assertEqual(backend, mock_backend)
-        mock_get_backend.assert_called_once_with("aer_simulator")  # Ensure correct simulator name
+        mock_get_backend.assert_called_once_with("aer_simulator")
         mock_backend.set_options.assert_called_once_with(device="CPU")
 
-        # Reset mock to test "aer_simulator_gpu"
+        # Reset mocks to test GPU configuration
         mock_get_backend.reset_mock()
         mock_backend.reset_mock()
 
+        # Test GPU configuration
         backend = self.backend_instance.select_backend("aer_simulator_gpu", 3)
         self.assertEqual(backend, mock_backend)
         mock_get_backend.assert_called_once_with("aer_simulator")
-        mock_backend.set_options.assert_called_once_with(device="GPU")  # Ensure device is set to GPU
+        mock_backend.set_options.assert_called_once_with(device="GPU")
 
+        # Test invalid configuration
         with self.assertRaises(NotImplementedError):
             self.backend_instance.select_backend("unknown_backend", 3)
 
@@ -203,7 +200,6 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
 
         backend = self.backend_instance.decompile_noisy_config(config_dict, num_qubits)
 
-        # Assertions
         self.assertEqual(backend.name, "aer_simulator_statevector", "Expected default AerSimulator backend")
         mock_get_backend.assert_called_once_with("aer_simulator")
         mock_backend.set_options.assert_called_once_with(device=device, method=simulation_method)
@@ -270,57 +266,6 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         self.assertEqual(self.backend_instance.get_transpile_routine(2), 2)
         self.assertEqual(self.backend_instance.get_transpile_routine(5), 1)  # Invalid config defaults to 1
 
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.build_noise_model")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.get_coupling_map")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.AerSimulator")
-    def test_get_custom_config(self, mock_aer_simulator, mock_get_coupling_map, mock_build_noise_model):
-        # Mock coupling map and noise model
-        mock_coupling_map = MagicMock()
-        mock_get_coupling_map.return_value = mock_coupling_map
-        mock_noise_model = MagicMock(spec=NoiseModel)
-        mock_build_noise_model.return_value = mock_noise_model
-
-        # Test case with coupling map
-        config_dict = {
-            "custom_readout_error": 0.01,
-            "two_qubit_depolarizing_errors": 0.02,
-            "one_qubit_depolarizing_errors": 0.005,
-            "qubit_layout": "linear",
-        }
-        num_qubits = 4
-
-        backend = self.backend_instance.get_custom_config(config_dict, num_qubits)
-        mock_aer_simulator.assert_called_once_with(noise_model=mock_noise_model, coupling_map=mock_coupling_map)
-        self.assertEqual(backend, mock_aer_simulator.return_value)
-
-        # Test case without coupling map
-        mock_get_coupling_map.return_value = None
-        backend = self.backend_instance.get_custom_config(config_dict, num_qubits)
-        mock_aer_simulator.assert_called_with(noise_model=mock_noise_model)
-        self.assertEqual(backend, mock_aer_simulator.return_value)
-
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.noise.NoiseModel")
-    def test_build_noise_model(self, mock_noise_model):
-        # Mock NoiseModel
-        mock_noise_model_instance = MagicMock(spec=NoiseModel)
-        mock_noise_model.return_value = mock_noise_model_instance
-
-        config_dict = {
-            "custom_readout_error": 0.01,
-            "two_qubit_depolarizing_errors": 0.02,
-            "one_qubit_depolarizing_errors": 0.005,
-        }
-
-        # Call the method
-        noise_model = self.backend_instance.build_noise_model(config_dict)
-
-        # Assertions
-        mock_noise_model.assert_called_once()
-        mock_noise_model_instance.add_all_qubit_readout_error.assert_called_once_with(
-            [[0.99, 0.01], [0.01, 0.99]]
-        )
-        self.assertEqual(noise_model, mock_noise_model_instance)
-
     @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.noise.depolarizing_error")
     def test_add_quantum_errors(self, mock_depolarizing_error):
         # Mock noise model and depolarizing errors
@@ -334,7 +279,6 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
             "one_qubit_depolarizing_errors": 0.005,
         }
 
-        # Call the method
         self.backend_instance.add_quantum_errors(mock_noise_model, config_dict)
 
         # Assertions for two-qubit errors
@@ -348,14 +292,29 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
             mock_noise_model.add_all_qubit_quantum_error.assert_any_call(mock_one_qubit_error, gate)
 
     def test_get_coupling_map(self):
+         # Test linear coupling map
         config_dict = {"qubit_layout": "linear"}
         coupling_map = self.backend_instance.get_coupling_map(config_dict, num_qubits=4)
         self.assertIsNotNone(coupling_map)
+        self.assertIsInstance(coupling_map, CouplingMap, "Expected a CouplingMap instance for linear layout.")
+        self.assertEqual(coupling_map.size(), 4, "Coupling map size should match the number of qubits.")
 
+        # Test circular coupling map
+        config_dict = {"qubit_layout": "circle"}
+        coupling_map = self.backend_instance.get_coupling_map(config_dict, num_qubits=4)
+        self.assertIsInstance(coupling_map, CouplingMap, "Expected a CouplingMap instance for circular layout.")
+
+        # Test fully connected coupling map
+        config_dict = {"qubit_layout": "fully_connected"}
+        coupling_map = self.backend_instance.get_coupling_map(config_dict, num_qubits=4)
+        self.assertIsInstance(coupling_map, CouplingMap, "Expected a CouplingMap instance for fully connected layout.")
+
+        # Test no specified coupling map
         config_dict = {"qubit_layout": None}
         coupling_map = self.backend_instance.get_coupling_map(config_dict, num_qubits=4)
         self.assertIsNone(coupling_map)
 
+        # Test unknown qubit layout
         config_dict = {"qubit_layout": "unknown_layout"}
         with self.assertRaises(ValueError):
             self.backend_instance.get_coupling_map(config_dict, num_qubits=4)

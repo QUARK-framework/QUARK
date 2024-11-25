@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 import numpy as np
 from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
 from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
@@ -84,7 +84,3 @@ class TestDiscreteData(unittest.TestCase):
         self.assertGreater(evaluate_dict["KL_best"], 0)
         self.assertGreater(time_taken, 0)
         np.testing.assert_almost_equal(np.sum(evaluate_dict["histogram_generated"]), 1.0, decimal=6)
-
-
-if __name__ == "__main__":
-    unittest.main()

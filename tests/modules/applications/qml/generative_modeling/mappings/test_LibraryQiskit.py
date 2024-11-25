@@ -1,12 +1,9 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from qiskit import QuantumCircuit, transpile
-from qiskit.providers import Backend
-from qiskit.quantum_info import Statevector
+from qiskit import QuantumCircuit
 import numpy as np
+from qiskit_aer import AerSimulator
 
-from qiskit.transpiler.target import Target
-from qiskit.transpiler import InstructionProperties
 from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 from modules.applications.qml.generative_modeling.training.QGAN import QGAN
@@ -81,105 +78,183 @@ class TestLibraryQiskit(unittest.TestCase):
         self.assertIn("n_params", output)
         self.assertEqual(output["n_params"], 3)  # RX, RY, RXX need 3 parameters
 
+    # @patch("modules.applications.qml.generative_modeling.mappings.LibraryQiskit.select_backend.cusvaer")
     # @patch("qiskit_aer.Aer.get_backend")
-    # @patch("modules.devices.braket.Ionq")
-    # @patch("qiskit_braket_provider.AWSBraketBackend")
-    # def test_select_backend(self, mock_braket_backend, mock_ionq, mock_get_backend):
-    #     # Mocking Qiskit Aer backend
+    # def test_cusvaer_simulator(self, mock_aer_simulator, mock_cusvaer):
     #     mock_backend = MagicMock()
-    #     mock_get_backend.return_value = mock_backend
+    #     mock_aer_simulator.return_value = mock_backend
 
-    #     # Test aer_simulator_cpu
-    #     backend = self.library_instance.select_backend("aer_simulator_cpu", 2)
-    #     mock_get_backend.assert_called_with("aer_simulator")
-    #     mock_backend.set_options.assert_called_with(device="CPU")
-    #     self.assertIs(mock_backend, backend)
-
-    #     # Test aer_simulator_gpu
-    #     backend = self.library_instance.select_backend("aer_simulator_gpu", 2)
-    #     mock_get_backend.assert_called_with("aer_simulator")
-    #     mock_backend.set_options.assert_called_with(device="GPU")
-    #     self.assertIs(mock_backend, backend)
-
-    #     # Test aer_statevector_simulator_cpu
-    #     backend = self.library_instance.select_backend("aer_statevector_simulator_cpu", 3)
-    #     mock_get_backend.assert_called_with("statevector_simulator")
-    #     mock_backend.set_options.assert_called_with(device="CPU")
-    #     self.assertIs(mock_backend, backend)
-
-    #     # Test aer_statevector_simulator_gpu
-    #     backend = self.library_instance.select_backend("aer_statevector_simulator_gpu", 3)
-    #     mock_get_backend.assert_called_with("statevector_simulator")
-    #     mock_backend.set_options.assert_called_with(device="GPU")
-    #     self.assertIs(mock_backend, backend)
-
-    #     # Mocking IonQ backend
-    #     mock_device = MagicMock()
-    #     mock_ionq.return_value.device = mock_device
-    #     backend = self.library_instance.select_backend("ionQ_Harmony", 3)
-    #     self.assertIsInstance(backend, MagicMock)
-    #     mock_ionq.assert_called_with("ionQ", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
-
-    #     # Test Amazon_SV1 backend
-    #     backend = self.library_instance.select_backend("Amazon_SV1", 4)
-    #     self.assertIsInstance(backend, MagicMock)
-
-    #     # Test invalid backend
-    #     with self.assertRaises(NotImplementedError):
-    #         self.library_instance.select_backend("invalid_backend", 2)
-
-    # @patch("qiskit.quantum_info.Statevector.probabilities")
-    # @patch("qiskit.transpile")
-    # def test_get_execute_circuit(self, mock_transpile, mock_probabilities):
-    #     # Mock transpile function
-    #     mock_transpiled_circuit = QuantumCircuit(2)
-    #     mock_transpile.return_value = mock_transpiled_circuit
-
-    #     # Mock probabilities function
-    #     mock_probabilities.return_value = [0.5, 0.5]
-
-    #     # Create a mock backend
-    #     mock_backend = MagicMock()
-    #     mock_backend.version = 1
-    #     mock_backend.num_qubits = 2
-
-    #     # Mock qubit properties to match num_qubits
-    #     mock_backend.qubit_properties = [None] * mock_backend.num_qubits
-
-    #     # Create a mock Target with mocked instructions
-    #     mock_target = Target(num_qubits=2)
-    #     mock_target.add_instruction("rx", InstructionProperties())
-    #     mock_target.add_instruction("ry", InstructionProperties())
-    #     mock_target.add_instruction("rz", InstructionProperties())
-    #     mock_target.add_instruction("cx", InstructionProperties())
-    #     mock_target.add_instruction("measure", InstructionProperties())
-    #     mock_backend.target = mock_target
-
-    #     # Add configuration mock
-    #     mock_backend.configuration = MagicMock()
-    #     mock_backend.configuration.num_qubits = mock_backend.num_qubits
-
-    #     # Test inputs
-    #     config_dict = {"n_shots": 100}
-    #     circuit = QuantumCircuit(2)
-
-    #     # Call get_execute_circuit
-    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
-    #         circuit, mock_backend, "aer_statevector_simulator_cpu", config_dict
+    #     backend = self.library_instance.select_backend(
+    #         "cusvaer_simulator (only available in cuQuantum appliance)", 5
+    #     )
+    #     self.assertEqual(backend, mock_backend)
+    #     mock_aer_simulator.assert_called_once_with(
+    #         method="statevector",
+    #         device="GPU",
+    #         cusvaer_enable=True,
+    #         noise_model=None,
+    #         cusvaer_p2p_device_bits=3,
+    #         cusvaer_comm_plugin_type=mock_cusvaer.CommPluginType.MPI_AUTO,
+    #         cusvaer_comm_plugin_soname="libmpi.so",
     #     )
 
-    #     # Assertions
-    #     self.assertIs(transpiled_circuit, mock_transpiled_circuit)
-    #     self.assertTrue(callable(execute_circuit))
+    @patch("qiskit_aer.Aer.get_backend")
+    def test_aer_simulator_gpu(self, mock_get_backend):
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
 
-    #     # Test execution with mock data
-    #     solutions = [np.array([1.0, 2.0])]
-    #     pmfs, _ = execute_circuit(solutions)
+        backend = self.library_instance.select_backend("aer_simulator_gpu", 4)
+        mock_get_backend.assert_called_once_with("aer_simulator")
+        mock_backend.set_options.assert_called_once_with(device="GPU")
+        self.assertEqual(backend, mock_backend)
+
+    @patch("qiskit_aer.Aer.get_backend")
+    def test_aer_simulator_cpu(self, mock_get_backend):
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
+
+        backend = self.library_instance.select_backend("aer_simulator_cpu", 4)
+        mock_get_backend.assert_called_once_with("aer_simulator")
+        mock_backend.set_options.assert_called_once_with(device="CPU")
+        self.assertEqual(backend, mock_backend)
+
+    @patch("qiskit_aer.Aer.get_backend")
+    def test_aer_statevector_simulator_gpu(self, mock_get_backend):
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
+
+        backend = self.library_instance.select_backend("aer_statevector_simulator_gpu", 4)
+        mock_get_backend.assert_called_once_with("statevector_simulator")
+        mock_backend.set_options.assert_called_once_with(device="GPU")
+        self.assertEqual(backend, mock_backend)
+
+    @patch("qiskit_aer.Aer.get_backend")
+    def test_aer_statevector_simulator_cpu(self, mock_get_backend):
+        mock_backend = MagicMock()
+        mock_get_backend.return_value = mock_backend
+
+        backend = self.library_instance.select_backend("aer_statevector_simulator_cpu", 4)
+        mock_get_backend.assert_called_once_with("statevector_simulator")
+        mock_backend.set_options.assert_called_once_with(device="CPU")
+        self.assertEqual(backend, mock_backend)
+
+    # def test_amazon_sv1(self):
+    #     from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider
+    #     from modules.devices.braket.SV1 import SV1
+
+    #     # Create a mock device wrapper and backend
+    #     device_wrapper = SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
+    #     backend = AWSBraketBackend(
+    #         device=device_wrapper.device,
+    #         provider=AWSBraketProvider(),
+    #         name=device_wrapper.device.name,
+    #         description=f"AWS Device: {device_wrapper.device.provider_name} {device_wrapper.device.name}.",
+    #         online_date=device_wrapper.device.properties.service.updatedAt,
+    #         backend_version="2",
+    #     )
+
+    #     # Assert that the backend behaves as expected
+    #     self.assertIsNotNone(backend)
+    #     self.assertEqual(backend.name, device_wrapper.device.name)
+
+
+    @patch("modules.devices.braket.Ionq.Ionq")
+    @patch("qiskit_braket_provider.AWSBraketBackend")
+    def test_ionq_harmony(self, mock_aws_braket_backend, mock_ionq):
+        mock_device_wrapper = MagicMock()
+        mock_ionq.return_value = mock_device_wrapper
+
+        backend = self.library_instance.select_backend("ionQ_Harmony", 4)
+        mock_aws_braket_backend.assert_called_once()
+        self.assertEqual(backend, mock_aws_braket_backend.return_value)
+
+    def test_invalid_configuration(self):
+        with self.assertRaises(NotImplementedError) as context:
+            self.library_instance.select_backend("invalid.backend", 4)
+        self.assertIn("Device Configuration invalid.backend not implemented", str(context.exception))
+
+    #get_execute_circuit function
+    # @patch("qiskit.transpiler.transpile")
+    # @patch("qiskit.quantum_info.Statevector")
+    # def test_aer_statevector_simulator(self, mock_statevector, mock_transpile):
+    #     mock_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpile.return_value = mock_transpiled_circuit
+    #     mock_statevector.return_value.probabilities.return_value = np.array([0.25, 0.75])
+
+    #     # Config
+    #     config = "aer_statevector_simulator_gpu"
+    #     config_dict = {"n_shots": 100}
+    #     backend = MagicMock()
+
+    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
+    #         mock_circuit, backend, config, config_dict
+    #     )
+
+    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
+    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
+    #     pmfs, samples = execute_circuit(solutions)
+
+    #     # Validate the outputs
+    #     self.assertIsInstance(pmfs, np.ndarray)
+    #     self.assertIsNone(samples)
+    #     self.assertEqual(pmfs.shape, (2, 2))
+    #     np.testing.assert_array_equal(pmfs[0], [0.25, 0.75])
+
+    # @patch("qiskit.transpile")
+    # @patch("qiskit_aer.AerSimulator.run")
+    # def test_aer_simulator(self, mock_run, mock_transpile):
+    #     mock_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpile.return_value = mock_transpiled_circuit
+    #     mock_job = MagicMock()
+    #     mock_job.result.return_value.get_counts.return_value.int_outcomes.return_value = {0: 10, 1: 20}
+    #     mock_run.return_value = mock_job
+
+    #     # Config
+    #     mock_backend = MagicMock(spec=AerSimulator)
+    #     mock_backend.version = 2
+    #     config = "aer_simulator_gpu"
+    #     config_dict = {"n_shots": 100}
+
+    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
+    #         mock_circuit, mock_backend, config, config_dict
+    #     )
+
+    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
+    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
+    #     pmfs, samples = execute_circuit(solutions)
 
     #     self.assertIsInstance(pmfs, np.ndarray)
-    #     self.assertEqual(len(pmfs), len(solutions))
-    #     self.assertAlmostEqual(np.sum(pmfs[0]), 1.0, places=6)
+    #     self.assertIsInstance(samples, np.ndarray)
+    #     self.assertEqual(pmfs.shape, (2, 2))
+    #     self.assertEqual(samples.shape, (2, 2))
 
+    # @patch("qiskit.transpiler.transpile")
+    # @patch("modules.devices.braket.SV1.SV1")
+    # def test_amazon_sv1(self, mock_sv1, mock_transpile):
+    #     mock_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
+    #     mock_transpile.return_value = mock_transpiled_circuit
+    #     mock_job = MagicMock()
+    #     mock_job.result.return_value.get_counts.return_value.int_outcomes.return_value = {0: 50, 1: 50}
+    #     mock_backend = MagicMock()
+    #     mock_backend.run.return_value = mock_job
 
-if __name__ == "__main__":
-    unittest.main()
+    #     # Config
+    #     config = "Amazon_SV1"
+    #     config_dict = {"n_shots": 100}
+    #     backend = mock_backend
+
+    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
+    #         mock_circuit, backend, config, config_dict
+    #     )
+
+    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
+    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
+    #     pmfs, samples = execute_circuit(solutions)
+
+    #     self.assertIsInstance(pmfs, np.ndarray)
+    #     self.assertIsInstance(samples, np.ndarray)
+    #     self.assertEqual(pmfs.shape, (2, 2))
+    #     self.assertEqual(samples.shape, (2, 2))

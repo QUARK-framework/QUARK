@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
-import pennylane as qml
+
 from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 from modules.applications.qml.generative_modeling.training.QGAN import QGAN

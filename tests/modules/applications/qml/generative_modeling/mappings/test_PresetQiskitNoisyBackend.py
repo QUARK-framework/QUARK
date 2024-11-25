@@ -3,9 +3,7 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 import pickle
 from qiskit import QuantumCircuit
-from qiskit_aer import Aer, AerSimulator
-from qiskit.circuit import Parameter
-from qiskit_aer.noise import NoiseModel
+from qiskit_aer import AerSimulator
 from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 
 
@@ -14,7 +12,7 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.backend_instance = PresetQiskitNoisyBackend()
-        with open("test_circuit.pkl", "rb") as file:
+        with open("tests/modules/applications/qml/generative_modeling/mappings/test_circuit.pkl", "rb") as file:
             cls.circuit = pickle.load(file)
 
     def test_initialization(self):
@@ -102,12 +100,10 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
             "transpile_optimization_level": 1
         }
 
-        # Call the method to test
         execute_circuit, transpiled_circuit = self.backend_instance.get_execute_circuit(
             self.circuit, mock_backend, "aer_simulator_cpu", config_dict
         )
 
-        # Verify transpiled circuit matches the loaded circuit
         self.assertEqual(
             transpiled_circuit, mock_transpiled_circuit,
             "The transpiled circuit does not match the expected circuit."
@@ -118,17 +114,33 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         solutions = [{param_0: 1.0, param_1: 2.0}]
         pmfs, samples = execute_circuit(solutions)
 
-        # Assertions
         self.assertIsInstance(pmfs, np.ndarray)
         self.assertIsInstance(samples, np.ndarray)
 
     def test_get_simulation_method_and_device(self):
+        # Test valid configuration: statevector
         method, device = self.backend_instance.get_simulation_method_and_device("GPU", "statevector")
         self.assertEqual(method, "statevector")
         self.assertEqual(device, "GPU")
 
-        method, device = self.backend_instance.get_simulation_method_and_device("CPU", "cpu_mps")
+        # Test valid configuration: cpu_mps (forces device to CPU)
+        method, device = self.backend_instance.get_simulation_method_and_device("GPU", "cpu_mps")
         self.assertEqual(method, "matrix_product_state")
+        self.assertEqual(device, "CPU")
+
+        # Test valid configuration: density_matrix
+        method, device = self.backend_instance.get_simulation_method_and_device("GPU", "density_matrix")
+        self.assertEqual(method, "density_matrix")
+        self.assertEqual(device, "GPU")
+
+        # Test default configuration for unknown simulation method
+        method, device = self.backend_instance.get_simulation_method_and_device("GPU", "unknown_method")
+        self.assertEqual(method, "automatic")
+        self.assertEqual(device, "GPU")
+
+        # Test default device behavior with CPU
+        method, device = self.backend_instance.get_simulation_method_and_device("CPU", "unknown_method")
+        self.assertEqual(method, "automatic")
         self.assertEqual(device, "CPU")
 
     def test_get_transpile_routine(self):
@@ -200,31 +212,21 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         mock_logging.assert_any_call("Backend configuration: {'dummy': 'config'}")
         mock_logging.assert_any_call("Simulation method: statevector")
 
-    # @patch("qiskit_ibm_runtime.fake_provider.FakeProviderForBackendV2.get_backend")
-    # def test_get_fake_backend(self, mock_get_backend):
-    #     from qiskit_ibm_runtime.fake_provider import FakeManilaV2
-    #     from qiskit_aer import AerSimulator
+    @patch("qiskit_aer.noise.NoiseModel.from_backend")
+    @patch("qiskit_aer.AerSimulator.from_backend")
+    @patch("qiskit_aer.Aer.get_backend")
+    @patch("modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend.FakeProviderForBackendV2")
+    def test_get_FakeBackend(self, mock_provider, mock_aer_get_backend, mock_simulator_from_backend, mock_noise_model):
+        mock_backend = MagicMock()
+        mock_backend.num_qubits = 5
+        mock_backend.name = "fake_backend_name"
+        mock_provider.return_value.get_backend.return_value = mock_backend
+        mock_noise_model.return_value = MagicMock()
+        mock_aer_get_backend.return_value = MagicMock()
 
-    #     # Use FakeManilaV2 as the mock backend
-    #     mock_backend = FakeManilaV2()
-
-    #     # Mock the `configuration` method to return a controlled configuration object
-    #     mock_configuration = mock_backend.configuration()
-    #     mock_configuration.num_qubits = 5
-    #     mock_backend.configuration = MagicMock(return_value=mock_configuration)
-
-    #     # Mock the `get_backend` method to return the mocked backend
-    #     mock_get_backend.return_value = mock_backend
-
-    #     # Test valid backend configuration
-    #     returned_backend = self.backend_instance.get_FakeBackend("fake_backend", 4)
-    #     self.assertIsInstance(returned_backend, AerSimulator)
-
-    #     # Test exceeding qubit capacity by modifying the mocked configuration
-    #     mock_configuration.num_qubits = 2  # Simulate insufficient qubits
-    #     returned_backend = self.backend_instance.get_FakeBackend("fake_backend", 4)
-    #     self.assertEqual(returned_backend.name(), "aer_simulator")
-
-
-if __name__ == "__main__":
-    unittest.main()
+        with self.subTest("Retrieve backend successfully"):
+            backend = self.backend_instance.get_FakeBackend("fake_backend_name", 4)
+            mock_provider.return_value.get_backend.assert_called_once_with("fake_backend_name")
+            mock_noise_model.assert_called_once_with(mock_backend)
+            mock_simulator_from_backend.assert_called_once_with(mock_backend)
+            self.assertEqual(backend, mock_simulator_from_backend.return_value)

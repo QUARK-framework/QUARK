@@ -12,8 +12,8 @@ class TestMetricsGeneralization(unittest.TestCase):
         cls.n_qubits = 3
         cls.n_states = 2 ** cls.n_qubits
         cls.train_size = 0.5
-        cls.train_set = np.array([0, 1, 2])  # Example indices for the train set
-        cls.solution_set = np.array([3, 4, 5, 6, 7])  # Example indices for the solution set
+        cls.train_set = np.array([0, 1, 2])
+        cls.solution_set = np.array([3, 4, 5, 6, 7])
 
         cls.metrics_instance = MetricsGeneralization(
             train_set=cls.train_set,

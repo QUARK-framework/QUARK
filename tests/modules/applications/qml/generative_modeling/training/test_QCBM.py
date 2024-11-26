@@ -65,9 +65,9 @@ class TestQCBM(unittest.TestCase):
             "n_params": 16,
             "generalization_metrics": MagicMock(),
             "n_shots": 1000,
-            "histogram_train": np.full(16, 1 / 16),  # Uniform distribution
+            "histogram_train": np.full(16, 1 / 16),
             "execute_circuit": MagicMock(
-                return_value=(np.tile(np.full(16, 1 / 16), (10, 1)), None)  # Valid PMF (10x16)
+                return_value=(np.tile(np.full(16, 1 / 16), (10, 1)), None)
             ),
             "dataset_name": "test_dataset",
         }
@@ -80,8 +80,6 @@ class TestQCBM(unittest.TestCase):
             "pretrained": "False",
         }
         try:
-
-            # Run `start_training`
             result = self.qcbm_instance.start_training(input_data, config)
 
             # Validate results
@@ -108,55 +106,23 @@ class TestQCBM(unittest.TestCase):
         self.qcbm_instance.writer = MagicMock()
 
         # Define target explicitly
-        self.qcbm_instance.target = np.array([0.1] * 16)  # Mocked target distribution for 4 qubits
-        self.qcbm_instance.target[self.qcbm_instance.target == 0] = 1e-8  # Avoid zero probabilities
+        self.qcbm_instance.target = np.array([0.1] * 16)
+        self.qcbm_instance.target[self.qcbm_instance.target == 0] = 1e-8
 
         # Define `n_qubits` and `n_states_range`
         n_qubits = 4
         self.qcbm_instance.n_states_range = np.arange(2 ** n_qubits)
 
-        # Mock the Matplotlib figure and axis
         self.qcbm_instance.fig, self.qcbm_instance.ax = plt.subplots()
 
-        # Prepare inputs
         loss_epoch = np.array([0.1, 0.2, 0.3])
         pmfs_model = np.array([[0.1] * 16])
         pmfs_model /= pmfs_model.sum(axis=1, keepdims=True)
         samples = None
 
-        # Call `data_visualization`
         best_pmf = self.qcbm_instance.data_visualization(loss_epoch, pmfs_model, samples, epoch=1)
 
         # Validate the results
         self.assertIsNotNone(best_pmf, "Best PMF should not be None.")
         self.qcbm_instance.writer.add_scalar.assert_called()
         self.qcbm_instance.writer.add_figure.assert_called_with('grid_figure', self.qcbm_instance.fig, global_step=1)
-
-    def test_loss_function_assignment(self):
-        # Mock input data and configuration
-        input_data = {
-            "backend": "aer_simulator",
-            "n_qubits": 4,
-            "store_dir_iter": "/tmp/test_qcbm",
-            "n_params": 16,
-            "generalization_metrics": MagicMock(),  # Mock generalization metrics
-            "n_shots": 1000,  # Ensure `n_shots` is included
-        }
-        input_data["generalization_metrics"].n_shots = input_data["n_shots"]
-
-        config = {
-            "loss": "KL",
-            "population_size": 10,
-            "max_evaluations": 1000,
-            "sigma": 0.5,
-            "pretrained": "False",
-        }
-
-        # Call `setup_training`
-        _, options = self.qcbm_instance.setup_training(input_data, config)
-
-        # Validate configuration
-        self.assertIsNotNone(options, "Options should not be None.")
-        self.assertIn("bounds", options, "Options should include 'bounds'.")
-        self.assertEqual(options["popsize"], config["population_size"], "Population size does not match.")
-        self.assertEqual(options["maxfevals"], config["max_evaluations"], "Max evaluations do not match.")

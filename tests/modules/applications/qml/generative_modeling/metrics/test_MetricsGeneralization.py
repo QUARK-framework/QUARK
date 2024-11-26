@@ -34,15 +34,14 @@ class TestMetricsGeneralization(unittest.TestCase):
 
         self.assertFalse(mask_new[self.train_set].any())
 
-        # Verify `mask_sol` includes solution indices but excludes training indices
         self.assertTrue(mask_sol[self.solution_set].all())
         self.assertFalse(mask_sol[self.train_set].any())
 
     def test_get_metrics(self):
         # Simulated generated samples
         generated = np.zeros(self.n_states)
-        generated[self.solution_set] = [0.1, 0.2, 0.3, 0.4, 0.5]  # Example values
-        generated[self.train_set] = [0.05, 0.05, 0.05]  # Simulated memorized samples
+        generated[self.solution_set] = [0.1, 0.2, 0.3, 0.4, 0.5]
+        generated[self.train_set] = [0.05, 0.05, 0.05]
 
         results = self.metrics_instance.get_metrics(generated)
 
@@ -53,7 +52,6 @@ class TestMetricsGeneralization(unittest.TestCase):
         self.assertIn("normalized_rate", results)
         self.assertIn("precision", results)
 
-        # Example assertions (adjust based on expected values for the given input)
         self.assertGreaterEqual(results["fidelity"], 0)
         self.assertGreaterEqual(results["exploration"], 0)
         self.assertGreaterEqual(results["coverage"], 0)
@@ -83,7 +81,3 @@ class TestMetricsGeneralization(unittest.TestCase):
         precision = self.metrics_instance.precision(g_sol=2.5, g_train=1.5)
         expected_precision = (2.5 + 1.5) / self.metrics_instance.n_shots
         self.assertAlmostEqual(precision, expected_precision, msg="Precision calculation is incorrect")
-
-
-if __name__ == "__main__":
-    unittest.main()

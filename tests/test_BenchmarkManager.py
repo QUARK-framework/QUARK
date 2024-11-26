@@ -1,17 +1,13 @@
 
+from src.BenchmarkManager import BenchmarkManager, Instruction, preprocess, postprocess
+from pathlib import Path
+from unittest.mock import MagicMock, patch, mock_open
+import unittest
 import sys
 import os
 
 # Add the src directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
-
-
-
-import unittest
-from unittest.mock import MagicMock, patch, mock_open
-import os
-from pathlib import Path
-from src.BenchmarkManager import BenchmarkManager, Instruction, preprocess, postprocess
 
 
 class TestBenchmarkManager(unittest.TestCase):
@@ -23,11 +19,14 @@ class TestBenchmarkManager(unittest.TestCase):
     def test_initialization(self):
         # Reset store_dir before testing
         self.benchmark_manager.store_dir = None
-        
+
         # Assertions
         self.assertIsNone(self.benchmark_manager.store_dir, "Expected store_dir to be None after initialization.")
         self.assertIsNone(self.benchmark_manager.application, "Expected application to be None after initialization.")
-        self.assertEqual(self.benchmark_manager.results, [], "Expected results to be an empty list after initialization.")
+        self.assertEqual(
+            self.benchmark_manager.results,
+            [],
+            "Expected results to be an empty list after initialization.")
         self.assertFalse(self.benchmark_manager.fail_fast, "Expected fail_fast to be False after initialization.")
 
     @patch("os.path.exists")
@@ -47,7 +46,8 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertIsNone(results)
 
     @patch("pathlib.Path.mkdir")
-    @patch("pathlib.Path.exists", return_value=False)  # Mock `exists` to ensure the directory is considered non-existent
+    # Mock `exists` to ensure the directory is considered non-existent
+    @patch("pathlib.Path.exists", return_value=False)
     def test_create_store_dir(self, mock_exists, mock_mkdir):
         with patch.object(self.benchmark_manager, "_set_logger") as mock_logger:
             self.benchmark_manager._create_store_dir(store_dir="/tmp", tag="test")

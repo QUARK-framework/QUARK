@@ -46,7 +46,6 @@ class TestQGAN(unittest.TestCase):
         ]
         self.assertEqual(requirements, expected_requirements)
 
-
     def test_get_parameter_options(self):
         parameter_options = self.qgan_instance.get_parameter_options()
         self.assertIn("epochs", parameter_options)
@@ -55,7 +54,7 @@ class TestQGAN(unittest.TestCase):
 
     def test_get_default_submodule_raises_value_error(self):
         with self.assertRaises(ValueError):
-            self.qgan_instance.get_default_submodule( "option")
+            self.qgan_instance.get_default_submodule("option")
 
     def test_setup_training(self):
         self.qgan_instance.setup_training(self.input_data, self.config)
@@ -102,7 +101,7 @@ class TestQGAN(unittest.TestCase):
         input_tensor = torch.rand(10, self.input_length)
         output = self.discriminator(input_tensor)
         self.assertEqual(output.shape, (10, 1), "The output shape should be (10, 1).")
-        
+
     def test_discriminator_weights_init(self):
         discriminator = Discriminator(input_length=self.input_length)
         # Apply the weights initialization

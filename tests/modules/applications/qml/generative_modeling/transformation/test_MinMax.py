@@ -59,7 +59,6 @@ class TestMinMax(unittest.TestCase):
     #     # Ensure solution_space values align with self.n_qubits
     #     self.minmax_instance.n_qubits = self.sample_input_data["n_qubits"]
     #     max_value = 2 ** self.minmax_instance.n_qubits - 1
-        
 
     #     # Mock solution_space to be 1D and within the range of self.n_qubits
     #     solution_space = np.random.randint(0, max_value + 1, size=100)  # Flattened 1D array
@@ -83,7 +82,6 @@ class TestMinMax(unittest.TestCase):
     #         # Call the transform method
     #         result = self.minmax_instance.transform(self.sample_input_data, self.sample_config)
 
-        
     #     # Validate result keys
     #     expected_keys = [
     #         "histogram_train", "binary_train", "dataset_name", "n_registers",
@@ -136,7 +134,7 @@ class TestMinMax(unittest.TestCase):
     #     """Test the reverse_transform method for correct behavior."""
     #     # Mock methods
     #     mock_compute_discretization.return_value = np.array([1, 2, 4])
-    #     mock_generate_samples.return_value = np.random.rand(64, 2) 
+    #     mock_generate_samples.return_value = np.random.rand(64, 2)
 
     #     # Input data for reverse_transform
     #     input_data = {

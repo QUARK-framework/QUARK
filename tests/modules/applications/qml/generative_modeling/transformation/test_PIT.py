@@ -24,7 +24,7 @@ class TestPIT(unittest.TestCase):
             [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
             [0.0, 0.25, 0.5, 0.75, 1.0, 1.25]
         ])
-    
+
     def test_get_requirements(self):
         requirements = self.pit_instance.get_requirements()
         expected_requirements = [
@@ -87,7 +87,7 @@ class TestPIT(unittest.TestCase):
         self.pit_instance.fit_transform(data)
         inverse_data = self.pit_instance.inverse_transform(data)
         self.assertEqual(inverse_data.shape, data.shape, "Inverse-transformed data should match the input shape.")
-    
+
     # def test_reverse_emp_integral_trans_single(self):
     #     # Case 1: Integer-like values
     #     values = np.array([0.2, 0.4])

@@ -18,7 +18,6 @@ class TestInference(unittest.TestCase):
             "n_shots": 1000,
         }
 
-
     def test_get_requirements(self):
         requirements = self.inference_instance.get_requirements()
         expected_requirements = [{"name": "numpy", "version": "1.26.4"}]
@@ -67,4 +66,7 @@ class TestInference(unittest.TestCase):
         self.assertTrue((result["best_sample"] >= 0).all(), "Best sample should contain non-negative integers.")
 
         best_parameter = result["best_parameter"]
-        np.testing.assert_array_equal(best_parameter, self.mock_parameters, "Best parameter does not match the expected parameters.")
+        np.testing.assert_array_equal(
+            best_parameter,
+            self.mock_parameters,
+            "Best parameter does not match the expected parameters.")

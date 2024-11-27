@@ -13,9 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import TypedDict
 import pickle
-import logging
 from typing import TypedDict
 
 import networkx as nx
@@ -95,21 +93,21 @@ class MIS(Optimization):
         :return: Configuration dictionary for this application
         .. code-block:: python
 
-                      return {
-                                "size": {
-                                    "values": [1, 5, 10, 15],
-                                    "custom_input": True,
-                                    "allow_ranges": True,
-                                    "postproc": int,
-                                    "description": "How large should your graph be?"
-                                },
-                                "graph_type": {
-                                    "values": ["hexagonal", "erdosRenyi"],
-                                    "postproc": str,
-                                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
-                                    "depending_submodule": True
-                                }
-                            }
+        return {
+                "size": {
+                    "values": [1, 5, 10, 15],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": int,
+                    "description": "How large should your graph be?"
+                },
+                "graph_type": {
+                    "values": ["hexagonal", "erdosRenyi"],
+                    "postproc": str,
+                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                    "depending_submodule": True
+                }
+            }
         """
         return {
             "size": {
@@ -132,9 +130,7 @@ class MIS(Optimization):
         Changes mapping options  based on selection of graphs.
 
         :param options: List of chosen graph type
-        :type options: list
         :return: List of available submodules
-        :rtype: list
         """
         if options == ["hexagonal"]:
             return ["QIRO", "NeutralAtom"]
@@ -146,11 +142,8 @@ class MIS(Optimization):
         Returns parameters necessary for chosen problem option.
 
         :param option: The chosen option
-        :type option: str
         :param config: The current config
-        :type config: dict
         :return: The parameters for the given option
-        :rtype: dict
         """
 
         more_params = {

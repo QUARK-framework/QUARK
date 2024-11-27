@@ -16,11 +16,16 @@ import logging
 from typing import TypedDict
 
 from qrisp import QuantumVariable
-from qrisp.algorithms.qiro import (QIROProblem, create_max_indep_replacement_routine, create_max_indep_cost_operator_reduced, qiro_rx_mixer, qiro_init_function)
+from qrisp.algorithms.qiro import (
+    QIROProblem,
+    create_max_indep_replacement_routine,
+    create_max_indep_cost_operator_reduced,
+    qiro_rx_mixer,
+    qiro_init_function
+)
 from qrisp.qaoa import create_max_indep_set_cl_cost_function
-import matplotlib.pyplot as plt
-import networkx as nx
-from modules.solvers.Solver import *
+
+from modules.solvers.Solver import Solver, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -43,12 +48,7 @@ class QIROSolver(Solver):
 
         :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "qrisp",
-                "version": "0.5"
-            }
-        ]
+        return [{"name": "qrisp","version": "0.5"}]
 
     def get_default_submodule(self, option: str) -> Core:
         """
@@ -70,27 +70,27 @@ class QIROSolver(Solver):
         Returns the configurable settings for this solver.
 
         :return:
-                 .. code-block:: python
+        .. code-block:: python
 
-                              return {
-                                        "shots": {  # number measurements to make on circuit
-                                            "values": [10, 500, 1000, 2000, 5000, 10000],
-                                            "description": "How many shots do you need?"
-                                        },
-                                        "iterations": {  # number of optimization iterations
-                                            "values": [5, 10, 20, 50, 75],
-                                            "description": "How many optimization iterations do you need?"
-                                        },
-                                        "depth": { # depth of original QAOA
-                                            "values": [2, 3, 4, 5, 10],
-                                            "description": "How many layers for QAOA (Parameter: p) do you want?"
-                                        },
-                                        "QIRO_reps": { # number of QIRO reps
-                                            "values": [2, 3, 4, 5],
-                                            "description": "How QIRO reps (Parameter: n) do you want? Choose this
-                                                           "parameter sensibly in relation to the graph size!"
-                                        }
-                                    }
+                    return {
+                            "shots": {  # number measurements to make on circuit
+                                "values": [10, 500, 1000, 2000, 5000, 10000],
+                                "description": "How many shots do you need?"
+                            },
+                            "iterations": {  # number of optimization iterations
+                                "values": [5, 10, 20, 50, 75],
+                                "description": "How many optimization iterations do you need?"
+                            },
+                            "depth": { # depth of original QAOA
+                                "values": [2, 3, 4, 5, 10],
+                                "description": "How many layers for QAOA (Parameter: p) do you want?"
+                            },
+                            "QIRO_reps": { # number of QIRO reps
+                                "values": [2, 3, 4, 5],
+                                "description": "How QIRO reps (Parameter: n) do you want? Choose this
+                                                "parameter sensibly in relation to the graph size!"
+                            }
+                        }
         """
         # TODO: FURTHER OPTIONS TO BE INCLUDED (MAYBE)
         """
@@ -140,13 +140,13 @@ class QIROSolver(Solver):
         iterations: int
         QIRO_reps: int
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, float, dict):
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
-        Run Qrisp QIRO on the local Qrisp simulator
+        Run Qrisp QIRO on the local Qrisp simulator.
 
         :param mapped_problem: Dictionary with the keys 'graph' and 't'
         :param device_wrapper: Instance of device
-        :param config:
+        :param config: Solver configuration settings
         :param kwargs: no additionally settings needed, may include the measurement kwargs
         :return: Solution, the time it took to compute it and optional additional information
         """
@@ -197,6 +197,7 @@ class QIROSolver(Solver):
         maxfive = sorted(res_qiro, key=res_qiro.get, reverse=True)[:10]
         max_cost = 0 
         best_state = "0" * len(maxfive[0])
+
         for key in maxfive:
             if cost_func({key: 1}) < max_cost:
                 best_state = key

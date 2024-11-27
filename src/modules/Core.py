@@ -19,6 +19,7 @@ import sys
 import logging
 from abc import ABC, abstractmethod
 from typing import final
+
 from utils import _get_instance_with_sub_options
 from Metrics import Metrics
 
@@ -32,7 +33,7 @@ class Core(ABC):
         """
         Constructor method.
 
-        :param name: name used to identify this QUARK module. If not specified class name will be used as default.
+        :param name: Name used to identify this QUARK module. If not specified class name will be used as default.
         """
         self.submodule_options = []
         self.sub_options = []
@@ -75,9 +76,7 @@ class Core(ABC):
         accordingly.
 
         :param option: List of chosen options
-        :type option: list
         :return: List of available submodules
-        :rtype: list
         """
         return []
 
@@ -87,11 +86,8 @@ class Core(ABC):
         given option.
 
         :param option: The chosen option
-        :type option: str
         :param config: Current config dictionary
-        :type config: dict
         :return: The parameters for the given option
-        :rtype: dict
         """
         return {}
 

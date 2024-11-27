@@ -86,7 +86,7 @@ class QIRO(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QrispQIRO":
-            from modules.solvers.QrispQIRO import QIRO  # pylint: disable=C0415
-            return QIRO()
+            from modules.solvers.QrispQIRO import QIROSolver  # pylint: disable=C0415
+            return QIROSolver()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

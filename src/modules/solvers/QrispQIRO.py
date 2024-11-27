@@ -60,7 +60,7 @@ class QIROSolver(Solver):
         """
         if option == "qrisp_simulator":
             from modules.devices.qrisp_simulator import QrispSimulator  # pylint: disable=C0415
-            return QrispSimulator()
+            return QrispSimulator() # pylint: disable=E1102
 
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
@@ -93,16 +93,15 @@ class QIROSolver(Solver):
                         }
         """
         # TODO: FURTHER OPTIONS TO BE INCLUDED (MAYBE)
-        """
-        "method": {
-            "values": ["classic", "vqe", "qaoa"],
-            "description": "Which Qiskit solver should be used?"
-        },
-        "optimizer": {
-            "values": ["not", "yet", "implemented"],
-            "description": "Which QIRO solver should be used?"
-        }
-        """
+        # "method": {
+        #     "values": ["classic", "vqe", "qaoa"],
+        #     "description": "Which Qiskit solver should be used?"
+        # },
+        # "optimizer": {
+        #     "values": ["not", "yet", "implemented"],
+        #     "description": "Which QIRO solver should be used?"
+        # }
+
         return {
             "shots": {  # number measurements to make on circuit
                 "values": [10, 500, 1000, 2000, 5000, 10000],
@@ -189,7 +188,8 @@ class QIROSolver(Solver):
     def _qiro_select_best_state(self, res_qiro, cost_func) -> str:
         """
         This function is used for post_processing, i.e. finding the best solution out of the 10 most likely ones.
-        Since QIRO is an optimization algorithm, the most_likely solution can be of bad quality, depending on the problem cost landscape.
+        Since QIRO is an optimization algorithm, the most_likely solution can be of bad quality, depending on 
+        the problem cost landscape.
     
         :param res_qiro: Dictionary containing the QIRO optimization routine results, i.e. the final state.
         :param cost_func: classical cost function of the problem instance

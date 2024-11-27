@@ -51,6 +51,7 @@ class MIS(Optimization):
         super().__init__("MIS")
         self.submodule_options = ["QIRO", "NeutralAtom"]
         self.depending_parameters = True
+        self.graph = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -125,14 +126,14 @@ class MIS(Optimization):
             }
         }
 
-    def get_available_submodules(self, options: list) -> list:
+    def get_available_submodules(self, option: list) -> list:
         """
         Changes mapping options  based on selection of graphs.
 
-        :param options: List of chosen graph type
+        :param option: List of chosen graph type
         :return: List of available submodules
         """
-        if options == ["hexagonal"]:
+        if option == ["hexagonal"]:
             return ["QIRO", "NeutralAtom"]
         else:
             return ["QIRO"]
@@ -174,9 +175,10 @@ class MIS(Optimization):
                 "description": "How much space do you want between your nodes, relative to Rydberg distance?"
             }
         param_to_return = {}
-        for key in more_params:
+        for key, value in more_params.items():
             if key not in config:
-                param_to_return[key] = more_params[key]
+                param_to_return[key] = value
+
         return param_to_return
 
     class Config(TypedDict):

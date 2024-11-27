@@ -15,9 +15,9 @@
 from abc import ABC, abstractmethod
 from typing import TypedDict
 
+from qrisp.interface import BackendServer
 
 from modules.Core import Core
-from qrisp.interface import BackendServer
 from modules.devices.Device import Device
 
 
@@ -32,6 +32,7 @@ class QrispSimulator(Device, ABC):
         """
         super().__init__(device_name="qrisp_simulator")
         self.submodule_options = []
+        self.backend = None
 
     def get_backend(self) -> any:
         """
@@ -39,6 +40,8 @@ class QrispSimulator(Device, ABC):
 
         :return: Instance of the backend class
         """
+        if self.backend is None:
+            raise AttributeError("The 'backend' attribute has not been set.")
         return self.backend
 
     @staticmethod
@@ -74,6 +77,10 @@ class QrispSimulator(Device, ABC):
 
         :return: Backend config for the emulator
         """
+        if self.backend is None:
+            raise AttributeError("The 'backend' attribute has not been set.")
+        if not hasattr(self.backend, 'config'):
+            raise AttributeError("The 'backend' object has no attribute 'config'.")
         return self.backend.config
 
     def get_default_submodule(self, option: str) -> Core:

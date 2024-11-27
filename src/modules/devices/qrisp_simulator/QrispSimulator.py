@@ -51,7 +51,7 @@ class QrispSimulator(Device, ABC):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "qrisp","version": "0.5"}]
+        return [{"name": "qrisp", "version": "0.5"}]
 
     def get_parameter_options(self) -> dict:
         """

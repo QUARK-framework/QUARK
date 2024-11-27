@@ -48,7 +48,7 @@ class QIROSolver(Solver):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "qrisp","version": "0.5"}]
+        return [{"name": "qrisp", "version": "0.5"}]
 
     def get_default_submodule(self, option: str) -> Core:
         """
@@ -60,7 +60,7 @@ class QIROSolver(Solver):
         """
         if option == "qrisp_simulator":
             from modules.devices.qrisp_simulator import QrispSimulator  # pylint: disable=C0415
-            return QrispSimulator() # pylint: disable=E1102
+            return QrispSimulator()  # pylint: disable=E1102
 
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
@@ -165,7 +165,7 @@ class QIROSolver(Solver):
                                     cl_cost_function=create_max_indep_set_cl_cost_function,
                                     init_function=qiro_init_function
                                     )
-        
+
         qarg = QuantumVariable(g.number_of_nodes())
 
         # Run actual optimization algorithm
@@ -180,7 +180,7 @@ class QIROSolver(Solver):
 
         def _translate_state_to_nodes(state: str, nodes: list) -> list:
             return [key for index, key in enumerate(nodes) if state[index] == '1']
-        
+
         winner_state = _translate_state_to_nodes(best_bitstring, nodes=g.nodes())
 
         return winner_state, end_time_measurement(start), {}
@@ -188,19 +188,19 @@ class QIROSolver(Solver):
     def _qiro_select_best_state(self, res_qiro, cost_func) -> str:
         """
         This function is used for post_processing, i.e. finding the best solution out of the 10 most likely ones.
-        Since QIRO is an optimization algorithm, the most_likely solution can be of bad quality, depending on 
+        Since QIRO is an optimization algorithm, the most_likely solution can be of bad quality, depending on
         the problem cost landscape.
-    
+
         :param res_qiro: Dictionary containing the QIRO optimization routine results, i.e. the final state.
         :param cost_func: classical cost function of the problem instance
         """
         maxfive = sorted(res_qiro, key=res_qiro.get, reverse=True)[:10]
-        max_cost = 0 
+        max_cost = 0
         best_state = "0" * len(maxfive[0])
 
         for key in maxfive:
             if cost_func({key: 1}) < max_cost:
                 best_state = key
                 max_cost = cost_func({key: 1})
-        
+
         return best_state

@@ -149,19 +149,19 @@ class MIS(Optimization):
 
         more_params = {
             "filling_fraction": {
-                    "values": [x/10 for x in range(2, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
+                "values": [x / 10 for x in range(2, 11, 2)],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": float,
+                "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
             }}
         if option == "QIRO":
             more_params["seed"] = {
-                    "values": ["No"],
-                    "custom_input": True,
-                    "description": "Do you want to set a seed? If yes, please set an integer number"
-                }
-            
+                "values": ["No"],
+                "custom_input": True,
+                "description": "Do you want to set a seed? If yes, please set an integer number"
+            }
+
         elif option == "NeutralAtom":
             pass  # No additional parameters needed at the moment
         else:

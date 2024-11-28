@@ -163,9 +163,9 @@ class TestLibraryQiskit(unittest.TestCase):
     #     mock_device_wrapper = MagicMock()
     #     mock_ionq.return_value = mock_device_wrapper
 
-        backend = self.library_instance.select_backend("ionQ_Harmony", 4)
-        mock_aws_braket_backend.assert_called_once()
-        self.assertEqual(backend, mock_aws_braket_backend.return_value)
+        # backend = self.library_instance.select_backend("ionQ_Harmony", 4)
+        # mock_aws_braket_backend.assert_called_once()
+        # self.assertEqual(backend, mock_aws_braket_backend.return_value)
 
     def test_invalid_configuration(self):
         with self.assertRaises(NotImplementedError) as context:

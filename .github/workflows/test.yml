@@ -34,7 +34,7 @@ jobs:
         run: pip install -r .settings/requirements_full.txt
 
       - name: Run Unit Tests
-        run: python -m unittest discover -s . -p "test_*.py" > unittest_results.log
+        run: python -m unittest discover . > unittest_results.log
 
       - name: Upload Test Logs
         if: always()

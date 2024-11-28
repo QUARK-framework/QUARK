@@ -12,10 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import TypedDict
-
-from qrisp.interface import BackendServer
 
 from modules.Core import Core
 from modules.devices.Device import Device
@@ -51,7 +49,7 @@ class QrispSimulator(Device, ABC):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "qrisp", "version": "0.5"}]
+        return [{"name": "qrisp", "version": "0.5.2"}]
 
     def get_parameter_options(self) -> dict:
         """

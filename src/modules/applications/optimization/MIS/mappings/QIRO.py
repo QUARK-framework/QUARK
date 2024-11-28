@@ -14,7 +14,6 @@
 
 from typing import TypedDict
 import networkx
-import numpy as np
 
 from modules.applications.Mapping import Core, Mapping
 from utils import start_time_measurement, end_time_measurement
@@ -22,7 +21,8 @@ from utils import start_time_measurement, end_time_measurement
 
 class QIRO(Mapping):
     """
-    QIRO formulation for MIS.
+    The quantum-informed recursive optimization (QIRO) formulation for the MIS problem. QIRO recursively simplifies the
+    problem classically using information obtained with quantum resources.
     """
 
     def __init__(self):
@@ -39,7 +39,7 @@ class QIRO(Mapping):
 
         :return: list of dict with requirements of this module
         """
-        return [{"name": "qrisp", "version": "0.5"}]
+        return [{"name": "qrisp", "version": "0.5.2"}]
 
     def get_parameter_options(self) -> dict:
         """
@@ -51,6 +51,10 @@ class QIRO(Mapping):
             return {}
 
         """
+        # TODO "optimizer": {
+        #          "values": ["not", "yet", "implemented"],
+        #          "description": "Which QIRO algorithm should be used?"
+        #      }
         return {}
 
     class Config(TypedDict):

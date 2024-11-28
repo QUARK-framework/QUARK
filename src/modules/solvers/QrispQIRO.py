@@ -48,7 +48,7 @@ class QIROSolver(Solver):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "qrisp", "version": "0.5"}]
+        return [{"name": "qrisp", "version": "0.5.2"}]
 
     def get_default_submodule(self, option: str) -> Core:
         """
@@ -92,15 +92,6 @@ class QIROSolver(Solver):
                             }
                         }
         """
-        # TODO: FURTHER OPTIONS TO BE INCLUDED (MAYBE)
-        # "method": {
-        #     "values": ["classic", "vqe", "qaoa"],
-        #     "description": "Which Qiskit solver should be used?"
-        # },
-        # "optimizer": {
-        #     "values": ["not", "yet", "implemented"],
-        #     "description": "Which QIRO solver should be used?"
-        # }
 
         return {
             "shots": {  # number measurements to make on circuit

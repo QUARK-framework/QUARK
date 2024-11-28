@@ -23,7 +23,7 @@ from modules.applications.optimization.Optimization import Optimization
 from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
 
-# define R_rydberg
+# Define R_rydberg
 R_rydberg = 9.75
 
 
@@ -50,6 +50,7 @@ class MIS(Optimization):
         """
         super().__init__("MIS")
         self.submodule_options = ["QIRO", "NeutralAtom"]
+        # TODO add more solvers like classical heuristics, VQE, QAOA, etc.
         self.depending_parameters = True
         self.graph = None
 
@@ -128,7 +129,7 @@ class MIS(Optimization):
 
     def get_available_submodules(self, option: list) -> list:
         """
-        Changes mapping options  based on selection of graphs.
+        Changes mapping options based on selection of graphs.
 
         :param option: List of chosen graph type
         :return: List of available submodules
@@ -268,31 +269,29 @@ class MIS(Optimization):
         nodes = list(self.graph.nodes())
         edges = list(self.graph.edges())
 
-        # TODO: Check if the solution is maximal?
-
         # Check if the solution is independent
         is_independent = all((u, v) not in edges for u, v in edges if u in solution and v in solution)
         if is_independent:
-            logging.info("The solution is independent")
+            logging.info("The solution is independent.")
         else:
-            logging.warning("The solution is not independent")
+            logging.warning("The solution is not independent.")
             is_valid = False
 
         # Check if the solution is a set
         solution_set = set(solution)
         is_set = len(solution_set) == len(solution)
         if is_set:
-            logging.info("The solution is a set")
+            logging.info("The solution is a set.")
         else:
-            logging.warning("The solution is not a set")
+            logging.warning("The solution is not a set.")
             is_valid = False
 
         # Check if the solution is a subset of the original nodes
         is_subset = all(node in nodes for node in solution)
         if is_subset:
-            logging.info("The solution is a subset of the problem")
+            logging.info("The solution is a subset of the problem.")
         else:
-            logging.warning("The solution is not a subset of the problem")
+            logging.warning("The solution is not a subset of the problem.")
             is_valid = False
 
         return is_valid, end_time_measurement(start)

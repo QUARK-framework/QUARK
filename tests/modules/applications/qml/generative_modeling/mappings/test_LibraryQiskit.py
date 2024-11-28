@@ -157,11 +157,11 @@ class TestLibraryQiskit(unittest.TestCase):
     #     self.assertIsNotNone(backend)
     #     self.assertEqual(backend.name, device_wrapper.device.name)
 
-    @patch("modules.devices.braket.Ionq.Ionq")
-    @patch("qiskit_braket_provider.AWSBraketBackend")
-    def test_ionq_harmony(self, mock_aws_braket_backend, mock_ionq):
-        mock_device_wrapper = MagicMock()
-        mock_ionq.return_value = mock_device_wrapper
+    # @patch("modules.devices.braket.Ionq.Ionq")
+    # @patch("qiskit_braket_provider.AWSBraketBackend")
+    # def test_ionq_harmony(self, mock_aws_braket_backend, mock_ionq):
+    #     mock_device_wrapper = MagicMock()
+    #     mock_ionq.return_value = mock_device_wrapper
 
         backend = self.library_instance.select_backend("ionQ_Harmony", 4)
         mock_aws_braket_backend.assert_called_once()

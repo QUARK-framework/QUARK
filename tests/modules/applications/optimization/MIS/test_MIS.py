@@ -3,6 +3,7 @@ import networkx as nx
 import os
 from tempfile import TemporaryDirectory
 import logging
+import sys
 
 from modules.applications.optimization.MIS.MIS import MIS
 
@@ -56,17 +57,23 @@ class TestMIS(unittest.TestCase):
         logging.disable(logging.WARNING)
         valid_solution = [0, 4]
         print("Graph Nodes (Validation):", list(self.mis_instance.application.nodes()))
+        sys.stdout.flush()
         print("Graph Edges (Validation):", list(self.mis_instance.application.edges()))
+        sys.stdout.flush()
         print("Testing Valid Solution:", valid_solution)
+        sys.stdout.flush()
 
         is_valid, validation_time = self.mis_instance.validate(valid_solution)
         print(f"Validation result: {is_valid}, Time: {validation_time}")
+        sys.stdout.flush()
         self.assertTrue(is_valid, f"Expected valid solution: {valid_solution}")
 
         invalid_solution = [0, 1]
         print("Testing Invalid Solution:", invalid_solution)
+        sys.stdout.flush()
         is_valid, _ = self.mis_instance.validate(invalid_solution)
         print(f"Validation result: {is_valid}")
+        sys.stdout.flush()
         self.assertFalse(is_valid, f"Expected invalid solution: {invalid_solution}")
 
     def test_evaluate(self):

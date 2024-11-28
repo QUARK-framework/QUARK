@@ -54,14 +54,17 @@ class TestMIS(unittest.TestCase):
 
     def test_validate(self):
         logging.disable(logging.WARNING)
-        valid_solution = [3]
+
+        # Case 1: Valid independent solution
+        valid_solution = [0, 4]
         is_valid, validation_time = self.mis_instance.validate(valid_solution)
-        self.assertTrue(is_valid, "Expected valid solution.")
+        self.assertTrue(is_valid, f"Expected valid solution: {valid_solution}")
         self.assertGreater(validation_time, 0, "Validation time should be positive.")
 
-        invalid_solution = [1, 2]
+        # Case 2: Invalid dependent solution
+        invalid_solution = [0, 1]
         is_valid, _ = self.mis_instance.validate(invalid_solution)
-        self.assertTrue(is_valid, "Expected invalid solution.")
+        self.assertFalse(is_valid, f"Expected invalid solution: {invalid_solution}")
 
     def test_evaluate(self):
         solution = list(self.graph.nodes)[:3]

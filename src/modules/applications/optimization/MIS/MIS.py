@@ -13,9 +13,7 @@
 #  limitations under the License.
 
 import logging
-from typing import TypedDict
 import pickle
-import logging
 from typing import TypedDict
 
 import networkx as nx
@@ -25,7 +23,7 @@ from modules.applications.optimization.Optimization import Optimization
 from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
 
-# define R_rydberg
+# Define R_rydberg
 R_rydberg = 9.75
 
 
@@ -52,7 +50,9 @@ class MIS(Optimization):
         """
         super().__init__("MIS")
         self.submodule_options = ["QIRO", "NeutralAtom"]
+        # TODO add more solvers like classical heuristics, VQE, QAOA, etc.
         self.depending_parameters = True
+        self.graph = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -95,21 +95,21 @@ class MIS(Optimization):
         :return: Configuration dictionary for this application
         .. code-block:: python
 
-                      return {
-                                "size": {
-                                    "values": [1, 5, 10, 15],
-                                    "custom_input": True,
-                                    "allow_ranges": True,
-                                    "postproc": int,
-                                    "description": "How large should your graph be?"
-                                },
-                                "graph_type": {
-                                    "values": ["hexagonal", "erdosRenyi"],
-                                    "postproc": str,
-                                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
-                                    "depending_submodule": True
-                                }
-                            }
+        return {
+                "size": {
+                    "values": [1, 5, 10, 15],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": int,
+                    "description": "How large should your graph be?"
+                },
+                "graph_type": {
+                    "values": ["hexagonal", "erdosRenyi"],
+                    "postproc": str,
+                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                    "depending_submodule": True
+                }
+            }
         """
         return {
             "size": {
@@ -127,16 +127,14 @@ class MIS(Optimization):
             }
         }
 
-    def get_available_submodules(self, options: list) -> list:
+    def get_available_submodules(self, option: list) -> list:
         """
-        Changes mapping options  based on selection of graphs.
+        Changes mapping options based on selection of graphs.
 
-        :param options: List of chosen graph type
-        :type options: list
+        :param option: List of chosen graph type
         :return: List of available submodules
-        :rtype: list
         """
-        if options == ["hexagonal"]:
+        if option == ["hexagonal"]:
             return ["QIRO", "NeutralAtom"]
         else:
             return ["QIRO"]
@@ -146,28 +144,25 @@ class MIS(Optimization):
         Returns parameters necessary for chosen problem option.
 
         :param option: The chosen option
-        :type option: str
         :param config: The current config
-        :type config: dict
         :return: The parameters for the given option
-        :rtype: dict
         """
 
         more_params = {
             "filling_fraction": {
-                    "values": [x/10 for x in range(2, 11, 2)],
-                    "custom_input": True,
-                    "allow_ranges": True,
-                    "postproc": float,
-                    "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
+                "values": [x / 10 for x in range(2, 11, 2)],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": float,
+                "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
             }}
         if option == "QIRO":
             more_params["seed"] = {
-                    "values": ["No"],
-                    "custom_input": True,
-                    "description": "Do you want to set a seed? If yes, please set an integer number"
-                }
-            
+                "values": ["No"],
+                "custom_input": True,
+                "description": "Do you want to set a seed? If yes, please set an integer number"
+            }
+
         elif option == "NeutralAtom":
             pass  # No additional parameters needed at the moment
         else:
@@ -181,9 +176,10 @@ class MIS(Optimization):
                 "description": "How much space do you want between your nodes, relative to Rydberg distance?"
             }
         param_to_return = {}
-        for key in more_params:
+        for key, value in more_params.items():
             if key not in config:
-                param_to_return[key] = more_params[key]
+                param_to_return[key] = value
+
         return param_to_return
 
     class Config(TypedDict):
@@ -273,31 +269,29 @@ class MIS(Optimization):
         nodes = list(self.graph.nodes())
         edges = list(self.graph.edges())
 
-        # TODO: Check if the solution is maximal?
-
         # Check if the solution is independent
         is_independent = all((u, v) not in edges for u, v in edges if u in solution and v in solution)
         if is_independent:
-            logging.info("The solution is independent")
+            logging.info("The solution is independent.")
         else:
-            logging.warning("The solution is not independent")
+            logging.warning("The solution is not independent.")
             is_valid = False
 
         # Check if the solution is a set
         solution_set = set(solution)
         is_set = len(solution_set) == len(solution)
         if is_set:
-            logging.info("The solution is a set")
+            logging.info("The solution is a set.")
         else:
-            logging.warning("The solution is not a set")
+            logging.warning("The solution is not a set.")
             is_valid = False
 
         # Check if the solution is a subset of the original nodes
         is_subset = all(node in nodes for node in solution)
         if is_subset:
-            logging.info("The solution is a subset of the problem")
+            logging.info("The solution is a subset of the problem.")
         else:
-            logging.warning("The solution is not a subset of the problem")
+            logging.warning("The solution is not a subset of the problem.")
             is_valid = False
 
         return is_valid, end_time_measurement(start)

@@ -2086,7 +2086,7 @@
         "requirements": [
           {
             "name": "qrisp",
-            "version": "0.5"
+            "version": "0.5.2"
           }
         ],
         "submodules": [
@@ -2098,7 +2098,7 @@
             "requirements": [
               {
                 "name": "qrisp",
-            "version": "0.5"
+            "version": "0.5.2"
               }
             ],
             "submodules": [
@@ -2110,7 +2110,7 @@
                 "requirements": [
                   {
                     "name": "qrisp",
-                    "version": "0.5"
+                    "version": "0.5.2"
                   }
                 ],
                 "submodules": []
@@ -2210,13 +2210,13 @@
     {
       "name": "GenerativeModeling",
       "class": "GenerativeModeling",
-      "module": "modules.applications.QML.generative_modeling.GenerativeModeling",
+      "module": "modules.applications.qml.generative_modeling.GenerativeModeling",
       "submodules": [
         {
           "name": "Continuous Data",
           "class": "ContinuousData",
           "args": {},
-          "module": "modules.applications.QML.generative_modeling.data.data_handler.ContinuousData",
+          "module": "modules.applications.qml.generative_modeling.data.data_handler.ContinuousData",
           "requirements": [
             {
               "name": "numpy",
@@ -2228,7 +2228,7 @@
               "name": "PIT",
               "class": "PIT",
               "args": {},
-              "module": "modules.applications.QML.generative_modeling.transformations.PIT",
+              "module": "modules.applications.qml.generative_modeling.transformations.PIT",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2256,7 +2256,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2345,7 +2345,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -2446,7 +2446,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2510,7 +2510,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2582,7 +2582,7 @@
               "name": "MinMax",
               "class": "MinMax",
               "args": {},
-              "module": "modules.applications.QML.generative_modeling.transformations.MinMax",
+              "module": "modules.applications.qml.generative_modeling.transformations.MinMax",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2601,7 +2601,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2690,7 +2690,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -2791,7 +2791,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2855,7 +2855,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2932,7 +2932,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -3021,7 +3021,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -3122,7 +3122,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -3186,7 +3186,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -3260,7 +3260,7 @@
           "name": "Discrete Data",
           "class": "DiscreteData",
           "args": {},
-          "module": "modules.applications.QML.generative_modeling.data.data_handler.DiscreteData",
+          "module": "modules.applications.qml.generative_modeling.data.data_handler.DiscreteData",
           "requirements": [
             {
               "name": "numpy",
@@ -3279,7 +3279,7 @@
                   "name": "LibraryQiskit",
                   "class": "LibraryQiskit",
                   "args": {},
-                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryQiskit",
+                  "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -3368,7 +3368,7 @@
                   "name": "LibraryPennylane",
                   "class": "LibraryPennylane",
                   "args": {},
-                  "module": "modules.applications.QML.generative_modeling.mappings.LibraryPennylane",
+                  "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
                   "requirements": [
                     {
                       "name": "pennylane",
@@ -3469,7 +3469,7 @@
                   "name": "CustomQiskitNoisyBackend",
                   "class": "CustomQiskitNoisyBackend",
                   "args": {},
-                  "module": "modules.applications.QML.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                  "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -3533,7 +3533,7 @@
                   "name": "PresetQiskitNoisyBackend",
                   "class": "PresetQiskitNoisyBackend",
                   "args": {},
-                  "module": "modules.applications.QML.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                  "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
                   "requirements": [
                     {
                       "name": "qiskit",

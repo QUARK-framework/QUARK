@@ -12,16 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from abc import ABC
 from typing import TypedDict
 
-
 from modules.Core import Core
-
-
-from qrisp.interface import BackendServer
-
-from abc import ABC, abstractmethod
-
 from modules.devices.Device import Device
 
 
@@ -32,34 +26,30 @@ class QrispSimulator(Device, ABC):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(device_name="qrisp_simulator")
         self.submodule_options = []
+        self.backend = None
 
     def get_backend(self) -> any:
         """
-        Returns backend
+        Returns backend.
 
         :return: Instance of the backend class
-        :rtype: any
         """
+        if self.backend is None:
+            raise AttributeError("The 'backend' attribute has not been set.")
         return self.backend
 
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "qrisp",
-                "version": "0.5"
-            },
-        ]
+        return [{"name": "qrisp", "version": "0.5.2"}]
 
     def get_parameter_options(self) -> dict:
         """
@@ -75,17 +65,20 @@ class QrispSimulator(Device, ABC):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
         """
         doppler: bool
 
     def get_backend_config(self):
         """
-        Returns backend configurations
+        Returns backend configurations.
 
-        :return: backend config for the emulator
-        :rtype: backend.config
+        :return: Backend config for the emulator
         """
+        if self.backend is None:
+            raise AttributeError("The 'backend' attribute has not been set.")
+        if not hasattr(self.backend, 'config'):
+            raise AttributeError("The 'backend' object has no attribute 'config'.")
         return self.backend.config
 
     def get_default_submodule(self, option: str) -> Core:

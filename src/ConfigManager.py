@@ -81,6 +81,8 @@ class ConfigManager:
         full_application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
         depending_submodules = False
+
+        available_submodules = []
         for parameter in application_config:
             if ("depending_submodule" in application_config[parameter] and
                     application_config[parameter]["depending_submodule"]):
@@ -125,6 +127,7 @@ class ConfigManager:
         module_config = module.get_parameter_options()
         full_module_config = ConfigManager._query_for_config(module_config, f"(Option for {module.__class__.__name__})")
         depending_submodules = False
+        available_submodules = []
         for parameter in module_config:
             if ("depending_submodule" in module_config[parameter] and
                     module_config[parameter]["depending_submodule"]):

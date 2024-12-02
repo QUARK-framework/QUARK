@@ -54,8 +54,6 @@ class TestConfigManager(unittest.TestCase):
     #         choices=["TestSubmodule"]
     #     )
 
-
-
     # @patch("src.ConfigManager.checkbox")
     # @patch("src.ConfigManager._get_instance_with_sub_options")
     # def test_query_module(self, mock_get_instance, mock_checkbox):
@@ -105,7 +103,6 @@ class TestConfigManager(unittest.TestCase):
     #     )
     #     mock_module.get_parameter_options.assert_called_once()
     #     mock_module.get_available_submodule_options.assert_called_once()
-
 
     def test_set_config(self):
         config = {
@@ -201,7 +198,7 @@ class TestConfigManager(unittest.TestCase):
     def test_initialize_module_classes(self):
         parent_module = MagicMock(spec=Core)
         parent_module.get_submodule = MagicMock(side_effect=lambda name: MagicMock(name=name))
-        
+
         config = {
             "name": "TestModule",
             "config": {"param1": "value1"},
@@ -239,11 +236,11 @@ class TestConfigManager(unittest.TestCase):
             "config": {"param1": [1, 2]},
             "submodules": [
                     {
-                    "name": "SubModule1",
-                    "config": {"sub_param": [3, 4]},
-                    "submodules": [],
-                    "instance": MagicMock(),
-                }
+                        "name": "SubModule1",
+                        "config": {"sub_param": [3, 4]},
+                        "submodules": [],
+                        "instance": MagicMock(),
+                    }
             ],
             "instance": MagicMock(),
         }
@@ -258,11 +255,11 @@ class TestConfigManager(unittest.TestCase):
             "config": {"param1": [1, 2]},
             "submodules": [
                     {
-                    "name": "SubModule1",
-                    "config": {"sub_param": [3, 4]},
-                    "submodules": [],
-                    "instance": MagicMock(),
-                }
+                        "name": "SubModule1",
+                        "config": {"sub_param": [3, 4]},
+                        "submodules": [],
+                        "instance": MagicMock(),
+                    }
             ],
             "instance": MagicMock(),
         }
@@ -270,7 +267,6 @@ class TestConfigManager(unittest.TestCase):
         self.assertEqual(len(backlog), 4)
         self.assertEqual(backlog[0]["config"]["param1"], 1)
         self.assertEqual(backlog[1]["config"]["param1"], 1)
-
 
     def test_save(self):
         mock_config = {"application": {"name": "TestApp"}, "repetitions": 3}
@@ -298,7 +294,7 @@ class TestConfigManager(unittest.TestCase):
         with patch("matplotlib.pyplot.savefig") as mock_savefig:
             self.config_manager.create_tree_figure("/mock/store/dir")
             mock_savefig.assert_called_once_with("/mock/store/dir/BenchmarkGraph.png", format="PNG")
-    
+
     # @patch("src.ConfigManager.checkbox")
     # @patch("src.ConfigManager.inquirer.prompt")
     # def test_query_for_config(self, mock_prompt, mock_checkbox):

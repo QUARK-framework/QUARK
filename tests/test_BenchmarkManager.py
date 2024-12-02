@@ -25,10 +25,13 @@ class TestBenchmarkManager(unittest.TestCase):
     def test_initialization(self):
         # Reset store_dir before testing
         self.benchmark_manager.store_dir = None
-        
+
         # Assertions
         self.assertIsNone(self.benchmark_manager.store_dir, "Expected store_dir to be None after initialization.")
-        self.assertEqual(self.benchmark_manager.results, [], "Expected results to be an empty list after initialization.")
+        self.assertEqual(
+            self.benchmark_manager.results,
+            [],
+            "Expected results to be an empty list after initialization.")
 
     @patch("os.path.exists", return_value=True)
     @patch("builtins.open", new_callable=mock_open, read_data='[{"key": "value"}]')
@@ -48,22 +51,22 @@ class TestBenchmarkManager(unittest.TestCase):
     @patch("BenchmarkManager.logging.FileHandler")  # Mock FileHandler
     def test_create_store_dir(self, mock_file_handler, mock_path_mkdir):
         # Mock datetime to control the generated timestamp
-            dynamic_now = datetime.today()
-            expected_date_str = dynamic_now.strftime("%Y-%m-%d-%H-%M-%S")
+        dynamic_now = datetime.today()
+        expected_date_str = dynamic_now.strftime("%Y-%m-%d-%H-%M-%S")
 
-            # Call the method under test
-            self.benchmark_manager._create_store_dir(store_dir="/mock_dir", tag="test_tag")
+        # Call the method under test
+        self.benchmark_manager._create_store_dir(store_dir="/mock_dir", tag="test_tag")
 
-            # Dynamically build the expected directory path
-            expected_dir = f"/mock_dir/benchmark_runs/test_tag-{expected_date_str}"
-            expected_log_file = f"{expected_dir}/logging.log"
+        # Dynamically build the expected directory path
+        expected_dir = f"/mock_dir/benchmark_runs/test_tag-{expected_date_str}"
+        expected_log_file = f"{expected_dir}/logging.log"
 
-            # Assertions to check expected outcomes
-            self.assertEqual(self.benchmark_manager.store_dir, expected_dir)
-            self.assertTrue(self.benchmark_manager.store_dir.startswith("/mock_dir/benchmark_runs/test_tag-"))
-            self.assertTrue(self.benchmark_manager.store_dir.endswith(expected_date_str))
-            mock_path_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-            mock_file_handler.assert_called_once_with(expected_log_file)
+        # Assertions to check expected outcomes
+        self.assertEqual(self.benchmark_manager.store_dir, expected_dir)
+        self.assertTrue(self.benchmark_manager.store_dir.startswith("/mock_dir/benchmark_runs/test_tag-"))
+        self.assertTrue(self.benchmark_manager.store_dir.endswith(expected_date_str))
+        mock_path_mkdir.assert_called_once_with(parents=True, exist_ok=True)
+        mock_file_handler.assert_called_once_with(expected_log_file)
 
     @patch("logging.FileHandler")
     def test_resume_store_dir(self, mock_file_handler):
@@ -98,7 +101,6 @@ class TestBenchmarkManager(unittest.TestCase):
         mock_file_handler.assert_called_with("/mock/store/logging.log")
         logger_mock.addHandler.assert_called_once()
 
-       
     @patch("BenchmarkManager.Path.mkdir")
     @patch("os.path.exists", return_value=True)
     @patch("BenchmarkManager.logging.FileHandler")
@@ -174,11 +176,6 @@ class TestBenchmarkManager(unittest.TestCase):
     #     )
     #     mock_append_record.assert_called_once_with(module_instance.metrics)
 
-
-
-
-
-
     # @patch("BenchmarkManager.BenchmarkManager._save_as_json")
     # @patch("BenchmarkManager.BenchmarkManager._collect_all_results")
     # @patch("BenchmarkManager.BenchmarkManager._resume_store_dir")
@@ -214,7 +211,7 @@ class TestBenchmarkManager(unittest.TestCase):
     # @patch("BenchmarkManager.BenchmarkManager.load_interrupted_results", return_value=None)
     # @patch("utils_mpi.get_comm")
     # def test_run_benchmark_basic(
-    #     self, mock_comm, mock_load_results, mock_postprocess, mock_preprocess, 
+    #     self, mock_comm, mock_load_results, mock_postprocess, mock_preprocess,
     #     mock_git_revision, mock_benchmark_record, mock_open, mock_mkdir
     # ):
     #     """
@@ -237,4 +234,4 @@ class TestBenchmarkManager(unittest.TestCase):
     #     mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
     #     mock_preprocess.assert_called()
     #     mock_postprocess.assert_called()
-    #     self.assertEqual(mock_open.call_count, 2) 
+    #     self.assertEqual(mock_open.call_count, 2)

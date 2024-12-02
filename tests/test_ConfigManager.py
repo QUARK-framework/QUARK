@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import yaml
 
 from modules.Core import Core
 from src.ConfigManager import ConfigManager, BenchmarkConfig, ConfigModule
@@ -11,98 +10,45 @@ class TestConfigManager(unittest.TestCase):
     def setUp(self):
         self.config_manager = ConfigManager()
 
-    # @patch("src.ConfigManager.inquirer.prompt")
-    # @patch("src.ConfigManager.checkbox")
-    # @patch("src.ConfigManager._get_instance_with_sub_options")
-    # def test_generate_benchmark_configs(self, mock_get_instance, mock_checkbox, mock_prompt):
-    #     # Mock application selection
-    #     mock_prompt.side_effect = [
-    #         {"application": "TestApp"},  # For application selection
-    #         {"repetitions": "3"}        # For repetitions
-    #     ]
-    #     mock_checkbox.return_value = {"submodules": ["TestSubmodule"]}
 
-    #     # Mock application behavior
-    #     mock_app_instance = MagicMock()
-    #     mock_app_instance.get_parameter_options.return_value = {
-    #         "param1": {
-    #             "values": [1, 2],
-    #             "description": "Select a value for param1",
-    #             "exclusive": False,
-    #             "custom_input": False,
-    #         }
-    #     }
-    #     mock_app_instance.get_available_submodule_options.return_value = ["TestSubmodule"]
-    #     mock_app_instance.get_submodule.return_value = mock_app_instance
+    @patch("src.ConfigManager.ConfigManager._query_for_config")
+    @patch("src.ConfigManager.checkbox")
+    def test_query_module(self, mock_checkbox, mock_query_for_config):
+        # Mock the `get_parameter_options` and `get_available_submodule_options` methods
+        mock_module = MagicMock()
+        mock_module.get_parameter_options.return_value = {
+            "param1": {"values": [1, 2, 3], "description": "Test parameter 1"}
+        }
+        mock_module.get_available_submodule_options.return_value = ["Submodule1", "Submodule2"]
 
-    #     # Mock application instance retrieval
-    #     mock_get_instance.return_value = mock_app_instance
+        # Mock submodules
+        mock_submodule = MagicMock()
+        mock_module.get_submodule.return_value = mock_submodule
+        mock_submodule.get_parameter_options.return_value = {
+            "sub_param": {"values": ["a", "b"], "description": "Submodule parameter"}
+        }
+        mock_submodule.get_available_submodule_options.return_value = []
 
-    #     # Run the function
-    #     self.config_manager.generate_benchmark_configs([{"name": "TestApp"}])
+        # Mock `checkbox` and `_query_for_config`
+        mock_checkbox.side_effect = [
+            {"submodules": ["Submodule1"]},  # Main module selection
+            {"submodules": []}  # Submodule does not have further submodules
+        ]
+        mock_query_for_config.side_effect = [
+            {"param1": [1, 2]},  # Main module parameters
+            {"sub_param": ["a"]}  # Submodule parameters
+        ]
 
-    #     # Assertions
-    #     self.assertEqual(self.config_manager.config["application"]["name"], "TestApp")
-    #     self.assertEqual(self.config_manager.config["repetitions"], 3)
-    #     self.assertIn("param1", self.config_manager.config["application"]["config"])
-    #     self.assertEqual(self.config_manager.config["application"]["config"]["param1"], [1, 2, 3])
+        result = self.config_manager.query_module(mock_module, "TestModule")
 
-    #     mock_prompt.assert_any_call([unittest.mock.ANY])
-    #     mock_checkbox.assert_called_once_with(
-    #         key='submodules',
-    #         message="What submodule do you want?",
-    #         choices=["TestSubmodule"]
-    #     )
+        # Assertions
+        self.assertEqual(result["name"], "TestModule", "Module name should match input")
+        self.assertEqual(result["config"], {"param1": [1, 2]}, "Module config should match mocked input")
+        self.assertEqual(len(result["submodules"]), 1, "Should have one submodule")
+        self.assertEqual(result["submodules"][0]["name"], "Submodule1", "Submodule name should match checkbox selection")
+        self.assertEqual(result["submodules"][0]["config"], {"sub_param": ["a"]}, "Submodule config should match mocked input")
+        self.assertEqual(result["submodules"][0]["submodules"], [], "Submodule should not have further submodules")
 
-    # @patch("src.ConfigManager.checkbox")
-    # @patch("src.ConfigManager._get_instance_with_sub_options")
-    # def test_query_module(self, mock_get_instance, mock_checkbox):
-    #     # Mock the checkbox response for "param1" and "submodules"
-    #     def checkbox_side_effect(key, message, choices):
-    #         if key == "param1":
-    #             return {"param1": [1]}
-    #         elif key == "submodules":
-    #             return {"submodules": ["TestSubmodule"]}
-    #         return {}
-
-    #     mock_checkbox.side_effect = checkbox_side_effect
-
-    #     # Mock a module instance
-    #     mock_module = MagicMock()
-    #     mock_module.get_parameter_options.return_value = {
-    #         "param1": {
-    #             "values": [1, 2, 3],
-    #             "description": "Choose a value for param1",
-    #             "exclusive": False,
-    #             "custom_input": False
-    #         }
-    #     }
-    #     mock_module.get_available_submodule_options.return_value = ["TestSubmodule"]
-    #     mock_module.get_submodule.return_value = mock_module
-
-    #     # Call the method to test
-    #     result = self.config_manager.query_module(mock_module, "TestModule")
-
-    #     # Assertions
-    #     self.assertEqual(result["name"], "TestModule")
-    #     self.assertIn("param1", result["config"])
-    #     self.assertEqual(result["config"]["param1"], [1])  # Mocked response
-    #     self.assertEqual(len(result["submodules"]), 1)
-    #     self.assertEqual(result["submodules"][0]["name"], "TestSubmodule")
-
-    #     # Validate mock calls
-    #     mock_checkbox.assert_any_call(
-    #         key='param1',
-    #         message="(Option for TestModule) Choose a value for param1",
-    #         choices=[1, 2, 3]
-    #     )
-    #     mock_checkbox.assert_any_call(
-    #         key='submodules',
-    #         message="What submodule do you want?",
-    #         choices=["TestSubmodule"]
-    #     )
-    #     mock_module.get_parameter_options.assert_called_once()
-    #     mock_module.get_available_submodule_options.assert_called_once()
 
     def test_set_config(self):
         config = {
@@ -294,58 +240,65 @@ class TestConfigManager(unittest.TestCase):
         with patch("matplotlib.pyplot.savefig") as mock_savefig:
             self.config_manager.create_tree_figure("/mock/store/dir")
             mock_savefig.assert_called_once_with("/mock/store/dir/BenchmarkGraph.png", format="PNG")
-
+    
+    @patch("src.ConfigManager.inquirer.prompt")
+    @patch("src.ConfigManager.checkbox")
+    def test_query_for_config(self, mock_checkbox, mock_prompt):
+        mock_checkbox.return_value = {"param1": [1, 2, "Custom Input"]}
+        mock_prompt.side_effect = [{"custom_input": "custom_value"}]
+        param_opts = {
+            "param1": {"values": [1, 2, 3], "description": "Test parameter 1", "custom_input": True}
+        }
+        config = ConfigManager._query_for_config(param_opts)
+        self.assertIn("param1", config)
+        self.assertEqual(config["param1"], [1, 2, "custom_value"])
+        
+    # @patch("src.utils._get_instance_with_sub_options")
+    # @patch("src.utils._import_class")
     # @patch("src.ConfigManager.checkbox")
     # @patch("src.ConfigManager.inquirer.prompt")
-    # def test_query_for_config(self, mock_prompt, mock_checkbox):
-    #     # Mock user inputs
-    #     mock_checkbox.side_effect = [
-    #         {"param1": [1, 2, "Custom Input"]},  # Checkbox selection for param1
-    #         {"param4": [1, 2, "Custom Range"]}  # Checkbox selection for param4
-    #     ]
+    # def test_generate_benchmark_configs(self, mock_prompt, mock_checkbox, mock_import_class, mock_get_instance):
+    #     # Mock user input
     #     mock_prompt.side_effect = [
-    #         {"custom_input": "custom_value"},  # Custom input for param1
-    #         {"start": "0", "stop": "10", "step": "2"},  # Custom range for param4
-    #         {"param2": "a"}  # Exclusive selection for param2
+    #         {"application": "TestApp"},  # Selecting the application
+    #         {"repetitions": "3"}        # Setting repetitions
+    #     ]
+    #     mock_checkbox.return_value = {"submodules": ["TestSubmodule"]}
+
+    #     # Mock application modules and instance creation
+    #     app_modules = [
+    #         {
+    #             "name": "TestApp",
+    #             "module": "modules.applications.TestApp",
+    #             "class": "TestAppClass",
+    #             "submodules": [
+    #                 {
+    #                     "name": "TestSubmodule",
+    #                     "module": "modules.applications.TestApp.Submodule",
+    #                     "class": "TestSubmoduleClass"
+    #                 }
+    #             ]
+    #         }
     #     ]
 
-    #     param_opts = {
-    #         "param1": {
-    #             "values": [1, 2, 3],
-    #             "description": "Test parameter 1",
-    #             "custom_input": True
-    #         },
-    #         "param2": {
-    #             "values": ["a", "b"],
-    #             "description": "Test parameter 2",
-    #             "exclusive": True
-    #         },
-    #         "param3": {
-    #             "values": [10],
-    #             "description": "Single value test"
-    #         },
-    #         "param4": {
-    #             "values": [1, 2, 3],
-    #             "description": "Range test",
-    #             "allow_ranges": True
-    #         }
-    #     }
+    #     # Mock dynamic import behavior
+    #     mocked_app_instance = MagicMock(name="MockedAppInstance")
+    #     mocked_submodule_instance = MagicMock(name="MockedSubmoduleInstance")
+    #     mock_import_class.side_effect = lambda module, class_name, _: (
+    #         mocked_app_instance if class_name == "TestAppClass" else mocked_submodule_instance
+    #     )
+    #     mock_get_instance.return_value = mocked_app_instance
 
-    #     # Call the function
-    #     config = ConfigManager._query_for_config(param_opts)
+    #     # Run the method
+    #     self.config_manager.generate_benchmark_configs(app_modules)
 
-    #     # Assertions for param1
-    #     self.assertIn("param1", config)
-    #     self.assertEqual(config["param1"], [1, 2, "custom_value"], "Expected combined values for param1.")
+    #     # Assertions to validate the configuration
+    #     self.assertIn("application", self.config_manager.config)
+    #     self.assertEqual(self.config_manager.config["application"]["name"], "TestApp")
+    #     self.assertEqual(self.config_manager.config["repetitions"], 3)
+    #     self.assertEqual(len(self.config_manager.config["application"]["submodules"]), 1)
 
-    #     # Assertions for param2
-    #     self.assertIn("param2", config)
-    #     self.assertEqual(config["param2"], ["a"], "Expected exclusive selection for param2.")
-
-    #     # Assertions for param3
-    #     self.assertIn("param3", config)
-    #     self.assertEqual(config["param3"], [10], "Expected single value to be returned for param3.")
-
-    #     # Assertions for param4
-    #     self.assertIn("param4", config)
-    #     self.assertEqual(config["param4"], [0.0, 2.0, 4.0, 6.0, 8.0], "Expected generated range for param4.")
+    #     # Validate dynamic imports were called correctly
+    #     mock_import_class.assert_any_call("modules.applications.TestApp", "TestAppClass", None)
+    #     mock_import_class.assert_any_call("modules.applications.TestApp.Submodule", "TestSubmoduleClass", None)
+    #     mock_get_instance.assert_called_once_with(app_modules, "TestApp")

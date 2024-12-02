@@ -126,16 +126,13 @@ class TestBenchmarkManager(unittest.TestCase):
         mock_open_file.assert_called_once_with(f"{self.benchmark_manager.store_dir}/results.json", 'w')
         mock_json_dump.assert_called_once_with(mock_results, mock_open_file(), indent=2)
 
-    # @patch("BenchmarkManager.Plotter.visualize_results")
-    # @patch("BenchmarkManager.BenchmarkManager.load_results", return_value=[{"result": "test"}])
-    # @patch("BenchmarkManager.BenchmarkManager._create_store_dir")
-    # @patch("BenchmarkManager.BenchmarkManager._save_as_json")
-    # def test_summarize_results(self, mock_save_as_json, mock_create_store_dir, mock_load_results, mock_visualize):
-    #     self.benchmark_manager.summarize_results(["/mock_dir1", "/mock_dir2"])
-    #     mock_create_store_dir.assert_called_once_with(tag="summary")
-    #     mock_load_results.assert_called_once_with(["/mock_dir1", "/mock_dir2"])
-    #     mock_save_as_json.assert_called_once_with([{"result": "test"}])
-    #     mock_visualize.assert_called_once_with([{"result": "test"}], self.benchmark_manager.store_dir)
+    @patch("src.BenchmarkManager.Plotter.visualize_results")
+    @patch("src.BenchmarkManager.BenchmarkManager._save_as_json")
+    @patch("src.BenchmarkManager.ConfigManager")
+    def test_summarize_results(self, mock_config_manager, mock_save_json, mock_visualize):
+        self.benchmark_manager.summarize_results(["/mock/dir1", "/mock/dir2"])
+        mock_save_json.assert_called()
+        mock_visualize.assert_called()
 
     @patch("glob.glob", return_value=["/mock_dir1/results.json", "/mock_dir2/results.json"])
     @patch("builtins.open", new_callable=mock_open, read_data='[{"result": "mock"}]')
@@ -144,94 +141,103 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertEqual(len(results), 4, "Expected to load results from both directories.")
         self.assertEqual(results[0]["result"], "mock", "Expected the first result to match mock.")
 
-    # @patch("BenchmarkManager.preprocess", return_value=(Instruction.PROCEED, "processed_input", 0.1))
-    # @patch("BenchmarkManager.postprocess", return_value=(Instruction.PROCEED, "postprocessed_input", 0.2))
-    # @patch("BenchmarkRecord.BenchmarkRecord.append_module_record_left")
-    # def test_traverse_config(self, mock_append_record, mock_postprocess, mock_preprocess):
-    #     module = {
-    #         "module1": {
-    #             "name": "module1",
-    #             "instance": MagicMock(),
-    #             "config": {"param": "value"},
-    #             "submodule": None,
-    #         }
-    #     }
-    #     module_instance = module["module1"]["instance"]
-    #     module_instance.metrics = MagicMock()
+    @patch("src.BenchmarkManager.preprocess")
+    @patch("src.BenchmarkManager.postprocess")
+    def test_traverse_config(self, mock_postprocess, mock_preprocess):
+        # Mock the preprocess function to return expected values
+        mock_preprocess.return_value = (Instruction.PROCEED, "processed_input", 0.1)
 
-    #     instruction, output, benchmark_record = self.benchmark_manager.traverse_config(
-    #         module, "input_data", "/mock_path", 1
-    #     )
+        mock_postprocess.return_value = (Instruction.PROCEED, "postprocessed_output", 0.2)
 
-    #     # Assertions
-    #     self.assertEqual(instruction, Instruction.PROCEED, "Expected instruction to be PROCEED.")
-    #     self.assertEqual(output, "postprocessed_input", "Expected postprocessed input as output.")
-    #     mock_preprocess.assert_called_once_with(
-    #         module_instance, "input_data", {"param": "value"},
-    #         store_dir="/mock_path", rep_count=1, previous_job_info=None
-    #     )
-    #     mock_postprocess.assert_called_once_with(
-    #         module_instance, "processed_input", {"param": "value"},
-    #         store_dir="/mock_path", rep_count=1, previous_job_info=None
-    #     )
-    #     mock_append_record.assert_called_once_with(module_instance.metrics)
+        mock_benchmark_record_template = MagicMock()
+        mock_benchmark_record_template.copy.return_value = MagicMock()
+        self.benchmark_manager.benchmark_record_template = mock_benchmark_record_template
+        module = {
+            "TestModule": {
+                "name": "TestModule",
+                "config": {"key": "value"},
+                "instance": MagicMock(),
+                "submodule": {}
+            }
+        }
+        module["TestModule"]["instance"].metrics = MagicMock()
 
-    # @patch("BenchmarkManager.BenchmarkManager._save_as_json")
-    # @patch("BenchmarkManager.BenchmarkManager._collect_all_results")
-    # @patch("BenchmarkManager.BenchmarkManager._resume_store_dir")
-    # @patch("BenchmarkManager.BenchmarkManager._create_store_dir")
+        instruction, output, benchmark_record = self.benchmark_manager.traverse_config(
+            module, "input_data", "/mock/path", 1
+        )
+
+        # Assertions
+        self.assertEqual(instruction, Instruction.PROCEED, "Expected Instruction.PROCEED to be returned.")
+        self.assertEqual(output, "postprocessed_output", "Expected processed output to match mock postprocess return.")
+        self.assertIsNotNone(benchmark_record, "Expected a BenchmarkRecord instance.")
+
+    # @patch("BenchmarkManager.Path.mkdir")
+    # @patch("BenchmarkManager.logging.FileHandler")
     # @patch("BenchmarkManager.ConfigManager")
-    # def test_orchestrate_benchmark(self, mock_config_manager, mock_create_store_dir, mock_resume_store_dir, mock_collect_all_results, mock_save_as_json):
-    #     mock_config = MagicMock()
-    #     mock_config.get_config.return_value = {"application": {"name": "test"}}
-    #     mock_config_manager.return_value = mock_config
+    # @patch("BenchmarkManager.BenchmarkManager._collect_all_results")
+    # def test_orchestrate_benchmark(self, mock_collect_results, mock_config_manager, mock_filehandler, mock_mkdir):
+    #     # Mock ConfigManager behavior
+    #     mock_config_manager.get_config.return_value = {
+    #         "application": {"name": "test_application"}
+    #     }
+    #     mock_config_manager.get_app.return_value = MagicMock()
+    #     mock_config_manager.start_create_benchmark_backlog.return_value = []
+    #     mock_config_manager.get_reps.return_value = 1
 
-    #     # Mock `_collect_all_results` to return a non-empty list
-    #     mock_collect_all_results.return_value = [{"mock_key": "mock_value"}]
+    #     # Mock mkdir to avoid filesystem errors
+    #     mock_mkdir.return_value = None
 
-    #     # Mock `_save_as_json` to do nothing
-    #     mock_save_as_json.return_value = None
+    #     # Mock FileHandler to avoid file creation errors
+    #     mock_filehandler.return_value = MagicMock()
+    #     mock_filehandler.return_value.level = 10  # Set a valid integer logging level
 
-    #     # Use a temporary directory for the store
-    #     with tempfile.TemporaryDirectory() as temp_store_dir:
-    #         self.benchmark_manager.orchestrate_benchmark(mock_config_manager, [], temp_store_dir, None)
+    #     # Mock _collect_all_results to return an empty list
+    #     mock_collect_results.return_value = []
 
-    #         # Assertions to validate expected calls
-    #         mock_create_store_dir.assert_called_with(temp_store_dir, tag="test")
-    #         mock_resume_store_dir.assert_not_called()
-    #         mock_collect_all_results.assert_called_once()
-    #         mock_save_as_json.assert_called_once_with([{"mock_key": "mock_value"}])
+    #     # Create an instance of BenchmarkManager
+    #     benchmark_manager = BenchmarkManager()
 
-    # @patch("pathlib.Path.mkdir")
-    # @patch("builtins.open", new_callable=MagicMock)
-    # @patch("BenchmarkManager.BenchmarkRecord")
-    # @patch("BenchmarkManager.get_git_revision", return_value=("mock_git_revision", False))
-    # @patch("BenchmarkManager.preprocess", return_value=(Instruction.PROCEED, {"mock_problem": "value"}, 1.0))
-    # @patch("BenchmarkManager.postprocess", return_value=(Instruction.PROCEED, {}, 1.0))
-    # @patch("BenchmarkManager.BenchmarkManager.load_interrupted_results", return_value=None)
-    # @patch("utils_mpi.get_comm")
-    # def test_run_benchmark_basic(
-    #     self, mock_comm, mock_load_results, mock_postprocess, mock_preprocess,
-    #     mock_git_revision, mock_benchmark_record, mock_open, mock_mkdir
-    # ):
-    #     """
-    #     Test run_benchmark method with a basic configuration.
-    #     """
-    #     # Mock MPI communication
-    #     comm_mock = MagicMock()
-    #     comm_mock.Get_rank.return_value = 0
-    #     comm_mock.Barrier.return_value = None
-    #     mock_comm.return_value = comm_mock
-
-    #     # Set up benchmark backlog and repetitions
-    #     benchmark_backlog = [{"config": {"param": "value"}, "submodule": {}}]
-    #     repetitions = 2
-
-    #     # Call run_benchmark
-    #     self.benchmark_manager.run_benchmark(benchmark_backlog, repetitions)
+    #     # Call orchestrate_benchmark
+    #     benchmark_manager.orchestrate_benchmark(mock_config_manager, [{"name": "test"}], "/mock/store_dir")
 
     #     # Assertions
-    #     mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-    #     mock_preprocess.assert_called()
-    #     mock_postprocess.assert_called()
-    #     self.assertEqual(mock_open.call_count, 2)
+    #     mock_config_manager.get_config.assert_called_once()
+    #     mock_config_manager.save.assert_called_once()
+    #     mock_mkdir.assert_called()
+    #     mock_filehandler.assert_called_once_with(
+    #         "/mock/store_dir/benchmark_runs/test_application-<timestamp>/logging.log"
+    #     )
+    #     mock_collect_results.assert_called_once()
+
+    # @patch("src.BenchmarkManager.Path.mkdir")
+    # @patch("builtins.open", new_callable=mock_open)
+    # @patch("src.BenchmarkManager.logging.getLogger")
+    # def test_run_benchmark(self, mock_get_logger, mock_open_file, mock_mkdir):
+    #     # Set up a mocked logger
+    #     mock_logger = MagicMock()
+    #     mock_get_logger.return_value = mock_logger
+
+    #     # Mock the BenchmarkManager instance and dependencies
+    #     benchmark_manager = BenchmarkManager()
+    #     benchmark_manager.application = MagicMock()
+    #     benchmark_manager.application.metrics = MagicMock()
+    #     benchmark_manager.application.metrics.set_module_config = MagicMock()
+    #     benchmark_manager.application.metrics.set_preprocessing_time = MagicMock()
+    #     benchmark_manager.application.metrics.add_metric = MagicMock()
+    #     benchmark_manager.application.metrics.validate = MagicMock()
+    #     benchmark_manager.application.save = MagicMock()
+    #     benchmark_manager.benchmark_record_template = MagicMock()
+    #     benchmark_manager.store_dir = "/mock/store"
+
+    #     # Set up backlog and repetitions
+    #     backlog = [{"config": {"name": "test"}, "submodule": None}]
+    #     repetitions = 1
+
+    #     # Run the benchmark
+    #     benchmark_manager.run_benchmark(backlog, repetitions)
+
+    #     # Assertions
+    #     mock_mkdir.assert_called()
+    #     mock_open_file.assert_called_with("/mock/store/benchmark_0/application_config.json", 'w')
+    #     mock_logger.info.assert_called()  # Ensure logging calls happen
+    #     benchmark_manager.application.save.assert_called()  # Ensure save is called

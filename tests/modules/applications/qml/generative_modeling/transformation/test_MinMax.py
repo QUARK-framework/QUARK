@@ -1,6 +1,8 @@
 import unittest
 import numpy as np
 from unittest.mock import patch, MagicMock
+
+from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.applications.qml.generative_modeling.transformations.MinMax import MinMax
 from modules.applications.qml.generative_modeling.circuits.CircuitStandard import CircuitStandard
 from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
@@ -51,139 +53,51 @@ class TestMinMax(unittest.TestCase):
         self.assertTrue((original >= data.min()).all() and (original <= data.max()).all(),
                         "Reconstructed data should match the original range.")
 
-    # @patch("modules.applications.qml.generative_modeling.transformations.MinMax")
-    # def test_transform(self, mock_fit_transform):
-    #     # Mock fit_transform to normalize the dataset to [0, 1]
-    #     mock_fit_transform.side_effect = lambda x: (x - np.min(x, axis=0)) / np.ptp(x, axis=0)
+    def test_transform(self):
+        input_data = {
+            "dataset_name": "test_dataset",
+            "dataset": np.array([[1, 2], [3, 4], [5, 6]]),
+            "n_qubits": 4,
+            "train_size": 0.8,
+            "store_dir_iter": "/tmp"
+        }
+        config = {}
 
-    #     # Ensure solution_space values align with self.n_qubits
-    #     self.minmax_instance.n_qubits = self.sample_input_data["n_qubits"]
-    #     max_value = 2 ** self.minmax_instance.n_qubits - 1
+        transformed_config = self.minmax_instance.transform(input_data, config)
 
-    #     # Mock solution_space to be 1D and within the range of self.n_qubits
-    #     solution_space = np.random.randint(0, max_value + 1, size=100)  # Flattened 1D array
+        self.assertIn("histogram_train", transformed_config, "Expected histogram_train in the transformed config.")
+        self.assertIn("binary_train", transformed_config, "Expected binary_train in the transformed config.")
+        self.assertEqual(transformed_config["dataset_name"], "test_dataset", "Dataset name should match.")
+        self.assertEqual(transformed_config["n_qubits"], 4, "Expected number of qubits to match.")
+        self.assertEqual(transformed_config["train_size"], 0.8, "Expected train size to match.")
 
-    #     # Debug solution_space
-    #     print("Generated solution_space:", solution_space)
-    #     assert all(x < 2 ** self.minmax_instance.n_qubits for x in solution_space), \
-    #         f"solution_space contains values exceeding {2 ** self.minmax_instance.n_qubits - 1}"
+    def test_reverse_transform(self):
+        input_data = {
+            "best_sample": np.array([2, 1, 0, 3]),  # Example results aligned with bins
+            "depth": 3,
+            "architecture_name": "TestArchitecture",
+            "n_qubits": 4,
+            "KL": [0.1, 0.2, 0.05],
+            "best_parameter": [0.5, 1.0],
+            "circuit_transpiled": None,
+            "store_dir_iter": "/tmp"
+        }
 
-    #     # Intercept solution_space generation
-    #     with patch("modules.applications.qml.generative_modeling.transformations.MinMax.transform") as mocked_transform:
-    #         def side_effect(input_data, config):
-    #             result = self.minmax_instance.transform(input_data, config)
-    #             result["binary_train"] = np.array(
-    #                 [list(map(int, np.binary_repr(x, width=self.minmax_instance.n_qubits))) for x in solution_space]
-    #             )
-    #             return result
+        # Simulate the transformation configuration
+        self.minmax_instance.transform_config = {
+            "n_registers": 4
+        }
+        self.minmax_instance.histogram_train = np.array([0.1, 0.2])
+        self.minmax_instance.histogram_train_original = np.array([0.05, 0.15])
 
-    #         mocked_transform.side_effect = side_effect
+        # Mock Transformation methods for alignment
+        Transformation.compute_discretization_efficient = MagicMock(return_value=np.array([[0], [1], [2], [3]]))
+        Transformation.generate_samples_efficient = MagicMock(return_value=np.array([[0], [1], [2], [3]]))
 
-    #         # Call the transform method
-    #         result = self.minmax_instance.transform(self.sample_input_data, self.sample_config)
+        # Call reverse_transform
+        reversed_config = self.minmax_instance.reverse_transform(input_data)
 
-    #     # Validate result keys
-    #     expected_keys = [
-    #         "histogram_train", "binary_train", "dataset_name", "n_registers",
-    #         "n_qubits", "train_size", "store_dir_iter"
-    #     ]
-    #     for key in expected_keys:
-    #         self.assertIn(key, result, f"Key '{key}' is missing in the transform result.")
+        # Assertions
+        self.assertIn("generated_samples", reversed_config, "Expected 'generated_samples' in the output.")
+        self.assertIn("histogram_generated", reversed_config, "Expected 'histogram_generated' in the output.")
 
-    #     # Validate transformed dataset
-    #     transformed_dataset = mock_fit_transform(self.sample_input_data["dataset"])
-    #     self.assertTrue(
-    #         (transformed_dataset >= 0).all() and (transformed_dataset <= 1).all(),
-    #         "Transformed dataset should be normalized to the range [0, 1]."
-    #     )
-
-    #     # Validate binary_train
-    #     binary_train = result["binary_train"]
-    #     self.assertIsInstance(binary_train, np.ndarray, "The 'binary_train' should be a NumPy array.")
-    #     self.assertEqual(
-    #         binary_train.shape[1],
-    #         self.sample_input_data["n_qubits"],
-    #         "Each binary vector in 'binary_train' should match the number of qubits."
-    #     )
-    #     self.assertTrue(
-    #         np.isin(binary_train, [0, 1]).all(),
-    #         "All values in 'binary_train' should be binary (0 or 1)."
-    #     )
-
-    #     # Validate histogram_train
-    #     histogram_train = result["histogram_train"]
-    #     self.assertAlmostEqual(
-    #         np.sum(histogram_train),
-    #         1,
-    #         places=5,
-    #         msg="The 'histogram_train' should be normalized to sum to 1."
-    #     )
-    #     self.assertTrue(
-    #         (histogram_train >= 0).all(),
-    #         "The 'histogram_train' should contain non-negative values."
-    #     )
-
-    #     # Validate dataset metadata
-    #     self.assertEqual(result["dataset_name"], self.sample_input_data["dataset_name"], "Dataset name mismatch.")
-    #     self.assertEqual(result["n_qubits"], self.sample_input_data["n_qubits"], "Number of qubits mismatch.")
-    #     self.assertEqual(result["train_size"], self.sample_input_data["train_size"], "Train size mismatch.")
-    #     self.assertEqual(result["store_dir_iter"], self.sample_input_data["store_dir_iter"], "Store directory mismatch.")
-    # @patch("modules.applications.qml.generative_modeling.transformations.MinMax")
-    # @patch("modules.applications.qml.generative_modeling.transformations.Transformation")
-    # def test_reverse_transform(self, mock_generate_samples, mock_compute_discretization):
-    #     """Test the reverse_transform method for correct behavior."""
-    #     # Mock methods
-    #     mock_compute_discretization.return_value = np.array([1, 2, 4])
-    #     mock_generate_samples.return_value = np.random.rand(64, 2)
-
-    #     # Input data for reverse_transform
-    #     input_data = {
-    #         "best_sample": np.array([32, 32]),
-    #         "depth": 3,
-    #         "architecture_name": "TestArchitecture",
-    #         "n_qubits": 6,
-    #         "KL": [0.1, 0.2],
-    #         "circuit_transpiled": MagicMock(),
-    #         "best_parameter": np.array([0.3, 0.7]),
-    #         "store_dir_iter": "./test_dir"
-    #     }
-
-    #     # Call reverse_transform
-    #     result = self.minmax_instance.reverse_transform(input_data)
-
-    #     # Validate result keys
-    #     expected_keys = [
-    #         "generated_samples", "transformed_samples", "depth", "architecture_name",
-    #         "dataset_name", "n_qubits", "best_parameter", "histogram_train",
-    #         "histogram_train_original", "histogram_generated_original",
-    #         "histogram_generated", "KL_best_transformed", "store_dir_iter",
-    #         "circuit_transpiled"
-    #     ]
-    #     for key in expected_keys:
-    #         self.assertIn(key, result, f"Key '{key}' is missing in the reverse_transform result.")
-
-    #     # Validate individual components
-    #     self.assertEqual(result["depth"], input_data["depth"], "Depth mismatch in the result.")
-    #     self.assertEqual(result["architecture_name"], input_data["architecture_name"], "Architecture name mismatch.")
-    #     self.assertEqual(result["n_qubits"], input_data["n_qubits"], "Number of qubits mismatch.")
-    #     self.assertEqual(result["dataset_name"], self.minmax_instance.dataset_name, "Dataset name mismatch.")
-    #     np.testing.assert_array_equal(
-    #         result["best_parameter"],
-    #         input_data["best_parameter"],
-    #         "Best parameter mismatch."
-    #     )
-    #     np.testing.assert_array_almost_equal(
-    #         result["histogram_train"],
-    #         self.minmax_instance.histogram_train,
-    #         err_msg="Histogram train mismatch."
-    #     )
-    #     np.testing.assert_array_almost_equal(
-    #         result["histogram_train_original"],
-    #         self.minmax_instance.histogram_train_original,
-    #         err_msg="Histogram train original mismatch."
-    #     )
-    #     self.assertEqual(
-    #         result["KL_best_transformed"],
-    #         min(input_data["KL"]),
-    #         "KL best transformed mismatch."
-    #     )

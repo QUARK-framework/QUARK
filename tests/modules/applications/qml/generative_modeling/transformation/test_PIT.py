@@ -21,9 +21,19 @@ class TestPIT(unittest.TestCase):
         cls.sample_config = {}
         # Mock reverse_epit_lookup for testing
         cls.pit_instance.reverse_epit_lookup = np.array([
-            [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
-            [0.0, 0.25, 0.5, 0.75, 1.0, 1.25]
+            [0.1, 0.2, 0.3, 0.4],
+            [0.5, 0.6, 0.7, 0.8],
+            [0.9, 1.0, 1.1, 1.2]
         ])
+        cls.pit_instance.grid_shape = (2, 2)
+        cls.pit_instance.transform_config = {
+            "n_registers": 2,
+            "binary_train": np.array([[0, 1], [1, 0]]),
+            "histogram_train": np.array([0.5, 0.5]),
+            "dataset_name": "mock_dataset",
+            "store_dir_iter": "/mock/path"
+        }
+
 
     def test_get_requirements(self):
         requirements = self.pit_instance.get_requirements()
@@ -50,26 +60,32 @@ class TestPIT(unittest.TestCase):
         self.assertEqual(result["n_qubits"], self.sample_input_data["n_qubits"], "n_qubits mismatch.")
 
     # def test_reverse_transform(self):
-    #     # Mock transformation data
-    #     self.pit_instance.transform_config = {
-    #         "n_registers": 2,
-    #     }
+    #     # Mocked input data
     #     input_data = {
-    #         "depth": 3,
-    #         "architecture_name": "test_architecture",
-    #         "n_qubits": 4,
-    #         "KL": [0.1, 0.05, 0.2],
-    #         "best_sample": np.array([0, 1, 1, 0]),
-    #         "circuit_transpiled": MagicMock(),
-    #         "store_dir_iter": "/tmp",
-    #         "best_parameter": np.random.random(4)
+    #         "best_sample": np.array([0, 1, 2, 3]),
+    #         "depth": 2,
+    #         "architecture_name": "TestArchitecture",
+    #         "n_qubits": 2,
+    #         "KL": [0.1, 0.2],
+    #         "circuit_transpiled": None,
+    #         "best_parameter": [0.5, 0.6],
+    #         "store_dir_iter": "/mock/path"
     #     }
+        
+    #     # Mock internal method responses
+    #     self.pit_instance.compute_discretization_efficient = MagicMock(return_value=np.array([[0, 1], [2, 3]]))
+    #     self.pit_instance.generate_samples_efficient = MagicMock(return_value=np.array([[0.1, 0.2], [0.3, 0.4]]))
+        
+    #     # Call the method
+    #     reverse_config = self.pit_instance.reverse_transform(input_data)
 
-    #     result = self.pit_instance.reverse_transform(input_data)
+    #     # Validate the response
+    #     self.assertIn("generated_samples", reverse_config)
+    #     self.assertIn("transformed_samples", reverse_config)
+    #     self.assertIn("KL_best_transformed", reverse_config)
+    #     self.assertEqual(reverse_config["depth"], input_data["depth"])
+    #     self.assertEqual(reverse_config["dataset_name"], self.pit_instance.dataset_name)
 
-    #     self.assertIn("generated_samples", result, "Expected 'generated_samples' in reverse transform result.")
-    #     self.assertIn("histogram_generated_original", result, "Expected 'histogram_generated_original' in result.")
-    #     self.assertIn("KL_best_transformed", result, "Expected 'KL_best_transformed' in reverse transform result.")
 
     def test_emp_integral_trans(self):
         data = np.random.uniform(0, 1, 100)
@@ -88,23 +104,11 @@ class TestPIT(unittest.TestCase):
         inverse_data = self.pit_instance.inverse_transform(data)
         self.assertEqual(inverse_data.shape, data.shape, "Inverse-transformed data should match the input shape.")
 
-    # def test_reverse_emp_integral_trans_single(self):
-    #     # Case 1: Integer-like values
-    #     values = np.array([0.2, 0.4])
-    #     expected_result = [0.2, 0.5]
-    #     result = self.pit_instance._reverse_emp_integral_trans_single(values)
-    #     np.testing.assert_almost_equal(result, expected_result, decimal=6, err_msg="Failed for integer-like values")
-
-    #     # Case 2: Non-integer values
-    #     values = np.array([0.35, 0.55])
-    #     expected_result = [0.275, 0.625]  # Interpolated values
-    #     result = self.pit_instance._reverse_emp_integral_trans_single(values)
-    #     np.testing.assert_almost_equal(result, expected_result, decimal=6, err_msg="Failed for non-integer values")
-
-    #     # Case 3: Out-of-bounds values
-    #     values = np.array([1.1, -0.1])
-    #     try:
-    #         self.pit_instance._reverse_emp_integral_trans_single(values)
-    #         self.fail("Expected IndexError for out-of-bounds values")
-    #     except IndexError:
-    #         pass  # Test passes if IndexError is raised
+    # def test_reverse_empirical_integral_trans_single(self):
+    #     self.pit_instance.reverse_epit_lookup = np.array([
+    #         [0.1, 0.2, 0.3],
+    #         [0.4, 0.5, 0.6]
+    #     ])
+    #     values = np.array([0.2, 0.8])
+    #     reverse_result = self.pit_instance._reverse_emp_integral_trans_single(values)
+    #     self.assertEqual(len(reverse_result), 1, "Reverse transformed result length mismatch.")

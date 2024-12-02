@@ -100,4 +100,3 @@ class TestMinMax(unittest.TestCase):
         # Assertions
         self.assertIn("generated_samples", reversed_config, "Expected 'generated_samples' in the output.")
         self.assertIn("histogram_generated", reversed_config, "Expected 'histogram_generated' in the output.")
-

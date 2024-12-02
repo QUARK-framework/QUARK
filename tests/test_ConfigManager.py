@@ -10,7 +10,6 @@ class TestConfigManager(unittest.TestCase):
     def setUp(self):
         self.config_manager = ConfigManager()
 
-
     @patch("src.ConfigManager.ConfigManager._query_for_config")
     @patch("src.ConfigManager.checkbox")
     def test_query_module(self, mock_checkbox, mock_query_for_config):
@@ -45,10 +44,12 @@ class TestConfigManager(unittest.TestCase):
         self.assertEqual(result["name"], "TestModule", "Module name should match input")
         self.assertEqual(result["config"], {"param1": [1, 2]}, "Module config should match mocked input")
         self.assertEqual(len(result["submodules"]), 1, "Should have one submodule")
-        self.assertEqual(result["submodules"][0]["name"], "Submodule1", "Submodule name should match checkbox selection")
-        self.assertEqual(result["submodules"][0]["config"], {"sub_param": ["a"]}, "Submodule config should match mocked input")
+        self.assertEqual(result["submodules"][0]["name"], "Submodule1",
+                         "Submodule name should match checkbox selection")
+        self.assertEqual(
+            result["submodules"][0]["config"], {
+                "sub_param": ["a"]}, "Submodule config should match mocked input")
         self.assertEqual(result["submodules"][0]["submodules"], [], "Submodule should not have further submodules")
-
 
     def test_set_config(self):
         config = {
@@ -240,7 +241,7 @@ class TestConfigManager(unittest.TestCase):
         with patch("matplotlib.pyplot.savefig") as mock_savefig:
             self.config_manager.create_tree_figure("/mock/store/dir")
             mock_savefig.assert_called_once_with("/mock/store/dir/BenchmarkGraph.png", format="PNG")
-    
+
     @patch("src.ConfigManager.inquirer.prompt")
     @patch("src.ConfigManager.checkbox")
     def test_query_for_config(self, mock_checkbox, mock_prompt):
@@ -252,7 +253,7 @@ class TestConfigManager(unittest.TestCase):
         config = ConfigManager._query_for_config(param_opts)
         self.assertIn("param1", config)
         self.assertEqual(config["param1"], [1, 2, "custom_value"])
-        
+
     # @patch("src.utils._get_instance_with_sub_options")
     # @patch("src.utils._import_class")
     # @patch("src.ConfigManager.checkbox")

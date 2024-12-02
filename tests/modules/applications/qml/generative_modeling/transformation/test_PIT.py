@@ -34,7 +34,6 @@ class TestPIT(unittest.TestCase):
             "store_dir_iter": "/mock/path"
         }
 
-
     def test_get_requirements(self):
         requirements = self.pit_instance.get_requirements()
         expected_requirements = [
@@ -71,11 +70,11 @@ class TestPIT(unittest.TestCase):
     #         "best_parameter": [0.5, 0.6],
     #         "store_dir_iter": "/mock/path"
     #     }
-        
+
     #     # Mock internal method responses
     #     self.pit_instance.compute_discretization_efficient = MagicMock(return_value=np.array([[0, 1], [2, 3]]))
     #     self.pit_instance.generate_samples_efficient = MagicMock(return_value=np.array([[0.1, 0.2], [0.3, 0.4]]))
-        
+
     #     # Call the method
     #     reverse_config = self.pit_instance.reverse_transform(input_data)
 
@@ -85,7 +84,6 @@ class TestPIT(unittest.TestCase):
     #     self.assertIn("KL_best_transformed", reverse_config)
     #     self.assertEqual(reverse_config["depth"], input_data["depth"])
     #     self.assertEqual(reverse_config["dataset_name"], self.pit_instance.dataset_name)
-
 
     def test_emp_integral_trans(self):
         data = np.random.uniform(0, 1, 100)

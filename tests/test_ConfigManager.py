@@ -10,7 +10,6 @@ class TestConfigManager(unittest.TestCase):
     def setUp(self):
         self.config_manager = ConfigManager()
 
-
     @patch("src.ConfigManager.inquirer.prompt")
     @patch("src.ConfigManager.checkbox")
     def test_query_module(self, mock_checkbox, mock_prompt):

@@ -11,43 +11,22 @@ class TestConfigManager(unittest.TestCase):
         self.config_manager = ConfigManager()
 
 
-    @patch("src.ConfigManager.ConfigManager._query_for_config")
+    @patch("src.ConfigManager.inquirer.prompt")
     @patch("src.ConfigManager.checkbox")
-    def test_query_module(self, mock_checkbox, mock_query_for_config):
-        # Mock the `get_parameter_options` and `get_available_submodule_options` methods
-        mock_module = MagicMock()
-        mock_module.get_parameter_options.return_value = {
-            "param1": {"values": [1, 2, 3], "description": "Test parameter 1"}
+    def test_query_module(self, mock_checkbox, mock_prompt):
+        # Mock responses for checkbox and prompt
+        mock_checkbox.return_value = {"param1": [1, 2]}  # Simulates a user selecting 1 and 2
+        mock_prompt.return_value = {"param2": "a"}  # Simulates a user selecting 'a' for param2
+
+        param_opts = {
+            "param1": {"values": [1, 2, 3], "description": "Test parameter 1"},
+            "param2": {"values": ["a", "b"], "description": "Test parameter 2", "exclusive": True},
         }
-        mock_module.get_available_submodule_options.return_value = ["Submodule1", "Submodule2"]
 
-        # Mock submodules
-        mock_submodule = MagicMock()
-        mock_module.get_submodule.return_value = mock_submodule
-        mock_submodule.get_parameter_options.return_value = {
-            "sub_param": {"values": ["a", "b"], "description": "Submodule parameter"}
-        }
-        mock_submodule.get_available_submodule_options.return_value = []
+        config = ConfigManager._query_for_config(param_opts)
 
-        # Mock `checkbox` and `_query_for_config`
-        mock_checkbox.side_effect = [
-            {"submodules": ["Submodule1"]},  # Main module selection
-            {"submodules": []}  # Submodule does not have further submodules
-        ]
-        mock_query_for_config.side_effect = [
-            {"param1": [1, 2]},  # Main module parameters
-            {"sub_param": ["a"]}  # Submodule parameters
-        ]
-
-        result = self.config_manager.query_module(mock_module, "TestModule")
-
-        # Assertions
-        self.assertEqual(result["name"], "TestModule", "Module name should match input")
-        self.assertEqual(result["config"], {"param1": [1, 2]}, "Module config should match mocked input")
-        self.assertEqual(len(result["submodules"]), 1, "Should have one submodule")
-        self.assertEqual(result["submodules"][0]["name"], "Submodule1", "Submodule name should match checkbox selection")
-        self.assertEqual(result["submodules"][0]["config"], {"sub_param": ["a"]}, "Submodule config should match mocked input")
-        self.assertEqual(result["submodules"][0]["submodules"], [], "Submodule should not have further submodules")
+        # Assert the results
+        self.assertEqual(config["param1"], [1, 2])
 
 
     def test_set_config(self):

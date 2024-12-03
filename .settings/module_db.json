@@ -1,7 +1,7 @@
 {
   "build_number": 16,
-  "build_date": "03-12-2024 08:59:35",
-  "git_revision_number": "0599cf7f730ab1e64efa5769804ff2033f8ae48c",
+  "build_date": "03-12-2024 10:33:07",
+  "git_revision_number": "5dd793e3a63cae9acd48fc083569f9ba20615e4c",
   "modules": [
     {
       "name": "PVC",
@@ -2248,7 +2248,7 @@
                   "name": "CircuitCopula",
                   "class": "CircuitCopula",
                   "args": {},
-                  "module": "modules.circuits.CircuitCopula",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCopula",
                   "requirements": [
                     {
                       "name": "scipy",
@@ -2276,7 +2276,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2305,7 +2305,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2334,7 +2334,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2377,7 +2377,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2406,7 +2406,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2435,7 +2435,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2470,7 +2470,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2499,7 +2499,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2538,7 +2538,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2567,7 +2567,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2598,7 +2598,7 @@
                   "name": "CircuitStandard",
                   "class": "CircuitStandard",
                   "args": {},
-                  "module": "modules.circuits.CircuitStandard",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitStandard",
                   "requirements": [],
                   "submodules": [
                     {
@@ -2621,7 +2621,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2650,7 +2650,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2679,7 +2679,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2722,7 +2722,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2751,7 +2751,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2780,7 +2780,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2815,7 +2815,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2844,7 +2844,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2883,7 +2883,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2912,7 +2912,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2929,7 +2929,7 @@
                   "name": "CircuitCardinality",
                   "class": "CircuitCardinality",
                   "args": {},
-                  "module": "modules.circuits.CircuitCardinality",
+                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
                   "requirements": [],
                   "submodules": [
                     {
@@ -2952,7 +2952,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2981,7 +2981,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3010,7 +3010,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3053,7 +3053,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3082,7 +3082,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3111,7 +3111,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3146,7 +3146,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3175,7 +3175,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3214,7 +3214,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3243,7 +3243,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.Inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3276,7 +3276,7 @@
               "name": "CircuitCardinality",
               "class": "CircuitCardinality",
               "args": {},
-              "module": "modules.circuits.CircuitCardinality",
+              "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
               "requirements": [],
               "submodules": [
                 {
@@ -3299,7 +3299,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3328,7 +3328,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3357,7 +3357,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3400,7 +3400,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3429,7 +3429,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3458,7 +3458,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3493,7 +3493,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3522,7 +3522,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3561,7 +3561,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3590,7 +3590,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.Inference",
                       "requirements": [
                         {
                           "name": "numpy",

@@ -20,12 +20,12 @@ from modules.Core import Core
 
 class SimulatedAnnealingSampler(Device):
     """
-    Class for D-Waves neal simulated annealer
+    Class for D-Waves neal simulated annealer.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__(device_name="simulated annealer")
         self.device = dwave.samplers.SimulatedAnnealingSampler()
@@ -34,28 +34,25 @@ class SimulatedAnnealingSampler(Device):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "dwave-samplers",
-                "version": "1.3.0"
-            }
-        ]
+        return [{"name": "dwave-samplers", "version": "1.3.0"}]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
+        return {}
 
-        }
+    def get_default_submodule(self, option: str) -> None:
+        """
+        Raises ValueError as this module has no submodules.
 
-    def get_default_submodule(self, option: str) -> Core:
+        :param option: Option name
+        :raises ValueError: If called, since this module has no submodules
+        """
         raise ValueError("This module has no submodules.")

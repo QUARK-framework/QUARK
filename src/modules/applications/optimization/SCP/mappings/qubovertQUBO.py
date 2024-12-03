@@ -12,9 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from typing import TypedDict
+
 from qubovert.problems import SetCover
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -25,7 +27,7 @@ class QubovertQUBO(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
@@ -33,36 +35,29 @@ class QubovertQUBO(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "qubovert",
-                "version": "1.2.5"
-            }
-        ]
+        return [{"name": "qubovert", "version": "1.2.5"}]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary containing configurable settings
+        .. code-block:: python
 
-                      return {
-                          "penalty_weight": {
-                              "values": [2, 5, 10, 25, 50, 100],
-                              "custom_input": True,
-                              "custom_range": True,
-                              "postproc": float,
-                              "description": "Please choose the weight of the penalties in the QUBO representation of
-                              the problem"
-                          }
-                      }
-
+            return {
+                "penalty_weight": {
+                    "values": [2, 5, 10, 25, 50, 100],
+                    "custom_input": True,
+                    "custom_range": True,
+                    "postproc": float,
+                    "description": "Please choose the weight of the penalties in the QUBO representation of
+                    the problem"
+                }
+            }
         """
         return {
             "penalty_weight": {
@@ -76,7 +71,7 @@ class QubovertQUBO(Mapping):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -85,17 +80,14 @@ class QubovertQUBO(Mapping):
         """
         penalty_weight: float
 
-    def map(self, problem: tuple, config: Config) -> (dict, float):
+    def map(self, problem: tuple, config: Config) -> tuple[dict, float]:
         """
         Maps the SCP to a QUBO matrix.
 
-        :param problem: tuple containing the set of all elements of an instance and a list of subsets each covering some
-         of these elements
-        :type problem: tuple
-        :param config: config with the parameters specified in Config class
-        :type config: Config
-        :return: dict with QUBO matrix, time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: Tuple containing the set of all elements of an instance and a list of subsets,
+                        each covering some of these elements
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with QUBO matrix, time it took to map it
         """
         start = start_time_measurement()
         penalty_weight = config['penalty_weight']
@@ -107,17 +99,17 @@ class QubovertQUBO(Mapping):
 
         logging.info(f"Converted to QUBO with {self.SCP_qubo.num_binary_variables} Variables.")
 
-        # now we need to convert it to the right format to be accepted by Braket / Dwave
+        # Convert it to the right format to be accepted by Braket / Dwave
         q_dict = {}
 
         for key, val in self.SCP_qubo.items():
-            # interaction (quadratic) terms
+            # Interaction (quadratic) terms
             if len(key) == 2:
                 if (key[0], key[1]) not in q_dict:
                     q_dict[(key[0], key[1])] = float(val)
                 else:
                     q_dict[(key[0], key[1])] += float(val)
-            # local (linear) fields
+            # Local (linear) fields
             elif len(key) == 1:
                 if (key[0], key[0]) not in q_dict:
                     q_dict[(key[0], key[0])] = float(val)
@@ -126,21 +118,26 @@ class QubovertQUBO(Mapping):
 
         return {"Q": q_dict}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (set, float):
+    def reverse_map(self, solution: dict) -> tuple[set, float]:
         """
         Maps the solution of the QUBO to a set of subsets included in the solution.
 
         :param solution: QUBO matrix in dict form
-        :type solution: dict
-        :return: tuple with set of subsets that are part of the solution and the time it took to map it
-        :rtype: tuple(set, float)
+        :return: Tuple with set of subsets that are part of the solution and the time it took to map it
         """
         start = start_time_measurement()
         sol = self.SCP_problem.convert_solution(solution)
+
         return sol, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
             return Annealer()

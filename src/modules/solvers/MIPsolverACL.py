@@ -30,7 +30,8 @@
 from typing import TypedDict
 import pulp
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -41,7 +42,7 @@ class MIPaclp(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Local"]
@@ -49,19 +50,19 @@ class MIPaclp(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "pulp",
-                "version": "2.9.0"
-            },
-        ]
+        return [{"name": "pulp", "version": "2.9.0"},]
 
-    def get_default_submodule(self, option: str) -> any:
+    def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415
             return Local()
@@ -70,35 +71,28 @@ class MIPaclp(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns empty dict as this solver has no configurable settings
+        Returns empty dictionary as this solver has no configurable settings.
 
-        :return: empty dict
-        :rtype: dict
+        :return: Empty dict
         """
-        return {
-
-        }
+        return {}
 
     class Config(TypedDict):
         """
-        Empty config as this solver has no configurable settings
+        Empty config as this solver has no configurable settings.
         """
         pass
 
-    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) \
+            -> tuple[dict, float, dict]:
         """
-        Solve the ACL problem as a mixed integer problem (MIP)
+        Solve the ACL problem as a mixed integer problem (MIP).
 
-        :param mapped_problem: linear problem in form of a dictionary
-        :type mapped_problem: dict
+        :param mapped_problem: Linear problem in form of a dictionary
         :param device_wrapper: Local device
-        :type device_wrapper: any
-        :param config: empty dict
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param config: Empty dict
+        :param kwargs: No additionally settings needed
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(dict, float, dict)
         """
         # Convert dict of problem instance to LP problem
         _, problem_instance = pulp.LpProblem.from_dict(mapped_problem)
@@ -112,4 +106,5 @@ class MIPaclp(Solver):
         for v in problem_instance.variables():
             variables[v.name] = v.varValue
             solution_data["variables"] = variables
+
         return solution_data, end_time_measurement(start), {}

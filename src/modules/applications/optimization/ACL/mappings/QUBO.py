@@ -14,58 +14,53 @@
 
 from typing import TypedDict
 import re
+import logging
 
 import numpy as np
 from qiskit_optimization import QuadraticProgram
-from qiskit_optimization.converters import (QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary,
-                                            LinearEqualityToPenalty)
+from qiskit_optimization.converters import (
+    QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary,
+    LinearEqualityToPenalty
+)
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+
+# TODO Large chunks of this code is duplicated in ACL.mappings.ISING -> unify
 
 
 class Qubo(Mapping):
     """
     QUBO formulation for the ACL.
-
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["Annealer"]
-        self.global_variables = 0
+        self.global_variables = []
 
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            },
-            {
-                "name": "qiskit-optimization",
-                "version": "0.6.1"
-            },
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "qiskit-optimization", "version": "0.6.1"},
         ]
 
-    def get_parameter_options(self):
+    def get_parameter_options(self) -> dict:
         """
         Returns empty dict as this mapping has no configurable settings.
 
-        :return: empty dictionary
-        :rtype: dict
+        :return: Empty dictionary
         """
-        return {
-        }
+        return {}
 
     class Config(TypedDict):
         """
@@ -73,18 +68,17 @@ class Qubo(Mapping):
         """
         pass
 
-    def map_pulp_to_qiskit(self, problem: any):
+    def map_pulp_to_qiskit(self, problem: dict) -> QuadraticProgram:
         """
         Maps the problem dict to a quadratic program.
 
         :param problem: Problem formulation in dict form
-        :type problem: dict
-        :return: quadratic program in qiskit-optimization format
-        :rtype: QuadraticProgram
+        :return: Quadratic program in qiskit-optimization format
         """
         # Details at:
         # https://coin-or.github.io/pulp/guides/how_to_export_models.html
         # https://qiskit.org/documentation/stable/0.26/tutorials/optimization/2_converters_for_quadratic_programs.html
+
         qp = QuadraticProgram()
 
         # Variables
@@ -101,10 +95,7 @@ class Qubo(Mapping):
                     qp.integer_var(lowerbound=lb, upperbound=ub, name=name)
 
         # Objective function
-        # Arguments:
-        obj_arguments = {}
-        for arg in problem["objective"]["coefficients"]:
-            obj_arguments[arg["name"]] = arg["value"]
+        obj_arguments = {arg["name"]: arg["value"] for arg in problem["objective"]["coefficients"]}
 
         # Maximize
         if problem["parameters"]["sense"] == -1:
@@ -115,37 +106,35 @@ class Qubo(Mapping):
 
         # Constraints
         for constraint in problem["constraints"]:
-            const_arguments = {}
-            for arg in constraint["coefficients"]:
-                const_arguments[arg["name"]] = arg["value"]
+            const_arguments = {arg["name"]: arg["value"] for arg in constraint["coefficients"]}
             sense = constraint["sense"]
-            if sense == -1:
-                const_sense = "LE"
-            elif sense == 1:
-                const_sense = "GE"
-            else:
-                const_sense = "E"
-            qp.linear_constraint(linear=const_arguments, sense=const_sense, rhs=-1 * constraint["constant"],
-                                 name=constraint["name"])
+            const_sense = "LE" if sense == -1 else "GE" if sense == 1 else "E"
+
+            qp.linear_constraint(
+                linear=const_arguments,
+                sense=const_sense,
+                rhs=-1 * constraint["constant"],
+                name=constraint["name"]
+            )
+
         return qp
 
-    def convert_string_to_arguments(self, input_string: str):
+    def convert_string_to_arguments(self, input_string: str) -> list[any]:
         """
-        Converts QUBO in string format to a list of separated arguments, used to construct the QUBO matrix.
+        Converts QUBO in string format to a list of separated arguments,
+        used to construct the QUBO matrix.
 
         :param input_string: QUBO in raw string format
-        :type input_string: str
-        :return: list of arguments
-        :rtype: list
+        :return: List of arguments
         """
         terms = re.findall(r'[+\-]?[^+\-]+', input_string)
         # Convert the penalty string to a list of lists of the individual arguments in the penalty term
         result = [term.strip() for term in terms]
         separated_arguments = []
         first_item = True
-        # Loop over all arguments in the penalty
+
         for argument in result:
-            if first_item is True:
+            if first_item:
                 # Remove "maximize" or minimize string from the first argument
                 argument = argument[8:]
                 first_item = False
@@ -155,25 +144,22 @@ class Qubo(Mapping):
                 # Convert string of numbers to floats
                 new_argument = elements[0].strip()
                 # Remove empty strings
-                new_argument = [int(new_argument.replace(" ", "")) if new_argument.replace(" ", "").isdigit() else
-                                float(new_argument.replace(" ", ""))]
-                for el in elements[1:]:
-                    new_argument += [el.strip()]
+                new_argument = [int(new_argument.replace(" ", "")) if new_argument.replace(" ", "").isdigit()
+                                else float(new_argument.replace(" ", ""))]
+                new_argument += [el.strip() for el in elements[1:]]
                 separated_arguments.append(new_argument)
             else:
                 separated_arguments.append(argument)
+
         return separated_arguments
 
-    def construct_qubo(self, penalty: list[list], variables: list):
+    def construct_qubo(self, penalty: list[list], variables: list[str]) -> np.ndarray:
         """
-        Creates QUBO matrix Q to solve linear problem of the form x^T * Q + x
+        Creates QUBO matrix Q to solve linear problem of the form x^T * Q + x.
 
-        :param penalty: list of lists containing all non-zero elements of the QUBO matrix as strings
-        :type penalty: list
-        :param variables: listing of all variables used in the problem
-        :type variables: list
+        :param penalty: List of lists containing all non-zero elements of the QUBO matrix as strings
+        :param variables: Listing of all variables used in the problem
         :return: QUBO in numpy array format
-        :rtype: array
         """
         # Create empty qubo matrix
         count_variables = len(variables)
@@ -185,91 +171,103 @@ class Qubo(Mapping):
                 # Save the parameters (values in the qubo)
                 parameter = 0
                 for argument in penalty:
-                    if type(argument) is list:
+                    if isinstance(argument, list):
                         # squared variables in diagonals (x^2 == x)
-                        if len(argument) == 2:
-                            if any(isinstance(elem, str) and variable in elem for elem in argument) and col == row:
-                                parameter += argument[0]
+                        if (
+                            len(argument) == 2
+                            and any(isinstance(elem, str) and variable in elem for elem in argument)
+                            and col == row
+                        ):
+                            parameter += argument[0]
                         # Multiplication of different variables not on diagonal
-                        if len(argument) == 3:
-                            if variable in argument and variable2 in argument and variable > variable2:
-                                parameter += argument[0]
-                                # this value is already taking into account the factor 2 from quadratic term
-                    # For the variables on the diagonal, if the parameter is zero, we still have to check the sign in
-                    # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
-                    elif type(argument) is str:
-                        if variable in argument and variable2 in argument and variable == variable2:
-                            if "-" in argument:
-                                parameter += -1
+                        if (
+                            len(argument) == 3
+                            and variable in argument and variable2 in argument and variable > variable2
+                        ):
+                            parameter += argument[0]
+                            # This value is already taking into account the factor 2 from quadratic term
+                            # For the variables on the diagonal, if the parameter is zero
+                            # We still have to check the sign in
+                            # front of the decision variable. If it is "-", we have to put "-1" on the diagonal.
+                    elif (isinstance(argument, str) and variable in argument
+                          and variable2 in argument and variable == variable2):
+                        if "-" in argument:
+                            parameter += -1
+
                 qubo[col, row] = parameter
+
         # Minimization problem
         qubo = -qubo.astype(int)
 
         return qubo
 
-    def map(self, problem: any, config: Config) -> (dict, float):
+    def map(self, problem: dict, config: Config) -> tuple[dict, float]:
         """
-        Use Ising mapping of qiskit-optimize
-        Converts linear program created with pulp to quadratic program to Ising with qiskit to QUBO matrix
+        Converts linear program created with pulp to quadratic program to Ising with qiskit to QUBO matrix.
 
-        :param config: config with the parameters specified in Config class
-        :type config: Config
-        :return: dict with the QUBO, time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: Dict containing the problem parameters
+        :param config: Config with the parameters specified in Config class
+        :return: Dict with the QUBO, time it took to map it
         """
         start = start_time_measurement()
 
         # Map Linear problem from dictionary (generated by pulp) to quadratic program to QUBO
         qp = self.map_pulp_to_qiskit(problem)
-        # print(qp.prettyprint())
         logging.info(qp.export_as_lp_string())
+
         ineq2eq = InequalityToEquality()
         qp_eq = ineq2eq.convert(qp)
+
         int2bin = IntegerToBinary()
         qp_eq_bin = int2bin.convert(qp_eq)
+
         lineq2penalty = LinearEqualityToPenalty(100)
         qubo = lineq2penalty.convert(qp_eq_bin)
 
-        # get variables
-        variables = []
-        for variable in qubo.variables:
-            variables.append(variable.name)
+        variables = [variable.name for variable in qubo.variables]
 
         # convert penalty term to string to QUBO
         qubo_string = str(qubo.objective)
         arguments = self.convert_string_to_arguments(qubo_string)
-        qubo = self.construct_qubo(arguments, variables)
+        qubo_matrix = self.construct_qubo(arguments, variables)
 
         self.global_variables = variables
 
-        return {"Q": qubo}, end_time_measurement(start)
+        return {"Q": qubo_matrix}, end_time_measurement(start)
 
-    def reverse_map(self, solution: dict) -> (dict, float):
+    def reverse_map(self, solution: dict) -> tuple[dict, float]:
         """
         Maps the solution back to the representation needed by the ACL class for validation/evaluation.
 
         :param solution: bit_string containing the solution
-        :type solution: dict
-        :return: solution mapped accordingly, time it took to map it
-        :rtype: tuple(dict, float)
+        :return: Solution mapped accordingly, time it took to map it
         """
         start = start_time_measurement()
+
         result = {"status": [0]}
         objective_value = 0
         variables = {}
         for bit in solution:
-            if solution[bit] > 0:
+            if solution[bit] > 0 and "x" in self.global_variables[bit]:
                 # We only care about assignments of vehicles to platforms:
                 # We map the solution to the original variables
-                if "x" in self.global_variables[bit]:
-                    variables[self.global_variables[bit]] = solution[bit]
-                    result["status"] = 'Optimal'  # TODO: I do not think every solution with at least one car is optimal
-                    objective_value += solution[bit]
+                variables[self.global_variables[bit]] = solution[bit]
+                result["status"] = 'Optimal'  # TODO: I do not think every solution with at least one car is optimal
+                objective_value += solution[bit]
+
         result["variables"] = variables
         result["obj_value"] = objective_value
+
         return result, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "Annealer":
             from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
             return Annealer()

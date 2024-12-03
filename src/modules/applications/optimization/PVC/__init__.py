@@ -12,4 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for PVC"""
+"""
+Module for PVC mappings.
+
+This module initializes the PVC mapping packages
+"""

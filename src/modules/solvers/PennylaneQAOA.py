@@ -11,6 +11,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
 import ast
 import inspect
 import json
@@ -26,7 +27,8 @@ import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -37,49 +39,44 @@ class PennylaneQAOA(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
-        self.submodule_options = ["arn:aws:braket:::device/quantum-simulator/amazon/sv1",
-                                  "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
-                                  "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
-                                  "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
-                                  "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
-                                  "braket.local.qubit",
-                                  "default.qubit",
-                                  "default.qubit.autograd",
-                                  "qulacs.simulator",
-                                  "lightning.gpu",
-                                  "lightning.qubit"]
+        self.submodule_options = [
+            "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+            "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+            "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+            "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+            "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+            "braket.local.qubit",
+            "default.qubit",
+            "default.qubit.autograd",
+            "qulacs.simulator",
+            "lightning.gpu",
+            "lightning.qubit"
+        ]
 
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [
-            {
-                "name": "pennylane",
-                "version": "0.37.0"
-            },
-            {
-                "name": "pennylane-lightning",
-                "version": "0.38.0"
-            },
-            {
-                "name": "amazon-braket-pennylane-plugin",
-                "version": "1.30.0"
-            },
-            {
-                "name": "numpy",
-                "version": "1.26.4"
-            }
+            {"name": "pennylane", "version": "0.37.0"},
+            {"name": "pennylane-lightning", "version": "0.38.0"},
+            {"name": "amazon-braket-pennylane-plugin", "version": "1.30.0"},
+            {"name": "numpy", "version": "1.26.4"}
         ]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
             from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
@@ -119,33 +116,33 @@ class PennylaneQAOA(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
-        :return:
-                 .. code-block:: python
+        :return: Dictionary of configuration settings
+        .. code-block:: python
 
-                              return {
-                                        "shots": {  # number measurements to make on circuit
-                                            "values": list(range(10, 500, 30)),
-                                            "description": "How many shots do you need?"
-                                        },
-                                        "iterations": {  # number measurements to make on circuit
-                                            "values": [1, 10, 20, 50, 75],
-                                            "description": "How many iterations do you need?"
-                                        },
-                                        "layers": {
-                                            "values": [2, 3, 4],
-                                            "description": "How many layers for QAOA do you want?"
-                                        },
-                                        "coeff_scale": {
-                                            "values": [0.01, 0.1, 1, 10],
-                                            "description": "How do you want to scale your coefficients?"
-                                        },
-                                        "stepsize": {
-                                            "values": [0.0001, 0.001, 0.01, 0.1, 1],
-                                            "description": "Which stepsize do you want?"
-                                        }
-                                    }
+                    return {
+                            "shots": {  # number measurements to make on circuit
+                                "values": list(range(10, 500, 30)),
+                                "description": "How many shots do you need?"
+                            },
+                            "iterations": {  # number measurements to make on circuit
+                                "values": [1, 10, 20, 50, 75],
+                                "description": "How many iterations do you need?"
+                            },
+                            "layers": {
+                                "values": [2, 3, 4],
+                                "description": "How many layers for QAOA do you want?"
+                            },
+                            "coeff_scale": {
+                                "values": [0.01, 0.1, 1, 10],
+                                "description": "How do you want to scale your coefficients?"
+                            },
+                            "stepsize": {
+                                "values": [0.0001, 0.001, 0.01, 0.1, 1],
+                                "description": "Which stepsize do you want?"
+                            }
+                        }
 
         """
         return {
@@ -173,7 +170,7 @@ class PennylaneQAOA(Solver):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -197,71 +194,58 @@ class PennylaneQAOA(Solver):
         """
         Not used currently, as I just scale the coefficients in the qaoa_operators_from_ising.
 
-        :param data:
-        :type data: any
-        :param scale:
-        :type scale: float
+        :param data: Data to normalize
+        :param scale: Scaling factor
         :return: Normalized data
-        :rtype: any
         """
         return scale * data / np.max(np.abs(data))
 
     @staticmethod
-    def qaoa_operators_from_ising(J: any, t: any, scale: float = 1.0) -> (any, any):
+    def qaoa_operators_from_ising(j: any, t: any, scale: float = 1.0) -> tuple[any, any]:
         """
-        Generates pennylane cost and mixer hamiltonians from the Ising matrix J and vector t.
+        Generates pennylane cost and mixer Hamiltonians from the Ising matrix J and vector t.
 
-        :param J: J matrix
-        :type J: any
+        :param j: J matrix
         :param t: t vector
-        :type t: any
-        :param scale:
-        :type scale: float
-        :return:
-        :rtype: tuple(any, any)
+        :param scale: Scaling factor
+        :return: Cost Hamiltonian and mixer Hamiltonian
         """
-        # we define the scaling factor as scale * the maximum parameter found in the coefficients
-        scaling_factor = scale * max(np.max(np.abs(J.flatten())), np.max(np.abs(t)))
-        # we scale the coefficients
-        J /= scaling_factor
+        # Define the scaling factor
+        scaling_factor = scale * max(np.max(np.abs(j.flatten())), np.max(np.abs(t)))
+
+        # Scale the coefficients
+        j /= scaling_factor
         t /= scaling_factor
 
         sigzsigz_arr = [
-            qml.PauliZ(i) @ qml.PauliZ(j) for i in range(len(J))
-             for j in range(len(J))
-             ]
+            qml.PauliZ(i) @ qml.PauliZ(k) for i in range(len(j)) for k in range(len(j))
+        ]
 
         sigz_arr = [qml.PauliZ(i) for i in range(len(t))]
-        J_real = np.real(J.flatten())
+        j_real = np.real(j.flatten())
         t_real = np.real(t)
-        h_cost = qml.simplify(qml.Hamiltonian([*t_real, *J_real.flatten()], [*sigz_arr, *sigzsigz_arr]))
+        h_cost = qml.simplify(qml.Hamiltonian([*t_real, *j_real.flatten()], [*sigz_arr, *sigzsigz_arr]))
 
-        # definition of the mixer hamiltonian
-        h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(J)))
+        # Definition of the mixer hamiltonian
+        h_mixer = -1 * qml.qaoa.mixers.x_mixer(range(len(j)))
 
         return h_cost, h_mixer
 
     # pylint: disable=R0915
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (any, any, float):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[any, float, dict]:
         """
         Runs Pennylane QAOA on the Ising problem.
 
-        :param mapped_problem: Ising
-        :type mapped_problem: any
-        :param device_wrapper:
-        :type device_wrapper: any
-        :param config:
-        :type config: Config
-        :param kwargs: contains store_dir for the plot of the optimization
-        :type kwargs: any
+        :param mapped_problem: Dict containing problem parameters mapped to the Ising model
+        :param device_wrapper: Device to run the problem on
+        :param config: QAOA solver settings
+        :param kwargs: Contains store_dir for the plot of the optimization
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
-
-        J = mapped_problem['J']
+        j = mapped_problem['J']
         t = mapped_problem['t']
-        wires = J.shape[0]
-        cost_h, mixer_h = self.qaoa_operators_from_ising(J, t, scale=config['coeff_scale'])
+        wires = j.shape[0]
+        cost_h, mixer_h = self.qaoa_operators_from_ising(j, t, scale=config['coeff_scale'])
 
         # set up the problem
         try:
@@ -291,13 +275,13 @@ class PennylaneQAOA(Solver):
             if device_wrapper.device == 'qulacs.simulator':
                 dev = qml.device(device_wrapper.device, wires=wires, shots=config['shots'], gpu=True)
             elif device_wrapper.device in ['lightning.qubit', 'lightning.gpu']:
-                # no number shots as diff method will be adjoint backprop for these devices
+                # No number shots as diff method will be adjoint backprop for these devices
                 if diff_method in ["adjoint", "backprop"]:
                     dev = qml.device(device_wrapper.device, wires=wires, shots=None, batch_obs=True)
                 else:
                     dev = qml.device(device_wrapper.device, wires=wires, batch_obs=True, shots=config['shots'])
             elif device_wrapper.device == 'default.qubit':
-                # no number shots as diff method will be adjoint backprop for these devices
+                # No number shots as diff method will be adjoint backprop for these devices
                 if diff_method in ["adjoint", "backprop"]:
                     dev = qml.device(device_wrapper.device, shots=None, wires=wires)
                 else:
@@ -351,19 +335,14 @@ class PennylaneQAOA(Solver):
 
         # Optimization Loop
         optimizer = qml.GradientDescentOptimizer(stepsize=config['stepsize'])
-        # optimizer = qml.MomentumOptimizer(stepsize=config['stepsize'], momentum=0.9)
-        # optimizer = qml.QNSPSAOptimizer(stepsize=config['stepsize'])
         logging.info(f"Device: {device_wrapper.device}, Optimizer {optimizer}, Differentiation: {diff_method}, "
                      f"Optimization start...")
 
         additional_solver_information = {}
-        min_param = None
-        min_cost = None
-        cost_pt = []
-        params_list = []
-        x = []
+        min_param, min_cost, cost_pt, params_list, x = None, None, [], [], []
         run_id = round(time())
         start = start_time_measurement()
+
         for iteration in range(config['iterations']):
             t0 = start_time_measurement()
             # Evaluates the cost, then does a gradient step to new params
@@ -375,12 +354,14 @@ class PennylaneQAOA(Solver):
                 logging.error(e)
                 logging.error("Run a smaller problem size or select another device.")
                 raise e
+
             # Convert cost_before to a float, so it's easier to handle
             cost_before = float(cost_before)
             if iteration == 0:
                 logging.info(f"Initial cost: {cost_before}")
             else:
                 logging.info(f"Cost at step {iteration}: {cost_before}")
+
             # Log the current loss as a metric
             logging.info(f"Time to complete iteration {iteration + 1}: {end_time_measurement(t0)}")
             cost_pt.append(cost_before)
@@ -403,7 +384,6 @@ class PennylaneQAOA(Solver):
                 plt.clf()
 
         params = min_param
-
         logging.info(f"Final params: {params}")
         logging.info(f"Final costs: {min_cost}")
 
@@ -435,7 +415,6 @@ class PennylaneQAOA(Solver):
             best_bitstring = max(probs, key=probs.get)
             return best_bitstring, probs
 
-        best_bitstring, probs = None, None
         if config['shots'] is None or diff_method in ["backprop", "adjoint"]:
             best_bitstring, probs = evaluate_params_probs(params)
         else:
@@ -458,7 +437,7 @@ class PennylaneQAOA(Solver):
             bitstring_list.append(bitstring)
 
         # Save the cost, best bitstring, variational parameters per iteration as well as the final prob. distribution
-        # TODO: Maybe this can be done more efficient, e.g. only saving the circuit and its weights?
+        # TODO: Maybe this can be done more efficient, e.g., only saving the circuit and its weights?
         json_data = {
             'cost': cost_pt,
             'bitstrings': bitstring_list,
@@ -474,27 +453,24 @@ class PennylaneQAOA(Solver):
 
 def monkey_init_array(self):
     """
-    Here we create the timings array where we later append the quantum timings
-    :param self:
-    :return:
+    Here we create the timings array where we later append the quantum timings.
     """
     self.timings = []
 
 
 def _pseudo_decor(fun, device):
     """
-    Massive shoutout to this guy: https://stackoverflow.com/a/25827070/10456906
-    We use this decorator for measuring execute and batch_execute
+    We use this decorator for measuring execute and batch_execute.
     """
 
-    # magic sauce to lift the name and doc of the function
+    # Lift the name and doc of the function
     @wraps(fun)
     def ret_fun(*args, **kwargs):
-        # pre function execution stuff here
+        # Pre function execution here
         from time import time  # pylint: disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
-        # post execution stuff here
+        # Post execution here
         device.timings.append(round(time() * 1000 - start_timing, 3))
         return returned_value
 

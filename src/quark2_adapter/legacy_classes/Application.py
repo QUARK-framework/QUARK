@@ -20,13 +20,15 @@ from utils import _get_instance_with_sub_options
 
 class Application(ABC):
     """
-    The application component defines the workload, comprising a dataset of increasing complexity, a validation, and an
-    evaluation function.
+    The application component defines the workload, comprising a dataset of increasing complexity,
+    a validation, and an evaluation function.
     """
 
-    def __init__(self, application_name):
+    def __init__(self, application_name: str):
         """
-        Constructor method
+        Constructor method.
+
+        :param application_name: Name of the application
         """
         self.application_name = application_name
         self.application = None
@@ -41,10 +43,9 @@ class Application(ABC):
 
     def get_application(self) -> any:
         """
-        Getter that returns the application
+        Getter that returns the application.
 
-        :return: self.application
-        :rtype: any
+        :return: The application instance
         """
         return self.application
 
@@ -54,7 +55,6 @@ class Application(ABC):
         Method to return the unit of the evaluation which is used to make the plots nicer.
 
         :return: String with the unit
-        :rtype: str
         """
 
     @abstractmethod
@@ -78,23 +78,22 @@ class Application(ABC):
             }
 
         :return: Available application settings for this application
-        :rtype: dict
         """
         pass
 
     def regenerate_on_iteration(self, config: dict) -> bool:
-        """Overwrite this to return True if the problem should be newly generated
+        """
+        Overwrite this to return True if the problem should be newly generated
         on every iteration. Typically, this will be the case if the problem is taken
         from a statistical ensemble e.g. an erdos-renyi graph.
-        :param config: the application configuration
-        :type config: dict
-        :return: whether the problem should be recreated on every iteration. Returns False if not overwritten.
-        :rtype: bool
+
+        :param config: The application configuration
+        :return: Whether the problem should be recreated on every iteration. Returns False if not overwritten.
         """
         return False
 
     @final
-    def init_problem(self, config, conf_idx: int, iter_count: int, path):
+    def init_problem(self, config: dict, conf_idx: int, iter_count: int, path: str) -> any:
         """
         This method is called on every iteration and calls generate_problem if necessary.
         conf_idx identifies the application configuration.
@@ -106,17 +105,11 @@ class Application(ABC):
         over the different application configurations (conf_idx).
 
         :param config: the application configuration
-        :type config: dict
         :param conf_idx: the index of the application configuration
-        :conf_idx: int
         :param iter_count: the repetition count (starting with 1)
-        :type iter_count: int
         :param path: the path used to save each newly generated problem instance
-        :type path: str
         :return: the current problem instance
-        :rtype: any
         """
-
         if conf_idx != self.conf_idx:
             self.problems = {}
             self.conf_idx = conf_idx
@@ -135,65 +128,49 @@ class Application(ABC):
         """
         Depending on the config this method creates a concrete problem and returns it.
 
-        :param config:
-        :type config: dict
-        :param iter_count: the iteration count
-        :type iter_count: int
-        :return:
-        :rtype: any
+        :param config: The application configuration
+        :param iter_count: The iteration count
+        :return: The generated problem instance
         """
         pass
 
-    def process_solution(self, solution) -> (any, float):
+    def process_solution(self, solution) -> tuple[any, float]:
         """
         Most of the time the solution has to be processed before it can be validated and evaluated
         This might not be necessary in all cases, so the default is to return the original solution.
 
-        :param solution:
-        :type solution: any
+        :param solution: The solution to be processed
         :return: Processed solution and the execution time to process it
-        :rtype: tuple(any, float)
-
         """
         return solution, 0
 
     @abstractmethod
-    def validate(self, solution) -> (bool, float):
+    def validate(self, solution) -> tuple[bool, float]:
         """
-        Check if the solution is a valid solution.
+        Check if the solution is valid.
 
-        :return: bool and the time it took to create it
-        :param solution:
-        :type solution: any
-        :rtype: tuple(bool, float)
-
+        :param solution: The solution to validate
+        :return: Boolean indicating if the solution is valid and the time it took to create it
         """
         pass
 
     @abstractmethod
-    def evaluate(self, solution: any) -> (float, float):
+    def evaluate(self, solution: any) -> tuple[float, float]:
         """
         Checks how good the solution is to allow comparison to other solutions.
 
-        :param solution:
-        :type solution: any
+        :param solution: The solution to evaluate
         :return: Evaluation and the time it took to create it
-        :rtype: tuple(any, float)
-
         """
         pass
 
     @abstractmethod
     def save(self, path: str, iter_count: int) -> None:
         """
-        Function to save the concrete problem.
+        Save the concrete problem.
 
-        :param path: path of the experiment directory for this run
-        :type path: str
+        :param path: Path of the experiment directory for this run
         :param iter_count: the iteration count
-        :type iter_count: int
-        :return:
-        :rtype: None
         """
         pass
 
@@ -202,10 +179,8 @@ class Application(ABC):
         If self.sub_options is not None, a mapping is instantiated according to the information given in
         self.sub_options. Otherwise, get_mapping is called as fall back.
 
-        :param mapping_option: String with the option
-        :type mapping_option: str
+        :param mapping_option: The option for the mapping
         :return: instance of a mapping class
-        :rtype: any
         """
         if self.sub_options is None:
             return self.get_mapping(mapping_option)
@@ -219,20 +194,17 @@ class Application(ABC):
         self.sub_options is None. See get_submodule.
 
         :param mapping_option: String with the option
-        :rtype: str
-        :return: instance of a mapping class
-        :rtype: any
+        :return: Instance of a mapping class
         """
         pass
 
     def get_available_mapping_options(self) -> list:
         """
-        Get list of available mapping options.
+        Gets the list of available mapping options.
 
         :return: list of mapping options
-        :rtype: list
         """
         if self.sub_options is None:
             return self.mapping_options
         else:
-            return [o["name"] for o in self.sub_options]
+            return [option["name"] for option in self.sub_options]

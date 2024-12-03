@@ -14,11 +14,10 @@
 
 from typing import TypedDict
 
-import networkx
-import numpy as np
+import networkx as nx
 import pulser
 
-from modules.applications.Mapping import *
+from modules.applications.Mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -29,7 +28,7 @@ class NeutralAtom(Mapping):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["NeutralAtomMIS"]
@@ -37,63 +36,54 @@ class NeutralAtom(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of requirements of this module
         """
-        return [
-            {
-                "name": "pulser",
-                "version": "0.19.0"
-           }
-        ]
+        return [{"name": "pulser", "version": "0.19.0"}]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
 
-        :return:
-                 .. code-block:: python
-
-                     return {}
-
+        :return: Empty dictionary, as this mapping has no configurable settings
         """
         return {}
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
-
-        .. code-block:: python
-            pass
+        Configuration options for Neutral Atom MIS mapping.
         """
         pass
 
-    def map(self, problem: networkx.Graph, config: Config) -> (dict, float):
+    def map(self, problem: nx.Graph, config: Config) -> tuple[dict, float]:
         """
         Maps the networkx graph to a neutral atom MIS problem.
 
-        :param problem: networkx graph
-        :type problem: networkx.Graph
-        :param config: config with the parameters specified in Config class
-        :type config: Config
-        :return: dict with neutral MIS, time it took to map it
-        :rtype: tuple(dict, float)
+        :param problem: Networkx graph representing the MIS problem
+        :param config: Config with the parameters specified in Config class
+        :return: Tuple containing a dictionary with the neutral MIS and time it took to map it
         """
         start = start_time_measurement()
 
-        pos = networkx.get_node_attributes(problem, 'pos')
+        pos = nx.get_node_attributes(problem, 'pos')
         register = pulser.Register(pos)
 
         neutral_atom_problem = {
             'graph': problem,
             'register': register
         }
+
         return neutral_atom_problem, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "NeutralAtomMIS":
             from modules.solvers.NeutralAtomMIS import NeutralAtomMIS  # pylint: disable=C0415
             return NeutralAtomMIS()

@@ -85,33 +85,43 @@ Example for an application, which should reside under ``src/modules/applications
 
 .. code-block:: python
 
-        from modules.applications.Application import *
+        from modules.applications.Application import Application, Core
         from utils import start_time_measurement, end_time_measurement
-
-
+        from typing import TypedDict
 
         class MyApplication(Application):
+            """
+            MyApplication is an example of how to create a new application module in the Quark framework.
+            """
 
 
             def __init__(self):
+                """
+                Initializes the MyApplication class.
+                """
                 super().__init__("MyApplication")
                 self.submodule_options = ["submodule1"]
 
             @staticmethod
             def get_requirements() -> list:
+                """
+                Returns a list of requirements for the application.
+
+                :returns: A list of dictionaries containing the name and version of required packages
+                """
                 return [
-                    {
-                        "name": "networkx",
-                        "version": "3.2.1"
-                    },
-                    {
-                        "name": "numpy",
-                        "version": "1.26.4"
-                    }
+                    {"name": "networkx", "version": "3.2.1"},
+                    {"name": "numpy", "version": "1.26.4"}
                 ]
 
             def get_default_submodule(self, option: str) -> Core:
+                """
+                Given an option string by the user, this returns a submodule.
 
+                :param option: String with the chosen submodule
+                :return: Module of type Core
+                :raises NotImplementedError: If the option is not recognized
+                """
                 if option == "submodule1":
                     return Submodule1()
 
@@ -119,7 +129,9 @@ Example for an application, which should reside under ``src/modules/applications
                     raise NotImplementedError(f"Submodule Option {option} not implemented")
 
             def get_parameter_options(self):
-
+                """
+                Returns the parameter options for the application.
+                """
                 return {
                     "size": {
                         "values": [3, 4, 6, 8, 10, 14, 16],
@@ -136,19 +148,34 @@ Example for an application, which should reside under ``src/modules/applications
                 }
 
             class Config(TypedDict):
+                """
+                A configuration dictionary for the application.
+                """
                 size: int
                 factor: float
 
-            def preprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+            def preprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
+                """
+                Generate data that gets passed to the next submodule.
 
-                # Generate data that gets passed to the next submodule
+                :param input_data: The input data for preprocessing
+                :param config: The configuration dictionary
+                :param **kwargs: Additional keyword arguments
+                :return: A tuple containing the preprocessed output and the time taken for preprocessing
+                """
                 start = start_time_measurement()
                 output = self.generate_problem(config)
                 return output, end_time_measurement(start)
 
-            def postprocess(self, input_data: any, config: dict, **kwargs) -> (any, float):
+            def postprocess(self, input_data: any, config: dict, **kwargs) -> tuple[any, float]:
+                """
+                Processes data passed to this module from the submodule.
 
-                # Process data passed to this module from the submodule
+                :param input_data: The input data for postprocessing
+                :param config: The configuration dictionary
+                :param **kwargs: Additional keyword arguments
+                :returns: A tuple containing the processed solution quality and the time taken for evaluation
+                """
                 solution_validity, time_to_validation = self.validate(
                     input_data)
                 if solution_validity and processed_solution:
@@ -162,16 +189,26 @@ Example for an application, which should reside under ``src/modules/applications
 
                 return solution_validity, sum(time_to_validation, time_to_evaluation))
 
+            def generate_problem(self, config: Config, iter_count: int) -> any:
+                """
+                Generates a problem based on the given configuration.
 
-
-            def generate_problem(self, config: Config, iter_count: int):
-
+                :param config: The configuration dictionary
+                :param iter_count: The iteration count
+                :returns: The generated problem
+                """
                 size = config['size']
 
                 self.application = create_problem(size)
                 return self.application
 
-            def validate(self, solution):
+            def validate(self, solution) -> tuple[bool, float]:
+                """
+                Validates the solution.
+
+                :param solution: The solution to validate
+                :return: A tuple containing the validity of the solution and the time taken for validation
+                """
                 start = start_time_measurement()
 
                 # Check if solution is valid
@@ -182,14 +219,27 @@ Example for an application, which should reside under ``src/modules/applications
                     logging.info(f"Solution valid")
                     return True, end_time_measurement(start)
 
-            def evaluate(self, solution):
+            def evaluate(self, solution) -> tuple[float, float]:
+                """
+                Evaluates the solution.
+
+                :param solution: The solution to evaluate
+                :return: A tuple containing the evaluation metric and the time taken for evaluation
+                """
                 start = start_time_measurement()
 
                 evaluation_metric = calculate_metric(solution)
 
                 return evaluation_metric, end_time_measurement(start)
 
-            def save(self, path, iter_count):
+            def save(self, path, iter_count) -> None:
+                """
+                Saves the application state.
+
+                :param path: The path where the application state should be saved
+                :param iter_count: The iteration count
+                :returns:None
+                """
                 save_your_application(self.application, f"{path}/application.txt")
 
 Writing an asynchronous Module

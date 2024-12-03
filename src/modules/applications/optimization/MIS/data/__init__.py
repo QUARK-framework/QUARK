@@ -12,4 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for MIS data"""
+"""
+Module for MIS data
+
+This module initialize the MIS package
+"""

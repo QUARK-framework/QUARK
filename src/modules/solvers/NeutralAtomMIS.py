@@ -13,11 +13,13 @@
 #  limitations under the License.
 
 from typing import TypedDict
+import logging
 
 import numpy as np
 import pulser
 
-from modules.solvers.Solver import *
+from modules.solvers.Solver import Solver
+from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -28,7 +30,7 @@ class NeutralAtomMIS(Solver):
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()
         self.submodule_options = ["MockNeutralAtomDevice"]
@@ -36,19 +38,19 @@ class NeutralAtomMIS(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "pulser",
-                "version": "0.19.0"
-           }
-        ]
+        return [{"name": "pulser", "version": "0.19.0"}]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The name of the submodule
+        :return: Instance of the default submodule
+        """
         if option == "MockNeutralAtomDevice":
             from modules.devices.pulser.MockNeutralAtomDevice import MockNeutralAtomDevice  # pylint: disable=C0415
             return MockNeutralAtomDevice()
@@ -57,7 +59,9 @@ class NeutralAtomMIS(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
+
+        :return: Dictionary of configurable settings.
         """
         return {
             "samples": {
@@ -71,35 +75,29 @@ class NeutralAtomMIS(Solver):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         samples (int): How many times to sample the final state from the quantum computer per measurement
         """
         samples: int
 
-    def run(self, mapped_problem: dict, device_wrapper: any, config: any, **kwargs: dict) -> (list, float, dict):
+    def run(self, mapped_problem: dict, device_wrapper: any, config: any, **kwargs: dict) -> tuple[list, float, dict]:
         """
         The given application is a problem instance from the pysat library. This uses the rc2 maxsat solver
         given in that library to return a solution.
 
-        :param mapped_problem:
-        :type mapped_problem: dict with graph and register
+        :param mapped_problem: Dictionary with graph and register
         :param device_wrapper: Device to run the problem on
-        :type device_wrapper: any
-        :param config: empty dict
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param config: Solver Configuration
+        :param kwargs: Additional settings (not used)
         :return: Solution, the time it took to compute it and optional additional information
-        :rtype: tuple(list, float, dict)
         """
         register = mapped_problem.get('register')
         graph = mapped_problem.get('graph')
         nodes = list(graph.nodes())
         edges = list(graph.edges())
-        logging.info(
-            f"Got problem with {len(graph.nodes)} nodes, {len(graph.edges)} edges."
-        )
+
+        logging.info(f"Got problem with {len(graph.nodes)} nodes, {len(graph.edges)} edges.")
 
         device = device_wrapper.get_device()
         device.validate_register(register)
@@ -123,10 +121,14 @@ class NeutralAtomMIS(Solver):
 
         return state_nodes, end_time_measurement(start), {}
 
-    def _create_sequence(self, register:pulser.Register, device:pulser.devices._device_datacls.Device) -> (
-            pulser.Sequence):
+    def _create_sequence(self, register: pulser.Register, device: pulser.devices._device_datacls.Device) \
+            -> pulser.Sequence:
         """
         Creates a pulser sequence from a register and a device.
+
+        :param register: The quantum register
+        :param device: The device being used
+        :return: The created sequence
         """
         pulses = self._create_pulses(device)
         sequence = pulser.Sequence(register, device)
@@ -135,7 +137,7 @@ class NeutralAtomMIS(Solver):
             sequence.add(pulse, "Rydberg global")
         return sequence
 
-    def _create_pulses(self, device:pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
+    def _create_pulses(self, device: pulser.devices._device_datacls.Device) -> list[pulser.Pulse]:
         """
         Creates pulses tuned to MIS problem.
 
@@ -144,14 +146,17 @@ class NeutralAtomMIS(Solver):
         We found this configuration in the documentation of the pulser documentation and it works for MIS.
         We are hesitant to make them parametrizable, because setting the wrong values will break your whole MIS.
         Though parameterization of pulses is a feature that we might implement in the future.
+
+        :param device: The device being used
+        :return: List of pulses
         """
-        Omega_max = 2.3 * 2 * np.pi
+        omega_max = 2.3 * 2 * np.pi
         delta_factor = 2 * np.pi
 
         channel = device.channels['rydberg_global']
         max_amp = channel.max_amp
-        if max_amp is not None and max_amp < Omega_max:
-            Omega_max = max_amp
+        if max_amp is not None and max_amp < omega_max:
+            omega_max = max_amp
 
         delta_0 = -3 * delta_factor
         delta_f = 1 * delta_factor
@@ -161,13 +166,13 @@ class NeutralAtomMIS(Solver):
         t_sweep = (delta_f - delta_0) / (2 * np.pi * 10) * 5000
 
         rise = pulser.Pulse.ConstantDetuning(
-            pulser.waveforms.RampWaveform(t_rise, 0.0, Omega_max), delta_0, 0.0
+            pulser.waveforms.RampWaveform(t_rise, 0.0, omega_max), delta_0, 0.0
         )
         sweep = pulser.Pulse.ConstantAmplitude(
-            Omega_max, pulser.waveforms.RampWaveform(t_sweep, delta_0, delta_f), 0.0
+            omega_max, pulser.waveforms.RampWaveform(t_sweep, delta_0, delta_f), 0.0
         )
         fall = pulser.Pulse.ConstantDetuning(
-            pulser.waveforms.RampWaveform(t_fall, Omega_max, 0.0), delta_f, 0.0
+            pulser.waveforms.RampWaveform(t_fall, omega_max, 0.0), delta_f, 0.0
         )
         pulses = [rise, sweep, fall]
 
@@ -176,7 +181,15 @@ class NeutralAtomMIS(Solver):
 
         return pulses
 
-    def _filter_invalid_states(self, state_counts:dict, nodes:list, edges:list) -> dict:
+    def _filter_invalid_states(self, state_counts: dict, nodes: list, edges: list) -> dict:
+        """
+        Filters out invalid states that do not meet the problem constraints.
+
+        :param state_counts: Counts of each sampled data
+        :param nodes: List of nodes in the graph
+        :param edges: List of edges in the graph
+        :return: Dictionary of valid state counts
+        """
         valid_state_counts = {}
         for state, count in state_counts.items():
             selected_nodes = self._translate_state_to_nodes(state, nodes)
@@ -191,16 +204,31 @@ class NeutralAtomMIS(Solver):
 
         return valid_state_counts
 
-    def _translate_state_to_nodes(self, state:str, nodes:list) -> list:
+    def _translate_state_to_nodes(self, state: str, nodes: list) -> list:
+        """
+        Translates a state string into the corresponding list of nodes.
+
+        :param state: State string
+        :param nodes: List of nodes
+        :return: List of nodes corresponding to the states
+        """
         return [key for index, key in enumerate(nodes) if state[index] == '1']
 
-    def _select_best_state(self, states:dict, nodes=list) -> str:
+    def _select_best_state(self, states: dict, nodes: list) -> str:
+        """
+        Selects the best state from the available valid states.
+
+        :param states: Dictionary of valid states and their counts
+        :param nodes: List of nodes
+        :return: The best state as a string
+        """
         # TODO: Implement the samplers
         try:
             best_state = max(states, key=lambda k: states[k])
-        except:  # pylint: disable=W0702
+        except Exception:  # pylint: disable=W0702
             # TODO: Specify error
-            # TODO: Clean up this monstrocity
+            # TODO: Clean this up
             n_nodes = len(nodes)
             best_state = "0" * n_nodes
+
         return best_state

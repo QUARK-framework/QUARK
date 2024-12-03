@@ -22,6 +22,7 @@ from functools import partial, wraps
 from time import time
 from typing import TypedDict
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
@@ -30,6 +31,8 @@ from pennylane import numpy as npqml
 from modules.solvers.Solver import Solver
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
+
+matplotlib.use('Agg')
 
 
 class PennylaneQAOA(Solver):

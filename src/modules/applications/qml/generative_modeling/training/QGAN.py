@@ -21,11 +21,13 @@ from torch import nn
 import torch.nn.functional as funct
 from tensorboardX import SummaryWriter
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
 from utils_mpi import is_running_mpi, get_comm
 
+matplotlib.use('Agg')
 MPI = is_running_mpi()
 comm = get_comm()
 

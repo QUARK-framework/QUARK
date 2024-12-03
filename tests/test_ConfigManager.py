@@ -28,7 +28,6 @@ class TestConfigManager(unittest.TestCase):
         # Assert the results
         self.assertEqual(config["param1"], [1, 2])
 
-
     def test_set_config(self):
         config = {
             "application": {
@@ -219,7 +218,7 @@ class TestConfigManager(unittest.TestCase):
         with patch("matplotlib.pyplot.savefig") as mock_savefig:
             self.config_manager.create_tree_figure("/mock/store/dir")
             mock_savefig.assert_called_once_with("/mock/store/dir/BenchmarkGraph.png", format="PNG")
-    
+
     @patch("src.ConfigManager.inquirer.prompt")
     @patch("src.ConfigManager.checkbox")
     def test_query_for_config(self, mock_checkbox, mock_prompt):
@@ -231,7 +230,7 @@ class TestConfigManager(unittest.TestCase):
         config = ConfigManager._query_for_config(param_opts)
         self.assertIn("param1", config)
         self.assertEqual(config["param1"], [1, 2, "custom_value"])
-        
+
     # @patch("src.utils._get_instance_with_sub_options")
     # @patch("src.utils._import_class")
     # @patch("src.ConfigManager.checkbox")

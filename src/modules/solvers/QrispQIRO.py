@@ -59,7 +59,7 @@ class QIROSolver(Solver):
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "qrisp_simulator":
-            from modules.devices.qrisp_simulator import QrispSimulator  # pylint: disable=C0415
+            from modules.devices.qrisp_simulator.QrispSimulator import QrispSimulator  # pylint: disable=C0415
             return QrispSimulator()  # pylint: disable=E1102
 
         else:

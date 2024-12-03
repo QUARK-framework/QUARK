@@ -24,14 +24,14 @@ from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
 from qiskit_aer import Aer, AerSimulator
 from qiskit_aer.noise import NoiseModel
 
-from modules.training.QCBM import QCBM
-from modules.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.Library import Library
+from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.training.Inference import Inference
+from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
 
 logging.getLogger("NoisyQiskit").setLevel(logging.WARNING)
 
 
-class PresetQiskitNoisyBackend(Library):
+class PresetQiskitNoisyBackend(LibraryGenerative):
     """
     This module maps a library-agnostic gate sequence to a qiskit circuit.
     """

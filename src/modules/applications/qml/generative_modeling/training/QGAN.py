@@ -23,14 +23,14 @@ from tensorboardX import SummaryWriter
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.training.Training import Training, Core
+from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
 from utils_mpi import is_running_mpi, get_comm
 
 MPI = is_running_mpi()
 comm = get_comm()
 
 
-class QGAN(Training):  # pylint: disable=R0902
+class QGAN(TrainingGenerative):  # pylint: disable=R0902
     """
     Class for QGAN
     """

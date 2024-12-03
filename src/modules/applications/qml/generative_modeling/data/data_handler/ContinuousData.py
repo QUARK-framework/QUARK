@@ -21,10 +21,10 @@ import pkg_resources
 from utils import start_time_measurement, end_time_measurement
 from modules.applications.qml.generative_modeling.transformations.MinMax import MinMax
 from modules.applications.qml.generative_modeling.transformations.PIT import PIT
-from modules.applications.qml.generative_modeling.data.data_handler.DataHandler import DataHandler
+from modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
 
 
-class ContinuousData(DataHandler):
+class ContinuousData(DataHandlerGenerative):
     """
     A data handler for continuous datasets. This class loads a dataset from a specified path and provides
     methods for data transformation and evaluation.

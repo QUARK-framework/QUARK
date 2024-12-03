@@ -21,15 +21,15 @@ from qiskit.circuit import Parameter
 from qiskit.providers import Backend
 from qiskit.quantum_info import Statevector
 
-from modules.training.QCBM import QCBM
-from modules.training.QGAN import QGAN
-from modules.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.Library import Library
+from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.training.QGAN import QGAN
+from modules.applications.qml.generative_modeling.training.Inference import Inference
+from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
 
 logging.getLogger("qiskit").setLevel(logging.WARNING)
 
 
-class LibraryQiskit(Library):
+class LibraryQiskit(LibraryGenerative):
     """
     This module maps a library-agnostic gate sequence to a qiskit circuit.
     """

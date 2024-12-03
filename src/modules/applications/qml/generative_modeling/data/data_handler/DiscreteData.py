@@ -19,13 +19,13 @@ from typing import TypedDict
 
 import numpy as np
 
-from modules.circuits.CircuitCardinality import CircuitCardinality
-from modules.applications.qml.generative_modeling.data.data_handler.DataHandler import DataHandler
-from modules.applications.qml.generative_modeling.data.data_handler.MetricsGeneralization import MetricsGeneralization
+from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
+from modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
+from modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization
 from utils import start_time_measurement, end_time_measurement
 
 
-class DiscreteData(DataHandler):
+class DiscreteData(DataHandlerGenerative):
     """
     A data handler for discrete datasets with cardinality constraints.
     This class creates a dataset with a cardinality constraint and provides

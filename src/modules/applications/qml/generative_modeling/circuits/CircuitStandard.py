@@ -14,25 +14,24 @@
 
 from typing import Union, TypedDict
 
-from modules.circuits.Circuit import Circuit
+from modules.applications.qml.generative_modeling.circuits.CircuitGenerative import CircuitGenerative
 from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
 from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
 from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
-class CircuitCardinality(Circuit):
+class CircuitStandard(CircuitGenerative):
     """
     This class generates a library-agnostic gate sequence, i.e. a list containing information
     about the gates and the wires they act on.
-    The circuit follows the implementation by Gili et al. https://arxiv.org/abs/2207.13645
     """
 
     def __init__(self):
         """
         Constructor method.
         """
-        super().__init__("CircuitCardinality")
+        super().__init__("DiscreteStandard")
         self.submodule_options = [
             "LibraryQiskit",
             "LibraryPennylane",
@@ -40,35 +39,45 @@ class CircuitCardinality(Circuit):
             "PresetQiskitNoisyBackend"
         ]
 
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Returns requirements of this module.
+
+        :return: List of dict with requirements of this module
+        """
+        return []
+
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this circuit.
+        Returns the configurable settings for this standard circuit.
 
-        :return: Dictionary with parameter options
+        :return: Dictionary of parameter options.
         .. code-block:: python
 
             return {
                     "depth": {
-                        "values": [2, 4, 8, 16],
+                        "values": [1, 2, 3],
                         "description": "What depth do you want?"
                     }
                 }
+
         """
         return {
 
             "depth": {
-                "values": [2, 4, 8, 16],
+                "values": [1, 2, 3],
                 "description": "What depth do you want?"
-            },
+            }
         }
 
     def get_default_submodule(self, option: str) \
             -> Union[LibraryQiskit, LibraryPennylane, PresetQiskitNoisyBackend, CustomQiskitNoisyBackend]:
         """
-        Returns the default submodule based on the provided option.
+        Returns the default submodule based on the given option.
 
-        :param option: The name of the submodule
-        :return: Instance of the default submodule
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "LibraryQiskit":
@@ -95,48 +104,38 @@ class CircuitCardinality(Circuit):
 
     def generate_gate_sequence(self, input_data: dict, config: Config) -> dict:
         """
-        Returns gate sequence of cardinality circuit architecture.
+        Returns gate sequence of standard architecture.
 
         :param input_data: Collection of information from the previous modules
         :param config: Config specifying the number of qubits of the circuit
-        :return: Dictionary including the gate sequence of the Cardinality Circuit
+        :return: Dictionary including the gate sequence of the Standard Circuit
         """
+        n_registers = input_data["n_registers"]
         n_qubits = input_data["n_qubits"]
-        depth = config["depth"] // 2
+        depth = config["depth"]
 
         gate_sequence = []
 
-        for k in range(n_qubits):
-            gate_sequence.append(["RX", [k]])
-            gate_sequence.append(["RZ", [k]])
+        for _ in range(depth):
+            for k in range(n_qubits):
+                gate_sequence.append(["RY", [k]])
 
-        for d in range(depth):
-            gate_sequence.append(["Barrier", None])
             for k in range(n_qubits - 1):
-                gate_sequence.append(["RXX", [k, k + 1]])
+                gate_sequence.append(["RYY", [k, k + 1]])
+
+            for k in range(n_qubits - 1):
+                gate_sequence.append(["CRY", [k, k + 1]])
+
             gate_sequence.append(["Barrier", None])
-
-            if d == depth - 2:
-                for k in range(n_qubits):
-                    gate_sequence.append(["RX", [k]])
-                    gate_sequence.append(["RZ", [k]])
-                    gate_sequence.append(["RX", [k]])
-
-            elif d < depth - 2:
-                for k in range(n_qubits):
-                    gate_sequence.append(["RX", [k]])
-                    gate_sequence.append(["RZ", [k]])
-
-        gate_sequence.append(["Barrier", None])
 
         for k in range(n_qubits):
             gate_sequence.append(["Measure", [k, k]])
 
         output_dict = {
             "gate_sequence": gate_sequence,
-            "circuit_name": "Cardinality",
+            "circuit_name": "Standard",
             "n_qubits": n_qubits,
-            "n_registers": input_data["n_registers"],
+            "n_registers": n_registers,
             "depth": depth,
             "histogram_train": input_data["histogram_train"],
             "store_dir_iter": input_data["store_dir_iter"],

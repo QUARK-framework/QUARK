@@ -19,6 +19,8 @@ jobs:
     defaults:
       run:
         shell: bash -el {0}
+    permissions:
+      contents: write
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -38,7 +40,12 @@ jobs:
       - name: Run autopep8 (fix PEP8 issues automatically)
         run: autopep8 --in-place --recursive --aggressive --max-line-length 120 -v .
 
+      - name: Clean the workspace
+        if: github.event_name == 'pull_request'
+        run: git reset --hard
+        
       - name: Commit changes if any
+        if: github.event_name == 'push'
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"

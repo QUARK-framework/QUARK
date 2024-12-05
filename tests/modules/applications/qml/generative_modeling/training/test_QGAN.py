@@ -65,11 +65,6 @@ class TestQGAN(unittest.TestCase):
 
         actual_batches = len(self.qgan_instance.dataloader)
 
-        print(f"Total samples in dataset: {total_samples}")
-        print(f"Batch size: {batch_size}")
-        print(f"Expected full batches: {expected_batches}")
-        print(f"Actual DataLoader batches: {actual_batches}")
-
         self.assertEqual(
             actual_batches,
             expected_batches,

@@ -216,9 +216,9 @@ class PIT(Transformation):  # pylint disable=R0902
         values = values * (np.shape(self.reverse_epit_lookup)[1] - 1)
         rows = np.shape(self.reverse_epit_lookup)[0]
 
-        # if we are an integer do not use linear interpolation
-        values_l = np.floor(values).astype(int)
-        values_h = np.ceil(values).astype(int)
+        # Ensure values are within bounds
+        values_l = np.clip(np.floor(values).astype(int), 0, self.reverse_epit_lookup.shape[1] - 1)
+        values_h = np.clip(np.ceil(values).astype(int), 0, self.reverse_epit_lookup.shape[1] - 1)
 
         # if we are an integer then floor and ceiling are the same
         is_int_mask = 1 - (values_h - values_l)

@@ -42,7 +42,7 @@ class QUBO(Mapping):
 
         :return: List of dictionaries with requirements of this module
         """
-        return [{"name": "networkx", "version": "3.2.1"}]
+        return [{"name": "networkx", "version": "3.4.2"}]
 
     def get_parameter_options(self) -> dict:
         """

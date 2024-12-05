@@ -45,7 +45,7 @@ class ChoiIsing(Mapping):
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "dimod", "version": "0.12.17"},
+            {"name": "dimod", "version": "0.12.18"},
             *ChoiQUBO.get_requirements()
         ]
 

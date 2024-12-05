@@ -37,7 +37,7 @@ class Installer:
         self.quark_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
         self.settings_dir = f"{self.quark_dir}/.settings"
         self.envs_dir = f"{self.settings_dir}/envs"
-        self.python_version = "3.9.16"
+        self.python_version = "3.12.7"
         self.pip_version = "23.0"
         self.default_app_modules = [
             {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
@@ -52,13 +52,13 @@ class Installer:
 
         self.core_requirements = [
             {"name": "seaborn", "version": "0.13.2"},
-            {"name": "networkx", "version": "3.2.1"},
+            {"name": "networkx", "version": "3.4.2"},
             {"name": "inquirer", "version": "3.4.0"},
-            {"name": "packaging", "version": "24.1"},
+            {"name": "packaging", "version": "24.2"},
             {"name": "pyyaml", "version": "6.0.2"},
             {"name": "typing-extensions", "version": "4.12.2"},
-            {"name": "sphinx", "version": "7.4.7"},
-            {"name": "sphinx-rtd-theme", "version": "2.0.0"},
+            {"name": "sphinx", "version": "8.1.3"},
+            {"name": "sphinx-rtd-theme", "version": "3.0.2"},
         ]
         Path(self.envs_dir).mkdir(parents=True, exist_ok=True)
 

@@ -20,7 +20,7 @@ class TestDinneenIsing(unittest.TestCase):
         requirements = self.dinneen_ising_instance.get_requirements()
         self.assertIn({"name": "nnf", "version": "0.4.1"}, requirements)
         self.assertIn({"name": "numpy", "version": "1.26.4"}, requirements)
-        self.assertIn({"name": "dimod", "version": "0.12.17"}, requirements)
+        self.assertIn({"name": "dimod", "version": "0.12.18"}, requirements)
 
     def test_get_parameter_options(self):
         options = self.dinneen_ising_instance.get_parameter_options()

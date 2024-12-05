@@ -30,7 +30,7 @@ class TestACL(unittest.TestCase):
         requirements = self.acl_instance.get_requirements()
         expected_requirements = [
             {"name": "pulp", "version": "2.9.0"},
-            {"name": "pandas", "version": "2.2.2"},
+            {"name": "pandas", "version": "2.2.3"},
             {"name": "numpy", "version": "1.26.4"},
             {"name": "openpyxl", "version": "3.1.5"},
         ]

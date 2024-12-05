@@ -11,7 +11,7 @@ It is designed to be easily extendable in all of its components: applications, m
 Prerequisites
 ~~~~~~~~~~~~~
 
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.
+As this framework is implemented in Python 3.12, you need to install this version of Python if you do not already have it installed.
 Other versions could cause issues with other dependencies used in the framework.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
@@ -23,7 +23,7 @@ For this installer to work, you need to install the following packages in the fi
 
 * inquirer==3.4.0
 * pyyaml==6.0.2
-* packaging==24.1
+* packaging==24.2
 
 To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
 You can select the modules of choice via:

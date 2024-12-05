@@ -137,8 +137,8 @@ class CircuitCopula(CircuitGenerative):
 
             k = 3 * n + shift
             for i, j in combinations(range(n), 2):
-                for l in range(n_registers):
-                    gate_sequence.append(["RXX", [l * n + i, l * n + j]])
+                for layer in range(n_registers):
+                    gate_sequence.append(["RXX", [layer * n + i, layer * n + j]])
 
                 k += 1
             shift += 3 * n + int(binom(n, 2))

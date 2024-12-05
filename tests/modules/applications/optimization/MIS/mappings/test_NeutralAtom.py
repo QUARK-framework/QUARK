@@ -16,7 +16,7 @@ class TestNeutralAtom(unittest.TestCase):
 
     def test_get_requirements(self):
         requirements = self.neutral_atom_instance.get_requirements()
-        expected_requirements = [{"name": "pulser", "version": "0.19.0"}]
+        expected_requirements = [{"name": "pulser", "version": "1.1.1"}]
         for req in expected_requirements:
             self.assertIn(req, requirements)
 

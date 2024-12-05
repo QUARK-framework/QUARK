@@ -25,8 +25,8 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
     def test_get_requirements(self):
         requirements = self.backend_instance.get_requirements()
         expected_requirements = [
-            {"name": "qiskit", "version": "1.1.0"},
-            {"name": "qiskit_aer", "version": "0.15.0"},
+            {"name": "qiskit", "version": "1.3.0"},
+            {"name": "qiskit_aer", "version": "0.15.1"},
             {"name": "numpy", "version": "1.26.4"}
         ]
         self.assertEqual(requirements, expected_requirements)

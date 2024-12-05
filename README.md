@@ -14,7 +14,7 @@ Even though the architecture changes significantly from QUARK 1.0 to 2.0, the gu
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.
 
 ## Prerequisites
-As this framework is implemented in Python 3.9, you need to install this version of Python if you do not already have it installed.
+As this framework is implemented in Python 3.12, you need to install this version of Python if you do not already have it installed.
 Other versions could cause issues with other dependencies used in the framework.
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
@@ -26,7 +26,7 @@ For this installer to work, you need to install the following packages in the fi
 
 * inquirer==3.4.0
 * pyyaml==6.0.2
-* packaging==24.1
+* packaging==24.2
 
 To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
 You can select the modules of choice via:

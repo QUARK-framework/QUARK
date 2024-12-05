@@ -339,7 +339,7 @@ class ConfigManager:
                 if not consistent:
                     raise Exception(f"{prefix} {err_msg}")
 
-                if not config[key_in_cond][0] in config_answer.get("if")["in"]:
+                if config[key_in_cond][0] not in config_answer.get("if")["in"]:
                     continue
 
             if len(config_answer['values']) == 1 and "custom_input" not in config_answer:

@@ -19,7 +19,6 @@ import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit.providers import Backend
-from qiskit.providers.fake_provider import *
 from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
 from qiskit_aer import Aer, AerSimulator
 from qiskit_aer.noise import NoiseModel
@@ -53,9 +52,9 @@ class PresetQiskitNoisyBackend(LibraryGenerative):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "qiskit", "version": "1.1.0"},
-            {"name": "qiskit_ibm_runtime", "version": "0.29.0"},
-            {"name": "qiskit_aer", "version": "0.15.0"},
+            {"name": "qiskit", "version": "1.3.0"},
+            {"name": "qiskit_ibm_runtime", "version": "0.33.2"},
+            {"name": "qiskit_aer", "version": "0.15.1"},
             {"name": "numpy", "version": "1.26.4"}
         ]
 
@@ -378,7 +377,7 @@ class PresetQiskitNoisyBackend(LibraryGenerative):
         backend_name = str(self.split_string(noise_configuration))
         provider = FakeProviderForBackendV2()
         try:
-            backend = provider.get_backend(backend_name)
+            backend = provider.backend(name=backend_name)
         except TypeError:
             logging.info("qiskit.providers.fake_provider.FakeProviderForBackendV2.get_backend overwritten. "
                          "Will be addressed with upcoming qiskit upgrade.")

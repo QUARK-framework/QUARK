@@ -22,7 +22,7 @@ class TestTSP(unittest.TestCase):
 
     def test_get_requirements(self):
         requirements = self.tsp_instance.get_requirements()
-        self.assertIn({"name": "networkx", "version": "3.2.1"}, requirements)
+        self.assertIn({"name": "networkx", "version": "3.4.2"}, requirements)
         self.assertIn({"name": "numpy", "version": "1.26.4"}, requirements)
 
     def test_get_default_submodule(self):

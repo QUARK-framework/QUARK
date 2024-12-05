@@ -141,9 +141,9 @@ class Braket(Device, ABC):
         :return: List of dictionaries with requirements
         """
         return [
-            {"name": "amazon-braket-sdk", "version": "1.87.0"},
-            {"name": "botocore", "version": "1.35.20"},
-            {"name": "boto3", "version": "1.35.20"}
+            {"name": "amazon-braket-sdk", "version": "1.88.2"},
+            {"name": "botocore", "version": "1.35.73"},
+            {"name": "boto3", "version": "1.35.73"}
         ]
 
     def init_s3_storage(self, folder_name: str) -> None:

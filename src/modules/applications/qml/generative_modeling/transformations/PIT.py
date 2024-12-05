@@ -47,7 +47,7 @@ class PIT(Transformation):  # pylint disable=R0902
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "pandas", "version": "2.2.2"}
+            {"name": "pandas", "version": "2.2.3"}
         ]
 
     def get_parameter_options(self) -> dict:

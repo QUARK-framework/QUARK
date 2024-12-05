@@ -333,7 +333,7 @@ class ConfigManager:
                     err_msg = f"Inconsistent parameter options: condition references unknown parameter: {key_in_cond}"
                 elif not dependency.get('exclusive', False):
                     err_msg = f"Inconsistent parameter options: " \
-                              f"condition references non exclusive parameter: {key_in_cond}"
+                        f"condition references non exclusive parameter: {key_in_cond}"
                 else:
                     consistent = True
                 if not consistent:
@@ -365,7 +365,7 @@ class ConfigManager:
                 if "Custom Input" in values:
                     freetext_answer = inquirer.prompt(
                         [inquirer.Text('custom_input', message=f"What's your custom input for {key}? (No validation of "
-                                                               "this input is done!)")])
+                                       "this input is done!)")])
 
                     # Replace the freetext placeholder with the user input
                     values.remove("Custom Input")
@@ -374,11 +374,11 @@ class ConfigManager:
                 if "Custom Range" in values:
                     range_answer = inquirer.prompt(
                         [inquirer.Text('start', message=f"What's the start of your range for {key}? (No validation of "
-                                                        "this input is done!)"),
+                                       "this input is done!)"),
                          inquirer.Text('stop', message=f"What's the end of your range for {key}? (No validation of "
-                                                       "this input is done!)"),
+                                       "this input is done!)"),
                          inquirer.Text('step', message=f"What are the steps of your range for {key}? (No validation of "
-                                                       "this input is done!)")])
+                                       "this input is done!)")])
                     values.remove("Custom Range")
                     values.extend(np.arange(float(range_answer["start"]), float(range_answer["stop"]),
                                             float(range_answer["step"])))

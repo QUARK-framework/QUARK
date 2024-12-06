@@ -8,7 +8,7 @@ It is designed to be easily extendable in all of its components: applications, m
 
 ## Publications
 Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028).
-Even though the architecture changes significantly from QUARK 1.0 to 2.0, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK 2.1.
+Even though the architecture changes significantly from QUARK 1.0 to current version, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK.
 
 ## Documentation
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.

@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
+import matplotlib.pyplot as plt
+
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 
 
@@ -34,9 +36,11 @@ class TestQCBM(unittest.TestCase):
             self.qcbm_instance.get_default_submodule("AnyOption")
 
     @patch("numpy.random.rand")
-    def test_setup_training(self, mock_rand):
+    @patch("modules.applications.qml.generative_modeling.training.QCBM.SummaryWriter")
+    def test_setup_training(self, mock_summary_writer, mock_rand):
         # Mock inputs
         mock_rand.return_value = np.array([0.5, 0.5, 0.5])
+        mock_summary_writer.return_value = MagicMock()
         input_data = {
             "backend": "test_backend",
             "n_qubits": 5,
@@ -95,8 +99,6 @@ class TestQCBM(unittest.TestCase):
             raise e
 
     def test_data_visualization(self):
-        import matplotlib.pyplot as plt
-
         # Mock generalization metrics
         self.qcbm_instance.study_generalization = True
         self.qcbm_instance.generalization_metrics = MagicMock()

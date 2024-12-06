@@ -6,8 +6,6 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel
 from qiskit.transpiler import CouplingMap
 
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-from modules.applications.qml.generative_modeling.training.Inference import Inference
 from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
@@ -94,11 +92,22 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             self.backend_instance.select_backend("unknown_backend", 3)
 
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.Layout")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.PassManager")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.transpile")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.AerSimulator")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.decompile_noisy_config")
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.Layout"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.PassManager"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.transpile"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.AerSimulator"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
+        "CustomQiskitNoisyBackend.decompile_noisy_config"
+    )
     def test_get_execute_circuit(self, mock_decompile_noisy_config, mock_aer_simulator,
                                  mock_transpile, mock_pass_manager, mock_layout):
         # Mock Configurations
@@ -166,10 +175,22 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         )
         mock_backend.run.assert_called_once()
 
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.build_noise_model")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.get_coupling_map")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.Aer.get_backend")
-    @patch("modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend.CustomQiskitNoisyBackend.log_backend_options")
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
+        "CustomQiskitNoisyBackend.build_noise_model"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
+        "CustomQiskitNoisyBackend.get_coupling_map"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
+        "Aer.get_backend"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
+        "CustomQiskitNoisyBackend.log_backend_options"
+    )
     def test_decompile_noisy_config(self, mock_log_backend_options, mock_get_backend,
                                     mock_get_coupling_map, mock_build_noise_model):
         # Mock simulation method and device

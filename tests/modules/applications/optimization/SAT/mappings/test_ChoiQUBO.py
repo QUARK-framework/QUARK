@@ -33,7 +33,9 @@ class TestChoiQUBO(unittest.TestCase):
         self.assertIsInstance(q_matrix, dict)
         for key, value in q_matrix.items():
             self.assertIsInstance(key, tuple, "Expected key to be a tuple")
-            self.assertTrue(isinstance(value, float) or isinstance(value, int), "Expected value to be a float or int")
+            self.assertTrue(isinstance(
+                value, float) or isinstance(value, int), "Expected value to be a float or int"
+            )
 
         self.assertGreater(mapping_time, 0, "Mapping time should be greater than zero.")
 

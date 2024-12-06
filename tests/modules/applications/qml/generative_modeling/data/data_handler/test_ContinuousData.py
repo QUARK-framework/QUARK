@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 import numpy as np
+
 from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 
 
@@ -48,8 +49,12 @@ class TestContinuousData(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             self.data_handler.get_default_submodule("InvalidSubmodule")
 
-    @patch("modules.applications.qml.generative_modeling.data.data_handler.ContinuousData.pkg_resources.resource_filename")
-    @patch("modules.applications.qml.generative_modeling.data.data_handler.ContinuousData.np.load")
+    @patch(
+        "modules.applications.qml.generative_modeling.data.data_handler.ContinuousData.pkg_resources.resource_filename"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.data.data_handler.ContinuousData.np.load"
+    )
     def test_data_load(self, mock_np_load, mock_resource_filename):
         mock_resource_filename.return_value = "/mock/path/X_2D.npy"
         mock_np_load.return_value = np.array([[1, 2], [3, 4]])

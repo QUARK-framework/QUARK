@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
+
 from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 
 
@@ -147,8 +148,13 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         self.assertEqual(self.backend_instance.get_transpile_routine(2), 2)
         self.assertEqual(self.backend_instance.get_transpile_routine(5), 1)  # Invalid option defaults to 1
 
-    @patch("qiskit_aer.Aer.get_backend")
-    @patch("modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend.PresetQiskitNoisyBackend.get_FakeBackend")
+    @patch(
+        "qiskit_aer.Aer.get_backend"
+    )
+    @patch(
+        "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend."
+        "PresetQiskitNoisyBackend.get_FakeBackend"
+    )
     def test_decompile_noisy_config(self, mock_get_fake_backend, mock_get_backend):
         mock_backend = MagicMock(spec=AerSimulator)
         mock_get_backend.return_value = mock_backend

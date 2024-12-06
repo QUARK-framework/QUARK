@@ -1,5 +1,4 @@
 import unittest
-import io
 from nnf import And, Var, Or
 from pysat.formula import WCNF
 
@@ -49,7 +48,9 @@ class TestDirect(unittest.TestCase):
         reverse_mapped_solution, reverse_mapping_time = self.direct_instance.reverse_map(solution)
 
         # Check that the result is a dictionary
-        self.assertIsInstance(reverse_mapped_solution, dict, "Expected a dictionary as the reverse mapping result.")
+        self.assertIsInstance(
+            reverse_mapped_solution, dict, "Expected a dictionary as the reverse mapping result."
+        )
         self.assertGreater(reverse_mapping_time, 0, "Reverse mapping time should be positive.")
 
         # Verify that the literals are correctly mapped

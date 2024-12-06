@@ -1,7 +1,7 @@
 import unittest
-import networkx as nx
 import numpy as np
 import pickle
+
 from modules.applications.optimization.PVC.mappings.ISING import Ising
 from modules.applications.optimization.PVC.mappings.QUBO import QUBO
 

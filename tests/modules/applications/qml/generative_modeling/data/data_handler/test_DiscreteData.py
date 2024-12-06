@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 import numpy as np
+
 from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
 from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
 from modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization

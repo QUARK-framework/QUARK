@@ -3,7 +3,6 @@ import networkx as nx
 import os
 from tempfile import TemporaryDirectory
 import logging
-import sys
 
 from modules.applications.optimization.MIS.MIS import MIS
 

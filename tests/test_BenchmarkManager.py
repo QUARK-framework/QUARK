@@ -2,13 +2,9 @@ import unittest
 from unittest.mock import patch, MagicMock, mock_open
 from pathlib import Path
 import os
-import json
-import logging
-import tempfile
 from datetime import datetime
 
-from src.BenchmarkManager import BenchmarkManager, Instruction, JobStatus, preprocess, postprocess
-from modules.Core import Core
+from src.BenchmarkManager import BenchmarkManager, Instruction
 
 
 class TestBenchmarkManager(unittest.TestCase):
@@ -171,6 +167,12 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertEqual(output, "postprocessed_output", "Expected processed output to match mock postprocess return.")
         self.assertIsNotNone(benchmark_record, "Expected a BenchmarkRecord instance.")
 
+    # These tests are commented out because:
+    # - The `BenchmarkManager` relies on complex dependencies, including filesystem operations (`Path.mkdir`), 
+    #   logging configurations (`FileHandler`), and application-specific configurations (`ConfigManager`).
+    # - Mocking all these dependencies accurately to test the `orchestrate_benchmark` and `run_benchmark` methods
+    #   requires significant effort and a well-structured mocking strategy, which is currently incomplete.
+    # - We plan to implement these tests in the future
     # @patch("BenchmarkManager.Path.mkdir")
     # @patch("BenchmarkManager.logging.FileHandler")
     # @patch("BenchmarkManager.ConfigManager")

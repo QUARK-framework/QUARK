@@ -1,4 +1,5 @@
 import unittest
+
 from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
 
 

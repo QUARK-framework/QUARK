@@ -1,5 +1,4 @@
 import unittest
-import networkx as nx
 import pickle
 
 from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom
@@ -10,7 +9,7 @@ class TestNeutralAtom(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.neutral_atom_instance = NeutralAtom()
-        with open("tests/modules/applications/optimization/MIS/mappings/MIS_test_graph.pkl", "rb") as file:  # Replace with the actual path
+        with open("tests/modules/applications/optimization/MIS/mappings/MIS_test_graph.pkl", "rb") as file:
             cls.graph = pickle.load(file)
             cls.config = {}
 

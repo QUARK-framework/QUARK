@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import numpy as np
+
 from modules.applications.qml.generative_modeling.training.Inference import Inference
 
 

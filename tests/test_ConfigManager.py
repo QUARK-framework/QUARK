@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 from modules.Core import Core
-from src.ConfigManager import ConfigManager, BenchmarkConfig, ConfigModule
+from src.ConfigManager import ConfigManager
 
 
 class TestConfigManager(unittest.TestCase):
@@ -229,53 +229,3 @@ class TestConfigManager(unittest.TestCase):
         config = ConfigManager._query_for_config(param_opts)
         self.assertIn("param1", config)
         self.assertEqual(config["param1"], [1, 2, "custom_value"])
-
-    # @patch("src.utils._get_instance_with_sub_options")
-    # @patch("src.utils._import_class")
-    # @patch("src.ConfigManager.checkbox")
-    # @patch("src.ConfigManager.inquirer.prompt")
-    # def test_generate_benchmark_configs(self, mock_prompt, mock_checkbox, mock_import_class, mock_get_instance):
-    #     # Mock user input
-    #     mock_prompt.side_effect = [
-    #         {"application": "TestApp"},  # Selecting the application
-    #         {"repetitions": "3"}        # Setting repetitions
-    #     ]
-    #     mock_checkbox.return_value = {"submodules": ["TestSubmodule"]}
-
-    #     # Mock application modules and instance creation
-    #     app_modules = [
-    #         {
-    #             "name": "TestApp",
-    #             "module": "modules.applications.TestApp",
-    #             "class": "TestAppClass",
-    #             "submodules": [
-    #                 {
-    #                     "name": "TestSubmodule",
-    #                     "module": "modules.applications.TestApp.Submodule",
-    #                     "class": "TestSubmoduleClass"
-    #                 }
-    #             ]
-    #         }
-    #     ]
-
-    #     # Mock dynamic import behavior
-    #     mocked_app_instance = MagicMock(name="MockedAppInstance")
-    #     mocked_submodule_instance = MagicMock(name="MockedSubmoduleInstance")
-    #     mock_import_class.side_effect = lambda module, class_name, _: (
-    #         mocked_app_instance if class_name == "TestAppClass" else mocked_submodule_instance
-    #     )
-    #     mock_get_instance.return_value = mocked_app_instance
-
-    #     # Run the method
-    #     self.config_manager.generate_benchmark_configs(app_modules)
-
-    #     # Assertions to validate the configuration
-    #     self.assertIn("application", self.config_manager.config)
-    #     self.assertEqual(self.config_manager.config["application"]["name"], "TestApp")
-    #     self.assertEqual(self.config_manager.config["repetitions"], 3)
-    #     self.assertEqual(len(self.config_manager.config["application"]["submodules"]), 1)
-
-    #     # Validate dynamic imports were called correctly
-    #     mock_import_class.assert_any_call("modules.applications.TestApp", "TestAppClass", None)
-    #     mock_import_class.assert_any_call("modules.applications.TestApp.Submodule", "TestSubmoduleClass", None)
-    #     mock_get_instance.assert_called_once_with(app_modules, "TestApp")

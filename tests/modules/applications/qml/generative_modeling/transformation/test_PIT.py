@@ -58,6 +58,12 @@ class TestPIT(unittest.TestCase):
         self.assertIsInstance(result["binary_train"], np.ndarray, "Expected binary_train to be a numpy array.")
         self.assertEqual(result["n_qubits"], self.sample_input_data["n_qubits"], "n_qubits mismatch.")
 
+    # This test is currently commented out because:
+    # - The `reverse_transform` method relies on mocked internal methods (`compute_discretization_efficient` and
+    #   `generate_samples_efficient`) that require precise mocking of their behavior and returned data.
+    # - Creating realistic mock data for `reverse_transform` is challenging without deeper understanding of
+    #   the expected transformations or how they interact with the architecture.
+    # - We plan to implement this test in the future when there is more clarity on the expected functionality
     # def test_reverse_transform(self):
     #     # Mocked input data
     #     input_data = {
@@ -102,6 +108,8 @@ class TestPIT(unittest.TestCase):
         inverse_data = self.pit_instance.inverse_transform(data)
         self.assertEqual(inverse_data.shape, data.shape, "Inverse-transformed data should match the input shape.")
 
+    # This test is currently commented out because:
+    # We plan to revisit this test in the future
     # def test_reverse_empirical_integral_trans_single(self):
     #     self.pit_instance.reverse_epit_lookup = np.array([
     #         [0.1, 0.2, 0.3],

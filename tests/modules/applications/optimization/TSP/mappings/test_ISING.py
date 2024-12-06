@@ -109,7 +109,9 @@ class TestIsing(unittest.TestCase):
         solution = [0, 1, 0, 1]
         expected_converted = [0, 1, 0, 1]
         qubo_solution = self.ising_instance._convert_ising_to_qubo(solution)
-        self.assertTrue(np.array_equal(qubo_solution, expected_converted), "QUBO solution should remain unchanged.")
+        self.assertTrue(
+            np.array_equal(qubo_solution, expected_converted), "QUBO solution should remain unchanged."
+        )
 
         # Input with only -1s
         solution = [-1, -1, -1, -1]

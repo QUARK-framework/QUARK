@@ -78,6 +78,10 @@ class TestLibraryQiskit(unittest.TestCase):
         self.assertIn("n_params", output)
         self.assertEqual(output["n_params"], 3)  # RX, RY, RXX need 3 parameters
 
+    # These tests are currently commented out because implementing test cases for the
+    # cusvaer simulator is challenging due to the complexity of mocking certain 
+    # behaviors of the `cusvaer`-enabled backend. We plan to implement these tests 
+    # in the future once we have resolved these issues.
     # @patch("modules.applications.qml.generative_modeling.mappings.LibraryQiskit.select_backend.cusvaer")
     # @patch("qiskit_aer.Aer.get_backend")
     # def test_cusvaer_simulator(self, mock_aer_simulator, mock_cusvaer):
@@ -138,6 +142,9 @@ class TestLibraryQiskit(unittest.TestCase):
         mock_backend.set_options.assert_called_once_with(device="CPU")
         self.assertEqual(backend, mock_backend)
 
+    # The following tests are commented out because:
+    # - The `AWSBraketBackend` and `AWSBraketProvider` are complex to mock in the current setup.
+    # - Additional setup or dependency resolution is required for testing with AWS Braket devices (e.g., SV1 or IonQ Harmony).
     # def test_amazon_sv1(self):
     #     from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider
     #     from modules.devices.braket.SV1 import SV1
@@ -172,7 +179,11 @@ class TestLibraryQiskit(unittest.TestCase):
             self.library_instance.select_backend("invalid.backend", 4)
         self.assertIn("Device Configuration invalid.backend not implemented", str(context.exception))
 
-    # get_execute_circuit function
+    # These tests are commented out because:
+    # - The complexity of mocking the behavior of Qiskit components (e.g., `transpile`, `Statevector`, and `AerSimulator`)
+    #   makes it challenging to implement these tests in the current setup.
+    # - The dependency on specific Qiskit modules and features requires more robust mocking strategies.
+    # - We plan to revisit these tests in the future.
     # @patch("qiskit.transpiler.transpile")
     # @patch("qiskit.quantum_info.Statevector")
     # def test_aer_statevector_simulator(self, mock_statevector, mock_transpile):
@@ -218,35 +229,6 @@ class TestLibraryQiskit(unittest.TestCase):
 
     #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
     #         mock_circuit, mock_backend, config, config_dict
-    #     )
-
-    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
-    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
-    #     pmfs, samples = execute_circuit(solutions)
-
-    #     self.assertIsInstance(pmfs, np.ndarray)
-    #     self.assertIsInstance(samples, np.ndarray)
-    #     self.assertEqual(pmfs.shape, (2, 2))
-    #     self.assertEqual(samples.shape, (2, 2))
-
-    # @patch("qiskit.transpiler.transpile")
-    # @patch("modules.devices.braket.SV1.SV1")
-    # def test_amazon_sv1(self, mock_sv1, mock_transpile):
-    #     mock_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpile.return_value = mock_transpiled_circuit
-    #     mock_job = MagicMock()
-    #     mock_job.result.return_value.get_counts.return_value.int_outcomes.return_value = {0: 50, 1: 50}
-    #     mock_backend = MagicMock()
-    #     mock_backend.run.return_value = mock_job
-
-    #     # Config
-    #     config = "Amazon_SV1"
-    #     config_dict = {"n_shots": 100}
-    #     backend = mock_backend
-
-    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
-    #         mock_circuit, backend, config, config_dict
     #     )
 
     #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)

@@ -1,8 +1,8 @@
 import unittest
 import os
 from tempfile import TemporaryDirectory
-
 from networkx import Graph
+
 from modules.applications.optimization.PVC.PVC import PVC
 
 
@@ -55,7 +55,9 @@ class TestPVC(unittest.TestCase):
                 "description": "How many seams should be sealed?"
             }
         }
-        self.assertEqual(parameter_options, expected_options, "Parameter options do not match expected structure.")
+        self.assertEqual(
+            parameter_options, expected_options, "Parameter options do not match expected structure."
+        )
 
     def test_generate_problem(self):
         with self.subTest("Default Config (None)"):

@@ -14,11 +14,35 @@ Even though the architecture changes significantly from QUARK 1.0 to 2.0, the gu
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.
 
 ## Prerequisites
-As this framework is implemented in Python 3.12, you need to install this version of Python if you do not already have it installed.
+
+### Step 1: Install Python 3.12
+QUARK requires **Python 3.12**, you need to install this version of Python if you do not already have it installed.
 Other versions could cause issues with other dependencies used in the framework.
+1. Visit the [Python Downloads Page](https://www.python.org/downloads/) and install Python 3.12.
+2. Verify your Python version:
+   
+   ```python --version```
+
+3. Ensure it returns Python 3.12.x
+
+### Step 2: Create a Conda Environment
+QUARK provides flexibility in managing its environment using Conda. Create and activate a Conda environment:
+1. Create a Conda environment:
+
+    ```conda create -n quark python=3.12```
+
+    ```conda activate quark```
+
+### Step 3: Install Required Packages
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
-1. Install pip packages manually, or
+1. Install pip packages manually, 
+
+      If you are setting up the default configuration ( This installs all dependencies needed for the full QUARK framework.):
+
+      ```pip install -r .settings/requirements_full.txt```
+
+
 2. Use the QUARK installer.
 
 
@@ -29,21 +53,24 @@ For this installer to work, you need to install the following packages in the fi
 * packaging==24.2
 
 To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
-You can select the modules of choice via:
+You can select the modules of choice via :
 
-```python src/main.py env --configure myenv```
+```python src/main.py env --configure myenv``` 
 
-Of course there is a default option, which will include all available options.
+Activate the environment:
+
+```python src/main.py env --activate myenv```
+
 
 Depending on your configured modules, you will need to install additional Python packages, as the above-mentioned 3 
 packages are **not** sufficient to run a benchmark!
-We provide the option to generate a Conda file or a pip requirements file, which you can use to install the required packages.
 You can also configure multiple QUARK environments and then switch between them via:
 
 ```python src/main.py env --activate myenv2```
 
 > __Note:__ Different modules require different python packages.
 > Be sure that your python environment has the necessary packages installed!
+Ensure the environment is properly configured:
 
 To see which environments are configured, please use
 
@@ -88,6 +115,18 @@ python src/main.py
 `AWS_PROFILE` is only needed if you want to use an AWS braket device (default is quantum_computing). In case no profile is needed in your case, please set `export AWS_PROFILE=default`.
 
 `AWS_REGION` is only needed if you need another aws region than us-east-1. Usually this is specific to the Braket device.
+
+### Running Specific Modules
+
+If you want to run specific modules, use the preconfigured YAML files under tests/config/valid/. 
+
+For example:
+
+```python src/main.py -c tests/config/valid/TSP.yml```
+
+Replace TSP.yml with the desired module configuration (e.g., MIS.yml, generativemodeling.yml, etc.)
+> __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
+
 
 Example run (You need to check at least one option with an ``X`` for the checkbox question):
 ```
@@ -173,13 +212,6 @@ python src/main.py --resume-dir=<result-dir>
 ```
 Note that you can copy/paste the --resume-dir option from the QUARK output as shown in the above example.
 
-#### Non-Interactive Mode
-It is also possible to start the script with a config file instead of using the interactive mode:
-```
- python src/main.py --config config.yml
-```
-
-> __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
 
 Example for a config file:
 
@@ -198,6 +230,21 @@ application:
       submodules: []
 repetitions: 1
 ```
+### For Users of Older QUARK Versions
+
+If you're upgrading from an older version of QUARK or Python, follow these steps:
+1. Upgrade to Python 3.12:
+
+      ```conda install python=3.12```
+
+2. Reconfigure your environment:
+
+    ```python src/main.py env --configure myenv```
+
+3. Install the necessary dependencies:
+
+      ```pip install -r .settings/requirements_full.txt```
+
 
 ### Run as Container
 We also support the option to run the framework as a container.

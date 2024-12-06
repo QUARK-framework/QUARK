@@ -79,8 +79,8 @@ class TestLibraryQiskit(unittest.TestCase):
         self.assertEqual(output["n_params"], 3)  # RX, RY, RXX need 3 parameters
 
     # These tests are currently commented out because implementing test cases for the
-    # cusvaer simulator is challenging due to the complexity of mocking certain 
-    # behaviors of the `cusvaer`-enabled backend. We plan to implement these tests 
+    # cusvaer simulator is challenging due to the complexity of mocking certain
+    # behaviors of the `cusvaer`-enabled backend. We plan to implement these tests
     # in the future once we have resolved these issues.
     # @patch("modules.applications.qml.generative_modeling.mappings.LibraryQiskit.select_backend.cusvaer")
     # @patch("qiskit_aer.Aer.get_backend")

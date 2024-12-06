@@ -13,10 +13,10 @@ class TestSAT(unittest.TestCase):
         cls.sat_instance = SAT()
         cls.problem = cls.sat_instance.generate_problem(
             {
-                "variables": 10, "clvar_ratio_cons": 2, 
+                "variables": 10, "clvar_ratio_cons": 2,
                 "clvar_ratio_test": 2, "problem_set": 5,
                 "max_tries": 100
-             }
+            }
         )
 
     @classmethod

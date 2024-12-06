@@ -32,8 +32,7 @@ class TestMIS(unittest.TestCase):
     def test_get_parameter_options(self):
         options = self.mis_instance.get_parameter_options()
         self.assertIn("size", options)
-        self.assertIn("spacing", options)
-        self.assertIn("filling_fraction", options)
+        self.assertIn("graph_type", options)
 
     def test_generate_problem(self):
         # Generate with valid configuration

@@ -218,10 +218,10 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
     @patch("modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend.FakeProviderForBackendV2")
     def test_get_FakeBackend(self, mock_provider, mock_aer_get_backend, mock_simulator_from_backend, mock_noise_model):
         mock_backend = MagicMock()
-        mock_backend.num_qubits = 5 
+        mock_backend.num_qubits = 5
         mock_backend.name = "fake_backend_name"
         mock_backend.coupling_map = [[0, 1], [1, 2]]
-        
+
         # Configure the mock provider
         mock_provider.return_value.backend.return_value = mock_backend
         mock_provider.return_value._backends = [mock_backend]
@@ -233,7 +233,7 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
 
         with self.subTest("Retrieve backend successfully"):
             backend = self.backend_instance.get_FakeBackend("fake_backend_name", 4)
-            
+
             # Assertions
             mock_provider.return_value.backend.assert_called_once_with(name="fake_backend_name")
             mock_noise_model.assert_called_once_with(mock_backend)

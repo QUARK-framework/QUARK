@@ -142,7 +142,7 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
             },
             "learning_rate_generator": {
                 "values": [0.1, 0.2],
-                "description": "What learnig rate do you want to set for the generator?"
+                "description": "What learning rate do you want to set for the generator?"
             },
             "learning_rate_discriminator": {
                 "values": [0.1, 0.05],

@@ -144,7 +144,7 @@ class Ising(Mapping):
         j_matrix = np.zeros((qubit_op.num_qubits, qubit_op.num_qubits), dtype=complex)
 
         for pauli_op in qubit_op:
-            pauli_str, coeff = pauli_op.primitive.to_list()[0]
+            pauli_str, coeff = pauli_op.to_list()[0]
             index_pos_list = list(locate(pauli_str, lambda a: a == 'Z'))
 
             if len(index_pos_list) == 1:

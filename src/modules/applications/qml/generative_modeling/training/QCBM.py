@@ -17,12 +17,14 @@ import logging
 import numpy as np
 from cma import CMAEvolutionStrategy
 from tensorboardX import SummaryWriter
+import matplotlib
+from matplotlib import pyplot as plt
 from matplotlib import figure, axes
-import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm
 
+matplotlib.use('Agg')
 MPI = is_running_mpi()
 comm = get_comm()
 
@@ -58,8 +60,8 @@ class QCBM(TrainingGenerative):
         return [
             {"name": "numpy", "version": "1.26.4"},
             {"name": "cma", "version": "4.0.0"},
-            {"name": "matplotlib", "version": "3.7.5"},
-            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "matplotlib", "version": "3.9.3"},
+            {"name": "tensorboard", "version": "2.18.0"},
             {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
 

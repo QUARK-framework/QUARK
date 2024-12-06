@@ -110,7 +110,7 @@ Example for an application, which should reside under ``src/modules/applications
                 :returns: A list of dictionaries containing the name and version of required packages
                 """
                 return [
-                    {"name": "networkx", "version": "3.2.1"},
+                    {"name": "networkx", "version": "3.4.2"},
                     {"name": "numpy", "version": "1.26.4"}
                 ]
 

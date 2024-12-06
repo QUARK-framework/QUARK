@@ -21,11 +21,13 @@ from torch import nn
 import torch.nn.functional as funct
 from tensorboardX import SummaryWriter
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
 from utils_mpi import is_running_mpi, get_comm
 
+matplotlib.use('Agg')
 MPI = is_running_mpi()
 comm = get_comm()
 
@@ -85,9 +87,9 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "torch", "version": "2.2.0"},
-            {"name": "matplotlib", "version": "3.7.5"},
-            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "torch", "version": "2.5.1"},
+            {"name": "matplotlib", "version": "3.9.3"},
+            {"name": "tensorboard", "version": "2.18.0"},
             {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
 
@@ -140,7 +142,7 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
             },
             "learning_rate_generator": {
                 "values": [0.1, 0.2],
-                "description": "What learnig rate do you want to set for the generator?"
+                "description": "What learning rate do you want to set for the generator?"
             },
             "learning_rate_discriminator": {
                 "values": [0.1, 0.05],

@@ -28,7 +28,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9.16'
+          python-version: '3.12.7'
           token: ${{ secrets.QUARK_GH_GITHUB_COM_TOKEN }}
 
       - name: Install pylint and autopep8

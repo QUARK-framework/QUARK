@@ -15,11 +15,12 @@
 from collections import defaultdict
 import logging
 
-import matplotlib.pyplot as plt
 import matplotlib
+from matplotlib import pyplot as plt
 import seaborn as sns
 import pandas as pd
 
+matplotlib.use('Agg')
 matplotlib.rcParams['savefig.dpi'] = 300
 sns.set(style="darkgrid")
 

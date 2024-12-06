@@ -17,9 +17,10 @@ from typing import TypedDict
 import pulser
 from pulser.devices import MockDevice
 from pulser_simulation import QutipBackend
+from pulser.noise_model import NoiseModel
+from pulser.backend.config import EmulatorConfig
 
 from modules.devices.pulser.Pulser import Pulser
-from modules.Core import Core
 
 
 class MockNeutralAtomDevice(Pulser):
@@ -76,9 +77,22 @@ class MockNeutralAtomDevice(Pulser):
 
         :return: Backend config for the emulator
         """
-        noise_types = [key for key, value in self.config.items() if value]
-        noise_model = pulser.backend.noise_model.NoiseModel(noise_types=noise_types)
-        emulator_config = pulser.backend.config.EmulatorConfig(noise_model=noise_model)
+        noise_params = {}
+        if "relaxation_rate" in self.config:
+            noise_params["relaxation_rate"] = self.config["relaxation_rate"]
+        if "dephasing_rate" in self.config:
+            noise_params["dephasing_rate"] = self.config["dephasing_rate"]
+        if "depolarizing_rate" in self.config:
+            noise_params["depolarizing_rate"] = self.config["depolarizing_rate"]
+
+        # Log the noise parameters for debugging
+        print("Configured noise parameters:", noise_params)
+
+        # Create the NoiseModel using parameters from self.config
+        noise_model = NoiseModel(**noise_params)
+
+        # Return the EmulatorConfig with the noise model
+        emulator_config = EmulatorConfig(noise_model=noise_model)
         return emulator_config
 
     def get_default_submodule(self, option: str) -> None:

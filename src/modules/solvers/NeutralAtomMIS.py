@@ -42,7 +42,7 @@ class NeutralAtomMIS(Solver):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "pulser", "version": "0.19.0"}]
+        return [{"name": "pulser", "version": "1.1.1"}]
 
     def get_default_submodule(self, option: str) -> Core:
         """

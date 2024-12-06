@@ -76,17 +76,33 @@ class ConfigManager:
         self.application = _get_instance_with_sub_options(app_modules, app_name)
 
         application_config = self.application.get_parameter_options()
-        application_config = ConfigManager._query_for_config(
+        more_app_config = {}
+
+        full_application_config = ConfigManager._query_for_config(
             application_config, f"(Option for {application_answer['application']})")
+        depending_submodules = False
 
-        submodule_options = self.application.get_available_submodule_options()
-        submodule_answer = checkbox(key='submodules', message="What submodule do you want?",
-                                    choices=submodule_options)
-
+        available_submodules = []
+        for parameter in application_config:
+            if ("depending_submodule" in application_config[parameter] and
+                    application_config[parameter]["depending_submodule"]):
+                available_submodules = self.application.get_available_submodules(full_application_config[parameter])
+                depending_submodules = True
+        if not depending_submodules:
+            available_submodules = self.application.get_available_submodule_options()
+        submodule_answer = checkbox(key='submodules',
+                                    message="What submodule do you want?",
+                                    choices=available_submodules)
+        for option in submodule_answer["submodules"]:
+            if self.application.depending_parameters:
+                more_app_config = self.application.get_depending_parameters(option, full_application_config)
+                more_app_config = (ConfigManager._query_for_config
+                                   (more_app_config, f"(Option for {self.application.__class__.__name__})"))
+                full_application_config = full_application_config | more_app_config
         self.config = {
             "application": {
                 "name": app_name,
-                "config": application_config,
+                "config": full_application_config,
                 "submodules": [self.query_module(self.application.get_submodule(sm), sm) for sm in
                                submodule_answer["submodules"]],
             },
@@ -109,15 +125,38 @@ class ConfigManager:
         :return: Config module with the choices of the user
         """
         module_config = module.get_parameter_options()
-        module_config = ConfigManager._query_for_config(module_config,
-                                                        f"(Option for {module.__class__.__name__})")
-        available_submodules = module.get_available_submodule_options()
-        submodule_answer = checkbox(key='submodules', message="What submodule do you want?",
-                                    choices=available_submodules)
+        full_module_config = ConfigManager._query_for_config(module_config, f"(Option for {module.__class__.__name__})")
+        depending_submodules = False
+        available_submodules = []
+        for parameter in module_config:
+            if ("depending_submodule" in module_config[parameter] and
+                    module_config[parameter]["depending_submodule"]):
+                available_submodules = module.get_available_submodules(full_module_config[parameter])
+                depending_submodules = True
+        if not depending_submodules:
+            available_submodules = module.get_available_submodule_options()
+        more_module_config = {}
+        if available_submodules:
+            if len(available_submodules) == 1:
+                logging.info(
+                    f"Skipping asking for submodule, since only 1 option ({available_submodules[0]}) is available.")
+                submodule_answer = {"submodules": [available_submodules[0]]}
+            else:
+                submodule_answer = checkbox(key='submodules',
+                                            message="What submodule do you want?",
+                                            choices=available_submodules)
+                for option in submodule_answer:
+                    if module.depending_parameters:
+                        more_module_config = module.get_depending_parameters(option, full_module_config)
+                        more_module_config = (ConfigManager._query_for_config
+                                              (more_module_config, f"(Option for {module.__class__.__name__})"))
+                        full_module_config = full_module_config | more_module_config
+        else:
+            submodule_answer = {"submodules": []}
 
         return {
             "name": module_friendly_name,
-            "config": module_config,
+            "config": full_module_config,
             "submodules": [self.query_module(module.get_submodule(sm), sm) for sm in
                            submodule_answer["submodules"]]
         }
@@ -333,13 +372,13 @@ class ConfigManager:
                     err_msg = f"Inconsistent parameter options: condition references unknown parameter: {key_in_cond}"
                 elif not dependency.get('exclusive', False):
                     err_msg = f"Inconsistent parameter options: " \
-                              f"condition references non exclusive parameter: {key_in_cond}"
+                        f"condition references non exclusive parameter: {key_in_cond}"
                 else:
                     consistent = True
                 if not consistent:
                     raise Exception(f"{prefix} {err_msg}")
 
-                if not config[key_in_cond][0] in config_answer.get("if")["in"]:
+                if config[key_in_cond][0] not in config_answer.get("if")["in"]:
                     continue
 
             if len(config_answer['values']) == 1 and "custom_input" not in config_answer:
@@ -365,7 +404,7 @@ class ConfigManager:
                 if "Custom Input" in values:
                     freetext_answer = inquirer.prompt(
                         [inquirer.Text('custom_input', message=f"What's your custom input for {key}? (No validation of "
-                                                               "this input is done!)")])
+                                       "this input is done!)")])
 
                     # Replace the freetext placeholder with the user input
                     values.remove("Custom Input")
@@ -374,11 +413,11 @@ class ConfigManager:
                 if "Custom Range" in values:
                     range_answer = inquirer.prompt(
                         [inquirer.Text('start', message=f"What's the start of your range for {key}? (No validation of "
-                                                        "this input is done!)"),
+                                       "this input is done!)"),
                          inquirer.Text('stop', message=f"What's the end of your range for {key}? (No validation of "
-                                                       "this input is done!)"),
+                                       "this input is done!)"),
                          inquirer.Text('step', message=f"What are the steps of your range for {key}? (No validation of "
-                                                       "this input is done!)")])
+                                       "this input is done!)")])
                     values.remove("Custom Range")
                     values.extend(np.arange(float(range_answer["start"]), float(range_answer["stop"]),
                                             float(range_answer["step"])))

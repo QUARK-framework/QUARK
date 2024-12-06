@@ -19,7 +19,7 @@ import logging
 import numpy as np
 from qiskit_optimization import QuadraticProgram
 from qiskit_optimization.converters import (
-    QuadraticProgramToQubo, InequalityToEquality, IntegerToBinary,
+    InequalityToEquality, IntegerToBinary,
     LinearEqualityToPenalty
 )
 

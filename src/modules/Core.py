@@ -16,9 +16,9 @@ from __future__ import annotations  # Needed if you want to type hint a method w
 
 import os
 import sys
-import logging
 from abc import ABC, abstractmethod
 from typing import final
+
 from utils import _get_instance_with_sub_options
 from Metrics import Metrics
 
@@ -32,10 +32,11 @@ class Core(ABC):
         """
         Constructor method.
 
-        :param name: name used to identify this QUARK module. If not specified class name will be used as default.
+        :param name: Name used to identify this QUARK module. If not specified class name will be used as default.
         """
         self.submodule_options = []
         self.sub_options = []
+        self.depending_parameters = False
         self.preprocessed_input = None
         self.postprocessed_input = None
         if name is None:
@@ -67,6 +68,27 @@ class Core(ABC):
         """
         raise NotImplementedError("Please don't use the base version of get_parameter_options. "
                                   "Implement your own override instead.")
+
+    def get_available_submodules(self, option: list) -> list:
+        """
+        If the module has submodules depending on certain options, this method should adjust the submodule_options
+        accordingly.
+
+        :param option: List of chosen options
+        :return: List of available submodules
+        """
+        return []
+
+    def get_depending_parameters(self, option: str, config: dict) -> dict:
+        """
+        If the module has parameters depending on certain options, this method should return the parameters for the
+        given option.
+
+        :param option: The chosen option
+        :param config: Current config dictionary
+        :return: The parameters for the given option
+        """
+        return {}
 
     @final
     def get_submodule(self, option: str) -> Core:

@@ -12,8 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import pickle
 import logging
+import pickle
 from typing import TypedDict
 
 import networkx as nx
@@ -23,7 +23,7 @@ from modules.applications.optimization.Optimization import Optimization
 from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
 from utils import start_time_measurement, end_time_measurement
 
-# define R_rydberg
+# Define R_rydberg
 R_rydberg = 9.75
 
 
@@ -49,7 +49,10 @@ class MIS(Optimization):
         Constructor method.
         """
         super().__init__("MIS")
-        self.submodule_options = ["NeutralAtom"]
+        self.submodule_options = ["QIRO", "NeutralAtom"]
+        # TODO add more solvers like classical heuristics, VQE, QAOA, etc.
+        self.depending_parameters = True
+        self.graph = None
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -76,7 +79,10 @@ class MIS(Optimization):
         :return: Instance of the corresponding submodule
         :raises NotImplementedError: If the option is not recognized
         """
-        if option == "NeutralAtom":
+        if option == "QIRO":
+            from modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
+            return QIRO()
+        elif option == "NeutralAtom":
             from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
@@ -89,22 +95,21 @@ class MIS(Optimization):
         :return: Configuration dictionary for this application
         .. code-block:: python
 
-            return {
-                    "size": {
-                        "values": list(range(1, 18)),
-                        "description": "How large should your graph be?"
-                    },
-                    "spacing": {
-                        "values": [x/10 for x in range(1, 11)],
-                        "description": "How much space do you want between your nodes,"
-                                    " relative to Rydberg distance?"
-                    },
-                    "filling_fraction": {
-                        "values": [x/10 for x in range(1, 11)],
-                        "description": "What should the filling fraction be?"
-                    },
+        return {
+                "size": {
+                    "values": [1, 5, 10, 15],
+                    "custom_input": True,
+                    "allow_ranges": True,
+                    "postproc": int,
+                    "description": "How large should your graph be?"
+                },
+                "graph_type": {
+                    "values": ["hexagonal", "erdosRenyi"],
+                    "postproc": str,
+                    "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                    "depending_submodule": True
                 }
-
+            }
         """
         return {
             "size": {
@@ -114,21 +119,68 @@ class MIS(Optimization):
                 "postproc": int,
                 "description": "How large should your graph be?"
             },
-            "spacing": {
-                "values": [x / 10 for x in range(3, 11, 2)],
-                "custom_input": True,
-                "allow_ranges": True,
-                "postproc": float,
-                "description": "How much space do you want between your nodes,relative to Rydberg distance?"
-            },
+            "graph_type": {
+                "values": ["hexagonal", "erdosRenyi"],
+                "postproc": str,
+                "description": "Do you want a hexagonal or an Erdos-Renyi graph?",
+                "depending_submodule": True
+            }
+        }
+
+    def get_available_submodules(self, option: list) -> list:
+        """
+        Changes mapping options based on selection of graphs.
+
+        :param option: List of chosen graph type
+        :return: List of available submodules
+        """
+        if option == ["hexagonal"]:
+            return ["QIRO", "NeutralAtom"]
+        else:
+            return ["QIRO"]
+
+    def get_depending_parameters(self, option: str, config: dict) -> dict:
+        """
+        Returns parameters necessary for chosen problem option.
+
+        :param option: The chosen option
+        :param config: The current config
+        :return: The parameters for the given option
+        """
+
+        more_params = {
             "filling_fraction": {
                 "values": [x / 10 for x in range(2, 11, 2)],
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float,
-                "description": "What should the filling fraction be?"
-            },
-        }
+                "description": "What should be the filling fraction of the hexagonal graph / p of erdosRenyi graph?"
+            }}
+        if option == "QIRO":
+            more_params["seed"] = {
+                "values": ["No"],
+                "custom_input": True,
+                "description": "Do you want to set a seed? If yes, please set an integer number"
+            }
+
+        elif option == "NeutralAtom":
+            pass  # No additional parameters needed at the moment
+        else:
+            raise NotImplementedError(f"Option {option} not implemented")
+        if "hexagonal" in config["graph_type"]:
+            more_params["spacing"] = {
+                "values": [x / 10 for x in range(3, 11, 2)],
+                "custom_input": True,
+                "allow_ranges": True,
+                "postproc": float,
+                "description": "How much space do you want between your nodes, relative to Rydberg distance?"
+            }
+        param_to_return = {}
+        for key, value in more_params.items():
+            if key not in config:
+                param_to_return[key] = value
+
+        return param_to_return
 
     class Config(TypedDict):
         """
@@ -151,27 +203,47 @@ class MIS(Optimization):
         :return: Networkx graph representing the problem
         """
         if config is None:
-            config = {"size": 3, "spacing": 1, "filling_fraction": 0.5}
+            logging.warning("No config provided, using default values: graph_type='hexagonal', size=3, spacing=1,"
+                            "filling_fraction=0.5")
+            config = {"graph_type": "hexagonal", "size": 3, "spacing": 1, "filling_fraction": 0.5}
 
-        # Ensure config has the necessary information
-        assert all(key in config for key in ['size', 'spacing', 'filling_fraction'])
-
+        graph_type = config.get('graph_type')
         size = config.get('size')
-        spacing = config.get('spacing') * R_rydberg
         filling_fraction = config.get('filling_fraction')
 
-        graph = generate_hexagonal_graph(
-            n_nodes=size,
-            spacing=spacing,
-            filling_fraction=filling_fraction,
-        )
+        if graph_type == "erdosRenyi":
+            gseed = config.get("seed")
 
-        logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")
-        logging.info(f" - Graph size: {size}")
-        logging.info(f" - Spacing: {spacing}")
-        logging.info(f" - Filling fraction: {filling_fraction}")
+            if gseed == "No":
+                graph = nx.erdos_renyi_graph(size, filling_fraction)
 
-        self.application = graph
+            else:
+                try:
+                    gseed = int(gseed)
+                except ValueError:
+                    logging.warning(f"Please select an integer number as seed for the Erdos-Renyi graph instead of "
+                                    f"'{gseed}'. The seed is instead set to 0.")
+                    gseed = 0
+                graph = nx.erdos_renyi_graph(size, filling_fraction, seed=gseed)
+            logging.info("Created MIS problem with the nx.erdos_renyi graph method, with the following attributes:")
+            logging.info(f" - Graph size: {size}")
+            logging.info(f" - p: {filling_fraction}")
+            logging.info(f" - seed: {gseed}")
+
+        else:
+            if config.get('spacing') is None:
+                spacing = 0.5
+            else:
+                spacing = config.get('spacing')
+            graph = generate_hexagonal_graph(n_nodes=size,
+                                             spacing=spacing * R_rydberg,
+                                             filling_fraction=filling_fraction)
+            logging.info("Created MIS problem with the generate hexagonal graph method, with the following attributes:")
+            logging.info(f" - Graph size: {size}")
+            logging.info(f" - Spacing: {spacing * R_rydberg}")
+            logging.info(f" - Filling fraction: {filling_fraction}")
+
+        self.graph = graph
         return graph.copy()
 
     def process_solution(self, solution: list) -> tuple[list, float]:
@@ -194,34 +266,32 @@ class MIS(Optimization):
         start = start_time_measurement()
         is_valid = True
 
-        nodes = list(self.application.nodes())
-        edges = list(self.application.edges())
-
-        # TODO: Check if the solution is maximal?
+        nodes = list(self.graph.nodes())
+        edges = list(self.graph.edges())
 
         # Check if the solution is independent
         is_independent = all((u, v) not in edges for u, v in edges if u in solution and v in solution)
         if is_independent:
-            logging.info("The solution is independent")
+            logging.info("The solution is independent.")
         else:
-            logging.warning("The solution is not independent")
+            logging.warning("The solution is not independent.")
             is_valid = False
 
         # Check if the solution is a set
         solution_set = set(solution)
         is_set = len(solution_set) == len(solution)
         if is_set:
-            logging.info("The solution is a set")
+            logging.info("The solution is a set.")
         else:
-            logging.warning("The solution is not a set")
+            logging.warning("The solution is not a set.")
             is_valid = False
 
         # Check if the solution is a subset of the original nodes
         is_subset = all(node in nodes for node in solution)
         if is_subset:
-            logging.info("The solution is a subset of the problem")
+            logging.info("The solution is a subset of the problem.")
         else:
-            logging.warning("The solution is not a subset of the problem")
+            logging.warning("The solution is not a subset of the problem.")
             is_valid = False
 
         return is_valid, end_time_measurement(start)
@@ -248,4 +318,4 @@ class MIS(Optimization):
         :param iter_count: Iteration count for file versioning
         """
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
-            pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.graph, file, pickle.HIGHEST_PROTOCOL)

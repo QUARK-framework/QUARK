@@ -42,7 +42,7 @@ class QUBO(Mapping):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "networkx", "version": "3.2.1"},
+            {"name": "networkx", "version": "3.4.2"},
             {"name": "dwave_networkx", "version": "0.8.15"}
         ]
 

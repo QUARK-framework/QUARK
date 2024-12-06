@@ -22,6 +22,7 @@ from functools import partial, wraps
 from time import time
 from typing import TypedDict
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pennylane as qml
@@ -30,6 +31,8 @@ from pennylane import numpy as npqml
 from modules.solvers.Solver import Solver
 from modules.Core import Core
 from utils import start_time_measurement, end_time_measurement
+
+matplotlib.use('Agg')
 
 
 class PennylaneQAOA(Solver):
@@ -64,9 +67,9 @@ class PennylaneQAOA(Solver):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "pennylane", "version": "0.37.0"},
-            {"name": "pennylane-lightning", "version": "0.38.0"},
-            {"name": "amazon-braket-pennylane-plugin", "version": "1.30.0"},
+            {"name": "pennylane", "version": "0.39.0"},
+            {"name": "pennylane-lightning", "version": "0.39.0"},
+            {"name": "amazon-braket-pennylane-plugin", "version": "1.30.2"},
             {"name": "numpy", "version": "1.26.4"}
         ]
 

@@ -239,26 +239,7 @@ You can resume an interrupted QUARK run by calling:
 ```
 python src/main.py --resume-dir=<result-dir>
 ```
-Note that you can copy/paste the --resume-dir option from the QUARK output as shown in the above example.
-
-
-Example for a config file:
-
-```
-application:
-  config:
-    nodes:
-    - 3
-  name: TSP
-  submodules:
-  - config: {}
-    name: GreedyClassicalTSP
-    submodules:
-    - config: {}
-      name: Local
-      submodules: []
-repetitions: 1
-```
+Note that you can copy/paste the ```--resume-dir``` option from the QUARK output as shown in the above example.
 
 ### Run as Container
 We also support the option to run the framework as a container.

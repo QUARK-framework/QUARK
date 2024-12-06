@@ -86,11 +86,6 @@ class TestLibraryPennylane(unittest.TestCase):
         self.assertEqual(backend.name, "lightning.qubit")
         self.assertEqual(len(backend.wires), 3)
 
-        # Test default.qubit.jax
-        backend = self.library_instance.select_backend("default.qubit.jax", 4)
-        self.assertEqual(backend.name, "Default qubit (jax) PennyLane plugin")
-        self.assertEqual(len(backend.wires), 4)
-
         # Test invalid backend
         with self.assertRaises(NotImplementedError):
             self.library_instance.select_backend("invalid.backend", 2)

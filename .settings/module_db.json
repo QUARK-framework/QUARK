@@ -1,7 +1,7 @@
 {
-  "build_number": 20,
-  "build_date": "03-12-2024 14:13:12",
-  "git_revision_number": "64cef10ca89be21b6784acab049532b025227a45",
+  "build_number": 17,
+  "build_date": "06-12-2024 16:34:38",
+  "git_revision_number": "4e90d19586fdbf5672ebcb4725aa9b045b6733ce",
   "modules": [
     {
       "name": "PVC",
@@ -2082,6 +2082,47 @@
       "class": "MIS",
       "module": "modules.applications.optimization.MIS.MIS",
       "submodules": [
+        {
+          "name": "QIRO",
+          "class": "QIRO",
+          "args": {},
+          "module": "modules.applications.optimization.MIS.mappings.QIRO",
+          "requirements": [
+            {
+              "name": "qrisp",
+              "version": "0.5.2"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QrispQIRO",
+              "class": "QIROSolver",
+              "args": {},
+              "module": "modules.solvers.QrispQIRO",
+              "requirements": [
+                {
+                  "name": "qrisp",
+                  "version": "0.5.2"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "qrisp_simulator",
+                  "class": "QrispSimulator",
+                  "args": {},
+                  "module": "modules.devices.qrisp_simulator.QrispSimulator",
+                  "requirements": [
+                    {
+                      "name": "qrisp",
+                      "version": "0.5.2"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
         {
           "name": "NeutralAtom",
           "class": "NeutralAtom",

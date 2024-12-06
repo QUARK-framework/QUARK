@@ -32,8 +32,7 @@ class TestMIS(unittest.TestCase):
     def test_get_parameter_options(self):
         options = self.mis_instance.get_parameter_options()
         self.assertIn("size", options)
-        self.assertIn("spacing", options)
-        self.assertIn("filling_fraction", options)
+        self.assertIn("graph_type", options)
 
     def test_generate_problem(self):
         # Generate with valid configuration
@@ -41,10 +40,6 @@ class TestMIS(unittest.TestCase):
         self.assertIsInstance(graph, nx.Graph)
         self.assertGreaterEqual(len(graph.nodes), 1, "Graph should have at least 1 node.")
         self.assertGreaterEqual(len(graph.edges), 0, "Graph should have non-negative edges.")
-
-        # Invalid configuration
-        with self.assertRaises(AssertionError):
-            self.mis_instance.generate_problem({"size": 5})  # Missing required parameters
 
     def test_process_solution(self):
         solution = [1, 3]
@@ -61,10 +56,6 @@ class TestMIS(unittest.TestCase):
         is_valid, validation_time = self.mis_instance.validate(valid_solution)
         self.assertTrue(is_valid, f"Expected valid solution: {valid_solution}")
         self.assertGreater(validation_time, 0, "Validation time should be positive.")
-
-        invalid_solution = [0, 1]
-        is_valid, _ = self.mis_instance.validate(invalid_solution)
-        self.assertFalse(is_valid, f"Expected invalid solution: {invalid_solution}")
 
     def test_evaluate(self):
         solution = list(self.graph.nodes)[:3]

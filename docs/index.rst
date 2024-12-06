@@ -24,7 +24,7 @@ to mathematical formulations, solvers, hardware or other custom module definitio
 Publications
 ============
 
-Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028). The data used for the paper can be found in ``results/results.csv``. Even though the architecture changes significantly from QUARK 1.0 to 2.0, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK 2.0.
+Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028). The data used for the paper can be found in ``results/results.csv``. Even though the architecture changes significantly from QUARK 1.0 to the current version, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK.
 
 .. toctree::
    :maxdepth: 2

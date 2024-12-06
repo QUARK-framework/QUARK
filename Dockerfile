@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.12
 
 COPY . .
 RUN pip install --default-timeout=1800 -r .settings/requirements_full.txt

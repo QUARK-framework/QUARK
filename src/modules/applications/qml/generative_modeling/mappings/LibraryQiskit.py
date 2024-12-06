@@ -49,7 +49,7 @@ class LibraryQiskit(LibraryGenerative):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "qiskit", "version": "1.1.0"},
+            {"name": "qiskit", "version": "1.3.0"},
             {"name": "numpy", "version": "1.26.4"}
         ]
 

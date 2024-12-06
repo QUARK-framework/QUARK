@@ -67,9 +67,9 @@ class PennylaneQAOA(Solver):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "pennylane", "version": "0.37.0"},
-            {"name": "pennylane-lightning", "version": "0.38.0"},
-            {"name": "amazon-braket-pennylane-plugin", "version": "1.30.0"},
+            {"name": "pennylane", "version": "0.39.0"},
+            {"name": "pennylane-lightning", "version": "0.39.0"},
+            {"name": "amazon-braket-pennylane-plugin", "version": "1.30.2"},
             {"name": "numpy", "version": "1.26.4"}
         ]
 

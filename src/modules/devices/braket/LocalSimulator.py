@@ -15,7 +15,6 @@
 from braket.devices import LocalSimulator as LocalSimulatorBraket
 
 from modules.devices.braket.Braket import Braket
-from modules.Core import Core
 
 
 class LocalSimulator(Braket):

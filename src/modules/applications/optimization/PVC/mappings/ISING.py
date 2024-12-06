@@ -46,9 +46,9 @@ class Ising(Mapping):
         :return: List of dictionaries with requirements of this module
         """
         return [
-            {"name": "networkx", "version": "3.2.1"},
+            {"name": "networkx", "version": "3.4.2"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "dimod", "version": "0.12.17"},
+            {"name": "dimod", "version": "0.12.18"},
             *QUBO.get_requirements()
         ]
 

@@ -52,12 +52,12 @@ class Ising(Mapping):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "networkx", "version": "3.2.1"},
+            {"name": "networkx", "version": "3.4.2"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "dimod", "version": "0.12.17"},
+            {"name": "dimod", "version": "0.12.18"},
             {"name": "more-itertools", "version": "10.5.0"},
             {"name": "qiskit-optimization", "version": "0.6.1"},
-            {"name": "pyqubo", "version": "1.4.0"},
+            {"name": "pyqubo", "version": "1.5.0"},
             *QUBO.get_requirements()
         ]
 

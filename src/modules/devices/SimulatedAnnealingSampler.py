@@ -15,7 +15,6 @@
 import dwave.samplers
 
 from modules.devices.Device import Device
-from modules.Core import Core
 
 
 class SimulatedAnnealingSampler(Device):
@@ -38,7 +37,7 @@ class SimulatedAnnealingSampler(Device):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "dwave-samplers", "version": "1.3.0"}]
+        return [{"name": "dwave-samplers", "version": "1.4.0"}]
 
     def get_parameter_options(self) -> dict:
         """

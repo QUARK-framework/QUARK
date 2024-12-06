@@ -41,11 +41,11 @@ class LibraryPennylane(LibraryGenerative):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "pennylane", "version": "0.37.0"},
-            {"name": "pennylane-lightning", "version": "0.38.0"},
+            {"name": "pennylane", "version": "0.39.0"},
+            {"name": "pennylane-lightning", "version": "0.39.0"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "jax", "version": "0.4.30"},
-            {"name": "jaxlib", "version": "0.4.30"}
+            {"name": "jax", "version": "0.4.35"},
+            {"name": "jaxlib", "version": "0.4.35"}
         ]
 
     def get_parameter_options(self) -> dict:

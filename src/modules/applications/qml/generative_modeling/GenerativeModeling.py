@@ -15,7 +15,6 @@
 from typing import Union
 from utils import start_time_measurement, end_time_measurement
 
-from modules.applications.Application import Application
 from modules.applications.qml.QML import QML
 from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
 from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData

@@ -13,7 +13,6 @@
 #  limitations under the License.
 
 from modules.devices.Device import Device
-from modules.Core import Core
 
 
 class Local(Device):

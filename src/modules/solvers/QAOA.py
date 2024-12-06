@@ -51,7 +51,7 @@ class QAOA(Solver):
         :return: List of dict with requirements of this module
         """
         return [
-            {"name": "amazon-braket-sdk", "version": "1.87.0"},
+            {"name": "amazon-braket-sdk", "version": "1.88.2"},
             {"name": "scipy", "version": "1.12.0"},
             {"name": "numpy", "version": "1.26.4"}
         ]
@@ -449,6 +449,7 @@ def train(device: AwsDevice, options: dict, p: int, ising: np.ndarray, n_qubits:
     bnds = bnds_gamma + bnds_beta
 
     tracker["params"].append(params0)
+    print(f"Qubit count: {n_qubits}")
 
     # Run classical optimization (example: method='Nelder-Mead')
     try:

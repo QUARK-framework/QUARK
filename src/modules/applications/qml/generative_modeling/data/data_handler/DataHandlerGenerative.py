@@ -47,8 +47,8 @@ class DataHandlerGenerative(Core, DataHandler, ABC):
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "pandas", "version": "2.2.2"},
-            {"name": "tensorboard", "version": "2.17.0"}
+            {"name": "pandas", "version": "2.2.3"},
+            {"name": "tensorboard", "version": "2.18.0"}
         ]
 
     def preprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[any, float]:

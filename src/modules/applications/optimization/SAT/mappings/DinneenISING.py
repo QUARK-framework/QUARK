@@ -47,7 +47,7 @@ class DinneenIsing(Mapping):
         return [
             {"name": "nnf", "version": "0.4.1"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "dimod", "version": "0.12.17"},
+            {"name": "dimod", "version": "0.12.18"},
             *DinneenQUBO.get_requirements()
         ]
 

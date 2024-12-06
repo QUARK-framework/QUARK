@@ -23,9 +23,9 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
     def test_get_requirements(self):
         requirements = self.backend_instance.get_requirements()
         expected_requirements = [
-            {"name": "qiskit", "version": "1.1.0"},
-            {"name": "qiskit_ibm_runtime", "version": "0.29.0"},
-            {"name": "qiskit_aer", "version": "0.15.0"},
+            {"name": "qiskit", "version": "1.3.0"},
+            {"name": "qiskit_ibm_runtime", "version": "0.33.2"},
+            {"name": "qiskit_aer", "version": "0.15.1"},
             {"name": "numpy", "version": "1.26.4"}
         ]
         self.assertEqual(requirements, expected_requirements)
@@ -226,13 +226,28 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         mock_backend = MagicMock()
         mock_backend.num_qubits = 5
         mock_backend.name = "fake_backend_name"
-        mock_provider.return_value.get_backend.return_value = mock_backend
+        mock_backend.coupling_map = [[0, 1], [1, 2]]
+
+        # Configure the mock provider
+        mock_provider.return_value.backend.return_value = mock_backend
+        mock_provider.return_value._backends = [mock_backend]
+
+        # Mock other components
         mock_noise_model.return_value = MagicMock()
+        mock_simulator_from_backend.return_value = MagicMock()
         mock_aer_get_backend.return_value = MagicMock()
 
         with self.subTest("Retrieve backend successfully"):
             backend = self.backend_instance.get_FakeBackend("fake_backend_name", 4)
-            mock_provider.return_value.get_backend.assert_called_once_with("fake_backend_name")
+
+            # Assertions
+            mock_provider.return_value.backend.assert_called_once_with(name="fake_backend_name")
             mock_noise_model.assert_called_once_with(mock_backend)
             mock_simulator_from_backend.assert_called_once_with(mock_backend)
             self.assertEqual(backend, mock_simulator_from_backend.return_value)
+
+        with self.subTest("Fallback to AerSimulator"):
+            # Test fallback case when num_qubits exceeds backend capacity
+            backend = self.backend_instance.get_FakeBackend("fake_backend_name", 6)
+            mock_aer_get_backend.assert_called_once_with("aer_simulator")
+            self.assertEqual(backend, mock_aer_get_backend.return_value)

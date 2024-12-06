@@ -38,7 +38,7 @@ class TestPIT(unittest.TestCase):
         requirements = self.pit_instance.get_requirements()
         expected_requirements = [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "pandas", "version": "2.2.2"}
+            {"name": "pandas", "version": "2.2.3"}
         ]
         self.assertEqual(requirements, expected_requirements)
 

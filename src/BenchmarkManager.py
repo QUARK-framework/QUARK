@@ -131,7 +131,7 @@ class BenchmarkManager:
         if store_dir is None:
             store_dir = Path.cwd()
         self.store_dir = f"{store_dir}/benchmark_runs/{tag + '-' if not None else ''}" \
-                         f"{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
+            f"{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
         Path(self.store_dir).mkdir(parents=True, exist_ok=True)
         self._set_logger()
 

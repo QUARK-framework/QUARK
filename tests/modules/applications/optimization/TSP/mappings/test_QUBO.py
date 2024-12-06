@@ -18,7 +18,7 @@ class TestQUBO(unittest.TestCase):
     def test_get_requirements(self):
         requirements = self.qubo_instance.get_requirements()
         expected_requirements = [
-            {"name": "networkx", "version": "3.2.1"},
+            {"name": "networkx", "version": "3.4.2"},
             {"name": "dwave_networkx", "version": "0.8.15"},
         ]
         for req in expected_requirements:

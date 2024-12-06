@@ -16,7 +16,6 @@ import os
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import Braket
-from modules.Core import Core
 
 
 class Rigetti(Braket):

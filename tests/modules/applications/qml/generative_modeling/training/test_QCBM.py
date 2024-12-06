@@ -17,8 +17,8 @@ class TestQCBM(unittest.TestCase):
         expected_requirements = [
             {"name": "numpy", "version": "1.26.4"},
             {"name": "cma", "version": "4.0.0"},
-            {"name": "matplotlib", "version": "3.7.5"},
-            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "matplotlib", "version": "3.9.3"},
+            {"name": "tensorboard", "version": "2.18.0"},
             {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
         self.assertEqual(requirements, expected_requirements)

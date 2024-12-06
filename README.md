@@ -100,18 +100,50 @@ Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/)
 
 ## Running a Benchmark
 
+#### Setting Global Variables
 ```bash
 export HTTP_PROXY=http://username:password@proxy.com:8080 
 export AWS_PROFILE=quantum_computing
 export AWS_REGION=us-west-1
-python src/main.py
-
 ```
 `HTTP_PROXY` is only needed if you have to use a proxy to access AWS.
 
 `AWS_PROFILE` is only needed if you want to use an AWS braket device (default is quantum_computing). In case no profile is needed in your case, please set `export AWS_PROFILE=default`.
 
 `AWS_REGION` is only needed if you need another aws region than us-east-1. Usually this is specific to the Braket device.
+
+#### Interactive Mode
+You can run QUARK using
+```
+python src/main.py
+```
+This will initiate an interactive configuration mode to describe what you want to benchmark. After finishing the configuration, the benchmark run begins automatically. The results and the configuration ```config.yml``` file are saved with a timestamp in ```benchmark_runs```.
+
+#### Non-Interactive Mode
+It is also possible to start the script with a config file instead of using the interactive mode:
+```
+ python src/main.py --config config.yml
+```
+
+> __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
+
+Example for a config file:
+
+```
+application:
+  config:
+    nodes:
+    - 3
+  name: TSP
+  submodules:
+  - config: {}
+    name: GreedyClassicalTSP
+    submodules:
+    - config: {}
+      name: Local
+      submodules: []
+repetitions: 1
+```
 
 ### Running Specific Modules
 
@@ -192,7 +224,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
 
 All used config files, logs and results are stored in a folder in the ```benchmark_runs``` directory.
 
-#### interrupt/resume
+### Interrupt/resume
 The processing of backlog items may get interrupted in which case you will see something like
 ```
 2024-03-13 10:25:20,201 [INFO] ================================================================================

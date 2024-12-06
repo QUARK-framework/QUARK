@@ -16,7 +16,7 @@ Documentation with a tutorial and developer guidelines can be found here: https:
 ## Prerequisites
 
 ### Step 1: Install Python 3.12
-QUARK requires **Python 3.12**, you need to install this version of Python if you do not already have it installed.
+QUARK requires **Python 3.12**. You need to install this version of Python if you do not already have it installed.
 Other versions could cause issues with other dependencies used in the framework.
 1. Visit the [Python Downloads Page](https://www.python.org/downloads/) and install Python 3.12.
 2. Verify your Python version:
@@ -36,59 +36,56 @@ QUARK provides flexibility in managing its environment using Conda. Create and a
 ### Step 3: Install Required Packages
 Additionally, we rely on several pip dependencies, which you can install in two ways:
 
-1. Install pip packages manually, 
-
-      If you are setting up the default configuration ( This installs all dependencies needed for the full QUARK framework.):
-
-      ```pip install -r .settings/requirements_full.txt```
-
-
+1. Install pip packages manually, or
 2. Use the QUARK installer.
+   For this installer to work, you need to install the following packages in the first place:
 
+   * inquirer==3.4.0
+   * pyyaml==6.0.2
+   * packaging==24.2
 
-For this installer to work, you need to install the following packages in the first place:
+   To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
+   You can select the modules of choice via :
 
-* inquirer==3.4.0
-* pyyaml==6.0.2
-* packaging==24.2
+   ```python src/main.py env --configure myenv```
 
-To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
-You can select the modules of choice via :
+   This will generate a requirements file ```requirements_myenv.txt``` that you can use to set up a customized conda environment.
 
-```python src/main.py env --configure myenv``` 
+   ```pip install -r .settings/envs/requirements_myenv.txt```
+      
+   If you want to set up the default configuration (which installs all dependencies needed for the full QUARK framework):
 
-Activate the environment:
+   ```pip install -r .settings/requirements_full.txt```
 
-```python src/main.py env --activate myenv```
+   Activate the environment:
 
+   ```python src/main.py env --activate myenv```
 
-Depending on your configured modules, you will need to install additional Python packages, as the above-mentioned 3 
-packages are **not** sufficient to run a benchmark!
-You can also configure multiple QUARK environments and then switch between them via:
+   You can also configure multiple QUARK environments and then switch between them, e.g. via:
 
-```python src/main.py env --activate myenv2```
+   ```python src/main.py env --activate myenv2```
 
-> __Note:__ Different modules require different python packages.
-> Be sure that your python environment has the necessary packages installed!
-Ensure the environment is properly configured:
+   > __Note:__ Different modules require different python packages.
+   > Be sure that your python environment has the necessary packages installed!
+   Ensure the environment is properly configured:
 
-To see which environments are configured, please use
+   To see which environments are configured, please use
 
-```python src/main.py env --list```
+   ```python src/main.py env --list```
 
-You can also visualize the contents of your QUARK environment:
+   You can also visualize the contents of your QUARK environment:
+   
+   ```
+   (quark) %  python src/main.py env --show myenv
+   [...]
+   Content of the environment:
+   >-- TSP
+       >-- GreedyClassicalTSP
+           >-- Local
+   ```
 
-```
-(quark) %  python src/main.py env --show myenv
-[...]
-Content of the environment:
->-- TSP
-    >-- GreedyClassicalTSP
-        >-- Local
-```
-
-In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
-You can find the documentation in the respective Read the Docs section.
+> __Note:__ In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
+> You can find the documentation in the respective Read the Docs section.
 
 ## Git Large File Storage (LFS)
 QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
@@ -230,21 +227,6 @@ application:
       submodules: []
 repetitions: 1
 ```
-### For Users of Older QUARK Versions
-
-If you're upgrading from an older version of QUARK or Python, follow these steps:
-1. Upgrade to Python 3.12:
-
-      ```conda install python=3.12```
-
-2. Reconfigure your environment:
-
-    ```python src/main.py env --configure myenv```
-
-3. Install the necessary dependencies:
-
-      ```pip install -r .settings/requirements_full.txt```
-
 
 ### Run as Container
 We also support the option to run the framework as a container.

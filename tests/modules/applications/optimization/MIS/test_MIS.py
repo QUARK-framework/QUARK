@@ -50,6 +50,7 @@ class TestMIS(unittest.TestCase):
     def test_validate(self):
         logging.disable(logging.WARNING)
         self.mis_instance.application = nx.Graph()
+        self.mis_instance.application.add_nodes_from([0, 1, 2])
         self.mis_instance.application.add_edges_from([(0, 1), (1, 2)])
 
         valid_solution = [0, 2]

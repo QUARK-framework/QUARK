@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 import pandas as pd
+import numpy as np
 
 matplotlib.rcParams['savefig.dpi'] = 300
 sns.set(style="darkgrid")
@@ -94,6 +95,8 @@ class Plotter:
             [*processed_results_with_application_score, *processed_results_rest],
             store_dir, required_application_score_keys
         )
+
+        Plotter.plot_all_metrics(results, store_dir)
 
         logging.info("Finished creating plots.")
 
@@ -245,3 +248,110 @@ class Plotter:
             )
 
         return config
+
+
+    @staticmethod
+    def make_radar_chart(name, subname, store_dir, stats, attribute_labels):
+        """
+        name: Plot title,
+        subname: Plot subtitle (relevant experiment info)
+        store_dir: folder where to store plot,
+        stats: metric values,
+        attribute_labels: metric names
+        """
+
+        assert len(stats) == len(attribute_labels), "labels and values to plot do not have the same length!"
+        attribute_labels.append('')
+
+        markers = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0] #can be any length
+        labels = np.array(attribute_labels)
+
+        angles = np.linspace(0, 2*np.pi, len(labels)-1, endpoint=False)
+        stats = np.concatenate((stats,[stats[0]]))
+        angles = np.concatenate((angles,[angles[0]]))
+        
+        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+
+        ax.plot(angles, stats, 'o-', linewidth=2)
+        ax.fill(angles, stats, alpha=0.25)
+        ax.grid(True)
+        # ax.grid(c="black")
+        ax.spines['polar'].set_visible(False)
+        ax.set_thetagrids(angles[:-1] * 180/np.pi, labels[:-1])
+        ax.set_ylim([0,1])
+        ax.plot(np.linspace(0,2*np.pi, 500), np.ones(500), color="k", linewidth=1)
+
+        plt.yticks(markers)
+        plt.title(subname)
+        plt.suptitle(name, y=1.02)
+
+
+        fig.savefig(f"{store_dir}/metrics_collection_test.pdf", dpi=300, bbox_inches='tight') # dpi=300, bbox_inches='tight'
+        fig.savefig(f"{store_dir}/metrics_collection_test.png", dpi=300, bbox_inches='tight')
+        return 
+
+
+    @staticmethod
+    def plot_all_metrics(results: list[dict], store_dir: str) -> None:
+
+        # Total time
+        overall_time, overall_time_unit = results[0]["total_time"], results[0]["total_time_unit"]
+        m_name = results[0]["module"]["module_name"]
+
+        # Use-case specific results
+        if m_name == "GenerativeModeling":
+            dataset_name = results[0]["module"]["submodule"]["module_name"]
+            kl_best = results[0]["module"]["submodule"]["KL_best"]
+            gen_metrics = results[0]["module"]["submodule"]["generalization_metrics"] #TODO
+            precision = gen_metrics["precision"]
+            fidelity = gen_metrics["fidelity"]
+
+            quantum_module = results[0]["module"]["submodule"]["submodule"]["submodule"]["submodule"]
+            pop_size = quantum_module["module_config"]["population_size"]
+            max_evaluations = quantum_module["module_config"]["max_evaluations"]
+            quantum_time, quantum_time_unit = quantum_module["total_time"], quantum_module["total_time_unit"]
+            if overall_time_unit == quantum_time_unit:
+                time_ratio = float(quantum_time)/(float(overall_time))
+            else:
+                print('Hybrid module time and overall time have different time units, please check.')
+                time_ratio = 0.
+            ent = 0. #quantum_module["meyer-wallach"]
+            expr = 0. #quantum_module["expressibility_jsd"]
+
+            metrics_vector = [time_ratio, precision, fidelity, expr, ent]
+            metrics_names = ['Time ratio', 'Precision', 'Fidelity', 'Expressibility', 'Entanglement']
+            plt_title = "GenerativeModeling"
+            info_str = f"Data: {dataset_name}, Population size: {pop_size}, Max. Evaluations: {max_evaluations}"
+
+        elif m_name == "Classification":
+            # Results
+            quantum_module = results[0]["module"]["submodule"]["submodule"]
+            quantum_time, quantum_time_unit = quantum_module["total_time"], quantum_module["total_time_unit"]
+            assert quantum_module["module_name"] == "Hybrid", f"Module name is not hybrid but {quantum_module['module_name']}. Are you sure this is correct?"
+            if overall_time_unit == quantum_time_unit:
+                time_ratio = float(quantum_time)/(float(overall_time))
+            else:
+                print('Hybrid module time and overall time have different time units, please check.')
+                time_ratio = 0.
+            
+            # Experiment info
+            n_epochs = quantum_module["module_config"]["n_epochs"]
+            setup_info = results[0]["module"]["submodule"]["module_config"]
+            n_classes = setup_info["n_classes"]
+            dataset = setup_info["data_set"]
+
+            metrics_vector = [time_ratio, quantum_module["train_accuracy"], quantum_module["val_accuracy"], quantum_module["expressibility_jsd"], quantum_module["meyer-wallach"]]
+            metrics_names = ['Time ratio', 'Acc_train', 'Acc_test', 'Expressibility', 'Entanglement']
+            plt_title = f"QNN: {dataset} (Cls={n_classes})"
+            info_str = f"Epochs: {n_epochs}, Noise: {setup_info['noise_sigma']}, Images: {setup_info['n_images_per_class']}"
+            
+
+        else:
+            print(f"{m_name} is not implemented for plotting, no radar plot generated.")
+            return
+        
+        
+        # Make metrics plot
+        Plotter.make_radar_chart(plt_title, info_str, store_dir, metrics_vector, metrics_names)
+
+        logging.info(f"Saved {f'{store_dir}/metrics_collection_test.pdf'}.")

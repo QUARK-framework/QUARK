@@ -307,7 +307,10 @@ class Plotter:
             fidelity = gen_metrics["fidelity"]
 
             quantum_module = results[0]["module"]["submodule"]["submodule"]["submodule"]["submodule"]
-            pop_size = quantum_module["module_config"]["population_size"]
+            if "population_size" in quantum_module["module_config"]:
+                pop_size = quantum_module["module_config"]["population_size"]
+            else:
+                pop_size = None
             max_evaluations = quantum_module["module_config"]["max_evaluations"]
             quantum_time, quantum_time_unit = quantum_module["total_time"], quantum_module["total_time_unit"]
             if overall_time_unit == quantum_time_unit:
@@ -315,8 +318,8 @@ class Plotter:
             else:
                 print('Hybrid module time and overall time have different time units, please check.')
                 time_ratio = 0.
-            ent = 0. #quantum_module["meyer-wallach"]
-            expr = 0. #quantum_module["expressibility_jsd"]
+            ent = quantum_module["meyer-wallach"]
+            expr = quantum_module["expressibility_jsd"]
 
             metrics_vector = [time_ratio, precision, fidelity, expr, ent]
             metrics_names = ['Time ratio', 'Precision', 'Fidelity', 'Expressibility', 'Entanglement']

@@ -25,7 +25,7 @@ application:
             loss:
             - KL
             max_evaluations:
-            - 5000
+            - 1000
             population_size:
             - 5
             pretrained:

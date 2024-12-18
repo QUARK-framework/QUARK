@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
 from utils_mpi import is_running_mpi, get_comm
+from modules.applications.qml.MetricsQuantum import MetricsQuantum
 
 MPI = is_running_mpi()
 comm = get_comm()
@@ -269,6 +270,20 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
         :param kwargs: Optional additional arguments
         :return: Dictionary including the solution
         """
+
+        # Get and record quantum metrics 
+        circuit = input_data["circuit"]
+        params = input_data["circuit"].parameters
+        quantum_metrics_class = MetricsQuantum()
+        print("Quantum layer:\n", circuit.draw(output='text'))
+        quantum_metrics = quantum_metrics_class.get_metrics(circuit, params)
+        self.metrics.add_metric_batch({
+            "meyer-wallach": quantum_metrics["meyer-wallach"],
+            "expressibility_jsd": quantum_metrics["expressibility_jsd"]
+        })
+        logging.info('Quantum metrics: %s', quantum_metrics)
+
+
         self.setup_training(input_data, config)
         generator_losses = []
         discriminator_losses = []

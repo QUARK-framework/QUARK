@@ -12,10 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import math
-
-from typing import Tuple, Dict
-import qleet
+from typing import Dict
+import sys
+import os
+# Add the parent directory to the sys.path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from qleet.interface.circuit import CircuitDescriptor
+from qleet.analyzers.entanglement import EntanglementCapability
+from qleet.analyzers.expressibility import Expressibility
 
 class MetricsQuantum:
     """
@@ -54,11 +58,11 @@ class MetricsQuantum:
         :rtype: float
         """
 
-        qiskit_descriptor = qleet.interface.circuit.CircuitDescriptor(
+        qiskit_descriptor = CircuitDescriptor(
             circuit=circuit, params=params, cost_function=None
         )
         qiskit_entanglement_capability = (
-            qleet.analyzers.entanglement.EntanglementCapability(
+            EntanglementCapability(
                 qiskit_descriptor, samples=samples
             )
         )
@@ -75,10 +79,10 @@ class MetricsQuantum:
         :rtype: float
         """
 
-        qiskit_descriptor = qleet.interface.circuit.CircuitDescriptor(
+        qiskit_descriptor = CircuitDescriptor(
             circuit=circuit, params=params, cost_function=None
         )
-        qiskit_expressibility = qleet.analyzers.expressibility.Expressibility(
+        qiskit_expressibility = Expressibility(
             qiskit_descriptor, samples=100
         )
         expr = qiskit_expressibility.expressibility("jsd")

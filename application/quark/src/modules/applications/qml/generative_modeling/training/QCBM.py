@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm
+from modules.applications.qml.MetricsQuantum import MetricsQuantum
 
 MPI = is_running_mpi()
 comm = get_comm()
@@ -214,6 +215,19 @@ class QCBM(TrainingGenerative):
         :param kwargs: Optional additional settings
         :return: Dictionary including the information of previous modules as well as of the training
         """
+
+        # Get and record quantum metrics 
+        circuit = input_data["circuit"]
+        params = input_data["circuit"].parameters
+        quantum_metrics_class = MetricsQuantum()
+        print("Quantum layer:\n", circuit.draw(output='text'))
+        quantum_metrics = quantum_metrics_class.get_metrics(circuit, params)
+        self.metrics.add_metric_batch({
+            "meyer-wallach": quantum_metrics["meyer-wallach"],
+            "expressibility_jsd": quantum_metrics["expressibility_jsd"]
+        })
+        logging.info('Quantum metrics: %s', quantum_metrics)
+
 
         size = None
         input_data['MPI_size'] = size

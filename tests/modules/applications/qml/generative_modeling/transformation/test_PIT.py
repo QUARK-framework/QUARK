@@ -1,6 +1,5 @@
 import unittest
 import numpy as np
-from unittest.mock import MagicMock
 
 from modules.applications.qml.generative_modeling.transformations.PIT import PIT
 from modules.applications.qml.generative_modeling.circuits.CircuitCopula import CircuitCopula
@@ -22,17 +21,9 @@ class TestPIT(unittest.TestCase):
         # Mock reverse_epit_lookup for testing
         cls.pit_instance.reverse_epit_lookup = np.array([
             [0.1, 0.2, 0.3, 0.4],
-            [0.5, 0.6, 0.7, 0.8],
-            [0.9, 1.0, 1.1, 1.2]
+            [0.5, 0.6, 0.7, 0.8]
         ])
-        cls.pit_instance.grid_shape = (2, 2)
-        cls.pit_instance.transform_config = {
-            "n_registers": 2,
-            "binary_train": np.array([[0, 1], [1, 0]]),
-            "histogram_train": np.array([0.5, 0.5]),
-            "dataset_name": "mock_dataset",
-            "store_dir_iter": "/mock/path"
-        }
+        # cls.pit_instance.grid_shape = (2, 2)
 
     def test_get_requirements(self):
         requirements = self.pit_instance.get_requirements()
@@ -58,38 +49,27 @@ class TestPIT(unittest.TestCase):
         self.assertIsInstance(result["binary_train"], np.ndarray, "Expected binary_train to be a numpy array.")
         self.assertEqual(result["n_qubits"], self.sample_input_data["n_qubits"], "n_qubits mismatch.")
 
-    # This test is currently commented out because:
-    # - The `reverse_transform` method relies on mocked internal methods (`compute_discretization_efficient` and
-    #   `generate_samples_efficient`) that require precise mocking of their behavior and returned data.
-    # - Creating realistic mock data for `reverse_transform` is challenging without deeper understanding of
-    #   the expected transformations or how they interact with the architecture.
-    # - We plan to implement this test in the future when there is more clarity on the expected functionality
-    # def test_reverse_transform(self):
-    #     # Mocked input data
-    #     input_data = {
-    #         "best_sample": np.array([0, 1, 2, 3]),
-    #         "depth": 2,
-    #         "architecture_name": "TestArchitecture",
-    #         "n_qubits": 2,
-    #         "KL": [0.1, 0.2],
-    #         "circuit_transpiled": None,
-    #         "best_parameter": [0.5, 0.6],
-    #         "store_dir_iter": "/mock/path"
-    #     }
-
-    #     # Mock internal method responses
-    #     self.pit_instance.compute_discretization_efficient = MagicMock(return_value=np.array([[0, 1], [2, 3]]))
-    #     self.pit_instance.generate_samples_efficient = MagicMock(return_value=np.array([[0.1, 0.2], [0.3, 0.4]]))
-
-    #     # Call the method
-    #     reverse_config = self.pit_instance.reverse_transform(input_data)
-
-    #     # Validate the response
-    #     self.assertIn("generated_samples", reverse_config)
-    #     self.assertIn("transformed_samples", reverse_config)
-    #     self.assertIn("KL_best_transformed", reverse_config)
-    #     self.assertEqual(reverse_config["depth"], input_data["depth"])
-    #     self.assertEqual(reverse_config["dataset_name"], self.pit_instance.dataset_name)
+    def test_reverse_transform(self):
+        """
+        Test the reverse_transform method.
+        """
+        input_data = {
+            "depth": 1,
+            "architecture_name": "dummy_arch",
+            "n_qubits": 4,
+            "KL": [0.1, 0.05],
+            "best_sample": np.random.rand(10, 2),
+            "circuit_transpiled": "dummy_circuit",
+            "best_parameter": [0.5, 0.3],
+            "store_dir_iter": "/tmp",
+        }
+        self.pit_instance.grid_shape = 10
+        self.pit_instance.transform_config = {
+            "n_registers": 2
+        }
+        result = self.pit_instance.reverse_transform(input_data)
+        self.assertIn("generated_samples", result)
+        self.assertIn("KL_best_transformed", result)
 
     def test_emp_integral_trans(self):
         data = np.random.uniform(0, 1, 100)
@@ -107,14 +87,3 @@ class TestPIT(unittest.TestCase):
         self.pit_instance.fit_transform(data)
         inverse_data = self.pit_instance.inverse_transform(data)
         self.assertEqual(inverse_data.shape, data.shape, "Inverse-transformed data should match the input shape.")
-
-    # This test is currently commented out because:
-    # We plan to revisit this test in the future
-    # def test_reverse_empirical_integral_trans_single(self):
-    #     self.pit_instance.reverse_epit_lookup = np.array([
-    #         [0.1, 0.2, 0.3],
-    #         [0.4, 0.5, 0.6]
-    #     ])
-    #     values = np.array([0.2, 0.8])
-    #     reverse_result = self.pit_instance._reverse_emp_integral_trans_single(values)
-    #     self.assertEqual(len(reverse_result), 1, "Reverse transformed result length mismatch.")

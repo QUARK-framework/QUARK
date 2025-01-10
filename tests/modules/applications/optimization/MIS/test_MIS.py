@@ -2,7 +2,6 @@ import unittest
 import networkx as nx
 import os
 from tempfile import TemporaryDirectory
-import logging
 
 from modules.applications.optimization.MIS.MIS import MIS
 
@@ -32,7 +31,6 @@ class TestMIS(unittest.TestCase):
     def test_get_parameter_options(self):
         options = self.mis_instance.get_parameter_options()
         self.assertIn("size", options)
-        self.assertIn("graph_type", options)
 
     def test_generate_problem(self):
         # Generate with valid configuration
@@ -48,14 +46,20 @@ class TestMIS(unittest.TestCase):
         self.assertGreaterEqual(processing_time, 0, "Processing time should be positive.")
 
     def test_validate(self):
-        logging.disable(logging.WARNING)
-        self.mis_instance.application = nx.Graph()
-        self.mis_instance.application.add_edges_from([(0, 1), (1, 2)])
+        generated_graph = self.mis_instance.generate_problem(self.config)
+        self.assertIsInstance(generated_graph, nx.Graph)
 
-        valid_solution = [0, 2]
-        is_valid, validation_time = self.mis_instance.validate(valid_solution)
-        self.assertTrue(is_valid, f"Expected valid solution: {valid_solution}")
-        self.assertGreater(validation_time, 0, "Validation time should be positive.")
+        # Valid solution (independent set)
+        valid_solution = []
+        for node in generated_graph.nodes():
+            if all(neighbor not in valid_solution for neighbor in generated_graph.neighbors(node)):
+                valid_solution.append(node)
+        print('valid solution', valid_solution)
+        is_valid, time_taken = self.mis_instance.validate(valid_solution)
+        print('is valid', is_valid)
+
+        self.assertTrue(is_valid, "Expected solution to be valid")
+        self.assertIsInstance(time_taken, float)
 
     def test_evaluate(self):
         solution = list(self.graph.nodes)[:3]

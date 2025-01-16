@@ -1,6 +1,7 @@
 # .readthedocs.yaml
 # Read the Docs configuration file
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# The part about Git LFS was taken from here: https://docs.readthedocs.io/en/stable/build-customization.html#support-git-lfs-large-file-storage
 
 # Required
 version: 2

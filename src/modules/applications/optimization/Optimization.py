@@ -106,6 +106,7 @@ class Optimization(Application, ABC):
 
         if solution_validity and (processed_solution is not None):
             solution_quality, time_to_evaluation = self.evaluate(processed_solution)
+            self.visualize_solution(processed_solution, f"{kwargs["store_dir"]}/solution.pdf")
         else:
             solution_quality = None
             time_to_evaluation = None
@@ -123,3 +124,14 @@ class Optimization(Application, ABC):
         return solution_validity, sum(filter(None, [
             time_to_process_solution, time_to_validation, time_to_evaluation
         ]))
+    
+    def visualize_solution(self, processed_solution: any, path:str) -> None:
+        """
+        Creates visualizations of a processed and validated solution and writes them to disk.
+        Override if applicable. Default is to do nothing.
+        
+        :param processed_solution: A solution that was already processed by :func:`process_solution`
+        :param path: File path for the plot
+        :returns: None
+        """
+        pass

@@ -17,6 +17,8 @@ import pickle
 from typing import TypedDict
 
 import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
@@ -246,16 +248,6 @@ class MIS(Optimization):
         self.graph = graph
         return graph.copy()
 
-    def process_solution(self, solution: list) -> tuple[list, float]:
-        """
-        Returns list of visited nodes and the time it took to process the solution.
-
-        :param solution: Unprocessed solution
-        :return: Processed solution and the time it took to process it
-        """
-        start_time = start_time_measurement()
-        return solution, end_time_measurement(start_time)
-
     def validate(self, solution: list) -> tuple[bool, float]:
         """
         Checks if the solution is an independent set.
@@ -319,3 +311,39 @@ class MIS(Optimization):
         """
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.graph, file, pickle.HIGHEST_PROTOCOL)
+
+    def visualize_solution(self, processed_solution: list[int], path:str):
+        """
+        Plot the problem graph with the solution nodes highlighted
+
+        :param processed_solution: The solution already processed by :func:`process_solution`, a list of visited node IDs in order of being visited.
+        :param path: File path for the plot
+        :returns: None
+        """
+        NODE_SIZE=300   # Default=300
+        EDGE_WIDTH=1.0  # Default=1.0
+        FONT_SIZE=12    # Default=12
+        COLOR_INCLUDED="red"
+        COLOR_EXCLUDED="gray"
+
+        G = self.graph
+        included_nodes = [node for node in G.nodes() if node in processed_solution]
+        excluded_nodes = [node for node in G.nodes() if node not in processed_solution]
+        pos = nx.circular_layout(G)
+        included_pos = {n:n for n,_ in pos.items() if n in processed_solution}
+        excluded_pos = {n:n for n,_ in pos.items() if n not in processed_solution}
+        legend_elements = [
+            Line2D([0], [0], marker='o', ls="None", label="Included", markerfacecolor=COLOR_INCLUDED, markeredgewidth=0, markersize=10),
+            Line2D([0], [0], marker='o', ls="None", label="Excluded", markerfacecolor=COLOR_EXCLUDED, markeredgewidth=0, markersize=10)
+            ]
+
+        nx.draw_networkx_nodes(G, pos, nodelist=included_nodes, node_size=NODE_SIZE, node_color=COLOR_INCLUDED)
+        nx.draw_networkx_nodes(G, pos, nodelist=excluded_nodes, node_size=NODE_SIZE, node_color=COLOR_EXCLUDED)
+        nx.draw_networkx_labels(G, pos, included_pos, font_size=FONT_SIZE, font_weight="bold")
+        nx.draw_networkx_labels(G, pos, excluded_pos, font_size=FONT_SIZE)
+        nx.draw_networkx_edges(G, pos, width=EDGE_WIDTH)
+
+        plt.legend(handles=legend_elements)
+        plt.savefig(path)
+        plt.close()
+        

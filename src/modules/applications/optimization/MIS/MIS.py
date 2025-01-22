@@ -312,7 +312,7 @@ class MIS(Optimization):
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.graph, file, pickle.HIGHEST_PROTOCOL)
 
-    def visualize_solution(self, processed_solution: list[int], path:str):
+    def visualize_solution(self, processed_solution: list[int], path: str):
         """
         Plot the problem graph with the solution nodes highlighted
 
@@ -320,22 +320,38 @@ class MIS(Optimization):
         :param path: File path for the plot
         :returns: None
         """
-        NODE_SIZE=300   # Default=300
-        EDGE_WIDTH=1.0  # Default=1.0
-        FONT_SIZE=12    # Default=12
-        COLOR_INCLUDED="red"
-        COLOR_EXCLUDED="gray"
+        NODE_SIZE = 300   # Default=300
+        EDGE_WIDTH = 1.0  # Default=1.0
+        FONT_SIZE = 12    # Default=12
+        COLOR_INCLUDED = "red"
+        COLOR_EXCLUDED = "gray"
 
         G = self.graph
         included_nodes = [node for node in G.nodes() if node in processed_solution]
         excluded_nodes = [node for node in G.nodes() if node not in processed_solution]
         pos = nx.circular_layout(G)
-        included_pos = {n:n for n,_ in pos.items() if n in processed_solution}
-        excluded_pos = {n:n for n,_ in pos.items() if n not in processed_solution}
+        included_pos = {n: n for n, _ in pos.items() if n in processed_solution}
+        excluded_pos = {n: n for n, _ in pos.items() if n not in processed_solution}
         legend_elements = [
-            Line2D([0], [0], marker='o', ls="None", label="Included", markerfacecolor=COLOR_INCLUDED, markeredgewidth=0, markersize=10),
-            Line2D([0], [0], marker='o', ls="None", label="Excluded", markerfacecolor=COLOR_EXCLUDED, markeredgewidth=0, markersize=10)
-            ]
+            Line2D(
+                [0],
+                [0],
+                marker='o',
+                ls="None",
+                label="Included",
+                markerfacecolor=COLOR_INCLUDED,
+                markeredgewidth=0,
+                markersize=10),
+            Line2D(
+                [0],
+                [0],
+                marker='o',
+                ls="None",
+                label="Excluded",
+                markerfacecolor=COLOR_EXCLUDED,
+                markeredgewidth=0,
+                markersize=10)
+        ]
 
         nx.draw_networkx_nodes(G, pos, nodelist=included_nodes, node_size=NODE_SIZE, node_color=COLOR_INCLUDED)
         nx.draw_networkx_nodes(G, pos, nodelist=excluded_nodes, node_size=NODE_SIZE, node_color=COLOR_EXCLUDED)
@@ -346,4 +362,3 @@ class MIS(Optimization):
         plt.legend(handles=legend_elements)
         plt.savefig(path)
         plt.close()
-        

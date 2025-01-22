@@ -319,8 +319,7 @@ class PVC(Optimization):
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)
 
-
-    def visualize_solution(self, processed_solution, path:str):
+    def visualize_solution(self, processed_solution, path: str):
         """
         Plot a graph representing the possible locations where seams can start or end, with arrows representing either idle movements or the sealing of a seam
 
@@ -328,42 +327,67 @@ class PVC(Optimization):
         :param path: File path for the plot
         :returns: None
         """
-        NODE_SIZE=300   # Default=300
-        EDGE_WIDTH=1.0  # Default=1.0
-        FONT_SIZE=12    # Default=12
+        NODE_SIZE = 300   # Default=300
+        EDGE_WIDTH = 1.0  # Default=1.0
+        FONT_SIZE = 12    # Default=12
 
         highest_node_id = max(node[1] for node in self.application.nodes())
         G = nx.MultiDiGraph()
-        G.add_nodes_from(range(highest_node_id+1))
+        G.add_nodes_from(range(highest_node_id + 1))
         pos = nx.circular_layout(G)
 
         tools = set()
         configs = set()
         current_node = 0
-        for ((seam1 ,node1), config, tool) in processed_solution[1:]:
-            config=config-1
+        for ((seam1, node1), config, tool) in processed_solution[1:]:
+            config = config - 1
             tools.add(tool)
             configs.add(config)
-            (seam2 , node2) = next((seam, node) for (seam, node) in self.application.nodes() if seam == seam1 and not node == node1)
+            (seam2, node2) = next((seam, node)
+                                  for (seam, node) in self.application.nodes() if seam == seam1 and not node == node1)
             assert seam1 == seam2, "This is bad"
             if not current_node == node1:
                 G.add_edge(current_node, node1, color=7, width=EDGE_WIDTH, style=-1)
-            G.add_edge(node1, node2, color=tool, width=2*EDGE_WIDTH, style=config)
+            G.add_edge(node1, node2, color=tool, width=2 * EDGE_WIDTH, style=config)
             current_node = node2
 
-        # The 8 here controls how many edges between the same two nodes are at most drawn with spacing between them before drawing them on top of each other to avoid cluttering
+        # The 8 here controls how many edges between the same two nodes are at
+        # most drawn with spacing between them before drawing them on top of each
+        # other to avoid cluttering
         connectionstyle = [f"arc3,rad={r}" for r in itertools.accumulate([0.15] * 8)]
         style_options = ["solid", "dotted", "dashed", "dashdot"]
-        cmap=plt.cm.Dark2
+        cmap = plt.cm.Dark2
         tools = list(tools)
         configs = list(configs)
-        legend_elements = [Line2D([0], [0], color=cmap(7), lw=EDGE_WIDTH, ls=':', label="Idle Movement")] + [Patch(facecolor=cmap(i),label=f"Tool {i}") for i in tools] + [Line2D([0], [0], color="black", lw=2*EDGE_WIDTH, ls=style_options[i%len(style_options)], label=f"Config {i+1}") for i in configs]
-        colors = nx.get_edge_attributes(G,'color').values()
-        widths = nx.get_edge_attributes(G,'width').values()
-        styles = [':' if i == -1 else style_options[i%len(style_options)] for i in nx.get_edge_attributes(G,'style').values()]
+        legend_elements = [Line2D([0],
+                                  [0],
+                                  color=cmap(7),
+                                  lw=EDGE_WIDTH,
+                                  ls=':',
+                                  label="Idle Movement")] + [Patch(facecolor=cmap(i),
+                                                                   label=f"Tool {i}") for i in tools] + [Line2D([0],
+                                                                                                                [0],
+                                                                                                                color="black",
+                                                                                                                lw=2 * EDGE_WIDTH,
+                                                                                                                ls=style_options[i % len(
+                                                                                                                    style_options)],
+                                                                                                                label=f"Config {i + 1}") for i in configs]
+        colors = nx.get_edge_attributes(G, 'color').values()
+        widths = nx.get_edge_attributes(G, 'width').values()
+        styles = [':' if i == -1 else style_options[i % len(style_options)]
+                  for i in nx.get_edge_attributes(G, 'style').values()]
 
-        nx.draw_networkx(G, pos, node_size=NODE_SIZE, font_size=FONT_SIZE, style=list(styles), edge_color=colors, edge_cmap=cmap, width=list(widths), connectionstyle=connectionstyle)
-        
+        nx.draw_networkx(
+            G,
+            pos,
+            node_size=NODE_SIZE,
+            font_size=FONT_SIZE,
+            style=list(styles),
+            edge_color=colors,
+            edge_cmap=cmap,
+            width=list(widths),
+            connectionstyle=connectionstyle)
+
         plt.legend(handles=legend_elements)
         plt.savefig(path)
         plt.close()

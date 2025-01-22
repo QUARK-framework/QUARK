@@ -308,7 +308,7 @@ class TSP(Optimization):
         with open(f"{path}/graph_iter_{iter_count}.gpickle", "wb") as file:
             pickle.dump(self.application, file, pickle.HIGHEST_PROTOCOL)
 
-    def visualize_solution(self, processed_solution: list[int], path:str):
+    def visualize_solution(self, processed_solution: list[int], path: str):
         """
         Plot a graph representing the problem network with the solution path highlighted
 
@@ -316,23 +316,22 @@ class TSP(Optimization):
         :param path: File path for the plot
         :returns: None
         """
-        NODE_SIZE=300   # Default=300
-        EDGE_WIDTH=1.0  # Default=1.0
-        FONT_SIZE=12    # Default=12
+        NODE_SIZE = 300   # Default=300
+        EDGE_WIDTH = 1.0  # Default=1.0
+        FONT_SIZE = 12    # Default=12
 
         path_edges = list(nx.utils.pairwise(processed_solution, cyclic=True))
-        path_edges = [(u,v) if u < v else (v,u) for (u,v) in path_edges]
+        path_edges = [(u, v) if u < v else (v, u) for (u, v) in path_edges]
         G = self.application
         pos = nx.circular_layout(G)
-        weights = nx.get_edge_attributes(G,"weight")
-        filtered_weights = {e:(int(weights[e])) for e in path_edges}
+        weights = nx.get_edge_attributes(G, "weight")
+        filtered_weights = {e: (int(weights[e])) for e in path_edges}
 
         nx.draw_networkx_nodes(G, pos, node_size=NODE_SIZE)
         nx.draw_networkx_edges(G, pos, edgelist=G.edges(), width=EDGE_WIDTH, edge_color="gray")
-        nx.draw_networkx_edges(G, pos, edgelist=path_edges, width=2*EDGE_WIDTH, edge_color="red", arrows=True)
+        nx.draw_networkx_edges(G, pos, edgelist=path_edges, width=2 * EDGE_WIDTH, edge_color="red", arrows=True)
         nx.draw_networkx_labels(G, pos, font_size=FONT_SIZE)
-        nx.draw_networkx_edge_labels(G, pos, filtered_weights, font_size=.5*FONT_SIZE)
+        nx.draw_networkx_edge_labels(G, pos, filtered_weights, font_size=.5 * FONT_SIZE)
 
         plt.savefig(path)
         plt.close()
-        

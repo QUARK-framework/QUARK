@@ -1,7 +1,7 @@
 {
-  "build_number": 17,
-  "build_date": "06-12-2024 16:34:38",
-  "git_revision_number": "4e90d19586fdbf5672ebcb4725aa9b045b6733ce",
+  "build_number": 18,
+  "build_date": "22-01-2025 13:49:05",
+  "git_revision_number": "c817270e589cd85c29fa8644cd14eeafde2215f1",
   "modules": [
     {
       "name": "PVC",
@@ -1462,10 +1462,6 @@
             {
               "name": "qiskit-optimization",
               "version": "0.6.1"
-            },
-            {
-              "name": "pyqubo",
-              "version": "1.5.0"
             },
             {
               "name": "networkx",

@@ -14,7 +14,7 @@ class TestIsing(unittest.TestCase):
         cls.graph = nx.complete_graph(4)
         for (u, v) in cls.graph.edges():
             cls.graph[u][v]['weight'] = np.random.randint(1, 10)
-        cls.config = {"lagrange_factor": 1.0, "mapping": "pyqubo"}
+        cls.config = {"lagrange_factor": 1.0, "mapping": "ocean"}
 
     def test_get_requirements(self):
         requirements = self.ising_instance.get_requirements()
@@ -24,7 +24,6 @@ class TestIsing(unittest.TestCase):
             {"name": "dimod", "version": "0.12.18"},
             {"name": "more-itertools", "version": "10.5.0"},
             {"name": "qiskit-optimization", "version": "0.6.1"},
-            {"name": "pyqubo", "version": "1.5.0"},
         ]
         for req in expected_requirements:
             self.assertIn(req, requirements)
@@ -33,17 +32,6 @@ class TestIsing(unittest.TestCase):
         options = self.ising_instance.get_parameter_options()
         self.assertIn("lagrange_factor", options)
         self.assertIn("mapping", options)
-
-    def test_map_pyqubo(self):
-        self.config["mapping"] = "pyqubo"
-        ising_mapping, mapping_time = self.ising_instance.map(self.graph, self.config)
-        self.assertIn("J", ising_mapping)
-        self.assertIn("J_dict", ising_mapping)
-        self.assertIn("t", ising_mapping)
-
-        self.assertIsInstance(ising_mapping["J"], np.ndarray)
-        self.assertIsInstance(ising_mapping["t"], np.ndarray)
-        self.assertGreater(mapping_time, 0, "Mapping time should be positive.")
 
     def test_map_ocean(self):
         self.config["mapping"] = "ocean"

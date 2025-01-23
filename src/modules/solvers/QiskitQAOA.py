@@ -112,9 +112,8 @@ class QiskitQAOA(Solver):
             },
             "iterations": {  # number measurements to make on circuit
                 "values": [1, 5, 10, 20, 50, 75],
-                "description": "How many iterations do you need? Warning: When using the IBM Eagle device you\
-                should only choose a low number of iterations, since a high number would lead to a waiting \
-                time that could take up to multiple days!"
+                "description": "How many iterations do you need? Warning: When using the IBM Eagle device you should "
+                               "only choose a low number of iterations (long computation times)."
             },
             "depth": {
                 "values": [2, 3, 4, 5, 10, 20],
@@ -126,8 +125,8 @@ class QiskitQAOA(Solver):
             },
             "optimizer": {
                 "values": ["POWELL", "SPSA", "COBYLA"],
-                "description": "Which Qiskit solver should be used? Warning: When using the IBM Eagle device\
-                you should not use the SPSA optimizer for a low number of iterations!"
+                "description": "Which Qiskit solver should be used? Warning: When using the IBM Eagle device you should"
+                               " not use the SPSA optimizer for a low number of iterations!"
             }
         }
 

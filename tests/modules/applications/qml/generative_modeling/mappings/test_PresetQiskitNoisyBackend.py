@@ -1,10 +1,13 @@
-import unittest
-from unittest.mock import patch, MagicMock
-import numpy as np
 import pickle
+import unittest
+from unittest.mock import MagicMock, patch
+
+import numpy as np
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
+from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.training.Inference import Inference
 from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
 
 
@@ -31,8 +34,6 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         self.assertEqual(requirements, expected_requirements)
 
     def test_get_default_submodule(self):
-        from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-        from modules.applications.qml.generative_modeling.training.Inference import Inference
 
         submodule = self.backend_instance.get_default_submodule("QCBM")
         self.assertIsInstance(submodule, QCBM)

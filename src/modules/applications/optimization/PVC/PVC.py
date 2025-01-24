@@ -13,10 +13,10 @@
 #  limitations under the License.
 
 import itertools
-from typing import TypedDict
-import pickle
 import logging
 import os
+import pickle
+from typing import TypedDict
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -26,7 +26,7 @@ import numpy as np
 
 from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class PVC(Optimization):
@@ -84,19 +84,24 @@ class PVC(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "Ising":
-            from modules.applications.optimization.PVC.mappings.ISING import Ising  # pylint: disable=C0415
+            from modules.applications.optimization.PVC.mappings.ISING import \
+                Ising  # pylint: disable=C0415
             return Ising()
         elif option == "QUBO":
-            from modules.applications.optimization.PVC.mappings.QUBO import QUBO  # pylint: disable=C0415
+            from modules.applications.optimization.PVC.mappings.QUBO import \
+                QUBO  # pylint: disable=C0415
             return QUBO()
         elif option == "GreedyClassicalPVC":
-            from modules.solvers.GreedyClassicalPVC import GreedyClassicalPVC  # pylint: disable=C0415
+            from modules.solvers.GreedyClassicalPVC import \
+                GreedyClassicalPVC  # pylint: disable=C0415
             return GreedyClassicalPVC()
         elif option == "ReverseGreedyClassicalPVC":
-            from modules.solvers.ReverseGreedyClassicalPVC import ReverseGreedyClassicalPVC  # pylint: disable=C0415
+            from modules.solvers.ReverseGreedyClassicalPVC import \
+                ReverseGreedyClassicalPVC  # pylint: disable=C0415
             return ReverseGreedyClassicalPVC()
         elif option == "RandomPVC":
-            from modules.solvers.RandomClassicalPVC import RandomPVC  # pylint: disable=C0415
+            from modules.solvers.RandomClassicalPVC import \
+                RandomPVC  # pylint: disable=C0415
             return RandomPVC()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

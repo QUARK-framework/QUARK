@@ -13,21 +13,20 @@
 #    limitations under the License.
 #
 
-from abc import ABC
 import json
 import logging
+from abc import ABC
 from time import time
 
-from modules.Core import Core
 from modules.applications.Application import Application as Application_NEW
 from modules.applications.Mapping import Mapping as Mapping_NEW
-from modules.solvers.Solver import Solver as Solver_NEW
+from modules.Core import Core
 from modules.devices.Device import Device as Device_NEW
+from modules.solvers.Solver import Solver as Solver_NEW
 from quark2_adapter.legacy_classes.Application import Application as Application_OLD
 from quark2_adapter.legacy_classes.Mapping import Mapping as Mapping_OLD
 from quark2_adapter.legacy_classes.Solver import Solver as Solver_OLD
 from quark2_adapter.legacy_classes.Device import Device as Device_OLD
-
 
 WARNING_MSG = 'Class "%s" is inheriting from deprecated base class. Please refactor your class.'
 

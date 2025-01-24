@@ -66,4 +66,3 @@ jobs:
                         --disable=W0719 --disable=R1705 --disable=W0107 --disable=W0613 --disable=W0401 --disable=W0614
                         --disable=W0611 --disable=C0123 --disable=C0413 --disable=W0511 --disable=R1702 --disable=R0912
                         --disable=R0914 --disable=R0911 --disable=R0801"
-

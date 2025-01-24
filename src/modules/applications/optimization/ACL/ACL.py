@@ -26,17 +26,17 @@
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 
-import os
 import logging
+import os
 from typing import TypedDict
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pulp
 
 from modules.applications.Application import Core
 from modules.applications.optimization.Optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class ACL(Optimization):
@@ -84,10 +84,12 @@ class ACL(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "MIPsolverACL":
-            from modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
+            from modules.solvers.MIPsolverACL import \
+                MIPaclp  # pylint: disable=C0415
             return MIPaclp()
         elif option == "QUBO":
-            from modules.applications.optimization.ACL.mappings.QUBO import Qubo  # pylint: disable=C0415
+            from modules.applications.optimization.ACL.mappings.QUBO import \
+                Qubo  # pylint: disable=C0415
             return Qubo()
         else:
             raise NotImplementedError(f"Submodule Option {option} not implemented")

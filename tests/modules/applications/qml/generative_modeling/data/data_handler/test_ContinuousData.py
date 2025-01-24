@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import patch
+
 import numpy as np
 
 from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData

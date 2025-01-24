@@ -12,16 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import logging
+from typing import TypedDict
 
 import networkx as nx
 import numpy as np
 from dimod import qubo_to_ising
 
-from modules.applications.Mapping import Mapping, Core
+from modules.applications.Mapping import Core, Mapping
 from modules.applications.optimization.PVC.mappings.QUBO import QUBO
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class Ising(Mapping):

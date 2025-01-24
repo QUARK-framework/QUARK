@@ -13,10 +13,11 @@
 #  limitations under the License.
 
 from typing import TypedDict
+
 import networkx
 
 from modules.applications.Mapping import Core, Mapping
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class QIRO(Mapping):

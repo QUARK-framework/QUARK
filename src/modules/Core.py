@@ -12,15 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from __future__ import annotations  # Needed if you want to type hint a method with the type of the enclosing class
+from __future__ import \
+    annotations  # Needed if you want to type hint a method with the type of the enclosing class
 
 import os
 import sys
 from abc import ABC, abstractmethod
 from typing import final
 
-from utils import _get_instance_with_sub_options
 from Metrics import Metrics
+from utils import _get_instance_with_sub_options
 
 
 class Core(ABC):

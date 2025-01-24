@@ -1,5 +1,6 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 import numpy as np
 
 from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
@@ -96,7 +97,9 @@ class TestLibraryPennylane(unittest.TestCase):
 
         mock_backend = MagicMock()
         config_dict = {"n_shots": 100}
-        def circuit(x): return x  # Placeholder circuit function
+
+        def circuit(x):
+            return x  # Placeholder circuit function
 
         execute_circuit, _ = self.library_instance.get_execute_circuit(
             circuit, mock_backend, "default.qubit", config_dict)

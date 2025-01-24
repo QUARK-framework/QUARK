@@ -1,8 +1,11 @@
 import unittest
+
 import numpy as np
 
-from modules.applications.qml.generative_modeling.transformations.PIT import PIT
-from modules.applications.qml.generative_modeling.circuits.CircuitCopula import CircuitCopula
+from modules.applications.qml.generative_modeling.circuits.CircuitCopula import \
+    CircuitCopula
+from modules.applications.qml.generative_modeling.transformations.PIT import \
+    PIT
 
 
 class TestPIT(unittest.TestCase):

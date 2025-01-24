@@ -12,17 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import argparse
+import json
+import logging
 import os
 import sys
-import argparse
-import logging
-import json
 from collections.abc import Iterable
+
 import yaml
 
 from Installer import Installer
 from utils import _expand_paths
-from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
+from utils_mpi import MPIFileHandler, MPIStreamHandler, get_comm
 
 comm = get_comm()
 

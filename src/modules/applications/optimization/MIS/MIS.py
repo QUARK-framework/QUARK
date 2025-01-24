@@ -82,10 +82,12 @@ class MIS(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QIRO":
-            from modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
+            from modules.applications.optimization.MIS.mappings.QIRO import \
+                QIRO  # pylint: disable=C0415
             return QIRO()
         elif option == "NeutralAtom":
-            from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
+            from modules.applications.optimization.MIS.mappings.NeutralAtom import \
+                NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

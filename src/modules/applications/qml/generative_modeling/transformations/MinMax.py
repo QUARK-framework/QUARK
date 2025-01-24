@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from typing import Union
+
 import numpy as np
 
 from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation

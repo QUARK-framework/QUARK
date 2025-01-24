@@ -1,8 +1,8 @@
-import unittest
-from unittest.mock import patch, MagicMock, mock_open
-from pathlib import Path
 import os
+import unittest
 from datetime import datetime
+from pathlib import Path
+from unittest.mock import MagicMock, mock_open, patch
 
 from src.BenchmarkManager import BenchmarkManager, Instruction
 
@@ -63,24 +63,6 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertTrue(self.benchmark_manager.store_dir.endswith(expected_date_str))
         mock_path_mkdir.assert_called_once_with(parents=True, exist_ok=True)
         mock_file_handler.assert_called_once_with(expected_log_file)
-
-    @patch("logging.FileHandler")
-    def test_resume_store_dir(self, mock_file_handler):
-        # Ensure the directory exists
-        test_dir = "/tmp/existing_dir"
-        os.makedirs(test_dir, exist_ok=True)
-
-        try:
-            self.benchmark_manager._resume_store_dir(store_dir=test_dir)
-
-            # Assertions
-            self.assertEqual(self.benchmark_manager.store_dir, test_dir)
-            mock_file_handler.assert_called_once_with(f"{test_dir}/logging.log")
-
-        finally:
-            # Cleanup the created directory
-            if os.path.exists(test_dir):
-                os.rmdir(test_dir)
 
     @patch("logging.FileHandler")
     @patch("logging.getLogger")

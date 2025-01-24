@@ -142,7 +142,8 @@ class DinneenIsing(Mapping):
             from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()
         if option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            from modules.solvers.PennylaneQAOA import \
+                PennylaneQAOA  # pylint: disable=C0415
             return PennylaneQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

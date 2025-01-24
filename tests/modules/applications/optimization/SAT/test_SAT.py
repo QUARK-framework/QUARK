@@ -1,7 +1,8 @@
-import unittest
 import os
-import nnf
+import unittest
 from tempfile import TemporaryDirectory
+
+import nnf
 
 from modules.applications.optimization.SAT.SAT import SAT
 

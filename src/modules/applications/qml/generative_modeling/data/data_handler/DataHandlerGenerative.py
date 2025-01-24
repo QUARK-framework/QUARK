@@ -12,16 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import pickle
 import os
+import pickle
 from abc import ABC
-from qiskit import qpy
 
 import numpy as np
+from qiskit import qpy
 
-from modules.Core import Core
 from modules.applications.qml.DataHandler import DataHandler
-from utils import start_time_measurement, end_time_measurement
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
 
 
 class DataHandlerGenerative(Core, DataHandler, ABC):

@@ -17,12 +17,12 @@ from typing import TypedDict
 
 import nnf
 import numpy as np
-from nnf import Var, And, Or
+from nnf import And, Or, Var
 from nnf.dimacs import dump
 
-from modules.Core import Core
 from modules.applications.optimization.Optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
 
 
 class SAT(Optimization):
@@ -92,16 +92,20 @@ class SAT(Optimization):
                 QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         elif option == "Direct":
-            from modules.applications.optimization.SAT.mappings.Direct import Direct  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.Direct import \
+                Direct  # pylint: disable=C0415
             return Direct()
         elif option == "ChoiQUBO":
-            from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.ChoiQUBO import \
+                ChoiQUBO  # pylint: disable=C0415
             return ChoiQUBO()
         elif option == "ChoiIsing":
-            from modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.ChoiISING import \
+                ChoiIsing  # pylint: disable=C0415
             return ChoiIsing()
         elif option == "DinneenQUBO":
-            from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO  # pylint: disable=C0415
+            from modules.applications.optimization.SAT.mappings.DinneenQUBO import \
+                DinneenQUBO  # pylint: disable=C0415
             return DinneenQUBO()
         elif option == "DinneenIsing":
             from modules.applications.optimization.SAT.mappings.DinneenISING import \

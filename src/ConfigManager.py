@@ -21,14 +21,14 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import yaml
-from typing_extensions import TypedDict, NotRequired, Self
+from typing_extensions import NotRequired, Self, TypedDict
 
-from modules.Core import Core
 from modules.applications import Application
+from modules.Core import Core
 from utils import _get_instance_with_sub_options, checkbox
 
 
-class ConfigModule(TypedDict):
+class ConfigModule(TypedDict):  # pylint: disable=R0903
     """
     Each instance consists of the name of the module, its config, and a list of its configured submodules, which are
     ConfigModule instances themselves. It can also contain the instance of the class associated to this module,
@@ -40,7 +40,7 @@ class ConfigModule(TypedDict):
     instance: NotRequired[Core]
 
 
-class BenchmarkConfig(TypedDict):
+class BenchmarkConfig(TypedDict):  # pylint: disable=R0903
     """
     Each instance consists of a ConfigModule associated with the application at the first level and the number of
     repetitions of the benchmark.

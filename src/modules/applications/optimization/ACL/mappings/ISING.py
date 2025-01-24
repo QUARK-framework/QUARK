@@ -22,7 +22,7 @@ from qiskit_optimization.converters import QuadraticProgramToQubo
 
 from modules.applications.Mapping import Mapping
 from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class Ising(Mapping):

@@ -12,19 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
-import re
 import logging
+import re
+from typing import TypedDict
 
 import numpy as np
 from qiskit_optimization import QuadraticProgram
-from qiskit_optimization.converters import (
-    InequalityToEquality, IntegerToBinary,
-    LinearEqualityToPenalty
-)
+from qiskit_optimization.converters import (InequalityToEquality,
+                                            IntegerToBinary,
+                                            LinearEqualityToPenalty)
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
 
 # TODO Large chunks of this code is duplicated in ACL.mappings.ISING -> unify
 

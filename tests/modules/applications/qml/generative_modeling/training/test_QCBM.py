@@ -1,7 +1,8 @@
 import unittest
-from unittest.mock import patch, MagicMock
-import numpy as np
+from unittest.mock import MagicMock, patch
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 

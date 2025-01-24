@@ -11,17 +11,17 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import Union
 import logging
 from time import perf_counter
-import numpy as np
+from typing import Union
 
+import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit.providers import Backend
-from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
 from qiskit_aer import Aer, AerSimulator
 from qiskit_aer.noise import NoiseModel
+from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
 
 from modules.applications.qml.generative_modeling.training.QCBM import QCBM
 from modules.applications.qml.generative_modeling.training.Inference import Inference

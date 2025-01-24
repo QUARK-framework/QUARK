@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from collections import defaultdict
 import logging
+from collections import defaultdict
 
 import matplotlib
-from matplotlib import pyplot as plt
-import seaborn as sns
 import pandas as pd
+import seaborn as sns
+from matplotlib import pyplot as plt
 
 matplotlib.use('Agg')
 matplotlib.rcParams['savefig.dpi'] = 300

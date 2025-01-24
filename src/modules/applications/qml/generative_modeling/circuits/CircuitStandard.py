@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, TypedDict
+from typing import TypedDict, Union
 
 from modules.applications.qml.generative_modeling.circuits.CircuitGenerative import CircuitGenerative
 from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit

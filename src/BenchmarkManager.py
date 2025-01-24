@@ -103,7 +103,7 @@ class BenchmarkManager:
         """
         self.fail_fast = fail_fast
         self.application = None
-        self.application_configs = None
+        self.application_configs = None  # TODO Seems to be unused, maybe delete
         self.results = []
         self.store_dir = None
         self.benchmark_record_template = None

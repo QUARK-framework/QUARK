@@ -248,6 +248,12 @@ After making sure your docker daemon is running, you can run the container:
 docker run -it --rm ghcr.io/quark-framework/quark
 ```
 
+> __Note__: ARM builds are (temporarily) removed in release 2.1.3 because pyqubo 1.5.0 is unavailable for this platform
+> at the moment. This means if you want to run QUARK as a container on a machine with a chip from this 
+> [list](https://en.wikipedia.org/wiki/List_of_ARM_processors) you might face problems. Please feel free to 
+> [open an issue](https://github.com/QUARK-framework/QUARK/issues/new), so we can work on a tailored workaround until 
+> the latest version of pyqubo is available on ARM platforms.
+
 You can also build the docker image locally like:
 ``` 
 docker build -t ghcr.io/quark-framework/quark .

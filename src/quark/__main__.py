@@ -20,9 +20,9 @@ import json
 from collections.abc import Iterable
 import yaml
 
-from Installer import Installer
-from utils import _expand_paths
-from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
+from quark.Installer import Installer
+from quark.utils import _expand_paths
+from quark.utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
 
 comm = get_comm()
 

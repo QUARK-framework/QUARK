@@ -20,10 +20,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
-from modules.applications.Application import Core
-from modules.applications.optimization.Optimization import Optimization
-from modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Application import Core
+from quark.modules.applications.optimization.Optimization import Optimization
+from quark.modules.applications.optimization.MIS.data.graph_layouts import generate_hexagonal_graph
+from quark.utils import start_time_measurement, end_time_measurement
 
 # Define R_rydberg
 R_rydberg = 9.75
@@ -82,10 +82,10 @@ class MIS(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QIRO":
-            from modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
+            from quark.modules.applications.optimization.MIS.mappings.QIRO import QIRO  # pylint: disable=C0415
             return QIRO()
         elif option == "NeutralAtom":
-            from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
+            from quark.modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

@@ -19,9 +19,9 @@ from qiskit import qpy
 
 import numpy as np
 
-from modules.Core import Core
-from modules.applications.qml.DataHandler import DataHandler
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.Core import Core
+from quark.modules.applications.qml.DataHandler import DataHandler
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class DataHandlerGenerative(Core, DataHandler, ABC):

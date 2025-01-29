@@ -34,9 +34,9 @@ import pandas as pd
 import numpy as np
 import pulp
 
-from modules.applications.Application import Core
-from modules.applications.optimization.Optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Application import Core
+from quark.modules.applications.optimization.Optimization import Optimization
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class ACL(Optimization):
@@ -84,10 +84,10 @@ class ACL(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "MIPsolverACL":
-            from modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
+            from quark.modules.solvers.MIPsolverACL import MIPaclp  # pylint: disable=C0415
             return MIPaclp()
         elif option == "QUBO":
-            from modules.applications.optimization.ACL.mappings.QUBO import Qubo  # pylint: disable=C0415
+            from quark.modules.applications.optimization.ACL.mappings.QUBO import Qubo  # pylint: disable=C0415
             return Qubo()
         else:
             raise NotImplementedError(f"Submodule Option {option} not implemented")

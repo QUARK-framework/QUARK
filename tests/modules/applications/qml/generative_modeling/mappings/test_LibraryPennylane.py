@@ -2,10 +2,10 @@ import unittest
 from unittest.mock import patch, MagicMock
 import numpy as np
 
-from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-from modules.applications.qml.generative_modeling.training.QGAN import QGAN
-from modules.applications.qml.generative_modeling.training.Inference import Inference
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
+from quark.modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from quark.modules.applications.qml.generative_modeling.training.QGAN import QGAN
+from quark.modules.applications.qml.generative_modeling.training.Inference import Inference
 
 
 class TestLibraryPennylane(unittest.TestCase):

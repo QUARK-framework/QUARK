@@ -20,9 +20,9 @@ import numpy as np
 from nnf import Var, And, Or
 from nnf.dimacs import dump
 
-from modules.Core import Core
-from modules.applications.optimization.Optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.Core import Core
+from quark.modules.applications.optimization.Optimization import Optimization
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class SAT(Optimization):
@@ -88,23 +88,23 @@ class SAT(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QubovertQUBO":
-            from modules.applications.optimization.SAT.mappings.QubovertQUBO import \
+            from quark.modules.applications.optimization.SAT.mappings.QubovertQUBO import \
                 QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         elif option == "Direct":
-            from modules.applications.optimization.SAT.mappings.Direct import Direct  # pylint: disable=C0415
+            from quark.modules.applications.optimization.SAT.mappings.Direct import Direct  # pylint: disable=C0415
             return Direct()
         elif option == "ChoiQUBO":
-            from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO  # pylint: disable=C0415
+            from quark.modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO  # pylint: disable=C0415
             return ChoiQUBO()
         elif option == "ChoiIsing":
-            from modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing  # pylint: disable=C0415
+            from quark.modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing  # pylint: disable=C0415
             return ChoiIsing()
         elif option == "DinneenQUBO":
-            from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO  # pylint: disable=C0415
+            from quark.modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO  # pylint: disable=C0415
             return DinneenQUBO()
         elif option == "DinneenIsing":
-            from modules.applications.optimization.SAT.mappings.DinneenISING import \
+            from quark.modules.applications.optimization.SAT.mappings.DinneenISING import \
                 DinneenIsing  # pylint: disable=C0415
             return DinneenIsing()
         else:

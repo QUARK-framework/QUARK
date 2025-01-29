@@ -21,10 +21,10 @@ from qiskit.circuit import Parameter
 from qiskit.providers import Backend
 from qiskit.quantum_info import Statevector
 
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-from modules.applications.qml.generative_modeling.training.QGAN import QGAN
-from modules.applications.qml.generative_modeling.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
+from quark.modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from quark.modules.applications.qml.generative_modeling.training.QGAN import QGAN
+from quark.modules.applications.qml.generative_modeling.training.Inference import Inference
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
 
 logging.getLogger("qiskit").setLevel(logging.WARNING)
 
@@ -201,7 +201,7 @@ class LibraryQiskit(LibraryGenerative):
             backend = Aer.get_backend('statevector_simulator')
             backend.set_options(device="CPU")
         elif config == "ionQ_Harmony":
-            from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
+            from quark.modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
             from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider  # pylint: disable=C0415
             device_wrapper = Ionq("ionQ", "arn:aws:braket:::device/qpu/ionq/ionQdevice")
             backend = AWSBraketBackend(
@@ -213,7 +213,7 @@ class LibraryQiskit(LibraryGenerative):
                 backend_version="2",
             )
         elif config == "Amazon_SV1":
-            from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
+            from quark.modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
             from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider  # pylint: disable=C0415
             device_wrapper = SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
             backend = AWSBraketBackend(

@@ -1,7 +1,7 @@
 import unittest
 import networkx as nx
 
-from modules.applications.optimization.TSP.mappings.QUBO import QUBO
+from quark.modules.applications.optimization.TSP.mappings.QUBO import QUBO
 
 
 class TestQUBO(unittest.TestCase):

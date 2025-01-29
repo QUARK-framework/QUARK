@@ -16,9 +16,9 @@ from abc import ABC
 import logging
 from typing import TypedDict
 
-from utils import start_time_measurement, end_time_measurement
-from modules.Core import Core
-from modules.applications.qml.Model import Model
+from quark.utils import start_time_measurement, end_time_measurement
+from quark.modules.Core import Core
+from quark.modules.applications.qml.Model import Model
 
 
 class LibraryGenerative(Core, Model, ABC):

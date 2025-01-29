@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from modules.devices.Device import Device
+from quark.modules.devices.Device import Device
 
 
 class HelperClass(Device):

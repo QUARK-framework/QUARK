@@ -1,7 +1,7 @@
 import unittest
 import pickle
 
-from modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom
+from quark.modules.applications.optimization.MIS.mappings.NeutralAtom import NeutralAtom
 
 
 class TestNeutralAtom(unittest.TestCase):

@@ -23,8 +23,8 @@ import yaml
 from packaging import version
 import inquirer
 
-from modules.Core import Core
-from utils import _get_instance_with_sub_options, get_git_revision, checkbox
+from quark.modules.Core import Core
+from quark.utils import _get_instance_with_sub_options, get_git_revision, checkbox
 
 
 class Installer:
@@ -34,7 +34,7 @@ class Installer:
     """
 
     def __init__(self):
-        self.quark_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
+        self.quark_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
         self.settings_dir = f"{self.quark_dir}/.settings"
         self.envs_dir = f"{self.settings_dir}/envs"
         self.python_version = "3.12.7"

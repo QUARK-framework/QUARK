@@ -18,10 +18,10 @@ import logging
 import numpy as np
 import pkg_resources
 
-from utils import start_time_measurement, end_time_measurement
-from modules.applications.qml.generative_modeling.transformations.MinMax import MinMax
-from modules.applications.qml.generative_modeling.transformations.PIT import PIT
-from modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
+from quark.utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.qml.generative_modeling.transformations.MinMax import MinMax
+from quark.modules.applications.qml.generative_modeling.transformations.PIT import PIT
+from quark.modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
 
 
 class ContinuousData(DataHandlerGenerative):

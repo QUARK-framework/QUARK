@@ -23,9 +23,9 @@ from more_itertools import locate
 from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
-from modules.applications.Mapping import Mapping, Core
-from modules.applications.optimization.TSP.mappings.QUBO import QUBO
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Mapping, Core
+from quark.modules.applications.optimization.TSP.mappings.QUBO import QUBO
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Ising(Mapping):
@@ -261,13 +261,13 @@ class Ising(Mapping):
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "QAOA":
-            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            from quark.modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()
         elif option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            from quark.modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
             return PennylaneQAOA()
         elif option == "QiskitQAOA":
-            from modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
+            from quark.modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
             return QiskitQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

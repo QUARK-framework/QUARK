@@ -1,6 +1,6 @@
 import unittest
 
-from modules.applications.optimization.SCP.mappings.qubovertQUBO import QubovertQUBO
+from quark.modules.applications.optimization.SCP.mappings.qubovertQUBO import QubovertQUBO
 
 
 class TestQubovertQUBO(unittest.TestCase):

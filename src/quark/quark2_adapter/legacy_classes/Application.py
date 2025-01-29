@@ -15,7 +15,7 @@
 from abc import ABC, abstractmethod
 from typing import final
 
-from utils import _get_instance_with_sub_options
+from quark.utils import _get_instance_with_sub_options
 
 
 class Application(ABC):

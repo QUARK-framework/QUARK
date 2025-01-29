@@ -1,7 +1,7 @@
 import unittest
 import pickle
 
-from modules.applications.optimization.PVC.mappings.QUBO import QUBO
+from quark.modules.applications.optimization.PVC.mappings.QUBO import QUBO
 
 
 class TestQUBO(unittest.TestCase):

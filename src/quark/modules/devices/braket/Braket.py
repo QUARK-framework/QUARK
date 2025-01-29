@@ -23,7 +23,7 @@ from botocore.config import Config
 from botocore.exceptions import ProfileNotFound
 from braket.aws import AwsSession
 
-from modules.devices.Device import Device
+from quark.modules.devices.Device import Device
 
 
 class Braket(Device, ABC):

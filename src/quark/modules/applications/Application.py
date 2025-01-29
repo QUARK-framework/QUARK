@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from modules.Core import Core
+from quark.modules.Core import Core
 
 
 class Application(Core, ABC):

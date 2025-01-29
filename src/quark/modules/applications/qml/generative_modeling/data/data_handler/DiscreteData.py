@@ -19,10 +19,10 @@ from typing import TypedDict
 
 import numpy as np
 
-from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
-from modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
-from modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
+from quark.modules.applications.qml.generative_modeling.data.data_handler.DataHandlerGenerative import DataHandlerGenerative
+from quark.modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class DiscreteData(DataHandlerGenerative):

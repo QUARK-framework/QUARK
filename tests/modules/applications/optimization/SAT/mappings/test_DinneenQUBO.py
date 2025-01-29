@@ -1,7 +1,7 @@
 import unittest
 from nnf import Var, And, Or
 
-from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
+from quark.modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
 
 
 class TestDinneenQUBO(unittest.TestCase):

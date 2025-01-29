@@ -24,9 +24,9 @@ from qiskit_optimization.applications import OptimizationApplication
 from qiskit_algorithms.optimizers import POWELL, SPSA, COBYLA
 from qiskit_algorithms.minimum_eigensolvers import VQE, QAOA, NumPyMinimumEigensolver
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class QiskitQAOA(Solver):
@@ -64,7 +64,7 @@ class QiskitQAOA(Solver):
         :return: Instance of the default submodule
         """
         if option in ["qasm_simulator", "qasm_simulator_gpu"]:
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass(option)
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

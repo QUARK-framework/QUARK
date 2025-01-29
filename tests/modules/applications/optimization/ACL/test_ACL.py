@@ -2,7 +2,7 @@ import unittest
 import os
 import pandas as pd
 from tempfile import TemporaryDirectory
-from modules.applications.optimization.ACL.ACL import ACL
+from quark.modules.applications.optimization.ACL.ACL import ACL
 
 
 class TestACL(unittest.TestCase):

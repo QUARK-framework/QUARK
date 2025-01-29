@@ -16,7 +16,7 @@ import glob
 import argparse
 import unittest
 
-from main import handle_benchmark_run, create_benchmark_parser
+from quark.__main__ import handle_benchmark_run, create_benchmark_parser
 
 
 class TestMain(unittest.TestCase):

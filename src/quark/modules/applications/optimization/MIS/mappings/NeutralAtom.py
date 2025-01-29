@@ -17,8 +17,8 @@ from typing import TypedDict
 import networkx as nx
 import pulser
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Mapping, Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class NeutralAtom(Mapping):
@@ -85,7 +85,7 @@ class NeutralAtom(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "NeutralAtomMIS":
-            from modules.solvers.NeutralAtomMIS import NeutralAtomMIS  # pylint: disable=C0415
+            from quark.modules.solvers.NeutralAtomMIS import NeutralAtomMIS  # pylint: disable=C0415
             return NeutralAtomMIS()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

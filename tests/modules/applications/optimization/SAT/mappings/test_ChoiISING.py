@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from nnf import Var, And, Or
 
-from modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing
+from quark.modules.applications.optimization.SAT.mappings.ChoiISING import ChoiIsing
 
 
 class TestChoiIsing(unittest.TestCase):

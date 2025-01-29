@@ -25,9 +25,9 @@ except ModuleNotFoundError:
     GPU = False
     logging.info("CuPy not available, using vanilla numpy, data processing on CPU")
 
-from modules.Core import Core
-from modules.applications.qml.Training import Training
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.Core import Core
+from quark.modules.applications.qml.Training import Training
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class TrainingGenerative(Core, Training, ABC):

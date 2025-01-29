@@ -15,8 +15,8 @@
 from abc import ABC
 from typing import TypedDict
 
-from modules.Core import Core
-from modules.devices.Device import Device
+from quark.modules.Core import Core
+from quark.modules.devices.Device import Device
 
 
 class QrispSimulator(Device, ABC):

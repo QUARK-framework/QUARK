@@ -18,9 +18,9 @@ import logging
 import numpy as np
 import pulser
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class NeutralAtomMIS(Solver):
@@ -52,7 +52,7 @@ class NeutralAtomMIS(Solver):
         :return: Instance of the default submodule
         """
         if option == "MockNeutralAtomDevice":
-            from modules.devices.pulser.MockNeutralAtomDevice import MockNeutralAtomDevice  # pylint: disable=C0415
+            from quark.modules.devices.pulser.MockNeutralAtomDevice import MockNeutralAtomDevice  # pylint: disable=C0415
             return MockNeutralAtomDevice()
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

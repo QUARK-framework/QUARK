@@ -17,8 +17,8 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Transformation(Core, ABC):

@@ -28,9 +28,9 @@ import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 matplotlib.use('Agg')
 
@@ -82,37 +82,37 @@ class PennylaneQAOA(Solver):
         """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
-            from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
+            from quark.modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
             return Ionq("ionq", "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
-            from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
+            from quark.modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
-            from modules.devices.braket.TN1 import TN1  # pylint: disable=C0415
+            from quark.modules.devices.braket.TN1 import TN1  # pylint: disable=C0415
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
         elif option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
-            from modules.devices.braket.Rigetti import Rigetti  # pylint: disable=C0415
+            from quark.modules.devices.braket.Rigetti import Rigetti  # pylint: disable=C0415
             return Rigetti("Rigetti", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3")
         elif option == "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy":
-            from modules.devices.braket.OQC import OQC  # pylint: disable=C0415
+            from quark.modules.devices.braket.OQC import OQC  # pylint: disable=C0415
             return OQC("OQC", "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy")
         elif option == "braket.local.qubit":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("braket.local.qubit")
         elif option == "default.qubit":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("default.qubit")
         elif option == "default.qubit.autograd":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("default.qubit.autograd")
         elif option == "qulacs.simulator":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("qulacs.simulator")
         elif option == "lightning.gpu":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("lightning.gpu")
         elif option == "lightning.qubit":
-            from modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
+            from quark.modules.devices.HelperClass import HelperClass  # pylint: disable=C0415
             return HelperClass("lightning.qubit")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

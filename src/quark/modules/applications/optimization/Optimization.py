@@ -14,8 +14,8 @@
 from abc import ABC, abstractmethod
 import logging
 
-from modules.applications.Application import Application
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Application import Application
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Optimization(Application, ABC):

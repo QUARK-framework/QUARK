@@ -5,7 +5,7 @@ import os
 from tempfile import TemporaryDirectory
 import logging
 
-from modules.applications.optimization.TSP.TSP import TSP
+from quark.modules.applications.optimization.TSP.TSP import TSP
 
 
 class TestTSP(unittest.TestCase):

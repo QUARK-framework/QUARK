@@ -14,11 +14,11 @@
 
 from typing import Union, TypedDict
 
-from modules.applications.qml.generative_modeling.circuits.CircuitGenerative import CircuitGenerative
-from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
-from modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
-from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
-from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitGenerative import CircuitGenerative
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryPennylane import LibraryPennylane
+from quark.modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
+from quark.modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
 
 class CircuitCardinality(CircuitGenerative):

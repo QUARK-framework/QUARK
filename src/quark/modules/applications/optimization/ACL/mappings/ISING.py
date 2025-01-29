@@ -20,9 +20,9 @@ from more_itertools import locate
 from qiskit_optimization import QuadraticProgram
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
-from modules.applications.Mapping import Mapping
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Mapping
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Ising(Mapping):
@@ -200,10 +200,10 @@ class Ising(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
-            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            from quark.modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()
         elif option == "QiskitQAOA":
-            from modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
+            from quark.modules.solvers.QiskitQAOA import QiskitQAOA  # pylint: disable=C0415
             return QiskitQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

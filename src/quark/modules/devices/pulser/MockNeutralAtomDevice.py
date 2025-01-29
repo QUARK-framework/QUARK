@@ -20,7 +20,7 @@ from pulser_simulation import QutipBackend
 from pulser.noise_model import NoiseModel
 from pulser.backend.config import EmulatorConfig
 
-from modules.devices.pulser.Pulser import Pulser
+from quark.modules.devices.pulser.Pulser import Pulser
 
 
 class MockNeutralAtomDevice(Pulser):

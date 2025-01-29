@@ -25,8 +25,8 @@ from qrisp.algorithms.qiro import (
 )
 from qrisp.qaoa import create_max_indep_set_cl_cost_function
 
-from modules.solvers.Solver import Solver, Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver, Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class QIROSolver(Solver):
@@ -59,7 +59,7 @@ class QIROSolver(Solver):
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "qrisp_simulator":
-            from modules.devices.qrisp_simulator.QrispSimulator import QrispSimulator  # pylint: disable=C0415
+            from quark.modules.devices.qrisp_simulator.QrispSimulator import QrispSimulator  # pylint: disable=C0415
             return QrispSimulator()  # pylint: disable=E1102
 
         else:

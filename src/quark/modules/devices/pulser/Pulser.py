@@ -14,7 +14,7 @@
 
 from abc import ABC, abstractmethod
 
-from modules.devices.Device import Device
+from quark.modules.devices.Device import Device
 
 
 class Pulser(Device, ABC):

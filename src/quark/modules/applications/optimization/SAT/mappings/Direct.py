@@ -20,8 +20,8 @@ from nnf import And
 from nnf.dimacs import dump
 from pysat.formula import CNF, WCNF
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Mapping, Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Direct(Mapping):
@@ -119,10 +119,10 @@ class Direct(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "ClassicalSAT":
-            from modules.solvers.ClassicalSAT import ClassicalSAT  # pylint: disable=C0415
+            from quark.modules.solvers.ClassicalSAT import ClassicalSAT  # pylint: disable=C0415
             return ClassicalSAT()
         elif option == "RandomSAT":
-            from modules.solvers.RandomClassicalSAT import RandomSAT  # pylint: disable=C0415
+            from quark.modules.solvers.RandomClassicalSAT import RandomSAT  # pylint: disable=C0415
             return RandomSAT()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

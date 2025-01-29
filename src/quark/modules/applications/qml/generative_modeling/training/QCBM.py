@@ -21,8 +21,8 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib import figure, axes
 
-from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
-from utils_mpi import is_running_mpi, get_comm
+from quark.modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
+from quark.utils_mpi import is_running_mpi, get_comm
 
 matplotlib.use('Agg')
 MPI = is_running_mpi()

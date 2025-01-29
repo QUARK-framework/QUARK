@@ -19,8 +19,8 @@ import sys
 from abc import ABC, abstractmethod
 from typing import final
 
-from utils import _get_instance_with_sub_options
-from Metrics import Metrics
+from quark.utils import _get_instance_with_sub_options
+from quark.Metrics import Metrics
 
 
 class Core(ABC):

@@ -19,10 +19,10 @@ import pennylane as qml
 from jax import numpy as jnp
 import jax
 
-from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
-from modules.applications.qml.generative_modeling.training.Inference import Inference
-from modules.applications.qml.generative_modeling.training.QGAN import QGAN
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
+from quark.modules.applications.qml.generative_modeling.training.Inference import Inference
+from quark.modules.applications.qml.generative_modeling.training.QGAN import QGAN
+from quark.modules.applications.qml.generative_modeling.training.QCBM import QCBM
 
 jax.config.update("jax_enable_x64", True)
 

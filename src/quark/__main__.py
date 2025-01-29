@@ -96,8 +96,8 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None,
 
     benchmark_config = json.loads(benchmark_config["config"])
 
-    from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
-    from ConfigManager import ConfigManager  # pylint: disable=C0415
+    from quark.BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
+    from quark.ConfigManager import ConfigManager  # pylint: disable=C0415
 
     config_manager = ConfigManager()
     config_manager.set_config(benchmark_config)
@@ -146,15 +146,15 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
 
     :param args: Namespace with the arguments given by the user
     """
-    from BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
-    from Plotter import Plotter  # pylint: disable=C0415
+    from quark.BenchmarkManager import BenchmarkManager  # pylint: disable=C0415
+    from quark.Plotter import Plotter  # pylint: disable=C0415
 
     benchmark_manager = BenchmarkManager(fail_fast=args.failfast)
 
     if args.summarize:
         benchmark_manager.summarize_results(args.summarize)
     else:
-        from ConfigManager import ConfigManager  # pylint: disable=C0415
+        from quark.ConfigManager import ConfigManager  # pylint: disable=C0415
         config_manager = ConfigManager()
         if args.modules:
             logging.info(f"Load application modules configuration from {args.modules}")

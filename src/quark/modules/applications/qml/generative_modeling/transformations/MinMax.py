@@ -15,9 +15,9 @@
 from typing import Union
 import numpy as np
 
-from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
-from modules.applications.qml.generative_modeling.circuits.CircuitStandard import CircuitStandard
-from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
+from quark.modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitStandard import CircuitStandard
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
 
 
 class MinMax(Transformation):  # pylint: disable=R0902

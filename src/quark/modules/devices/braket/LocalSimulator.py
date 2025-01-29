@@ -14,7 +14,7 @@
 
 from braket.devices import LocalSimulator as LocalSimulatorBraket
 
-from modules.devices.braket.Braket import Braket
+from quark.modules.devices.braket.Braket import Braket
 
 
 class LocalSimulator(Braket):

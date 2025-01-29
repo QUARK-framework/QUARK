@@ -1,8 +1,8 @@
 import logging
 
-from BenchmarkManager import Instruction
-from modules.Core import Core
-from modules.applications.Application import Application
+from quark.BenchmarkManager import Instruction
+from quark.modules.Core import Core
+from quark.modules.applications.Application import Application
 
 
 class InstructionDemo(Application):

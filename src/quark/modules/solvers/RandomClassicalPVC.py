@@ -16,9 +16,9 @@ from typing import TypedDict
 import random
 import networkx as nx
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class RandomPVC(Solver):
@@ -50,7 +50,7 @@ class RandomPVC(Solver):
         :return: Instance of the default submodule
         """
         if option == "Local":
-            from modules.devices.Local import Local  # pylint: disable=C0415
+            from quark.modules.devices.Local import Local  # pylint: disable=C0415
             return Local()
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

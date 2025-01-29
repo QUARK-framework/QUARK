@@ -13,11 +13,11 @@
 #  limitations under the License.
 
 from typing import Union
-from utils import start_time_measurement, end_time_measurement
+from quark.utils import start_time_measurement, end_time_measurement
 
-from modules.applications.qml.QML import QML
-from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
-from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
+from quark.modules.applications.qml.QML import QML
+from quark.modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
+from quark.modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
 
 
 class GenerativeModeling(QML):

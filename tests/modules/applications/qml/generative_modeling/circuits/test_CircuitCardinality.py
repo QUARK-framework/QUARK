@@ -1,6 +1,6 @@
 import unittest
 
-from modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitCardinality import CircuitCardinality
 
 
 class TestCircuitCardinality(unittest.TestCase):

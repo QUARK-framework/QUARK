@@ -15,9 +15,9 @@
 from typing import TypedDict
 import logging
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.solvers.Solver import Solver
+from quark.modules.Core import Core
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class Annealer(Solver):
@@ -40,7 +40,7 @@ class Annealer(Solver):
         :return: Instance of the default submodule
         """
         if option == "Simulated Annealer":
-            from modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
+            from quark.modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
             return SimulatedAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")

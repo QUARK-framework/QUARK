@@ -18,9 +18,9 @@ import numpy as np
 from dimod import qubo_to_ising
 from nnf import And
 
-from modules.applications.Mapping import Mapping, Core
-from modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Mapping, Core
+from quark.modules.applications.optimization.SAT.mappings.DinneenQUBO import DinneenQUBO
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class DinneenIsing(Mapping):
@@ -139,10 +139,10 @@ class DinneenIsing(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
-            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            from quark.modules.solvers.QAOA import QAOA  # pylint: disable=C0415
             return QAOA()
         if option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            from quark.modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
             return PennylaneQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

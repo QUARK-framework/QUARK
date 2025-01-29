@@ -23,9 +23,9 @@ import numpy as np
 import yaml
 from typing_extensions import TypedDict, NotRequired, Self
 
-from modules.Core import Core
-from modules.applications import Application
-from utils import _get_instance_with_sub_options, checkbox
+from quark.modules.Core import Core
+from quark.modules.applications import Application
+from quark.utils import _get_instance_with_sub_options, checkbox
 
 
 class ConfigModule(TypedDict):

@@ -1,6 +1,6 @@
 import unittest
 
-from modules.applications.qml.generative_modeling.circuits.CircuitCopula import CircuitCopula
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitCopula import CircuitCopula
 
 
 class TestCircuitCopula(unittest.TestCase):

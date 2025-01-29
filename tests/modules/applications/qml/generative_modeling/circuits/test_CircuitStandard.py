@@ -1,6 +1,6 @@
 import unittest
 
-from modules.applications.qml.generative_modeling.circuits.CircuitStandard import CircuitStandard
+from quark.modules.applications.qml.generative_modeling.circuits.CircuitStandard import CircuitStandard
 
 
 class TestCircuitStandard(unittest.TestCase):

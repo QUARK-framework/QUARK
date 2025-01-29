@@ -23,9 +23,9 @@ from qiskit_ibm_runtime.fake_provider import FakeProviderForBackendV2
 from qiskit_aer import Aer, AerSimulator
 from qiskit_aer.noise import NoiseModel
 
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-from modules.applications.qml.generative_modeling.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
+from quark.modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from quark.modules.applications.qml.generative_modeling.training.Inference import Inference
+from quark.modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
 
 logging.getLogger("NoisyQiskit").setLevel(logging.WARNING)
 

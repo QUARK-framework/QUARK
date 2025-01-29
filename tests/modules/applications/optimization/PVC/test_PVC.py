@@ -3,7 +3,7 @@ import os
 from tempfile import TemporaryDirectory
 from networkx import Graph
 
-from modules.applications.optimization.PVC.PVC import PVC
+from quark.modules.applications.optimization.PVC.PVC import PVC
 
 
 class TestPVC(unittest.TestCase):

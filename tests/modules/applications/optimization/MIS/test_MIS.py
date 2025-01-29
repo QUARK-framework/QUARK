@@ -4,7 +4,7 @@ import os
 from tempfile import TemporaryDirectory
 import logging
 
-from modules.applications.optimization.MIS.MIS import MIS
+from quark.modules.applications.optimization.MIS.MIS import MIS
 
 
 class TestMIS(unittest.TestCase):

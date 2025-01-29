@@ -2,7 +2,7 @@ import unittest
 import networkx as nx
 import numpy as np
 
-from modules.applications.optimization.TSP.mappings.ISING import Ising
+from quark.modules.applications.optimization.TSP.mappings.ISING import Ising
 
 
 class TestIsing(unittest.TestCase):

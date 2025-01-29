@@ -14,7 +14,7 @@
 
 from abc import ABC, abstractmethod
 
-from modules.applications.Application import Application
+from quark.modules.applications.Application import Application
 
 
 class QML(Application, ABC):

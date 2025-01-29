@@ -15,8 +15,8 @@
 from typing import TypedDict
 import networkx
 
-from modules.applications.Mapping import Core, Mapping
-from utils import start_time_measurement, end_time_measurement
+from quark.modules.applications.Mapping import Core, Mapping
+from quark.utils import start_time_measurement, end_time_measurement
 
 
 class QIRO(Mapping):
@@ -90,7 +90,7 @@ class QIRO(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QrispQIRO":
-            from modules.solvers.QrispQIRO import QIROSolver  # pylint: disable=C0415
+            from quark.modules.solvers.QrispQIRO import QIROSolver  # pylint: disable=C0415
             return QIROSolver()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

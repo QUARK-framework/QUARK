@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from utils import _get_instance_with_sub_options
+from quark.utils import _get_instance_with_sub_options
 
 
 class Mapping(ABC):

@@ -14,7 +14,7 @@
 
 import dwave.samplers
 
-from modules.devices.Device import Device
+from quark.modules.devices.Device import Device
 
 
 class SimulatedAnnealingSampler(Device):

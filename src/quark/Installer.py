@@ -151,15 +151,17 @@ class Installer:
 
         :return: Returns the name of the active env
         """
-        if not self.check_active_env():
-            logging.warning("No active QUARK module environment found, using default")
-            module_db = self.get_module_db()
-            self.save_env(module_db, "default")
-            self.set_active_env("default")
+        # if not self.check_active_env():
+        #     logging.warning("No active QUARK module environment found, using default")
+        #     module_db = self.get_module_db()
+        #     self.save_env(module_db, "default")
+        #     self.set_active_env("default")
 
-        with open(f"{self.settings_dir}/active_env.json", "r") as filehandler:
-            env = json.load(filehandler)
-            return env["name"]
+        # with open(f"{self.settings_dir}/active_env.json", "r") as filehandler:
+        #     env = json.load(filehandler)
+        #     return env["name"]
+
+        return ""
 
     def get_env(self, name: str) -> list[dict]:
         """
@@ -168,20 +170,21 @@ class Installer:
         :param name: Name of the env
         :return: Returns the modules of the env
         """
-        file = f"{self.envs_dir}/{name}.json"
-        self._check_if_env_exists(name)
+        # file = f"{self.envs_dir}/{name}.json"
+        # self._check_if_env_exists(name)
 
-        with open(file, "r") as filehandler:
-            env = json.load(filehandler)
-            logging.info(f"Getting {name} QUARK module environment")
-            module_db_build_number = self.get_module_db_build_number()
-            if env["build_number"] < module_db_build_number:
-                logging.warning(f"You QUARK module env is based on an outdated build version of the module database "
-                                f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
-                                f"{module_db_build_number}) might bring new features. You should think about "
-                                f"updating your environment!")
+        # with open(file, "r") as filehandler:
+        #     env = json.load(filehandler)
+        #     logging.info(f"Getting {name} QUARK module environment")
+        #     module_db_build_number = self.get_module_db_build_number()
+        #     if env["build_number"] < module_db_build_number:
+        #         logging.warning(f"You QUARK module env is based on an outdated build version of the module database "
+        #                         f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
+        #                         f"{module_db_build_number}) might bring new features. You should think about "
+        #                         f"updating your environment!")
 
-            return env["modules"]
+        #     return env["modules"]
+        return self.default_app_modules
 
     def _check_if_env_exists(self, name: str) -> str:
         """
@@ -246,8 +249,12 @@ class Installer:
 
         :return: Module Database
         """
-        with open(f"{self.settings_dir}/module_db.json", "r") as filehandler:
-            return json.load(filehandler)
+        return {
+            "build_number": 1,
+            "build_date": time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()),
+            "git_revision_number": 1,
+            "modules": self.default_app_modules
+        }
 
     def create_module_db(self) -> None:
         """

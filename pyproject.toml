@@ -1,16 +1,24 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [project.urls]
 Homepage = "https://github.com/QUARK-framework/QUARK"
 Issues = "https://github.com/QUARK-framework/QUARK/issues"
 
 [project]
-name = "quark"
-version = "0.0.1"
+name = "quark-famework"
+version = "2.1.4"
 authors = [
-  { name="Example Author", email="author@example.com" },
+  { name="Philipp Ross", email="philipp.ross@bmw.de" },
+  { name="Marvin Erdmann", email="marvin.erdmann@bmw.de" },
+  { name="Andre Luckow", email="andre.luckow@bmwgroup.com" },
+  { name="Greshma Shaji", email="greshma.shaji@bmwgroup.com" },
+  { name="Florian Kiwit", email="florian.kiwit@bmw.de" },
+  { name="Benjamin Decker", email="benjamin.decker@bmw.de" },
+  { name="Jürgen Schwitalla" },
+  { name="Chris van den Oetelaar" },
+  { name="Niklas Steinmann" },
 ]
 description = "Framework for Quantum Computing Application Benchmarking"
 readme = "README.md"
@@ -19,8 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
-license = "Apache-2.0"
-license-files = ["LICEN[CS]E*"]
+license = {text = "Apache-2.0"}
 dependencies = [
     "amazon-braket-pennylane-plugin==1.30.2",
     "amazon-braket-sdk==1.88.2",

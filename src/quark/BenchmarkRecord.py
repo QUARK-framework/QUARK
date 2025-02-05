@@ -17,7 +17,7 @@ from collections import deque
 import json
 from copy import deepcopy
 
-from Metrics import Metrics
+from quark.Metrics import Metrics
 
 
 class BenchmarkRecord:

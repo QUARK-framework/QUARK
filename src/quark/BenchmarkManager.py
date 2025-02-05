@@ -25,12 +25,12 @@ from typing import Optional
 
 import numpy as np
 
-from ConfigManager import ConfigManager
-from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
-from Plotter import Plotter
-from modules.Core import Core
-from utils import get_git_revision
-from utils_mpi import get_comm
+from quark.ConfigManager import ConfigManager
+from quark.BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
+from quark.Plotter import Plotter
+from quark.modules.Core import Core
+from quark.utils import get_git_revision
+from quark.utils_mpi import get_comm
 
 comm = get_comm()
 
@@ -202,7 +202,7 @@ class BenchmarkManager:
         job_status_count_total = {}
         interrupted_results = self.load_interrupted_results()
         for idx_backlog, backlog_item in enumerate(benchmark_backlog):
-            benchmark_records: [BenchmarkRecord] = []
+            benchmark_records: list[BenchmarkRecord] = []
             path = f"{self.store_dir}/benchmark_{idx_backlog}"
             Path(path).mkdir(parents=True, exist_ok=True)
             with open(f"{path}/application_config.json", 'w') as filehandler:

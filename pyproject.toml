@@ -15,7 +15,7 @@ Issues = "https://github.com/QUARK-framework/QUARK/issues"
 
 [project]
 name = "quark-famework"
-version = "2.1.4"
+version = "2.1.5"
 authors = [
   { name="Philipp Ross", email="philipp.ross@bmw.de" },
   { name="Marvin Erdmann", email="marvin.erdmann@bmw.de" },

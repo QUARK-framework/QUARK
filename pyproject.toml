@@ -1,6 +1,13 @@
 [build-system]
+# Keep in sync with optional dev requirements
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+# Copy of build-system requirements
+dev = [
+    "setuptools>=61.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/QUARK-framework/QUARK"

@@ -82,6 +82,7 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None,
     """
     Starts a benchmark run from the code.
     """
+    # TODO not reachable? dead code?
     setup_logging()
 
     # Helper for hybrid jobs

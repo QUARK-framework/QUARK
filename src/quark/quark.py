@@ -225,7 +225,7 @@ def handler_env_run(args: argparse.Namespace) -> None:
         installer.show(installer.get_env(args.show))
 
 
-def main() -> None:
+def start() -> None:
     """
     Main function that triggers the benchmarking process
     """
@@ -250,7 +250,3 @@ def main() -> None:
     except Exception as error:
         logging.error(error)
         raise error
-
-
-if __name__ == '__main__':
-    main()

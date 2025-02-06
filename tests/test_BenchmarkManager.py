@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 from datetime import datetime
 
-from src.BenchmarkManager import BenchmarkManager, Instruction
+from QUARK.src.benchmark_manager import BenchmarkManager, Instruction
 
 
 class TestBenchmarkManager(unittest.TestCase):

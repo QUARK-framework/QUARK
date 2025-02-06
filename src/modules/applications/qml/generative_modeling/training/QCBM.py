@@ -21,7 +21,7 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib import figure, axes
 
-from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
+from modules.applications.qml.generative_modeling.training.training_generative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm
 
 matplotlib.use('Agg')

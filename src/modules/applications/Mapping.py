@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
-from modules.Core import Core
+from modules.core import Core
 
 
 class Mapping(Core, ABC):

@@ -14,7 +14,7 @@
 
 from abc import ABC, abstractmethod
 
-from modules.devices.Device import Device
+from modules.devices.device import Device
 
 
 class Pulser(Device, ABC):

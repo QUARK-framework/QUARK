@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from modules.Core import Core
-from src.ConfigManager import ConfigManager
+from modules.core import Core
+from QUARK.src.config_manager import ConfigManager
 
 
 class TestConfigManager(unittest.TestCase):

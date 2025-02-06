@@ -17,8 +17,8 @@ from typing import TypedDict
 import numpy as np
 from dimod import qubo_to_ising
 
-from modules.applications.Mapping import Mapping, Core
-from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO
+from modules.applications.mapping import Mapping, Core
+from modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -147,10 +147,10 @@ class ChoiIsing(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
-            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            from modules.solvers.qaoa import QAOA  # pylint: disable=C0415
             return QAOA()
         if option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            from modules.solvers.pennylane_qaoa import PennylaneQAOA  # pylint: disable=C0415
             return PennylaneQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

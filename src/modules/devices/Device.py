@@ -13,7 +13,7 @@
 #  limitations under the License.
 
 from abc import ABC
-from modules.Core import Core
+from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
 
 

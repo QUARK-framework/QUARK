@@ -1,18 +1,18 @@
 {
-  "build_number": 18,
-  "build_date": "22-01-2025 13:49:05",
-  "git_revision_number": "c817270e589cd85c29fa8644cd14eeafde2215f1",
+  "build_number": 19,
+  "build_date": "06-02-2025 14:08:22",
+  "git_revision_number": "4771e55f1ea6c3b87ee020004a1ff21630824081",
   "modules": [
     {
       "name": "PVC",
       "class": "PVC",
-      "module": "modules.applications.optimization.PVC.PVC",
+      "module": "modules.applications.optimization.pvc.pvc",
       "submodules": [
         {
           "name": "Ising",
           "class": "Ising",
           "args": {},
-          "module": "modules.applications.optimization.PVC.mappings.ISING",
+          "module": "modules.applications.optimization.pvc.mappings.ising",
           "requirements": [
             {
               "name": "networkx",
@@ -36,7 +36,7 @@
               "name": "QAOA",
               "class": "QAOA",
               "args": {},
-              "module": "modules.solvers.QAOA",
+              "module": "modules.solvers.qaoa",
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
@@ -58,7 +58,7 @@
                   "args": {
                     "device_name": "LocalSimulator"
                   },
-                  "module": "modules.devices.braket.LocalSimulator",
+                  "module": "modules.devices.braket.local_simulator",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -82,7 +82,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -106,7 +106,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -130,7 +130,7 @@
                     "device_name": "ionQ",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -154,7 +154,7 @@
                     "device_name": "Rigetti Aspen-9",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -177,7 +177,7 @@
               "name": "PennylaneQAOA",
               "class": "PennylaneQAOA",
               "args": {},
-              "module": "modules.solvers.PennylaneQAOA",
+              "module": "modules.solvers.pennylane_qaoa",
               "requirements": [
                 {
                   "name": "pennylane",
@@ -204,7 +204,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -228,7 +228,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -252,7 +252,7 @@
                     "device_name": "ionq",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -276,7 +276,7 @@
                     "device_name": "Rigetti",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -300,7 +300,7 @@
                     "device_name": "OQC",
                     "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
                   },
-                  "module": "modules.devices.braket.OQC",
+                  "module": "modules.devices.braket.oqc",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -323,7 +323,7 @@
                   "args": {
                     "device_name": "braket.local.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -333,7 +333,7 @@
                   "args": {
                     "device_name": "default.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -343,7 +343,7 @@
                   "args": {
                     "device_name": "default.qubit.autograd"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -353,7 +353,7 @@
                   "args": {
                     "device_name": "qulacs.simulator"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -363,7 +363,7 @@
                   "args": {
                     "device_name": "lightning.gpu"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -373,7 +373,7 @@
                   "args": {
                     "device_name": "lightning.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 }
@@ -385,7 +385,7 @@
           "name": "QUBO",
           "class": "QUBO",
           "args": {},
-          "module": "modules.applications.optimization.PVC.mappings.QUBO",
+          "module": "modules.applications.optimization.pvc.mappings.qubo",
           "requirements": [
             {
               "name": "networkx",
@@ -397,14 +397,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -421,7 +421,7 @@
           "name": "GreedyClassicalPVC",
           "class": "GreedyClassicalPVC",
           "args": {},
-          "module": "modules.solvers.GreedyClassicalPVC",
+          "module": "modules.solvers.greedy_classical_pvc",
           "requirements": [
             {
               "name": "networkx",
@@ -433,7 +433,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -443,7 +443,7 @@
           "name": "ReverseGreedyClassicalPVC",
           "class": "ReverseGreedyClassicalPVC",
           "args": {},
-          "module": "modules.solvers.ReverseGreedyClassicalPVC",
+          "module": "modules.solvers.reverse_greedy_classical_pvc",
           "requirements": [
             {
               "name": "networkx",
@@ -455,7 +455,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -465,7 +465,7 @@
           "name": "RandomPVC",
           "class": "RandomPVC",
           "args": {},
-          "module": "modules.solvers.RandomClassicalPVC",
+          "module": "modules.solvers.random_classical_pvc",
           "requirements": [
             {
               "name": "networkx",
@@ -477,7 +477,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -498,13 +498,13 @@
     {
       "name": "SAT",
       "class": "SAT",
-      "module": "modules.applications.optimization.SAT.SAT",
+      "module": "modules.applications.optimization.sat.sat",
       "submodules": [
         {
           "name": "QubovertQUBO",
           "class": "QubovertQUBO",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.QubovertQUBO",
+          "module": "modules.applications.optimization.sat.mappings.qubovertqubo",
           "requirements": [
             {
               "name": "nnf",
@@ -520,14 +520,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -544,7 +544,7 @@
           "name": "Direct",
           "class": "Direct",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.Direct",
+          "module": "modules.applications.optimization.sat.mappings.direct",
           "requirements": [
             {
               "name": "nnf",
@@ -560,7 +560,7 @@
               "name": "ClassicalSAT",
               "class": "ClassicalSAT",
               "args": {},
-              "module": "modules.solvers.ClassicalSAT",
+              "module": "modules.solvers.classical_sat",
               "requirements": [
                 {
                   "name": "python-sat",
@@ -572,7 +572,7 @@
                   "name": "Local",
                   "class": "Local",
                   "args": {},
-                  "module": "modules.devices.Local",
+                  "module": "modules.devices.local",
                   "requirements": [],
                   "submodules": []
                 }
@@ -582,7 +582,7 @@
               "name": "RandomSAT",
               "class": "RandomSAT",
               "args": {},
-              "module": "modules.solvers.RandomClassicalSAT",
+              "module": "modules.solvers.random_classical_sat",
               "requirements": [
                 {
                   "name": "python-sat",
@@ -598,7 +598,7 @@
                   "name": "Local",
                   "class": "Local",
                   "args": {},
-                  "module": "modules.devices.Local",
+                  "module": "modules.devices.local",
                   "requirements": [],
                   "submodules": []
                 }
@@ -610,7 +610,7 @@
           "name": "ChoiQUBO",
           "class": "ChoiQUBO",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.ChoiQUBO",
+          "module": "modules.applications.optimization.sat.mappings.choiqubo",
           "requirements": [
             {
               "name": "nnf",
@@ -622,14 +622,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -646,7 +646,7 @@
           "name": "DinneenQUBO",
           "class": "DinneenQUBO",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.DinneenQUBO",
+          "module": "modules.applications.optimization.sat.mappings.dinneenqubo",
           "requirements": [
             {
               "name": "nnf",
@@ -658,14 +658,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -682,7 +682,7 @@
           "name": "ChoiIsing",
           "class": "ChoiIsing",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.ChoiISING",
+          "module": "modules.applications.optimization.sat.mappings.choiIsing",
           "requirements": [
             {
               "name": "numpy",
@@ -702,7 +702,7 @@
               "name": "QAOA",
               "class": "QAOA",
               "args": {},
-              "module": "modules.solvers.QAOA",
+              "module": "modules.solvers.qaoa",
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
@@ -724,7 +724,7 @@
                   "args": {
                     "device_name": "LocalSimulator"
                   },
-                  "module": "modules.devices.braket.LocalSimulator",
+                  "module": "modules.devices.braket.local_simulator",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -748,7 +748,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -772,7 +772,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -796,7 +796,7 @@
                     "device_name": "ionQ",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -820,7 +820,7 @@
                     "device_name": "Rigetti Aspen-9",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -843,7 +843,7 @@
               "name": "PennylaneQAOA",
               "class": "PennylaneQAOA",
               "args": {},
-              "module": "modules.solvers.PennylaneQAOA",
+              "module": "modules.solvers.pennylane_qaoa",
               "requirements": [
                 {
                   "name": "pennylane",
@@ -870,7 +870,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -894,7 +894,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -918,7 +918,7 @@
                     "device_name": "ionq",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -942,7 +942,7 @@
                     "device_name": "Rigetti",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -966,7 +966,7 @@
                     "device_name": "OQC",
                     "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
                   },
-                  "module": "modules.devices.braket.OQC",
+                  "module": "modules.devices.braket.oqc",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -989,7 +989,7 @@
                   "args": {
                     "device_name": "braket.local.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -999,7 +999,7 @@
                   "args": {
                     "device_name": "default.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1009,7 +1009,7 @@
                   "args": {
                     "device_name": "default.qubit.autograd"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1019,7 +1019,7 @@
                   "args": {
                     "device_name": "qulacs.simulator"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1029,7 +1029,7 @@
                   "args": {
                     "device_name": "lightning.gpu"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1039,7 +1039,7 @@
                   "args": {
                     "device_name": "lightning.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 }
@@ -1051,7 +1051,7 @@
           "name": "DinneenIsing",
           "class": "DinneenIsing",
           "args": {},
-          "module": "modules.applications.optimization.SAT.mappings.DinneenISING",
+          "module": "modules.applications.optimization.sat.mappings.dinneenising",
           "requirements": [
             {
               "name": "nnf",
@@ -1075,7 +1075,7 @@
               "name": "QAOA",
               "class": "QAOA",
               "args": {},
-              "module": "modules.solvers.QAOA",
+              "module": "modules.solvers.qaoa",
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
@@ -1097,7 +1097,7 @@
                   "args": {
                     "device_name": "LocalSimulator"
                   },
-                  "module": "modules.devices.braket.LocalSimulator",
+                  "module": "modules.devices.braket.local_simulator",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1121,7 +1121,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1145,7 +1145,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1169,7 +1169,7 @@
                     "device_name": "ionQ",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1193,7 +1193,7 @@
                     "device_name": "Rigetti Aspen-9",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1216,7 +1216,7 @@
               "name": "PennylaneQAOA",
               "class": "PennylaneQAOA",
               "args": {},
-              "module": "modules.solvers.PennylaneQAOA",
+              "module": "modules.solvers.pennylane_qaoa",
               "requirements": [
                 {
                   "name": "pennylane",
@@ -1243,7 +1243,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1267,7 +1267,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1291,7 +1291,7 @@
                     "device_name": "ionq",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1315,7 +1315,7 @@
                     "device_name": "Rigetti",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1339,7 +1339,7 @@
                     "device_name": "OQC",
                     "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
                   },
-                  "module": "modules.devices.braket.OQC",
+                  "module": "modules.devices.braket.oqc",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1362,7 +1362,7 @@
                   "args": {
                     "device_name": "braket.local.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1372,7 +1372,7 @@
                   "args": {
                     "device_name": "default.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1382,7 +1382,7 @@
                   "args": {
                     "device_name": "default.qubit.autograd"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1392,7 +1392,7 @@
                   "args": {
                     "device_name": "qulacs.simulator"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1402,7 +1402,7 @@
                   "args": {
                     "device_name": "lightning.gpu"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1412,7 +1412,7 @@
                   "args": {
                     "device_name": "lightning.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 }
@@ -1435,13 +1435,13 @@
     {
       "name": "TSP",
       "class": "TSP",
-      "module": "modules.applications.optimization.TSP.TSP",
+      "module": "modules.applications.optimization.tsp.tsp",
       "submodules": [
         {
           "name": "Ising",
           "class": "Ising",
           "args": {},
-          "module": "modules.applications.optimization.TSP.mappings.ISING",
+          "module": "modules.applications.optimization.tsp.mappings.ising",
           "requirements": [
             {
               "name": "networkx",
@@ -1477,7 +1477,7 @@
               "name": "QAOA",
               "class": "QAOA",
               "args": {},
-              "module": "modules.solvers.QAOA",
+              "module": "modules.solvers.qaoa",
               "requirements": [
                 {
                   "name": "amazon-braket-sdk",
@@ -1499,7 +1499,7 @@
                   "args": {
                     "device_name": "LocalSimulator"
                   },
-                  "module": "modules.devices.braket.LocalSimulator",
+                  "module": "modules.devices.braket.local_simulator",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1523,7 +1523,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1547,7 +1547,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1571,7 +1571,7 @@
                     "device_name": "ionQ",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1595,7 +1595,7 @@
                     "device_name": "Rigetti Aspen-9",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1618,7 +1618,7 @@
               "name": "PennylaneQAOA",
               "class": "PennylaneQAOA",
               "args": {},
-              "module": "modules.solvers.PennylaneQAOA",
+              "module": "modules.solvers.pennylane_qaoa",
               "requirements": [
                 {
                   "name": "pennylane",
@@ -1645,7 +1645,7 @@
                     "device_name": "SV1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
                   },
-                  "module": "modules.devices.braket.SV1",
+                  "module": "modules.devices.braket.sv1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1669,7 +1669,7 @@
                     "device_name": "TN1",
                     "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
                   },
-                  "module": "modules.devices.braket.TN1",
+                  "module": "modules.devices.braket.tn1",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1693,7 +1693,7 @@
                     "device_name": "ionq",
                     "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
                   },
-                  "module": "modules.devices.braket.Ionq",
+                  "module": "modules.devices.braket.ionq",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1717,7 +1717,7 @@
                     "device_name": "Rigetti",
                     "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
                   },
-                  "module": "modules.devices.braket.Rigetti",
+                  "module": "modules.devices.braket.rigetti",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1741,7 +1741,7 @@
                     "device_name": "OQC",
                     "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
                   },
-                  "module": "modules.devices.braket.OQC",
+                  "module": "modules.devices.braket.oqc",
                   "requirements": [
                     {
                       "name": "amazon-braket-sdk",
@@ -1764,7 +1764,7 @@
                   "args": {
                     "device_name": "braket.local.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1774,7 +1774,7 @@
                   "args": {
                     "device_name": "default.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1784,7 +1784,7 @@
                   "args": {
                     "device_name": "default.qubit.autograd"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1794,7 +1794,7 @@
                   "args": {
                     "device_name": "qulacs.simulator"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1804,7 +1804,7 @@
                   "args": {
                     "device_name": "lightning.gpu"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1814,7 +1814,7 @@
                   "args": {
                     "device_name": "lightning.qubit"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 }
@@ -1824,7 +1824,7 @@
               "name": "QiskitQAOA",
               "class": "QiskitQAOA",
               "args": {},
-              "module": "modules.solvers.QiskitQAOA",
+              "module": "modules.solvers.qiskit_qaoa",
               "requirements": [
                 {
                   "name": "qiskit",
@@ -1850,7 +1850,7 @@
                   "args": {
                     "device_name": "qasm_simulator"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 },
@@ -1860,7 +1860,7 @@
                   "args": {
                     "device_name": "qasm_simulator_gpu"
                   },
-                  "module": "modules.devices.HelperClass",
+                  "module": "modules.devices.helper_class",
                   "requirements": [],
                   "submodules": []
                 }
@@ -1872,7 +1872,7 @@
           "name": "QUBO",
           "class": "QUBO",
           "args": {},
-          "module": "modules.applications.optimization.TSP.mappings.QUBO",
+          "module": "modules.applications.optimization.tsp.mappings.qubo",
           "requirements": [
             {
               "name": "networkx",
@@ -1888,14 +1888,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -1912,7 +1912,7 @@
           "name": "GreedyClassicalTSP",
           "class": "GreedyClassicalTSP",
           "args": {},
-          "module": "modules.solvers.GreedyClassicalTSP",
+          "module": "modules.solvers.greedy_classical_tsp",
           "requirements": [
             {
               "name": "networkx",
@@ -1924,7 +1924,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -1934,7 +1934,7 @@
           "name": "ReverseGreedyClassicalTSP",
           "class": "ReverseGreedyClassicalTSP",
           "args": {},
-          "module": "modules.solvers.ReverseGreedyClassicalTSP",
+          "module": "modules.solvers.reverse_greedy_classical_tsp",
           "requirements": [
             {
               "name": "networkx",
@@ -1946,7 +1946,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -1956,7 +1956,7 @@
           "name": "RandomTSP",
           "class": "RandomTSP",
           "args": {},
-          "module": "modules.solvers.RandomClassicalTSP",
+          "module": "modules.solvers.random_classical_tsp",
           "requirements": [
             {
               "name": "networkx",
@@ -1968,7 +1968,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -1989,13 +1989,13 @@
     {
       "name": "ACL",
       "class": "ACL",
-      "module": "modules.applications.optimization.ACL.ACL",
+      "module": "modules.applications.optimization.acl.acl",
       "submodules": [
         {
           "name": "MIPsolverACL",
           "class": "MIPaclp",
           "args": {},
-          "module": "modules.solvers.MIPsolverACL",
+          "module": "modules.solvers.mip_solver_acl",
           "requirements": [
             {
               "name": "pulp",
@@ -2007,7 +2007,7 @@
               "name": "Local",
               "class": "Local",
               "args": {},
-              "module": "modules.devices.Local",
+              "module": "modules.devices.local",
               "requirements": [],
               "submodules": []
             }
@@ -2017,7 +2017,7 @@
           "name": "QUBO",
           "class": "Qubo",
           "args": {},
-          "module": "modules.applications.optimization.ACL.mappings.QUBO",
+          "module": "modules.applications.optimization.acl.mappings.qubo",
           "requirements": [
             {
               "name": "numpy",
@@ -2033,14 +2033,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -2076,13 +2076,13 @@
     {
       "name": "MIS",
       "class": "MIS",
-      "module": "modules.applications.optimization.MIS.MIS",
+      "module": "modules.applications.optimization.mis.mis",
       "submodules": [
         {
           "name": "QIRO",
           "class": "QIRO",
           "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.QIRO",
+          "module": "modules.applications.optimization.mis.mappings.qiro",
           "requirements": [
             {
               "name": "qrisp",
@@ -2094,7 +2094,7 @@
               "name": "QrispQIRO",
               "class": "QIROSolver",
               "args": {},
-              "module": "modules.solvers.QrispQIRO",
+              "module": "modules.solvers.qrisp_qiro",
               "requirements": [
                 {
                   "name": "qrisp",
@@ -2106,7 +2106,7 @@
                   "name": "qrisp_simulator",
                   "class": "QrispSimulator",
                   "args": {},
-                  "module": "modules.devices.qrisp_simulator.QrispSimulator",
+                  "module": "modules.devices.qrisp_simulator.qrisp_simulator",
                   "requirements": [
                     {
                       "name": "qrisp",
@@ -2123,7 +2123,7 @@
           "name": "NeutralAtom",
           "class": "NeutralAtom",
           "args": {},
-          "module": "modules.applications.optimization.MIS.mappings.NeutralAtom",
+          "module": "modules.applications.optimization.mis.mappings.neutralatom",
           "requirements": [
             {
               "name": "pulser",
@@ -2135,7 +2135,7 @@
               "name": "NeutralAtomMIS",
               "class": "NeutralAtomMIS",
               "args": {},
-              "module": "modules.solvers.NeutralAtomMIS",
+              "module": "modules.solvers.neutral_atom_mis",
               "requirements": [
                 {
                   "name": "pulser",
@@ -2147,7 +2147,7 @@
                   "name": "MockNeutralAtomDevice",
                   "class": "MockNeutralAtomDevice",
                   "args": {},
-                  "module": "modules.devices.pulser.MockNeutralAtomDevice",
+                  "module": "modules.devices.pulser.mock_neutral_atom_device",
                   "requirements": [
                     {
                       "name": "pulser",
@@ -2166,13 +2166,13 @@
     {
       "name": "SCP",
       "class": "SCP",
-      "module": "modules.applications.optimization.SCP.SCP",
+      "module": "modules.applications.optimization.scp.scp",
       "submodules": [
         {
           "name": "qubovertQUBO",
           "class": "QubovertQUBO",
           "args": {},
-          "module": "modules.applications.optimization.SCP.mappings.qubovertQUBO",
+          "module": "modules.applications.optimization.scp.mappings.qubovertqubo",
           "requirements": [
             {
               "name": "qubovert",
@@ -2184,14 +2184,14 @@
               "name": "Annealer",
               "class": "Annealer",
               "args": {},
-              "module": "modules.solvers.Annealer",
+              "module": "modules.solvers.annealer",
               "requirements": [],
               "submodules": [
                 {
                   "name": "Simulated Annealer",
                   "class": "SimulatedAnnealingSampler",
                   "args": {},
-                  "module": "modules.devices.SimulatedAnnealingSampler",
+                  "module": "modules.devices.simulated_annealing_sampler",
                   "requirements": [
                     {
                       "name": "dwave-samplers",
@@ -2210,13 +2210,13 @@
     {
       "name": "GenerativeModeling",
       "class": "GenerativeModeling",
-      "module": "modules.applications.qml.generative_modeling.GenerativeModeling",
+      "module": "modules.applications.qml.generative_modeling.generative_modeling",
       "submodules": [
         {
           "name": "Continuous Data",
           "class": "ContinuousData",
           "args": {},
-          "module": "modules.applications.qml.generative_modeling.data.data_handler.ContinuousData",
+          "module": "modules.applications.qml.generative_modeling.data.data_handler.continuous_data",
           "requirements": [
             {
               "name": "numpy",
@@ -2228,7 +2228,7 @@
               "name": "PIT",
               "class": "PIT",
               "args": {},
-              "module": "modules.applications.qml.generative_modeling.transformations.PIT",
+              "module": "modules.applications.qml.generative_modeling.transformations.pit",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2244,7 +2244,7 @@
                   "name": "CircuitCopula",
                   "class": "CircuitCopula",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCopula",
+                  "module": "modules.applications.qml.generative_modeling.circuits.circuit_copula",
                   "requirements": [
                     {
                       "name": "scipy",
@@ -2256,7 +2256,7 @@
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_qiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2272,7 +2272,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2301,7 +2301,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2330,7 +2330,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2345,7 +2345,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_pennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -2373,7 +2373,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2402,7 +2402,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2431,7 +2431,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2446,7 +2446,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2466,7 +2466,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2495,7 +2495,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2510,7 +2510,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2534,7 +2534,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2563,7 +2563,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2582,7 +2582,7 @@
               "name": "MinMax",
               "class": "MinMax",
               "args": {},
-              "module": "modules.applications.qml.generative_modeling.transformations.MinMax",
+              "module": "modules.applications.qml.generative_modeling.transformations.min_max",
               "requirements": [
                 {
                   "name": "numpy",
@@ -2594,14 +2594,14 @@
                   "name": "CircuitStandard",
                   "class": "CircuitStandard",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitStandard",
+                  "module": "modules.applications.qml.generative_modeling.circuits.circuit_standard",
                   "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_qiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2617,7 +2617,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2646,7 +2646,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2675,7 +2675,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2690,7 +2690,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_pennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -2718,7 +2718,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2747,7 +2747,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2776,7 +2776,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2791,7 +2791,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2811,7 +2811,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2840,7 +2840,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2855,7 +2855,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2879,7 +2879,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2908,7 +2908,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2925,14 +2925,14 @@
                   "name": "CircuitCardinality",
                   "class": "CircuitCardinality",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
+                  "module": "modules.applications.qml.generative_modeling.circuits.circuit_cardinality",
                   "requirements": [],
                   "submodules": [
                     {
                       "name": "LibraryQiskit",
                       "class": "LibraryQiskit",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_qiskit",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -2948,7 +2948,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -2977,7 +2977,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3006,7 +3006,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3021,7 +3021,7 @@
                       "name": "LibraryPennylane",
                       "class": "LibraryPennylane",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                      "module": "modules.applications.qml.generative_modeling.mappings.library_pennylane",
                       "requirements": [
                         {
                           "name": "pennylane",
@@ -3049,7 +3049,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3078,7 +3078,7 @@
                           "name": "QGAN",
                           "class": "QGAN",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                          "module": "modules.applications.qml.generative_modeling.training.qgan",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3107,7 +3107,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3122,7 +3122,7 @@
                       "name": "CustomQiskitNoisyBackend",
                       "class": "CustomQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -3142,7 +3142,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3171,7 +3171,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3186,7 +3186,7 @@
                       "name": "PresetQiskitNoisyBackend",
                       "class": "PresetQiskitNoisyBackend",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                      "module": "modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend",
                       "requirements": [
                         {
                           "name": "qiskit",
@@ -3210,7 +3210,7 @@
                           "name": "QCBM",
                           "class": "QCBM",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                          "module": "modules.applications.qml.generative_modeling.training.qcbm",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3239,7 +3239,7 @@
                           "name": "Inference",
                           "class": "Inference",
                           "args": {},
-                          "module": "modules.applications.qml.generative_modeling.training.Inference",
+                          "module": "modules.applications.qml.generative_modeling.training.inference",
                           "requirements": [
                             {
                               "name": "numpy",
@@ -3260,7 +3260,7 @@
           "name": "Discrete Data",
           "class": "DiscreteData",
           "args": {},
-          "module": "modules.applications.qml.generative_modeling.data.data_handler.DiscreteData",
+          "module": "modules.applications.qml.generative_modeling.data.data_handler.discrete_data",
           "requirements": [
             {
               "name": "numpy",
@@ -3272,14 +3272,14 @@
               "name": "CircuitCardinality",
               "class": "CircuitCardinality",
               "args": {},
-              "module": "modules.applications.qml.generative_modeling.circuits.CircuitCardinality",
+              "module": "modules.applications.qml.generative_modeling.circuits.circuit_cardinality",
               "requirements": [],
               "submodules": [
                 {
                   "name": "LibraryQiskit",
                   "class": "LibraryQiskit",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.mappings.LibraryQiskit",
+                  "module": "modules.applications.qml.generative_modeling.mappings.library_qiskit",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -3295,7 +3295,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.qcbm",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3324,7 +3324,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.qgan",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3353,7 +3353,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3368,7 +3368,7 @@
                   "name": "LibraryPennylane",
                   "class": "LibraryPennylane",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.mappings.LibraryPennylane",
+                  "module": "modules.applications.qml.generative_modeling.mappings.library_pennylane",
                   "requirements": [
                     {
                       "name": "pennylane",
@@ -3396,7 +3396,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.qcbm",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3425,7 +3425,7 @@
                       "name": "QGAN",
                       "class": "QGAN",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QGAN",
+                      "module": "modules.applications.qml.generative_modeling.training.qgan",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3454,7 +3454,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3469,7 +3469,7 @@
                   "name": "CustomQiskitNoisyBackend",
                   "class": "CustomQiskitNoisyBackend",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend",
+                  "module": "modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -3489,7 +3489,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.qcbm",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3518,7 +3518,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.inference",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3533,7 +3533,7 @@
                   "name": "PresetQiskitNoisyBackend",
                   "class": "PresetQiskitNoisyBackend",
                   "args": {},
-                  "module": "modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend",
+                  "module": "modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend",
                   "requirements": [
                     {
                       "name": "qiskit",
@@ -3557,7 +3557,7 @@
                       "name": "QCBM",
                       "class": "QCBM",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.QCBM",
+                      "module": "modules.applications.qml.generative_modeling.training.qcbm",
                       "requirements": [
                         {
                           "name": "numpy",
@@ -3586,7 +3586,7 @@
                       "name": "Inference",
                       "class": "Inference",
                       "args": {},
-                      "module": "modules.applications.qml.generative_modeling.training.Inference",
+                      "module": "modules.applications.qml.generative_modeling.training.inference",
                       "requirements": [
                         {
                           "name": "numpy",

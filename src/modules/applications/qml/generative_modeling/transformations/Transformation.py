@@ -17,7 +17,7 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from modules.Core import Core
+from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
 
 

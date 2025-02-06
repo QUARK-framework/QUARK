@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.training.qcbm import QCBM
 
 
 class TestQCBM(unittest.TestCase):
@@ -36,7 +36,7 @@ class TestQCBM(unittest.TestCase):
             self.qcbm_instance.get_default_submodule("AnyOption")
 
     @patch("numpy.random.rand")
-    @patch("modules.applications.qml.generative_modeling.training.QCBM.SummaryWriter")
+    @patch("modules.applications.qml.generative_modeling.training.qcbm.SummaryWriter")
     def test_setup_training(self, mock_summary_writer, mock_rand):
         # Mock inputs
         mock_rand.return_value = np.array([0.5, 0.5, 0.5])

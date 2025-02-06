@@ -3,7 +3,7 @@ import os
 import pickle
 from tempfile import TemporaryDirectory
 
-from modules.applications.optimization.SCP.SCP import SCP
+from modules.applications.optimization.scp.scp import SCP
 
 
 class TestSCP(unittest.TestCase):

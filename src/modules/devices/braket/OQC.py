@@ -15,7 +15,7 @@
 import os
 from braket.aws import AwsDevice
 
-from modules.devices.braket.Braket import Braket
+from modules.devices.braket.braket import Braket
 
 
 class OQC(Braket):

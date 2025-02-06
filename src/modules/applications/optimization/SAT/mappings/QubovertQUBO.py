@@ -18,7 +18,7 @@ from typing import TypedDict
 from qubovert.sat import NOT, OR, AND
 from nnf import And
 
-from modules.applications.Mapping import Mapping, Core
+from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -189,7 +189,7 @@ class QubovertQUBO(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "Annealer":
-            from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
+            from modules.solvers.annealer import Annealer  # pylint: disable=C0415
             return Annealer()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

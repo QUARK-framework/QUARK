@@ -18,7 +18,7 @@ import logging
 import dwave_networkx as dnx
 import networkx
 
-from modules.applications.Mapping import Mapping, Core
+from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -119,7 +119,7 @@ class QUBO(Mapping):
         """
 
         if option == "Annealer":
-            from modules.solvers.Annealer import Annealer  # pylint: disable=C0415
+            from modules.solvers.annealer import Annealer  # pylint: disable=C0415
             return Annealer()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

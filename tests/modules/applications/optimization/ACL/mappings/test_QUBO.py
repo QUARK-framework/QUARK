@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from qiskit_optimization import QuadraticProgram
 
-from modules.applications.optimization.ACL.mappings.QUBO import Qubo
+from src.modules.applications.optimization.acl.mappings.qubo import Qubo
 
 
 class TestQubo(unittest.TestCase):

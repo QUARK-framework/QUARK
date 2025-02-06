@@ -15,8 +15,8 @@
 import numpy as np
 import pandas as pd
 
-from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
-from modules.applications.qml.generative_modeling.circuits.CircuitCopula import CircuitCopula
+from modules.applications.qml.generative_modeling.transformations.transformation import Transformation
+from modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
 
 
 class PIT(Transformation):  # pylint disable=R0902

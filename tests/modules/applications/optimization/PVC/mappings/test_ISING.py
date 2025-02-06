@@ -2,8 +2,8 @@ import unittest
 import numpy as np
 import pickle
 
-from modules.applications.optimization.PVC.mappings.ISING import Ising
-from modules.applications.optimization.PVC.mappings.QUBO import QUBO
+from modules.applications.optimization.pvc.mappings.ISING import Ising
+from modules.applications.optimization.pvc.mappings.qubo import QUBO
 
 
 class TestIsing(unittest.TestCase):

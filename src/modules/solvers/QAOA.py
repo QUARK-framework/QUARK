@@ -21,8 +21,8 @@ from braket.circuits import Circuit
 from braket.aws import AwsDevice
 from scipy.optimize import minimize
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
+from modules.solvers.solver import Solver
+from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -65,19 +65,19 @@ class QAOA(Solver):
         """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
-            from modules.devices.braket.Ionq import Ionq  # pylint: disable=C0415
+            from modules.devices.braket.ionq import Ionq  # pylint: disable=C0415
             return Ionq("ionQ", "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
-            from modules.devices.braket.SV1 import SV1  # pylint: disable=C0415
+            from modules.devices.braket.sv1 import SV1  # pylint: disable=C0415
             return SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/tn1":
-            from modules.devices.braket.TN1 import TN1  # pylint: disable=C0415
+            from modules.devices.braket.tn1 import TN1  # pylint: disable=C0415
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
         elif option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
-            from modules.devices.braket.Rigetti import Rigetti  # pylint: disable=C0415
+            from modules.devices.braket.rigetti import Rigetti  # pylint: disable=C0415
             return Rigetti("Rigetti Aspen-9", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3")
         elif option == "LocalSimulator":
-            from modules.devices.braket.LocalSimulator import LocalSimulator  # pylint: disable=C0415
+            from modules.devices.braket.local_simulator import LocalSimulator  # pylint: disable=C0415
             return LocalSimulator("LocalSimulator")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

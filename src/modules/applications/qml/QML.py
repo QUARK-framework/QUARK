@@ -14,7 +14,7 @@
 
 from abc import ABC, abstractmethod
 
-from modules.applications.Application import Application
+from modules.applications.application import Application
 
 
 class QML(Application, ABC):

@@ -3,7 +3,7 @@ import os
 import nnf
 from tempfile import TemporaryDirectory
 
-from modules.applications.optimization.SAT.SAT import SAT
+from modules.applications.optimization.sat.sat import SAT
 
 
 class TestSAT(unittest.TestCase):

@@ -21,8 +21,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
 
-from modules.applications.Application import Core
-from modules.applications.optimization.Optimization import Optimization
+from modules.applications.application import Core
+from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -78,19 +78,19 @@ class TSP(Optimization):
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "Ising":
-            from modules.applications.optimization.TSP.mappings.ISING import Ising  # pylint: disable=C0415
+            from modules.applications.optimization.tsp.mappings.ising import Ising  # pylint: disable=C0415
             return Ising()
         elif option == "QUBO":
-            from modules.applications.optimization.TSP.mappings.QUBO import QUBO  # pylint: disable=C0415
+            from modules.applications.optimization.tsp.mappings.qubo import QUBO  # pylint: disable=C0415
             return QUBO()
         elif option == "GreedyClassicalTSP":
-            from modules.solvers.GreedyClassicalTSP import GreedyClassicalTSP  # pylint: disable=C0415
+            from modules.solvers.greedy_classical_tsp import GreedyClassicalTSP  # pylint: disable=C0415
             return GreedyClassicalTSP()
         elif option == "ReverseGreedyClassicalTSP":
-            from modules.solvers.ReverseGreedyClassicalTSP import ReverseGreedyClassicalTSP  # pylint: disable=C0415
+            from modules.solvers.reverse_greedy_classical_tsp import ReverseGreedyClassicalTSP  # pylint: disable=C0415
             return ReverseGreedyClassicalTSP()
         elif option == "RandomTSP":
-            from modules.solvers.RandomClassicalTSP import RandomTSP  # pylint: disable=C0415
+            from modules.solvers.random_classical_tsp import RandomTSP  # pylint: disable=C0415
             return RandomTSP()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

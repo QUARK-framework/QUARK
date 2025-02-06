@@ -14,7 +14,7 @@
 from abc import ABC, abstractmethod
 import logging
 
-from modules.applications.Application import Application
+from modules.applications.application import Application
 from utils import start_time_measurement, end_time_measurement
 
 

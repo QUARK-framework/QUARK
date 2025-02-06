@@ -19,8 +19,8 @@ import networkx as nx
 import numpy as np
 from dimod import qubo_to_ising
 
-from modules.applications.Mapping import Mapping, Core
-from modules.applications.optimization.PVC.mappings.QUBO import QUBO
+from modules.applications.mapping import Mapping, Core
+from modules.applications.optimization.pvc.mappings.qubo import QUBO
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -150,10 +150,10 @@ class Ising(Mapping):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QAOA":
-            from modules.solvers.QAOA import QAOA  # pylint: disable=C0415
+            from modules.solvers.qaoa import QAOA  # pylint: disable=C0415
             return QAOA()
         if option == "PennylaneQAOA":
-            from modules.solvers.PennylaneQAOA import PennylaneQAOA  # pylint: disable=C0415
+            from modules.solvers.pennylane_qaoa import PennylaneQAOA  # pylint: disable=C0415
             return PennylaneQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

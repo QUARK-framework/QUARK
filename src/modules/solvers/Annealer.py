@@ -15,8 +15,8 @@
 from typing import TypedDict
 import logging
 
-from modules.solvers.Solver import Solver
-from modules.Core import Core
+from modules.solvers.solver import Solver
+from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -40,7 +40,7 @@ class Annealer(Solver):
         :return: Instance of the default submodule
         """
         if option == "Simulated Annealer":
-            from modules.devices.SimulatedAnnealingSampler import SimulatedAnnealingSampler  # pylint: disable=C0415
+            from modules.devices.simulated_annealing_sampler import SimulatedAnnealingSampler  # pylint: disable=C0415
             return SimulatedAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")

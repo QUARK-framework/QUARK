@@ -16,8 +16,8 @@ from typing import TypedDict
 import pickle
 import os
 
-from modules.applications.Application import Application
-from modules.applications.optimization.Optimization import Optimization
+from modules.applications.application import Application
+from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
 
 
@@ -60,7 +60,7 @@ class SCP(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "qubovertQUBO":
-            from modules.applications.optimization.SCP.mappings.qubovertQUBO import QubovertQUBO  # pylint: disable=C0415
+            from modules.applications.optimization.scp.mappings.qubovertqubo import QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

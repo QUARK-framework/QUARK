@@ -1,6 +1,6 @@
 import unittest
 
-from modules.applications.optimization.SCP.mappings.qubovertQUBO import QubovertQUBO
+from modules.applications.optimization.scp.mappings.qubovertqubo import QubovertQUBO
 
 
 class TestQubovertQUBO(unittest.TestCase):

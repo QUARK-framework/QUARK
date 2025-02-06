@@ -14,7 +14,7 @@
 
 from typing import TypedDict
 import numpy as np
-from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
+from modules.applications.qml.generative_modeling.training.training_generative import TrainingGenerative, Core, GPU
 
 
 class Inference(TrainingGenerative):

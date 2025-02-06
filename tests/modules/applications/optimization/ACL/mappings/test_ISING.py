@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from qiskit_optimization import QuadraticProgram
 
-from modules.applications.optimization.ACL.mappings.ISING import Ising
+from src.modules.applications.optimization.acl.mappings.ising import Ising
 
 
 class TestIsing(unittest.TestCase):

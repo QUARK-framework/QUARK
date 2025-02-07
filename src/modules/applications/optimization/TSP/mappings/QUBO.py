@@ -97,15 +97,8 @@ class QUBO(Mapping):
         lagrange_factor = config['lagrange_factor']
         weight = 'weight'
 
-        if lagrange is None:
-            # If no lagrange parameter provided, set to 'average' tour length.
-            # Usually a good estimate for a lagrange parameter is between 75-150%
-            # of the objective function value, so we come up with an estimate for
-            # tour length and use that.
-            if problem.number_of_edges() > 0:
-                lagrange = problem.size(weight=weight) * problem.number_of_nodes() / problem.number_of_edges()
-            else:
-                lagrange = 2
+        # Taken from dwave_networkx.traveling_salesperson_qubo
+        lagrange = problem.size(weight=weight) * problem.number_of_nodes() / problem.number_of_edges()
 
         lagrange = lagrange * lagrange_factor
 

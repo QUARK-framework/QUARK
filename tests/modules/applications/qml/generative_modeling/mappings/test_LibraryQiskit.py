@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from qiskit import QuantumCircuit
-import numpy as np
 from qiskit_aer import AerSimulator
 
 from modules.applications.qml.generative_modeling.mappings.LibraryQiskit import LibraryQiskit
@@ -78,29 +77,14 @@ class TestLibraryQiskit(unittest.TestCase):
         self.assertIn("n_params", output)
         self.assertEqual(output["n_params"], 3)  # RX, RY, RXX need 3 parameters
 
-    # These tests are currently commented out because implementing test cases for the
-    # cusvaer simulator is challenging due to the complexity of mocking certain
-    # behaviors of the `cusvaer`-enabled backend. We plan to implement these tests
-    # in the future once we have resolved these issues.
-    # @patch("modules.applications.qml.generative_modeling.mappings.LibraryQiskit.select_backend.cusvaer")
-    # @patch("qiskit_aer.Aer.get_backend")
-    # def test_cusvaer_simulator(self, mock_aer_simulator, mock_cusvaer):
-    #     mock_backend = MagicMock()
-    #     mock_aer_simulator.return_value = mock_backend
+    def test_select_backend(self):
+        with patch("qiskit_aer.Aer.get_backend", return_value=AerSimulator()) as mock_backend:
+            backend = self.library_instance.select_backend("aer_simulator_cpu", 2)
+            mock_backend.assert_called_once_with("aer_simulator")
+            self.assertIsInstance(backend, AerSimulator)
 
-    #     backend = self.library_instance.select_backend(
-    #         "cusvaer_simulator (only available in cuQuantum appliance)", 5
-    #     )
-    #     self.assertEqual(backend, mock_backend)
-    #     mock_aer_simulator.assert_called_once_with(
-    #         method="statevector",
-    #         device="GPU",
-    #         cusvaer_enable=True,
-    #         noise_model=None,
-    #         cusvaer_p2p_device_bits=3,
-    #         cusvaer_comm_plugin_type=mock_cusvaer.CommPluginType.MPI_AUTO,
-    #         cusvaer_comm_plugin_soname="libmpi.so",
-    #     )
+        with self.assertRaises(NotImplementedError):
+            self.library_instance.select_backend("unknown_backend", 2)
 
     @patch("qiskit_aer.Aer.get_backend")
     def test_aer_simulator_gpu(self, mock_get_backend):
@@ -142,100 +126,20 @@ class TestLibraryQiskit(unittest.TestCase):
         mock_backend.set_options.assert_called_once_with(device="CPU")
         self.assertEqual(backend, mock_backend)
 
-    # The following tests are commented out because:
-    # - The `AWSBraketBackend` and `AWSBraketProvider` are complex to mock in the current setup.
-    # - Additional setup or dependency resolution is required for testing with AWS Braket devices (e.g., SV1 or IonQ Harmony).
-    # def test_amazon_sv1(self):
-    #     from qiskit_braket_provider import AWSBraketBackend, AWSBraketProvider
-    #     from modules.devices.braket.SV1 import SV1
-
-    #     # Create a mock device wrapper and backend
-    #     device_wrapper = SV1("SV1", "arn:aws:braket:::device/quantum-simulator/amazon/sv1")
-    #     backend = AWSBraketBackend(
-    #         device=device_wrapper.device,
-    #         provider=AWSBraketProvider(),
-    #         name=device_wrapper.device.name,
-    #         description=f"AWS Device: {device_wrapper.device.provider_name} {device_wrapper.device.name}.",
-    #         online_date=device_wrapper.device.properties.service.updatedAt,
-    #         backend_version="2",
-    #     )
-
-    #     # Assert that the backend behaves as expected
-    #     self.assertIsNotNone(backend)
-    #     self.assertEqual(backend.name, device_wrapper.device.name)
-
-    # @patch("modules.devices.braket.Ionq.Ionq")
-    # @patch("qiskit_braket_provider.AWSBraketBackend")
-    # def test_ionq_harmony(self, mock_aws_braket_backend, mock_ionq):
-    #     mock_device_wrapper = MagicMock()
-    #     mock_ionq.return_value = mock_device_wrapper
-
-        # backend = self.library_instance.select_backend("ionQ_Harmony", 4)
-        # mock_aws_braket_backend.assert_called_once()
-        # self.assertEqual(backend, mock_aws_braket_backend.return_value)
-
     def test_invalid_configuration(self):
         with self.assertRaises(NotImplementedError) as context:
             self.library_instance.select_backend("invalid.backend", 4)
         self.assertIn("Device Configuration invalid.backend not implemented", str(context.exception))
 
-    # These tests are commented out because:
-    # - The complexity of mocking the behavior of Qiskit components (e.g., `transpile`, `Statevector`, and `AerSimulator`)
-    #   makes it challenging to implement these tests in the current setup.
-    # - The dependency on specific Qiskit modules and features requires more robust mocking strategies.
-    # - We plan to revisit these tests in the future.
-    # @patch("qiskit.transpiler.transpile")
-    # @patch("qiskit.quantum_info.Statevector")
-    # def test_aer_statevector_simulator(self, mock_statevector, mock_transpile):
-    #     mock_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpile.return_value = mock_transpiled_circuit
-    #     mock_statevector.return_value.probabilities.return_value = np.array([0.25, 0.75])
+    def test_get_execute_circuit(self):
+        circuit = QuantumCircuit(2)
+        circuit.h(0)
+        backend = AerSimulator()
+        config_dict = {"n_shots": 100}
 
-    #     # Config
-    #     config = "aer_statevector_simulator_gpu"
-    #     config_dict = {"n_shots": 100}
-    #     backend = MagicMock()
+        execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
+            circuit, backend, "aer_simulator_cpu", config_dict
+        )
 
-    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
-    #         mock_circuit, backend, config, config_dict
-    #     )
-
-    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
-    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
-    #     pmfs, samples = execute_circuit(solutions)
-
-    #     # Validate the outputs
-    #     self.assertIsInstance(pmfs, np.ndarray)
-    #     self.assertIsNone(samples)
-    #     self.assertEqual(pmfs.shape, (2, 2))
-    #     np.testing.assert_array_equal(pmfs[0], [0.25, 0.75])
-
-    # @patch("qiskit.transpile")
-    # @patch("qiskit_aer.AerSimulator.run")
-    # def test_aer_simulator(self, mock_run, mock_transpile):
-    #     mock_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpiled_circuit = MagicMock(spec=QuantumCircuit)
-    #     mock_transpile.return_value = mock_transpiled_circuit
-    #     mock_job = MagicMock()
-    #     mock_job.result.return_value.get_counts.return_value.int_outcomes.return_value = {0: 10, 1: 20}
-    #     mock_run.return_value = mock_job
-
-    #     # Config
-    #     mock_backend = MagicMock(spec=AerSimulator)
-    #     mock_backend.version = 2
-    #     config = "aer_simulator_gpu"
-    #     config_dict = {"n_shots": 100}
-
-    #     execute_circuit, transpiled_circuit = self.library_instance.get_execute_circuit(
-    #         mock_circuit, mock_backend, config, config_dict
-    #     )
-
-    #     self.assertEqual(transpiled_circuit, mock_transpiled_circuit)
-    #     solutions = [np.array([0.1, 0.9]), np.array([0.8, 0.2])]
-    #     pmfs, samples = execute_circuit(solutions)
-
-    #     self.assertIsInstance(pmfs, np.ndarray)
-    #     self.assertIsInstance(samples, np.ndarray)
-    #     self.assertEqual(pmfs.shape, (2, 2))
-    #     self.assertEqual(samples.shape, (2, 2))
+        self.assertIsNotNone(execute_circuit)
+        self.assertIsInstance(transpiled_circuit, QuantumCircuit)

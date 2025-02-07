@@ -3,6 +3,7 @@ import pickle
 
 from modules.applications.optimization.mis.mappings.neutral_atom import NeutralAtom
 
+
 class TestNeutralAtom(unittest.TestCase):
 
     @classmethod

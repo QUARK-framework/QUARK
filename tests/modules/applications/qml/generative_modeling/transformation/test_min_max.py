@@ -73,17 +73,17 @@ class TestMinMax(unittest.TestCase):
 
     def test_reverse_transform(self):
         # self.minmax_instance.transform(self.sample_input_data, self.sample_config)
-
+        best_sample = np.random.randint(0, 64, size=(64,))
         # Mock the input for reverse_transform
         reverse_input_data = {
-            "best_sample": np.array([0, 1, 2]),  # Example best samples
-            "depth": 1,  # Example
-            "architecture_name": "test_arch",  # Example
+            "best_sample": best_sample,
+            "depth": 1,
+            "architecture_name": "test_arch",  
             "n_qubits": 6,
-            "KL": [0.1],  # Example
+            "KL": [0.1],
             "best_parameter": [0.5],
             "store_dir_iter": "test_dir",
-            "circuit_transpiled": MagicMock()  # Mock the circuit
+            "circuit_transpiled": None
         }
 
         reverse_config = self.minmax_instance.reverse_transform(reverse_input_data)

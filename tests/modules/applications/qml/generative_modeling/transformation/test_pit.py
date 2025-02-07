@@ -2,8 +2,8 @@ import unittest
 import numpy as np
 from unittest.mock import MagicMock
 
-from src.modules.applications.qml.generative_modeling.transformations.pit import PIT
-from src.modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
+from modules.applications.qml.generative_modeling.transformations.pit import PIT
+from modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
 
 
 class TestPIT(unittest.TestCase):

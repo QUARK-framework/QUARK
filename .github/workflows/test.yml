@@ -32,6 +32,18 @@ jobs:
 
       - name: Install Dependencies
         run: pip install -r .settings/requirements_full.txt
+      
+      - name: Clean Python Cache
+        run: |
+          echo "Cleaning __pycache__ and *.pyc files..."
+          find . -type d -name "__pycache__" -exec rm -rf {} +
+          find . -type f -name "*.pyc" -delete
+          rm -rf .pytest_cache
+
+      - name: Set PYTHONPATH
+        run: |
+          echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
+          echo "Current PYTHONPATH: $PYTHONPATH"
 
       - name: Run Unit Tests
         run: python -m unittest discover . > unittest_results.log

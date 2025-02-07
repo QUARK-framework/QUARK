@@ -20,7 +20,7 @@ from abc import ABC, abstractmethod
 from typing import final
 
 from utils import _get_instance_with_sub_options
-from Metrics import Metrics
+from metrics import Metrics
 
 
 class Core(ABC):

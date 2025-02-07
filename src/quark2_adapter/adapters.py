@@ -18,15 +18,15 @@ import json
 import logging
 from time import time
 
-from modules.Core import Core
-from modules.applications.Application import Application as Application_NEW
-from modules.applications.Mapping import Mapping as Mapping_NEW
-from modules.solvers.Solver import Solver as Solver_NEW
-from modules.devices.Device import Device as Device_NEW
-from quark2_adapter.legacy_classes.Application import Application as Application_OLD
-from quark2_adapter.legacy_classes.Mapping import Mapping as Mapping_OLD
-from quark2_adapter.legacy_classes.Solver import Solver as Solver_OLD
-from quark2_adapter.legacy_classes.Device import Device as Device_OLD
+from modules.core import Core
+from modules.applications.application import Application as Application_NEW
+from modules.applications.mapping import Mapping as Mapping_NEW
+from modules.solvers.solver import Solver as Solver_NEW
+from modules.devices.device import Device as Device_NEW
+from quark2_adapter.legacy_classes.application import Application as Application_OLD
+from quark2_adapter.legacy_classes.mapping import Mapping as Mapping_OLD
+from quark2_adapter.legacy_classes.solver import Solver as Solver_OLD
+from quark2_adapter.legacy_classes.device import Device as Device_OLD
 
 
 WARNING_MSG = 'Class "%s" is inheriting from deprecated base class. Please refactor your class.'

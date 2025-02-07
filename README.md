@@ -169,7 +169,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    SCP
    GenerativeModeling
 
-2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
+2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.tsp.tsp
 [?] (Option for TSP) How many nodes does you graph need?:
  > [X] 3
    [ ] 4
@@ -187,13 +187,13 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
    [ ] ReverseGreedyClassicalTSP
    [ ] RandomTSP
 
-2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
+2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.greedy_classical_tsp
 2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
 2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
 2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
 [?] How many repetitions do you want?: 1P
-2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
-2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
+2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.tsp.tsp
+2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.greedy_classical_tsp
 2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
 2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
 2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes

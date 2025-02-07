@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 
-from src.modules.applications.qml.generative_modeling.data.data_handler.continuous_data import ContinuousData
+from modules.applications.qml.generative_modeling.data.data_handler.continuous_data import ContinuousData
 
 
 class TestContinuousData(unittest.TestCase):

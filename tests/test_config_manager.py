@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 
-from src.modules.core import Core
+from modules.core import Core
 from src.config_manager import ConfigManager
 
 

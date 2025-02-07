@@ -4,10 +4,10 @@ from qiskit import QuantumCircuit
 import numpy as np
 from qiskit_aer import AerSimulator
 
-from src.modules.applications.qml.generative_modeling.mappings.library_qiskit import LibraryQiskit
-from src.modules.applications.qml.generative_modeling.training.qcbm import QCBM
-from src.modules.applications.qml.generative_modeling.training.qgan import QGAN
-from src.modules.applications.qml.generative_modeling.training.inference import Inference
+from modules.applications.qml.generative_modeling.mappings.library_qiskit import LibraryQiskit
+from modules.applications.qml.generative_modeling.training.qcbm import QCBM
+from modules.applications.qml.generative_modeling.training.qgan import QGAN
+from modules.applications.qml.generative_modeling.training.inference import Inference
 
 
 class TestLibraryQiskit(unittest.TestCase):

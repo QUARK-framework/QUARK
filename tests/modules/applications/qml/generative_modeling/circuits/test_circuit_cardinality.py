@@ -1,6 +1,6 @@
 import unittest
 
-from src.modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
+from modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
 
 
 class TestCircuitCardinality(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-from src.modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
+from modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
 
 
 class TestCircuitCopula(unittest.TestCase):

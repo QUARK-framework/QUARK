@@ -78,7 +78,7 @@ class TestMinMax(unittest.TestCase):
         reverse_input_data = {
             "best_sample": best_sample,
             "depth": 1,
-            "architecture_name": "test_arch",  
+            "architecture_name": "test_arch",
             "n_qubits": 6,
             "KL": [0.1],
             "best_parameter": [0.5],

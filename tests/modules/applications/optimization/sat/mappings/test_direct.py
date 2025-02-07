@@ -2,7 +2,7 @@ import unittest
 from nnf import And, Var, Or
 from pysat.formula import WCNF
 
-from src.modules.applications.optimization.sat.mappings.direct import Direct
+from modules.applications.optimization.sat.mappings.direct import Direct
 
 
 class TestDirect(unittest.TestCase):

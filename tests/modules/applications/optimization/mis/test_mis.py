@@ -4,7 +4,7 @@ import os
 from tempfile import TemporaryDirectory
 import logging
 
-from src.modules.applications.optimization.mis.mis import MIS
+from modules.applications.optimization.mis.mis import MIS
 
 
 class TestMIS(unittest.TestCase):

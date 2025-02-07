@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from nnf import Var, And, Or
 
-from src.modules.applications.optimization.sat.mappings.dinneenising import DinneenIsing
+from modules.applications.optimization.sat.mappings.dinneenising import DinneenIsing
 
 
 class TestDinneenIsing(unittest.TestCase):

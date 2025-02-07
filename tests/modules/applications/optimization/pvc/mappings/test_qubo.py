@@ -9,7 +9,7 @@ class TestQUBO(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.qubo_instance = QUBO()
-        with open("tests/modules/applications/optimization/PVC/mappings/pvc_graph_1_seam.gpickle", "rb") as file:
+        with open("tests/modules/applications/optimization/pvc/mappings/pvc_graph_1_seam.gpickle", "rb") as file:
             cls.graph = pickle.load(file)
 
     def test_get_requirements(self):

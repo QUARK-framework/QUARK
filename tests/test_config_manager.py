@@ -10,8 +10,8 @@ class TestConfigManager(unittest.TestCase):
     def setUp(self):
         self.config_manager = ConfigManager()
 
-    @patch("src.ConfigManager.inquirer.prompt")
-    @patch("src.ConfigManager.checkbox")
+    @patch("src.config_manager.inquirer.prompt")
+    @patch("src.config_manager.checkbox")
     def test_query_module(self, mock_checkbox, mock_prompt):
         # Mock responses for checkbox and prompt
         mock_checkbox.return_value = {"param1": [1, 2]}  # Simulates a user selecting 1 and 2
@@ -96,7 +96,7 @@ class TestConfigManager(unittest.TestCase):
         self.assertEqual(result[0]["name"], "SolverA")
         self.assertEqual(len(result[0]["submodules"]), 1)
 
-    @patch("src.ConfigManager._get_instance_with_sub_options")
+    @patch("src.config_manager._get_instance_with_sub_options")
     def test_load_config(self, mock_get_instance):
         mock_app_instance = MagicMock()
         mock_get_instance.return_value = mock_app_instance
@@ -218,8 +218,8 @@ class TestConfigManager(unittest.TestCase):
             self.config_manager.create_tree_figure("/mock/store/dir")
             mock_savefig.assert_called_once_with("/mock/store/dir/BenchmarkGraph.png", format="PNG")
 
-    @patch("src.ConfigManager.inquirer.prompt")
-    @patch("src.ConfigManager.checkbox")
+    @patch("src.config_manager.inquirer.prompt")
+    @patch("src.config_manager.checkbox")
     def test_query_for_config(self, mock_checkbox, mock_prompt):
         mock_checkbox.return_value = {"param1": [1, 2, "Custom Input"]}
         mock_prompt.side_effect = [{"custom_input": "custom_value"}]

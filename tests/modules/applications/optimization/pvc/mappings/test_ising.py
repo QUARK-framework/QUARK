@@ -11,7 +11,7 @@ class TestIsing(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ising_instance = Ising()
-        with open("tests/modules/applications/optimization/PVC/mappings/pvc_graph_1_seam.gpickle", "rb") as file:
+        with open("tests/modules/applications/optimization/pvc/mappings/pvc_graph_1_seam.gpickle", "rb") as file:
             cls.graph = pickle.load(file)
 
     def test_get_requirements(self):

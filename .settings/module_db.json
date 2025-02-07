@@ -2123,7 +2123,7 @@
           "name": "NeutralAtom",
           "class": "NeutralAtom",
           "args": {},
-          "module": "modules.applications.optimization.mis.mappings.neutralatom",
+          "module": "modules.applications.optimization.mis.mappings.neutral_atom",
           "requirements": [
             {
               "name": "pulser",

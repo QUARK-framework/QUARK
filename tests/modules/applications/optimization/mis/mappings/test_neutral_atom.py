@@ -9,7 +9,7 @@ class TestNeutralAtom(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.neutral_atom_instance = NeutralAtom()
-        with open("tests/modules/applications/optimization/MIS/mappings/MIS_test_graph.pkl", "rb") as file:
+        with open("tests/modules/applications/optimization/mis/mappings/mis_test_graph.pkl", "rb") as file:
             cls.graph = pickle.load(file)
             cls.config = {}
 

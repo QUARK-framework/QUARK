@@ -122,9 +122,9 @@ class TestBenchmarkManager(unittest.TestCase):
         mock_open_file.assert_called_once_with(f"{self.benchmark_manager.store_dir}/results.json", 'w')
         mock_json_dump.assert_called_once_with(mock_results, mock_open_file(), indent=2)
 
-    @patch("src.BenchmarkManager.Plotter.visualize_results")
-    @patch("src.BenchmarkManager.BenchmarkManager._save_as_json")
-    @patch("src.BenchmarkManager.ConfigManager")
+    @patch("src.benchmark_manager.Plotter.visualize_results")
+    @patch("src.benchmark_manager.BenchmarkManager._save_as_json")
+    @patch("src.benchmark_manager.ConfigManager")
     def test_summarize_results(self, mock_config_manager, mock_save_json, mock_visualize):
         self.benchmark_manager.summarize_results(["/mock/dir1", "/mock/dir2"])
         mock_save_json.assert_called()
@@ -137,8 +137,8 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertEqual(len(results), 4, "Expected to load results from both directories.")
         self.assertEqual(results[0]["result"], "mock", "Expected the first result to match mock.")
 
-    @patch("src.BenchmarkManager.preprocess")
-    @patch("src.BenchmarkManager.postprocess")
+    @patch("src.benchmark_manager.preprocess")
+    @patch("src.benchmark_manager.postprocess")
     def test_traverse_config(self, mock_postprocess, mock_preprocess):
         # Mock the preprocess function to return expected values
         mock_preprocess.return_value = (Instruction.PROCEED, "processed_input", 0.1)

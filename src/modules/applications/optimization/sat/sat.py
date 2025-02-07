@@ -98,7 +98,7 @@ class SAT(Optimization):
             from modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO  # pylint: disable=C0415
             return ChoiQUBO()
         elif option == "ChoiIsing":
-            from modules.applications.optimization.sat.mappings.choiIsing import ChoiIsing  # pylint: disable=C0415
+            from modules.applications.optimization.sat.mappings.choiising import ChoiIsing  # pylint: disable=C0415
             return ChoiIsing()
         elif option == "DinneenQUBO":
             from modules.applications.optimization.sat.mappings.dinneenqubo import DinneenQUBO  # pylint: disable=C0415

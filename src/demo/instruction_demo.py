@@ -1,6 +1,6 @@
 import logging
 
-from BenchmarkManager import Instruction
+from benchmark_manager import Instruction
 from modules.core import Core
 from modules.applications.application import Application
 

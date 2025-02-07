@@ -2,10 +2,10 @@ import unittest
 import numpy as np
 from unittest.mock import patch, MagicMock
 
-from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
-from modules.applications.qml.generative_modeling.transformations.min_max import MinMax
-from modules.applications.qml.generative_modeling.circuits.circuit_standard import CircuitStandard
-from modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
+from src.modules.applications.qml.generative_modeling.transformations.transformation import Transformation
+from src.modules.applications.qml.generative_modeling.transformations.min_max import MinMax
+from src.modules.applications.qml.generative_modeling.circuits.circuit_standard import CircuitStandard
+from src.modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
 
 
 class TestMinMax(unittest.TestCase):

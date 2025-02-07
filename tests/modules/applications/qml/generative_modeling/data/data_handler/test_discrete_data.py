@@ -2,9 +2,9 @@ import unittest
 from unittest.mock import MagicMock
 import numpy as np
 
-from modules.applications.qml.generative_modeling.data.data_handler.discrete_data import DiscreteData
-from modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
-from modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization
+from src.modules.applications.qml.generative_modeling.data.data_handler.discrete_data import DiscreteData
+from src.modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
+from src.modules.applications.qml.generative_modeling.metrics.metrics_generalization import MetricsGeneralization
 
 
 class TestDiscreteData(unittest.TestCase):

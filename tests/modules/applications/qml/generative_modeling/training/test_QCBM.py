@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 import matplotlib.pyplot as plt
 
-from modules.applications.qml.generative_modeling.training.qcbm import QCBM
+from src.modules.applications.qml.generative_modeling.training.qcbm import QCBM
 
 
 class TestQCBM(unittest.TestCase):

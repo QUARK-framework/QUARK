@@ -5,7 +5,7 @@ import pickle
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
-from modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend import PresetQiskitNoisyBackend
+from src.modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend import PresetQiskitNoisyBackend
 
 
 class TestPresetQiskitNoisyBackend(unittest.TestCase):

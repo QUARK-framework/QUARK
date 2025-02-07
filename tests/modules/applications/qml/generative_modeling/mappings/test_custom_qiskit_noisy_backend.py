@@ -6,7 +6,7 @@ from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel
 from qiskit.transpiler import CouplingMap
 
-from modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend import CustomQiskitNoisyBackend
+from src.modules.applications.qml.generative_modeling.mappings.custom_qiskit_noisy_backend import CustomQiskitNoisyBackend
 
 
 class TestCustomQiskitNoisyBackend(unittest.TestCase):

@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 import numpy as np
 
-from modules.applications.qml.generative_modeling.training.inference import Inference
+from src.modules.applications.qml.generative_modeling.training.inference import Inference
 
 
 class TestInference(unittest.TestCase):

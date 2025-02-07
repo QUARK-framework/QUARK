@@ -85,7 +85,7 @@ class MIS(Optimization):
             from modules.applications.optimization.mis.mappings.qiro import QIRO  # pylint: disable=C0415
             return QIRO()
         elif option == "NeutralAtom":
-            from QUARK.src.modules.applications.optimization.mis.mappings.neutral_atom import NeutralAtom  # pylint: disable=C0415
+            from modules.applications.optimization.mis.mappings.neutralatom import NeutralAtom  # pylint: disable=C0415
             return NeutralAtom()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

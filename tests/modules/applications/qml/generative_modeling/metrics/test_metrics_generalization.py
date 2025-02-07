@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import math
 
-from modules.applications.qml.generative_modeling.metrics.MetricsGeneralization import MetricsGeneralization
+from src.modules.applications.qml.generative_modeling.metrics.metrics_generalization import MetricsGeneralization
 
 
 class TestMetricsGeneralization(unittest.TestCase):

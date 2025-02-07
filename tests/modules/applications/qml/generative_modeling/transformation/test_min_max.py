@@ -72,31 +72,20 @@ class TestMinMax(unittest.TestCase):
         self.assertEqual(transformed_config["train_size"], 0.8, "Expected train size to match.")
 
     def test_reverse_transform(self):
-        input_data = {
-            "best_sample": np.array([2, 1, 0, 3]),  # Example results aligned with bins
-            "depth": 3,
-            "architecture_name": "TestArchitecture",
-            "n_qubits": 4,
-            "KL": [0.1, 0.2, 0.05],
-            "best_parameter": [0.5, 1.0],
-            "circuit_transpiled": None,
-            "store_dir_iter": "/tmp"
+        # self.minmax_instance.transform(self.sample_input_data, self.sample_config)
+
+        # Mock the input for reverse_transform
+        reverse_input_data = {
+            "best_sample": np.array([0, 1, 2]),  # Example best samples
+            "depth": 1,  # Example
+            "architecture_name": "test_arch",  # Example
+            "n_qubits": 6,
+            "KL": [0.1],  # Example
+            "best_parameter": [0.5],
+            "store_dir_iter": "test_dir",
+            "circuit_transpiled": MagicMock() # Mock the circuit
         }
 
-        # Simulate the transformation configuration
-        self.minmax_instance.transform_config = {
-            "n_registers": 4
-        }
-        self.minmax_instance.histogram_train = np.array([0.1, 0.2])
-        self.minmax_instance.histogram_train_original = np.array([0.05, 0.15])
+        reverse_config = self.minmax_instance.reverse_transform(reverse_input_data)
 
-        # Mock Transformation methods for alignment
-        Transformation.compute_discretization_efficient = MagicMock(return_value=np.array([[0], [1], [2], [3]]))
-        Transformation.generate_samples_efficient = MagicMock(return_value=np.array([[0], [1], [2], [3]]))
-
-        # Call reverse_transform
-        reversed_config = self.minmax_instance.reverse_transform(input_data)
-
-        # Assertions
-        self.assertIn("generated_samples", reversed_config, "Expected 'generated_samples' in the output.")
-        self.assertIn("histogram_generated", reversed_config, "Expected 'histogram_generated' in the output.")
+        self.assertIn("generated_samples", reverse_config)

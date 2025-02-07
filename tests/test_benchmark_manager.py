@@ -43,8 +43,8 @@ class TestBenchmarkManager(unittest.TestCase):
         results = self.benchmark_manager.load_interrupted_results()
         self.assertIsNone(results)
 
-    @patch("BenchmarkManager.Path.mkdir")  # Mock Path.mkdir
-    @patch("BenchmarkManager.logging.FileHandler")  # Mock FileHandler
+    @patch("benchmark_manager.Path.mkdir")  # Mock Path.mkdir
+    @patch("benchmark_manager.logging.FileHandler")  # Mock FileHandler
     def test_create_store_dir(self, mock_file_handler, mock_path_mkdir):
         # Mock datetime to control the generated timestamp
         dynamic_now = datetime.today()
@@ -97,9 +97,9 @@ class TestBenchmarkManager(unittest.TestCase):
         mock_file_handler.assert_called_with("/mock/store/logging.log")
         logger_mock.addHandler.assert_called_once()
 
-    @patch("BenchmarkManager.Path.mkdir")
+    @patch("benchmark_manager.Path.mkdir")
     @patch("os.path.exists", return_value=True)
-    @patch("BenchmarkManager.logging.FileHandler")
+    @patch("benchmark_manager.logging.FileHandler")
     def test_resume_store_dir(self, mock_file_handler, mock_path_exists, mock_path_mkdir):
         store_dir = "/mock_dir"
         self.benchmark_manager._resume_store_dir(store_dir)

@@ -6,7 +6,7 @@ application:
   submodules:
   - config:
       data_set:
-      - MG_2D
+      - mg_2d
       train_size:
       - 0.1
       - 1.0

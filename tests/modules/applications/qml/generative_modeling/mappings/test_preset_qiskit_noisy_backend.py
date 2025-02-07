@@ -152,7 +152,7 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         "qiskit_aer.Aer.get_backend"
     )
     @patch(
-        "modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend."
+        "src.modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend."
         "PresetQiskitNoisyBackend.get_FakeBackend"
     )
     def test_decompile_noisy_config(self, mock_get_fake_backend, mock_get_backend):
@@ -221,7 +221,7 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
     @patch("qiskit_aer.noise.NoiseModel.from_backend")
     @patch("qiskit_aer.AerSimulator.from_backend")
     @patch("qiskit_aer.Aer.get_backend")
-    @patch("modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend.FakeProviderForBackendV2")
+    @patch("src.modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend.FakeProviderForBackendV2")
     def test_get_FakeBackend(self, mock_provider, mock_aer_get_backend, mock_simulator_from_backend, mock_noise_model):
         mock_backend = MagicMock()
         mock_backend.num_qubits = 5

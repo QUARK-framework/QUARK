@@ -1,7 +1,7 @@
 import unittest
 from nnf import Var, And, Or
 
-from modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO
+from src.modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO
 
 
 class TestChoiQUBO(unittest.TestCase):

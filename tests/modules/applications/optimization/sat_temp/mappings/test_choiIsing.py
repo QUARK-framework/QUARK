@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 from nnf import Var, And, Or
 
-from modules.applications.optimization.sat.mappings.choiising import ChoiIsing
+from src.modules.applications.optimization.sat.mappings.choiising import ChoiIsing
 
 
 class TestChoiIsing(unittest.TestCase):

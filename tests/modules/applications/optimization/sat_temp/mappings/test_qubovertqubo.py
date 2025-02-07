@@ -1,7 +1,7 @@
 import unittest
 from nnf import Var, And, Or
 
-from modules.applications.optimization.sat.mappings.qubovertqubo import QubovertQUBO
+from src.modules.applications.optimization.sat.mappings.qubovertqubo import QubovertQUBO
 
 
 class TestQubovertQUBO(unittest.TestCase):

@@ -83,7 +83,7 @@ class TestMinMax(unittest.TestCase):
             "KL": [0.1],  # Example
             "best_parameter": [0.5],
             "store_dir_iter": "test_dir",
-            "circuit_transpiled": MagicMock() # Mock the circuit
+            "circuit_transpiled": MagicMock()  # Mock the circuit
         }
 
         reverse_config = self.minmax_instance.reverse_transform(reverse_input_data)

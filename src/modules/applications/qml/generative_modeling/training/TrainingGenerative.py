@@ -13,8 +13,8 @@
 #  limitations under the License.
 
 import logging
-from abc import ABC
 import time
+from abc import ABC
 
 try:
     import cupy as np
@@ -25,9 +25,9 @@ except ModuleNotFoundError:
     GPU = False
     logging.info("CuPy not available, using vanilla numpy, data processing on CPU")
 
-from modules.Core import Core
 from modules.applications.qml.Training import Training
-from utils import start_time_measurement, end_time_measurement
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
 
 
 class TrainingGenerative(Core, Training, ABC):

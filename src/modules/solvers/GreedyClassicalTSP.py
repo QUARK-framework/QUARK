@@ -17,9 +17,9 @@ from typing import TypedDict
 import networkx as nx
 from networkx.algorithms import approximation as approx
 
-from modules.solvers.Solver import Solver
 from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
 
 
 class GreedyClassicalTSP(Solver):

@@ -1,5 +1,6 @@
 import unittest
-from nnf import Var, And, Or
+
+from nnf import And, Or, Var
 
 from modules.applications.optimization.SAT.mappings.QubovertQUBO import QubovertQUBO
 
@@ -33,7 +34,7 @@ class TestQubovertQUBO(unittest.TestCase):
         for key, value in q_dict.items():
             self.assertIsInstance(key, tuple, "Expected key to be a tuple")
             self.assertTrue(
-                isinstance(value, float) or isinstance(value, int), "Expected value to be a float or int"
+                isinstance(value, (float, int)), "Expected value to be a float or int"
             )
 
         self.assertGreater(mapping_time, 0, "Mapping time should be greater than zero.")

@@ -1,7 +1,9 @@
-import unittest
 import os
-import pandas as pd
+import unittest
 from tempfile import TemporaryDirectory
+
+import pandas as pd
+
 from modules.applications.optimization.ACL.ACL import ACL
 
 
@@ -107,7 +109,7 @@ class TestACL(unittest.TestCase):
     def test_validate(self):
         # Create a mock solution
         mock_solution = {"status": "Optimal"}
-        is_valid, validation_time = self.acl_instance.validate(mock_solution)
+        is_valid, _ = self.acl_instance.validate(mock_solution)
         self.assertTrue(is_valid, "Expected solution to be valid.")
 
         invalid_solution = {"status": "Infeasible"}

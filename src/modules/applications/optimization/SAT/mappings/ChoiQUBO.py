@@ -12,14 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from itertools import combinations, product
 from typing import TypedDict
-import logging
 
-from nnf import Var, And
+from nnf import And, Var
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
 
 
 class ChoiQUBO(Mapping):

@@ -14,10 +14,10 @@
 
 from typing import Union
 
+import jax
 import numpy as np
 import pennylane as qml
 from jax import numpy as jnp
-import jax
 
 from modules.applications.qml.generative_modeling.mappings.LibraryGenerative import LibraryGenerative
 from modules.applications.qml.generative_modeling.training.Inference import Inference

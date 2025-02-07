@@ -11,11 +11,11 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from abc import ABC, abstractmethod
 import logging
+from abc import ABC, abstractmethod
 
 from modules.applications.Application import Application
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class Optimization(Application, ABC):

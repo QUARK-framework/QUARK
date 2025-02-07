@@ -36,13 +36,5 @@ jobs:
       - name: Run Unit Tests
         env:
           PYTHONWARNINGS: "ignore::DeprecationWarning"
-        run: python -m unittest discover . > unittest_results.log
 
-      - name: Upload Test Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unittest-logs
-          path: unittest_results.log
-            
-
+        run: python -m unittest discover .

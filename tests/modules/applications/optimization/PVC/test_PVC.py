@@ -1,6 +1,7 @@
-import unittest
 import os
+import unittest
 from tempfile import TemporaryDirectory
+
 from networkx import Graph
 
 from modules.applications.optimization.PVC.PVC import PVC

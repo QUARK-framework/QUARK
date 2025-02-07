@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from itertools import product
 from abc import ABC, abstractmethod
+from itertools import product
 
 import numpy as np
 
 from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from utils import end_time_measurement, start_time_measurement
 
 
 class Transformation(Core, ABC):

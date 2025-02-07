@@ -13,15 +13,15 @@
 #  limitations under the License.
 
 import io
-from typing import TypedDict
 import logging
+from typing import TypedDict
 
 from nnf import And
 from nnf.dimacs import dump
 from pysat.formula import CNF, WCNF
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
 
 
 class Direct(Mapping):

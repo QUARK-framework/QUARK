@@ -18,7 +18,7 @@ import os
 import subprocess
 import sys
 import time
-from typing import Union, Callable
+from typing import Callable, Union
 
 import inquirer
 

@@ -1,6 +1,7 @@
 import unittest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from unittest.mock import patch, MagicMock
 
 from modules.applications.qml.generative_modeling.transformations.Transformation import Transformation
 from modules.applications.qml.generative_modeling.transformations.MinMax import MinMax

@@ -28,11 +28,12 @@
 # in all copies or substantial portions of the Software.
 
 from typing import TypedDict
+
 import pulp
 
-from modules.solvers.Solver import Solver
 from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
 
 
 class MIPaclp(Solver):

@@ -17,8 +17,8 @@ from typing import TypedDict
 import networkx as nx
 import pulser
 
-from modules.applications.Mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
 
 
 class NeutralAtom(Mapping):

@@ -13,10 +13,10 @@
 #  limitations under the License.
 
 from abc import ABC
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.qml.Circuit import Circuit
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
 
 
 class CircuitGenerative(Circuit, Core, ABC):

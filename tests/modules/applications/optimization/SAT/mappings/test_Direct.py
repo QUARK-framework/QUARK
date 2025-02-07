@@ -1,5 +1,6 @@
 import unittest
-from nnf import And, Var, Or
+
+from nnf import And, Or, Var
 from pysat.formula import WCNF
 
 from modules.applications.optimization.SAT.mappings.Direct import Direct

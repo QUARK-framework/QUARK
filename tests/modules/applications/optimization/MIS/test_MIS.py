@@ -1,7 +1,8 @@
-import unittest
-import networkx as nx
 import os
+import unittest
 from tempfile import TemporaryDirectory
+
+import networkx as nx
 
 from modules.applications.optimization.MIS.MIS import MIS
 
@@ -54,9 +55,7 @@ class TestMIS(unittest.TestCase):
         for node in generated_graph.nodes():
             if all(neighbor not in valid_solution for neighbor in generated_graph.neighbors(node)):
                 valid_solution.append(node)
-        print('valid solution', valid_solution)
         is_valid, time_taken = self.mis_instance.validate(valid_solution)
-        print('is valid', is_valid)
 
         self.assertTrue(is_valid, "Expected solution to be valid")
         self.assertIsInstance(time_taken, float)

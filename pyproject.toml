@@ -14,18 +14,15 @@ Homepage = "https://github.com/QUARK-framework/QUARK"
 Issues = "https://github.com/QUARK-framework/QUARK/issues"
 
 [project]
-name = "quark-famework"
-version = "2.1.5"
+name = "quark-framework"
+version = "0.1"
 authors = [
   { name="Philipp Ross", email="philipp.ross@bmw.de" },
   { name="Marvin Erdmann", email="marvin.erdmann@bmw.de" },
   { name="Andre Luckow", email="andre.luckow@bmwgroup.com" },
   { name="Greshma Shaji", email="greshma.shaji@bmwgroup.com" },
   { name="Florian Kiwit", email="florian.kiwit@bmw.de" },
-  { name="Benjamin Decker", email="benjamin.decker@bmw.de" },
-  { name="Jürgen Schwitalla" },
-  { name="Chris van den Oetelaar" },
-  { name="Niklas Steinmann" },
+  { name="Benjamin Decker", email="benjamin.decker@bmw.de" }
 ]
 description = "Framework for Quantum Computing Application Benchmarking"
 readme = "README.md"

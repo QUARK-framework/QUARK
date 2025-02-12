@@ -155,9 +155,9 @@ class Expressibility(MetaExplorer):
         pqc_prob: np.ndarray = pqc_hist / float(pqc_hist.sum())
 
         if measure == "kld":
-            pqc_expressibility = self.kl_divergence(pqc_prob, haar_prob)
+            pqc_expressibility = 1 - self.kl_divergence(pqc_prob, haar_prob)
         elif measure == "jsd":
-            pqc_expressibility = jensenshannon(pqc_prob, haar_prob, 2.0)
+            pqc_expressibility = 1 - jensenshannon(pqc_prob, haar_prob, 2.0)
         else:
             raise ValueError("Invalid measure provided, choose from 'kld' or 'jsd'")
         self.plot_data = [haar_prob, pqc_prob, bin_edges]

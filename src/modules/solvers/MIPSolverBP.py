@@ -80,15 +80,18 @@ class MIPSolver(Solver):
         """
         return {
             "mip_gap": {  # number measurements to make on circuit
-                "values": [0], #default value 0 means optimal solution is required
+                "values": [0],  # default value 0 means optimal solution is required
                 "description": "What MIP-Gap do you allow?"
             },
             "solution_method": {
-                "values": [-1], # for gurobi:  -1=default automatic, 0=primal simplex, 1=dual simplex, 2=barrier, 3=concurrent, 4=deterministic concurrent, 5=deterministic concurrent simplex
+                # for gurobi:  -1=default automatic, 0=primal simplex, 1=dual simplex,
+                # 2=barrier, 3=concurrent, 4=deterministic concurrent, 5=deterministic
+                # concurrent simplex
+                "values": [-1],
                 "description": "Which optimization method do you want?"
             },
             "time_limit": {
-                "values": [60*60*2], # default value: 2 hours
+                "values": [60 * 60 * 2],  # default value: 2 hours
                 "description": "How much time may the solving take?"
             }
         }
@@ -124,32 +127,32 @@ class MIPSolver(Solver):
         :rtype: dict, float, dict
         """
         start = start_time_measurement()
-        
-        #save mapped problem to result folder via lp
+
+        # save mapped problem to result folder via lp
         export_path = kwargs['store_dir']
         mapped_problem.export_as_lp(basename="MIP", path=export_path)
         # pdb.set_trace()
-        #read the lp-file to get the model into a SCIP_OPT-model
+        # read the lp-file to get the model into a SCIP_OPT-model
         scip_model = scip_opt.Model()
-        #scip_model =
+        # scip_model =
         scip_model.readProblem(filename=Path(export_path) / Path("MIP.lp"))
-        
-        #start the optimization
+
+        # start the optimization
         scip_model.optimize()
-        
-        #get the optimization results
+
+        # get the optimization results
         if scip_model.getStatus() == 'infeasible':
             print('infeasible')
             additional_solution_info = {'obj_value': None,
-                               'opt_status': 'infeasible'}
+                                        'opt_status': 'infeasible'}
             return {}, end_time_measurement(), additional_solution_info
         else:
             if scip_model.getSols() == []:
                 print('no solution found within time limit')
                 additional_solution_info = {'obj_value': None,
-                                   'opt_status': 'no solution found within time limit'}
+                                            'opt_status': 'no solution found within time limit'}
                 return {}, end_time_measurement(), additional_solution_info
-            else:   
+            else:
                 obj_value = scip_model.getObjVal()
                 solution = scip_model.getBestSol()
                 solution_dict = {}
@@ -158,5 +161,5 @@ class MIPSolver(Solver):
                     var_value = solution[var]
                     solution_dict[var_name] = var_value
                 additional_solution_info = {'obj_value': obj_value,
-                                   'opt_status': 'optimal solution'}
+                                            'opt_status': 'optimal solution'}
                 return solution_dict, end_time_measurement(start), additional_solution_info

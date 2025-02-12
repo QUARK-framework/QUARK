@@ -87,14 +87,13 @@ class MIP(Mapping):
         :return: docplex-model, time it took to map it
         :rtype: tuple(dict, float)
         """
-        #TODO kwargs -->MIP und QUBO haben jeweils andere bessere Formulierungen
+        # TODO kwargs -->MIP und QUBO haben jeweils andere bessere Formulierungen
         start = start_time_measurement()
         self.problem = problem
         self.config = config
-        
+
         # create the docplex MIP model
         return BPack.create_MIP(problem), end_time_measurement(start)
-    
 
     def get_default_submodule(self, option: str) -> Core:
 

@@ -28,7 +28,7 @@ class QuantumAnnealingSampler(Device):
         Constructor method
         """
         super().__init__(device_name="quantum annealer dwave")
-        
+
         dwave_token = input("What is your Dwave-Solver-API-Token? \n Copy-paste it here from your DWave-Leap account: ")
         self.device = AutoEmbeddingComposite(DWaveSampler(token=dwave_token))
         self.submodule_options = []
@@ -50,7 +50,7 @@ class QuantumAnnealingSampler(Device):
 
     def get_parameter_options(self) -> dict:
         """
-        
+
 
         :return: empty dict
         :rtype: dict

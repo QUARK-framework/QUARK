@@ -223,7 +223,7 @@ class MIP(Mapping):
                 station_vars[s] >= station_vars[s + 1]
                 for s in range(max_num_stations - 1)
             ),
-            names=(f"consecutive_stations_{s}_{s+1}" for s in range(max_num_stations)),
+            names=(f"consecutive_stations_{s}_{s + 1}" for s in range(max_num_stations)),
         )
 
     def reverse_map(

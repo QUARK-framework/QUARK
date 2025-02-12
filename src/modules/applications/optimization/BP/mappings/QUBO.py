@@ -98,18 +98,17 @@ class QUBO(Mapping):
         self.config = config
         start = start_time_measurement()
         print_models = True
-        
+
         # %% create docplex model for the binpacking-problem
         bin_packing_mip = BPack.create_MIP(problem)
-        
-        # %% transform docplex model to QUBO  
-        penalty_factor = config['penalty_factor']
-        self.qubo_operator, self.qubo_bin_packing_problem = BPack.transform_docplex_mip_to_qubo(bin_packing_mip, penalty_factor)
-        # %%
-        
-        return {"Q": self.qubo_operator, "QUBO": self.qubo_bin_packing_problem}, end_time_measurement(start)
-    
 
+        # %% transform docplex model to QUBO
+        penalty_factor = config['penalty_factor']
+        self.qubo_operator, self.qubo_bin_packing_problem = BPack.transform_docplex_mip_to_qubo(
+            bin_packing_mip, penalty_factor)
+        # %%
+
+        return {"Q": self.qubo_operator, "QUBO": self.qubo_bin_packing_problem}, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
 

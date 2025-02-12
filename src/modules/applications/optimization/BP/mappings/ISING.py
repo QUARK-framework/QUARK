@@ -72,7 +72,7 @@ class Ising(Mapping):
         """
         return {
             "penalty_factor": {
-                "values": [2],#[1, 2, 5, 10],
+                "values": [2],  # [1, 2, 5, 10],
                 "description": "By which factor would you like to multiply your lagrange?"
             }
         }
@@ -103,17 +103,18 @@ class Ising(Mapping):
         self.problem = problem
         self.config = config
         start = start_time_measurement()
-        
+
         # %% create docplex model for the binpacking-problem
         bin_packing_mip = BPack.create_MIP(problem)
-        
+
         # %% transform the MIP to an Ising formulation
         penalty_factor = config['penalty_factor']
-        self.ising_matrix, self.ising_vector, self.ising_offset, self.qubo = BPack.transform_docplex_mip_to_ising(bin_packing_mip, penalty_factor)
+        self.ising_matrix, self.ising_vector, self.ising_offset, self.qubo = BPack.transform_docplex_mip_to_ising(
+            bin_packing_mip, penalty_factor)
         # %%
-        
-        return {"J": self.ising_matrix, "h": self.ising_vector, "c": self.ising_offset, "QUBO": self.qubo}, end_time_measurement(start)
 
+        return {"J": self.ising_matrix, "h": self.ising_vector,
+                "c": self.ising_offset, "QUBO": self.qubo}, end_time_measurement(start)
 
     def reverse_map(self, solution: any) -> (dict, float):
         """
@@ -125,19 +126,18 @@ class Ising(Mapping):
         :rtype: tuple(dict, float)
         """
         start = start_time_measurement()
-        
+
         solution_dict = {}
-        
+
         variable_names = [var.name for var in self.qubo.variables]
-        
+
         for idx in range(len(solution)):
             var_name = variable_names[idx]
-            var_value = int(solution[len(solution)-1-idx]) # QAOA-result bitstring is reversed
+            var_value = int(solution[len(solution) - 1 - idx])  # QAOA-result bitstring is reversed
             solution_dict[var_name] = var_value
-        
-        #pdb.set_trace()
-        return solution_dict, end_time_measurement(start)
 
+        # pdb.set_trace()
+        return solution_dict, end_time_measurement(start)
 
     @staticmethod
     def _convert_ising_to_qubo(solution: any) -> any:

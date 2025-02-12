@@ -46,6 +46,8 @@ class Installer:
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
             {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
+            {"name": "BP", "class": "BP", "module": "modules.applications.optimization.BP.BP"},
+            {"name": "SALBP", "class": "SALBP", "module": "modules.applications.optimization.SALBP.SALBP"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
              "module": "modules.applications.qml.generative_modeling.GenerativeModeling"}
         ]

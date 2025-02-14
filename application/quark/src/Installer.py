@@ -12,19 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import logging
+import inspect
 import json
+import logging
 import os
 import time
 from pathlib import Path
-import inspect
 
-import yaml
-from packaging import version
 import inquirer
-
+import yaml
 from modules.Core import Core
-from utils import _get_instance_with_sub_options, get_git_revision, checkbox
+from packaging import version
+from utils import _get_instance_with_sub_options, checkbox, get_git_revision
 
 
 class Installer:
@@ -34,20 +33,56 @@ class Installer:
     """
 
     def __init__(self):
-        self.quark_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
+        self.quark_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+        )
         self.settings_dir = f"{self.quark_dir}/.settings"
         self.envs_dir = f"{self.settings_dir}/envs"
         self.python_version = "3.9.16"
         self.pip_version = "23.0"
         self.default_app_modules = [
-            {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
-            {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
-            {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
-            {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
-            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
-            {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
-            {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.qml.generative_modeling.GenerativeModeling"}
+            {
+                "name": "PVC",
+                "class": "PVC",
+                "module": "modules.applications.optimization.PVC.PVC",
+            },
+            {
+                "name": "SAT",
+                "class": "SAT",
+                "module": "modules.applications.optimization.SAT.SAT",
+            },
+            {
+                "name": "TSP",
+                "class": "TSP",
+                "module": "modules.applications.optimization.TSP.TSP",
+            },
+            {
+                "name": "ACL",
+                "class": "ACL",
+                "module": "modules.applications.optimization.ACL.ACL",
+            },
+            {
+                "name": "MIS",
+                "class": "MIS",
+                "module": "modules.applications.optimization.MIS.MIS",
+            },
+            {
+                "name": "SCP",
+                "class": "SCP",
+                "module": "modules.applications.optimization.SCP.SCP",
+            },
+            {
+                "name": "GenerativeModeling",
+                "class": "GenerativeModeling",
+                "module": "modules.applications.qml.generative_modeling.GenerativeModeling",
+            },
+            {
+                "name": "Classification",
+                "class": "Classification",
+                "module": "modules.applications.qml.classification.Classification",
+            },
+            # TODO configure new application
         ]
 
         self.core_requirements = [
@@ -71,20 +106,30 @@ class Installer:
         configured_envs = self.check_for_configs()
 
         if env_name in configured_envs:
-            answer_continue = inquirer.prompt([
-                inquirer.List("continue",
-                              message=f"{env_name} found in the list of existing QUARK module environment, are you"
-                                      f" sure you want to overwrite it?",
-                              choices=["Yes", "No"], )])["continue"]
+            answer_continue = inquirer.prompt(
+                [
+                    inquirer.List(
+                        "continue",
+                        message=f"{env_name} found in the list of existing QUARK module environment, are you"
+                        f" sure you want to overwrite it?",
+                        choices=["Yes", "No"],
+                    )
+                ]
+            )["continue"]
 
             if answer_continue.lower() == "no":
                 logging.info("Exiting configuration")
                 return
 
-        chosen_config_type = inquirer.prompt([
-            inquirer.List("config",
-                          message="Do you want to use the default configuration or a custom environment?",
-                          choices=["Default", "Custom"])])["config"]
+        chosen_config_type = inquirer.prompt(
+            [
+                inquirer.List(
+                    "config",
+                    message="Do you want to use the default configuration or a custom environment?",
+                    choices=["Default", "Custom"],
+                )
+            ]
+        )["config"]
         logging.info(f"You chose {chosen_config_type}")
 
         module_db = self.get_module_db()
@@ -96,9 +141,11 @@ class Installer:
             self.save_env(module_db, env_name)
 
         requirements = self.collect_requirements(module_db["modules"])
-        activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
-                                                         "which package manager?",
-                                         ["Conda", "PIP", "Print it here"])["requirements"]
+        activate_requirements = checkbox(
+            "requirements",
+            "Should we create an package file, if yes for which package manager?",
+            ["Conda", "PIP", "Print it here"],
+        )["requirements"]
 
         if "Conda" in activate_requirements:
             self.create_conda_file(requirements, env_name)
@@ -109,10 +156,15 @@ class Installer:
             for p, v in requirements.items():
                 logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
 
-        activate_answer = inquirer.prompt([
-            inquirer.List("activate",
-                          message="Do you want to activate the QUARK module environment?",
-                          choices=["Yes", "No"])])["activate"]
+        activate_answer = inquirer.prompt(
+            [
+                inquirer.List(
+                    "activate",
+                    message="Do you want to activate the QUARK module environment?",
+                    choices=["Yes", "No"],
+                )
+            ]
+        )["activate"]
 
         if activate_answer == "Yes":
             self.set_active_env(env_name)
@@ -176,10 +228,12 @@ class Installer:
             logging.info(f"Getting {name} QUARK module environment")
             module_db_build_number = self.get_module_db_build_number()
             if env["build_number"] < module_db_build_number:
-                logging.warning(f"You QUARK module env is based on an outdated build version of the module database "
-                                f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
-                                f"{module_db_build_number}) might bring new features. You should think about "
-                                f"updating your environment!")
+                logging.warning(
+                    f"You QUARK module env is based on an outdated build version of the module database "
+                    f"(BUILD NUMBER {env['build_number']}). The current module database (BUILD NUMBER "
+                    f"{module_db_build_number}) might bring new features. You should think about "
+                    f"updating your environment!"
+                )
 
             return env["modules"]
 
@@ -214,10 +268,15 @@ class Installer:
         :param module_db: module_db file
         :return: Returns the module_db with selected (sub)modules
         """
-        answer_apps = checkbox("apps", "Which application would you like to include?",
-                               [m["name"] for m in module_db["modules"]])["apps"]
+        answer_apps = checkbox(
+            "apps",
+            "Which application would you like to include?",
+            [m["name"] for m in module_db["modules"]],
+        )["apps"]
 
-        module_db["modules"] = [x for x in module_db["modules"] if x["name"] in answer_apps]
+        module_db["modules"] = [
+            x for x in module_db["modules"] if x["name"] in answer_apps
+        ]
 
         for idx, entry in enumerate(module_db["modules"]):
             self.query_user(module_db["modules"][idx], entry["name"])
@@ -232,11 +291,15 @@ class Installer:
         :param name: Name of the module
         """
         if submodules["submodules"]:
-            answer_submodules = \
-                checkbox("submodules", f"Which submodule would you like to include for {name}?",
-                         [m["name"] for m in submodules["submodules"]])["submodules"]
+            answer_submodules = checkbox(
+                "submodules",
+                f"Which submodule would you like to include for {name}?",
+                [m["name"] for m in submodules["submodules"]],
+            )["submodules"]
 
-            submodules["submodules"] = [x for x in submodules["submodules"] if x["name"] in answer_submodules]
+            submodules["submodules"] = [
+                x for x in submodules["submodules"] if x["name"] in answer_submodules
+            ]
             for idx, entry in enumerate(submodules["submodules"]):
                 self.query_user(submodules["submodules"][idx], entry["name"])
 
@@ -262,19 +325,25 @@ class Installer:
 
         for idx, app in enumerate(module_db_modules):
             logging.info(f"Processing {app['name']}")
-            app_instance = _get_instance_with_sub_options(module_db_modules, app["name"])
+            app_instance = _get_instance_with_sub_options(
+                module_db_modules, app["name"]
+            )
             module_db_modules[idx]["submodules"] = [
-                Installer._create_module_db_helper(app_instance.get_submodule(sm), sm) for
-                sm in app_instance.submodule_options]
+                Installer._create_module_db_helper(app_instance.get_submodule(sm), sm)
+                for sm in app_instance.submodule_options
+            ]
             module_db_modules[idx]["requirements"] = app_instance.get_requirements()
 
-        git_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", )
+        git_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "..",
+        )
         git_revision_number, _ = get_git_revision(git_dir)
         module_db = {
             "build_number": self.get_module_db_build_number() + 1,
             "build_date": time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()),
             "git_revision_number": git_revision_number,
-            "modules": module_db_modules
+            "modules": module_db_modules,
         }
 
         # loop over first level and add to file
@@ -298,12 +367,17 @@ class Installer:
         return {
             "name": name,
             "class": module.__class__.__name__,
-            "args": {k: v for k, v in module.__dict__.items() if k in
-                     inspect.signature(module.__init__).parameters.keys()},
+            "args": {
+                k: v
+                for k, v in module.__dict__.items()
+                if k in inspect.signature(module.__init__).parameters.keys()
+            },
             "module": module.__module__,
             "requirements": module.get_requirements(),
-            "submodules": [Installer._create_module_db_helper(module.get_submodule(sm), sm) for sm in
-                           module.submodule_options]
+            "submodules": [
+                Installer._create_module_db_helper(module.get_submodule(sm), sm)
+                for sm in module.submodule_options
+            ],
         }
 
     def get_module_db_build_number(self) -> int:
@@ -334,21 +408,27 @@ class Installer:
         for req in requirements:
             if req["name"] in merged_requirements:
                 # Checks if the specific version is already there, if so the req is skipped
-                if merged_requirements[req["name"]] and ("version" in req and req["version"] not in
-                                                         merged_requirements[req["name"]]):
+                if merged_requirements[req["name"]] and (
+                    "version" in req
+                    and req["version"] not in merged_requirements[req["name"]]
+                ):
                     merged_requirements[req["name"]].append(req["version"])
 
             else:
                 # Sometimes there is no specific version required, then the "version" field is missing
-                merged_requirements[req["name"]] = [req["version"]] if "version" in req else []
+                merged_requirements[req["name"]] = (
+                    [req["version"]] if "version" in req else []
+                )
 
         for k, v in merged_requirements.items():
             if len(v) > 1:
                 # If there are multiple different versions, the latest version is selected
                 newest_version = sorted(v, key=lambda x: version.Version(x))[-1]  # pylint: disable=W0108
                 merged_requirements[k] = [newest_version]
-                logging.warning(f"Different version requirements for {k}: {v}. Will try to take the newer version "
-                                f"{newest_version}, but this might cause problems at QUARK runtime!")
+                logging.warning(
+                    f"Different version requirements for {k}: {v}. Will try to take the newer version "
+                    f"{newest_version}, but this might cause problems at QUARK runtime!"
+                )
 
         return merged_requirements
 
@@ -366,7 +446,9 @@ class Installer:
 
         return requirements
 
-    def create_conda_file(self, requirements: dict, name: str, directory: str = None) -> None:
+    def create_conda_file(
+        self, requirements: dict, name: str, directory: str = None
+    ) -> None:
         """
         Creates conda yaml file based on the requirements.
 
@@ -382,9 +464,12 @@ class Installer:
             "dependencies": [
                 f"python={self.python_version}",
                 f"pip={self.pip_version}",
-                {"pip": [(f"{k}=={v[0]}" if v else k) for k, v in requirements.items()]}
-
-            ]
+                {
+                    "pip": [
+                        (f"{k}=={v[0]}" if v else k) for k, v in requirements.items()
+                    ]
+                },
+            ],
         }
         with open(f"{directory}/conda_{name}.yml", "w") as filehandler:
             yaml.dump(conda_data, filehandler)
@@ -392,7 +477,9 @@ class Installer:
         logging.info("Saved conda env file, if you like to install it run:")
         logging.info(f"conda env create -f {directory}/conda_{name}.yml")
 
-    def create_req_file(self, requirements: dict, name: str, directory: str = None) -> None:
+    def create_req_file(
+        self, requirements: dict, name: str, directory: str = None
+    ) -> None:
         """
         Creates pip txt file based on the requirements.
 

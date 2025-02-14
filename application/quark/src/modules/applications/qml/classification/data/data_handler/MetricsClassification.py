@@ -13,10 +13,11 @@
 #  limitations under the License.
 
 import math
+from typing import Dict, Tuple
 
-from typing import Tuple, Dict
 import numpy as np
 import sklearn
+
 
 class MetricsClassification:
     """
@@ -33,10 +34,9 @@ class MetricsClassification:
     """
 
     def __init__(
-            self,
+        self,
     ) -> None:
         pass
-
 
     def get_metrics(self, y_pred: np.array, y_true: np.array) -> Dict[str, float]:
         """
@@ -82,7 +82,9 @@ class MetricsClassification:
         :return: recall
         :rtype: float
         """
-        recall = sklearn.metrics.recall_score(y_true, y_pred, zero_division=1.0, average="macro")
+        recall = sklearn.metrics.recall_score(
+            y_true, y_pred, zero_division=1.0, average="macro"
+        )
         return recall
 
     def precision(self, y_pred: np.array, y_true: np.array) -> float:
@@ -96,7 +98,9 @@ class MetricsClassification:
         :return: precision
         :rtype: float
         """
-        precision = sklearn.metrics.precision_score(y_true, y_pred, zero_division=1.0, average="macro")
+        precision = sklearn.metrics.precision_score(
+            y_true, y_pred, zero_division=1.0, average="macro"
+        )
         return precision
 
     def f1_score(self, y_pred: np.array, y_true: np.array) -> float:
@@ -110,5 +114,10 @@ class MetricsClassification:
         :return: f1_score
         :rtype: float
         """
-        f1_score = sklearn.metrics.f1_score(y_true, y_pred, zero_division=1.0, average="macro")
+        f1_score = sklearn.metrics.f1_score(
+            y_true, y_pred, zero_division=1.0, average="macro"
+        )
         return f1_score
+
+
+# Check if it's good

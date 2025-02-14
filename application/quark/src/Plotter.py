@@ -12,16 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from collections import defaultdict
 import logging
+from collections import defaultdict
 
-import matplotlib.pyplot as plt
 import matplotlib
-import seaborn as sns
-import pandas as pd
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import seaborn as sns
 
-matplotlib.rcParams['savefig.dpi'] = 300
+matplotlib.rcParams["savefig.dpi"] = 300
 sns.set(style="darkgrid")
 
 
@@ -45,7 +45,9 @@ class Plotter:
         processed_results_with_application_score = []
         processed_results_rest = []
         required_application_score_keys = [
-            "application_score_value", "application_score_unit", "application_score_type"
+            "application_score_value",
+            "application_score_unit",
+            "application_score_type",
         ]
         application_name = None
         application_axis = None
@@ -55,26 +57,43 @@ class Plotter:
             if len(changing_keys) == 1:
                 # If only 1 config item changes, we use its value for application_config
                 application_axis = changing_keys[0]
-                application_config = result['module']['module_config'][changing_keys[0]]
+                application_config = result["module"]["module_config"][changing_keys[0]]
             else:
                 # If multiple config items change, we stringify them
                 application_axis = f"{application_name} Config"
-                application_config = ', '.join(
-                    [f"{key}: {value}" for (key, value) in sorted(result["module"]["module_config"].items(),
-                                                                  key=lambda key_value_pair:
-                                                                  key_value_pair[0]) if key not in static_keys]
+                application_config = ", ".join(
+                    [
+                        f"{key}: {value}"
+                        for (key, value) in sorted(
+                            result["module"]["module_config"].items(),
+                            key=lambda key_value_pair: key_value_pair[0],
+                        )
+                        if key not in static_keys
+                    ]
                 )
             if len(static_keys) > 0:
                 # Include the static items in the axis name
-                application_axis += "(" + ', '.join(
-                    [f"{key}: {result['module']['module_config'][key]}" for key in static_keys]
-                ) + ")"
+                application_axis += (
+                    "("
+                    + ", ".join(
+                        [
+                            f"{key}: {result['module']['module_config'][key]}"
+                            for key in static_keys
+                        ]
+                    )
+                    + ")"
+                )
 
-            processed_item = Plotter._extract_columns({
-                "benchmark_backlog_item_number": result["benchmark_backlog_item_number"],
-                "total_time": result["total_time"],
-                "application_config": application_config
-            }, result["module"])
+            processed_item = Plotter._extract_columns(
+                {
+                    "benchmark_backlog_item_number": result[
+                        "benchmark_backlog_item_number"
+                    ],
+                    "total_time": result["total_time"],
+                    "application_config": application_config,
+                },
+                result["module"],
+            )
 
             if all(k in result["module"] for k in required_application_score_keys):
                 # Check if all required keys are present to create application score plots
@@ -85,15 +104,22 @@ class Plotter:
                 processed_results_rest.append(processed_item)
 
         if len(processed_results_with_application_score) > 0:
-            logging.info("Found results with an application score, generating according plots.")
+            logging.info(
+                "Found results with an application score, generating according plots."
+            )
             Plotter.plot_application_score(
-                application_name, application_axis, processed_results_with_application_score, store_dir
+                application_name,
+                application_axis,
+                processed_results_with_application_score,
+                store_dir,
             )
 
         Plotter.plot_times(
-            application_name, application_axis,
+            application_name,
+            application_axis,
             [*processed_results_with_application_score, *processed_results_rest],
-            store_dir, required_application_score_keys
+            store_dir,
+            required_application_score_keys,
         )
 
         Plotter.plot_all_metrics(results, store_dir)
@@ -101,8 +127,13 @@ class Plotter:
         logging.info("Finished creating plots.")
 
     @staticmethod
-    def plot_times(application_name: str, application_axis: str, results: list[dict], store_dir: str,
-                   required_application_score_keys: list) -> None:
+    def plot_times(
+        application_name: str,
+        application_axis: str,
+        results: list[dict],
+        store_dir: str,
+        required_application_score_keys: list,
+    ) -> None:
         """
         Function to plot execution times of the different modules in a benchmark.
 
@@ -115,39 +146,69 @@ class Plotter:
 
         df = pd.DataFrame.from_dict(results)
         df = df.fillna(0.0).infer_objects(copy=False)
-        df_melt = df.drop(df.filter(["application_config", "config_combo", "total_time",
-                                     *required_application_score_keys]), axis=1)
-        df_melt = pd.melt(frame=df_melt, id_vars='benchmark_backlog_item_number', var_name='module_config',
-                          value_name='time')
+        df_melt = df.drop(
+            df.filter(
+                [
+                    "application_config",
+                    "config_combo",
+                    "total_time",
+                    *required_application_score_keys,
+                ]
+            ),
+            axis=1,
+        )
+        df_melt = pd.melt(
+            frame=df_melt,
+            id_vars="benchmark_backlog_item_number",
+            var_name="module_config",
+            value_name="time",
+        )
 
         # This plot shows the execution time of each module
-        ax = sns.barplot(x="benchmark_backlog_item_number", y="time", data=df_melt, hue="module_config")
+        ax = sns.barplot(
+            x="benchmark_backlog_item_number",
+            y="time",
+            data=df_melt,
+            hue="module_config",
+        )
         plt.title(application_name)
         # Put the legend out of the figure
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="Modules used")
-        ax.set(xlabel="benchmark run ID", ylabel='execution time of module (ms)')
-        plt.savefig(f"{store_dir}/time_by_module.pdf", dpi=300, bbox_inches='tight')
+        plt.legend(
+            bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.0, title="Modules used"
+        )
+        ax.set(xlabel="benchmark run ID", ylabel="execution time of module (ms)")
+        plt.savefig(f"{store_dir}/time_by_module.pdf", dpi=300, bbox_inches="tight")
         logging.info(f"Saved {f'{store_dir}/time_by_module.pdf'}.")
         plt.clf()
 
         # This plot shows the total time of a benchmark run
-        ax = sns.barplot(x="application_config", y="total_time", data=df, hue="config_combo")
+        ax = sns.barplot(
+            x="application_config", y="total_time", data=df, hue="config_combo"
+        )
         ax.set(xlabel=application_axis, ylabel="total execution time (ms)")
         # Put the legend out of the figure
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="Modules used")
+        plt.legend(
+            bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.0, title="Modules used"
+        )
         plt.title(application_name)
         plt.sca(ax)
         # If column values are very long and of type string rotate the ticks
-        if (pd.api.types.is_string_dtype(df.application_config.dtype) or pd.api.types.is_object_dtype(
-                df.application_config.dtype)) and df.application_config.str.len().max() > 10:
+        if (
+            pd.api.types.is_string_dtype(df.application_config.dtype)
+            or pd.api.types.is_object_dtype(df.application_config.dtype)
+        ) and df.application_config.str.len().max() > 10:
             plt.xticks(rotation=90)
-        plt.savefig(f"{store_dir}/total_time.pdf", dpi=300, bbox_inches='tight')
+        plt.savefig(f"{store_dir}/total_time.pdf", dpi=300, bbox_inches="tight")
         logging.info(f"Saved {f'{store_dir}/total_time.pdf'}.")
         plt.clf()
 
     @staticmethod
-    def plot_application_score(application_name: str, application_axis: str, results: list[dict],
-                               store_dir: str) -> None:
+    def plot_application_score(
+        application_name: str,
+        application_axis: str,
+        results: list[dict],
+        store_dir: str,
+    ) -> None:
         """
         Function to create plots showing the application score.
 
@@ -158,13 +219,17 @@ class Plotter:
         """
         df = pd.DataFrame.from_dict(results)
         application_score_units = df["application_score_unit"].unique()
-        count_invalid_rows = pd.isna(df['application_score_value']).sum()
+        count_invalid_rows = pd.isna(df["application_score_value"]).sum()
 
         if count_invalid_rows == len(df):
-            logging.info("All results have an invalid application score, skipping plotting.")
+            logging.info(
+                "All results have an invalid application score, skipping plotting."
+            )
             return
         else:
-            logging.info(f"{count_invalid_rows} out of {len(df)} benchmark runs have an invalid application score.")
+            logging.info(
+                f"{count_invalid_rows} out of {len(df)} benchmark runs have an invalid application score."
+            )
 
         if len(application_score_units) != 1:
             logging.warning(
@@ -172,25 +237,37 @@ class Plotter:
                 f" This might lead to incorrect plots!"
             )
 
-        ax = sns.barplot(x="application_config", y="application_score_value", data=df, hue="config_combo")
+        ax = sns.barplot(
+            x="application_config",
+            y="application_score_value",
+            data=df,
+            hue="config_combo",
+        )
         ax.set(xlabel=application_axis, ylabel=application_score_units[0])
         # Put the legend out of the figure
-        plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., title="Modules used")
+        plt.legend(
+            bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.0, title="Modules used"
+        )
         ax.text(
-            1.03, 0.5,
+            1.03,
+            0.5,
             f"{len(df) - count_invalid_rows}/{len(df)} runs have a valid \napplication score",
-            transform=ax.transAxes, fontsize=12, verticalalignment='top',
-            bbox={"boxstyle": "round", "alpha": 0.15}
+            transform=ax.transAxes,
+            fontsize=12,
+            verticalalignment="top",
+            bbox={"boxstyle": "round", "alpha": 0.15},
         )
         plt.title(application_name)
 
         plt.sca(ax)
         # If column values are very long and of type string, rotate the ticks
-        if (pd.api.types.is_string_dtype(df.application_config.dtype) or pd.api.types.is_object_dtype(
-                df.application_config.dtype)) and df.application_config.str.len().max() > 10:
+        if (
+            pd.api.types.is_string_dtype(df.application_config.dtype)
+            or pd.api.types.is_object_dtype(df.application_config.dtype)
+        ) and df.application_config.str.len().max() > 10:
             plt.xticks(rotation=90)
 
-        plt.savefig(f"{store_dir}/application_score.pdf", dpi=300, bbox_inches='tight')
+        plt.savefig(f"{store_dir}/application_score.pdf", dpi=300, bbox_inches="tight")
         logging.info(f"Saved {f'{store_dir}/application_score.pdf'}.")
         plt.clf()
 
@@ -232,23 +309,29 @@ class Plotter:
         """
         if rest_result:
             module_name = rest_result["module_name"]
-            for key, value in sorted(rest_result["module_config"].items(),
-                                     key=lambda key_value_pair: key_value_pair[0]):
+            for key, value in sorted(
+                rest_result["module_config"].items(),
+                key=lambda key_value_pair: key_value_pair[0],
+            ):
                 module_name += f", {key}: {value}"
 
-            config_combo = config.pop("config_combo") + "\n" + module_name if "config_combo" in config else ""
+            config_combo = (
+                config.pop("config_combo") + "\n" + module_name
+                if "config_combo" in config
+                else ""
+            )
             return Plotter._extract_columns(
                 {
                     **config,
                     "config_combo": config_combo,
                     module_name: rest_result["total_time"]
-                    if module_name not in config else config[module_name] + rest_result["total_time"]
+                    if module_name not in config
+                    else config[module_name] + rest_result["total_time"],
                 },
-                rest_result["submodule"]
+                rest_result["submodule"],
             )
 
         return config
-
 
     @staticmethod
     def make_radar_chart(name, subname, store_dir, stats, attribute_labels):
@@ -260,101 +343,144 @@ class Plotter:
         attribute_labels: metric names
         """
 
-        assert len(stats) == len(attribute_labels), "labels and values to plot do not have the same length!"
-        attribute_labels.append('')
+        assert len(stats) == len(attribute_labels), (
+            "labels and values to plot do not have the same length!"
+        )
+        attribute_labels.append("")
 
-        markers = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0] #can be any length
+        markers = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]  # can be any length
         labels = np.array(attribute_labels)
 
-        angles = np.linspace(0, 2*np.pi, len(labels)-1, endpoint=False)
-        stats = np.concatenate((stats,[stats[0]]))
-        angles = np.concatenate((angles,[angles[0]]))
-        
-        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+        angles = np.linspace(0, 2 * np.pi, len(labels) - 1, endpoint=False)
+        stats = np.concatenate((stats, [stats[0]]))
+        angles = np.concatenate((angles, [angles[0]]))
 
-        ax.plot(angles, stats, 'o-', linewidth=2)
+        fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+
+        ax.plot(angles, stats, "o-", linewidth=2)
         ax.fill(angles, stats, alpha=0.25)
         ax.grid(True)
         # ax.grid(c="black")
-        ax.spines['polar'].set_visible(False)
-        ax.set_thetagrids(angles[:-1] * 180/np.pi, labels[:-1])
-        ax.set_ylim([0,1])
-        ax.plot(np.linspace(0,2*np.pi, 500), np.ones(500), color="k", linewidth=1)
+        ax.spines["polar"].set_visible(False)
+        ax.set_thetagrids(angles[:-1] * 180 / np.pi, labels[:-1])
+        ax.set_ylim([0, 1])
+        ax.plot(np.linspace(0, 2 * np.pi, 500), np.ones(500), color="k", linewidth=1)
 
         plt.yticks(markers)
         plt.title(subname)
         plt.suptitle(name, y=1.02)
 
-
-        fig.savefig(f"{store_dir}/metrics_collection_test.pdf", dpi=300, bbox_inches='tight') # dpi=300, bbox_inches='tight'
-        fig.savefig(f"{store_dir}/metrics_collection_test.png", dpi=300, bbox_inches='tight')
-        return 
-
+        fig.savefig(
+            f"{store_dir}/metrics_collection_test.pdf", dpi=300, bbox_inches="tight"
+        )  # dpi=300, bbox_inches='tight'
+        fig.savefig(
+            f"{store_dir}/metrics_collection_test.png", dpi=300, bbox_inches="tight"
+        )
+        return
 
     @staticmethod
     def plot_all_metrics(results: list[dict], store_dir: str) -> None:
-
         # Total time
-        overall_time, overall_time_unit = results[0]["total_time"], results[0]["total_time_unit"]
+        overall_time, overall_time_unit = (
+            results[0]["total_time"],
+            results[0]["total_time_unit"],
+        )
         m_name = results[0]["module"]["module_name"]
 
         # Use-case specific results
         if m_name == "GenerativeModeling":
             dataset_name = results[0]["module"]["submodule"]["module_name"]
             kl_best = results[0]["module"]["submodule"]["KL_best"]
-            gen_metrics = results[0]["module"]["submodule"]["generalization_metrics"] #TODO
+            gen_metrics = results[0]["module"]["submodule"][
+                "generalization_metrics"
+            ]  # TODO
             precision = gen_metrics["precision"]
             fidelity = gen_metrics["fidelity"]
 
-            quantum_module = results[0]["module"]["submodule"]["submodule"]["submodule"]["submodule"]
+            quantum_module = results[0]["module"]["submodule"]["submodule"][
+                "submodule"
+            ]["submodule"]
             if "population_size" in quantum_module["module_config"]:
                 pop_size = quantum_module["module_config"]["population_size"]
             else:
                 pop_size = None
             max_evaluations = quantum_module["module_config"]["max_evaluations"]
-            quantum_time, quantum_time_unit = quantum_module["total_time"], quantum_module["total_time_unit"]
+            quantum_time, quantum_time_unit = (
+                quantum_module["total_time"],
+                quantum_module["total_time_unit"],
+            )
             if overall_time_unit == quantum_time_unit:
-                time_ratio = float(quantum_time)/(float(overall_time))
+                time_ratio = float(quantum_time) / (float(overall_time))
             else:
-                print('Hybrid module time and overall time have different time units, please check.')
-                time_ratio = 0.
+                print(
+                    "Hybrid module time and overall time have different time units, please check."
+                )
+                time_ratio = 0.0
             ent = quantum_module["meyer-wallach"]
             expr = quantum_module["expressibility_jsd"]
 
             metrics_vector = [time_ratio, precision, fidelity, expr, ent]
-            metrics_names = ['Time ratio', 'Precision', 'Fidelity', 'Expressibility', 'Entanglement']
+            metrics_names = [
+                "Time ratio",
+                "Precision",
+                "Fidelity",
+                "Expressibility",
+                "Entanglement",
+            ]
             plt_title = "GenerativeModeling"
             info_str = f"Data: {dataset_name}, Population size: {pop_size}, Max. Evaluations: {max_evaluations}"
 
         elif m_name == "Classification":
             # Results
             quantum_module = results[0]["module"]["submodule"]["submodule"]
-            quantum_time, quantum_time_unit = quantum_module["total_time"], quantum_module["total_time_unit"]
-            assert quantum_module["module_name"] == "Hybrid", f"Module name is not hybrid but {quantum_module['module_name']}. Are you sure this is correct?"
+            quantum_time, quantum_time_unit = (
+                quantum_module["total_time"],
+                quantum_module["total_time_unit"],
+            )
+            assert quantum_module["module_name"] == "Hybrid", (
+                f"Module name is not hybrid but {quantum_module['module_name']}. Are you sure this is correct?"
+            )
             if overall_time_unit == quantum_time_unit:
-                time_ratio = float(quantum_time)/(float(overall_time))
+                time_ratio = float(quantum_time) / (float(overall_time))
             else:
-                print('Hybrid module time and overall time have different time units, please check.')
-                time_ratio = 0.
-            
+                print(
+                    "Hybrid module time and overall time have different time units, please check."
+                )
+                time_ratio = 0.0
+
             # Experiment info
             n_epochs = quantum_module["module_config"]["n_epochs"]
             setup_info = results[0]["module"]["submodule"]["module_config"]
             n_classes = setup_info["n_classes"]
             dataset = setup_info["data_set"]
 
-            metrics_vector = [time_ratio, quantum_module["train_accuracy"], quantum_module["val_accuracy"], quantum_module["expressibility_jsd"], quantum_module["meyer-wallach"]]
-            metrics_names = ['Time ratio', 'Acc_train', 'Acc_test', 'Expressibility', 'Entanglement']
+            metrics_vector = [
+                time_ratio,
+                quantum_module["train_accuracy"],
+                quantum_module["val_accuracy"],
+                quantum_module["expressibility_jsd"],
+                quantum_module["meyer-wallach"],
+            ]
+            metrics_names = [
+                "Time ratio",
+                "Acc_train",
+                "Acc_test",
+                "Expressibility",
+                "Entanglement",
+            ]
             plt_title = f"QNN: {dataset} (Cls={n_classes})"
             info_str = f"Epochs: {n_epochs}, Noise: {setup_info['noise_sigma']}, Images: {setup_info['n_images_per_class']}"
-            
 
         else:
             print(f"{m_name} is not implemented for plotting, no radar plot generated.")
             return
-        
-        
+
         # Make metrics plot
-        Plotter.make_radar_chart(plt_title, info_str, store_dir, metrics_vector, metrics_names)
+        Plotter.make_radar_chart(
+            plt_title, info_str, store_dir, metrics_vector, metrics_names
+        )
 
         logging.info(f"Saved {f'{store_dir}/metrics_collection_test.pdf'}.")
+
+
+# TODO check if changes from Florian are enough

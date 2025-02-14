@@ -149,8 +149,8 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertEqual(output, "postprocessed_output", "Expected processed output to match mock postprocess return.")
         self.assertIsNotNone(benchmark_record, "Expected a BenchmarkRecord instance.")
 
-    @patch("BenchmarkManager.BenchmarkManager._collect_all_results", return_value=[{"key": "value"}])
-    @patch("BenchmarkManager.BenchmarkManager._save_as_json")
+    @patch("benchmark_manager.BenchmarkManager._collect_all_results", return_value=[{"key": "value"}])
+    @patch("benchmark_manager.BenchmarkManager._save_as_json")
     def test_orchestrate_benchmark(self, mock_save_as_json, mock_collect_all_results):
         mock_config_manager = MagicMock()
         mock_config_manager.get_config.return_value = {"application": {"name": "test_app"}}

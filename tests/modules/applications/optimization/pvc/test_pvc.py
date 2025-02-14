@@ -3,7 +3,7 @@ import os
 from tempfile import TemporaryDirectory
 from networkx import Graph
 
-from src.modules.applications.optimization.pvc.pvc import PVC
+from modules.applications.optimization.pvc.pvc import PVC
 
 
 class TestPVC(unittest.TestCase):

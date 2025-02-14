@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from src.modules.applications.qml.generative_modeling.training.qgan import QGAN, Discriminator, QuantumGenerator
+from modules.applications.qml.generative_modeling.training.qgan import QGAN, Discriminator, QuantumGenerator
 
 
 class TestQGAN(unittest.TestCase):

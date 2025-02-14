@@ -5,7 +5,7 @@ import os
 from tempfile import TemporaryDirectory
 import logging
 
-from src.modules.applications.optimization.tsp.tsp import TSP
+from modules.applications.optimization.tsp.tsp import TSP
 
 
 class TestTSP(unittest.TestCase):

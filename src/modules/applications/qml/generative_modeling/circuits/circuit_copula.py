@@ -12,8 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union, TypedDict
 from itertools import combinations
+from typing import TypedDict, Union
+
 from scipy.special import binom
 
 from modules.applications.qml.generative_modeling.circuits.circuit_generative import CircuitGenerative

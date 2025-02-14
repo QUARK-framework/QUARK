@@ -14,11 +14,11 @@
 
 from typing import TypedDict
 
-import pulser
-from pulser.devices import MockDevice
-from pulser_simulation import QutipBackend
-from pulser.noise_model import NoiseModel
+import pulser  # pylint: disable=C0412
 from pulser.backend.config import EmulatorConfig
+from pulser.devices import MockDevice
+from pulser.noise_model import NoiseModel
+from pulser_simulation import QutipBackend
 
 from modules.devices.pulser.pulser import Pulser
 

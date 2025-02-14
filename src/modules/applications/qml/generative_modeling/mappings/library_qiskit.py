@@ -14,8 +14,8 @@
 
 import logging
 from typing import Union
-import numpy as np
 
+import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit import Parameter
 from qiskit.providers import Backend

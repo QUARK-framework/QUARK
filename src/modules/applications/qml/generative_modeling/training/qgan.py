@@ -12,17 +12,17 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import logging
+from typing import TypedDict
 
-import torch
-from torch.utils.data import DataLoader
-from torch import nn
-import torch.nn.functional as funct
-from tensorboardX import SummaryWriter
-import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.nn.functional as funct
+from tensorboardX import SummaryWriter
+from torch import nn
+from torch.utils.data import DataLoader
 
 from modules.applications.qml.generative_modeling.training.training_generative import TrainingGenerative, Core
 from utils_mpi import is_running_mpi, get_comm

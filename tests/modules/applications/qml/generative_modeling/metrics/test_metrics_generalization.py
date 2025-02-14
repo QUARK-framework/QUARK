@@ -1,6 +1,7 @@
-import unittest
-import numpy as np
 import math
+import unittest
+
+import numpy as np
 
 from modules.applications.qml.generative_modeling.metrics.metrics_generalization import MetricsGeneralization
 

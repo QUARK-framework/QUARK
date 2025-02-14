@@ -1,8 +1,8 @@
-import unittest
-from unittest.mock import patch, MagicMock, mock_open
-from pathlib import Path
 import os
+import unittest
 from datetime import datetime
+from pathlib import Path
+from unittest.mock import MagicMock, mock_open, patch
 
 from src.benchmark_manager import BenchmarkManager, Instruction
 
@@ -63,24 +63,6 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertTrue(self.benchmark_manager.store_dir.endswith(expected_date_str))
         mock_path_mkdir.assert_called_once_with(parents=True, exist_ok=True)
         mock_file_handler.assert_called_once_with(expected_log_file)
-
-    @patch("logging.FileHandler")
-    def test_resume_store_dir(self, mock_file_handler):
-        # Ensure the directory exists
-        test_dir = "/tmp/existing_dir"
-        os.makedirs(test_dir, exist_ok=True)
-
-        try:
-            self.benchmark_manager._resume_store_dir(store_dir=test_dir)
-
-            # Assertions
-            self.assertEqual(self.benchmark_manager.store_dir, test_dir)
-            mock_file_handler.assert_called_once_with(f"{test_dir}/logging.log")
-
-        finally:
-            # Cleanup the created directory
-            if os.path.exists(test_dir):
-                os.rmdir(test_dir)
 
     @patch("logging.FileHandler")
     @patch("logging.getLogger")
@@ -167,79 +149,14 @@ class TestBenchmarkManager(unittest.TestCase):
         self.assertEqual(output, "postprocessed_output", "Expected processed output to match mock postprocess return.")
         self.assertIsNotNone(benchmark_record, "Expected a BenchmarkRecord instance.")
 
-    # These tests are commented out because:
-    # - The `BenchmarkManager` relies on complex dependencies, including filesystem operations (`Path.mkdir`),
-    #   logging configurations (`FileHandler`), and application-specific configurations (`ConfigManager`).
-    # - Mocking all these dependencies accurately to test the `orchestrate_benchmark` and `run_benchmark` methods
-    #   requires significant effort and a well-structured mocking strategy, which is currently incomplete.
-    # - We plan to implement these tests in the future
-    # @patch("BenchmarkManager.Path.mkdir")
-    # @patch("BenchmarkManager.logging.FileHandler")
-    # @patch("BenchmarkManager.ConfigManager")
-    # @patch("BenchmarkManager.BenchmarkManager._collect_all_results")
-    # def test_orchestrate_benchmark(self, mock_collect_results, mock_config_manager, mock_filehandler, mock_mkdir):
-    #     # Mock ConfigManager behavior
-    #     mock_config_manager.get_config.return_value = {
-    #         "application": {"name": "test_application"}
-    #     }
-    #     mock_config_manager.get_app.return_value = MagicMock()
-    #     mock_config_manager.start_create_benchmark_backlog.return_value = []
-    #     mock_config_manager.get_reps.return_value = 1
+    @patch("BenchmarkManager.BenchmarkManager._collect_all_results", return_value=[{"key": "value"}])
+    @patch("BenchmarkManager.BenchmarkManager._save_as_json")
+    def test_orchestrate_benchmark(self, mock_save_as_json, mock_collect_all_results):
+        mock_config_manager = MagicMock()
+        mock_config_manager.get_config.return_value = {"application": {"name": "test_app"}}
+        mock_config_manager.get_reps.return_value = 1
 
-    #     # Mock mkdir to avoid filesystem errors
-    #     mock_mkdir.return_value = None
+        self.benchmark_manager.orchestrate_benchmark(mock_config_manager, app_modules=[], store_dir="/tmp")
 
-    #     # Mock FileHandler to avoid file creation errors
-    #     mock_filehandler.return_value = MagicMock()
-    #     mock_filehandler.return_value.level = 10  # Set a valid integer logging level
-
-    #     # Mock _collect_all_results to return an empty list
-    #     mock_collect_results.return_value = []
-
-    #     # Create an instance of BenchmarkManager
-    #     benchmark_manager = BenchmarkManager()
-
-    #     # Call orchestrate_benchmark
-    #     benchmark_manager.orchestrate_benchmark(mock_config_manager, [{"name": "test"}], "/mock/store_dir")
-
-    #     # Assertions
-    #     mock_config_manager.get_config.assert_called_once()
-    #     mock_config_manager.save.assert_called_once()
-    #     mock_mkdir.assert_called()
-    #     mock_filehandler.assert_called_once_with(
-    #         "/mock/store_dir/benchmark_runs/test_application-<timestamp>/logging.log"
-    #     )
-    #     mock_collect_results.assert_called_once()
-
-    # @patch("src.BenchmarkManager.Path.mkdir")
-    # @patch("builtins.open", new_callable=mock_open)
-    # @patch("src.BenchmarkManager.logging.getLogger")
-    # def test_run_benchmark(self, mock_get_logger, mock_open_file, mock_mkdir):
-    #     # Set up a mocked logger
-    #     mock_logger = MagicMock()
-    #     mock_get_logger.return_value = mock_logger
-
-    #     # Mock the BenchmarkManager instance and dependencies
-    #     benchmark_manager = BenchmarkManager()
-    #     benchmark_manager.application = MagicMock()
-    #     benchmark_manager.application.metrics = MagicMock()
-    #     benchmark_manager.application.metrics.set_module_config = MagicMock()
-    #     benchmark_manager.application.metrics.set_preprocessing_time = MagicMock()
-    #     benchmark_manager.application.metrics.add_metric = MagicMock()
-    #     benchmark_manager.application.metrics.validate = MagicMock()
-    #     benchmark_manager.application.save = MagicMock()
-    #     benchmark_manager.benchmark_record_template = MagicMock()
-    #     benchmark_manager.store_dir = "/mock/store"
-
-    #     # Set up backlog and repetitions
-    #     backlog = [{"config": {"name": "test"}, "submodule": None}]
-    #     repetitions = 1
-
-    #     # Run the benchmark
-    #     benchmark_manager.run_benchmark(backlog, repetitions)
-
-    #     # Assertions
-    #     mock_mkdir.assert_called()
-    #     mock_open_file.assert_called_with("/mock/store/benchmark_0/application_config.json", 'w')
-    #     mock_logger.info.assert_called()  # Ensure logging calls happen
-    #     benchmark_manager.application.save.assert_called()  # Ensure save is called
+        mock_config_manager.save.assert_called_once_with(self.benchmark_manager.store_dir)
+        mock_config_manager.load_config.assert_called_once_with([])

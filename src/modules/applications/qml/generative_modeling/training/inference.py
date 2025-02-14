@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 from typing import TypedDict
+
 import numpy as np
 from modules.applications.qml.generative_modeling.training.training_generative import TrainingGenerative, Core, GPU
 

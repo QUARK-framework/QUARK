@@ -1,6 +1,6 @@
-import unittest
 import os
 import pickle
+import unittest
 from tempfile import TemporaryDirectory
 
 from modules.applications.optimization.scp.scp import SCP

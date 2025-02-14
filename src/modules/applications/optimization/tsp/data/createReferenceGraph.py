@@ -12,8 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import networkx as nx
 import pickle
+
+import networkx as nx
 import tsplib95
 
 # Source http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/tsp/

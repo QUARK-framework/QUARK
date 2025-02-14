@@ -15,80 +15,47 @@ Documentation with a tutorial and developer guidelines can be found here: https:
 
 ## Prerequisites
 
-### Step 1: Install Python 3.12
-QUARK requires **Python 3.12**. You need to install this version of Python if you do not already have it installed.
-Other versions could cause issues with other dependencies used in the framework.
-1. Visit the [Python Downloads Page](https://www.python.org/downloads/) and install Python 3.12.
-2. Verify your Python version:
-   
-   ```python --version```
+Using all of QUARK's features requires a lot of dependencies and increases QUARK's required starting time. To remedy that, QUARK manages its own module system alongside Python environments and keeps both in sync. 
+To use QUARK correctly and conveniently, we recommend using the uv package manager as described below. Of course, you can still set up QUARK manually. We also provide a description for that option.
 
-3. Ensure it returns Python 3.12.x
+### With uv
+#### Step 1: Install uv
+https://docs.astral.sh/uv/getting-started/installation/
 
-### Step 2: Create a Conda Environment
-QUARK provides flexibility in managing its environment using Conda. Create and activate a Conda environment:
-1. Create a Conda environment:
+#### Step 2: Run the setup script and choose which features to use
+```bash
+bash setup.sh
+```
 
-    ```conda create -n quark python=3.12```
+#### Step 3: Run QUARK
+```bash
+uv run python src/main.py
+```
+> __Note:__ This step might take a little longer when run the first time after a setup.
 
-    ```conda activate quark```
+#### Step 4 (Optional): Run the setup script again to switch dependencies
+```bash
+bash setup.sh
+```
 
-### Step 3: Install Required Packages
-Additionally, we rely on several pip dependencies, which you can install in two ways:
+### Without uv (all modules enabled)
+#### Step 1: Install all dependencies
+Make sure that your python version is 3.12, then install all dependencies
+```bash
+pip install -r .settings/requirements_full.txt
+```
 
-1. Install pip packages manually, or
-2. Use the QUARK installer.
-   For this installer to work, you need to install the following packages in the first place:
+#### Step 2: Run QUARK
+```bash
+python src/main.py
+```
 
-   * inquirer==3.4.0
-   * pyyaml==6.0.2
-   * packaging==24.2
+<br>
 
-   To limit the number of packages you need to install, there is an option to only include a subselection of QUARK modules.
-   You can select the modules of choice via :
-
-   ```python src/main.py env --configure myenv```
-
-   This will generate a requirements file ```requirements_myenv.txt``` that you can use to set up a customized conda environment.
-
-   ```pip install -r .settings/envs/requirements_myenv.txt```
-      
-   If you want to set up the default configuration (which installs all dependencies needed for the full QUARK framework):
-
-   ```pip install -r .settings/requirements_full.txt```
-
-   Activate the environment:
-
-   ```python src/main.py env --activate myenv```
-
-   You can also configure multiple QUARK environments and then switch between them, e.g. via:
-
-   ```python src/main.py env --activate myenv2```
-
-   > __Note:__ Different modules require different python packages.
-   > Be sure that your python environment has the necessary packages installed!
-   Ensure the environment is properly configured:
-
-   To see which environments are configured, please use
-
-   ```python src/main.py env --list```
-
-   You can also visualize the contents of your QUARK environment:
-   
-   ```
-   (quark) %  python src/main.py env --show myenv
-   [...]
-   Content of the environment:
-   >-- TSP
-       >-- GreedyClassicalTSP
-           >-- Local
-   ```
-
-> __Note:__ In case you want to use custom modules files (for example, to use external modules from other repositories), you can still use the ```--modules``` option.
-> You can find the documentation in the respective Read the Docs section.
+> __Note:__ It is still possible to only use a subset of QUARK's modules without also using uv. The process is explained in the [documentation](https://quark-framework.readthedocs.io/en/dev/tutorial.html).
 
 ## Git Large File Storage (LFS)
-QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have **Git LFS** installed and configured to manage large files effectively.
+QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have Git LFS installed and configured to manage large files effectively.
 
 ### Installing Git LFS
 Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/):
@@ -96,7 +63,7 @@ Install Git LFS by following the instructions on [Git LFS](https://git-lfs.com/)
     ```bash
     git lfs install
     ```
-  - On Windows. Download and install Git LFS from the [Official page](https://git-lfs.com/)
+  - On Windows. Download and install Git LFS from the [official page](https://git-lfs.com/)
 
 ## Running a Benchmark
 
@@ -147,17 +114,17 @@ repetitions: 1
 
 ### Running Specific Modules
 
-If you want to run specific modules, use the preconfigured YAML files under tests/config/valid/. 
+If you want to run specific modules, use the preconfigured YAML files under ```tests/config/valid/```. 
 
 For example:
 
 ```python src/main.py -c tests/config/valid/TSP.yml```
 
-Replace TSP.yml with the desired module configuration (e.g., MIS.yml, generativemodeling.yml, etc.)
+Replace ```TSP.yml``` with the desired module configuration (e.g., ```MIS.yml```, ```generativemodeling.yml```, etc.)
 > __Note:__ This should only be used by experienced users as invalid values will cause the framework to fail!
 
 
-Example run (You need to check at least one option with an ``X`` for the checkbox question):
+Example run (you need to check at least one option with an ``X`` for the checkbox question):
 ```
 (quark) % python src/main.py 
 [?] What application do you want?: TSP
@@ -234,7 +201,7 @@ The processing of backlog items may get interrupted in which case you will see s
 2024-03-13 10:25:20,201 [INFO] ================================================================================
 ```
 This happens if you press CTRL-C or if some QUARK module does its work asynchronously, e.g. by submitting its job to some 
-batch system. Learn more about how to write asynchronous modules in the [developer guide](https://quark-framework.readthedocs.io/en/dev/).
+batch system. Learn more about how to write asynchronous modules in the [developer guide](https://quark-framework.readthedocs.io/en/dev/developer.html).
 You can resume an interrupted QUARK run by calling: 
 ```
 python src/main.py --resume-dir=<result-dir>

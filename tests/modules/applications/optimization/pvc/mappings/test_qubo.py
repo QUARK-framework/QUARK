@@ -1,5 +1,5 @@
-import unittest
 import pickle
+import unittest
 
 from modules.applications.optimization.pvc.mappings.qubo import QUBO
 

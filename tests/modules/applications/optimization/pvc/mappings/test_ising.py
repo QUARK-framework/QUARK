@@ -1,6 +1,7 @@
-import unittest
-import numpy as np
 import pickle
+import unittest
+
+import numpy as np
 
 from modules.applications.optimization.pvc.mappings.ising import Ising
 from modules.applications.optimization.pvc.mappings.qubo import QUBO

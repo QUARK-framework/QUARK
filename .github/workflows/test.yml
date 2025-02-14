@@ -34,13 +34,7 @@ jobs:
         run: pip install -r .settings/requirements_full.txt
 
       - name: Run Unit Tests
-        run: python -m unittest discover . > unittest_results.log
+        env:
+          PYTHONWARNINGS: "ignore::DeprecationWarning"
 
-      - name: Upload Test Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unittest-logs
-          path: unittest_results.log
-            
-
+        run: python -m unittest discover .

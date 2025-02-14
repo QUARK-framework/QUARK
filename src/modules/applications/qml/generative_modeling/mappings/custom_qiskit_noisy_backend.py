@@ -12,17 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Union
 import logging
 from time import perf_counter
+from typing import Union
 
 import numpy as np
-
-from qiskit.circuit import QuantumCircuit, Parameter
+from qiskit.circuit import Parameter, QuantumCircuit
 from qiskit.compiler import transpile
-from qiskit.transpiler import PassManager, CouplingMap, Layout
-from qiskit.transpiler.passes import SetLayout
 from qiskit.providers import Backend
+from qiskit.transpiler import CouplingMap, Layout, PassManager
+from qiskit.transpiler.passes import SetLayout
 from qiskit_aer import Aer, AerSimulator, noise
 from qiskit_aer.noise import NoiseModel
 

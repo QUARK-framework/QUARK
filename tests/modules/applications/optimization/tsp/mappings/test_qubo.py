@@ -1,4 +1,5 @@
 import unittest
+
 import networkx as nx
 
 from modules.applications.optimization.tsp.mappings.qubo import QUBO

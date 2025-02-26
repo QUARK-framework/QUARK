@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from modules.applications.optimization.bp.mappings.qubo import QUBO
 
+
 class TestQUBO(unittest.TestCase):
 
     @classmethod
@@ -28,7 +29,7 @@ class TestQUBO(unittest.TestCase):
         problem = ([2, 4, 6], 10, [])
 
         with patch("modules.applications.optimization.bp.bp.create_MIP", return_value=MagicMock()):
-            with patch("modules.applications.optimization.bp.bp.transform_docplex_mip_to_qubo", 
+            with patch("modules.applications.optimization.bp.bp.transform_docplex_mip_to_qubo",
                        return_value=(MagicMock(), MagicMock())):
                 result, _ = self.qubo_instance.map(problem, config)
 
@@ -36,7 +37,7 @@ class TestQUBO(unittest.TestCase):
         self.assertIn("QUBO", result, "Expected 'QUBO' representation in result.")
         self.assertIsNotNone(result["Q"], "Expected 'Q' to be non-empty.")
         self.assertIsNotNone(result["QUBO"], "Expected 'QUBO' to be non-empty.")
-    
+
     def test_get_default_submodule(self):
         submodule = self.qubo_instance.get_default_submodule("Annealer")
         self.assertIsNotNone(submodule, "Expected 'Annealer' submodule to be returned.")

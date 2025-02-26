@@ -32,22 +32,22 @@ from utils import start_time_measurement, end_time_measurement
 
 class BP(Optimization):
     """
-    The bin packing problem is a classic optimization challenge where items of varying sizes must be efficiently packed 
-    into a finite number of bins, each with a fixed capacity, aiming to minimize the number of bins utilized. This problem 
-    is computationally NP-hard, meaning that finding an exact solution in a reasonable time frame is often impractical 
-    for large datasets. Consequently, various approximation algorithms have been developed to provide near-optimal solutions 
+    The bin packing problem is a classic optimization challenge where items of varying sizes must be efficiently packed
+    into a finite number of bins, each with a fixed capacity, aiming to minimize the number of bins utilized. This problem
+    is computationally NP-hard, meaning that finding an exact solution in a reasonable time frame is often impractical
+    for large datasets. Consequently, various approximation algorithms have been developed to provide near-optimal solutions
     within acceptable time limits.
 
     In practical applications, bin packing is prevalent in industries such as logistics and manufacturing. For instance,
     it is used in loading trucks with weight capacity constraints, filling containers to maximize space utilization, and creating
-    file backups in media storage. Additionally, it plays a role in technology mapping for FPGA semiconductor chip design, 
+    file backups in media storage. Additionally, it plays a role in technology mapping for FPGA semiconductor chip design,
     where efficient resource allocation is crucial.
 
-    To address the bin packing problem, several heuristic and approximation methods have been proposed. One common approach is 
-    the First-Fit Decreasing (FFD) algorithm, which involves sorting items in descending order by size and then placing each 
-    item into the first bin that can accommodate it. While FFD does not always yield an optimal solution, it is effective and 
+    To address the bin packing problem, several heuristic and approximation methods have been proposed. One common approach is
+    the First-Fit Decreasing (FFD) algorithm, which involves sorting items in descending order by size and then placing each
+    item into the first bin that can accommodate it. While FFD does not always yield an optimal solution, it is effective and
     widely used due to its simplicity and efficiency. Other advanced techniques, such as Best-Fit and Karmarkar–Karp algorithms,
-    offer improved performance for specific scenarios by considering different strategies for item placement and bin selection. 
+    offer improved performance for specific scenarios by considering different strategies for item placement and bin selection.
     (source: https://en.wikipedia.org/wiki/Bin_packing_problem)
     """
 
@@ -210,13 +210,13 @@ class BP(Optimization):
         )
 
         return self.object_weights, self.bin_capacity, self.incompatible_objects
-    
+
     @staticmethod
     def detect_mapping_from_solution(solution: dict) -> str:
         # If any key contains '@int_slack@', assume it's a QUBO/Ising solution.
         if any('@int_slack@' in key for key in solution.keys()):
             # Optionally, you could differentiate further between QUBO and Ising if needed.
-            return ['QUBO','Ising']
+            return ['QUBO', 'Ising']
         else:
             return "MIP"
 
@@ -236,7 +236,7 @@ class BP(Optimization):
         else:
             # create the MIP to investigate the solution
             problem_instance = (self.object_weights, self.bin_capacity, self.incompatible_objects)
-            self.mip_original = MIP.create_MIP(self,problem_instance)
+            self.mip_original = MIP.create_MIP(self, problem_instance)
             logging.info(f"Detected mapping 2: {mapping}")
             # MIP
             if mapping == 'MIP':
@@ -249,7 +249,7 @@ class BP(Optimization):
                 feasible_or_not = self.mip_qiskit.is_feasible(solution_list)
 
             # QUBO
-            elif mapping == ['QUBO','Ising']:  # QUBO or Ising -->we need the binary equation formulation of the MIP
+            elif mapping == ['QUBO', 'Ising']:  # QUBO or Ising -->we need the binary equation formulation of the MIP
 
                 # Transform docplex model to the qiskit-optimization framework
                 self.mip_qiskit = from_docplex_mp(self.mip_original)
@@ -300,7 +300,7 @@ class BP(Optimization):
             if mapping == 'MIP':
                 obj_value = self.mip_qiskit.objective.evaluate(solution_list)
 
-            elif mapping == ['QUBO','Ising']:  # QUBO or Ising -->we need the binary equation formulation of the MIP
+            elif mapping == ['QUBO', 'Ising']:  # QUBO or Ising -->we need the binary equation formulation of the MIP
                 obj_value = self.mip_qiskit_int2bin.objective.evaluate(
                     solution_list)  # mip_int2bin.objective.evaluate(solution)
 
@@ -312,5 +312,3 @@ class BP(Optimization):
 
     def save(self, path: str, iter_count: int) -> None:
         pass
-
-

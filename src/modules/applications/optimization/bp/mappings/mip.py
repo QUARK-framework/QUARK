@@ -85,10 +85,9 @@ class MIP(Mapping):
         self.config = config
 
         # Create the docplex MIP model
-        return MIP.create_MIP(self,problem), end_time_measurement(start)
+        return MIP.create_MIP(self, problem), end_time_measurement(start)
 
-    
-    def create_MIP(self,problem: tuple[list, float, list], **kwargs) -> tuple[Model, float]:
+    def create_MIP(self, problem: tuple[list, float, list], **kwargs) -> tuple[Model, float]:
         """
         Generates a bin-packing problem docplex model depending on a certain instance.
 
@@ -116,9 +115,9 @@ class MIP(Mapping):
         bin_variables = binpacking_mip.binary_var_list(
             keys=range(max_number_of_bins), name=[
                 f"x_{i}" for i in range(max_number_of_bins)])
-        
+
         logging.info("added binary variables x_i --> =1 if bin i is used, =0 if not")
-        
+
         object_to_bin_variables = binpacking_mip.binary_var_matrix(
             keys1=range(num_of_objects),
             keys2=range(max_number_of_bins),
@@ -134,7 +133,7 @@ class MIP(Mapping):
         # Add model constraints
         assignment_constraints = binpacking_mip.add_constraints(
             (binpacking_mip.sum(object_to_bin_variables[o, i] for i in range(
-            max_number_of_bins)) == 1 for o in range(num_of_objects)),
+                max_number_of_bins)) == 1 for o in range(num_of_objects)),
             ["assignment_constraint_object_%d" % i for i in range(num_of_objects)]
         )
 
@@ -142,7 +141,7 @@ class MIP(Mapping):
 
         capacity_constraints = binpacking_mip.add_constraints(
             (binpacking_mip.sum(object_weights[o] * object_to_bin_variables[o, i] for o in range(
-            num_of_objects)) <= bin_capacity * bin_variables[i] for i in range(max_number_of_bins)),
+                num_of_objects)) <= bin_capacity * bin_variables[i] for i in range(max_number_of_bins)),
             ["capacity_constraint_bin_%d" % i for i in range(max_number_of_bins)]
         )
 
@@ -151,8 +150,8 @@ class MIP(Mapping):
         # The following is good for the QUBO formulation because we don't need to introduce slack variables
         incompatibility_constraints = binpacking_mip.add_quadratic_constraints(
             object_to_bin_variables[o1, i] * object_to_bin_variables[o2, i] == 0 for (
-            # , ["incompatibility_constraint_%d" % i for i in range(max_number_of_bins * len(incompatible_objects))])
-            o1, o2) in incompatible_objects for i in range(max_number_of_bins)
+                # , ["incompatibility_constraint_%d" % i for i in range(max_number_of_bins * len(incompatible_objects))])
+                o1, o2) in incompatible_objects for i in range(max_number_of_bins)
         )
         # TODO the following is equivalent, but better suited for a MIP Solver because it is linear
         # Incompatibility_constraints = binpacking_mip.add_constraints((object_to_bin_variables[o1,i] + object_to_bin_variables[o2,i] <= 1 for (o1,o2) in incompatible_objects for i in range(max_number_of_bins)), ["incompatibility_constraint_%d" % i for i in range(max_number_of_bins * len(incompatible_objects))])
@@ -161,7 +160,6 @@ class MIP(Mapping):
         logging.info("finished the creation of the bin-packing-MIP \n\n")
 
         return binpacking_mip
-
 
     def get_default_submodule(self, option: str) -> Core:
         """

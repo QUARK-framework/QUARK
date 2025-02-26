@@ -102,7 +102,7 @@ class QUBO(Mapping):
         print_models = True
 
         # Create docplex model for the binpacking-problem
-        bin_packing_mip = MIP.create_MIP(self,problem)
+        bin_packing_mip = MIP.create_MIP(self, problem)
 
         # Transform docplex model to QUBO
         penalty_factor = config['penalty_factor']
@@ -115,8 +115,7 @@ class QUBO(Mapping):
             "QUBO": self.qubo_bin_packing_problem
         }, end_time_measurement(start)
 
-    
-    def transform_docplex_mip_to_qubo(self,mip_docplex: Model, penalty_factor) -> tuple[dict, QuadraticProgram]:
+    def transform_docplex_mip_to_qubo(self, mip_docplex: Model, penalty_factor) -> tuple[dict, QuadraticProgram]:
         """
         transform a docplex mixed-integer-problem to a QUBO.
 
@@ -154,7 +153,6 @@ class QUBO(Mapping):
         qubo_operator = quadr_coeff
 
         return qubo_operator, qubo
-
 
     # def validate_solution(self, solution: dict) -> bool:
     #     """

@@ -4,7 +4,10 @@ import numpy as np
 from qiskit_optimization import QuadraticProgram
 
 from docplex.mp.model import Model
-from modules.applications.optimization.bp.bp import BP, create_MIP, transform_docplex_mip_to_qubo, transform_docplex_mip_to_ising
+from modules.applications.optimization.bp.bp import BP
+from modules.applications.optimization.bp.mappings.mip import MIP
+from modules.applications.optimization.bp.mappings.ising import Ising
+from modules.applications.optimization.bp.mappings.qubo import QUBO
 
 
 class TestBP(unittest.TestCase):
@@ -92,7 +95,7 @@ class TestBP(unittest.TestCase):
 
     def test_create_MIP(self):
         problem = ([2, 4, 6], 10, [])
-        model = create_MIP(problem)
+        model = MIP.create_MIP(problem)
 
         self.assertIsInstance(model, Model)
         self.assertTrue(model.get_objective_expr() is not None)
@@ -103,7 +106,7 @@ class TestBP(unittest.TestCase):
         model.binary_var(name="x2")
 
         with patch("modules.applications.optimization.bp.bp.from_docplex_mp", return_value=QuadraticProgram()):
-            qubo_operator, qubo = transform_docplex_mip_to_qubo(model, penalty_factor=1.0)
+            qubo_operator, qubo = QUBO.transform_docplex_mip_to_qubo(model, penalty_factor=1.0)
 
         self.assertIsInstance(qubo_operator, dict)
         self.assertIsInstance(qubo, QuadraticProgram)
@@ -114,7 +117,7 @@ class TestBP(unittest.TestCase):
         model.binary_var(name="x2")
 
         with patch("modules.applications.optimization.bp.bp.from_docplex_mp", return_value=QuadraticProgram()):
-            ising_matrix, ising_vector, ising_offset, qubo = transform_docplex_mip_to_ising(model, penalty_factor=1.0)
+            ising_matrix, ising_vector, ising_offset, qubo = Ising.transform_docplex_mip_to_ising(model, penalty_factor=1.0)
         ising_offset = float(ising_offset)
 
         self.assertIsInstance(ising_matrix, np.ndarray)

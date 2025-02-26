@@ -24,7 +24,7 @@ from utils import end_time_measurement, start_time_measurement
 
 
 class MIP(Mapping):
- 
+
     def __init__(self):
         """
         Constructor method
@@ -65,7 +65,7 @@ class MIP(Mapping):
         self.salbp = salbp
         start = start_time_measurement()
         logging.info("Start the creation of the SALBP-1-MIP")
-     
+
         max_num_stations: int = salbp.number_of_tasks
         # Create the docplex MIP model
         salbp_mip: Model = Model("SALBP")
@@ -110,7 +110,7 @@ class MIP(Mapping):
         :param salbp: SALBP-1 instance
         :param salbp_mip: MIP model for the SALBP-1 instance
         :param max_num_stations: Maximum number of stations needed
-        :return: 
+        :return:
             - A list of binary variables representing station usage (y_s)
             - A dictionary of binary variables representing task assignments (x_t_s)
         """

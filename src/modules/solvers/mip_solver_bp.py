@@ -68,7 +68,7 @@ class MIPSolver(Solver):
                             "description": "What MIP-Gap do you allow?"
                         },
                         "solution_method": {
-                            "values": [-1], # for gurobi:  -1=default automatic, 0=primal simplex, 
+                            "values": [-1], # for gurobi:  -1=default automatic, 0=primal simplex,
                                     1=dual simplex, 2=barrier, 3=concurrent, 4=deterministic concurrent,
                                     5=deterministic concurrent simplex
                             "description": "Which optimization method do you want?"
@@ -127,7 +127,7 @@ class MIPSolver(Solver):
         # Save mapped problem to result folder via lp
         export_path = kwargs['store_dir']
         mapped_problem.export_as_lp(basename="MIP", path=export_path)
-    
+
         # Read the lp-file to get the model into a SCIP_OPT-model
         scip_model = scip_opt.Model()
         scip_model.readProblem(filename=Path(export_path) / Path("MIP.lp"))

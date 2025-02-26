@@ -7,6 +7,7 @@ from modules.applications.optimization.salbp.salbp import (
     respects_precedences, parse_task, create_salbp_from_file, SALBP
 )
 
+
 class TestSALBP(unittest.TestCase):
 
     @classmethod

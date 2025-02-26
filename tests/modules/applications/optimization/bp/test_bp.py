@@ -54,7 +54,7 @@ class TestBP(unittest.TestCase):
         self.assertEqual(bin_capacity, 5)
         self.assertEqual(len(object_weights), 5)
         self.assertEqual(incompatible_objects, [])
-    
+
     def test_generate_problem(self):
         config = {
             "number_of_objects": 5,

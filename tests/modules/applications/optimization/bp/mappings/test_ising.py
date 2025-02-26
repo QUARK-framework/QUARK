@@ -4,6 +4,7 @@ import numpy as np
 
 from modules.applications.optimization.bp.mappings.ising import Ising
 
+
 class TestIsing(unittest.TestCase):
 
     @classmethod
@@ -74,9 +75,3 @@ class TestIsing(unittest.TestCase):
 
         with self.assertRaises(NotImplementedError):
             self.ising_instance.get_default_submodule("InvalidSubmodule")
-
-    
-
-    
-
-    

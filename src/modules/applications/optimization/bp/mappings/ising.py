@@ -103,7 +103,7 @@ class Ising(Mapping):
         start = start_time_measurement()
 
         # Create docplex model for the bin packing problem
-        bin_packing_mip = MIP.create_MIP(self,problem)
+        bin_packing_mip = MIP.create_MIP(self, problem)
 
         # Transform the MIP to an Ising formulation
         penalty_factor = config['penalty_factor']
@@ -152,8 +152,9 @@ class Ising(Mapping):
                 if x == -1:
                     x[...] = 0
         return solution
-    
-    def transform_docplex_mip_to_ising(mip_docplex: Model, penalty_factor) -> tuple[np.ndarray, np.ndarray, float, QuadraticProgram]:
+
+    def transform_docplex_mip_to_ising(
+            mip_docplex: Model, penalty_factor) -> tuple[np.ndarray, np.ndarray, float, QuadraticProgram]:
         """
         Transform a docplex mix-integer-problem to an Ising formulation.
 
@@ -188,13 +189,11 @@ class Ising(Mapping):
             else:
                 ising_matrix[i, j] += 1 / 4 * coeff
                 ising_offset += 1 / 4 * coeff
-                
+
             ising_vector[i] -= 1 / 4 * coeff
             ising_vector[j] -= 1 / 4 * coeff
 
         return ising_matrix, ising_vector, ising_offset, qubo
-
-
 
     def get_default_submodule(self, option: str) -> Core:
         """

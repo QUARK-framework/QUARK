@@ -95,23 +95,23 @@ def salbp_factory(
     """
     if len(tasks) == 0:
         raise ValueError("No tasks registered! Trivial instance (no stations needed).")
-    
+
     task_ids: list[TaskId] = [task.id for task in tasks]
     if not len(task_ids) == len(set(task_ids)):
         raise ValueError(f"Some tasks have the same taskId ({tasks})")
-    
+
     if not all(x >= 0 for x in [task.time for task in tasks]):
         raise ValueError(f"Some tasks have a negative task time ({tasks})")
-    
+
     if not all(task.time <= cycle_time for task in tasks):
         raise ValueError(f"Cycle time ({cycle_time}) is too short for some tasks!.")
-    
+
     task_set = frozenset(tasks)
     if not all(t1 in task_set and t2 in task_set for (t1, t2) in precedence_relations):
         raise ValueError(
             f"Preceding tasks ({precedence_relations}) do not match registered tasks ({tasks})."
         )
-    
+
     precedence_graph = nx.DiGraph(precedence_relations)
     if not nx.is_directed_acyclic_graph(precedence_graph):
         raise ValueError("Precedence graph contains cycles!")
@@ -127,7 +127,7 @@ def salbp_factory(
 def has_overloaded_station(cycle_time: int, task_assignment: TaskAssignment) -> bool:
     """
     Return if a station in the given task_assignment is overloaded wrt the given cycle time.
-    
+
     :param cycle_time: The maximum time a station can take
     :param task_assignment: The assignment of tasks to stations
     :return: True if at least one station is overloaded, False otherwise
@@ -338,17 +338,17 @@ class SALBP(Optimization):
     """
     The Simple Assembly Line Balancing Problem Version 1 (SALBP-1) is a special BinPacking
     problem with precedence relations among the items. Given a set of tasks, each with a processing time,
-    precedence relations among those tasks, and a cycle time, this problem's goal is to assign every 
-    task to a station s.t. the total number of stations is minimized while the cycle time per station 
+    precedence relations among those tasks, and a cycle time, this problem's goal is to assign every
+    task to a station s.t. the total number of stations is minimized while the cycle time per station
     and the task precedences are respected.
 
-    SALBP-1 finds applications in manufacturing, logistics, and industrial automation, where optimizing 
-    assembly line operations can significantly enhance efficiency and cost-effectiveness. By balancing 
-    workloads across stations, industries can minimize idle time, reduce bottlenecks, and improve overall 
-    productivity. 
-    
-    This problem is especially relevant in automobile production, electronics assembly, and large-scale 
-    manufacturing, where tasks must follow strict precedence relations, meaning some tasks must be completed 
+    SALBP-1 finds applications in manufacturing, logistics, and industrial automation, where optimizing
+    assembly line operations can significantly enhance efficiency and cost-effectiveness. By balancing
+    workloads across stations, industries can minimize idle time, reduce bottlenecks, and improve overall
+    productivity.
+
+    This problem is especially relevant in automobile production, electronics assembly, and large-scale
+    manufacturing, where tasks must follow strict precedence relations, meaning some tasks must be completed
     before others can begin.
     """
 

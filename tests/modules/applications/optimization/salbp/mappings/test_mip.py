@@ -59,7 +59,8 @@ class TestMIP(unittest.TestCase):
         task_station_vars = {(t.id, s): MagicMock() for t in self.tasks for s in range(3)}
         station_vars = [MagicMock() for _ in range(3)]
 
-        self.mip_instance._add_cycle_time_constraints(mock_model, self.salbp_instance, 3, task_station_vars, station_vars)
+        self.mip_instance._add_cycle_time_constraints(
+            mock_model, self.salbp_instance, 3, task_station_vars, station_vars)
         mock_model.add_constraints.assert_called()
 
     def test_add_preceding_tasks_constraints(self):

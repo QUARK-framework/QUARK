@@ -96,7 +96,7 @@ class TestSALBP(unittest.TestCase):
         requirements = salbp.get_requirements()
         expected_requirements = [
             {"name": "docplex", "version": "2.25.236"},
-            {"name": "networkx", "version": "2.8.8"},
+            {"name": "networkx", "version": "3.4.2"},
         ]
         self.assertEqual(requirements, expected_requirements, "Expected correct module dependencies")
 

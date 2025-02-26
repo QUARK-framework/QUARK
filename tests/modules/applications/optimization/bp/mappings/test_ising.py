@@ -34,8 +34,8 @@ class TestIsing(unittest.TestCase):
         """
         config = {"penalty_factor": 2}
         problem = ([2, 4, 6], 10, [])
-        with patch("modules.applications.optimization.bp.bp.create_MIP", return_value=MagicMock()):
-            with patch("modules.applications.optimization.bp.bp.transform_docplex_mip_to_ising", return_value=(np.array([[1, -1], [-1, 1]]), np.array([1, -1]), 0, MagicMock())):
+        with patch("modules.applications.optimization.bp.mappings.mip.MIP.create_MIP", return_value=MagicMock()):
+            with patch("modules.applications.optimization.bp.mappings.ising.Ising.transform_docplex_mip_to_ising", return_value=(np.array([[1, -1], [-1, 1]]), np.array([1, -1]), 0, MagicMock())):
                 result, _ = self.ising_instance.map(problem, config)
 
         self.assertIn("J", result)

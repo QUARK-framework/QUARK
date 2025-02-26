@@ -20,7 +20,7 @@ from modules.Core import Core
 
 class QuantumAnnealingSampler(Device):
     """
-    Class for D-Waves quantum annealer
+    Class for D-Waves quantum annealer.
     """
 
     def __init__(self):
@@ -36,28 +36,27 @@ class QuantumAnnealingSampler(Device):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "dwave-system",
-                "version": "1.23.0"
-            }
-        ]
+        return [{"name": "dwave-system", "version": "1.23.0"}]
 
     def get_parameter_options(self) -> dict:
         """
+        Returns the configurable settings for this mapping.
 
-
-        :return: empty dict
-        :rtype: dict
+        :return: An empty dict
         """
         return {
 
         }
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        This module has no submodules.
+
+        :param option: Submodule option (not applicable)
+        :raises ValueError: Always raised because this module has no submodules
+        """
         raise ValueError("This module has no submodules.")

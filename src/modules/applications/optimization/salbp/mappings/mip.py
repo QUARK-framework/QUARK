@@ -17,16 +17,14 @@ from typing import TypedDict
 from docplex.mp.dvar import Var
 from docplex.mp.model import Model
 
-from modules.applications.Mapping import *
-from modules.applications.optimization.SALBP.SALBP import Task, SALBPInstance
+from modules.applications.Mapping import Mapping
+from modules.Core import Core
+from modules.applications.optimization.salbp.salbp import Task, SALBPInstance
 from utils import end_time_measurement, start_time_measurement
 
 
 class MIP(Mapping):
-    """
-    MIP formulation for SALBP-1.
-    """
-
+ 
     def __init__(self):
         """
         Constructor method
@@ -39,45 +37,45 @@ class MIP(Mapping):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
         return [{"name": "docplex", "version": "2.25.236"}]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this mapping
+        Returns the configurable settings for this mapping.
         """
         return {}
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
         """
 
     def map(self, salbp: SALBPInstance, config: Config) -> tuple[Model, float]:
-        """Map the SALBP-1 instance to its MIP formulation.
+        """
+        Map the SALBP-1 instance to its MIP formulation.
 
         :param salbp: SALBP-1 instance
-        :param config: configuration for the mapping
+        :param config: Configuration for the mapping
+        :return: A tuple containing the generated MIP model and the time taken to create it
         """
         self.salbp = salbp
         start = start_time_measurement()
         logging.info("Start the creation of the SALBP-1-MIP")
-        print(self.salbp, config)
+     
         max_num_stations: int = salbp.number_of_tasks
-
-        # create the docplex MIP model
+        # Create the docplex MIP model
         salbp_mip: Model = Model("SALBP")
 
-        # add variables
+        # Add variables
         station_vars, task_station_vars = self._add_variables(
             salbp, salbp_mip, max_num_stations
         )
 
-        # add constraints
+        # Add constraints
         self._add_one_station_per_task_constraints(
             salbp_mip, salbp.tasks, max_num_stations, task_station_vars
         )
@@ -91,7 +89,7 @@ class MIP(Mapping):
             salbp_mip, max_num_stations, station_vars
         )
 
-        # add objective
+        # Add objective
         salbp_mip.minimize(salbp_mip.sum(y for y in station_vars))
 
         logging.info("Finished the creation of the SALBP-1-MIP")
@@ -104,13 +102,17 @@ class MIP(Mapping):
         salbp_mip: Model,
         max_num_stations: int,
     ) -> tuple[list[Var], dict[tuple[int, int], Var]]:
-        """Add two types of binary variables to the SALBP-1 MIP:
+        """
+        Add two types of binary variables to the SALBP-1 MIP:
         - one binary variable y_s per potential station s (y_s = 1 iff s is used)
         - one binary variable x_t_s per task-station pair (x_t_s = 1 iff t assigned to s)
 
         :param salbp: SALBP-1 instance
         :param salbp_mip: MIP model for the SALBP-1 instance
-        :param max_num_stations: maximum number of stations needed
+        :param max_num_stations: Maximum number of stations needed
+        :return: 
+            - A list of binary variables representing station usage (y_s)
+            - A dictionary of binary variables representing task assignments (x_t_s)
         """
         return (
             salbp_mip.binary_var_list(keys=range(max_num_stations), name="y"),
@@ -132,12 +134,13 @@ class MIP(Mapping):
         max_num_stations: int,
         task_station_vars: dict[tuple[int, int], Var],
     ) -> None:
-        """Add constraints to ensure that each task is assigned to exactly one station.
+        """
+        Add constraints to ensure that each task is assigned to exactly one station.
 
         :param salbp_mip: MIP model for the SALBP-1 instance
-        :param tasks: tasks in SALBP-1 instance
-        :param max_num_stations: maximum number of stations needed
-        :param task_station_vars: binary variables for task-station pairs
+        :param tasks: Tasks in SALBP-1 instance
+        :param max_num_stations: Maximum number of stations needed
+        :param task_station_vars: Binary variables for task-station pairs
         """
         salbp_mip.add_constraints(
             (
@@ -158,13 +161,14 @@ class MIP(Mapping):
         task_station_vars: dict[tuple[int, int], Var],
         station_vars: list[Var],
     ) -> None:
-        """Add constraints to ensure that no station exceeds the cycle time.
+        """
+        Add constraints to ensure that no station exceeds the cycle time.
 
         :param salbp_mip: MIP model for the SALBP-1 instance
         :param salbp: SALBP-1 instance
-        :param max_num_stations: maximum number of stations needed
-        :param task_station_vars: binary variables for task-station pairs
-        :param station_vars: binary variables for stations
+        :param max_num_stations: Maximum number of stations needed
+        :param task_station_vars: Binary variables for task-station pairs
+        :param station_vars: Binary variables for stations
         """
         salbp_mip.add_constraints(
             (
@@ -184,12 +188,13 @@ class MIP(Mapping):
         max_num_stations: int,
         task_station_vars: dict[tuple[int, int], Var],
     ) -> None:
-        """Add constraints to ensure that preceding tasks are done before their succeeding tasks.
+        """
+        Add constraints to ensure that preceding tasks are done before their succeeding tasks.
 
         :param salbp_mip: MIP model for the SALBP-1 instance
         :param salbp: SALBP-1 instance
-        :param max_num_stations: maximum number of stations needed
-        :param task_station_vars: binary variables for task-station pairs
+        :param max_num_stations: Maximum number of stations needed
+        :param task_station_vars: Binary variables for task-station pairs
         """
         salbp_mip.add_constraints(
             (
@@ -211,12 +216,13 @@ class MIP(Mapping):
     def _add_consecutive_stations_constraints(
         salbp_mip: Model, max_num_stations: int, station_vars: list[Var]
     ) -> None:
-        """Add constraints to ensure that stations are used in consecutive order.
+        """
+        Add constraints to ensure that stations are used in consecutive order.
         -> avoids empty stations in between
 
         :param salbp_mip: MIP model for the SALBP-1 instance
-        :param max_num_stations: maximum number of stations needed
-        :param station_vars: binary variables for stations
+        :param max_num_stations: Maximum number of stations needed
+        :param station_vars: Binary variables for stations
         """
         salbp_mip.add_constraints(
             (
@@ -226,13 +232,12 @@ class MIP(Mapping):
             names=(f"consecutive_stations_{s}_{s + 1}" for s in range(max_num_stations)),
         )
 
-    def reverse_map(
-        self, solution: dict[str, int]
-    ) -> tuple[dict[int, list[Task]], float]:
-        """Map the solution of the MIP to a task assignment.
+    def reverse_map(self, solution: dict[str, int]) -> tuple[dict[int, list[Task]], float]:
+        """
+        Map the solution of the MIP to a task assignment.
 
-        :param solution: a dict mapping a variable name to its solution value
-        :return: the task assignment and the time it took to create it
+        :param solution: A dict mapping a variable name to its solution value
+        :return: The task assignment and the time it took to create it
         """
         start = start_time_measurement()
         logging.info(
@@ -252,10 +257,17 @@ class MIP(Mapping):
         return task_assignment, end_time_measurement(start)
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
+
+        :param option: The submodule option.
+        :return: The corresponding submodule instance.
+        :raises NotImplementedError: If the option is not recognized.
+        """
         if option == "MIPSolver":
             # logging.info(f"Using the module {option} requires the installation of Microsoft Visual C++.")
             # logging.info("Please make sure you installed the latest version for your respective system.")
-            from modules.solvers.MIPSolverBP import MIPSolver  # pylint: disable=C0415
+            from modules.solvers.mip_solver_bp import MIPSolver  # pylint: disable=C0415
             return MIPSolver()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

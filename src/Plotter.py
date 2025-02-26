@@ -157,7 +157,7 @@ class Plotter:
         df = pd.DataFrame.from_dict(results)
         application_score_units = df["application_score_unit"].unique()
         count_invalid_rows = pd.isna(df['application_score_value']).sum()
-
+        
         if count_invalid_rows == len(df):
             logging.info("All results have an invalid application score, skipping plotting.")
             return

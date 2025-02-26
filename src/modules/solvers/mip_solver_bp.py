@@ -35,20 +35,20 @@ class MIPSolver(Solver):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Return requirements of this module
+        Return requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: List of dict with requirements of this module
         """
-        return [
-            {
-                "name": "pyscipopt",
-                "version": "4.3.0"
-            }
-        ]
+        return [{"name": "pyscipopt", "version": "4.3.0"}]
 
     def get_default_submodule(self, option: str) -> Core:
+        """
+        Returns the default submodule based on the provided option.
 
+        :param option: Option specifying the submodule
+        :return: Instance of the corresponding submodule
+        :raises NotImplementedError: If the option is not recognized
+        """
         if option == "Local":
             from modules.devices.Local import Local  # pylint: disable=C0415
             return Local()
@@ -57,48 +57,49 @@ class MIPSolver(Solver):
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for this solver
+        Returns the configurable settings for this solver.
 
         :return:
-                 .. code-block:: python
+        .. code-block:: python
 
-                              return {
-                                  "mip_gap": {  # number measurements to make on circuit
-                                      "values": [0], #default value 0 means optimal solution is required
-                                      "description": "What MIP-Gap do you allow?"
-                                  },
-                                  "solution_method": {
-                                      "values": [-1], # for gurobi:  -1=default automatic, 0=primal simplex, 1=dual simplex, 2=barrier, 3=concurrent, 4=deterministic concurrent, 5=deterministic concurrent simplex
-                                      "description": "Which optimization method do you want?"
-                                  },
-                                  "time_limit": {
-                                      "values": [60*60*2], # default value: 2 hours
-                                      "description": "How much time may the solving take?"
-                                  }
-                              }
-
+                    return {
+                        "mip_gap": {  # number measurements to make on circuit
+                            "values": [0], #default value 0 means optimal solution is required
+                            "description": "What MIP-Gap do you allow?"
+                        },
+                        "solution_method": {
+                            "values": [-1], # for gurobi:  -1=default automatic, 0=primal simplex, 
+                                    1=dual simplex, 2=barrier, 3=concurrent, 4=deterministic concurrent,
+                                    5=deterministic concurrent simplex
+                            "description": "Which optimization method do you want?"
+                        },
+                        "time_limit": {
+                            "values": [60*60*2], # default value: 2 hours
+                            "description": "How much time may the solving take?"
+                        }
+                    }
         """
         return {
-            "mip_gap": {  # number measurements to make on circuit
-                "values": [0],  # default value 0 means optimal solution is required
+            "mip_gap": {  # Number measurements to make on circuit
+                "values": [0],  # Default value 0 means optimal solution is required
                 "description": "What MIP-Gap do you allow?"
             },
             "solution_method": {
-                # for gurobi:  -1=default automatic, 0=primal simplex, 1=dual simplex,
+                # For gurobi:  -1=default automatic, 0=primal simplex, 1=dual simplex,
                 # 2=barrier, 3=concurrent, 4=deterministic concurrent, 5=deterministic
                 # concurrent simplex
                 "values": [-1],
                 "description": "Which optimization method do you want?"
             },
             "time_limit": {
-                "values": [60 * 60 * 2],  # default value: 2 hours
+                "values": [60 * 60 * 2],  # Default value: 2 hours
                 "description": "How much time may the solving take?"
             }
         }
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -111,36 +112,30 @@ class MIPSolver(Solver):
         solution_method: str
         time_limit: int
 
-    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> (dict, float, dict):
+    def run(self, mapped_problem: any, device_wrapper: any, config: Config, **kwargs: dict) -> tuple[dict, float, dict]:
         """
-        Run MIP-solver on an optimization problem
+        Run MIP-solver on an optimization problem.
 
-        :param mapped_problem: optimization problem
-        :type mapped_problem: any
-        :param device_wrapper: instance of device
-        :type device_wrapper: any
-        :param config:
-        :type config: Config
-        :param kwargs: no additionally settings needed
-        :type kwargs: any
+        :param mapped_problem: Optimization problem
+        :param device_wrapper: Instance of device
+        :param config: Configuration parameters for the solver
+        :param kwargs: No additionally settings needed
         :return: Tuple consisting of solution as well as the time it took to compute it and  additional solution information
-        :rtype: dict, float, dict
         """
         start = start_time_measurement()
 
-        # save mapped problem to result folder via lp
+        # Save mapped problem to result folder via lp
         export_path = kwargs['store_dir']
         mapped_problem.export_as_lp(basename="MIP", path=export_path)
-        # pdb.set_trace()
-        # read the lp-file to get the model into a SCIP_OPT-model
+    
+        # Read the lp-file to get the model into a SCIP_OPT-model
         scip_model = scip_opt.Model()
-        # scip_model =
         scip_model.readProblem(filename=Path(export_path) / Path("MIP.lp"))
 
-        # start the optimization
+        # Start the optimization
         scip_model.optimize()
 
-        # get the optimization results
+        # Get the optimization results
         if scip_model.getStatus() == 'infeasible':
             print('infeasible')
             additional_solution_info = {'obj_value': None,

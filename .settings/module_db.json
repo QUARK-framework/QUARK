@@ -1,7 +1,7 @@
 {
-  "build_number": 20,
-  "build_date": "12-02-2025 16:00:55",
-  "git_revision_number": "e97008427c5b2cc1b162a0ff0d80c6ba39b88cef",
+  "build_number": 27,
+  "build_date": "26-02-2025 08:29:59",
+  "git_revision_number": "c3a4a034b1a033f61479d4dfe9827a74f69207bc",
   "modules": [
     {
       "name": "PVC",
@@ -2210,13 +2210,13 @@
     {
       "name": "BP",
       "class": "BP",
-      "module": "modules.applications.optimization.BP.BP",
+      "module": "modules.applications.optimization.bp.bp",
       "submodules": [
         {
           "name": "MIP",
           "class": "MIP",
           "args": {},
-          "module": "modules.applications.optimization.BP.mappings.MIP",
+          "module": "modules.applications.optimization.bp.mappings.mip",
           "requirements": [
             {
               "name": "docplex",
@@ -2228,7 +2228,7 @@
               "name": "MIPSolver",
               "class": "MIPSolver",
               "args": {},
-              "module": "modules.solvers.MIPSolverBP",
+              "module": "modules.solvers.mip_solver_bp",
               "requirements": [
                 {
                   "name": "pyscipopt",
@@ -2252,35 +2252,11 @@
           "name": "Ising",
           "class": "Ising",
           "args": {},
-          "module": "modules.applications.optimization.TSP.mappings.ISING",
+          "module": "modules.applications.optimization.bp.mappings.ising",
           "requirements": [
-            {
-              "name": "networkx",
-              "version": "3.4.2"
-            },
             {
               "name": "numpy",
               "version": "1.26.4"
-            },
-            {
-              "name": "dimod",
-              "version": "0.12.18"
-            },
-            {
-              "name": "more-itertools",
-              "version": "10.5.0"
-            },
-            {
-              "name": "qiskit-optimization",
-              "version": "0.6.1"
-            },
-            {
-              "name": "networkx",
-              "version": "3.4.2"
-            },
-            {
-              "name": "dwave_networkx",
-              "version": "0.8.15"
             }
           ],
           "submodules": [
@@ -2683,17 +2659,8 @@
           "name": "QUBO",
           "class": "QUBO",
           "args": {},
-          "module": "modules.applications.optimization.TSP.mappings.QUBO",
-          "requirements": [
-            {
-              "name": "networkx",
-              "version": "3.4.2"
-            },
-            {
-              "name": "dwave_networkx",
-              "version": "0.8.15"
-            }
-          ],
+          "module": "modules.applications.optimization.bp.mappings.qubo",
+          "requirements": [],
           "submodules": [
             {
               "name": "Annealer",
@@ -2723,7 +2690,7 @@
       "requirements": [
         {
           "name": "numpy",
-          "version": "1.23.5"
+          "version": "1.26.4"
         },
         {
           "name": "qiskit_optimization",
@@ -2738,13 +2705,13 @@
     {
       "name": "SALBP",
       "class": "SALBP",
-      "module": "modules.applications.optimization.SALBP.SALBP",
+      "module": "modules.applications.optimization.salbp.salbp",
       "submodules": [
         {
           "name": "MIP",
           "class": "MIP",
           "args": {},
-          "module": "modules.applications.optimization.SALBP.mappings.MIP",
+          "module": "modules.applications.optimization.salbp.mappings.mip",
           "requirements": [
             {
               "name": "docplex",
@@ -2756,7 +2723,7 @@
               "name": "MIPSolver",
               "class": "MIPSolver",
               "args": {},
-              "module": "modules.solvers.MIPSolverBP",
+              "module": "modules.solvers.mip_solver_bp",
               "requirements": [
                 {
                   "name": "pyscipopt",
@@ -2784,7 +2751,7 @@
         },
         {
           "name": "networkx",
-          "version": "2.8.8"
+          "version": "3.4.2"
         }
       ]
     },

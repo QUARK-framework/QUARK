@@ -1,0 +1,25 @@
+application:
+  config:
+    instance_creating_mode:
+    - linear weights without incompatibilities
+    - random weights without incompatibilities
+    number_of_objects:
+    - 10
+  name: BP
+  submodules:
+  - config: {}
+    name: MIP
+    submodules:
+    - config:
+        mip_gap:
+        - 0
+        solution_method:
+        - -1
+        time_limit:
+        - 7200
+      name: MIPSolver
+      submodules:
+      - config: {}
+        name: Local
+        submodules: []
+repetitions: 1

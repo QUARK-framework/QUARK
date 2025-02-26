@@ -2232,7 +2232,7 @@
               "requirements": [
                 {
                   "name": "pyscipopt",
-                  "version": "4.3.0"
+                  "version": "5.0.1"
                 }
               ],
               "submodules": [
@@ -2694,7 +2694,7 @@
         },
         {
           "name": "qiskit_optimization",
-          "version": "0.5.0"
+          "version": "0.6.1"
         },
         {
           "name": "docplex",
@@ -2727,7 +2727,7 @@
               "requirements": [
                 {
                   "name": "pyscipopt",
-                  "version": "4.3.0"
+                  "version": "5.0.1"
                 }
               ],
               "submodules": [

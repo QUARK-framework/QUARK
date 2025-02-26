@@ -39,7 +39,7 @@ class MIPSolver(Solver):
 
         :return: List of dict with requirements of this module
         """
-        return [{"name": "pyscipopt", "version": "4.3.0"}]
+        return [{"name": "pyscipopt", "version": "5.0.1"}]
 
     def get_default_submodule(self, option: str) -> Core:
         """

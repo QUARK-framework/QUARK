@@ -67,7 +67,7 @@ class BP(Optimization):
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "qiskit_optimization", "version": "0.5.0"},
+            {"name": "qiskit_optimization", "version": "0.6.1"},
             {"name": "docplex", "version": "2.25.236"}
         ]
 

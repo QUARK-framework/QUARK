@@ -31,7 +31,7 @@ class TestBP(unittest.TestCase):
         requirements = self.bp_instance.get_requirements()
         expected_requirements = [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "qiskit_optimization", "version": "0.5.0"},
+            {"name": "qiskit_optimization", "version": "0.6.1"},
             {"name": "docplex", "version": "2.25.236"}
         ]
         self.assertEqual(requirements, expected_requirements)

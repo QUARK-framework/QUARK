@@ -31,7 +31,7 @@ class TestMIP(unittest.TestCase):
         config = {"modelling_goal": 1.0}
         problem = ([2, 4, 6], 10, [])
 
-        with patch("modules.applications.optimization.bp.bp.create_MIP", return_value=Model()):
+        with patch("modules.applications.optimization.bp.mappings.mip.MIP.create_MIP", return_value=Model()):
             model, processing_time = self.mip_instance.map(problem, config)
 
         self.assertIsInstance(model, Model, "Expected output to be an instance of Model.")

@@ -2,9 +2,8 @@ application:
   config:
     instance_creating_mode:
     - linear weights without incompatibilities
-    - random weights without incompatibilities
     number_of_objects:
-    - 10
+    - 3
   name: BP
   submodules:
   - config: {}
@@ -21,5 +20,18 @@ application:
       submodules:
       - config: {}
         name: Local
+        submodules: []
+  - config:
+      penalty_factor:
+      - 1.0
+    name: QUBO
+    submodules:
+    - config:
+        number_of_reads:
+        - 100
+      name: Annealer
+      submodules:
+      - config: {}
+        name: Simulated Annealer
         submodules: []
 repetitions: 1

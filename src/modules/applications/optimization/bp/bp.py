@@ -213,9 +213,10 @@ class BP(Optimization):
 
     @staticmethod
     def detect_mapping_from_solution(solution: dict) -> str:
-        # If any key contains '@int_slack@', assume it's a QUBO/Ising solution.
+        if solution is None:
+            return "Invalid"
+        
         if any('@int_slack@' in key for key in solution.keys()):
-            # Optionally, you could differentiate further between QUBO and Ising if needed.
             return ['QUBO', 'Ising']
         else:
             return "MIP"
@@ -229,15 +230,16 @@ class BP(Optimization):
         :return: Boolean whether the solution is valid, time it took to validate
         """
         start = start_time_measurement()
-        mapping = BP.detect_mapping_from_solution(solution)
 
         if solution is None:
+            logging.warning("Solution is None. Returning invalid solution status.")
             return False, end_time_measurement(start)
+
         else:
             # create the MIP to investigate the solution
             problem_instance = (self.object_weights, self.bin_capacity, self.incompatible_objects)
             self.mip_original = MIP.create_MIP(self, problem_instance)
-            logging.info(f"Detected mapping 2: {mapping}")
+            mapping = BP.detect_mapping_from_solution(solution)
             # MIP
             if mapping == 'MIP':
                 # Transform docplex model to the qiskit-optimization framework
@@ -287,12 +289,12 @@ class BP(Optimization):
         :return: Tour cost and the time it took to calculate it
         """
         start = start_time_measurement()
-        mapping = BP.detect_mapping_from_solution(solution)
-        logging.info(f"Detected mapping: {mapping}")
+
         if solution is None:
             return False, end_time_measurement(start)
         else:
             # Put the solution-values into a list
+            mapping = BP.detect_mapping_from_solution(solution)
             solution_list = []
             for keys, value in solution.items():
                 solution_list.append(value)

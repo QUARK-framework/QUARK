@@ -154,7 +154,6 @@ class QUBO(Mapping):
 
         return qubo_operator, qubo
 
-
     def get_default_submodule(self, option: str) -> Core:
         """
         Returns the default submodule based on the provided option.

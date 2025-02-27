@@ -215,7 +215,7 @@ class BP(Optimization):
     def detect_mapping_from_solution(solution: dict) -> str:
         if solution is None:
             return "Invalid"
-        
+
         if any('@int_slack@' in key for key in solution.keys()):
             return ['QUBO', 'Ising']
         else:

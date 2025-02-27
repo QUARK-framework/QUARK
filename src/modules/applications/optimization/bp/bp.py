@@ -213,6 +213,12 @@ class BP(Optimization):
 
     @staticmethod
     def detect_mapping_from_solution(solution: dict) -> str:
+        """
+        Detects the mapping type based on the solution format.
+
+        :param solution: A dictionary representing the solution
+        :return: The detected mapping type
+        """
         if solution is None:
             return "Invalid"
         

@@ -117,7 +117,8 @@ class TestBP(unittest.TestCase):
         model.binary_var(name="x2")
 
         with patch("modules.applications.optimization.bp.bp.from_docplex_mp", return_value=QuadraticProgram()):
-            ising_matrix, ising_vector, ising_offset, qubo = Ising.transform_docplex_mip_to_ising(model, penalty_factor=1.0)
+            ising_matrix, ising_vector, ising_offset, qubo = Ising.transform_docplex_mip_to_ising(
+                model, penalty_factor=1.0)
         ising_offset = float(ising_offset)
 
         self.assertIsInstance(ising_matrix, np.ndarray)

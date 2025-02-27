@@ -95,7 +95,7 @@ class TestBP(unittest.TestCase):
 
     def test_create_MIP(self):
         problem = ([2, 4, 6], 10, [])
-        model = MIP.create_MIP(problem)
+        model = MIP.create_MIP(self, problem)
 
         self.assertIsInstance(model, Model)
         self.assertTrue(model.get_objective_expr() is not None)

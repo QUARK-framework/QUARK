@@ -28,7 +28,7 @@ class TestQUBO(unittest.TestCase):
         config = {"penalty_factor": 2}
         problem = ([2, 4, 6], 10, [])
 
-        with patch("modules.applications.optimization.bp.mappings.mip.mip.create_MIP", return_value=MagicMock()):
+        with patch("modules.applications.optimization.bp.mappings.mip.MIP.create_MIP", return_value=MagicMock()):
             with patch("modules.applications.optimization.bp.mappings.qubo.QUBO.transform_docplex_mip_to_qubo",
                        return_value=(MagicMock(), MagicMock())):
                 result, _ = self.qubo_instance.map(problem, config)

@@ -154,34 +154,6 @@ class QUBO(Mapping):
 
         return qubo_operator, qubo
 
-    # def validate_solution(self, solution: dict) -> bool:
-    #     """
-    #     Validate solution for QUBO formulation.
-
-    #     :param solution: Dictionary containing the solution values
-    #     :return: Boolean indicating whether the solution is feasible
-    #     """
-    #     try:
-    #         mip_qiskit = from_docplex_mp(self.create_MIP())
-    #         mip_ineq2eq = InequalityToEquality().convert(mip_qiskit)
-    #         mip_qiskit_int2bin = IntegerToBinary().convert(mip_ineq2eq)
-
-    #         # Rearrange solution into proper format
-    #         x_values, y_values, slack_values = [], [], []
-    #         for key, value in solution.items():
-    #             if key.startswith("x"):
-    #                 x_values.append(value)
-    #             elif key.startswith("y"):
-    #                 y_values.append(value)
-    #             else:
-    #                 slack_values.append(value)
-
-    #         solution_list = x_values + y_values + slack_values
-    #         return mip_qiskit_int2bin.is_feasible(solution_list)
-    #     except Exception as e:
-    #         logging.error(f"QUBO Validation Failed: {e}")
-    #         return False
-
     def get_default_submodule(self, option: str) -> Core:
         """
         Returns the default submodule based on the provided option.

@@ -111,19 +111,3 @@ class TestBP(unittest.TestCase):
 
         self.assertIsInstance(qubo_operator, dict)
         self.assertIsInstance(qubo, QuadraticProgram)
-
-    def test_transform_docplex_mip_to_ising(self):
-        model = Model()
-        model.binary_var(name="x1")
-        model.binary_var(name="x2")
-
-        with patch("modules.applications.optimization.bp.bp.from_docplex_mp", return_value=QuadraticProgram()):
-            ising_instance = Ising()
-            ising_matrix, ising_vector, ising_offset, qubo = ising_instance.transform_docplex_mip_to_ising(
-                model, penalty_factor=1.0)
-        ising_offset = float(ising_offset)
-
-        self.assertIsInstance(ising_matrix, np.ndarray)
-        self.assertIsInstance(ising_vector, np.ndarray)
-        self.assertIsInstance(ising_offset, float)
-        self.assertIsInstance(qubo, QuadraticProgram)

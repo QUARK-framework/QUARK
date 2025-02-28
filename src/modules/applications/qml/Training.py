@@ -15,7 +15,7 @@
 from abc import ABC, abstractmethod
 
 
-class Training(ABC):
+class Training(ABC):  # pylint: disable=R0903
     """
     Abstract base class for training QML models.
     """

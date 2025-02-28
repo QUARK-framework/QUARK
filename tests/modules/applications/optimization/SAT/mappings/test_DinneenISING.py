@@ -1,6 +1,7 @@
 import unittest
+
 import numpy as np
-from nnf import Var, And, Or
+from nnf import And, Or, Var
 
 from modules.applications.optimization.SAT.mappings.DinneenISING import DinneenIsing
 

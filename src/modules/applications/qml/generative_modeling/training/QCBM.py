@@ -12,14 +12,15 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import logging
+from typing import TypedDict
+
+import matplotlib
 import numpy as np
 from cma import CMAEvolutionStrategy
-from tensorboardX import SummaryWriter
-import matplotlib
+from matplotlib import axes, figure
 from matplotlib import pyplot as plt
-from matplotlib import figure, axes
+from tensorboardX import SummaryWriter
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm

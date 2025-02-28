@@ -1,8 +1,8 @@
 import logging
 
 from BenchmarkManager import Instruction
-from modules.Core import Core
 from modules.applications.Application import Application
+from modules.Core import Core
 
 
 class InstructionDemo(Application):

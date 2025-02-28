@@ -1,10 +1,11 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
+
 import numpy as np
 from qiskit import QuantumCircuit
+from qiskit.transpiler import CouplingMap
 from qiskit_aer import AerSimulator
 from qiskit_aer.noise import NoiseModel
-from qiskit.transpiler import CouplingMap
 
 from modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend import CustomQiskitNoisyBackend
 
@@ -108,10 +109,10 @@ class TestCustomQiskitNoisyBackend(unittest.TestCase):
         "modules.applications.qml.generative_modeling.mappings.CustomQiskitNoisyBackend."
         "CustomQiskitNoisyBackend.decompile_noisy_config"
     )
+    # pylint: disable=R0917
     def test_get_execute_circuit(self, mock_decompile_noisy_config, mock_aer_simulator,
                                  mock_transpile, mock_pass_manager, mock_layout):
         # Mock Configurations
-        from unittest.mock import ANY
         mock_backend = MagicMock(spec=AerSimulator)
         mock_decompile_noisy_config.return_value = mock_backend
         mock_pass_manager.return_value.run.return_value = "processed_circuit"

@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from abc import ABC
 import logging
+from abc import ABC
 from typing import TypedDict
 
-from utils import start_time_measurement, end_time_measurement
-from modules.Core import Core
 from modules.applications.qml.Model import Model
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
 
 
 class LibraryGenerative(Core, Model, ABC):

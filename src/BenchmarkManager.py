@@ -25,10 +25,10 @@ from typing import Optional
 
 import numpy as np
 
-from ConfigManager import ConfigManager
 from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
-from Plotter import Plotter
+from ConfigManager import ConfigManager
 from modules.Core import Core
+from Plotter import Plotter
 from utils import get_git_revision
 from utils_mpi import get_comm
 

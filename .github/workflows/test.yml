@@ -34,6 +34,7 @@ jobs:
         run: pip install -r .settings/requirements_full.txt
 
       - name: Run Unit Tests
+<<<<<<< HEAD
         run: python -m unittest discover . > unittest_results.log
 
       - name: Upload Test Logs
@@ -43,4 +44,9 @@ jobs:
           name: unittest-logs
           path: unittest_results.log
             
+=======
+        env:
+          PYTHONWARNINGS: "ignore::DeprecationWarning"
+>>>>>>> b0f59db31eecccbd83b1de2508c3f0b2db5290c5
 
+        run: python -m unittest discover .

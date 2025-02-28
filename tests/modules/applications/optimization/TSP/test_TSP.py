@@ -1,9 +1,10 @@
+import logging
+import os
 import unittest
+from tempfile import TemporaryDirectory
+
 import networkx as nx
 import numpy as np
-import os
-from tempfile import TemporaryDirectory
-import logging
 
 from modules.applications.optimization.TSP.TSP import TSP
 

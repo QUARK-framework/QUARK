@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 import os
+
 from braket.aws import AwsDevice
 
 from modules.devices.braket.Braket import Braket

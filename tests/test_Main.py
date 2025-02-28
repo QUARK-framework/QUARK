@@ -12,11 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import glob
 import argparse
+import glob
 import unittest
 
-from main import handle_benchmark_run, create_benchmark_parser
+from main import create_benchmark_parser, handle_benchmark_run
 
 
 class TestMain(unittest.TestCase):

@@ -12,19 +12,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import logging
+import inspect
 import json
+import logging
 import os
 import time
 from pathlib import Path
-import inspect
 
+import inquirer
 import yaml
 from packaging import version
-import inquirer
 
 from modules.Core import Core
-from utils import _get_instance_with_sub_options, get_git_revision, checkbox
+from utils import _get_instance_with_sub_options, checkbox, get_git_revision
 
 
 class Installer:
@@ -46,6 +46,8 @@ class Installer:
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
             {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
+            {"name": "BP", "class": "BP", "module": "modules.applications.optimization.bp.bp"},
+            {"name": "SALBP", "class": "SALBP", "module": "modules.applications.optimization.salbp.salbp"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
              "module": "modules.applications.qml.generative_modeling.GenerativeModeling"}
         ]
@@ -96,26 +98,26 @@ class Installer:
             self.save_env(module_db, env_name)
 
         requirements = self.collect_requirements(module_db["modules"])
-        activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
-                                                         "which package manager?",
-                                         ["Conda", "PIP", "Print it here"])["requirements"]
+        # activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
+        #                                                  "which package manager?",
+        #                                  ["Conda", "PIP", "Print it here"])["requirements"]
 
-        if "Conda" in activate_requirements:
-            self.create_conda_file(requirements, env_name)
-        if "PIP" in activate_requirements:
-            self.create_req_file(requirements, env_name)
-        if "Print it here" in activate_requirements:
-            logging.info("Please install:")
-            for p, v in requirements.items():
-                logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
+        # if "Conda" in activate_requirements:
+        #     self.create_conda_file(requirements, env_name)
+        # if "PIP" in activate_requirements:
+        self.create_req_file(requirements, env_name)
+        # if "Print it here" in activate_requirements:
+        #     logging.info("Please install:")
+        #     for p, v in requirements.items():
+        #         logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
 
-        activate_answer = inquirer.prompt([
-            inquirer.List("activate",
-                          message="Do you want to activate the QUARK module environment?",
-                          choices=["Yes", "No"])])["activate"]
+        # activate_answer = inquirer.prompt([
+        #     inquirer.List("activate",
+        #                   message="Do you want to activate the QUARK module environment?",
+        #                   choices=["Yes", "No"])])["activate"]
 
-        if activate_answer == "Yes":
-            self.set_active_env(env_name)
+        # if activate_answer == "Yes":
+        self.set_active_env(env_name)
 
     def check_for_configs(self) -> list:
         """

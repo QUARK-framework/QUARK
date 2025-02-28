@@ -82,7 +82,7 @@ class SALBPInstance:
 
 # --- FACTORY FUNCTION ---
 def salbp_factory(
-    tasks: list[Task], precedence_relations: list[tuple[Task, Task]], cycle_time: int) -> SALBPInstance:
+        tasks: list[Task], precedence_relations: list[tuple[Task, Task]], cycle_time: int) -> SALBPInstance:
     """
     Create an SALBP instance given a list of tasks and their precedence relations.
     Do validity checking on the input data and raise a ValueError if the data is invalid.

@@ -61,8 +61,8 @@ class Ising(Mapping):
 
             return {
             "penalty_factor": {
-                                "values": [1],
-                                "description": "How do you want to choose your QUBO-penalty-factors?",
+                                "values": [2],
+                                "description": "Choose your QUBO-penalty-factor(s).",
                                 "custom_input": True,
                                 "allow_ranges": True,
                                 "postproc": float
@@ -71,8 +71,8 @@ class Ising(Mapping):
         """
         return {
             "penalty_factor": {
-                "values": [1],
-                "description": "How do you want to choose your QUBO-penalty-factors?",
+                "values": [2],
+                "description": "Choose your QUBO-penalty-factor(s).",
                 "custom_input": True,
                 "allow_ranges": True,
                 "postproc": float  # Since we allow custom input here we need to parse it to float (input is str)

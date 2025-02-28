@@ -70,27 +70,24 @@ class TestBP(unittest.TestCase):
         self.assertEqual(incompatible_objects, [])
 
     def test_validate_invalid_solution(self):
-        config_summary = {"mapping": "MIP"}
         solution = None  # Invalid solution case
 
-        validity, _ = self.bp_instance.validate(solution, configuration_summary=config_summary)
+        validity, _ = self.bp_instance.validate(solution)
         self.assertFalse(validity)
 
     def test_validate_valid_solution(self):
-        config_summary = {"mapping": "MIP"}
         solution = {f"x_{i}": 1 for i in range(30)}
 
-        validity, _ = self.bp_instance.validate(solution, configuration_summary=config_summary)
+        validity, _ = self.bp_instance.validate(solution)
         self.assertIsInstance(validity, bool)
 
     def test_evaluate_solution(self):
-        config_summary = {"mapping": "MIP"}
         solution = {f"x_{i}": 1 for i in range(5)}
 
         self.bp_instance.mip_qiskit = MagicMock()
         self.bp_instance.mip_qiskit.objective.evaluate.return_value = 10.0
 
-        obj_value, _ = self.bp_instance.evaluate(solution, configuration_summary=config_summary)
+        obj_value, _ = self.bp_instance.evaluate(solution)
         self.assertIsInstance(obj_value, (float, int))
 
     def test_create_mip(self):

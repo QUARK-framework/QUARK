@@ -12,14 +12,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from itertools import combinations
 from typing import TypedDict
-import logging
 
 from nnf import And
 
+<<<<<<< HEAD:src/modules/applications/optimization/sat/mappings/dinneenqubo.py
 from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/mappings/DinneenQUBO.py
 
 
 class DinneenQUBO(Mapping):

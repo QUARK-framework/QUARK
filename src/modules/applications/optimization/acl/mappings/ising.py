@@ -20,9 +20,15 @@ from more_itertools import locate
 from qiskit_optimization import QuadraticProgram
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
+<<<<<<< HEAD:src/modules/applications/optimization/acl/mappings/ising.py
 from modules.applications.mapping import Mapping
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Mapping
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/ACL/mappings/ISING.py
 
 
 class Ising(Mapping):

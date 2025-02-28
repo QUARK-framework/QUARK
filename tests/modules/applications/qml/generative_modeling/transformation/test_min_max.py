@@ -1,5 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
+<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/transformation/test_min_max.py
+=======
+
+import numpy as np
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/transformation/test_MinMax.py
 
 import numpy as np
 

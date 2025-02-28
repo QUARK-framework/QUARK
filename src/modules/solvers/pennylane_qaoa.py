@@ -28,9 +28,15 @@ import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml
 
+<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
 
 matplotlib.use('Agg')
 
@@ -82,7 +88,12 @@ class PennylaneQAOA(Solver):
         """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
+<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
             from modules.devices.braket.ionq import Ionq  # pylint: disable=C0415
+=======
+            from modules.devices.braket.Ionq import \
+                Ionq  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
             return Ionq("ionq", "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
             from modules.devices.braket.sv1 import SV1  # pylint: disable=C0415
@@ -91,12 +102,18 @@ class PennylaneQAOA(Solver):
             from modules.devices.braket.tn1 import TN1  # pylint: disable=C0415
             return TN1("TN1", "arn:aws:braket:::device/quantum-simulator/amazon/tn1")
         elif option == "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3":
+<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
             from modules.devices.braket.rigetti import Rigetti  # pylint: disable=C0415
+=======
+            from modules.devices.braket.Rigetti import \
+                Rigetti  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
             return Rigetti("Rigetti", "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3")
         elif option == "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy":
             from modules.devices.braket.oqc import OQC  # pylint: disable=C0415
             return OQC("OQC", "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy")
         elif option == "braket.local.qubit":
+<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
             from modules.devices.helper_class import HelperClass  # pylint: disable=C0415
             return HelperClass("braket.local.qubit")
         elif option == "default.qubit":
@@ -113,6 +130,30 @@ class PennylaneQAOA(Solver):
             return HelperClass("lightning.gpu")
         elif option == "lightning.qubit":
             from modules.devices.helper_class import HelperClass  # pylint: disable=C0415
+=======
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+            return HelperClass("braket.local.qubit")
+        elif option == "default.qubit":
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+            return HelperClass("default.qubit")
+        elif option == "default.qubit.autograd":
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+            return HelperClass("default.qubit.autograd")
+        elif option == "qulacs.simulator":
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+            return HelperClass("qulacs.simulator")
+        elif option == "lightning.gpu":
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+            return HelperClass("lightning.gpu")
+        elif option == "lightning.qubit":
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
             return HelperClass("lightning.qubit")
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")
@@ -470,7 +511,8 @@ def _pseudo_decor(fun, device):
     @wraps(fun)
     def ret_fun(*args, **kwargs):
         # Pre function execution here
-        from time import time  # pylint: disable=W0621 disable=C0415 disable=W0404
+        from time import \
+            time  # pylint: disable=W0621 disable=C0415 disable=W0404
         start_timing = time() * 1000
         returned_value = fun(*args, **kwargs)
         # Post execution here

@@ -13,14 +13,19 @@
 #  limitations under the License.
 
 import itertools
+import logging
 from collections import defaultdict
 from typing import TypedDict
-import logging
 
 import networkx as nx
 
+<<<<<<< HEAD:src/modules/applications/optimization/pvc/mappings/qubo.py
 from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/PVC/mappings/QUBO.py
 
 
 class QUBO(Mapping):

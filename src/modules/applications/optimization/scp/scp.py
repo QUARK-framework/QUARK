@@ -12,13 +12,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
-import pickle
 import os
+import pickle
+from typing import TypedDict
 
+<<<<<<< HEAD:src/modules/applications/optimization/scp/scp.py
 from modules.applications.application import Application
 from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Application import Application
+from modules.applications.optimization.Optimization import Optimization
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SCP/SCP.py
 
 
 class SCP(Optimization):

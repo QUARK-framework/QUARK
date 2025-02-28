@@ -1,5 +1,11 @@
 import unittest
 from unittest.mock import MagicMock, patch
+<<<<<<< HEAD
+=======
+
+import matplotlib.pyplot as plt
+import numpy as np
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -28,11 +28,18 @@
 # in all copies or substantial portions of the Software.
 
 from typing import TypedDict
+
 import pulp
 
+<<<<<<< HEAD:src/modules/solvers/mip_solver_acl.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/MIPsolverACL.py
 
 
 class MIPaclp(Solver):

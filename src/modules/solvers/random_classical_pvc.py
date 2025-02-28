@@ -12,13 +12,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import random
+from typing import TypedDict
+
 import networkx as nx
 
+<<<<<<< HEAD:src/modules/solvers/random_classical_pvc.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/RandomClassicalPVC.py
 
 
 class RandomPVC(Solver):

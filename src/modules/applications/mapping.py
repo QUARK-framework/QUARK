@@ -13,7 +13,12 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
+<<<<<<< HEAD:src/modules/applications/mapping.py
 from modules.core import Core
+=======
+
+from modules.Core import Core
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/Mapping.py
 
 
 class Mapping(Core, ABC):

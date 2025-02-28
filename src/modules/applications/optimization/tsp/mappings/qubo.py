@@ -12,14 +12,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import logging
+from typing import TypedDict
 
 import dwave_networkx as dnx
 import networkx
 
+<<<<<<< HEAD:src/modules/applications/optimization/tsp/mappings/qubo.py
 from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/TSP/mappings/QUBO.py
 
 
 class QUBO(Mapping):

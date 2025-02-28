@@ -16,17 +16,23 @@ import logging
 from typing import TypedDict
 
 import numpy as np
-
 from qiskit.circuit.library import TwoLocal
-from qiskit.primitives import Sampler, Estimator
+from qiskit.primitives import Estimator, Sampler
 from qiskit.quantum_info import SparsePauliOp, Statevector
+from qiskit_algorithms.minimum_eigensolvers import (QAOA, VQE,
+                                                    NumPyMinimumEigensolver)
+from qiskit_algorithms.optimizers import COBYLA, POWELL, SPSA
 from qiskit_optimization.applications import OptimizationApplication
-from qiskit_algorithms.optimizers import POWELL, SPSA, COBYLA
-from qiskit_algorithms.minimum_eigensolvers import VQE, QAOA, NumPyMinimumEigensolver
 
+<<<<<<< HEAD:src/modules/solvers/qiskit_qaoa.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QiskitQAOA.py
 
 
 class QiskitQAOA(Solver):
@@ -64,7 +70,12 @@ class QiskitQAOA(Solver):
         :return: Instance of the default submodule
         """
         if option in ["qasm_simulator", "qasm_simulator_gpu"]:
+<<<<<<< HEAD:src/modules/solvers/qiskit_qaoa.py
             from modules.devices.helper_class import HelperClass  # pylint: disable=C0415
+=======
+            from modules.devices.HelperClass import \
+                HelperClass  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QiskitQAOA.py
             return HelperClass(option)
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

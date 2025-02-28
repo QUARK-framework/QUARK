@@ -13,8 +13,14 @@
 #  limitations under the License.
 
 from abc import ABC
+<<<<<<< HEAD:src/modules/devices/device.py
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/devices/Device.py
 
 
 class Device(Core, ABC):

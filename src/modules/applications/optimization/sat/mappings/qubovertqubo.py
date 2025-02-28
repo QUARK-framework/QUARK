@@ -15,11 +15,16 @@
 import logging
 from typing import TypedDict
 
-from qubovert.sat import NOT, OR, AND
 from nnf import And
+from qubovert.sat import AND, NOT, OR
 
+<<<<<<< HEAD:src/modules/applications/optimization/sat/mappings/qubovertqubo.py
 from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/mappings/QubovertQUBO.py
 
 
 class QubovertQUBO(Mapping):

@@ -12,15 +12,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import TypedDict
 import logging
+from typing import TypedDict
 
 from pysat.examples.rc2 import RC2
 from pysat.formula import WCNF
 
+<<<<<<< HEAD:src/modules/solvers/classical_sat.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/ClassicalSAT.py
 
 
 class ClassicalSAT(Solver):

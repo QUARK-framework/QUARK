@@ -16,17 +16,19 @@ import logging
 from typing import TypedDict
 
 from qrisp import QuantumVariable
-from qrisp.algorithms.qiro import (
-    QIROProblem,
-    create_max_indep_replacement_routine,
-    create_max_indep_cost_operator_reduced,
-    qiro_rx_mixer,
-    qiro_init_function
-)
+from qrisp.algorithms.qiro import (QIROProblem,
+                                   create_max_indep_cost_operator_reduced,
+                                   create_max_indep_replacement_routine,
+                                   qiro_init_function, qiro_rx_mixer)
 from qrisp.qaoa import create_max_indep_set_cl_cost_function
 
+<<<<<<< HEAD:src/modules/solvers/qrisp_qiro.py
 from modules.solvers.solver import Solver, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.solvers.Solver import Core, Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QrispQIRO.py
 
 
 class QIROSolver(Solver):
@@ -59,7 +61,12 @@ class QIROSolver(Solver):
         :raises NotImplemented: If the provided option is not implemented
         """
         if option == "qrisp_simulator":
+<<<<<<< HEAD:src/modules/solvers/qrisp_qiro.py
             from modules.devices.qrisp_simulator.qrisp_simulator import QrispSimulator  # pylint: disable=C0415
+=======
+            from modules.devices.qrisp_simulator.QrispSimulator import \
+                QrispSimulator  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QrispQIRO.py
             return QrispSimulator()  # pylint: disable=E1102
 
         else:

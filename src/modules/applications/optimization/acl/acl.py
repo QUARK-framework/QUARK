@@ -26,17 +26,23 @@
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 
-import os
 import logging
+import os
 from typing import TypedDict
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pulp
 
+<<<<<<< HEAD:src/modules/applications/optimization/acl/acl.py
 from modules.applications.application import Core
 from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Application import Core
+from modules.applications.optimization.Optimization import Optimization
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/ACL/ACL.py
 
 
 class ACL(Optimization):
@@ -84,10 +90,19 @@ class ACL(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "MIPsolverACL":
+<<<<<<< HEAD:src/modules/applications/optimization/acl/acl.py
             from modules.solvers.mip_solver_acl import MIPaclp  # pylint: disable=C0415
             return MIPaclp()
         elif option == "QUBO":
             from modules.applications.optimization.acl.mappings.qubo import Qubo  # pylint: disable=C0415
+=======
+            from modules.solvers.MIPsolverACL import \
+                MIPaclp  # pylint: disable=C0415
+            return MIPaclp()
+        elif option == "QUBO":
+            from modules.applications.optimization.ACL.mappings.QUBO import \
+                Qubo  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/ACL/ACL.py
             return Qubo()
         else:
             raise NotImplementedError(f"Submodule Option {option} not implemented")

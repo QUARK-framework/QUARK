@@ -12,19 +12,24 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import logging
+import inspect
 import json
+import logging
 import os
 import time
 from pathlib import Path
-import inspect
 
+import inquirer
 import yaml
 from packaging import version
-import inquirer
 
+<<<<<<< HEAD:src/installer.py
 from modules.core import Core
 from utils import _get_instance_with_sub_options, get_git_revision, checkbox
+=======
+from modules.Core import Core
+from utils import _get_instance_with_sub_options, checkbox, get_git_revision
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/Installer.py
 
 
 class Installer:
@@ -40,12 +45,23 @@ class Installer:
         self.python_version = "3.12.7"
         self.pip_version = "23.0"
         self.default_app_modules = [
+<<<<<<< HEAD:src/installer.py
             {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.pvc.pvc"},
             {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.sat.sat"},
             {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.tsp.tsp"},
             {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.acl.acl"},
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.mis.mis"},
             {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.scp.scp"},
+=======
+            {"name": "PVC", "class": "PVC", "module": "modules.applications.optimization.PVC.PVC"},
+            {"name": "SAT", "class": "SAT", "module": "modules.applications.optimization.SAT.SAT"},
+            {"name": "TSP", "class": "TSP", "module": "modules.applications.optimization.TSP.TSP"},
+            {"name": "ACL", "class": "ACL", "module": "modules.applications.optimization.ACL.ACL"},
+            {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
+            {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
+            {"name": "BP", "class": "BP", "module": "modules.applications.optimization.bp.bp"},
+            {"name": "SALBP", "class": "SALBP", "module": "modules.applications.optimization.salbp.salbp"},
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/Installer.py
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
              "module": "modules.applications.qml.generative_modeling.generative_modeling"}
         ]
@@ -96,26 +112,26 @@ class Installer:
             self.save_env(module_db, env_name)
 
         requirements = self.collect_requirements(module_db["modules"])
-        activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
-                                                         "which package manager?",
-                                         ["Conda", "PIP", "Print it here"])["requirements"]
+        # activate_requirements = checkbox("requirements", "Should we create an package file, if yes for "
+        #                                                  "which package manager?",
+        #                                  ["Conda", "PIP", "Print it here"])["requirements"]
 
-        if "Conda" in activate_requirements:
-            self.create_conda_file(requirements, env_name)
-        if "PIP" in activate_requirements:
-            self.create_req_file(requirements, env_name)
-        if "Print it here" in activate_requirements:
-            logging.info("Please install:")
-            for p, v in requirements.items():
-                logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
+        # if "Conda" in activate_requirements:
+        #     self.create_conda_file(requirements, env_name)
+        # if "PIP" in activate_requirements:
+        self.create_req_file(requirements, env_name)
+        # if "Print it here" in activate_requirements:
+        #     logging.info("Please install:")
+        #     for p, v in requirements.items():
+        #         logging.info(f"  -  {p}{': ' + v[0] if v else ''}")
 
-        activate_answer = inquirer.prompt([
-            inquirer.List("activate",
-                          message="Do you want to activate the QUARK module environment?",
-                          choices=["Yes", "No"])])["activate"]
+        # activate_answer = inquirer.prompt([
+        #     inquirer.List("activate",
+        #                   message="Do you want to activate the QUARK module environment?",
+        #                   choices=["Yes", "No"])])["activate"]
 
-        if activate_answer == "Yes":
-            self.set_active_env(env_name)
+        # if activate_answer == "Yes":
+        self.set_active_env(env_name)
 
     def check_for_configs(self) -> list:
         """

@@ -13,10 +13,10 @@
 #  limitations under the License.
 
 import itertools
-from typing import TypedDict
-import pickle
 import logging
 import os
+import pickle
+from typing import TypedDict
 
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -24,9 +24,15 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 import numpy as np
 
+<<<<<<< HEAD:src/modules/applications/optimization/pvc/pvc.py
 from modules.applications.application import Core
 from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Application import Core
+from modules.applications.optimization.Optimization import Optimization
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/PVC/PVC.py
 
 
 class PVC(Optimization):
@@ -84,6 +90,7 @@ class PVC(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "Ising":
+<<<<<<< HEAD:src/modules/applications/optimization/pvc/pvc.py
             from modules.applications.optimization.pvc.mappings.ising import Ising  # pylint: disable=C0415
             return Ising()
         elif option == "QUBO":
@@ -97,6 +104,26 @@ class PVC(Optimization):
             return ReverseGreedyClassicalPVC()
         elif option == "RandomPVC":
             from modules.solvers.random_classical_pvc import RandomPVC  # pylint: disable=C0415
+=======
+            from modules.applications.optimization.PVC.mappings.ISING import \
+                Ising  # pylint: disable=C0415
+            return Ising()
+        elif option == "QUBO":
+            from modules.applications.optimization.PVC.mappings.QUBO import \
+                QUBO  # pylint: disable=C0415
+            return QUBO()
+        elif option == "GreedyClassicalPVC":
+            from modules.solvers.GreedyClassicalPVC import \
+                GreedyClassicalPVC  # pylint: disable=C0415
+            return GreedyClassicalPVC()
+        elif option == "ReverseGreedyClassicalPVC":
+            from modules.solvers.ReverseGreedyClassicalPVC import \
+                ReverseGreedyClassicalPVC  # pylint: disable=C0415
+            return ReverseGreedyClassicalPVC()
+        elif option == "RandomPVC":
+            from modules.solvers.RandomClassicalPVC import \
+                RandomPVC  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/PVC/PVC.py
             return RandomPVC()
         else:
             raise NotImplementedError(f"Mapping Option {option} not implemented")

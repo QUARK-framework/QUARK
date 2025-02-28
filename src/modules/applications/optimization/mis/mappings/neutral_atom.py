@@ -17,8 +17,13 @@ from typing import TypedDict
 import networkx as nx
 import pulser
 
+<<<<<<< HEAD:src/modules/applications/optimization/mis/mappings/neutral_atom.py
 from modules.applications.mapping import Mapping, Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/MIS/mappings/NeutralAtom.py
 
 
 class NeutralAtom(Mapping):

@@ -12,18 +12,24 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
 from time import sleep
 from typing import TypedDict
-import logging
 
 import numpy as np
-from braket.circuits import Circuit
 from braket.aws import AwsDevice
+from braket.circuits import Circuit
 from scipy.optimize import minimize
 
+<<<<<<< HEAD:src/modules/solvers/qaoa.py
 from modules.solvers.solver import Solver
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QAOA.py
 
 
 class QAOA(Solver):

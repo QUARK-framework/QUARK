@@ -1,5 +1,10 @@
 import math
 import unittest
+<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/metrics/test_metrics_generalization.py
+=======
+
+import numpy as np
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/metrics/test_MetricsGeneralization.py
 
 import numpy as np
 

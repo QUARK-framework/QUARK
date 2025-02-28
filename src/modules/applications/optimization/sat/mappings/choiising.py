@@ -17,9 +17,15 @@ from typing import TypedDict
 import numpy as np
 from dimod import qubo_to_ising
 
+<<<<<<< HEAD:src/modules/applications/optimization/sat/mappings/choiising.py
 from modules.applications.mapping import Mapping, Core
 from modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.Mapping import Core, Mapping
+from modules.applications.optimization.SAT.mappings.ChoiQUBO import ChoiQUBO
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/mappings/ChoiISING.py
 
 
 class ChoiIsing(Mapping):

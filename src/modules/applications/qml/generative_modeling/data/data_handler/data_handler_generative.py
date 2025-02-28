@@ -12,16 +12,22 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import pickle
 import os
+import pickle
 from abc import ABC
-from qiskit import qpy
 
 import numpy as np
+from qiskit import qpy
 
+<<<<<<< HEAD:src/modules/applications/qml/generative_modeling/data/data_handler/data_handler_generative.py
 from modules.core import Core
 from modules.applications.qml.data_handler import DataHandler
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.qml.DataHandler import DataHandler
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/qml/generative_modeling/data/data_handler/DataHandlerGenerative.py
 
 
 class DataHandlerGenerative(Core, DataHandler, ABC):

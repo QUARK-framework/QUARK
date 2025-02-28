@@ -13,7 +13,12 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
+<<<<<<< HEAD:src/modules/applications/qml/circuit.py
 from modules.core import Core
+=======
+
+from modules.Core import Core
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/qml/Circuit.py
 
 
 class Circuit(Core, ABC):

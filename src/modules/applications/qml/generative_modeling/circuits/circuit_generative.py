@@ -13,10 +13,17 @@
 #  limitations under the License.
 
 from abc import ABC
+<<<<<<< HEAD:src/modules/applications/qml/generative_modeling/circuits/circuit_generative.py
 from modules.core import Core
 from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.qml.circuit import Circuit
+=======
+
+from modules.applications.qml.Circuit import Circuit
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/qml/generative_modeling/circuits/CircuitGenerative.py
 
 
 class CircuitGenerative(Circuit, Core, ABC):

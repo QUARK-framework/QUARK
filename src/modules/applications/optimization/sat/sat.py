@@ -17,12 +17,18 @@ from typing import TypedDict
 
 import nnf
 import numpy as np
-from nnf import Var, And, Or
+from nnf import And, Or, Var
 from nnf.dimacs import dump
 
+<<<<<<< HEAD:src/modules/applications/optimization/sat/sat.py
 from modules.core import Core
 from modules.applications.optimization.optimization import Optimization
 from utils import start_time_measurement, end_time_measurement
+=======
+from modules.applications.optimization.Optimization import Optimization
+from modules.Core import Core
+from utils import end_time_measurement, start_time_measurement
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/SAT.py
 
 
 class SAT(Optimization):
@@ -92,6 +98,7 @@ class SAT(Optimization):
                 QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         elif option == "Direct":
+<<<<<<< HEAD:src/modules/applications/optimization/sat/sat.py
             from modules.applications.optimization.sat.mappings.direct import Direct  # pylint: disable=C0415
             return Direct()
         elif option == "ChoiQUBO":
@@ -102,6 +109,22 @@ class SAT(Optimization):
             return ChoiIsing()
         elif option == "DinneenQUBO":
             from modules.applications.optimization.sat.mappings.dinneenqubo import DinneenQUBO  # pylint: disable=C0415
+=======
+            from modules.applications.optimization.SAT.mappings.Direct import \
+                Direct  # pylint: disable=C0415
+            return Direct()
+        elif option == "ChoiQUBO":
+            from modules.applications.optimization.SAT.mappings.ChoiQUBO import \
+                ChoiQUBO  # pylint: disable=C0415
+            return ChoiQUBO()
+        elif option == "ChoiIsing":
+            from modules.applications.optimization.SAT.mappings.ChoiISING import \
+                ChoiIsing  # pylint: disable=C0415
+            return ChoiIsing()
+        elif option == "DinneenQUBO":
+            from modules.applications.optimization.SAT.mappings.DinneenQUBO import \
+                DinneenQUBO  # pylint: disable=C0415
+>>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/SAT.py
             return DinneenQUBO()
         elif option == "DinneenIsing":
             from modules.applications.optimization.sat.mappings.dinneenising import \

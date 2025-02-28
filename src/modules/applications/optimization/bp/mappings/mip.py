@@ -127,14 +127,14 @@ class MIP(Mapping):
         # Add model constraints
         binpacking_mip.add_constraints((binpacking_mip.sum(object_to_bin_variables[o, i] for i in range(
             max_number_of_bins)) == 1 for o in range(num_of_objects)),
-                                       ["assignment_constraint_object_%d" % i for i in range(num_of_objects)])
+            ["assignment_constraint_object_%d" % i for i in range(num_of_objects)])
 
         logging.info("added constraints so that each object gets assigned to a bin")
 
         binpacking_mip.add_constraints((binpacking_mip.sum(object_weights[o] *
                                                            object_to_bin_variables[o, i] for o in range(
             num_of_objects)) <= bin_capacity * bin_variables[i] for i in range(max_number_of_bins)),
-                                       ["capacity_constraint_bin_%d" % i for i in range(max_number_of_bins)])
+            ["capacity_constraint_bin_%d" % i for i in range(max_number_of_bins)])
 
         # logging.info("added constraints so that the bin-capacity isn't violated")
 

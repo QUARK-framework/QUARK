@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-from QuantumModel import *
+from modules.applications.qml.classification.QuantumModel import *
 from sklearn.metrics import classification_report, confusion_matrix
 from torch.optim.lr_scheduler import StepLR
 

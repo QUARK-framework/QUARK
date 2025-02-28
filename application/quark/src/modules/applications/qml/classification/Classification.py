@@ -15,16 +15,10 @@
 from typing import Union
 
 from modules.applications.Application import *
-from modules.applications.QML.classification.data.data_handler.ImageData import (
+from modules.applications.qml.classification.data.data_handler.ImageData import (
     ImageData,
 )
-from modules.applications.QML.generative_modeling.data.data_handler.ContinuousData import (
-    ContinuousData,
-)
-from modules.applications.QML.generative_modeling.data.data_handler.DiscreteData import (
-    DiscreteData,
-)
-from modules.applications.QML.QML import QML
+from modules.applications.qml.QML import QML
 from utils import end_time_measurement, start_time_measurement
 
 

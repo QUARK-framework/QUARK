@@ -24,11 +24,11 @@ import pkg_resources
 import torch
 import torch.nn as nn
 import torchvision
-from modules.applications.QML.classification.data.data_handler.DataHandler import *
-from modules.applications.QML.classification.data.data_handler.MetricsClassification import (
+from modules.applications.qml.classification.data.data_handler.DataHandler import *
+from modules.applications.qml.classification.data.data_handler.MetricsClassification import (
     MetricsClassification,
 )
-from modules.training.Hybrid import Hybrid
+from modules.applications.qml.classification.training.Hybrid import Hybrid
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from torchvision import models, transforms
@@ -46,7 +46,7 @@ class ImageData(DataHandler):
     def __init__(self):
         """
         The continuous data class loads a dataset from the path
-        src/modules/applications/QML/classification/data
+        src/modules/applications/qml/classification/data
         """
         super().__init__("")
         self.submodule_options = ["Hybrid"]
@@ -56,7 +56,7 @@ class ImageData(DataHandler):
         self.gc = None
         self.n_qubits = None
         self.data_folder = pkg_resources.resource_filename(
-            "modules.applications.QML.classification.data", "Images_2D"
+            "modules.applications.qml.classification.data", "Images_2D"
         )
 
     @staticmethod

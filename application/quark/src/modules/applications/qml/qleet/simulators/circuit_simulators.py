@@ -12,8 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Implementation is based on the qLEET package https://github.com/QLemma/qleet
-
 """Module to draw samples from the circuit.
 Used for computing properties of the circuit like Entanglability and Expressibility.
 """

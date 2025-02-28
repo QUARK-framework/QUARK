@@ -12,6 +12,4 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Implementation is based on the qLEET package https://github.com/QLemma/qleet
-
 """Module containing qLEET simulators"""

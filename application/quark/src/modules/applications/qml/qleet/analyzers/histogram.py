@@ -12,8 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Implementation is based on the qLEET package https://github.com/QLemma/qleet
-
 """Module responsible to generating histogram plots of the parameter values.
 
 This modules is our alternative for TensorBoard histograms. It shows the 3D histograms for

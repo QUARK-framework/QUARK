@@ -12,8 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-#  Implementation is based on the qLEET package https://github.com/QLemma/qleet
-
 """This module houses the interfaces for analyzers, and provide a utility container AnalyzerList
 
 * MetaLogger is interface for those analyzers which need the state of the

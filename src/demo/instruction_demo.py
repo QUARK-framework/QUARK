@@ -1,14 +1,14 @@
+from modules.Core import Core
+from modules.applications.Application import Application
+from BenchmarkManager import Instruction
+from modules.applications.application import Application
+from modules.core import Core
+from benchmark_manager import Instruction
 import logging
 
-<<<<<<< HEAD
-from benchmark_manager import Instruction
-from modules.core import Core
-from modules.applications.application import Application
-=======
-from BenchmarkManager import Instruction
-from modules.applications.Application import Application
-from modules.Core import Core
->>>>>>> GreshmaShaji-binpacking_and_mipsolver
+<< << << < HEAD
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver
 
 
 class InstructionDemo(Application):

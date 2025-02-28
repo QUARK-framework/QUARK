@@ -1,13 +1,10 @@
-import unittest
-<<<<<<< HEAD:tests/modules/applications/optimization/sat/mappings/test_qubovertqubo.py
-=======
-
-from nnf import And, Or, Var
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/SAT/mappings/test_QubovertQUBO.py
-
-from nnf import And, Or, Var
-
 from modules.applications.optimization.sat.mappings.qubovertqubo import QubovertQUBO
+from nnf import And, Or, Var
+import unittest
+<< << << < HEAD: tests / modules / applications / optimization / sat / mappings / test_qubovertqubo.py
+== == == =
+
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / SAT / mappings / test_QubovertQUBO.py
 
 
 class TestQubovertQUBO(unittest.TestCase):

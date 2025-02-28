@@ -1,16 +1,12 @@
+from modules.applications.qml.generative_modeling.training.qcbm import QCBM
+import numpy as np
+import matplotlib.pyplot as plt
 import unittest
 from unittest.mock import MagicMock, patch
-<<<<<<< HEAD
-=======
+<< << << < HEAD
+== == == =
 
-import matplotlib.pyplot as plt
-import numpy as np
->>>>>>> GreshmaShaji-binpacking_and_mipsolver
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-from modules.applications.qml.generative_modeling.training.qcbm import QCBM
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver
 
 
 class TestQCBM(unittest.TestCase):

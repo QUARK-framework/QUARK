@@ -82,7 +82,9 @@ class MIS(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "QIRO":
-<<<<<<< HEAD:src/modules/applications/optimization/mis/mis.py
+
+
+<< << << < HEAD: src / modules / applications / optimization / mis / mis.py
             from modules.applications.optimization.mis.mappings.qiro import QIRO  # pylint: disable=C0415
             return QIRO()
         elif option == "NeutralAtom":

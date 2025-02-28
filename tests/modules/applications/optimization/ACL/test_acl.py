@@ -1,14 +1,14 @@
+from modules.applications.optimization.ACL.ACL import ACL
+import pandas as pd
+from modules.applications.optimization.acl.acl import ACL
 import os
 import unittest
 from tempfile import TemporaryDirectory
-<<<<<<< HEAD:tests/modules/applications/optimization/acl/test_acl.py
-from modules.applications.optimization.acl.acl import ACL
-=======
+<< << << < HEAD: tests / modules / applications / optimization / acl / test_acl.py
+== == == =
 
-import pandas as pd
 
-from modules.applications.optimization.ACL.ACL import ACL
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/ACL/test_ACL.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / ACL / test_ACL.py
 
 
 class TestACL(unittest.TestCase):

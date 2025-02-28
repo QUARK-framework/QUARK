@@ -12,6 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import _get_instance_with_sub_options, checkbox
+from modules.Core import Core
+from modules.applications import Application
+from modules.applications.application import Application
+from modules.core import Core
 import itertools
 import logging
 import re
@@ -23,14 +28,9 @@ import numpy as np
 import yaml
 from typing_extensions import NotRequired, Self, TypedDict
 
-<<<<<<< HEAD:src/config_manager.py
-from modules.core import Core
-from modules.applications.application import Application
-=======
-from modules.applications import Application
-from modules.Core import Core
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/ConfigManager.py
-from utils import _get_instance_with_sub_options, checkbox
+<< << << < HEAD: src / config_manager.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / ConfigManager.py
 
 
 class ConfigModule(TypedDict):  # pylint: disable=R0903

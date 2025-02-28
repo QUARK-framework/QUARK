@@ -1,15 +1,12 @@
+from modules.applications.optimization.pvc.mappings.qubo import QUBO
+from modules.applications.optimization.pvc.mappings.ising import Ising
+import numpy as np
 import pickle
 import unittest
-<<<<<<< HEAD:tests/modules/applications/optimization/pvc/mappings/test_ising.py
-=======
+<< << << < HEAD: tests / modules / applications / optimization / pvc / mappings / test_ising.py
+== == == =
 
-import numpy as np
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/PVC/mappings/test_ISING.py
-
-import numpy as np
-
-from modules.applications.optimization.pvc.mappings.ising import Ising
-from modules.applications.optimization.pvc.mappings.qubo import QUBO
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / PVC / mappings / test_ISING.py
 
 
 class TestIsing(unittest.TestCase):

@@ -12,6 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.solvers.Solver import Solver
+from modules.Core import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.core import Core
+from modules.solvers.solver import Solver
 import logging
 from typing import TypedDict
 
@@ -24,15 +30,9 @@ from qiskit_algorithms.minimum_eigensolvers import (QAOA, VQE,
 from qiskit_algorithms.optimizers import COBYLA, POWELL, SPSA
 from qiskit_optimization.applications import OptimizationApplication
 
-<<<<<<< HEAD:src/modules/solvers/qiskit_qaoa.py
-from modules.solvers.solver import Solver
-from modules.core import Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.Core import Core
-from modules.solvers.Solver import Solver
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QiskitQAOA.py
+<< << << < HEAD: src / modules / solvers / qiskit_qaoa.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / QiskitQAOA.py
 
 
 class QiskitQAOA(Solver):
@@ -70,12 +70,14 @@ class QiskitQAOA(Solver):
         :return: Instance of the default submodule
         """
         if option in ["qasm_simulator", "qasm_simulator_gpu"]:
-<<<<<<< HEAD:src/modules/solvers/qiskit_qaoa.py
+
+
+<< << << < HEAD: src / modules / solvers / qiskit_qaoa.py
             from modules.devices.helper_class import HelperClass  # pylint: disable=C0415
-=======
+== == == =
             from modules.devices.HelperClass import \
                 HelperClass  # pylint: disable=C0415
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/QiskitQAOA.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / QiskitQAOA.py
             return HelperClass(option)
         else:
             raise NotImplementedError(f"Device Option {option} not implemented")

@@ -1,15 +1,11 @@
-import unittest
-<<<<<<< HEAD:tests/modules/applications/optimization/sat/mappings/test_dinneenising.py
-=======
-
-import numpy as np
-from nnf import And, Or, Var
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/SAT/mappings/test_DinneenISING.py
-
-import numpy as np
-from nnf import And, Or, Var
-
 from modules.applications.optimization.sat.mappings.dinneenising import DinneenIsing
+from nnf import And, Or, Var
+import numpy as np
+import unittest
+<< << << < HEAD: tests / modules / applications / optimization / sat / mappings / test_dinneenising.py
+== == == =
+
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / SAT / mappings / test_DinneenISING.py
 
 
 class TestDinneenIsing(unittest.TestCase):

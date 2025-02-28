@@ -1,14 +1,11 @@
+from modules.applications.qml.generative_modeling.metrics.metrics_generalization import MetricsGeneralization
+import numpy as np
 import math
 import unittest
-<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/metrics/test_metrics_generalization.py
-=======
+<< << << < HEAD: tests / modules / applications / qml / generative_modeling / metrics / test_metrics_generalization.py
+== == == =
 
-import numpy as np
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/metrics/test_MetricsGeneralization.py
-
-import numpy as np
-
-from modules.applications.qml.generative_modeling.metrics.metrics_generalization import MetricsGeneralization
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / qml / generative_modeling / metrics / test_MetricsGeneralization.py
 
 
 class TestMetricsGeneralization(unittest.TestCase):

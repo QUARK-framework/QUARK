@@ -12,6 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils_mpi import get_comm
+from utils import get_git_revision
+from Plotter import Plotter
+from modules.Core import Core
+from ConfigManager import ConfigManager
+from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
+from modules.core import Core
+from plotter import Plotter
+from benchmark_record import BenchmarkRecord, BenchmarkRecordStored
+from config_manager import ConfigManager
 import glob
 import json
 import logging
@@ -25,19 +35,9 @@ from typing import Optional
 
 import numpy as np
 
-<<<<<<< HEAD:src/benchmark_manager.py
-from config_manager import ConfigManager
-from benchmark_record import BenchmarkRecord, BenchmarkRecordStored
-from plotter import Plotter
-from modules.core import Core
-=======
-from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
-from ConfigManager import ConfigManager
-from modules.Core import Core
-from Plotter import Plotter
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/BenchmarkManager.py
-from utils import get_git_revision
-from utils_mpi import get_comm
+<< << << < HEAD: src / benchmark_manager.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / BenchmarkManager.py
 
 comm = get_comm()
 

@@ -12,18 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.Core import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.core import Core
 from abc import ABC, abstractmethod
 from itertools import product
 
 import numpy as np
 
-<<<<<<< HEAD:src/modules/applications/qml/generative_modeling/transformations/transformation.py
-from modules.core import Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.Core import Core
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/qml/generative_modeling/transformations/Transformation.py
+<< << << < HEAD: src / modules / applications / qml / generative_modeling / transformations / transformation.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / qml / generative_modeling / transformations / Transformation.py
 
 
 class Transformation(Core, ABC):

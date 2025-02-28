@@ -12,6 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.solvers.Solver import Solver
+from modules.Core import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.core import Core
+from modules.solvers.solver import Solver
 import ast
 import inspect
 import json
@@ -28,15 +34,9 @@ import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml
 
-<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
-from modules.solvers.solver import Solver
-from modules.core import Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.Core import Core
-from modules.solvers.Solver import Solver
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
+<< << << < HEAD: src / modules / solvers / pennylane_qaoa.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / PennylaneQAOA.py
 
 matplotlib.use('Agg')
 
@@ -88,12 +88,14 @@ class PennylaneQAOA(Solver):
         """
 
         if option == "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony":
-<<<<<<< HEAD:src/modules/solvers/pennylane_qaoa.py
+
+
+<< << << < HEAD: src / modules / solvers / pennylane_qaoa.py
             from modules.devices.braket.ionq import Ionq  # pylint: disable=C0415
-=======
+== == == =
             from modules.devices.braket.Ionq import \
                 Ionq  # pylint: disable=C0415
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/PennylaneQAOA.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / PennylaneQAOA.py
             return Ionq("ionq", "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony")
         elif option == "arn:aws:braket:::device/quantum-simulator/amazon/sv1":
             from modules.devices.braket.sv1 import SV1  # pylint: disable=C0415

@@ -142,12 +142,14 @@ class DinneenIsing(Mapping):
             from modules.solvers.qaoa import QAOA  # pylint: disable=C0415
             return QAOA()
         if option == "PennylaneQAOA":
-<<<<<<< HEAD:src/modules/applications/optimization/sat/mappings/dinneenising.py
+
+
+<< << << < HEAD: src / modules / applications / optimization / sat / mappings / dinneenising.py
             from modules.solvers.pennylane_qaoa import PennylaneQAOA  # pylint: disable=C0415
-=======
+== == == =
             from modules.solvers.PennylaneQAOA import \
                 PennylaneQAOA  # pylint: disable=C0415
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/mappings/DinneenISING.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / SAT / mappings / DinneenISING.py
             return PennylaneQAOA()
         else:
             raise NotImplementedError(f"Solver Option {option} not implemented")

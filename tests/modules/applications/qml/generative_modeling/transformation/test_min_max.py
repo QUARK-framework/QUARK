@@ -1,17 +1,14 @@
+from modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
+from modules.applications.qml.generative_modeling.circuits.circuit_standard import CircuitStandard
+from modules.applications.qml.generative_modeling.transformations.min_max import MinMax
+from modules.applications.qml.generative_modeling.transformations.transformation import Transformation
+import numpy as np
 import unittest
 from unittest.mock import MagicMock, patch
-<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/transformation/test_min_max.py
-=======
+<< << << < HEAD: tests / modules / applications / qml / generative_modeling / transformation / test_min_max.py
+== == == =
 
-import numpy as np
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/transformation/test_MinMax.py
-
-import numpy as np
-
-from modules.applications.qml.generative_modeling.transformations.transformation import Transformation
-from modules.applications.qml.generative_modeling.transformations.min_max import MinMax
-from modules.applications.qml.generative_modeling.circuits.circuit_standard import CircuitStandard
-from modules.applications.qml.generative_modeling.circuits.circuit_cardinality import CircuitCardinality
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / qml / generative_modeling / transformation / test_MinMax.py
 
 
 class TestMinMax(unittest.TestCase):

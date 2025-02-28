@@ -12,13 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from abc import ABC, abstractmethod
-<<<<<<< HEAD:src/modules/applications/application.py
-from modules.core import Core
-=======
-
 from modules.Core import Core
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/Application.py
+from modules.core import Core
+from abc import ABC, abstractmethod
+<< << << < HEAD: src / modules / applications / application.py
+== == == =
+
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / Application.py
 
 
 class Application(Core, ABC):

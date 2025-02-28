@@ -12,6 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.mapping import Mapping, Core
 import logging
 import re
 from typing import TypedDict
@@ -22,13 +26,9 @@ from qiskit_optimization.converters import (InequalityToEquality,
                                             IntegerToBinary,
                                             LinearEqualityToPenalty)
 
-<<<<<<< HEAD:src/modules/applications/optimization/acl/mappings/qubo.py
-from modules.applications.mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.Mapping import Core, Mapping
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/ACL/mappings/QUBO.py
+<< << << < HEAD: src / modules / applications / optimization / acl / mappings / qubo.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / ACL / mappings / QUBO.py
 
 # TODO Large chunks of this code is duplicated in ACL.mappings.ISING -> unify
 

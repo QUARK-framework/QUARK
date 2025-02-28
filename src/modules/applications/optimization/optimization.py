@@ -11,16 +11,16 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.Application import Application
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.application import Application
 import logging
 from abc import ABC, abstractmethod
 
-<<<<<<< HEAD:src/modules/applications/optimization/optimization.py
-from modules.applications.application import Application
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.Application import Application
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/Optimization.py
+<< << << < HEAD: src / modules / applications / optimization / optimization.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / Optimization.py
 
 
 class Optimization(Application, ABC):

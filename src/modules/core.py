@@ -12,6 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from Metrics import Metrics
+from metrics import Metrics
+from utils import _get_instance_with_sub_options
 from __future__ import \
     annotations  # Needed if you want to type hint a method with the type of the enclosing class
 
@@ -20,13 +23,9 @@ import sys
 from abc import ABC, abstractmethod
 from typing import final
 
-<<<<<<< HEAD:src/modules/core.py
-from utils import _get_instance_with_sub_options
-from metrics import Metrics
-=======
-from Metrics import Metrics
-from utils import _get_instance_with_sub_options
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/Core.py
+<< << << < HEAD: src / modules / core.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / Core.py
 
 
 class Core(ABC):

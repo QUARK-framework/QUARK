@@ -12,6 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.optimization.TSP.mappings.QUBO import QUBO
+from modules.applications.Mapping import Core, Mapping
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.optimization.tsp.mappings.qubo import QUBO
+from modules.applications.mapping import Mapping, Core
+from qiskit_optimization.converters import QuadraticProgramToQubo
+from qiskit_optimization.applications import Tsp
 import logging
 import re
 from typing import TypedDict
@@ -20,22 +28,14 @@ import networkx as nx
 import numpy as np
 from dimod import qubo_to_ising
 from more_itertools import locate
-<<<<<<< HEAD
-=======
+<< << << < HEAD
+== == == =
 
->>>>>>> b0f59db31eecccbd83b1de2508c3f0b2db5290c5
-from qiskit_optimization.applications import Tsp
-from qiskit_optimization.converters import QuadraticProgramToQubo
+>>>>>> > b0f59db31eecccbd83b1de2508c3f0b2db5290c5
 
-<<<<<<< HEAD:src/modules/applications/optimization/tsp/mappings/ising.py
-from modules.applications.mapping import Mapping, Core
-from modules.applications.optimization.tsp.mappings.qubo import QUBO
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.Mapping import Core, Mapping
-from modules.applications.optimization.TSP.mappings.QUBO import QUBO
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/TSP/mappings/ISING.py
+<< << << < HEAD: src / modules / applications / optimization / tsp / mappings / ising.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / TSP / mappings / ISING.py
 
 
 class Ising(Mapping):

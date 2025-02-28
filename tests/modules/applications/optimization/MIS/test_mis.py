@@ -1,14 +1,14 @@
+from modules.applications.optimization.MIS.MIS import MIS
+from modules.applications.optimization.mis.mis import MIS
 import os
 import unittest
 from tempfile import TemporaryDirectory
 
 import networkx as nx
 
-<<<<<<< HEAD:tests/modules/applications/optimization/mis/test_mis.py
-from modules.applications.optimization.mis.mis import MIS
-=======
-from modules.applications.optimization.MIS.MIS import MIS
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/MIS/test_MIS.py
+<< << << < HEAD: tests / modules / applications / optimization / mis / test_mis.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / MIS / test_MIS.py
 
 
 class TestMIS(unittest.TestCase):
@@ -51,20 +51,22 @@ class TestMIS(unittest.TestCase):
         self.assertGreaterEqual(processing_time, 0, "Processing time should be positive.")
 
     def test_validate(self):
-<<<<<<< HEAD:tests/modules/applications/optimization/mis/test_mis.py
+
+
+<< << << < HEAD: tests / modules / applications / optimization / mis / test_mis.py
         generated_graph = self.mis_instance.generate_problem(self.config)
         self.assertIsInstance(generated_graph, nx.Graph)
-=======
-<<<<<<< HEAD
+== == == =
+<< << << < HEAD
         logging.disable(logging.WARNING)
         self.mis_instance.graph = nx.Graph()
         self.mis_instance.graph.add_nodes_from([0, 1, 2])
         self.mis_instance.graph.add_edges_from([(0, 1), (1, 2)])
-=======
+== == == =
         generated_graph = self.mis_instance.generate_problem(self.config)
         self.assertIsInstance(generated_graph, nx.Graph)
->>>>>>> b0f59db31eecccbd83b1de2508c3f0b2db5290c5
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/MIS/test_MIS.py
+>>>>>> > b0f59db31eecccbd83b1de2508c3f0b2db5290c5
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / MIS / test_MIS.py
 
         # Valid solution (independent set)
         valid_solution = []

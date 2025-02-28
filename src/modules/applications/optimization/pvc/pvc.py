@@ -12,6 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.optimization.Optimization import Optimization
+from modules.applications.Application import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.optimization.optimization import Optimization
+from modules.applications.application import Core
 import itertools
 import logging
 import os
@@ -24,15 +30,9 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 import numpy as np
 
-<<<<<<< HEAD:src/modules/applications/optimization/pvc/pvc.py
-from modules.applications.application import Core
-from modules.applications.optimization.optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.Application import Core
-from modules.applications.optimization.Optimization import Optimization
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/PVC/PVC.py
+<< << << < HEAD: src / modules / applications / optimization / pvc / pvc.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / PVC / PVC.py
 
 
 class PVC(Optimization):
@@ -90,7 +90,9 @@ class PVC(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "Ising":
-<<<<<<< HEAD:src/modules/applications/optimization/pvc/pvc.py
+
+
+<< << << < HEAD: src / modules / applications / optimization / pvc / pvc.py
             from modules.applications.optimization.pvc.mappings.ising import Ising  # pylint: disable=C0415
             return Ising()
         elif option == "QUBO":

@@ -26,6 +26,12 @@
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.optimization.Optimization import Optimization
+from modules.applications.Application import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.optimization.optimization import Optimization
+from modules.applications.application import Core
 import logging
 import os
 from typing import TypedDict
@@ -34,15 +40,9 @@ import numpy as np
 import pandas as pd
 import pulp
 
-<<<<<<< HEAD:src/modules/applications/optimization/acl/acl.py
-from modules.applications.application import Core
-from modules.applications.optimization.optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.Application import Core
-from modules.applications.optimization.Optimization import Optimization
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/ACL/ACL.py
+<< << << < HEAD: src / modules / applications / optimization / acl / acl.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / ACL / ACL.py
 
 
 class ACL(Optimization):
@@ -90,7 +90,9 @@ class ACL(Optimization):
         :raises NotImplementedError: If the option is not recognized
         """
         if option == "MIPsolverACL":
-<<<<<<< HEAD:src/modules/applications/optimization/acl/acl.py
+
+
+<< << << < HEAD: src / modules / applications / optimization / acl / acl.py
             from modules.solvers.mip_solver_acl import MIPaclp  # pylint: disable=C0415
             return MIPaclp()
         elif option == "QUBO":

@@ -1,14 +1,14 @@
+from modules.applications.optimization.SAT.SAT import SAT
+import nnf
+from modules.applications.optimization.sat.sat import SAT
 import os
 import unittest
 from tempfile import TemporaryDirectory
 
-<<<<<<< HEAD:tests/modules/applications/optimization/sat/test_sat.py
-from modules.applications.optimization.sat.sat import SAT
-=======
-import nnf
+<< << << < HEAD: tests / modules / applications / optimization / sat / test_sat.py
+== == == =
 
-from modules.applications.optimization.SAT.SAT import SAT
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/SAT/test_SAT.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / SAT / test_SAT.py
 
 
 class TestSAT(unittest.TestCase):

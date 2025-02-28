@@ -12,6 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.Core import Core
+from modules.applications.optimization.Optimization import Optimization
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.optimization.optimization import Optimization
+from modules.core import Core
 import logging
 from typing import TypedDict
 
@@ -20,15 +26,9 @@ import numpy as np
 from nnf import And, Or, Var
 from nnf.dimacs import dump
 
-<<<<<<< HEAD:src/modules/applications/optimization/sat/sat.py
-from modules.core import Core
-from modules.applications.optimization.optimization import Optimization
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.applications.optimization.Optimization import Optimization
-from modules.Core import Core
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SAT/SAT.py
+<< << << < HEAD: src / modules / applications / optimization / sat / sat.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / SAT / SAT.py
 
 
 class SAT(Optimization):
@@ -98,7 +98,9 @@ class SAT(Optimization):
                 QubovertQUBO  # pylint: disable=C0415
             return QubovertQUBO()
         elif option == "Direct":
-<<<<<<< HEAD:src/modules/applications/optimization/sat/sat.py
+
+
+<< << << < HEAD: src / modules / applications / optimization / sat / sat.py
             from modules.applications.optimization.sat.mappings.direct import Direct  # pylint: disable=C0415
             return Direct()
         elif option == "ChoiQUBO":

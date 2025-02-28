@@ -12,21 +12,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.solvers.Solver import Solver
+from modules.Core import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.core import Core
+from modules.solvers.solver import Solver
 import logging
 from typing import TypedDict
 
 import numpy as np
 from pysat.formula import WCNF
 
-<<<<<<< HEAD:src/modules/solvers/random_classical_sat.py
-from modules.solvers.solver import Solver
-from modules.core import Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.Core import Core
-from modules.solvers.Solver import Solver
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/RandomClassicalSAT.py
+<< << << < HEAD: src / modules / solvers / random_classical_sat.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / RandomClassicalSAT.py
 
 
 class RandomSAT(Solver):

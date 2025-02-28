@@ -1,15 +1,11 @@
-import unittest
-<<<<<<< HEAD:tests/modules/applications/optimization/sat/mappings/test_choiIsing.py
-=======
-
-import numpy as np
-from nnf import And, Or, Var
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/SAT/mappings/test_ChoiISING.py
-
-import numpy as np
-from nnf import And, Or, Var
-
 from modules.applications.optimization.sat.mappings.choiising import ChoiIsing
+from nnf import And, Or, Var
+import numpy as np
+import unittest
+<< << << < HEAD: tests / modules / applications / optimization / sat / mappings / test_choiIsing.py
+== == == =
+
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / SAT / mappings / test_ChoiISING.py
 
 
 class TestChoiIsing(unittest.TestCase):

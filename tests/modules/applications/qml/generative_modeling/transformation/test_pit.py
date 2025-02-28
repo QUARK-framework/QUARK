@@ -1,17 +1,17 @@
+from modules.applications.qml.generative_modeling.transformations.PIT import \
+    PIT
+from modules.applications.qml.generative_modeling.circuits.CircuitCopula import \
+    CircuitCopula
+from modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
+from modules.applications.qml.generative_modeling.transformations.pit import PIT
 import unittest
 
 import numpy as np
 from unittest.mock import MagicMock
 
-<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/transformation/test_pit.py
-from modules.applications.qml.generative_modeling.transformations.pit import PIT
-from modules.applications.qml.generative_modeling.circuits.circuit_copula import CircuitCopula
-=======
-from modules.applications.qml.generative_modeling.circuits.CircuitCopula import \
-    CircuitCopula
-from modules.applications.qml.generative_modeling.transformations.PIT import \
-    PIT
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/transformation/test_PIT.py
+<< << << < HEAD: tests / modules / applications / qml / generative_modeling / transformation / test_pit.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / qml / generative_modeling / transformation / test_PIT.py
 
 
 class TestPIT(unittest.TestCase):

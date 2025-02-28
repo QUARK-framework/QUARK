@@ -13,32 +13,32 @@
 #    limitations under the License.
 #
 
+from quark2_adapter.legacy_classes.Device import Device as Device_OLD
+from quark2_adapter.legacy_classes.Solver import Solver as Solver_OLD
+from quark2_adapter.legacy_classes.Mapping import Mapping as Mapping_OLD
+from quark2_adapter.legacy_classes.Application import Application as Application_OLD
+from modules.solvers.Solver import Solver as Solver_NEW
+from modules.devices.Device import Device as Device_NEW
+from modules.Core import Core
+from modules.applications.Mapping import Mapping as Mapping_NEW
+from modules.applications.Application import Application as Application_NEW
+from quark2_adapter.legacy_classes.device import Device as Device_OLD
+from quark2_adapter.legacy_classes.solver import Solver as Solver_OLD
+from quark2_adapter.legacy_classes.mapping import Mapping as Mapping_OLD
+from quark2_adapter.legacy_classes.application import Application as Application_OLD
+from modules.devices.device import Device as Device_NEW
+from modules.solvers.solver import Solver as Solver_NEW
+from modules.applications.mapping import Mapping as Mapping_NEW
+from modules.applications.application import Application as Application_NEW
+from modules.core import Core
 import json
 import logging
 from abc import ABC
 from time import time
 
-<<<<<<< HEAD
-from modules.core import Core
-from modules.applications.application import Application as Application_NEW
-from modules.applications.mapping import Mapping as Mapping_NEW
-from modules.solvers.solver import Solver as Solver_NEW
-from modules.devices.device import Device as Device_NEW
-from quark2_adapter.legacy_classes.application import Application as Application_OLD
-from quark2_adapter.legacy_classes.mapping import Mapping as Mapping_OLD
-from quark2_adapter.legacy_classes.solver import Solver as Solver_OLD
-from quark2_adapter.legacy_classes.device import Device as Device_OLD
-=======
-from modules.applications.Application import Application as Application_NEW
-from modules.applications.Mapping import Mapping as Mapping_NEW
-from modules.Core import Core
-from modules.devices.Device import Device as Device_NEW
-from modules.solvers.Solver import Solver as Solver_NEW
-from quark2_adapter.legacy_classes.Application import Application as Application_OLD
-from quark2_adapter.legacy_classes.Mapping import Mapping as Mapping_OLD
-from quark2_adapter.legacy_classes.Solver import Solver as Solver_OLD
-from quark2_adapter.legacy_classes.Device import Device as Device_OLD
->>>>>>> GreshmaShaji-binpacking_and_mipsolver
+<< << << < HEAD
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver
 
 WARNING_MSG = 'Class "%s" is inheriting from deprecated base class. Please refactor your class.'
 

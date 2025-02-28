@@ -12,18 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.applications.Mapping import Core, Mapping
+from utils import start_time_measurement, end_time_measurement
+from modules.applications.mapping import Mapping, Core
 import logging
 from typing import TypedDict
 
 from qubovert.problems import SetCover
-<<<<<<< HEAD:src/modules/applications/optimization/scp/mappings/qubovertqubo.py
-from modules.applications.mapping import Mapping, Core
-from utils import start_time_measurement, end_time_measurement
-=======
+<< << << < HEAD: src / modules / applications / optimization / scp / mappings / qubovertqubo.py
+== == == =
 
-from modules.applications.Mapping import Core, Mapping
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/applications/optimization/SCP/mappings/qubovertQUBO.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / applications / optimization / SCP / mappings / qubovertQUBO.py
 
 
 class QubovertQUBO(Mapping):

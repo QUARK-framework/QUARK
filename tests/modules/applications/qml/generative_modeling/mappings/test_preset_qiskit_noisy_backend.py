@@ -1,3 +1,7 @@
+from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
+from modules.applications.qml.generative_modeling.training.Inference import Inference
+from modules.applications.qml.generative_modeling.training.QCBM import QCBM
+from modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend import PresetQiskitNoisyBackend
 import pickle
 import unittest
 from unittest.mock import MagicMock, patch
@@ -6,13 +10,9 @@ import numpy as np
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 
-<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/mappings/test_preset_qiskit_noisy_backend.py
-from modules.applications.qml.generative_modeling.mappings.preset_qiskit_noisy_backend import PresetQiskitNoisyBackend
-=======
-from modules.applications.qml.generative_modeling.training.QCBM import QCBM
-from modules.applications.qml.generative_modeling.training.Inference import Inference
-from modules.applications.qml.generative_modeling.mappings.PresetQiskitNoisyBackend import PresetQiskitNoisyBackend
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/mappings/test_PresetQiskitNoisyBackend.py
+<< << << < HEAD: tests / modules / applications / qml / generative_modeling / mappings / test_preset_qiskit_noisy_backend.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / qml / generative_modeling / mappings / test_PresetQiskitNoisyBackend.py
 
 
 class TestPresetQiskitNoisyBackend(unittest.TestCase):
@@ -38,11 +38,13 @@ class TestPresetQiskitNoisyBackend(unittest.TestCase):
         self.assertEqual(requirements, expected_requirements)
 
     def test_get_default_submodule(self):
-<<<<<<< HEAD:tests/modules/applications/qml/generative_modeling/mappings/test_preset_qiskit_noisy_backend.py
+
+
+<< << << < HEAD: tests / modules / applications / qml / generative_modeling / mappings / test_preset_qiskit_noisy_backend.py
         from modules.applications.qml.generative_modeling.training.qcbm import QCBM
         from modules.applications.qml.generative_modeling.training.inference import Inference
-=======
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/qml/generative_modeling/mappings/test_PresetQiskitNoisyBackend.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / qml / generative_modeling / mappings / test_PresetQiskitNoisyBackend.py
 
         submodule = self.backend_instance.get_default_submodule("QCBM")
         self.assertIsInstance(submodule, QCBM)

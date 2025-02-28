@@ -12,18 +12,18 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import end_time_measurement, start_time_measurement
+from modules.solvers.Solver import Solver
+from modules.Core import Core
+from utils import start_time_measurement, end_time_measurement
+from modules.core import Core
+from modules.solvers.solver import Solver
 import logging
 from typing import TypedDict
 
-<<<<<<< HEAD:src/modules/solvers/annealer.py
-from modules.solvers.solver import Solver
-from modules.core import Core
-from utils import start_time_measurement, end_time_measurement
-=======
-from modules.Core import Core
-from modules.solvers.Solver import Solver
-from utils import end_time_measurement, start_time_measurement
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/Annealer.py
+<< << << < HEAD: src / modules / solvers / annealer.py
+== == == =
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / Annealer.py
 
 
 class Annealer(Solver):
@@ -46,12 +46,14 @@ class Annealer(Solver):
         :return: Instance of the default submodule
         """
         if option == "Simulated Annealer":
-<<<<<<< HEAD:src/modules/solvers/annealer.py
+
+
+<< << << < HEAD: src / modules / solvers / annealer.py
             from modules.devices.simulated_annealing_sampler import SimulatedAnnealingSampler  # pylint: disable=C0415
-=======
+== == == =
             from modules.devices.SimulatedAnnealingSampler import \
                 SimulatedAnnealingSampler  # pylint: disable=C0415
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:src/modules/solvers/Annealer.py
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: src / modules / solvers / Annealer.py
             return SimulatedAnnealingSampler()
         else:
             raise NotImplementedError(f"Device Option {option}  not implemented")

@@ -1,13 +1,10 @@
-import unittest
-<<<<<<< HEAD:tests/modules/applications/optimization/sat/mappings/test_choiqubo.py
-=======
-
-from nnf import And, Or, Var
->>>>>>> GreshmaShaji-binpacking_and_mipsolver:tests/modules/applications/optimization/SAT/mappings/test_ChoiQUBO.py
-
-from nnf import And, Or, Var
-
 from modules.applications.optimization.sat.mappings.choiqubo import ChoiQUBO
+from nnf import And, Or, Var
+import unittest
+<< << << < HEAD: tests / modules / applications / optimization / sat / mappings / test_choiqubo.py
+== == == =
+
+>>>>>> > GreshmaShaji - binpacking_and_mipsolver: tests / modules / applications / optimization / SAT / mappings / test_ChoiQUBO.py
 
 
 class TestChoiQUBO(unittest.TestCase):

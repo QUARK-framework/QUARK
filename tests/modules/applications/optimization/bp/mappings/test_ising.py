@@ -19,7 +19,7 @@ class TestIsing(unittest.TestCase):
 
     def test_get_requirements(self):
         requirements = self.ising_instance.get_requirements()
-        expected_requirements = [{"name": "numpy", "version": "1.26.4"}]
+        expected_requirements = [{"name": "numpy", "version": "1.26.4"}, {"name": "docplex", "version": "2.25.236"}]
         self.assertEqual(requirements, expected_requirements)
 
     def test_get_parameter_options(self):
@@ -39,11 +39,11 @@ class TestIsing(unittest.TestCase):
                 result, _ = self.ising_instance.map(problem, config)
 
         self.assertIn("J", result)
-        self.assertIn("h", result)
+        self.assertIn("t", result)
         self.assertIn("c", result)
         self.assertIn("QUBO", result)
         self.assertIsInstance(result["J"], np.ndarray)
-        self.assertIsInstance(result["h"], np.ndarray)
+        self.assertIsInstance(result["t"], np.ndarray)
         self.assertIsInstance(result["c"], (float, int))
 
     def test_reverse_map(self):

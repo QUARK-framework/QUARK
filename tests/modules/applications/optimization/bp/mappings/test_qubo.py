@@ -14,8 +14,8 @@ class TestQUBO(unittest.TestCase):
 
     def test_get_requirements(self):
         requirements = self.qubo_instance.get_requirements()
-        self.assertIsInstance(requirements, list, "Expected requirements to be a list.")
-        self.assertEqual(len(requirements), 0, "Expected requirements list to be empty.")
+        expected_requirements = [{"name": "numpy", "version": "1.26.4"}, {"name": "docplex", "version": "2.25.236"}]
+        self.assertEqual(requirements, expected_requirements)
 
     def test_get_parameter_options(self):
         params = self.qubo_instance.get_parameter_options()

@@ -59,7 +59,7 @@ from modules.applications.qml.MetricsQuantum import MetricsQuantum
 MPI = is_running_mpi()
 comm = get_comm()
 
-class Hybrid(Training):
+class Hybrid(Core, Training, ABC):
 
     def __init__(self):
         """
@@ -71,7 +71,7 @@ class Hybrid(Training):
         self.target: np.array
         self.study_generalization: bool
         self.generalization_metrics: dict
-        self.submodule_options = ["Hybrid"] 
+        self.sub_options = ["Hybrid"] 
         self.writer: SummaryWriter
         self.loss_func: callable
         self.fig: figure

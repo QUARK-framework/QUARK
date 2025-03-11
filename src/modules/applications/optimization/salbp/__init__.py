@@ -1,1 +1,1 @@
-"""Module for SALBP1"""
+"""Module for SALBP-1"""

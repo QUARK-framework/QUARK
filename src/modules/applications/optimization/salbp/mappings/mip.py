@@ -217,8 +217,7 @@ class MIP(Mapping):
         salbp_mip: Model, max_num_stations: int, station_vars: list[Var]
     ) -> None:
         """
-        Add constraints to ensure that stations are used in consecutive order.
-        -> avoids empty stations in between
+        Add constraints to ensure that stations are used in consecutive order. This avoids empty stations in between.
 
         :param salbp_mip: MIP model for the SALBP-1 instance
         :param max_num_stations: Maximum number of stations needed

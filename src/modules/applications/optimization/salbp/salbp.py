@@ -49,12 +49,12 @@ TaskAssignment = dict[StationId, list[Task]]
 @dataclass
 class SALBPInstance:
     """
-    An instance of a Simple Assembly Line Balancing Problem Version (SALBP).
+    An instance of the Simple Assembly Line Balancing Problem, version 1 (SALBP-1).
 
     Attributes:
-        cycle_time: time that is available for a station
-        tasks: tasks in this problem
-        preceding_tasks: known tasks' precedence relations
+        cycle_time: Time that is available for a station
+        tasks: Tasks in this problem
+        preceding_tasks: Known tasks' precedence relations
     """
 
     cycle_time: int
@@ -84,13 +84,13 @@ class SALBPInstance:
 def salbp_factory(
         tasks: list[Task], precedence_relations: list[tuple[Task, Task]], cycle_time: int) -> SALBPInstance:
     """
-    Create an SALBP instance given a list of tasks and their precedence relations.
+    Create an SALBP-1 instance given a list of tasks and their precedence relations.
     Do validity checking on the input data and raise a ValueError if the data is invalid.
 
     :param tasks: The tasks to be assigned to stations
     :param precedence_relations: The tasks' precedence relations
     :param cycle_time: The cycle time of a station (the same for every station)
-    :return: An instance of the simple assembly line balancing problem
+    :return: An instance of the SALBP-1
     """
     if len(tasks) == 0:
         raise ValueError("No tasks registered! Trivial instance (no stations needed).")
@@ -143,7 +143,7 @@ def has_unique_assignment_for_every_task(
     """
     Return if each task is assigned to exactly one station.
 
-    :param tasks: Set of all tasks in the SALBP instance
+    :param tasks: Set of all tasks in the SALBP-1 instance
     :param task_assignment: The assignment of tasks to stations
     :return: True if all tasks are uniquely assigned, False otherwise
     """
@@ -335,12 +335,13 @@ def create_salbp_from_file(file_path: Path) -> SALBPInstance:
 # --- QUARK OPTIMIZATION APPLICATION ---
 class SALBP(Optimization):
     """
-    The Simple Assembly Line Balancing Problem (SALBP) is a special BinPacking problem with precedence relations among
+    The Simple Assembly Line Balancing Problem (SALBP) is a special bin packing problem with precedence relations among
     the items. Given a set of tasks, each with a processing time, precedence relations among those tasks, and a cycle
     time, this problem's goal is to assign every task to a station s.t. the total number of stations is minimized while
-    the cycle time per station and the task precedences are respected.
+    the cycle time per station and the task precedences are respected. This version of the SALBP is commonly referred to
+    as version 1 (SALBP-1) in the literature.
 
-    SALBP finds applications in manufacturing, logistics, and industrial automation, where optimizing assembly line
+    The SALBP-1 finds applications in manufacturing, logistics, and industrial automation, where optimizing assembly line
     operations can significantly enhance efficiency and cost-effectiveness. By balancing workloads across stations,
     industries can minimize idle time, reduce bottlenecks, and improve overall productivity.
 
@@ -390,6 +391,21 @@ class SALBP(Optimization):
         Return the configurable settings for this application.
 
         :return: Dictionary containing parameter options
+        .. code-block:: python
+
+            return {
+                "instance": {
+                    "values": list(
+                        [
+                            "example_instance_n=3.alb",
+                            "example_instance_n=5.alb",
+                            "example_instance_n=10.alb",
+                            "example_instance_n=20.alb",
+                        ]
+                    ),
+                    "description": "Which SALBP-1 instance do you want to solve?",
+                },
+            }
         """
         return {
             "instance": {
@@ -414,10 +430,10 @@ class SALBP(Optimization):
 
     def generate_problem(self, config: Config, **kwargs) -> SALBPInstance:
         """
-        Generate an SALBP instance using the input configuration.
+        Generate an SALBP-1 instance using the input configuration.
 
         :param config: Configuration settings
-        :return: Generated SALBP instance
+        :return: Generated SALBP-1 instance
         """
         if config is None:
             config = {

@@ -1,7 +1,7 @@
 {
   "build_number": 20,
-  "build_date": "28-02-2025 13:22:24",
-  "git_revision_number": "bbbd4ecae13fb698f95461e4927323a02f9275d4",
+  "build_date": "18-03-2025 11:23:23",
+  "git_revision_number": "d1d3e6e445feb25bd6a2573c5eed4913fa3d3894",
   "modules": [
     {
       "name": "PVC",
@@ -2712,59 +2712,6 @@
         {
           "name": "docplex",
           "version": "2.25.236"
-        }
-      ]
-    },
-    {
-      "name": "SALBP",
-      "class": "SALBP",
-      "module": "modules.applications.optimization.salbp.salbp",
-      "submodules": [
-        {
-          "name": "MIP",
-          "class": "MIP",
-          "args": {},
-          "module": "modules.applications.optimization.salbp.mappings.mip",
-          "requirements": [
-            {
-              "name": "docplex",
-              "version": "2.25.236"
-            }
-          ],
-          "submodules": [
-            {
-              "name": "MIPSolver",
-              "class": "MIPSolver",
-              "args": {},
-              "module": "modules.solvers.mip_solver_bp",
-              "requirements": [
-                {
-                  "name": "pyscipopt",
-                  "version": "5.0.1"
-                }
-              ],
-              "submodules": [
-                {
-                  "name": "Local",
-                  "class": "Local",
-                  "args": {},
-                  "module": "modules.devices.local",
-                  "requirements": [],
-                  "submodules": []
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "requirements": [
-        {
-          "name": "docplex",
-          "version": "2.25.236"
-        },
-        {
-          "name": "networkx",
-          "version": "3.4.2"
         }
       ]
     },

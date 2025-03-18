@@ -1,7 +1,7 @@
 {
-  "build_number": 19,
-  "build_date": "06-02-2025 14:08:22",
-  "git_revision_number": "4771e55f1ea6c3b87ee020004a1ff21630824081",
+  "build_number": 20,
+  "build_date": "18-03-2025 11:23:23",
+  "git_revision_number": "d1d3e6e445feb25bd6a2573c5eed4913fa3d3894",
   "modules": [
     {
       "name": "PVC",
@@ -682,7 +682,7 @@
           "name": "ChoiIsing",
           "class": "ChoiIsing",
           "args": {},
-          "module": "modules.applications.optimization.sat.mappings.choiIsing",
+          "module": "modules.applications.optimization.sat.mappings.choiising",
           "requirements": [
             {
               "name": "numpy",
@@ -2206,6 +2206,514 @@
         }
       ],
       "requirements": []
+    },
+    {
+      "name": "BP",
+      "class": "BP",
+      "module": "modules.applications.optimization.bp.bp",
+      "submodules": [
+        {
+          "name": "MIP",
+          "class": "MIP",
+          "args": {},
+          "module": "modules.applications.optimization.bp.mappings.mip",
+          "requirements": [
+            {
+              "name": "docplex",
+              "version": "2.25.236"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "MIPSolver",
+              "class": "MIPSolver",
+              "args": {},
+              "module": "modules.solvers.mip_solver_bp",
+              "requirements": [
+                {
+                  "name": "pyscipopt",
+                  "version": "5.0.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "Local",
+                  "class": "Local",
+                  "args": {},
+                  "module": "modules.devices.local",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Ising",
+          "class": "Ising",
+          "args": {},
+          "module": "modules.applications.optimization.bp.mappings.ising",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "docplex",
+              "version": "2.25.236"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "QAOA",
+              "class": "QAOA",
+              "args": {},
+              "module": "modules.solvers.qaoa",
+              "requirements": [
+                {
+                  "name": "amazon-braket-sdk",
+                  "version": "1.88.2"
+                },
+                {
+                  "name": "scipy",
+                  "version": "1.12.0"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.26.4"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "LocalSimulator",
+                  "class": "LocalSimulator",
+                  "args": {
+                    "device_name": "LocalSimulator"
+                  },
+                  "module": "modules.devices.braket.local_simulator",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
+                  "module": "modules.devices.braket.sv1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
+                  "module": "modules.devices.braket.tn1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionQ",
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                  },
+                  "module": "modules.devices.braket.ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti Aspen-9",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
+                  "module": "modules.devices.braket.rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "PennylaneQAOA",
+              "class": "PennylaneQAOA",
+              "args": {},
+              "module": "modules.solvers.pennylane_qaoa",
+              "requirements": [
+                {
+                  "name": "pennylane",
+                  "version": "0.39.0"
+                },
+                {
+                  "name": "pennylane-lightning",
+                  "version": "0.39.0"
+                },
+                {
+                  "name": "amazon-braket-pennylane-plugin",
+                  "version": "1.30.2"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.26.4"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/sv1",
+                  "class": "SV1",
+                  "args": {
+                    "device_name": "SV1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/sv1"
+                  },
+                  "module": "modules.devices.braket.sv1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:::device/quantum-simulator/amazon/tn1",
+                  "class": "TN1",
+                  "args": {
+                    "device_name": "TN1",
+                    "arn": "arn:aws:braket:::device/quantum-simulator/amazon/tn1"
+                  },
+                  "module": "modules.devices.braket.tn1",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony",
+                  "class": "Ionq",
+                  "args": {
+                    "device_name": "ionq",
+                    "arn": "arn:aws:braket:us-east-1::device/qpu/ionq/Harmony"
+                  },
+                  "module": "modules.devices.braket.ionq",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3",
+                  "class": "Rigetti",
+                  "args": {
+                    "device_name": "Rigetti",
+                    "arn": "arn:aws:braket:us-west-1::device/qpu/rigetti/Aspen-M-3"
+                  },
+                  "module": "modules.devices.braket.rigetti",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy",
+                  "class": "OQC",
+                  "args": {
+                    "device_name": "OQC",
+                    "arn": "arn:aws:braket:eu-west-2::device/qpu/oqc/Lucy"
+                  },
+                  "module": "modules.devices.braket.oqc",
+                  "requirements": [
+                    {
+                      "name": "amazon-braket-sdk",
+                      "version": "1.88.2"
+                    },
+                    {
+                      "name": "botocore",
+                      "version": "1.35.73"
+                    },
+                    {
+                      "name": "boto3",
+                      "version": "1.35.73"
+                    }
+                  ],
+                  "submodules": []
+                },
+                {
+                  "name": "braket.local.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "braket.local.qubit"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "default.qubit.autograd",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "default.qubit.autograd"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qulacs.simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qulacs.simulator"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.gpu"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "lightning.qubit",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "lightning.qubit"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "QiskitQAOA",
+              "class": "QiskitQAOA",
+              "args": {},
+              "module": "modules.solvers.qiskit_qaoa",
+              "requirements": [
+                {
+                  "name": "qiskit",
+                  "version": "1.3.0"
+                },
+                {
+                  "name": "qiskit-optimization",
+                  "version": "0.6.1"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.26.4"
+                },
+                {
+                  "name": "qiskit-algorithms",
+                  "version": "0.3.1"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "qasm_simulator",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qasm_simulator"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                },
+                {
+                  "name": "qasm_simulator_gpu",
+                  "class": "HelperClass",
+                  "args": {
+                    "device_name": "qasm_simulator_gpu"
+                  },
+                  "module": "modules.devices.helper_class",
+                  "requirements": [],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "QUBO",
+          "class": "QUBO",
+          "args": {},
+          "module": "modules.applications.optimization.bp.mappings.qubo",
+          "requirements": [
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            },
+            {
+              "name": "docplex",
+              "version": "2.25.236"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Annealer",
+              "class": "Annealer",
+              "args": {},
+              "module": "modules.solvers.annealer",
+              "requirements": [],
+              "submodules": [
+                {
+                  "name": "Simulated Annealer",
+                  "class": "SimulatedAnnealingSampler",
+                  "args": {},
+                  "module": "modules.devices.simulated_annealing_sampler",
+                  "requirements": [
+                    {
+                      "name": "dwave-samplers",
+                      "version": "1.4.0"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        {
+          "name": "numpy",
+          "version": "1.26.4"
+        },
+        {
+          "name": "qiskit_optimization",
+          "version": "0.6.1"
+        },
+        {
+          "name": "docplex",
+          "version": "2.25.236"
+        }
+      ]
     },
     {
       "name": "GenerativeModeling",

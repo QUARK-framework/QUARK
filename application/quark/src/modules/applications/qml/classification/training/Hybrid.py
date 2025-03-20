@@ -21,6 +21,7 @@ from matplotlib import axes, figure
 from modules.applications.qml.Training import *
 from modules.Core import Core
 from tensorboardX import SummaryWriter
+from utils import start_time_measurement, end_time_measurement
 from utils_mpi import get_comm, is_running_mpi
 
 MPI = is_running_mpi()

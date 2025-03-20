@@ -77,3 +77,282 @@
 2024-11-21 17:43:46,765 [INFO]  ============================================================ 
 2024-11-21 17:43:46,766 [INFO]  ====================  QUARK finished!   ==================== 
 2024-11-21 17:43:46,766 [INFO]  ============================================================ 
+2025-02-18 15:28:29,055 [INFO]  ============================================================ 
+2025-02-18 15:28:29,055 [INFO]              ___    _   _      _      ____    _  __           
+2025-02-18 15:28:29,056 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2025-02-18 15:28:29,056 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2025-02-18 15:28:29,057 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2025-02-18 15:28:29,057 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2025-02-18 15:28:29,058 [INFO]                                                               
+2025-02-18 15:28:29,058 [INFO]  ============================================================ 
+2025-02-18 15:28:29,059 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2025-02-18 15:28:29,059 [INFO]                                                               
+2025-02-18 15:28:29,060 [INFO]         Licensed under the Apache License, Version 2.0        
+2025-02-18 15:28:29,060 [INFO]  ============================================================ 
+2025-02-18 15:28:59,481 [WARNING] No active QUARK module environment found, using default
+2025-02-18 15:28:59,515 [INFO] Saved default QUARK module environment.
+2025-02-18 15:28:59,550 [INFO] Set active QUARK module environment to default
+2025-02-18 15:28:59,552 [INFO] Getting default QUARK module environment
+2025-02-18 15:28:59,555 [INFO] Provided config file at example_config_genModelling.yml
+2025-02-18 15:28:59,555 [ERROR] [Errno 2] No such file or directory: 'example_config_genModelling.yml'
+2025-02-18 15:32:19,512 [INFO]  ============================================================ 
+2025-02-18 15:32:19,512 [INFO]              ___    _   _      _      ____    _  __           
+2025-02-18 15:32:19,513 [INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2025-02-18 15:32:19,514 [INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2025-02-18 15:32:19,514 [INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2025-02-18 15:32:19,514 [INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2025-02-18 15:32:19,514 [INFO]                                                               
+2025-02-18 15:32:19,515 [INFO]  ============================================================ 
+2025-02-18 15:32:19,515 [INFO]   A Framework for Quantum Computing Application Benchmarking  
+2025-02-18 15:32:19,515 [INFO]                                                               
+2025-02-18 15:32:19,515 [INFO]         Licensed under the Apache License, Version 2.0        
+2025-02-18 15:32:19,516 [INFO]  ============================================================ 
+2025-02-18 15:32:21,476 [INFO] Getting default QUARK module environment
+2025-02-18 15:32:21,477 [INFO] Provided config file at application/quark/src/example_config_genModelling.yml
+2025-02-18 15:32:21,521 [INFO] Import module modules.applications.qml.generative_modeling.GenerativeModeling
+2025-02-18 15:32:58,906 [INFO] CuPy not available, using vanilla numpy, data processing on CPU
+2025-02-18 15:33:19,565 [INFO] Pass: UnrollCustomDefinitions - 0.11444 (ms)
+2025-02-18 15:33:19,565 [INFO] Begin BasisTranslator from source basis {('u3', 1)} to target basis {'cx', 'rx', 'barrier', 'snapshot', 'measure', 'ry', 'reset', 'store', 'z', 'delay', 'p', 'rz', 'x', 'u'}.
+2025-02-18 15:33:19,566 [INFO] Basis translation path search completed in 0.000s.
+2025-02-18 15:33:19,689 [INFO] Basis translation paths composed in 0.122s.
+2025-02-18 15:33:19,699 [INFO] Basis translation instructions replaced in 0.010s.
+2025-02-18 15:33:19,699 [INFO] Pass: BasisTranslator - 133.61931 (ms)
+2025-02-18 15:33:38,722 [INFO] Import module modules.applications.qml.generative_modeling.data.data_handler.DiscreteData
+2025-02-18 15:33:38,722 [INFO] Import module modules.applications.qml.generative_modeling.circuits.CircuitCardinality
+2025-02-18 15:33:38,723 [INFO] Import module modules.applications.qml.generative_modeling.mappings.LibraryQiskit
+2025-02-18 15:33:38,723 [INFO] Import module modules.applications.qml.generative_modeling.training.QCBM
+2025-02-18 15:33:39,262 [INFO] Created Benchmark run directory /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21
+2025-02-18 15:33:39,354 [INFO] Codebase is based on revision 62635e6a3101ec25711d6cd6858d96ac1610c04d and has some uncommitted changes
+2025-02-18 15:33:39,357 [INFO] Running backlog item 1/1, Iteration 1/1:
+2025-02-18 15:33:39,640 [INFO] Library created
+2025-02-18 15:33:39,640 [INFO] Start training
+2025-02-18 15:33:49,791 [INFO] Quantum metrics: {'meyer-wallach': 1.099120794378905e-16, 'expressibility_jsd': 0.41856015368918265}
+2025-02-18 15:33:49,791 [INFO] Running config: [backend=aer_statevector_simulator_cpu] [n_qubits=6] [population_size=5]
+2025-02-18 15:33:49,940 [INFO] [Iteration 0] [KL: 2.31615] [Circuit processing: 17.047 ms] [KL processing: 0.024 ms] [sigma: 0.01000]
+2025-02-18 15:33:50,034 [INFO] [Iteration 1] [KL: 2.28814] [Circuit processing: 21.897 ms] [KL processing: 0.028 ms] [sigma: 0.00942]
+2025-02-18 15:33:50,126 [INFO] [Iteration 2] [KL: 2.27155] [Circuit processing: 17.979 ms] [KL processing: 0.027 ms] [sigma: 0.00899]
+2025-02-18 15:33:50,278 [INFO] [Iteration 3] [KL: 2.23689] [Circuit processing: 22.982 ms] [KL processing: 0.033 ms] [sigma: 0.00865]
+2025-02-18 15:33:50,369 [INFO] [Iteration 4] [KL: 2.23519] [Circuit processing: 17.346 ms] [KL processing: 0.026 ms] [sigma: 0.00837]
+2025-02-18 15:33:50,460 [INFO] [Iteration 5] [KL: 2.22564] [Circuit processing: 17.318 ms] [KL processing: 0.026 ms] [sigma: 0.00813]
+2025-02-18 15:33:50,569 [INFO] [Iteration 6] [KL: 2.18429] [Circuit processing: 23.194 ms] [KL processing: 0.032 ms] [sigma: 0.00795]
+2025-02-18 15:33:50,661 [INFO] [Iteration 7] [KL: 2.16354] [Circuit processing: 17.997 ms] [KL processing: 0.030 ms] [sigma: 0.00783]
+2025-02-18 15:33:50,754 [INFO] [Iteration 8] [KL: 2.13280] [Circuit processing: 18.152 ms] [KL processing: 0.028 ms] [sigma: 0.00772]
+2025-02-18 15:33:50,865 [INFO] [Iteration 9] [KL: 2.10698] [Circuit processing: 23.015 ms] [KL processing: 0.031 ms] [sigma: 0.00761]
+2025-02-18 15:33:50,958 [INFO] [Iteration 10] [KL: 2.09691] [Circuit processing: 17.243 ms] [KL processing: 0.028 ms] [sigma: 0.00754]
+2025-02-18 15:33:51,050 [INFO] [Iteration 11] [KL: 2.07885] [Circuit processing: 20.536 ms] [KL processing: 0.027 ms] [sigma: 0.00750]
+2025-02-18 15:33:51,161 [INFO] [Iteration 12] [KL: 2.05579] [Circuit processing: 23.085 ms] [KL processing: 0.035 ms] [sigma: 0.00749]
+2025-02-18 15:33:51,253 [INFO] [Iteration 13] [KL: 2.04275] [Circuit processing: 17.919 ms] [KL processing: 0.028 ms] [sigma: 0.00749]
+2025-02-18 15:33:51,344 [INFO] [Iteration 14] [KL: 2.01917] [Circuit processing: 17.121 ms] [KL processing: 0.026 ms] [sigma: 0.00751]
+2025-02-18 15:33:51,453 [INFO] [Iteration 15] [KL: 2.01114] [Circuit processing: 23.187 ms] [KL processing: 0.033 ms] [sigma: 0.00755]
+2025-02-18 15:33:51,546 [INFO] [Iteration 16] [KL: 1.97782] [Circuit processing: 17.555 ms] [KL processing: 0.029 ms] [sigma: 0.00760]
+2025-02-18 15:33:51,638 [INFO] [Iteration 17] [KL: 1.96924] [Circuit processing: 17.270 ms] [KL processing: 0.026 ms] [sigma: 0.00768]
+2025-02-18 15:33:51,747 [INFO] [Iteration 18] [KL: 1.94311] [Circuit processing: 23.827 ms] [KL processing: 0.033 ms] [sigma: 0.00778]
+2025-02-18 15:33:51,839 [INFO] [Iteration 19] [KL: 1.90869] [Circuit processing: 18.096 ms] [KL processing: 0.033 ms] [sigma: 0.00789]
+2025-02-18 15:33:51,932 [INFO] [Iteration 20] [KL: 1.89739] [Circuit processing: 17.319 ms] [KL processing: 0.029 ms] [sigma: 0.00802]
+2025-02-18 15:33:52,042 [INFO] [Iteration 21] [KL: 1.87390] [Circuit processing: 23.185 ms] [KL processing: 0.033 ms] [sigma: 0.00818]
+2025-02-18 15:33:52,132 [INFO] [Iteration 22] [KL: 1.86216] [Circuit processing: 17.293 ms] [KL processing: 0.027 ms] [sigma: 0.00833]
+2025-02-18 15:33:52,225 [INFO] [Iteration 23] [KL: 1.85312] [Circuit processing: 17.217 ms] [KL processing: 0.026 ms] [sigma: 0.00850]
+2025-02-18 15:33:52,335 [INFO] [Iteration 24] [KL: 1.83707] [Circuit processing: 23.980 ms] [KL processing: 0.033 ms] [sigma: 0.00867]
+2025-02-18 15:33:52,426 [INFO] [Iteration 25] [KL: 1.81702] [Circuit processing: 17.869 ms] [KL processing: 0.027 ms] [sigma: 0.00887]
+2025-02-18 15:33:52,519 [INFO] [Iteration 26] [KL: 1.78251] [Circuit processing: 17.358 ms] [KL processing: 0.026 ms] [sigma: 0.00908]
+2025-02-18 15:33:52,629 [INFO] [Iteration 27] [KL: 1.77556] [Circuit processing: 23.026 ms] [KL processing: 0.032 ms] [sigma: 0.00931]
+2025-02-18 15:33:52,721 [INFO] [Iteration 28] [KL: 1.75113] [Circuit processing: 17.400 ms] [KL processing: 0.028 ms] [sigma: 0.00954]
+2025-02-18 15:33:52,813 [INFO] [Iteration 29] [KL: 1.72112] [Circuit processing: 17.260 ms] [KL processing: 0.027 ms] [sigma: 0.00979]
+2025-02-18 15:33:52,922 [INFO] [Iteration 30] [KL: 1.69580] [Circuit processing: 24.020 ms] [KL processing: 0.034 ms] [sigma: 0.01004]
+2025-02-18 15:33:53,012 [INFO] [Iteration 31] [KL: 1.68729] [Circuit processing: 17.863 ms] [KL processing: 0.029 ms] [sigma: 0.01031]
+2025-02-18 15:33:53,104 [INFO] [Iteration 32] [KL: 1.67666] [Circuit processing: 17.310 ms] [KL processing: 0.026 ms] [sigma: 0.01058]
+2025-02-18 15:33:53,215 [INFO] [Iteration 33] [KL: 1.66214] [Circuit processing: 23.001 ms] [KL processing: 0.033 ms] [sigma: 0.01083]
+2025-02-18 15:33:53,306 [INFO] [Iteration 34] [KL: 1.64460] [Circuit processing: 17.165 ms] [KL processing: 0.030 ms] [sigma: 0.01110]
+2025-02-18 15:33:53,398 [INFO] [Iteration 35] [KL: 1.61161] [Circuit processing: 17.223 ms] [KL processing: 0.028 ms] [sigma: 0.01138]
+2025-02-18 15:33:53,507 [INFO] [Iteration 36] [KL: 1.59192] [Circuit processing: 23.930 ms] [KL processing: 0.034 ms] [sigma: 0.01172]
+2025-02-18 15:33:53,599 [INFO] [Iteration 37] [KL: 1.57694] [Circuit processing: 17.797 ms] [KL processing: 0.027 ms] [sigma: 0.01211]
+2025-02-18 15:33:53,690 [INFO] [Iteration 38] [KL: 1.55830] [Circuit processing: 17.107 ms] [KL processing: 0.027 ms] [sigma: 0.01252]
+2025-02-18 15:33:53,801 [INFO] [Iteration 39] [KL: 1.53880] [Circuit processing: 22.997 ms] [KL processing: 0.032 ms] [sigma: 0.01297]
+2025-02-18 15:33:53,892 [INFO] [Iteration 40] [KL: 1.52304] [Circuit processing: 17.361 ms] [KL processing: 0.027 ms] [sigma: 0.01342]
+2025-02-18 15:33:54,111 [INFO] [Iteration 41] [KL: 1.49367] [Circuit processing: 149.573 ms] [KL processing: 0.036 ms] [sigma: 0.01389]
+2025-02-18 15:33:54,221 [INFO] [Iteration 42] [KL: 1.48034] [Circuit processing: 23.559 ms] [KL processing: 0.032 ms] [sigma: 0.01441]
+2025-02-18 15:33:54,313 [INFO] [Iteration 43] [KL: 1.46474] [Circuit processing: 17.273 ms] [KL processing: 0.026 ms] [sigma: 0.01498]
+2025-02-18 15:33:54,404 [INFO] [Iteration 44] [KL: 1.44178] [Circuit processing: 17.259 ms] [KL processing: 0.026 ms] [sigma: 0.01556]
+2025-02-18 15:33:54,514 [INFO] [Iteration 45] [KL: 1.43194] [Circuit processing: 23.000 ms] [KL processing: 0.031 ms] [sigma: 0.01614]
+2025-02-18 15:33:54,606 [INFO] [Iteration 46] [KL: 1.40432] [Circuit processing: 17.488 ms] [KL processing: 0.025 ms] [sigma: 0.01675]
+2025-02-18 15:33:54,697 [INFO] [Iteration 47] [KL: 1.37275] [Circuit processing: 17.738 ms] [KL processing: 0.028 ms] [sigma: 0.01738]
+2025-02-18 15:33:54,808 [INFO] [Iteration 48] [KL: 1.36028] [Circuit processing: 23.851 ms] [KL processing: 0.033 ms] [sigma: 0.01803]
+2025-02-18 15:33:54,899 [INFO] [Iteration 49] [KL: 1.34180] [Circuit processing: 17.340 ms] [KL processing: 0.026 ms] [sigma: 0.01866]
+2025-02-18 15:33:54,990 [INFO] [Iteration 50] [KL: 1.32066] [Circuit processing: 17.404 ms] [KL processing: 0.026 ms] [sigma: 0.01933]
+2025-02-18 15:33:55,099 [INFO] [Iteration 51] [KL: 1.31316] [Circuit processing: 22.972 ms] [KL processing: 0.032 ms] [sigma: 0.02008]
+2025-02-18 15:33:55,188 [INFO] [Iteration 52] [KL: 1.28123] [Circuit processing: 17.314 ms] [KL processing: 0.028 ms] [sigma: 0.02074]
+2025-02-18 15:33:55,280 [INFO] [Iteration 53] [KL: 1.25089] [Circuit processing: 21.348 ms] [KL processing: 0.026 ms] [sigma: 0.02143]
+2025-02-18 15:33:55,390 [INFO] [Iteration 54] [KL: 1.24862] [Circuit processing: 23.832 ms] [KL processing: 0.032 ms] [sigma: 0.02208]
+2025-02-18 15:33:55,481 [INFO] [Iteration 55] [KL: 1.23901] [Circuit processing: 17.237 ms] [KL processing: 0.033 ms] [sigma: 0.02285]
+2025-02-18 15:33:55,573 [INFO] [Iteration 56] [KL: 1.21386] [Circuit processing: 17.331 ms] [KL processing: 0.025 ms] [sigma: 0.02364]
+2025-02-18 15:33:55,683 [INFO] [Iteration 57] [KL: 1.20891] [Circuit processing: 23.159 ms] [KL processing: 0.032 ms] [sigma: 0.02447]
+2025-02-18 15:33:55,772 [INFO] [Iteration 58] [KL: 1.18817] [Circuit processing: 17.418 ms] [KL processing: 0.028 ms] [sigma: 0.02532]
+2025-02-18 15:33:55,866 [INFO] [Iteration 59] [KL: 1.15195] [Circuit processing: 18.378 ms] [KL processing: 0.028 ms] [sigma: 0.02618]
+2025-02-18 15:33:55,896 [INFO] [Iteration 60] [KL: 1.15195] [Circuit processing: 23.752 ms] [KL processing: 0.032 ms] [sigma: 0.02703]
+2025-02-18 15:33:55,996 [INFO] [Iteration 61] [KL: 1.13811] [Circuit processing: 23.003 ms] [KL processing: 0.028 ms] [sigma: 0.02793]
+2025-02-18 15:33:56,087 [INFO] [Iteration 62] [KL: 1.11771] [Circuit processing: 18.002 ms] [KL processing: 0.026 ms] [sigma: 0.02904]
+2025-02-18 15:33:56,198 [INFO] [Iteration 63] [KL: 1.10576] [Circuit processing: 23.050 ms] [KL processing: 0.032 ms] [sigma: 0.03017]
+2025-02-18 15:33:56,288 [INFO] [Iteration 64] [KL: 1.10033] [Circuit processing: 17.264 ms] [KL processing: 0.025 ms] [sigma: 0.03132]
+2025-02-18 15:33:56,379 [INFO] [Iteration 65] [KL: 1.07775] [Circuit processing: 17.321 ms] [KL processing: 0.025 ms] [sigma: 0.03254]
+2025-02-18 15:33:56,489 [INFO] [Iteration 66] [KL: 1.07630] [Circuit processing: 23.136 ms] [KL processing: 0.032 ms] [sigma: 0.03382]
+2025-02-18 15:33:56,579 [INFO] [Iteration 67] [KL: 1.03848] [Circuit processing: 17.702 ms] [KL processing: 0.026 ms] [sigma: 0.03516]
+2025-02-18 15:33:56,671 [INFO] [Iteration 68] [KL: 1.01493] [Circuit processing: 17.762 ms] [KL processing: 0.025 ms] [sigma: 0.03665]
+2025-02-18 15:33:56,699 [INFO] [Iteration 69] [KL: 1.01493] [Circuit processing: 23.122 ms] [KL processing: 0.032 ms] [sigma: 0.03824]
+2025-02-18 15:33:56,799 [INFO] [Iteration 70] [KL: 0.97995] [Circuit processing: 23.457 ms] [KL processing: 0.028 ms] [sigma: 0.03970]
+2025-02-18 15:33:56,820 [INFO] [Iteration 71] [KL: 0.97995] [Circuit processing: 17.270 ms] [KL processing: 0.025 ms] [sigma: 0.04124]
+2025-02-18 15:33:56,927 [INFO] [Iteration 72] [KL: 0.97788] [Circuit processing: 23.488 ms] [KL processing: 0.028 ms] [sigma: 0.04277]
+2025-02-18 15:33:57,017 [INFO] [Iteration 73] [KL: 0.96031] [Circuit processing: 17.905 ms] [KL processing: 0.025 ms] [sigma: 0.04423]
+2025-02-18 15:33:57,108 [INFO] [Iteration 74] [KL: 0.95456] [Circuit processing: 20.158 ms] [KL processing: 0.025 ms] [sigma: 0.04562]
+2025-02-18 15:33:57,137 [INFO] [Iteration 75] [KL: 0.95456] [Circuit processing: 23.177 ms] [KL processing: 0.031 ms] [sigma: 0.04673]
+2025-02-18 15:33:57,161 [INFO] [Iteration 76] [KL: 0.95456] [Circuit processing: 22.878 ms] [KL processing: 0.027 ms] [sigma: 0.04785]
+2025-02-18 15:33:57,186 [INFO] [Iteration 77] [KL: 0.95456] [Circuit processing: 23.676 ms] [KL processing: 0.027 ms] [sigma: 0.04903]
+2025-02-18 15:33:57,211 [INFO] [Iteration 78] [KL: 0.95456] [Circuit processing: 23.047 ms] [KL processing: 0.027 ms] [sigma: 0.05016]
+2025-02-18 15:33:57,236 [INFO] [Iteration 79] [KL: 0.95456] [Circuit processing: 22.974 ms] [KL processing: 0.027 ms] [sigma: 0.05139]
+2025-02-18 15:33:57,331 [INFO] [Iteration 80] [KL: 0.92195] [Circuit processing: 23.813 ms] [KL processing: 0.027 ms] [sigma: 0.05252]
+2025-02-18 15:33:57,360 [INFO] [Iteration 81] [KL: 0.92195] [Circuit processing: 23.839 ms] [KL processing: 0.031 ms] [sigma: 0.05354]
+2025-02-18 15:33:57,384 [INFO] [Iteration 82] [KL: 0.92195] [Circuit processing: 22.897 ms] [KL processing: 0.028 ms] [sigma: 0.05450]
+2025-02-18 15:33:57,479 [INFO] [Iteration 83] [KL: 0.90663] [Circuit processing: 22.996 ms] [KL processing: 0.027 ms] [sigma: 0.05551]
+2025-02-18 15:33:57,589 [INFO] [Iteration 84] [KL: 0.89965] [Circuit processing: 23.146 ms] [KL processing: 0.032 ms] [sigma: 0.05634]
+2025-02-18 15:33:57,609 [INFO] [Iteration 85] [KL: 0.89965] [Circuit processing: 17.784 ms] [KL processing: 0.027 ms] [sigma: 0.05701]
+2025-02-18 15:33:57,699 [INFO] [Iteration 86] [KL: 0.89194] [Circuit processing: 16.795 ms] [KL processing: 0.024 ms] [sigma: 0.05768]
+2025-02-18 15:33:57,808 [INFO] [Iteration 87] [KL: 0.87960] [Circuit processing: 23.190 ms] [KL processing: 0.032 ms] [sigma: 0.05832]
+2025-02-18 15:33:57,898 [INFO] [Iteration 88] [KL: 0.85305] [Circuit processing: 17.913 ms] [KL processing: 0.026 ms] [sigma: 0.05929]
+2025-02-18 15:33:57,920 [INFO] [Iteration 89] [KL: 0.85305] [Circuit processing: 17.792 ms] [KL processing: 0.026 ms] [sigma: 0.06008]
+2025-02-18 15:33:57,945 [INFO] [Iteration 90] [KL: 0.85305] [Circuit processing: 22.702 ms] [KL processing: 0.027 ms] [sigma: 0.06066]
+2025-02-18 15:33:57,969 [INFO] [Iteration 91] [KL: 0.85305] [Circuit processing: 22.967 ms] [KL processing: 0.027 ms] [sigma: 0.06109]
+2025-02-18 15:33:57,994 [INFO] [Iteration 92] [KL: 0.85305] [Circuit processing: 22.957 ms] [KL processing: 0.026 ms] [sigma: 0.06133]
+2025-02-18 15:33:58,019 [INFO] [Iteration 93] [KL: 0.85305] [Circuit processing: 23.662 ms] [KL processing: 0.027 ms] [sigma: 0.06150]
+2025-02-18 15:33:58,044 [INFO] [Iteration 94] [KL: 0.85305] [Circuit processing: 22.965 ms] [KL processing: 0.027 ms] [sigma: 0.06162]
+2025-02-18 15:33:58,068 [INFO] [Iteration 95] [KL: 0.85305] [Circuit processing: 23.164 ms] [KL processing: 0.027 ms] [sigma: 0.06189]
+2025-02-18 15:33:58,175 [INFO] [Iteration 96] [KL: 0.84074] [Circuit processing: 23.546 ms] [KL processing: 0.027 ms] [sigma: 0.06212]
+2025-02-18 15:33:58,196 [INFO] [Iteration 97] [KL: 0.84074] [Circuit processing: 17.645 ms] [KL processing: 0.026 ms] [sigma: 0.06244]
+2025-02-18 15:33:58,215 [INFO] [Iteration 98] [KL: 0.84074] [Circuit processing: 17.500 ms] [KL processing: 0.022 ms] [sigma: 0.06313]
+2025-02-18 15:33:58,240 [INFO] [Iteration 99] [KL: 0.84074] [Circuit processing: 22.877 ms] [KL processing: 0.028 ms] [sigma: 0.06366]
+2025-02-18 15:33:58,340 [INFO] [Iteration 100] [KL: 0.78931] [Circuit processing: 23.028 ms] [KL processing: 0.027 ms] [sigma: 0.06378]
+2025-02-18 15:33:58,360 [INFO] [Iteration 101] [KL: 0.78931] [Circuit processing: 17.395 ms] [KL processing: 0.027 ms] [sigma: 0.06387]
+2025-02-18 15:33:58,385 [INFO] [Iteration 102] [KL: 0.78931] [Circuit processing: 22.779 ms] [KL processing: 0.031 ms] [sigma: 0.06368]
+2025-02-18 15:33:58,410 [INFO] [Iteration 103] [KL: 0.78931] [Circuit processing: 23.794 ms] [KL processing: 0.029 ms] [sigma: 0.06341]
+2025-02-18 15:33:58,435 [INFO] [Iteration 104] [KL: 0.78931] [Circuit processing: 23.034 ms] [KL processing: 0.027 ms] [sigma: 0.06297]
+2025-02-18 15:33:58,460 [INFO] [Iteration 105] [KL: 0.78931] [Circuit processing: 22.791 ms] [KL processing: 0.027 ms] [sigma: 0.06248]
+2025-02-18 15:33:58,485 [INFO] [Iteration 106] [KL: 0.78931] [Circuit processing: 23.673 ms] [KL processing: 0.027 ms] [sigma: 0.06214]
+2025-02-18 15:33:58,509 [INFO] [Iteration 107] [KL: 0.78931] [Circuit processing: 23.080 ms] [KL processing: 0.028 ms] [sigma: 0.06166]
+2025-02-18 15:33:58,535 [INFO] [Iteration 108] [KL: 0.78931] [Circuit processing: 23.096 ms] [KL processing: 0.027 ms] [sigma: 0.06118]
+2025-02-18 15:33:58,560 [INFO] [Iteration 109] [KL: 0.78931] [Circuit processing: 23.764 ms] [KL processing: 0.027 ms] [sigma: 0.06064]
+2025-02-18 15:33:58,588 [INFO] [Iteration 110] [KL: 0.78931] [Circuit processing: 27.087 ms] [KL processing: 0.036 ms] [sigma: 0.06002]
+2025-02-18 15:33:58,696 [INFO] [Iteration 111] [KL: 0.78806] [Circuit processing: 22.820 ms] [KL processing: 0.028 ms] [sigma: 0.05952]
+2025-02-18 15:33:58,716 [INFO] [Iteration 112] [KL: 0.78806] [Circuit processing: 17.344 ms] [KL processing: 0.027 ms] [sigma: 0.05912]
+2025-02-18 15:33:58,803 [INFO] [Iteration 113] [KL: 0.76367] [Circuit processing: 16.789 ms] [KL processing: 0.021 ms] [sigma: 0.05851]
+2025-02-18 15:33:58,831 [INFO] [Iteration 114] [KL: 0.76367] [Circuit processing: 23.184 ms] [KL processing: 0.033 ms] [sigma: 0.05781]
+2025-02-18 15:33:58,857 [INFO] [Iteration 115] [KL: 0.76367] [Circuit processing: 23.892 ms] [KL processing: 0.029 ms] [sigma: 0.05712]
+2025-02-18 15:33:58,881 [INFO] [Iteration 116] [KL: 0.76367] [Circuit processing: 23.182 ms] [KL processing: 0.022 ms] [sigma: 0.05631]
+2025-02-18 15:33:58,906 [INFO] [Iteration 117] [KL: 0.76367] [Circuit processing: 22.969 ms] [KL processing: 0.030 ms] [sigma: 0.05542]
+2025-02-18 15:33:58,930 [INFO] [Iteration 118] [KL: 0.76367] [Circuit processing: 22.970 ms] [KL processing: 0.027 ms] [sigma: 0.05485]
+2025-02-18 15:33:58,955 [INFO] [Iteration 119] [KL: 0.76367] [Circuit processing: 23.716 ms] [KL processing: 0.028 ms] [sigma: 0.05427]
+2025-02-18 15:33:58,981 [INFO] [Iteration 120] [KL: 0.76367] [Circuit processing: 23.072 ms] [KL processing: 0.028 ms] [sigma: 0.05363]
+2025-02-18 15:33:59,005 [INFO] [Iteration 121] [KL: 0.76367] [Circuit processing: 22.958 ms] [KL processing: 0.027 ms] [sigma: 0.05294]
+2025-02-18 15:33:59,030 [INFO] [Iteration 122] [KL: 0.76367] [Circuit processing: 23.698 ms] [KL processing: 0.027 ms] [sigma: 0.05236]
+2025-02-18 15:33:59,055 [INFO] [Iteration 123] [KL: 0.76367] [Circuit processing: 23.187 ms] [KL processing: 0.027 ms] [sigma: 0.05207]
+2025-02-18 15:33:59,157 [INFO] [Iteration 124] [KL: 0.76152] [Circuit processing: 23.157 ms] [KL processing: 0.027 ms] [sigma: 0.05175]
+2025-02-18 15:33:59,178 [INFO] [Iteration 125] [KL: 0.76152] [Circuit processing: 17.668 ms] [KL processing: 0.027 ms] [sigma: 0.05176]
+2025-02-18 15:33:59,286 [INFO] [Iteration 126] [KL: 0.74030] [Circuit processing: 22.755 ms] [KL processing: 0.028 ms] [sigma: 0.05171]
+2025-02-18 15:33:59,307 [INFO] [Iteration 127] [KL: 0.74030] [Circuit processing: 17.492 ms] [KL processing: 0.028 ms] [sigma: 0.05164]
+2025-02-18 15:33:59,397 [INFO] [Iteration 128] [KL: 0.73880] [Circuit processing: 17.740 ms] [KL processing: 0.023 ms] [sigma: 0.05159]
+2025-02-18 15:33:59,425 [INFO] [Iteration 129] [KL: 0.73880] [Circuit processing: 23.302 ms] [KL processing: 0.035 ms] [sigma: 0.05146]
+2025-02-18 15:33:59,653 [INFO] [Iteration 130] [KL: 0.72216] [Circuit processing: 156.105 ms] [KL processing: 0.036 ms] [sigma: 0.05115]
+2025-02-18 15:33:59,744 [INFO] [Iteration 131] [KL: 0.70719] [Circuit processing: 17.748 ms] [KL processing: 0.029 ms] [sigma: 0.05085]
+2025-02-18 15:33:59,772 [INFO] [Iteration 132] [KL: 0.70719] [Circuit processing: 23.259 ms] [KL processing: 0.033 ms] [sigma: 0.05039]
+2025-02-18 15:33:59,797 [INFO] [Iteration 133] [KL: 0.70719] [Circuit processing: 23.708 ms] [KL processing: 0.029 ms] [sigma: 0.04980]
+2025-02-18 15:33:59,821 [INFO] [Iteration 134] [KL: 0.70719] [Circuit processing: 23.188 ms] [KL processing: 0.028 ms] [sigma: 0.04907]
+2025-02-18 15:33:59,846 [INFO] [Iteration 135] [KL: 0.70719] [Circuit processing: 23.095 ms] [KL processing: 0.028 ms] [sigma: 0.04833]
+2025-02-18 15:33:59,871 [INFO] [Iteration 136] [KL: 0.70719] [Circuit processing: 23.747 ms] [KL processing: 0.028 ms] [sigma: 0.04779]
+2025-02-18 15:33:59,896 [INFO] [Iteration 137] [KL: 0.70719] [Circuit processing: 23.267 ms] [KL processing: 0.028 ms] [sigma: 0.04727]
+2025-02-18 15:33:59,922 [INFO] [Iteration 138] [KL: 0.70719] [Circuit processing: 23.347 ms] [KL processing: 0.028 ms] [sigma: 0.04699]
+2025-02-18 15:33:59,947 [INFO] [Iteration 139] [KL: 0.70719] [Circuit processing: 23.850 ms] [KL processing: 0.027 ms] [sigma: 0.04660]
+2025-02-18 15:33:59,972 [INFO] [Iteration 140] [KL: 0.70719] [Circuit processing: 23.245 ms] [KL processing: 0.027 ms] [sigma: 0.04641]
+2025-02-18 15:33:59,997 [INFO] [Iteration 141] [KL: 0.70719] [Circuit processing: 23.162 ms] [KL processing: 0.027 ms] [sigma: 0.04620]
+2025-02-18 15:34:00,023 [INFO] [Iteration 142] [KL: 0.70719] [Circuit processing: 24.208 ms] [KL processing: 0.036 ms] [sigma: 0.04608]
+2025-02-18 15:34:00,047 [INFO] [Iteration 143] [KL: 0.70719] [Circuit processing: 23.066 ms] [KL processing: 0.028 ms] [sigma: 0.04594]
+2025-02-18 15:34:00,073 [INFO] [Iteration 144] [KL: 0.70719] [Circuit processing: 23.374 ms] [KL processing: 0.028 ms] [sigma: 0.04565]
+2025-02-18 15:34:00,098 [INFO] [Iteration 145] [KL: 0.70719] [Circuit processing: 23.380 ms] [KL processing: 0.028 ms] [sigma: 0.04559]
+2025-02-18 15:34:00,123 [INFO] [Iteration 146] [KL: 0.70719] [Circuit processing: 23.914 ms] [KL processing: 0.027 ms] [sigma: 0.04557]
+2025-02-18 15:34:00,148 [INFO] [Iteration 147] [KL: 0.70719] [Circuit processing: 23.086 ms] [KL processing: 0.028 ms] [sigma: 0.04557]
+2025-02-18 15:34:00,173 [INFO] [Iteration 148] [KL: 0.70719] [Circuit processing: 23.242 ms] [KL processing: 0.028 ms] [sigma: 0.04548]
+2025-02-18 15:34:00,269 [INFO] [Iteration 149] [KL: 0.69022] [Circuit processing: 23.808 ms] [KL processing: 0.030 ms] [sigma: 0.04544]
+2025-02-18 15:34:00,379 [INFO] [Iteration 150] [KL: 0.67697] [Circuit processing: 23.198 ms] [KL processing: 0.034 ms] [sigma: 0.04561]
+2025-02-18 15:34:00,400 [INFO] [Iteration 151] [KL: 0.67697] [Circuit processing: 17.709 ms] [KL processing: 0.029 ms] [sigma: 0.04564]
+2025-02-18 15:34:00,419 [INFO] [Iteration 152] [KL: 0.67697] [Circuit processing: 17.955 ms] [KL processing: 0.023 ms] [sigma: 0.04568]
+2025-02-18 15:34:00,445 [INFO] [Iteration 153] [KL: 0.67697] [Circuit processing: 23.148 ms] [KL processing: 0.030 ms] [sigma: 0.04564]
+2025-02-18 15:34:00,469 [INFO] [Iteration 154] [KL: 0.67697] [Circuit processing: 23.111 ms] [KL processing: 0.027 ms] [sigma: 0.04552]
+2025-02-18 15:34:00,494 [INFO] [Iteration 155] [KL: 0.67697] [Circuit processing: 23.809 ms] [KL processing: 0.028 ms] [sigma: 0.04529]
+2025-02-18 15:34:00,603 [INFO] [Iteration 156] [KL: 0.67043] [Circuit processing: 23.288 ms] [KL processing: 0.028 ms] [sigma: 0.04510]
+2025-02-18 15:34:00,694 [INFO] [Iteration 157] [KL: 0.66974] [Circuit processing: 18.709 ms] [KL processing: 0.028 ms] [sigma: 0.04475]
+2025-02-18 15:34:00,786 [INFO] [Iteration 158] [KL: 0.66953] [Circuit processing: 17.846 ms] [KL processing: 0.028 ms] [sigma: 0.04451]
+2025-02-18 15:34:00,902 [INFO] [Iteration 159] [KL: 0.65533] [Circuit processing: 26.245 ms] [KL processing: 0.038 ms] [sigma: 0.04429]
+2025-02-18 15:34:00,923 [INFO] [Iteration 160] [KL: 0.65533] [Circuit processing: 17.267 ms] [KL processing: 0.029 ms] [sigma: 0.04396]
+2025-02-18 15:34:00,940 [INFO] [Iteration 161] [KL: 0.65533] [Circuit processing: 16.738 ms] [KL processing: 0.022 ms] [sigma: 0.04362]
+2025-02-18 15:34:00,966 [INFO] [Iteration 162] [KL: 0.65533] [Circuit processing: 23.547 ms] [KL processing: 0.029 ms] [sigma: 0.04325]
+2025-02-18 15:34:00,990 [INFO] [Iteration 163] [KL: 0.65533] [Circuit processing: 23.041 ms] [KL processing: 0.027 ms] [sigma: 0.04289]
+2025-02-18 15:34:01,015 [INFO] [Iteration 164] [KL: 0.65533] [Circuit processing: 23.133 ms] [KL processing: 0.028 ms] [sigma: 0.04247]
+2025-02-18 15:34:01,041 [INFO] [Iteration 165] [KL: 0.65533] [Circuit processing: 23.782 ms] [KL processing: 0.028 ms] [sigma: 0.04186]
+2025-02-18 15:34:01,065 [INFO] [Iteration 166] [KL: 0.65533] [Circuit processing: 23.122 ms] [KL processing: 0.028 ms] [sigma: 0.04130]
+2025-02-18 15:34:01,090 [INFO] [Iteration 167] [KL: 0.65533] [Circuit processing: 22.997 ms] [KL processing: 0.028 ms] [sigma: 0.04069]
+2025-02-18 15:34:01,115 [INFO] [Iteration 168] [KL: 0.65533] [Circuit processing: 23.682 ms] [KL processing: 0.028 ms] [sigma: 0.04001]
+2025-02-18 15:34:01,140 [INFO] [Iteration 169] [KL: 0.65533] [Circuit processing: 23.100 ms] [KL processing: 0.028 ms] [sigma: 0.03940]
+2025-02-18 15:34:01,235 [INFO] [Iteration 170] [KL: 0.64998] [Circuit processing: 23.170 ms] [KL processing: 0.028 ms] [sigma: 0.03890]
+2025-02-18 15:34:01,262 [INFO] [Iteration 171] [KL: 0.64998] [Circuit processing: 23.214 ms] [KL processing: 0.032 ms] [sigma: 0.03818]
+2025-02-18 15:34:01,287 [INFO] [Iteration 172] [KL: 0.64998] [Circuit processing: 23.002 ms] [KL processing: 0.028 ms] [sigma: 0.03748]
+2025-02-18 15:34:01,312 [INFO] [Iteration 173] [KL: 0.64998] [Circuit processing: 23.816 ms] [KL processing: 0.033 ms] [sigma: 0.03678]
+2025-02-18 15:34:01,337 [INFO] [Iteration 174] [KL: 0.64998] [Circuit processing: 23.169 ms] [KL processing: 0.028 ms] [sigma: 0.03611]
+2025-02-18 15:34:01,438 [INFO] [Iteration 175] [KL: 0.64752] [Circuit processing: 22.935 ms] [KL processing: 0.028 ms] [sigma: 0.03546]
+2025-02-18 15:34:01,529 [INFO] [Iteration 176] [KL: 0.64715] [Circuit processing: 17.330 ms] [KL processing: 0.033 ms] [sigma: 0.03480]
+2025-02-18 15:34:01,556 [INFO] [Iteration 177] [KL: 0.64715] [Circuit processing: 23.032 ms] [KL processing: 0.034 ms] [sigma: 0.03417]
+2025-02-18 15:34:01,580 [INFO] [Iteration 178] [KL: 0.64715] [Circuit processing: 22.941 ms] [KL processing: 0.028 ms] [sigma: 0.03352]
+2025-02-18 15:34:01,605 [INFO] [Iteration 179] [KL: 0.64715] [Circuit processing: 23.729 ms] [KL processing: 0.028 ms] [sigma: 0.03303]
+2025-02-18 15:34:01,631 [INFO] [Iteration 180] [KL: 0.64715] [Circuit processing: 23.353 ms] [KL processing: 0.028 ms] [sigma: 0.03267]
+2025-02-18 15:34:01,732 [INFO] [Iteration 181] [KL: 0.64689] [Circuit processing: 23.382 ms] [KL processing: 0.028 ms] [sigma: 0.03226]
+2025-02-18 15:34:01,753 [INFO] [Iteration 182] [KL: 0.64689] [Circuit processing: 17.283 ms] [KL processing: 0.027 ms] [sigma: 0.03206]
+2025-02-18 15:34:01,860 [INFO] [Iteration 183] [KL: 0.63884] [Circuit processing: 22.785 ms] [KL processing: 0.031 ms] [sigma: 0.03196]
+2025-02-18 15:34:01,951 [INFO] [Iteration 184] [KL: 0.62945] [Circuit processing: 17.297 ms] [KL processing: 0.028 ms] [sigma: 0.03197]
+2025-02-18 15:34:01,972 [INFO] [Iteration 185] [KL: 0.62945] [Circuit processing: 17.208 ms] [KL processing: 0.026 ms] [sigma: 0.03207]
+2025-02-18 15:34:01,997 [INFO] [Iteration 186] [KL: 0.62945] [Circuit processing: 22.716 ms] [KL processing: 0.029 ms] [sigma: 0.03216]
+2025-02-18 15:34:02,022 [INFO] [Iteration 187] [KL: 0.62945] [Circuit processing: 23.759 ms] [KL processing: 0.030 ms] [sigma: 0.03217]
+2025-02-18 15:34:02,047 [INFO] [Iteration 188] [KL: 0.62945] [Circuit processing: 23.144 ms] [KL processing: 0.035 ms] [sigma: 0.03204]
+2025-02-18 15:34:02,072 [INFO] [Iteration 189] [KL: 0.62945] [Circuit processing: 23.098 ms] [KL processing: 0.029 ms] [sigma: 0.03175]
+2025-02-18 15:34:02,174 [INFO] [Iteration 190] [KL: 0.62863] [Circuit processing: 24.035 ms] [KL processing: 0.033 ms] [sigma: 0.03144]
+2025-02-18 15:34:02,195 [INFO] [Iteration 191] [KL: 0.62863] [Circuit processing: 20.049 ms] [KL processing: 0.033 ms] [sigma: 0.03115]
+2025-02-18 15:34:02,221 [INFO] [Iteration 192] [KL: 0.62863] [Circuit processing: 23.582 ms] [KL processing: 0.030 ms] [sigma: 0.03089]
+2025-02-18 15:34:02,246 [INFO] [Iteration 193] [KL: 0.62863] [Circuit processing: 23.107 ms] [KL processing: 0.029 ms] [sigma: 0.03076]
+2025-02-18 15:34:02,270 [INFO] [Iteration 194] [KL: 0.62863] [Circuit processing: 23.198 ms] [KL processing: 0.027 ms] [sigma: 0.03058]
+2025-02-18 15:34:02,296 [INFO] [Iteration 195] [KL: 0.62863] [Circuit processing: 23.762 ms] [KL processing: 0.029 ms] [sigma: 0.03054]
+2025-02-18 15:34:02,321 [INFO] [Iteration 196] [KL: 0.62863] [Circuit processing: 23.430 ms] [KL processing: 0.028 ms] [sigma: 0.03035]
+2025-02-18 15:34:02,416 [INFO] [Iteration 197] [KL: 0.62182] [Circuit processing: 23.354 ms] [KL processing: 0.030 ms] [sigma: 0.02995]
+2025-02-18 15:34:02,527 [INFO] [Iteration 198] [KL: 0.62105] [Circuit processing: 23.262 ms] [KL processing: 0.033 ms] [sigma: 0.02949]
+2025-02-18 15:34:02,617 [INFO] [Iteration 199] [KL: 0.61620] [Circuit processing: 17.430 ms] [KL processing: 0.029 ms] [sigma: 0.02903]
+2025-02-18 15:34:02,639 [INFO] [Iteration 200] [KL: 0.61620] [Circuit processing: 20.910 ms] [KL processing: 0.029 ms] [sigma: 0.02876]
+2025-02-18 15:34:02,641 [INFO] Training finished in 23.000957999999997 s.
+2025-02-18 15:34:02,641 [INFO] {'coverage': 0.65,
+ 'exploration': 0.393,
+ 'fidelity': 0.7022900763358778,
+ 'normalized_rate': 0.3942857142857143,
+ 'precision': 0.883}
+2025-02-18 15:34:02,831 [INFO] No path found after /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21/benchmark_0/rep_1_Cardinality_Constraint_qubits6/events.out.tfevents.1739889229.oberon
+2025-02-18 15:34:02,859 [INFO] 
+2025-02-18 15:34:02,860 [INFO]  ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ==== 
+2025-02-18 15:34:02,860 [INFO] 
+2025-02-18 15:34:02,863 [INFO] 
+2025-02-18 15:34:02,863 [INFO]  =============== Run finished =============== 
+2025-02-18 15:34:02,863 [INFO] 
+2025-02-18 15:34:02,864 [INFO] ================================================================================
+2025-02-18 15:34:02,864 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+2025-02-18 15:34:02,865 [INFO] ================================================================================
+2025-02-18 15:34:02,865 [INFO] 
+2025-02-18 15:34:02,868 [INFO] Saving 1 benchmark records to /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21/results.json
+2025-02-18 15:34:03,029 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-02-18 15:34:03,050 [INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-02-18 15:34:05,239 [INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21/time_by_module.pdf.
+2025-02-18 15:34:05,379 [INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21/total_time.pdf.
+2025-02-18 15:34:05,750 [INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/generativemodeling-2025-02-18-15-32-21/metrics_collection_test.pdf.
+2025-02-18 15:34:05,751 [INFO] Finished creating plots.
+2025-02-18 15:34:05,751 [INFO]  ============================================================ 
+2025-02-18 15:34:05,751 [INFO]  ====================  QUARK finished!   ==================== 
+2025-02-18 15:34:05,752 [INFO]  ============================================================ 

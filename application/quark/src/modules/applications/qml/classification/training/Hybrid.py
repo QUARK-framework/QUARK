@@ -210,7 +210,7 @@ class Hybrid(Core, Training, ABC):
         n_epochs: int
         n_reduced_features: int
         n_images_per_class: int
-        data_set: str
+        dataset_name: str
         
         
 
@@ -265,7 +265,8 @@ class Hybrid(Core, Training, ABC):
         :rtype: dict
         """
 
-        self.model = QuantumModel(n_reduced_features=config['n_reduced_features'], dataset_name=config["data_set"], n_classes=config["n_classes"])
+        print(config)
+        self.model = QuantumModel(n_reduced_features=config['n_reduced_features'], dataset_name=config["input_data"], n_classes=config["n_classes"])
         quantum_metrics_class = MetricsQuantum()
         circuit, params = self.model.get_quantum_circuit()
         print("Quantum layer:\n", circuit.draw(output='text'))

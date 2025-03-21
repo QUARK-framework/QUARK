@@ -264,8 +264,6 @@ class Hybrid(Core, Training, ABC):
         :return: Dictionary including the information of previous modules as well as of the training
         :rtype: dict
         """
-
-        print(config)
         self.model = QuantumModel(n_reduced_features=config['n_reduced_features'], dataset_name=config["input_data"], n_classes=config["n_classes"])
         quantum_metrics_class = MetricsQuantum()
         circuit, params = self.model.get_quantum_circuit()

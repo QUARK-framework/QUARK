@@ -21,6 +21,7 @@ from matplotlib import axes, figure
 from modules.applications.qml.Training import *
 from modules.Core import Core
 from tensorboardX import SummaryWriter
+from utils import start_time_measurement, end_time_measurement
 from utils_mpi import get_comm, is_running_mpi
 
 MPI = is_running_mpi()
@@ -209,7 +210,7 @@ class Hybrid(Core, Training, ABC):
         n_epochs: int
         n_reduced_features: int
         n_images_per_class: int
-        data_set: str
+        dataset_name: str
         
         
 
@@ -263,8 +264,7 @@ class Hybrid(Core, Training, ABC):
         :return: Dictionary including the information of previous modules as well as of the training
         :rtype: dict
         """
-
-        self.model = QuantumModel(n_reduced_features=config['n_reduced_features'], dataset_name=config["data_set"], n_classes=config["n_classes"])
+        self.model = QuantumModel(n_reduced_features=config['n_reduced_features'], dataset_name=config["input_data"], n_classes=config["n_classes"])
         quantum_metrics_class = MetricsQuantum()
         circuit, params = self.model.get_quantum_circuit()
         print("Quantum layer:\n", circuit.draw(output='text'))

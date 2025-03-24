@@ -24,11 +24,10 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
-
-from ConfigManager import ConfigManager
 from BenchmarkRecord import BenchmarkRecord, BenchmarkRecordStored
-from Plotter import Plotter
+from ConfigManager import ConfigManager
 from modules.Core import Core
+from Plotter import Plotter
 from utils import get_git_revision
 from utils_mpi import get_comm
 
@@ -241,8 +240,12 @@ class BenchmarkManager:
                     )
                     self.application.metrics.set_module_config(backlog_item["config"])
                     instruction, problem, preprocessing_time = preprocess(
-                        self.application, None, backlog_item["config"],
-                        store_dir=path, rep_count=i, previous_job_info=job_info
+                        self.application, 
+                        None, 
+                        backlog_item["config"],
+                        store_dir=path, 
+                        rep_count=i, 
+                        previous_job_info=job_info,
                     )
                     self.application.metrics.set_preprocessing_time(preprocessing_time)
                     self.application.save(path, i)
@@ -376,7 +379,8 @@ class BenchmarkManager:
                 instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(
                     module_instance,
                     module_instance.preprocessed_input,
-                    module["config"], store_dir=path,
+                    module["config"], 
+                    store_dir=path,
                     rep_count=rep_count,
                     previous_job_info=submodule_job_info
                 )

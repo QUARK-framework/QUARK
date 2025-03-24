@@ -30,7 +30,7 @@ class QML(Application, ABC):
         :param config: Configuration dictionary
         :return: Generated problem
         """
-        pass
+        raise NotImplementedError
 
     def save(self, path: str, iter_count: int) -> None:
         """
@@ -39,4 +39,4 @@ class QML(Application, ABC):
         :param path: Path to save the file
         :param iter_count: Iteration count
         """
-        pass
+        return

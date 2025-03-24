@@ -21,10 +21,9 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import yaml
-from typing_extensions import TypedDict, NotRequired, Self
-
-from modules.Core import Core
 from modules.applications import Application
+from modules.Core import Core
+from typing_extensions import NotRequired, Self, TypedDict
 from utils import _get_instance_with_sub_options, checkbox
 
 

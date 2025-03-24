@@ -13,12 +13,16 @@
 #  limitations under the License.
 
 from typing import Union
-from utils import start_time_measurement, end_time_measurement
 
 from modules.applications.Application import Application
+from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import (
+    ContinuousData,
+)
+from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import (
+    DiscreteData,
+)
 from modules.applications.qml.QML import QML
-from modules.applications.qml.generative_modeling.data.data_handler.DiscreteData import DiscreteData
-from modules.applications.qml.generative_modeling.data.data_handler.ContinuousData import ContinuousData
+from utils import end_time_measurement, start_time_measurement
 
 
 class GenerativeModeling(QML):
@@ -117,6 +121,10 @@ class GenerativeModeling(QML):
         :param input_data: A representation of the quantum machine learning model that will be trained
         :param config: Config specifying the parameters of the training
         :param kwargs: Optional keyword arguments
+        :return: Tuple with input_data and the function's computation time
+        """
+        start = start_time_measurement()
+        return input_data, end_time_measurement(start)        :param kwargs: Optional keyword arguments
         :return: Tuple with input_data and the function's computation time
         """
         start = start_time_measurement()

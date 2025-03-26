@@ -206,6 +206,10 @@ class ImageData(DataHandler):
             )
 
         elif self.dataset_name == "MNIST":
+            if config["n_classes"] != 2:
+                raise NotImplementedError(
+                    "Sorry, currently only binary classification for digits 0 and 1 has been implemented."
+                )
             self.dataset_train, self.dataset_val, self.dataset_test = (
                 self.create_mnist_dataset(self.n_classes, self.n_images_per_class)
             )
@@ -245,6 +249,14 @@ class ImageData(DataHandler):
 
         idx = torch.as_tensor(trainset.targets) == 0
         idx += torch.as_tensor(trainset.targets) == 1
+        kept = 0
+        for j in range(len(idx)):
+            if idx[j] == 1:
+                if kept < n_images_per_class * 2:
+                    kept += 1
+                else:
+                    idx[j:] = 0
+                    break
         subset_train = torch.utils.data.dataset.Subset(trainset, np.where(idx == 1)[0])
 
         trainloader = torch.utils.data.DataLoader(
@@ -257,6 +269,14 @@ class ImageData(DataHandler):
 
         idx = torch.as_tensor(testset.targets) == 0
         idx += torch.as_tensor(testset.targets) == 1
+        kept = 0
+        for j in range(len(idx)):
+            if idx[j] == 1:
+                if kept < n_images_per_class * 2:
+                    kept += 1
+                else:
+                    idx[j:] = 0
+                    break
         subset_test = torch.utils.data.dataset.Subset(testset, np.where(idx == 1)[0])
         testloader = torch.utils.data.DataLoader(
             subset_test, batch_size=batch_size, shuffle=False, num_workers=2

@@ -14,7 +14,7 @@
 
 from typing import TypedDict
 
-from modules.applications.Application import *
+# from modules.applications.Application import *
 from modules.applications.qml.classification.data.data_handler.ImageData import (
     ImageData,
 )

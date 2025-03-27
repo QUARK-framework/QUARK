@@ -22,7 +22,7 @@ import pkg_resources
 import torch
 import torch.nn as nn
 import torchvision
-from modules.applications.qml.classification.data.data_handler.DataHandler import *
+from modules.applications.qml.classification.data.data_handler.DataHandler import DataHandler
 from modules.applications.qml.classification.data.data_handler.MetricsClassification import (
     MetricsClassification,
 )
@@ -53,9 +53,7 @@ class ImageData(DataHandler):
         self.n_registers = None
         self.gc = None
         self.n_qubits = None
-        self.data_folder = pkg_resources.resource_filename(
-            "modules.applications.qml.classification.data", "Images_2D"
-        )
+        self.data_folder = pkg_resources.resource_filename("modules.applications.qml.classification.data", "Images_2D")
 
     @staticmethod
     def get_requirements() -> list[dict]:
@@ -74,7 +72,7 @@ class ImageData(DataHandler):
             {"name": "numpy", "version": "1.26.4"},
         ]
 
-    def get_default_submodule(self, option: str) -> Core:
+    def get_default_submodule(self, option: str) -> Hybrid:
         if option == "Hybrid":
             return Hybrid()
 
@@ -104,7 +102,7 @@ class ImageData(DataHandler):
                 "description": "Number of images to extract for each class",
             },
             "n_classes": {
-                "values": [2, 10],
+                "values": [2, 4, 10],
                 "description": "How many classes to benchmark on?",
             },
             "noise_sigma": {
@@ -140,9 +138,7 @@ class ImageData(DataHandler):
             transform=None,
             target_transform=None,
         ):
-            self.embeddings_df = pd.read_csv(embeddings_file, index_col=0).iloc[
-                index_selection
-            ]
+            self.embeddings_df = pd.read_csv(embeddings_file, index_col=0).iloc[index_selection]
             self.transform = transform
             self.target_transform = target_transform
 
@@ -184,34 +180,25 @@ class ImageData(DataHandler):
         self.dataset_name = config["data_set"]
         self.n_qubits = gen_mod["n_qubits"]
         self.n_classes = config["n_classes"]
-
         self.n_images_per_class = config["n_images_per_class"]
         total_n_images = config["n_classes"] * config["n_images_per_class"]
         noise_sigma = config["noise_sigma"]
 
         if self.dataset_name == "Concrete_Crack":
             if config["n_classes"] != 2:
-                raise Exception(
-                    "Sorry, number of classes does not work for this dataset, should be 2."
-                )
+                raise Exception("Sorry, number of classes does not work for this dataset, should be 2.")
 
             logging.info("Creating index")
             self.create_data_index()
             logging.info("Embedding dataset")
-            embeddings_file = self.embed_dataset(
-                n_images_per_class=self.n_images_per_class, noise_sigma=noise_sigma
-            )
-            self.dataset_train, self.dataset_val, self.dataset_test = (
-                self.create_torch_dataset(total_n_images, embeddings_file)
+            embeddings_file = self.embed_dataset(n_images_per_class=self.n_images_per_class, noise_sigma=noise_sigma)
+            self.dataset_train, self.dataset_val, self.dataset_test = self.create_torch_dataset(
+                total_n_images, embeddings_file
             )
 
         elif self.dataset_name == "MNIST":
-            if config["n_classes"] != 2:
-                raise NotImplementedError(
-                    "Sorry, currently only binary classification for digits 0 and 1 has been implemented."
-                )
-            self.dataset_train, self.dataset_val, self.dataset_test = (
-                self.create_mnist_dataset(self.n_classes, self.n_images_per_class)
+            self.dataset_train, self.dataset_val, self.dataset_test = self.create_mnist_dataset(
+                self.n_classes, self.n_images_per_class
             )
 
         else:
@@ -232,6 +219,14 @@ class ImageData(DataHandler):
 
         return application_config
 
+    # TODO this method is not creating image embeddings.
+    # The dataloading for the concrete crack images does:
+    # 1. indexing and sampling of the files
+    # 2. embedding of the sampled images using resnet
+    # 3. packaging into a torch dataloader
+    # The dataloading for mnist instead does only steps 1 and 3.
+    # Step two for mnist is done in the training part (Hybrid module).
+    # This lack of consistency needs to be fixed.
     def create_mnist_dataset(self, n_classes: int, n_images_per_class: int):
         transform = transforms.Compose(
             [
@@ -243,46 +238,46 @@ class ImageData(DataHandler):
 
         batch_size = 64
 
-        trainset = torchvision.datasets.MNIST(
-            root=self.data_folder, train=True, download=True, transform=transform
-        )
+        trainset = torchvision.datasets.MNIST(root=self.data_folder, train=True, download=True, transform=transform)
 
-        idx = torch.as_tensor(trainset.targets) == 0
-        idx += torch.as_tensor(trainset.targets) == 1
-        kept = 0
-        for j in range(len(idx)):
-            if idx[j] == 1:
-                if kept < n_images_per_class * 2:
-                    kept += 1
-                else:
-                    idx[j:] = 0
-                    break
+        idx = self.keep_first_k_ones(torch.as_tensor(trainset.targets) == 0, k=n_images_per_class)
+        for j in range(1, n_classes):
+            idx += self.keep_first_k_ones(torch.as_tensor(trainset.targets) == j, k=n_images_per_class)
         subset_train = torch.utils.data.dataset.Subset(trainset, np.where(idx == 1)[0])
 
-        trainloader = torch.utils.data.DataLoader(
-            subset_train, batch_size=batch_size, shuffle=True, num_workers=2
-        )
+        trainloader = torch.utils.data.DataLoader(subset_train, batch_size=batch_size, shuffle=True, num_workers=2)
 
-        testset = torchvision.datasets.MNIST(
-            root=self.data_folder, train=False, download=True, transform=transform
-        )
+        testset = torchvision.datasets.MNIST(root=self.data_folder, train=False, download=True, transform=transform)
 
-        idx = torch.as_tensor(testset.targets) == 0
-        idx += torch.as_tensor(testset.targets) == 1
-        kept = 0
-        for j in range(len(idx)):
-            if idx[j] == 1:
-                if kept < n_images_per_class * 2:
-                    kept += 1
-                else:
-                    idx[j:] = 0
-                    break
+        idx = self.keep_first_k_ones(torch.as_tensor(testset.targets) == 0, k=n_images_per_class)
+        for j in range(1, n_classes):
+            idx += self.keep_first_k_ones(torch.as_tensor(testset.targets) == j, k=n_images_per_class)
         subset_test = torch.utils.data.dataset.Subset(testset, np.where(idx == 1)[0])
-        testloader = torch.utils.data.DataLoader(
-            subset_test, batch_size=batch_size, shuffle=False, num_workers=2
-        )
+        testloader = torch.utils.data.DataLoader(subset_test, batch_size=batch_size, shuffle=False, num_workers=2)
 
         return trainloader, testloader, testloader
+
+    @staticmethod
+    def keep_first_k_ones(tensor, k=1000):
+        """
+        Keeps only the first k ones in a 1-D tensor of 0s and 1s and sets the rest to 0.
+
+        Args:
+            tensor (torch.Tensor): A 1-D tensor containing 0s and 1s.
+            k (int): The number of ones to keep.  Defaults to 1000.
+
+        Returns:
+            torch.Tensor: A new tensor with only the first k ones remaining.
+        """
+
+        indices = (tensor == 1).nonzero(as_tuple=False).flatten()  # indices of all 1s
+        if len(indices) > k:
+            indices_to_zero = indices[k:]  # indices of ones to change to zeros
+            new_tensor = tensor.clone()  # creating a clone is crucial to avoid modifying the input tensor
+            new_tensor[indices_to_zero] = 0
+            return new_tensor
+        else:
+            return tensor.clone()
 
     def create_torch_dataset(
         self,
@@ -308,15 +303,9 @@ class ImageData(DataHandler):
             else:
                 train_indexes.append(j)
 
-        train_dataset = self.CustomDataset(
-            embeddings_file=embeddings_file, index_selection=train_indexes
-        )
-        val_dataset = self.CustomDataset(
-            embeddings_file=embeddings_file, index_selection=val_indexes
-        )
-        test_dataset = self.CustomDataset(
-            embeddings_file=embeddings_file, index_selection=test_indexes
-        )
+        train_dataset = self.CustomDataset(embeddings_file=embeddings_file, index_selection=train_indexes)
+        val_dataset = self.CustomDataset(embeddings_file=embeddings_file, index_selection=val_indexes)
+        test_dataset = self.CustomDataset(embeddings_file=embeddings_file, index_selection=test_indexes)
 
         train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
         val_dataloader = DataLoader(val_dataset, batch_size=32, shuffle=True)
@@ -358,9 +347,7 @@ class ImageData(DataHandler):
         index_df = index_df.set_index("file")
         index_df.to_csv(output_path)
 
-    def sample_index(
-        self, n_samples_per_class: int, random_state: int = 42
-    ) -> pd.DataFrame:
+    def sample_index(self, n_samples_per_class: int, random_state: int = 42) -> pd.DataFrame:
         """
         Sample images from the index file.
 
@@ -378,12 +365,8 @@ class ImageData(DataHandler):
         )
 
         shuffled_df = index_df.sample(frac=1.0, random_state=random_state)
-        negative_samples_df = shuffled_df[shuffled_df.label == "Negative"].iloc[
-            0:n_samples_per_class
-        ]
-        positive_samples_df = shuffled_df[shuffled_df.label == "Positive"].iloc[
-            0:n_samples_per_class
-        ]
+        negative_samples_df = shuffled_df[shuffled_df.label == "Negative"].iloc[0:n_samples_per_class]
+        positive_samples_df = shuffled_df[shuffled_df.label == "Positive"].iloc[0:n_samples_per_class]
 
         return pd.concat([negative_samples_df, positive_samples_df])
 
@@ -403,9 +386,7 @@ class ImageData(DataHandler):
         noisy_df = np.clip(noisy_df, 0, 1)
         return noisy_df
 
-    def embed_dataset(
-        self, n_images_per_class: int, noise_sigma: float
-    ) -> pd.DataFrame:
+    def embed_dataset(self, n_images_per_class: int, noise_sigma: float) -> pd.DataFrame:
         """
         Embed images from the data folder using the pretrained Resnet18 model.
         Stores the embeddings in a CSV file.
@@ -421,9 +402,7 @@ class ImageData(DataHandler):
         resnet18_embedder = self.build_truncated_resnet_model()
         resnet18_embedder.eval()
 
-        normalize = transforms.Normalize(
-            mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-        )
+        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 
         embedding_file = os.path.join(self.data_folder, "embeddings.csv")
         existing_embedding_df = pd.DataFrame(
@@ -456,9 +435,7 @@ class ImageData(DataHandler):
         embeddings = []
         batch_size = 16
         for batch_start in tqdm(range(0, len(imgs_array), batch_size)):
-            imgs_tensor = torch.tensor(
-                imgs_array[batch_start : batch_start + batch_size]
-            ).float()
+            imgs_tensor = torch.tensor(imgs_array[batch_start : batch_start + batch_size]).float()
             imgs_tensor = normalize(imgs_tensor)
             pred = resnet18_embedder(imgs_tensor)
             embeddings.extend(pred.detach().reshape(-1, 512).tolist())

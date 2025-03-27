@@ -12,11 +12,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import math
 
-from typing import Tuple, Dict
+from typing import Dict
+
 import numpy as np
 import sklearn
+
 
 class MetricsClassification:
     """
@@ -33,10 +34,9 @@ class MetricsClassification:
     """
 
     def __init__(
-            self,
+        self,
     ) -> None:
         pass
-
 
     def get_metrics(self, y_pred: np.array, y_true: np.array) -> Dict[str, float]:
         """

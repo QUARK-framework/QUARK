@@ -65,9 +65,7 @@ class QuantumLayer(nn.Module):
     Torch module implementing a quantum layer.
     """
 
-    def __init__(
-        self, nqubits=4, circuit_depth=4, quantum_device: Optional[qml.Device] = None
-    ) -> None:
+    def __init__(self, nqubits=4, circuit_depth=4, quantum_device: Optional[qml.Device] = None) -> None:
         """
         Define the quantum circuit.
         """
@@ -129,10 +127,7 @@ class QuantumLayer(nn.Module):
         self.circuit = QuantumCircuit(self.n_qubits)
 
         input_params = [Parameter(f"input_{i}") for i in range(self.n_qubits)]
-        var_params = [
-            Parameter(f"var_{i}")
-            for i in range(self.num_variational_layers * self.n_qubits)
-        ]
+        var_params = [Parameter(f"var_{i}") for i in range(self.num_variational_layers * self.n_qubits)]
         self.params = input_params + var_params
 
         self.H_layer(self.n_qubits)
@@ -168,6 +163,14 @@ class QuantumLayer(nn.Module):
 
 
 class QuantumModel(nn.Module):
+    """
+    A hybrid quantum-classical neural network model for image classification.
+
+    This model combines classical pre-processing layers (potentially including
+    feature extraction like ResNet) with a quantum layer for classification.
+    It supports different datasets like 'Concrete_Crack' and 'MNIST'.
+    """
+
     def __init__(
         self,
         quantum_device=None,
@@ -176,6 +179,27 @@ class QuantumModel(nn.Module):
         dataset_name="Concrete_Crack",
         n_classes=2,
     ):
+        """
+        Initializes the QuantumModel.
+
+        Args:
+            quantum_device (qml.Device, optional): The PennyLane quantum device
+                to run the quantum circuit on. Defaults to "default.qubit" with
+                wires equal to n_reduced_features.
+            n_reduced_features (int): The number of features to reduce the input
+                to before feeding into the quantum layer. This also corresponds
+                to the number of qubits in the quantum circuit. Defaults to 4.
+            circuit_depth (int): The depth of the quantum circuit (number of
+                layers in the QuantumLayer). Defaults to 1.
+            dataset_name (str): The name of the dataset being used ("Concrete_Crack"
+                or "MNIST"). This determines the classical pre-processing architecture.
+                Defaults to "Concrete_Crack".
+            n_classes (int): The number of output classes for the classification task.
+                Defaults to 2.
+
+        Raises:
+            Exception: If an invalid `dataset_name` is provided.
+        """
         super(QuantumModel, self).__init__()
 
         self.dataset_name = dataset_name
@@ -198,6 +222,8 @@ class QuantumModel(nn.Module):
                 nn.Linear(n_reduced_features, self.n_classes),
             )
 
+        # TODO the classical embeddings with resnet for MNIST
+        # should be moved to the ImageData logic as it'S done for the Concrete Crack usecase
         elif self.dataset_name == "MNIST":
             self.image_features = 28
             self.resnet18 = models.resnet18(pretrained=True)
@@ -213,9 +239,29 @@ class QuantumModel(nn.Module):
             raise Exception(f"No valid dataset name {self.dataset_name}.")
 
     def get_quantum_circuit(self):
+        """
+        Retrieves the underlying quantum circuit and its parameters.
+
+        Returns:
+            tuple: A tuple containing:
+                - qml.QNode: The quantum circuit (QNode).
+                - torch.nn.Parameter: The trainable parameters of the quantum circuit.
+        """
         return self.quantum_layer.circuit, self.quantum_layer.params
 
     def forward(self, x):
+        """
+        Defines the forward pass of the model.
+
+        Args:
+            x (torch.Tensor): The input tensor. For 'Concrete_Crack', this is
+                expected to be pre-extracted features. For 'MNIST', this is
+                expected to be the raw image tensor.
+
+        Returns:
+            torch.Tensor: The output tensor containing the model's predictions
+                (logits).
+        """
         if self.dataset_name == "MNIST":
             with torch.no_grad():
                 x = self.resnet18(x)

@@ -21,9 +21,10 @@ import torch
 import torch.nn as nn
 from matplotlib import axes, figure
 from modules.applications.qml.classification.QuantumModel import QuantumModel
-from modules.applications.qml.classification.training.ClassifierTraining import *
+
+# from modules.applications.qml.classification.training.ClassifierTraining import *
 from modules.applications.qml.MetricsQuantum import MetricsQuantum
-from modules.applications.qml.Training import *
+from modules.applications.qml.Training import Training
 from modules.Core import Core
 from tensorboardX import SummaryWriter
 from torch.optim.lr_scheduler import StepLR
@@ -158,9 +159,7 @@ class Hybrid(Core, Training):
         """
         start = start_time_measurement()
         logging.info("Start training")
-        training_results = self.start_training(
-            self.preprocessed_input, config, **kwargs
-        )
+        training_results = self.start_training(self.preprocessed_input, config, **kwargs)
 
         postprocessing_time = end_time_measurement(start)
         logging.info(f"Training finished in {postprocessing_time / 1000} s.")
@@ -217,17 +216,13 @@ class Hybrid(Core, Training):
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
         lr_scheduler_step = 100
         lr_scheduler_gamma = 0
-        lr_scheduler = StepLR(
-            self.optimizer, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma
-        )
+        lr_scheduler = StepLR(self.optimizer, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
         self.setup_training(input_data, config)
 
         size = None
         input_data["MPI_size"] = size
-        input_data["store_dir_iter"] += (
-            f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
-        )
+        input_data["store_dir_iter"] += f"_{input_data['dataset_name']}_qubits{input_data['n_qubits']}"
         n_epochs = config["n_epochs"]
 
         self.n_states_range = range(2 ** input_data["n_qubits"])
@@ -281,9 +276,7 @@ class Hybrid(Core, Training):
             if train_loss < best_loss:
                 best_loss = train_loss
 
-            self.writer.add_scalar(
-                "loss/train", sum(train_losses) / len(train_losses), epoch_idx
-            )
+            self.writer.add_scalar("loss/train", sum(train_losses) / len(train_losses), epoch_idx)
             input_data["train_loss"].append(float(train_loss))
 
             val_losses = []
@@ -300,16 +293,12 @@ class Hybrid(Core, Training):
                 y_pred = np.argmax(y_logits.detach().numpy(), axis=1)
 
                 val_losses.append(loss_fn(y_raw, y_true).detach().numpy())
-                val_accuracies.append(
-                    sum(y_pred == y_true.detach().numpy()) / len(y_pred)
-                )
+                val_accuracies.append(sum(y_pred == y_true.detach().numpy()) / len(y_pred))
 
             val_loss = np.mean(val_losses)
             val_accuracy = np.mean(val_accuracies)
 
-            self.writer.add_scalar(
-                "metrics/accuracy/validation", val_accuracy, epoch_idx
-            )
+            self.writer.add_scalar("metrics/accuracy/validation", val_accuracy, epoch_idx)
             self.writer.add_scalar("loss/validation", val_loss, epoch_idx)
 
             input_data["validation_loss"].append(float(val_loss))
@@ -317,9 +306,7 @@ class Hybrid(Core, Training):
 
             metrics = self.classification_metrics.get_metrics(y_preds, y_trues)
             for metric_name, metric_value in metrics.items():
-                self.writer.add_scalar(
-                    f"metrics/{metric_name}/train", metric_value, epoch_idx
-                )
+                self.writer.add_scalar(f"metrics/{metric_name}/train", metric_value, epoch_idx)
                 if metric_name == "accuracy":
                     train_accuracy = metric_value
 
@@ -337,9 +324,7 @@ class Hybrid(Core, Training):
 
         self.trained = True
 
-        self.metrics.add_metric_batch(
-            {"val_accuracy": val_accuracy, "train_accuracy": train_accuracy}
-        )
+        self.metrics.add_metric_batch({"val_accuracy": val_accuracy, "train_accuracy": train_accuracy})
 
         plt.close()
         self.writer.flush()
@@ -363,12 +348,8 @@ class Hybrid(Core, Training):
                 self.start_gpu: np.cuda.Event
                 self.end_gpu: time.perf_counter
 
-            self.start_recording = (
-                self.start_recording_gpu if GPU else self.start_recording_cpu
-            )
-            self.stop_recording = (
-                self.stop_recording_gpu if GPU else self.stop_recording_cpu
-            )
+            self.start_recording = self.start_recording_gpu if GPU else self.start_recording_cpu
+            self.stop_recording = self.stop_recording_gpu if GPU else self.stop_recording_cpu
 
         def start_recording_cpu(self) -> None:
             """

@@ -54,9 +54,10 @@ def setup_logging() -> None:
     Sets up the logging.
     """
     logging.root.handlers = []
+    logging.getLogger("qiskit").setLevel(logging.WARNING)
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
+        format="%(asctime)s [%(name)s:%(lineno)s - %(funcName)20s() ][%(levelname)s] %(message)s",
         handlers=[MPIFileHandler("logging.log"), MPIStreamHandler()],
     )
 
@@ -74,9 +75,7 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
 
 
-def start_benchmark_run(
-    config_file: str = None, store_dir: str = None, fail_fast: bool = False
-) -> None:
+def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fast: bool = False) -> None:
     """
     Starts a benchmark run from the code.
     """
@@ -105,15 +104,11 @@ def start_benchmark_run(
     # Can be overridden by using the -m|--modules option
     installer = Installer()
     app_modules = installer.get_env(installer.get_active_env())
-    benchmark_manager.orchestrate_benchmark(
-        config_manager, store_dir=store_dir, app_modules=app_modules
-    )
+    benchmark_manager.orchestrate_benchmark(config_manager, store_dir=store_dir, app_modules=app_modules)
 
 
 def create_benchmark_parser(parser: argparse.ArgumentParser):
-    parser.add_argument(
-        "-c", "--config", help="Provide valid config file instead of interactive mode"
-    )
+    parser.add_argument("-c", "--config", help="Provide valid config file instead of interactive mode")
     parser.add_argument(
         "-cc",
         "--createconfig",
@@ -128,9 +123,7 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
         help="If you want to summarize multiple experiments",
         required=False,
     )
-    parser.add_argument(
-        "-m", "--modules", help="Provide a file listing the modules to be loaded"
-    )
+    parser.add_argument("-m", "--modules", help="Provide a file listing the modules to be loaded")
     parser.add_argument(
         "-rd",
         "--resume-dir",
@@ -151,15 +144,9 @@ def create_benchmark_parser(parser: argparse.ArgumentParser):
 def create_env_parser(parser: argparse.ArgumentParser):
     subparsers = parser.add_subparsers(help="env")
 
-    parser_env = subparsers.add_parser(
-        "env", help="When you want to change something about the QUARK module env."
-    )
-    parser_env.add_argument(
-        "-c", "--configure", help="Configure certain QUARK modules", required=False
-    )
-    parser_env.add_argument(
-        "-a", "--activate", help="Activate a certain set of modules", required=False
-    )
+    parser_env = subparsers.add_parser("env", help="When you want to change something about the QUARK module env.")
+    parser_env.add_argument("-c", "--configure", help="Configure certain QUARK modules", required=False)
+    parser_env.add_argument("-a", "--activate", help="Activate a certain set of modules", required=False)
     parser_env.add_argument(
         "-cm",
         "--createmoduledb",
@@ -174,9 +161,7 @@ def create_env_parser(parser: argparse.ArgumentParser):
         required=False,
         action=argparse.BooleanOptionalAction,
     )
-    parser_env.add_argument(
-        "-s", "--show", help="Show the content of an env", required=False
-    )
+    parser_env.add_argument("-s", "--show", help="Show the content of an env", required=False)
     parser_env.set_defaults(goal="env")
 
 
@@ -204,9 +189,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             #   + Replaces relative paths by taking them relative to the location of the modules configuration file
             base_dir = os.path.dirname(args.modules)
             with open(args.modules) as filehandler:
-                app_modules = _expand_paths(
-                    json.loads(_filter_comments(filehandler)), base_dir
-                )
+                app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
         else:
             # Gets current env here
             installer = Installer()
@@ -223,9 +206,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
                     benchmark_config = yaml.load(filehandler, Loader=yaml.FullLoader)
                 except Exception as e:
                     logging.exception("Problem loading the given config file")
-                    raise ValueError(
-                        "Config file needs to be a valid QUARK YAML Config!"
-                    ) from e
+                    raise ValueError("Config file needs to be a valid QUARK YAML Config!") from e
 
                 config_manager.set_config(benchmark_config)
         else:
@@ -236,9 +217,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             config_manager.print()
         else:
             interrupted_results_path = (
-                None
-                if args.resume_dir is None
-                else os.path.join(args.resume_dir, "results.json")
+                None if args.resume_dir is None else os.path.join(args.resume_dir, "results.json")
             )
             benchmark_manager.orchestrate_benchmark(
                 config_manager,

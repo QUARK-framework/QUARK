@@ -18,12 +18,10 @@ from modules.applications.Application import Application
 
 
 class QML(Application, ABC):
-    """
-    qml Module for QUARK, is used by all qml applications.
-    """
+    """qml Module for QUARK, is used by all qml applications."""
 
     @abstractmethod
-    def generate_problem(self, config: dict) -> any:
+    def generate_problem(self, config: dict, a: float) -> any:
         """
         Creates a concrete problem and returns it.
 

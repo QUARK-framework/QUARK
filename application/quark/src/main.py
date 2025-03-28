@@ -12,17 +12,17 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import argparse
+import json
+import logging
 import os
 import sys
-import argparse
-import logging
-import json
 from collections.abc import Iterable
-import yaml
 
+import yaml
 from Installer import Installer
 from utils import _expand_paths
-from utils_mpi import MPIStreamHandler, MPIFileHandler, get_comm
+from utils_mpi import MPIFileHandler, MPIStreamHandler, get_comm
 
 comm = get_comm()
 
@@ -54,13 +54,11 @@ def setup_logging() -> None:
     Sets up the logging.
     """
     logging.root.handlers = []
+    logging.getLogger("qiskit").setLevel(logging.WARNING)
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            MPIFileHandler("logging.log"),
-            MPIStreamHandler()
-        ]
+        format="%(asctime)s [%(name)s:%(lineno)s - %(funcName)20s() ][%(levelname)s] %(message)s",
+        handlers=[MPIFileHandler("logging.log"), MPIStreamHandler()],
     )
 
     logging.info(" ============================================================ ")
@@ -77,8 +75,7 @@ def setup_logging() -> None:
     logging.info(" ============================================================ ")
 
 
-def start_benchmark_run(config_file: str = None, store_dir: str = None,
-                        fail_fast: bool = False) -> None:
+def start_benchmark_run(config_file: str = None, store_dir: str = None, fail_fast: bool = False) -> None:
     """
     Starts a benchmark run from the code.
     """
@@ -107,37 +104,65 @@ def start_benchmark_run(config_file: str = None, store_dir: str = None,
     # Can be overridden by using the -m|--modules option
     installer = Installer()
     app_modules = installer.get_env(installer.get_active_env())
-    benchmark_manager.orchestrate_benchmark(
-        config_manager, store_dir=store_dir, app_modules=app_modules
-    )
+    benchmark_manager.orchestrate_benchmark(config_manager, store_dir=store_dir, app_modules=app_modules)
 
 
 def create_benchmark_parser(parser: argparse.ArgumentParser):
     parser.add_argument("-c", "--config", help="Provide valid config file instead of interactive mode")
-    parser.add_argument('-cc', '--createconfig', help='If you want o create a config without executing it',
-                        required=False, action=argparse.BooleanOptionalAction)
-    parser.add_argument('-s', '--summarize', nargs='+', help='If you want to summarize multiple experiments',
-                        required=False)
-    parser.add_argument('-m', '--modules', help="Provide a file listing the modules to be loaded")
-    parser.add_argument('-rd', '--resume-dir', nargs='?', help='Provide results directory of the job to be resumed')
-    parser.add_argument('-ff', '--failfast', help='Flag whether a single failed benchmark run causes QUARK to fail',
-                        required=False, action=argparse.BooleanOptionalAction)
+    parser.add_argument(
+        "-cc",
+        "--createconfig",
+        help="If you want o create a config without executing it",
+        required=False,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser.add_argument(
+        "-s",
+        "--summarize",
+        nargs="+",
+        help="If you want to summarize multiple experiments",
+        required=False,
+    )
+    parser.add_argument("-m", "--modules", help="Provide a file listing the modules to be loaded")
+    parser.add_argument(
+        "-rd",
+        "--resume-dir",
+        nargs="?",
+        help="Provide results directory of the job to be resumed",
+    )
+    parser.add_argument(
+        "-ff",
+        "--failfast",
+        help="Flag whether a single failed benchmark run causes QUARK to fail",
+        required=False,
+        action=argparse.BooleanOptionalAction,
+    )
 
-    parser.set_defaults(goal='benchmark')
+    parser.set_defaults(goal="benchmark")
 
 
 def create_env_parser(parser: argparse.ArgumentParser):
-    subparsers = parser.add_subparsers(help='env')
+    subparsers = parser.add_subparsers(help="env")
 
-    parser_env = subparsers.add_parser('env', help='When you want to change something about the QUARK module env.')
-    parser_env.add_argument('-c', '--configure', help='Configure certain QUARK modules', required=False)
-    parser_env.add_argument('-a', '--activate', help='Activate a certain set of modules', required=False)
-    parser_env.add_argument('-cm', '--createmoduledb', help='Create module db', required=False,
-                            action=argparse.BooleanOptionalAction)
-    parser_env.add_argument('-l', '--list', help='List existing environments', required=False,
-                            action=argparse.BooleanOptionalAction)
-    parser_env.add_argument('-s', '--show', help='Show the content of an env', required=False)
-    parser_env.set_defaults(goal='env')
+    parser_env = subparsers.add_parser("env", help="When you want to change something about the QUARK module env.")
+    parser_env.add_argument("-c", "--configure", help="Configure certain QUARK modules", required=False)
+    parser_env.add_argument("-a", "--activate", help="Activate a certain set of modules", required=False)
+    parser_env.add_argument(
+        "-cm",
+        "--createmoduledb",
+        help="Create module db",
+        required=False,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser_env.add_argument(
+        "-l",
+        "--list",
+        help="List existing environments",
+        required=False,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser_env.add_argument("-s", "--show", help="Show the content of an env", required=False)
+    parser_env.set_defaults(goal="env")
 
 
 def handle_benchmark_run(args: argparse.Namespace) -> None:
@@ -155,6 +180,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
         benchmark_manager.summarize_results(args.summarize)
     else:
         from ConfigManager import ConfigManager  # pylint: disable=C0415
+
         config_manager = ConfigManager()
         if args.modules:
             logging.info(f"Load application modules configuration from {args.modules}")
@@ -163,9 +189,7 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             #   + Replaces relative paths by taking them relative to the location of the modules configuration file
             base_dir = os.path.dirname(args.modules)
             with open(args.modules) as filehandler:
-                app_modules = _expand_paths(json.loads(
-                    _filter_comments(filehandler)), base_dir
-                )
+                app_modules = _expand_paths(json.loads(_filter_comments(filehandler)), base_dir)
         else:
             # Gets current env here
             installer = Installer()
@@ -192,12 +216,13 @@ def handle_benchmark_run(args: argparse.Namespace) -> None:
             logging.info("Selected config is:")
             config_manager.print()
         else:
-            interrupted_results_path = None if args.resume_dir is None else os.path.join(
-                args.resume_dir, "results.json"
+            interrupted_results_path = (
+                None if args.resume_dir is None else os.path.join(args.resume_dir, "results.json")
             )
             benchmark_manager.orchestrate_benchmark(
-                config_manager, app_modules,
-                interrupted_results_path=interrupted_results_path
+                config_manager,
+                app_modules,
+                interrupted_results_path=interrupted_results_path,
             )
             comm.Barrier()
             if comm.Get_rank() == 0:
@@ -251,5 +276,5 @@ def main() -> None:
         raise error
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

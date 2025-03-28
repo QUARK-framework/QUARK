@@ -12,14 +12,16 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import Dict
-import sys
 import os
+import sys
+from typing import Dict
+
 # Add the parent directory to the sys.path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from qleet.interface.circuit import CircuitDescriptor
 from qleet.analyzers.entanglement import EntanglementCapability
 from qleet.analyzers.expressibility import Expressibility
+from qleet.interface.circuit import CircuitDescriptor
+
 
 class MetricsQuantum:
     """
@@ -27,10 +29,9 @@ class MetricsQuantum:
     """
 
     def __init__(
-            self,
+        self,
     ) -> None:
         pass
-
 
     def get_metrics(self, circuit, params) -> Dict[str, float]:
         """
@@ -43,7 +44,7 @@ class MetricsQuantum:
 
         results = {
             "meyer-wallach": self.entanglement_meyer_wallach(circuit, params),
-            "expressibility_jsd": self.expressibility_jensen_shannon(circuit, params)
+            "expressibility_jsd": self.expressibility_jensen_shannon(circuit, params),
         }
 
         return results
@@ -61,14 +62,14 @@ class MetricsQuantum:
         qiskit_descriptor = CircuitDescriptor(
             circuit=circuit, params=params, cost_function=None
         )
-        qiskit_entanglement_capability = (
-            EntanglementCapability(
-                qiskit_descriptor, samples=samples
-            )
+        qiskit_entanglement_capability = EntanglementCapability(
+            qiskit_descriptor, samples=samples
         )
-        entanglement = qiskit_entanglement_capability.entanglement_capability("meyer-wallach")
+        entanglement = qiskit_entanglement_capability.entanglement_capability(
+            "meyer-wallach"
+        )
         return entanglement
-    
+
     def expressibility_jensen_shannon(self, circuit, params, samples=100) -> float:
         """
         Method to determine the Jensen–Shannon Divergence metric
@@ -82,9 +83,6 @@ class MetricsQuantum:
         qiskit_descriptor = CircuitDescriptor(
             circuit=circuit, params=params, cost_function=None
         )
-        qiskit_expressibility = Expressibility(
-            qiskit_descriptor, samples=100
-        )
+        qiskit_expressibility = Expressibility(qiskit_descriptor, samples=100)
         expr = qiskit_expressibility.expressibility("jsd")
         return expr
-

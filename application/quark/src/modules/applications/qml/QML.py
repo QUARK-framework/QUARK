@@ -18,19 +18,17 @@ from modules.applications.Application import Application
 
 
 class QML(Application, ABC):
-    """
-    qml Module for QUARK, is used by all qml applications.
-    """
+    """qml Module for QUARK, is used by all qml applications."""
 
     @abstractmethod
-    def generate_problem(self, config: dict) -> any:
+    def generate_problem(self, config: dict, a: float) -> any:
         """
         Creates a concrete problem and returns it.
 
         :param config: Configuration dictionary
         :return: Generated problem
         """
-        pass
+        raise NotImplementedError
 
     def save(self, path: str, iter_count: int) -> None:
         """
@@ -39,4 +37,4 @@ class QML(Application, ABC):
         :param path: Path to save the file
         :param iter_count: Iteration count
         """
-        pass
+        return

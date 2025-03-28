@@ -1,7 +1,7 @@
 {
-  "build_number": 15,
-  "build_date": "28-10-2024 09:38:32",
-  "git_revision_number": "62a87b5b3c81a449424964c1672d9b32bc678c1a",
+  "build_number": 21,
+  "build_date": "07-03-2025 10:20:47",
+  "git_revision_number": "04ddc6f311cee644745f6a5779c7f21a297dbf10",
   "modules": [
     {
       "name": "PVC",
@@ -3561,6 +3561,133 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ],
+      "requirements": []
+    },
+    {
+      "name": "Classification",
+      "class": "Classification",
+      "module": "modules.applications.qml.classification.Classification",
+      "submodules": [
+        {
+          "name": "Image Data",
+          "class": "ImageData",
+          "args": {},
+          "module": "modules.applications.qml.classification.data.data_handler.ImageData",
+          "requirements": [
+            {
+              "name": "pandas",
+              "version": "2.2.2"
+            },
+            {
+              "name": "pillow",
+              "version": "10.3.0"
+            },
+            {
+              "name": "scikit-learn",
+              "version": "1.4.2"
+            },
+            {
+              "name": "torch",
+              "version": "2.2.2"
+            },
+            {
+              "name": "tqdm",
+              "version": "4.63.0"
+            },
+            {
+              "name": "numpy",
+              "version": "1.26.4"
+            }
+          ],
+          "submodules": [
+            {
+              "name": "Hybrid",
+              "class": "Hybrid",
+              "args": {},
+              "module": "modules.applications.qml.classification.training.Hybrid",
+              "requirements": [
+                {
+                  "name": "pandas",
+                  "version": "2.2.2"
+                },
+                {
+                  "name": "qiskit",
+                  "version": "0.40.0"
+                },
+                {
+                  "name": "qiskit-machine-learning",
+                  "version": "0.6.1"
+                },
+                {
+                  "name": "qleet",
+                  "version": "0.2.0.1"
+                },
+                {
+                  "name": "pennylane",
+                  "version": "0.35.1"
+                },
+                {
+                  "name": "pillow",
+                  "version": "10.3.0"
+                },
+                {
+                  "name": "scikit-learn",
+                  "version": "1.4.2"
+                },
+                {
+                  "name": "torch",
+                  "version": "2.2.2"
+                },
+                {
+                  "name": "torchvision",
+                  "version": "0.17.2"
+                },
+                {
+                  "name": "tqdm",
+                  "version": "4.63.0"
+                },
+                {
+                  "name": "numpy",
+                  "version": "1.26.4"
+                },
+                {
+                  "name": "tensorboard",
+                  "version": "2.11.0"
+                },
+                {
+                  "name": "tensorboardX",
+                  "version": "2.5.0"
+                },
+                {
+                  "name": "cirq",
+                  "version": "0.13.1"
+                },
+                {
+                  "name": "plotly",
+                  "version": "5.1.0"
+                },
+                {
+                  "name": "cma",
+                  "version": "3.3.0"
+                },
+                {
+                  "name": "tensorflow",
+                  "version": "2.7.0"
+                },
+                {
+                  "name": "tensorflow-quantum",
+                  "version": "0.7.2"
+                },
+                {
+                  "name": "protobuf",
+                  "version": "3.17.3"
+                }
+              ],
+              "submodules": []
             }
           ]
         }

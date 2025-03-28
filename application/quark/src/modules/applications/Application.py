@@ -13,26 +13,24 @@
 #  limitations under the License.
 
 from abc import ABC, abstractmethod
+
 from modules.Core import Core
 
 
 class Application(Core, ABC):
     """
-    The application component defines the workload, comprising a dataset of increasing complexity, a validation, and an
-    evaluation function.
+    The application component defines the workload, comprising
+    a dataset of increasing complexity, a validation, and an evaluation function.
     """
 
     def __init__(self, application_name: str):
-        """
-        Constructor method.
-        """
+        """Constructor method."""
         super().__init__(application_name)
         self.application_name = self.name
         self.application = None
 
     def get_application(self) -> any:
-        """
-        Gets the application.
+        """Gets the application.
 
         :return: self.application
         """
@@ -40,10 +38,8 @@ class Application(Core, ABC):
 
     @abstractmethod
     def save(self, path: str, iter_count: int) -> None:
-        """
-        Saves the concrete problem.
+        """Saves the concrete problem.
 
         :param path: Path of the experiment directory for this run
         :param iter_count: The iteration count
         """
-        pass

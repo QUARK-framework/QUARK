@@ -11,20 +11,17 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+from abc import ABC, abstractmethod
 
-import pickle
-import os
-
-import numpy as np
 import pandas as pd
-from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
-
 from modules.Core import *
-from utils import start_time_measurement, end_time_measurement
+from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
+from utils import end_time_measurement, start_time_measurement
+
 
 class DataHandler(Core, ABC):
     """
-    The task of the DataHandler module is to translate the application’s data 
+    The task of the DataHandler module is to translate the application’s data
     and problem specification into preproccesed format.
     """
 
@@ -45,18 +42,9 @@ class DataHandler(Core, ABC):
         :rtype: list[dict]
         """
         return [
-            {
-                "name": "numpy",
-                "version": "1.23.5"
-            },
-            {
-                "name": "pandas",
-                "version": "1.5.2"
-            },
-            {
-                "name": "tensorboard",
-                "version": "2.13.0"
-            }
+            {"name": "numpy", "version": "1.23.5"},
+            {"name": "pandas", "version": "1.5.2"},
+            {"name": "tensorboard", "version": "2.13.0"},
         ]
 
     def preprocess(self, input_data: dict, config: dict, **kwargs):
@@ -99,7 +87,7 @@ class DataHandler(Core, ABC):
     @abstractmethod
     def data_load(self, gen_mod: dict, config: dict) -> dict:
         """
-        Helps to ensure that the model can effectively learn the underlying 
+        Helps to ensure that the model can effectively learn the underlying
         patterns and structure of the data, and produce high-quality outputs.
 
         :param gen_mod: dictionary with collected information of the previous modules
@@ -109,9 +97,9 @@ class DataHandler(Core, ABC):
         :return: mapped problem and the time it took to create the mapping
         :rtype: tuple(any, float)
         """
-        pass
+        raise NotImplementedError
 
-    def generalisation(self) -> (dict, float):
+    def generalisation(self) -> tuple[dict, float]:
         """
         Compute generalisation metrics
 
@@ -126,7 +114,7 @@ class DataHandler(Core, ABC):
         return metrics, time_taken
 
     @abstractmethod
-    def evaluate(self, solution: any) -> (dict, float):
+    def evaluate(self, solution: any) -> tuple[dict, float]:
         """
         Compute best loss values.
 
@@ -136,25 +124,26 @@ class DataHandler(Core, ABC):
         :rtype: tuple(bool, float)
 
         """
-        pass
+        raise NotImplementedError
 
     @staticmethod
     def tb_to_pd(logdir: str, rep: str) -> None:
         """
-        Converts TensorBoard event files in the specified log directory 
+        Converts TensorBoard event files in the specified log directory
         into a pandas DataFrame and saves it as a pickle file.
 
         :param logdir: path to the log directory containing TensorBoard event files
-        :type logdir: str 
-        
+        :type logdir: str
+
         """
         event_acc = EventAccumulator(logdir)
         event_acc.Reload()
         tags = event_acc.Tags()
         tag_data = {}
-        for tag in tags['scalars']:
+        for tag in tags["scalars"]:
             data = event_acc.Scalars(tag)
             tag_values = [d.value for d in data]
             tag_data[tag] = tag_values
         data = pd.DataFrame(tag_data, index=[d.step for d in data])
+        data.to_pickle(f"{logdir}/data_{rep}.pkl")
         data.to_pickle(f"{logdir}/data_{rep}.pkl")

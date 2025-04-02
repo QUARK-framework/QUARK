@@ -45,7 +45,6 @@ class Task(NamedTuple):
 TaskAssignment = dict[StationId, list[Task]]
 
 
-# @dataclass(kw_only=True)  # only works in Python >= 3.10 (comes soon)
 @dataclass
 class SALBPInstance:
     """

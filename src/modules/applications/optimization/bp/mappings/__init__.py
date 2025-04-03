@@ -12,5 +12,4 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Module for BP mappings
-Contributed by Eric Stopfer (Fraunhofer IIS)"""
+"""Module for BP mappings"""

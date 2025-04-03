@@ -1,0 +1,23 @@
+application:
+  config:
+    instance:
+    - example_instance_n=3.alb
+    - example_instance_n=10.alb
+  name: SALBP
+  submodules:
+  - config: {}
+    name: MIP
+    submodules:
+    - config:
+        mip_gap:
+        - 0
+        solution_method:
+        - -1
+        time_limit:
+        - 7200
+      name: MIPSolver
+      submodules:
+      - config: {}
+        name: Local
+        submodules: []
+repetitions: 2

@@ -19,8 +19,6 @@ import itertools
 from typing import Union, List, Tuple, cast
 
 from qiskit_aer.noise import NoiseModel as qiskitNoiseModel
-#from cirq.devices.noise_model import NoiseModel as cirqNoiseModel
-from pyquil.noise import NoiseModel as pyquilNoiseModel
 
 from qiskit.quantum_info import state_fidelity
 from scipy.spatial.distance import jensenshannon
@@ -33,8 +31,6 @@ from ..interface.circuit import CircuitDescriptor
 from ..simulators.circuit_simulators import CircuitSimulator
 
 NOISE_MODELS = {
-    #"cirq": cirqNoiseModel,
-    "pyquil": pyquilNoiseModel,
     "qiskit": qiskitNoiseModel,
 }
 
@@ -46,8 +42,7 @@ class Expressibility(MetaExplorer):
         self,
         circuit: CircuitDescriptor,
         noise_model: Union[
-            #cirqNoiseModel, 
-            qiskitNoiseModel, pyquilNoiseModel, None
+            qiskitNoiseModel, None
         ] = None,
         samples: int = 1000,
     ):
@@ -64,16 +59,8 @@ class Expressibility(MetaExplorer):
         if noise_model is not None:
             if (
                 (
-                    #circuit.default_backend == "cirq"
-                    #and isinstance(noise_model, cirqNoiseModel)
-                #)
-                #or (
                     circuit.default_backend == "qiskit"
                     and isinstance(noise_model, qiskitNoiseModel)
-                )
-                or (
-                    circuit.default_backend == "pyquil"
-                    and isinstance(noise_model, pyquilNoiseModel)
                 )
             ):
                 self.noise_model = noise_model

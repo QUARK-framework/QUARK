@@ -86,7 +86,6 @@ class Hybrid(Core, Training):
             {"name": "numpy", "version": "1.26.4"},
             {"name": "tensorboard", "version": "2.11.0"},
             {"name": "tensorboardX", "version": "2.5.0"},
-            {"name": "cirq", "version": "0.13.1"},
             {"name": "plotly", "version": "5.1.0"},
             {"name": "cma", "version": "3.3.0"},
             {"name": "tensorflow", "version": "2.7.0"},

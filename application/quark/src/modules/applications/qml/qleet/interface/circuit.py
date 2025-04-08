@@ -16,56 +16,28 @@
 
 This makes the abstractions which ensures all operations in the library are
 backend agnostic, by allowing us to get the circuit back in the desired library's
-form, cirq, qiskit or pytket. It allows the user to specify the circuit in any
+form, qiskit or pytket. It allows the user to specify the circuit in any
 form. It also takes the loss function specification as a Pauli String.
 
 It also exposes functions that the user can use to convert their circuits to a
-qiskit or cirq backend.
+qiskit backend.
 WARNING: the conversion is done through a OpenQASM intermediate, operations not
 supported on QASM cannot be converted directly, please provide your circuit in a
-Cirq or Qiskit backend in that case.
+Qiskit backend in that case.
 """
 
 import typing
 
 import numpy as np
 import sympy
-
-#import cirq
 import qiskit
-import pyquil
-
-#from cirq.contrib.qasm_import import circuit_from_qasm
-#from cirq.contrib.quil_import import circuit_from_quil
 import qiskit.quantum_info
-import pyquil.paulis
 
 
-#def convert_to_cirq(
-#    circuit: typing.Union[qiskit.QuantumCircuit, cirq.Circuit, pyquil.Program]
-#) -> cirq.Circuit:
-#    """Converts any circuit to cirq
-#    :type circuit: Circuit in any supported library
-#    :param circuit: input circuit in any framework
-#    :return: circuit in cirq
-#    :rtype: cirq.Circuit
-#    :raises ValueError: if the circuit is not from one of the supported frameworks
-#    """
-#    if isinstance(circuit, cirq.Circuit):
-#        return circuit
-#    elif isinstance(circuit, qiskit.QuantumCircuit):
-#        return circuit_from_qasm(circuit.qasm())
-#    elif isinstance(circuit, pyquil.Program):
-#        return circuit_from_quil(str(circuit))
-#    else:
-#        raise ValueError(
-#            f"Expected a circuit object in cirq, qiskit or pyquil, got {type(circuit)}"
-#        )
 
 
 def convert_to_qiskit(
-    circuit: typing.Union[qiskit.QuantumCircuit, #cirq.Circuit, 
-                          pyquil.Program]
+    circuit: typing.Union[qiskit.QuantumCircuit]
 ) -> qiskit.QuantumCircuit:
     """Converts any circuit to qiskit
     :type circuit: Circuit in any supported library
@@ -74,42 +46,14 @@ def convert_to_qiskit(
     :return: circuit in qiskit
     :rtype: qiskit.QuantumCircuit
     """
-    #if isinstance(circuit, cirq.Circuit):
-    #    return qiskit.QuantumCircuit.from_qasm_str(circuit.to_qasm())
-    #el
+
     if isinstance(circuit, qiskit.QuantumCircuit):
         return circuit
-    elif isinstance(circuit, pyquil.Program):
-        #return convert_to_qiskit(convert_to_cirq(circuit))
     else:
         raise ValueError(
-            f"Expected a circuit object in cirq, qiskit or pyquil, got {type(circuit)}"
+            f"Expected a circuit object in qiskit, got {type(circuit)}"
         )
 
-
-def convert_to_pyquil(
-    circuit: typing.Union[qiskit.QuantumCircuit, #cirq.Circuit, 
-                          pyquil.Program]
-) -> qiskit.QuantumCircuit:
-    """Converts any circuit to pyquil
-    :type circuit: Circuit in any supported library
-    :param circuit: input circuit in any framework
-    :raises ValueError: if the circuit is not from one of the supported frameworks
-    :return: circuit in pyquil
-    :rtype: pyquil.Program
-    """
-    #if isinstance(circuit, cirq.Circuit):
-    #    return pyquil.Program(circuit.to_quil())
-    #el
-    # if isinstance(circuit, qiskit.QuantumCircuit):
-    #    return pyquil.Program(convert_to_cirq(circuit).to_quil())
-    #el
-    if isinstance(circuit, pyquil.Program):
-        return circuit
-    else:
-        raise ValueError(
-            f"Expected a circuit object in cirq, qiskit or pyquil, got {type(circuit)}"
-        )
 
 
 class CircuitDescriptor:
@@ -127,12 +71,10 @@ class CircuitDescriptor:
 
     def __init__(
         self,
-        circuit: typing.Union[qiskit.QuantumCircuit, #cirq.Circuit, 
-                              pyquil.Program],
+        circuit: typing.Union[qiskit.QuantumCircuit],
         params: typing.List[typing.Union[sympy.Symbol, qiskit.circuit.Parameter]],
         cost_function: typing.Union[
-            #cirq.PauliSum, 
-            qiskit.quantum_info.PauliList, pyquil.paulis.PauliSum, None
+            qiskit.quantum_info.PauliList, None
         ] = None,
     ):
         """Constructor for the CircuitDescriptor
@@ -160,12 +102,8 @@ class CircuitDescriptor:
         :rtype: str
         :raises ValueError: if the given circuit is not from a supported library
         """
-        #if isinstance(self._circuit, cirq.Circuit):
-        #    return "cirq"
         if isinstance(self._circuit, qiskit.QuantumCircuit):
             return "qiskit"
-        if isinstance(self._circuit, pyquil.Program):
-            return "pyquil"
         raise ValueError("Unsupported framework of circuit")
 
     @classmethod
@@ -174,10 +112,9 @@ class CircuitDescriptor:
         qasm_str: str,
         params: typing.List[typing.Union[sympy.Symbol, qiskit.circuit.Parameter]],
         cost_function: typing.Union[
-            #cirq.PauliSum, 
-            qiskit.quantum_info.PauliList, pyquil.paulis.PauliSum, None
+            qiskit.quantum_info.PauliList, None
         ],
-        backend: str = "cirq",
+        backend: str = "qiskit",
     ):
         """Generate the descriptor from OpenQASM string
 
@@ -193,15 +130,9 @@ class CircuitDescriptor:
         :rtype: CircuitDescriptor
         :raises ValueError: if one of the 3 supported backends is not the input
         """
-        circuit: typing.Union[#cirq.Circuit, 
-            qiskit.QuantumCircuit, pyquil.Program]
-        #if backend == "cirq":
-        #    circuit = circuit_from_qasm(qasm_str)
-        #el
+        circuit: typing.Union[qiskit.QuantumCircuit]
         if backend == "qiskit":
             circuit = qiskit.QuantumCircuit.from_qasm_str(qasm_str)
-        elif backend == "pyquil":
-            circuit = pyquil.Program(circuit_from_qasm(qasm_str).to_quil())
         else:
             raise ValueError()
 
@@ -225,14 +156,6 @@ class CircuitDescriptor:
         return len(self.parameters)
 
     @property
-    #def cirq_circuit(self) -> cirq.Circuit:
-    #    """Get the circuit in cirq
-    #    :return: the cirq representation of the circuit
-    #    :rtype: cirq.Circuit
-    #    """
-    #    return convert_to_cirq(self._circuit)
-
-    @property
     def qiskit_circuit(self) -> qiskit.QuantumCircuit:
         """Get the circuit in qiskit
         :return: the qiskit representation of the circuit
@@ -240,13 +163,6 @@ class CircuitDescriptor:
         """
         return convert_to_qiskit(self._circuit)
 
-    @property
-    def pyquil_circuit(self) -> pyquil.Program:
-        """Get the circuit in pyquil
-        :return: the pyquil representation of the circuit
-        :rtype: pyquil.Program
-        """
-        return convert_to_pyquil(self._circuit)
 
     @property
     def num_qubits(self) -> int:
@@ -255,40 +171,18 @@ class CircuitDescriptor:
         :rtype: int
         :raises ValueError: if unsupported circuit framework is given
         """
-        #if isinstance(self._circuit, cirq.Circuit):
-        #    return len(self._circuit.all_qubits())
-        #el
         if isinstance(self._circuit, qiskit.QuantumCircuit):
             return self._circuit.num_qubits
-        elif isinstance(self._circuit, pyquil.Program):
-            return len(self._circuit.get_qubits())
         else:
             raise ValueError("Unsupported framework of circuit")
 
-    @property
-    def cirq_cost(self) -> cirq.PauliSum:
-        """Returns the cost function, which is a function that takes in the state vector or the
-        density matrix and returns the loss value of the solution envisioned by the Quantum Circuit.
-        :raises ValueError: if the circuit is not from one of the supported frameworks
-        :raises NotImplementedError: Long as qiskit and pyquil ports of pauli-string aren't written
-        :return: cost function
-        TODO: Implement conversions into Cirq PauliSum
-        """
-        if isinstance(self._cost, cirq.PauliSum):
-            return self._cost
-        elif isinstance(self._cost, qiskit.quantum_info.PauliList):
-            raise NotImplementedError("Qiskit PauliString support is not implemented")
-        elif isinstance(self._cost, pyquil.paulis.PauliSum):
-            raise NotImplementedError("PyQuil PauliString support is not implemented")
-        else:
-            raise ValueError("Cost object should be a Pauli-Sum object")
 
     def __eq__(self, other: typing.Any) -> bool:
         """Checks equality between a CircuitDescriptor and another object"""
         if isinstance(other, CircuitDescriptor):
             return (
                 np.array_equal(self.parameters, other.parameters)
-                and self.cirq_circuit == other.cirq_circuit
+                and self.qiskit_circuit == other.qiskit_circuit
             )
         return False
 

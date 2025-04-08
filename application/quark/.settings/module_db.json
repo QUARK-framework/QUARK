@@ -3663,10 +3663,6 @@
                   "version": "2.5.0"
                 },
                 {
-                  "name": "cirq",
-                  "version": "0.13.1"
-                },
-                {
                   "name": "plotly",
                   "version": "5.1.0"
                 },

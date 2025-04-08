@@ -356,3 +356,118 @@
 2025-02-18 15:34:05,751 [INFO]  ============================================================ 
 2025-02-18 15:34:05,751 [INFO]  ====================  QUARK finished!   ==================== 
 2025-02-18 15:34:05,752 [INFO]  ============================================================ 
+2025-04-08 15:33:43,470 [root:64 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:33:43,470 [root:65 -        setup_logging() ][INFO]              ___    _   _      _      ____    _  __           
+2025-04-08 15:33:43,470 [root:66 -        setup_logging() ][INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2025-04-08 15:33:43,471 [root:67 -        setup_logging() ][INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2025-04-08 15:33:43,471 [root:68 -        setup_logging() ][INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2025-04-08 15:33:43,472 [root:69 -        setup_logging() ][INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2025-04-08 15:33:43,473 [root:70 -        setup_logging() ][INFO]                                                               
+2025-04-08 15:33:43,473 [root:71 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:33:43,473 [root:72 -        setup_logging() ][INFO]   A Framework for Quantum Computing Application Benchmarking  
+2025-04-08 15:33:43,474 [root:73 -        setup_logging() ][INFO]                                                               
+2025-04-08 15:33:43,475 [root:74 -        setup_logging() ][INFO]         Licensed under the Apache License, Version 2.0        
+2025-04-08 15:33:43,475 [root:75 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:33:45,558 [root:176 -              get_env() ][INFO] Getting default QUARK module environment
+2025-04-08 15:33:45,559 [root:201 - handle_benchmark_run() ][INFO] Provided config file at /home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/example_config_cls.yml
+2025-04-08 15:33:45,566 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.Classification
+2025-04-08 15:34:42,248 [root:44 -             <module>() ][INFO] CuPy not available, using vanilla numpy, data processing on CPU
+2025-04-08 15:34:42,274 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.data.data_handler.ImageData
+2025-04-08 15:34:42,274 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.training.Hybrid
+2025-04-08 15:34:42,471 [root:179 - orchestrate_benchmark() ][INFO] Created Benchmark run directory /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-33-45
+2025-04-08 15:34:42,660 [root:141 -     get_git_revision() ][INFO] Codebase is based on revision 68113606e0a0d48b31a852ddf3918faaeecdb30d and has some uncommitted changes
+2025-04-08 15:34:42,663 [root:212 -        run_benchmark() ][INFO] Running backlog item 1/1, Iteration 1/1:
+2025-04-08 15:34:42,663 [root:191 -            data_load() ][INFO] Creating index
+2025-04-08 15:34:42,972 [root:193 -            data_load() ][INFO] Embedding dataset
+2025-04-08 15:34:45,084 [root:283 -        run_benchmark() ][ERROR] Error during benchmark run: cannot identify image file '/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/Images_2D/test_data/Negative/07517.jpg'
+Traceback (most recent call last):
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/BenchmarkManager.py", line 257, in run_benchmark
+    self.traverse_config(backlog_item["submodule"], problem,
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/BenchmarkManager.py", line 363, in traverse_config
+    instruction, module_instance.preprocessed_input, preprocessing_time = preprocess(
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/BenchmarkManager.py", line 85, in preprocess
+    result = module_instance.preprocess(*args, **kwargs)
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/data_handler/DataHandler.py", line 64, in preprocess
+    output = self.data_load(input_data, config)
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/data_handler/ImageData.py", line 194, in data_load
+    embeddings_file = self.embed_dataset(n_images_per_class=self.n_images_per_class, noise_sigma=noise_sigma)
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/data_handler/ImageData.py", line 428, in embed_dataset
+    img_array = self.load_image(img_path)
+  File "/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/data_handler/ImageData.py", line 470, in load_image
+    img = Image.open(image_path)
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 3008, in open
+    raise UnidentifiedImageError(
+PIL.UnidentifiedImageError: cannot identify image file '/home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/modules/applications/qml/classification/data/Images_2D/test_data/Negative/07517.jpg'
+2025-04-08 15:34:45,087 [root:301 -        run_benchmark() ][INFO] 
+2025-04-08 15:34:45,087 [root:302 -        run_benchmark() ][INFO]  ==== Run backlog item 1/1 with 1 iterations - FAILED:1 ==== 
+2025-04-08 15:34:45,088 [root:304 -        run_benchmark() ][INFO] 
+2025-04-08 15:34:45,089 [root:312 -        run_benchmark() ][INFO] 
+2025-04-08 15:34:45,089 [root:313 -        run_benchmark() ][INFO]  =============== Run finished =============== 
+2025-04-08 15:34:45,089 [root:314 -        run_benchmark() ][INFO] 
+2025-04-08 15:34:45,090 [root:321 -        run_benchmark() ][INFO] ================================================================================
+2025-04-08 15:34:45,090 [root:322 -        run_benchmark() ][INFO] ====== Run 1 backlog items with 1 iterations - FAILED:1
+2025-04-08 15:34:45,090 [root:334 -        run_benchmark() ][INFO] ================================================================================
+2025-04-08 15:34:45,090 [root:335 -        run_benchmark() ][INFO] 
+2025-04-08 15:34:45,093 [root:424 - _collect_all_results() ][ERROR] No results.json files were found! Probably an error occurred during execution.
+2025-04-08 15:34:45,093 [root:433 -        _save_as_json() ][INFO] Saving 0 benchmark records to /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-33-45/results.json
+2025-04-08 15:34:45,095 [root:42 -    visualize_results() ][INFO] Nothing to plot since results are empty.
+2025-04-08 15:34:45,096 [root:270 -                 main() ][INFO]  ============================================================ 
+2025-04-08 15:34:45,096 [root:271 -                 main() ][INFO]  ====================  QUARK finished!   ==================== 
+2025-04-08 15:34:45,097 [root:272 -                 main() ][INFO]  ============================================================ 
+2025-04-08 15:40:41,314 [root:64 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:40:41,314 [root:65 -        setup_logging() ][INFO]              ___    _   _      _      ____    _  __           
+2025-04-08 15:40:41,314 [root:66 -        setup_logging() ][INFO]             / _ \  | | | |    / \    |  _ \  | |/ /           
+2025-04-08 15:40:41,314 [root:67 -        setup_logging() ][INFO]            | | | | | | | |   / _ \   | |_) | | ' /            
+2025-04-08 15:40:41,314 [root:68 -        setup_logging() ][INFO]            | |_| | | |_| |  / ___ \  |  _ <  | . \            
+2025-04-08 15:40:41,314 [root:69 -        setup_logging() ][INFO]             \__\_\  \___/  /_/   \_\ |_| \_\ |_|\_\           
+2025-04-08 15:40:41,315 [root:70 -        setup_logging() ][INFO]                                                               
+2025-04-08 15:40:41,315 [root:71 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:40:41,315 [root:72 -        setup_logging() ][INFO]   A Framework for Quantum Computing Application Benchmarking  
+2025-04-08 15:40:41,315 [root:73 -        setup_logging() ][INFO]                                                               
+2025-04-08 15:40:41,315 [root:74 -        setup_logging() ][INFO]         Licensed under the Apache License, Version 2.0        
+2025-04-08 15:40:41,315 [root:75 -        setup_logging() ][INFO]  ============================================================ 
+2025-04-08 15:40:43,469 [root:176 -              get_env() ][INFO] Getting default QUARK module environment
+2025-04-08 15:40:43,472 [root:201 - handle_benchmark_run() ][INFO] Provided config file at /home2/florian.geissler/quark_cnn/benchqc_opt/application/quark/src/example_config_cls.yml
+2025-04-08 15:40:43,481 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.Classification
+2025-04-08 15:40:50,403 [root:44 -             <module>() ][INFO] CuPy not available, using vanilla numpy, data processing on CPU
+2025-04-08 15:40:50,419 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.data.data_handler.ImageData
+2025-04-08 15:40:50,420 [root:95 -        _import_class() ][INFO] Import module modules.applications.qml.classification.training.Hybrid
+2025-04-08 15:40:50,623 [root:179 - orchestrate_benchmark() ][INFO] Created Benchmark run directory /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-40-43
+2025-04-08 15:40:52,065 [root:141 -     get_git_revision() ][INFO] Codebase is based on revision 68113606e0a0d48b31a852ddf3918faaeecdb30d and has some uncommitted changes
+2025-04-08 15:40:52,067 [root:212 -        run_benchmark() ][INFO] Running backlog item 1/1, Iteration 1/1:
+2025-04-08 15:40:52,068 [root:191 -            data_load() ][INFO] Creating index
+2025-04-08 15:40:52,365 [root:193 -            data_load() ][INFO] Embedding dataset
+2025-04-08 15:41:04,297 [root:160 -          postprocess() ][INFO] Start training
+2025-04-08 15:41:14,393 [root:208 -       start_training() ][INFO] Quantum metrics: {'meyer-wallach': 0.4387672618801047, 'expressibility_jsd': 0.7183110082238423}
+2025-04-08 15:41:14,394 [root:168 -       setup_training() ][INFO] Running config: [n_qubits=4]
+2025-04-08 15:41:52,427 [root:314 -       start_training() ][INFO] [Epoch 0/10] [Train Loss: 0.27944] [Train Accuracy: 0.78659] [Validation Loss: 0.29294] [Validation Accuracy: 0.95833] [Circuit processing: 1915.590 ms] [Loss processing: 0.091 ms]
+2025-04-08 15:42:28,891 [root:314 -       start_training() ][INFO] [Epoch 1/10] [Train Loss: 0.17614] [Train Accuracy: 0.97264] [Validation Loss: 0.19107] [Validation Accuracy: 0.97396] [Circuit processing: 1743.733 ms] [Loss processing: 0.182 ms]
+2025-04-08 15:43:05,284 [root:314 -       start_training() ][INFO] [Epoch 2/10] [Train Loss: 0.13414] [Train Accuracy: 0.99179] [Validation Loss: 0.19209] [Validation Accuracy: 0.95660] [Circuit processing: 1934.195 ms] [Loss processing: 0.157 ms]
+2025-04-08 15:43:41,347 [root:314 -       start_training() ][INFO] [Epoch 3/10] [Train Loss: 0.13892] [Train Accuracy: 0.99316] [Validation Loss: 0.13242] [Validation Accuracy: 0.97917] [Circuit processing: 1659.717 ms] [Loss processing: 0.139 ms]
+2025-04-08 15:44:17,530 [root:314 -       start_training() ][INFO] [Epoch 4/10] [Train Loss: 0.10280] [Train Accuracy: 0.99863] [Validation Loss: 0.11569] [Validation Accuracy: 0.97917] [Circuit processing: 1724.105 ms] [Loss processing: 0.169 ms]
+2025-04-08 15:44:53,680 [root:314 -       start_training() ][INFO] [Epoch 5/10] [Train Loss: 0.07449] [Train Accuracy: 0.99863] [Validation Loss: 0.10763] [Validation Accuracy: 0.98438] [Circuit processing: 1719.917 ms] [Loss processing: 0.142 ms]
+2025-04-08 15:45:30,278 [root:314 -       start_training() ][INFO] [Epoch 6/10] [Train Loss: 0.07888] [Train Accuracy: 1.00000] [Validation Loss: 0.12222] [Validation Accuracy: 0.96701] [Circuit processing: 1881.547 ms] [Loss processing: 0.142 ms]
+2025-04-08 15:46:06,346 [root:314 -       start_training() ][INFO] [Epoch 7/10] [Train Loss: 0.05389] [Train Accuracy: 0.99863] [Validation Loss: 0.08643] [Validation Accuracy: 0.98438] [Circuit processing: 1712.093 ms] [Loss processing: 0.090 ms]
+2025-04-08 15:46:42,307 [root:314 -       start_training() ][INFO] [Epoch 8/10] [Train Loss: 0.05749] [Train Accuracy: 1.00000] [Validation Loss: 0.08030] [Validation Accuracy: 0.98438] [Circuit processing: 1714.697 ms] [Loss processing: 0.166 ms]
+2025-04-08 15:47:18,455 [root:314 -       start_training() ][INFO] [Epoch 9/10] [Train Loss: 0.04736] [Train Accuracy: 1.00000] [Validation Loss: 0.07269] [Validation Accuracy: 0.98438] [Circuit processing: 1708.806 ms] [Loss processing: 0.089 ms]
+2025-04-08 15:47:18,457 [root:164 -          postprocess() ][INFO] Training finished in 374.160019 s.
+2025-04-08 15:47:18,457 [root:301 -        run_benchmark() ][INFO] 
+2025-04-08 15:47:18,457 [root:302 -        run_benchmark() ][INFO]  ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ==== 
+2025-04-08 15:47:18,457 [root:304 -        run_benchmark() ][INFO] 
+2025-04-08 15:47:18,461 [root:312 -        run_benchmark() ][INFO] 
+2025-04-08 15:47:18,461 [root:313 -        run_benchmark() ][INFO]  =============== Run finished =============== 
+2025-04-08 15:47:18,461 [root:314 -        run_benchmark() ][INFO] 
+2025-04-08 15:47:18,461 [root:321 -        run_benchmark() ][INFO] ================================================================================
+2025-04-08 15:47:18,462 [root:322 -        run_benchmark() ][INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+2025-04-08 15:47:18,462 [root:334 -        run_benchmark() ][INFO] ================================================================================
+2025-04-08 15:47:18,462 [root:335 -        run_benchmark() ][INFO] 
+2025-04-08 15:47:18,482 [root:433 -        _save_as_json() ][INFO] Saving 1 benchmark records to /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-40-43/results.json
+2025-04-08 15:47:18,503 [matplotlib.category:223 -               update() ][INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-04-08 15:47:18,505 [matplotlib.category:223 -               update() ][INFO] Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-04-08 15:47:18,840 [root:130 -           plot_times() ][INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-40-43/time_by_module.pdf.
+2025-04-08 15:47:18,991 [root:145 -           plot_times() ][INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-40-43/total_time.pdf.
+2025-04-08 15:47:19,353 [root:360 -     plot_all_metrics() ][INFO] Saved /home2/florian.geissler/quark_cnn/benchqc_opt/benchmark_runs/classification-2025-04-08-15-40-43/metrics_collection_test.pdf.
+2025-04-08 15:47:19,353 [root:101 -    visualize_results() ][INFO] Finished creating plots.
+2025-04-08 15:47:19,353 [root:270 -                 main() ][INFO]  ============================================================ 
+2025-04-08 15:47:19,353 [root:271 -                 main() ][INFO]  ====================  QUARK finished!   ==================== 
+2025-04-08 15:47:19,354 [root:272 -                 main() ][INFO]  ============================================================ 

@@ -65,10 +65,10 @@ class ImageData(DataHandler):
         """
         return [
             {"name": "pandas", "version": "2.2.2"},
-            {"name": "pillow", "version": "10.3.0"},
-            {"name": "scikit-learn", "version": "1.4.2"},
+            {"name": "pillow", "version": "11.1.0"},
+            # {"name": "scikit-learn", "version": "1.4.2"},
             {"name": "torch", "version": "2.2.2"},
-            {"name": "tqdm", "version": "4.63.0"},
+            {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
         ]
 
@@ -84,12 +84,24 @@ class ImageData(DataHandler):
 
                  .. code-block:: python
 
-                        return {
-                            "data_set": {
-                                "values": ["Images_2D"],
-                                "description": "Which dataset do you want to use?"
-                            }
-                        }
+                    return {
+                        "data_set": {
+                            "values": ["Concrete_Crack", "MNIST"],
+                            "description": "Which dataset do you want to use?",
+                        },
+                        "n_images_per_class": {
+                            "values": [100, 1000, 2000, 3000],
+                            "description": "Number of images to extract for each class",
+                        },
+                        "n_classes": {
+                            "values": [2, 4, 10],
+                            "description": "How many classes to benchmark on?",
+                        },
+                        "noise_sigma": {
+                            "values": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                            "description": "Variance of gaussian noise",
+                        },
+                    }
 
         """
         return {
@@ -106,7 +118,7 @@ class ImageData(DataHandler):
                 "description": "How many classes to benchmark on?",
             },
             "noise_sigma": {
-                "values": list(np.round(np.linspace(0, 1, 11), 2)),
+                "values": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                 "description": "Variance of gaussian noise",
             },
         }
@@ -118,12 +130,14 @@ class ImageData(DataHandler):
         .. code-block:: python
 
             data_set: str
-            train_size: int
+            n_images_per_class: int
+            n_classes: int
             noise_sigma: float
         """
 
         data_set: str
         n_images_per_class: int
+        n_classes: int
         noise_sigma: float
 
     class CustomDataset(Dataset):
@@ -324,14 +338,14 @@ class ImageData(DataHandler):
         Raises:
             FileExistsError: If overwrite is set to False and the index CSV file already exists.
         """
-        output_path = os.path.join(self.data_folder, "index.csv")
+        output_path = os.path.join(self.data_folder+"\\test_data", "index.csv")
         if os.path.exists(output_path) and not overwrite:
             raise FileExistsError(
                 "Index file already exists. To overwrite, call the function with the argument overwrite=True"
             )
 
         index_list = []
-        for root, dirs, files in os.walk(self.data_folder):
+        for root, dirs, files in os.walk(self.data_folder+"\\test_data"):
             for file in files:
                 if file.endswith(".jpg"):
                     label = os.path.basename(root)
@@ -358,7 +372,7 @@ class ImageData(DataHandler):
         Returns:
             A pandas DataFrame.
         """
-        index_df = pd.read_csv(os.path.join(self.data_folder, "index.csv"), index_col=0)
+        index_df = pd.read_csv(os.path.join(self.data_folder+"\\test_data", "index.csv"), index_col=0)
         min_images_per_class = min(index_df.label.value_counts())
         assert n_samples_per_class <= min_images_per_class, (
             f"n_samples_per_class is too big. Only {min_images_per_class} images per label are available."

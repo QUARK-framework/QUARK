@@ -20,7 +20,7 @@ import networkx as nx
 import numpy as np
 from dimod import qubo_to_ising
 from more_itertools import locate
-from pyqubo import Array, Placeholder, Constraint
+# from pyqubo import Array, Placeholder, Constraint
 from qiskit_optimization.applications import Tsp
 from qiskit_optimization.converters import QuadraticProgramToQubo
 
@@ -57,7 +57,7 @@ class Ising(Mapping):
             {"name": "dimod", "version": "0.12.17"},
             {"name": "more-itertools", "version": "10.5.0"},
             {"name": "qiskit-optimization", "version": "0.6.1"},
-            {"name": "pyqubo", "version": "1.4.0"},
+            # {"name": "pyqubo", "version": "1.4.0"},
             *QUBO.get_requirements()
         ]
 
@@ -74,7 +74,7 @@ class Ising(Mapping):
                         "description": "By which factor would you like to multiply your lagrange?"
                     },
                     "mapping": {
-                        "values": ["ocean", "qiskit", "pyqubo"],
+                        "values": ["ocean", "qiskit"],
                         "description": "Which Ising formulation of the TSP problem should be used?"
                     }
                 }
@@ -85,7 +85,7 @@ class Ising(Mapping):
                 "description": "By which factor would you like to multiply your lagrange?"
             },
             "mapping": {
-                "values": ["ocean", "qiskit", "pyqubo"],
+                "values": ["ocean", "qiskit"],
                 "description": "Which Ising formulation of the TSP problem should be used?"
             }
         }
@@ -117,107 +117,107 @@ class Ising(Mapping):
         mapping = self.config["mapping"]
         if mapping == "ocean":
             return self._map_ocean(problem, config)
-        elif mapping == "pyqubo":
-            return self._map_pyqubo(problem, config)
+        # elif mapping == "pyqubo":
+            # return self._map_pyqubo(problem, config)
         elif mapping == "qiskit":
             return self._map_qiskit(problem, config)
         else:
             logging.error(f"Unknown mapping {mapping}.")
             raise ValueError(f"Unknown mapping {mapping}.")
 
-    @staticmethod
-    def _create_pyqubo_model(cost_matrix: list) -> any:
-        """
-        This PyQubo formulation of the TSP was kindly provided by AWS.
+    # @staticmethod
+    # def _create_pyqubo_model(cost_matrix: list) -> any:
+    #     """
+    #     This PyQubo formulation of the TSP was kindly provided by AWS.
+    #
+    #     :param cost_matrix: Cost matrix of the TSP
+    #     :return: Compiled PyQubo model
+    #     """
+    #     n = len(cost_matrix)
+    #     x = Array.create('c', (n, n), 'BINARY')
+    #
+    #     # Constraint not to visit more than two nodes at the same time.
+    #     time_const = 0.0
+    #     for i in range(n):
+    #         # If you wrap the hamiltonian by Const(...), this part is recognized as constraint
+    #         time_const += Constraint((sum(x[i, j] for j in range(n)) - 1) ** 2, label=f"time{i}")
+    #
+    #     # Constraint not to visit the same location more than twice.
+    #     location_const = 0.0
+    #     for j in range(n):
+    #         location_const += Constraint((sum(x[i, j] for i in range(n)) - 1) ** 2, label=f"location{j}")
+    #
+    #     # distance of route
+    #     distance = 0.0
+    #     for i in range(n):
+    #         for j in range(n):
+    #             for k in range(n):
+    #                 d_ij = cost_matrix[i][j]
+    #                 distance += d_ij * x[k, i] * x[(k + 1) % n, j]
+    #
+    #     # Construct hamiltonian
+    #     A = Placeholder("A")
+    #     H = distance + A * (time_const + location_const)
+    #
+    #     # Compile model
+    #     model = H.compile()
+    #
+    #     return model
 
-        :param cost_matrix: Cost matrix of the TSP
-        :return: Compiled PyQubo model
-        """
-        n = len(cost_matrix)
-        x = Array.create('c', (n, n), 'BINARY')
+    # @staticmethod
+    # def _get_matrix_index(ising_index_string: any, number_nodes: any) -> any:
+    #     """
+    #     Converts dictionary index in PyQubo to matrix index.
+    #
+    #     :param ising_index_string: Index string from PyQubo
+    #     :param number_nodes: Number of nodes in the graph
+    #     :return: Matrix index
+    #     """
+    #     x = 0
+    #     y = 0
+    #     match = re.findall(r'(?<=\[)[0-9]*(?=\])', ising_index_string, re.S)
+    #     if len(match) == 2:
+    #         x = int(match[0])
+    #         y = int(match[1])
+    #
+    #     idx = x * number_nodes + y
+    #
+    #     return idx
 
-        # Constraint not to visit more than two nodes at the same time.
-        time_const = 0.0
-        for i in range(n):
-            # If you wrap the hamiltonian by Const(...), this part is recognized as constraint
-            time_const += Constraint((sum(x[i, j] for j in range(n)) - 1) ** 2, label=f"time{i}")
-
-        # Constraint not to visit the same location more than twice.
-        location_const = 0.0
-        for j in range(n):
-            location_const += Constraint((sum(x[i, j] for i in range(n)) - 1) ** 2, label=f"location{j}")
-
-        # distance of route
-        distance = 0.0
-        for i in range(n):
-            for j in range(n):
-                for k in range(n):
-                    d_ij = cost_matrix[i][j]
-                    distance += d_ij * x[k, i] * x[(k + 1) % n, j]
-
-        # Construct hamiltonian
-        A = Placeholder("A")
-        H = distance + A * (time_const + location_const)
-
-        # Compile model
-        model = H.compile()
-
-        return model
-
-    @staticmethod
-    def _get_matrix_index(ising_index_string: any, number_nodes: any) -> any:
-        """
-        Converts dictionary index in PyQubo to matrix index.
-
-        :param ising_index_string: Index string from PyQubo
-        :param number_nodes: Number of nodes in the graph
-        :return: Matrix index
-        """
-        x = 0
-        y = 0
-        match = re.findall(r'(?<=\[)[0-9]*(?=\])', ising_index_string, re.S)
-        if len(match) == 2:
-            x = int(match[0])
-            y = int(match[1])
-
-        idx = x * number_nodes + y
-
-        return idx
-
-    def _map_pyqubo(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
-        """
-        Use Qubo / Ising model defined in PyQubo.
-
-        :param graph: Networkx graph
-        :param config: Config with the parameters specified in Config class
-        :return: Dict with the Ising, time it took to map it
-        """
-        start = start_time_measurement()
-        cost_matrix = np.array(nx.to_numpy_array(graph, weight="weight"))
-        model = self._create_pyqubo_model(cost_matrix)
-        feed_dict = {'A': 2.0}
-        if "lagrange_factor" in config:
-            feed_dict = {'A': config["lagrange_factor"]}
-
-        linear, quad, _ = model.to_ising(feed_dict=feed_dict)
-
-        timesteps = graph.number_of_nodes()
-
-        t_matrix = np.zeros(graph.number_of_nodes() * graph.number_of_nodes(), dtype=float)
-
-        for key, value in linear.items():
-            idx = self._get_matrix_index(key, graph.number_of_nodes())
-            t_matrix[idx] = value
-
-        matrix_size = graph.number_of_nodes() * timesteps
-        j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
-
-        for key, value in quad.items():
-            x = self._get_matrix_index(key[0], graph.number_of_nodes())
-            y = self._get_matrix_index(key[1], graph.number_of_nodes())
-            j_matrix[x][y] = value
-
-        return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, end_time_measurement(start)
+    # def _map_pyqubo(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
+    #     """
+    #     Use Qubo / Ising model defined in PyQubo.
+    #
+    #     :param graph: Networkx graph
+    #     :param config: Config with the parameters specified in Config class
+    #     :return: Dict with the Ising, time it took to map it
+    #     """
+    #     start = start_time_measurement()
+    #     cost_matrix = np.array(nx.to_numpy_array(graph, weight="weight"))
+    #     model = self._create_pyqubo_model(cost_matrix)
+    #     feed_dict = {'A': 2.0}
+    #     if "lagrange_factor" in config:
+    #         feed_dict = {'A': config["lagrange_factor"]}
+    #
+    #     linear, quad, _ = model.to_ising(feed_dict=feed_dict)
+    #
+    #     timesteps = graph.number_of_nodes()
+    #
+    #     t_matrix = np.zeros(graph.number_of_nodes() * graph.number_of_nodes(), dtype=float)
+    #
+    #     for key, value in linear.items():
+    #         idx = self._get_matrix_index(key, graph.number_of_nodes())
+    #         t_matrix[idx] = value
+    #
+    #     matrix_size = graph.number_of_nodes() * timesteps
+    #     j_matrix = np.zeros((matrix_size, matrix_size), dtype=float)
+    #
+    #     for key, value in quad.items():
+    #         x = self._get_matrix_index(key[0], graph.number_of_nodes())
+    #         y = self._get_matrix_index(key[1], graph.number_of_nodes())
+    #         j_matrix[x][y] = value
+    #
+    #     return {"J": j_matrix, "J_dict": quad, "t_dict": linear, "t": t_matrix}, end_time_measurement(start)
 
     def _map_ocean(self, graph: nx.Graph, config: Config) -> tuple[dict, float]:
         """
@@ -297,7 +297,7 @@ class Ising(Mapping):
         start = start_time_measurement()
         if -1 in solution:  # ising model output from Braket QAOA
             solution = self._convert_ising_to_qubo(solution)
-        elif self.config["mapping"] == "pyqubo" or self.config["mapping"] == "ocean":
+        elif self.config["mapping"] == "ocean":
             logging.debug("Flip bits in solutions to unify different mappings")
             solution = self._flip_bits_in_bitstring(solution)
 

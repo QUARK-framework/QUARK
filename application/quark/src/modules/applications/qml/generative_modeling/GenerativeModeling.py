@@ -123,9 +123,6 @@ class GenerativeModeling(QML):
         :param kwargs: Optional keyword arguments
         :return: Tuple with input_data and the function's computation time
         """
-        start = start_time_measurement()
-        return input_data, end_time_measurement(start)        :param kwargs: Optional keyword arguments
-        :return: Tuple with input_data and the function's computation time
-        """
+
         start = start_time_measurement()
         return input_data, end_time_measurement(start)

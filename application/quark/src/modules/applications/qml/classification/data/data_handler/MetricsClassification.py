@@ -16,7 +16,7 @@
 from typing import Dict
 
 import numpy as np
-import sklearn
+import sklearn.metrics
 
 
 class MetricsClassification:

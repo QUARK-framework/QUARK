@@ -1,7 +1,7 @@
 {
-  "build_number": 21,
-  "build_date": "07-03-2025 10:20:47",
-  "git_revision_number": "04ddc6f311cee644745f6a5779c7f21a297dbf10",
+  "build_number": 23,
+  "build_date": "09-04-2025 14:38:00",
+  "git_revision_number": "3c1b0105db980589f4565fbcdcea05e325f1a704",
   "modules": [
     {
       "name": "PVC",
@@ -1464,10 +1464,6 @@
               "version": "0.6.1"
             },
             {
-              "name": "pyqubo",
-              "version": "1.4.0"
-            },
-            {
               "name": "networkx",
               "version": "3.2.1"
             },
@@ -2272,7 +2268,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -2373,7 +2369,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -2617,7 +2613,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -2718,7 +2714,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -2948,7 +2944,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -3049,7 +3045,7 @@
                             },
                             {
                               "name": "torch",
-                              "version": "2.2.0"
+                              "version": "2.2.2"
                             },
                             {
                               "name": "matplotlib",
@@ -3295,7 +3291,7 @@
                         },
                         {
                           "name": "torch",
-                          "version": "2.2.0"
+                          "version": "2.2.2"
                         },
                         {
                           "name": "matplotlib",
@@ -3396,7 +3392,7 @@
                         },
                         {
                           "name": "torch",
-                          "version": "2.2.0"
+                          "version": "2.2.2"
                         },
                         {
                           "name": "matplotlib",
@@ -3587,10 +3583,6 @@
               "version": "10.3.0"
             },
             {
-              "name": "scikit-learn",
-              "version": "1.4.2"
-            },
-            {
               "name": "torch",
               "version": "2.2.2"
             },
@@ -3616,11 +3608,11 @@
                 },
                 {
                   "name": "qiskit",
-                  "version": "0.40.0"
+                  "version": "1.1.0"
                 },
                 {
                   "name": "qiskit-machine-learning",
-                  "version": "0.6.1"
+                  "version": "0.8.2"
                 },
                 {
                   "name": "qleet",
@@ -3628,11 +3620,11 @@
                 },
                 {
                   "name": "pennylane",
-                  "version": "0.35.1"
+                  "version": "0.37.0"
                 },
                 {
                   "name": "pillow",
-                  "version": "10.3.0"
+                  "version": "11.1.0"
                 },
                 {
                   "name": "scikit-learn",
@@ -3648,7 +3640,7 @@
                 },
                 {
                   "name": "tqdm",
-                  "version": "4.63.0"
+                  "version": "4.67.1"
                 },
                 {
                   "name": "numpy",
@@ -3656,11 +3648,11 @@
                 },
                 {
                   "name": "tensorboard",
-                  "version": "2.11.0"
+                  "version": "2.17.0"
                 },
                 {
                   "name": "tensorboardX",
-                  "version": "2.5.0"
+                  "version": "2.6.2.2"
                 },
                 {
                   "name": "plotly",
@@ -3668,19 +3660,7 @@
                 },
                 {
                   "name": "cma",
-                  "version": "3.3.0"
-                },
-                {
-                  "name": "tensorflow",
-                  "version": "2.7.0"
-                },
-                {
-                  "name": "tensorflow-quantum",
-                  "version": "0.7.2"
-                },
-                {
-                  "name": "protobuf",
-                  "version": "3.17.3"
+                  "version": "4.0.0"
                 }
               ],
               "submodules": []

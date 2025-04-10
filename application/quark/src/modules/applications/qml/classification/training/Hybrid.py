@@ -74,23 +74,23 @@ class Hybrid(Core, Training):
         """
         return [
             {"name": "pandas", "version": "2.2.2"},
-            {"name": "qiskit", "version": "0.40.0"},
-            {"name": "qiskit-machine-learning", "version": "0.6.1"},
+            {"name": "qiskit", "version": "1.1.0"},
+            {"name": "qiskit-machine-learning", "version": "0.8.2"},
             {"name": "qleet", "version": "0.2.0.1"},
-            {"name": "pennylane", "version": "0.35.1"},
-            {"name": "pillow", "version": "10.3.0"},
+            {"name": "pennylane", "version": "0.37.0"},
+            {"name": "pillow", "version": "11.1.0"},
             {"name": "scikit-learn", "version": "1.4.2"},
             {"name": "torch", "version": "2.2.2"},
             {"name": "torchvision", "version": "0.17.2"},
-            {"name": "tqdm", "version": "4.63.0"},
+            {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "tensorboard", "version": "2.11.0"},
-            {"name": "tensorboardX", "version": "2.5.0"},
+            {"name": "tensorboard", "version": "2.17.0"},
+            {"name": "tensorboardX", "version": "2.6.2.2"},
             {"name": "plotly", "version": "5.1.0"},
-            {"name": "cma", "version": "3.3.0"},
-            {"name": "tensorflow", "version": "2.7.0"},
-            {"name": "tensorflow-quantum", "version": "0.7.2"},
-            {"name": "protobuf", "version": "3.17.3"},
+            {"name": "cma", "version": "4.0.0"},
+            # {"name": "tensorflow", "version": "2.7.0"},
+            # {"name": "tensorflow-quantum", "version": "0.7.2"},
+            # {"name": "protobuf", "version": "3.17.3"},
         ]
 
     def get_parameter_options(self) -> dict:
@@ -133,12 +133,8 @@ class Hybrid(Core, Training):
 
         """
 
-        usecase_name: str
-        n_classes: int
         n_epochs: int
         n_reduced_features: int
-        n_images_per_class: int
-        dataset_name: str
 
     def get_default_submodule(self, option: str) -> Core:
         raise ValueError("This module has no submodules.")
@@ -183,7 +179,7 @@ class Hybrid(Core, Training):
 
         :param input_data: the dataset to be trained on
         :type input_data: dict
-        :param config: Config specifying the paramters of the training
+        :param config: Config specifying the parameters of the training
         :type config: dict
         :param kwargs: optional additional settings
         :type kwargs: dict

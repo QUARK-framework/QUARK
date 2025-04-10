@@ -47,7 +47,9 @@ class Installer:
             {"name": "MIS", "class": "MIS", "module": "modules.applications.optimization.MIS.MIS"},
             {"name": "SCP", "class": "SCP", "module": "modules.applications.optimization.SCP.SCP"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.qml.generative_modeling.GenerativeModeling"}
+             "module": "modules.applications.qml.generative_modeling.GenerativeModeling"},
+            {"name": "Classification", "class": "Classification",
+             "module": "modules.applications.qml.classification.Classification"}
         ]
 
         self.core_requirements = [

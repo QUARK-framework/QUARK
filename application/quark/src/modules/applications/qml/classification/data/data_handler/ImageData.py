@@ -338,14 +338,14 @@ class ImageData(DataHandler):
         Raises:
             FileExistsError: If overwrite is set to False and the index CSV file already exists.
         """
-        output_path = os.path.join(self.data_folder+"\\test_data", "index.csv")
+        output_path = os.path.join(self.data_folder, "test_data", "index.csv")
         if os.path.exists(output_path) and not overwrite:
             raise FileExistsError(
                 "Index file already exists. To overwrite, call the function with the argument overwrite=True"
             )
 
         index_list = []
-        for root, dirs, files in os.walk(self.data_folder+"\\test_data"):
+        for root, dirs, files in os.walk(os.path.join(self.data_folder, "test_data")):
             for file in files:
                 if file.endswith(".jpg"):
                     label = os.path.basename(root)
@@ -372,7 +372,7 @@ class ImageData(DataHandler):
         Returns:
             A pandas DataFrame.
         """
-        index_df = pd.read_csv(os.path.join(self.data_folder+"\\test_data", "index.csv"), index_col=0)
+        index_df = pd.read_csv(os.path.join(self.data_folder, "test_data", "index.csv"), index_col=0)
         min_images_per_class = min(index_df.label.value_counts())
         assert n_samples_per_class <= min_images_per_class, (
             f"n_samples_per_class is too big. Only {min_images_per_class} images per label are available."

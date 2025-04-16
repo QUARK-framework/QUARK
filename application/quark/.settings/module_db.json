@@ -1,7 +1,7 @@
 {
-  "build_number": 23,
-  "build_date": "09-04-2025 14:38:00",
-  "git_revision_number": "3c1b0105db980589f4565fbcdcea05e325f1a704",
+  "build_number": 27,
+  "build_date": "16-04-2025 15:30:44",
+  "git_revision_number": "21a54233716f0b704847a9c99b50854138b550c3",
   "modules": [
     {
       "name": "PVC",
@@ -3580,7 +3580,7 @@
             },
             {
               "name": "pillow",
-              "version": "10.3.0"
+              "version": "11.1.0"
             },
             {
               "name": "torch",
@@ -3588,7 +3588,7 @@
             },
             {
               "name": "tqdm",
-              "version": "4.63.0"
+              "version": "4.67.1"
             },
             {
               "name": "numpy",
@@ -3613,10 +3613,6 @@
                 {
                   "name": "qiskit-machine-learning",
                   "version": "0.8.2"
-                },
-                {
-                  "name": "qleet",
-                  "version": "0.2.0.1"
                 },
                 {
                   "name": "pennylane",

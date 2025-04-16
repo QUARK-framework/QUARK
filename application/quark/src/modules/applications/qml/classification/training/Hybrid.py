@@ -76,7 +76,7 @@ class Hybrid(Core, Training):
             {"name": "pandas", "version": "2.2.2"},
             {"name": "qiskit", "version": "1.1.0"},
             {"name": "qiskit-machine-learning", "version": "0.8.2"},
-            {"name": "qleet", "version": "0.2.0.1"},
+            # {"name": "qleet", "version": "0.2.0.1"},
             {"name": "pennylane", "version": "0.37.0"},
             {"name": "pillow", "version": "11.1.0"},
             {"name": "scikit-learn", "version": "1.4.2"},

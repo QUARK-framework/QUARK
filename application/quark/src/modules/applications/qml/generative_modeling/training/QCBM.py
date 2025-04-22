@@ -17,8 +17,10 @@ import logging
 import numpy as np
 from cma import CMAEvolutionStrategy
 from tensorboardX import SummaryWriter
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 from matplotlib import figure, axes
-import matplotlib.pyplot as plt
 
 from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core, GPU
 from utils_mpi import is_running_mpi, get_comm

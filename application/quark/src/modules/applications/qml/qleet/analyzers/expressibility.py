@@ -23,7 +23,9 @@ from qiskit_aer.noise import NoiseModel as qiskitNoiseModel
 from qiskit.quantum_info import state_fidelity
 from scipy.spatial.distance import jensenshannon
 
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import numpy as np
 
 from ..interface.metas import MetaExplorer

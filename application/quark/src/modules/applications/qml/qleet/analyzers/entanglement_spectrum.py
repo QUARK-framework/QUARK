@@ -22,7 +22,8 @@ from qiskit.quantum_info import partial_trace
 from scipy.spatial.distance import jensenshannon
 
 import matplotlib
-import matplotlib.pyplot as plt
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import numpy as np
 import scipy as sp
 

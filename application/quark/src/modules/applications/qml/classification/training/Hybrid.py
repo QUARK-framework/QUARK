@@ -16,7 +16,9 @@ import logging
 import time
 from typing import TypedDict
 
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
 from matplotlib import axes, figure

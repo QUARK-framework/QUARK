@@ -15,8 +15,9 @@
 from collections import defaultdict
 import logging
 
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np

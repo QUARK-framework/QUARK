@@ -22,7 +22,9 @@ from functools import partial, wraps
 from time import time
 from typing import TypedDict
 
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import numpy as np
 import pennylane as qml
 from pennylane import numpy as npqml

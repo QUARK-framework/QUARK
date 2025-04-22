@@ -95,7 +95,7 @@ class ImageData(DataHandler):
                         },
                         "n_classes": {
                             "values": [2, 4, 10],
-                            "description": "How many classes to benchmark on?",
+                            "description": "How many classes to benchmark on (Concrete_Crack only works with 2)?",
                         },
                         "noise_sigma": {
                             "values": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -115,7 +115,7 @@ class ImageData(DataHandler):
             },
             "n_classes": {
                 "values": [2, 4, 10],
-                "description": "How many classes to benchmark on?",
+                "description": "How many classes to benchmark on (Concrete_Crack only works with 2)?",
             },
             "noise_sigma": {
                 "values": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
@@ -186,7 +186,7 @@ class ImageData(DataHandler):
 
         :param gen_mod: Dictionary with collected information of the previous modules
         :type gen_mod: dict
-        :param config: Config specifying the paramters of the data handler
+        :param config: Config specifying the parameters of the data handler
         :type config: dict
         :return: Must always return the mapped problem and the time it took to create the mapping
         :rtype: tuple(any, float)
@@ -200,7 +200,7 @@ class ImageData(DataHandler):
 
         if self.dataset_name == "Concrete_Crack":
             if config["n_classes"] != 2:
-                raise Exception("Sorry, number of classes does not work for this dataset, should be 2.")
+                raise Exception("Sorry, number of classes does not work for this dataset. Should be 2.")
 
             logging.info("Creating index")
             self.create_data_index()
@@ -259,7 +259,7 @@ class ImageData(DataHandler):
             idx += self.keep_first_k_ones(torch.as_tensor(trainset.targets) == j, k=n_images_per_class)
         subset_train = torch.utils.data.dataset.Subset(trainset, np.where(idx == 1)[0])
 
-        trainloader = torch.utils.data.DataLoader(subset_train, batch_size=batch_size, shuffle=True, num_workers=2)
+        trainloader = torch.utils.data.DataLoader(subset_train, batch_size=batch_size, shuffle=True, num_workers=0)
 
         testset = torchvision.datasets.MNIST(root=self.data_folder, train=False, download=True, transform=transform)
 
@@ -267,7 +267,7 @@ class ImageData(DataHandler):
         for j in range(1, n_classes):
             idx += self.keep_first_k_ones(torch.as_tensor(testset.targets) == j, k=n_images_per_class)
         subset_test = torch.utils.data.dataset.Subset(testset, np.where(idx == 1)[0])
-        testloader = torch.utils.data.DataLoader(subset_test, batch_size=batch_size, shuffle=False, num_workers=2)
+        testloader = torch.utils.data.DataLoader(subset_test, batch_size=batch_size, shuffle=False, num_workers=0)
 
         return trainloader, testloader, testloader
 
@@ -391,6 +391,7 @@ class ImageData(DataHandler):
         Args:
             image: Image
             sigma: Sigma of Gaussian noise
+            mean: Mean of Gaussian noise
 
         Returns:
             A numpy array with pixel values between 0 and 1.
@@ -467,6 +468,7 @@ class ImageData(DataHandler):
             A Pytorch model.
         """
         resnet18 = models.resnet18(pretrained=True)
+        # resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
         keep_layers = list(resnet18.children())[:-1]
         truncated_resnet18 = nn.Sequential(*keep_layers)
         return truncated_resnet18

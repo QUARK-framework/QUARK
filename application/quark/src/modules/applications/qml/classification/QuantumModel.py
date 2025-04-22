@@ -227,6 +227,7 @@ class QuantumModel(nn.Module):
         elif self.dataset_name == "MNIST":
             self.image_features = 28
             self.resnet18 = models.resnet18(pretrained=True)
+            # self.resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
             self.fc_inputs = self.resnet18.fc.in_features
             self.resnet18.fc = nn.Identity()
 

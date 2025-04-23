@@ -66,8 +66,8 @@ class ImageData(DataHandler):
         return [
             {"name": "pandas", "version": "2.2.2"},
             {"name": "pillow", "version": "11.1.0"},
-            # {"name": "scikit-learn", "version": "1.4.2"},
             {"name": "torch", "version": "2.2.2"},
+            {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
         ]
@@ -467,8 +467,8 @@ class ImageData(DataHandler):
         Returns:
             A Pytorch model.
         """
-        resnet18 = models.resnet18(pretrained=True)
-        # resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
+        # resnet18 = models.resnet18(pretrained=True)  # Deprecated
+        resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
         keep_layers = list(resnet18.children())[:-1]
         truncated_resnet18 = nn.Sequential(*keep_layers)
         return truncated_resnet18

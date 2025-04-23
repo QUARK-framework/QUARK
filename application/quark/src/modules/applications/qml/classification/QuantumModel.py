@@ -223,11 +223,11 @@ class QuantumModel(nn.Module):
             )
 
         # TODO the classical embeddings with resnet for MNIST
-        # should be moved to the ImageData logic as it'S done for the Concrete Crack usecase
+        # should be moved to the ImageData logic as it is done for the Concrete Crack use case
         elif self.dataset_name == "MNIST":
             self.image_features = 28
-            self.resnet18 = models.resnet18(pretrained=True)
-            # self.resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
+            # self.resnet18 = models.resnet18(pretrained=True)  # Deprecated
+            self.resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
             self.fc_inputs = self.resnet18.fc.in_features
             self.resnet18.fc = nn.Identity()
 
@@ -239,6 +239,7 @@ class QuantumModel(nn.Module):
         else:
             raise Exception(f"No valid dataset name {self.dataset_name}.")
 
+    @staticmethod
     def get_requirements() -> list[dict]:
         """
         Returns requirements of this module
@@ -251,7 +252,6 @@ class QuantumModel(nn.Module):
             {"name": "torch", "version": "2.2.2"},
             {"name": "pennylane", "version": "0.37.0"},
             {"name": "qiskit", "version": "1.1.0"},
-            {"name": "tensorboardX", "version": "2.6.2.2"}
         ]
 
     def get_quantum_circuit(self):

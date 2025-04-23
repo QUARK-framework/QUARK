@@ -24,7 +24,6 @@ import torch.nn as nn
 from matplotlib import axes, figure
 from modules.applications.qml.classification.QuantumModel import QuantumModel
 
-# from modules.applications.qml.classification.training.ClassifierTraining import *
 from modules.applications.qml.MetricsQuantum import MetricsQuantum
 from modules.applications.qml.Training import Training
 from modules.Core import Core
@@ -52,7 +51,7 @@ comm = get_comm()
 class Hybrid(Core, Training):
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__()  # "Hybrid")
 
@@ -69,35 +68,22 @@ class Hybrid(Core, Training):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
         :rtype: list[dict]
         """
         return [
-            {"name": "pandas", "version": "2.2.2"},
-            {"name": "qiskit", "version": "1.1.0"},
-            {"name": "qiskit-machine-learning", "version": "0.8.2"},
-            # {"name": "qleet", "version": "0.2.0.1"},
-            {"name": "pennylane", "version": "0.37.0"},
-            {"name": "pillow", "version": "11.1.0"},
-            {"name": "scikit-learn", "version": "1.4.2"},
+            {"name": "matplotlib", "version": "3.7.5"},
             {"name": "torch", "version": "2.2.2"},
-            {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "tensorboard", "version": "2.17.0"},
             {"name": "tensorboardX", "version": "2.6.2.2"},
-            {"name": "plotly", "version": "5.1.0"},
-            {"name": "cma", "version": "4.0.0"},
-            # {"name": "tensorflow", "version": "2.7.0"},
-            # {"name": "tensorflow-quantum", "version": "0.7.2"},
-            # {"name": "protobuf", "version": "3.17.3"},
         ]
 
     def get_parameter_options(self) -> dict:
         """
-        Returns the configurable settings for the quantum circuit born machine
+        Returns the configurable settings for the Quantum Circuit Born Machine.
 
         :return:
             .. code-block:: python
@@ -126,7 +112,7 @@ class Hybrid(Core, Training):
 
     class Config(TypedDict):
         """
-        Attributes of a valid config
+        Attributes of a valid config.
 
         .. code-block:: python
 
@@ -176,15 +162,12 @@ class Hybrid(Core, Training):
         input_data: dict,
         config: Config,
         **kwargs: dict,
-    ) -> tuple[dict, float]:
+    ) -> dict:
         """
 
         :param input_data: the dataset to be trained on
-        :type input_data: dict
         :param config: Config specifying the parameters of the training
-        :type config: dict
         :param kwargs: optional additional settings
-        :type kwargs: dict
         :return: Dictionary including the information of previous modules as well as of the training
         :rtype: dict
         """
@@ -207,7 +190,6 @@ class Hybrid(Core, Training):
 
         train_dataloader = input_data["dataset_train"]
         val_dataloader = input_data["dataset_val"]
-        test_dataloader = input_data["dataset_test"]
 
         loss_fn = nn.CrossEntropyLoss()
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.001)
@@ -242,15 +224,16 @@ class Hybrid(Core, Training):
             y_trues = []
             y_preds = []
             train_losses = []
-            val_losses = []
 
             for val in tqdm(train_dataloader):
                 if len(val) == 3:
-                    X, y_true, _ = val
+                    x, y_true, _ = val
                 elif len(val) == 2:
-                    X, y_true = val
+                    x, y_true = val
+                else:
+                    raise ValueError("Unexpected data format")
                 timing.start_recording()
-                y_raw = self.model(X)
+                y_raw = self.model(x)
                 time_circ = timing.stop_recording()
                 y_logits = nn.Softmax(dim=1)(y_raw)
                 y_pred = np.argmax(y_logits.detach().numpy(), axis=1)
@@ -281,10 +264,12 @@ class Hybrid(Core, Training):
 
             for val in tqdm(val_dataloader):
                 if len(val) == 3:
-                    X, y_true, _ = val
+                    x, y_true, _ = val
                 elif len(val) == 2:
-                    X, y_true = val
-                y_raw = self.model(X)
+                    x, y_true = val
+                else:
+                    raise ValueError("Unexpected data format")
+                y_raw = self.model(x)
                 time_circ = timing.stop_recording()
                 y_logits = nn.Softmax(dim=1)(y_raw)
                 y_pred = np.argmax(y_logits.detach().numpy(), axis=1)
@@ -306,6 +291,8 @@ class Hybrid(Core, Training):
                 self.writer.add_scalar(f"metrics/{metric_name}/train", metric_value, epoch_idx)
                 if metric_name == "accuracy":
                     train_accuracy = metric_value
+                else:
+                    train_accuracy = metrics["accuracy"]
 
             input_data["train_accuracy"].append(float(train_accuracy))
 

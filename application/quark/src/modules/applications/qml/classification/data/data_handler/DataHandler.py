@@ -22,7 +22,7 @@ from utils import end_time_measurement, start_time_measurement
 class DataHandler(Core, ABC):
     """
     The task of the DataHandler module is to translate the application’s data
-    and problem specification into preproccesed format.
+    and problem specification into preprocessed format.
     """
 
     def __init__(self, name):
@@ -42,7 +42,6 @@ class DataHandler(Core, ABC):
         :rtype: list[dict]
         """
         return [
-            {"name": "numpy", "version": "1.23.5"},
             {"name": "pandas", "version": "1.5.2"},
             {"name": "tensorboard", "version": "2.13.0"},
         ]

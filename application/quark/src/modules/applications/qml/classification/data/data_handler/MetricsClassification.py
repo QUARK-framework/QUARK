@@ -21,22 +21,26 @@ import sklearn.metrics
 
 class MetricsClassification:
     """
-    A class to compute classification metrics for generated samples based on train and solution sets.
-
-    :param train_set: Set of queries in the training set.
-    :type train_set: np.array
-    :param train_size: The fraction of queries used for training.
-    :type train_size: float
-    :param solution_set: Set of queries in the solution set.
-    :type solution_set: np.array
-    :param n_qubits: The number of qubits.
-    :type n_qubits: int
+    A class to compute classification metrics for generated samples
     """
 
     def __init__(
         self,
     ) -> None:
         pass
+
+    @staticmethod
+    def get_requirements() -> list[dict]:
+        """
+        Returns requirements of this module
+
+        :return: list of dict with requirements of this module
+        :rtype: list[dict]
+        """
+        return [
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "scikit-learn", "version": "1.4.2"},
+        ]
 
     def get_metrics(self, y_pred: np.array, y_true: np.array) -> Dict[str, float]:
         """

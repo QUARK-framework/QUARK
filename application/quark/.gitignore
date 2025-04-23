@@ -318,3 +318,5 @@ $RECYCLE.BIN/
 /configs/
 /docs/_autosummary/
 /src/modules/applications/qml/classification/data/images_2D/test_data/index.csv
+/src/modules/applications/qml/classification/data/images_2D/embeddings.csv
+/src/modules/applications/qml/classification/data/images_2D/MNIST/raw/*

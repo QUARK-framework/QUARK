@@ -141,7 +141,7 @@ class Classification(QML):
         """
         Process the solution here, then validate and evaluate it.
 
-        :param input_data: A representation of the quntum machine learning model that will be trained
+        :param input_data: A representation of the quantum machine learning model that will be trained
         :type input_data: dict
         :param config: Config specifying the parameters of the training
         :type config: dict

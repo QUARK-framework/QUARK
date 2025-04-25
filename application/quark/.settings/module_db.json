@@ -1,7 +1,7 @@
 {
-  "build_number": 27,
-  "build_date": "16-04-2025 15:30:44",
-  "git_revision_number": "21a54233716f0b704847a9c99b50854138b550c3",
+  "build_number": 28,
+  "build_date": "25-04-2025 08:36:25",
+  "git_revision_number": "a9597f35e68fe08c33253f24991b87aa6206ca64",
   "modules": [
     {
       "name": "PVC",
@@ -3587,6 +3587,10 @@
               "version": "2.2.2"
             },
             {
+              "name": "torchvision",
+              "version": "0.17.2"
+            },
+            {
               "name": "tqdm",
               "version": "4.67.1"
             },
@@ -3603,36 +3607,12 @@
               "module": "modules.applications.qml.classification.training.Hybrid",
               "requirements": [
                 {
-                  "name": "pandas",
-                  "version": "2.2.2"
-                },
-                {
-                  "name": "qiskit",
-                  "version": "1.1.0"
-                },
-                {
-                  "name": "qiskit-machine-learning",
-                  "version": "0.8.2"
-                },
-                {
-                  "name": "pennylane",
-                  "version": "0.37.0"
-                },
-                {
-                  "name": "pillow",
-                  "version": "11.1.0"
-                },
-                {
-                  "name": "scikit-learn",
-                  "version": "1.4.2"
+                  "name": "matplotlib",
+                  "version": "3.7.5"
                 },
                 {
                   "name": "torch",
                   "version": "2.2.2"
-                },
-                {
-                  "name": "torchvision",
-                  "version": "0.17.2"
                 },
                 {
                   "name": "tqdm",
@@ -3643,20 +3623,62 @@
                   "version": "1.26.4"
                 },
                 {
-                  "name": "tensorboard",
-                  "version": "2.17.0"
-                },
-                {
                   "name": "tensorboardX",
                   "version": "2.6.2.2"
+                }
+              ],
+              "submodules": [
+                {
+                  "name": "QuantumModel",
+                  "class": "QuantumModel",
+                  "args": {
+                    "dataset_name": "Concrete_Crack",
+                    "n_classes": 2
+                  },
+                  "module": "modules.applications.qml.classification.QuantumModel",
+                  "requirements": [
+                    {
+                      "name": "numpy",
+                      "version": "1.26.4"
+                    },
+                    {
+                      "name": "torch",
+                      "version": "2.2.2"
+                    },
+                    {
+                      "name": "pennylane",
+                      "version": "0.37.0"
+                    },
+                    {
+                      "name": "qiskit",
+                      "version": "1.1.0"
+                    },
+                    {
+                      "name": "qiskit-machine-learning",
+                      "version": "0.8.2"
+                    },
+                    {
+                      "name": "torchvision",
+                      "version": "0.17.2"
+                    }
+                  ],
+                  "submodules": []
+                }
+              ]
+            },
+            {
+              "name": "MetricsClassification",
+              "class": "MetricsClassification",
+              "args": {},
+              "module": "modules.applications.qml.classification.data.data_handler.MetricsClassification",
+              "requirements": [
+                {
+                  "name": "numpy",
+                  "version": "1.26.4"
                 },
                 {
-                  "name": "plotly",
-                  "version": "5.1.0"
-                },
-                {
-                  "name": "cma",
-                  "version": "4.0.0"
+                  "name": "scikit-learn",
+                  "version": "1.4.2"
                 }
               ],
               "submodules": []

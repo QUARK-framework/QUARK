@@ -59,7 +59,7 @@ class Hybrid(Core, Training):
         self.target: np.array
         self.study_generalization: bool
         self.generalization_metrics: dict
-        self.sub_options = ["Hybrid"]
+        self.submodule_options = ["QuantumModel"]
         self.writer: SummaryWriter
         self.loss_func: callable
         self.fig: figure
@@ -124,8 +124,18 @@ class Hybrid(Core, Training):
         n_epochs: int
         n_reduced_features: int
 
-    def get_default_submodule(self, option: str) -> Core:
-        raise ValueError("This module has no submodules.")
+    def get_default_submodule(self, option: str) -> QuantumModel:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: The submodule option to select
+        :return: Instance of the selected submodule
+        :raises NotImplemented: If the provided option is not implemented
+        """
+        if option == "QuantumModel":
+            return QuantumModel()
+        else:
+            raise NotImplementedError(f"Submodule {option} not implemented")
 
     def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """

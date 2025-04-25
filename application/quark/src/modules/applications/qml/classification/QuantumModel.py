@@ -216,7 +216,7 @@ class QuantumModel(nn.Module):
         :param n_classes: The number of classes to classify.
         """
         super(QuantumModel, self).__init__()
-
+        self.submodule_options = []
         self.dataset_name = dataset_name
         self.n_classes = n_classes
 
@@ -266,6 +266,8 @@ class QuantumModel(nn.Module):
             {"name": "torch", "version": "2.2.2"},
             {"name": "pennylane", "version": "0.37.0"},
             {"name": "qiskit", "version": "1.1.0"},
+            {"name": "qiskit-machine-learning", "version": "0.8.2"},
+            {"name": "torchvision", "version": "0.17.2"},
         ]
 
     def get_quantum_circuit(self) -> tuple[qml.QNode, torch.nn.Parameter]:

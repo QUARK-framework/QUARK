@@ -23,6 +23,10 @@ class MetricsClassification:
     """
 
     def __init__(self) -> None:
+        """
+        Constructor method.
+        """
+        self.submodule_options = []
         pass
 
     @staticmethod

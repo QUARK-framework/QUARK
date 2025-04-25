@@ -47,7 +47,7 @@ class ImageData(DataHandler):
         src/modules/applications/QML/classification/data
         """
         super().__init__("")
-        self.submodule_options = ["Hybrid"]
+        self.submodule_options = ["Hybrid", "MetricsClassification"]
         self.transformation = None
         self.dataset = None
         self.n_registers = None
@@ -75,6 +75,10 @@ class ImageData(DataHandler):
     def get_default_submodule(self, option: str) -> Hybrid:
         if option == "Hybrid":
             return Hybrid()
+        elif option == "MetricsClassification":
+            return MetricsClassification()
+        else:
+            raise NotImplementedError(f"Transformation Option {option} not implemented")
 
     def get_parameter_options(self) -> dict:
         """

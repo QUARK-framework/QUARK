@@ -47,7 +47,7 @@ class ImageData(DataHandler):
         src/modules/applications/QML/classification/data
         """
         super().__init__("")
-        self.submodule_options = ["Hybrid", "MetricsClassification"]
+        self.submodule_options = ["Hybrid"]
         self.transformation = None
         self.dataset = None
         self.n_registers = None
@@ -70,13 +70,18 @@ class ImageData(DataHandler):
             {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
+            {"name": "scikit-learn", "version": "1.4.2"}, # Used in MetricsClassifation
         ]
 
     def get_default_submodule(self, option: str) -> Hybrid:
+        """
+        Returns the default submodule based on the given option.
+
+        :param option: Option name
+        :raises NotImplementedError: If called, since this module has no submodules
+        """
         if option == "Hybrid":
             return Hybrid()
-        elif option == "MetricsClassification":
-            return MetricsClassification()
         else:
             raise NotImplementedError(f"Transformation Option {option} not implemented")
 

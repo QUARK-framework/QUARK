@@ -42,7 +42,15 @@ class Classification(QML):
 
         :return: list of dict with requirements of this module
         """
-        return []
+        # These requirements are used in the accompanying module QuantumModel
+        return [
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "torch", "version": "2.2.2"},
+            {"name": "pennylane", "version": "0.37.0"},
+            {"name": "qiskit", "version": "1.1.0"},
+            {"name": "qiskit-machine-learning", "version": "0.8.2"},
+            {"name": "torchvision", "version": "0.17.2"},
+        ]
 
     def get_solution_quality_unit(self) -> str:
         return "maximal Accuracy"

@@ -29,19 +29,6 @@ class MetricsClassification:
         self.submodule_options = []
         pass
 
-    @staticmethod
-    def get_requirements() -> list[dict]:
-        """
-        Returns requirements of this module.
-
-        :return: List of dicts with requirements of this module
-        :rtype: list[dict]
-        """
-        return [
-            {"name": "numpy", "version": "1.26.4"},
-            {"name": "scikit-learn", "version": "1.4.2"},
-        ]
-
     def get_metrics(self, y_pred: np.array, y_true: np.array) -> dict[str, float]:
         """
         Method that determines all classification metrics.

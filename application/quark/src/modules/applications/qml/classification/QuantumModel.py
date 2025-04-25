@@ -254,22 +254,6 @@ class QuantumModel(nn.Module):
         else:
             raise Exception(f"No valid dataset name {self.dataset_name}.")
 
-    @staticmethod
-    def get_requirements() -> list[dict]:
-        """
-        Returns requirements of this module.
-
-        :return: list of dicts with requirements of this module
-        """
-        return [
-            {"name": "numpy", "version": "1.26.4"},
-            {"name": "torch", "version": "2.2.2"},
-            {"name": "pennylane", "version": "0.37.0"},
-            {"name": "qiskit", "version": "1.1.0"},
-            {"name": "qiskit-machine-learning", "version": "0.8.2"},
-            {"name": "torchvision", "version": "0.17.2"},
-        ]
-
     def get_quantum_circuit(self) -> tuple[qml.QNode, torch.nn.Parameter]:
         """
         Retrieves the underlying quantum circuit and its parameters.

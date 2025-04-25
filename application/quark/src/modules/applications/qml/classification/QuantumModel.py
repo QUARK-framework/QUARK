@@ -13,7 +13,18 @@ from torchvision import models
 
 
 class EarlyStopping(object):
-    def __init__(self, mode="min", min_delta=0, patience=10, percentage=False):
+    """
+    Stops training when a monitored quantity has stopped improving.
+    """
+    def __init__(self, mode: str = "min", min_delta: float = 0, patience: int =10, percentage: bool = False):
+        """
+        Constructor method.
+
+        :param mode: Can be "min" or "max". With "min" training stops when quantity monitored has stopped decreasing
+        :param min_delta: Minimum change in the monitored quantity to qualify as an improvement
+        :param patience: Number of epochs with no improvement after which training will be stopped
+        :param percentage: If True, the min_delta is interpreted as a percentage of the best score
+        """
         self.mode = mode
         self.min_delta = min_delta
         self.patience = patience
@@ -26,7 +37,13 @@ class EarlyStopping(object):
             self.is_better = lambda a, b: True
             self.step = lambda a: False
 
-    def step(self, metrics):
+    def step(self, metrics: float) -> bool:
+        """
+        Checks if the training should be stopped.
+
+        :param metrics: Value of the monitored metric
+        :return: True if training should be stopped, False otherwise
+        """
         if self.best is None:
             self.best = metrics
             return False
@@ -45,7 +62,14 @@ class EarlyStopping(object):
 
         return False
 
-    def _init_is_better(self, mode, min_delta, percentage):
+    def _init_is_better(self, mode: str, min_delta: float, percentage: bool) -> None:
+        """
+        Check if initial metric value is better.
+
+        :param mode: Can be "min" or "max"
+        :param min_delta: Minimum change in the monitored quantity to qualify as an improvement
+        :param percentage: If True, the min_delta is interpreted as a percentage of the best score
+        """
         if mode not in {"min", "max"}:
             raise ValueError("mode " + mode + " is unknown!")
         if not percentage:
@@ -65,9 +89,13 @@ class QuantumLayer(nn.Module):
     Torch module implementing a quantum layer.
     """
 
-    def __init__(self, nqubits=4, circuit_depth=4, quantum_device: Optional[qml.Device] = None) -> None:
+    def __init__(self, nqubits: int =4, circuit_depth: int =4, quantum_device: Optional[qml.Device] = None) -> None:
         """
-        Define the quantum circuit.
+        Constructor method defining the quantum circuit.
+
+        :param nqubits: Number of qubits in the quantum circuit
+        :param circuit_depth: Depth of the quantum circuit
+        :param quantum_device: The quantum device to run the circuit on. If None, uses default.qubit
         """
         super(QuantumLayer, self).__init__()
         self.n_qubits = nqubits
@@ -78,32 +106,41 @@ class QuantumLayer(nn.Module):
         self.num_variational_layers = circuit_depth
         self.model = self.build_circuit()
 
-    def H_layer(self, nqubits):
+    def H_layer(self, nqubits: int) -> None:
         """
         Layer of single-qubit Hadamard gates.
+
+        :param nqubits: Number of qubits in the circuit
         """
         for idx in range(nqubits):
             self.circuit.h(idx)
 
-    def RY_layer(self, w):
+    def RY_layer(self, w: list) -> None:
         """
-        Layer of parametrized qubit rotations around the y axis.
+        Layer of parametrized qubit rotations around the y-axis.
+
+        :param w: List of rotation angles for each qubit
         """
         for idx, element in enumerate(w):
             self.circuit.ry(element, idx)
 
-    def entangling_layer(self, nqubits):
+    def entangling_layer(self, nqubits: int) -> None:
         """
-        Layer of CNOTs followed by another shifted layer of CNOT.
+        Layer of CNOT-gates followed by another shifted layer of CNOT-gates.
+
+        :param nqubits: Number of qubits in the circuit
         """
         for i in range(0, nqubits - 1, 2):
             self.circuit.cx(i, i + 1)
         for i in range(1, nqubits - 1, 2):
             self.circuit.cx(i, i + 1)
 
-    def generate_pauliz_observables(self, nqubits):
+    def generate_pauliz_observables(self, nqubits: int) -> list:
         """
-        PauliZ gates for each qubit of the circuit
+        Pauli_Z-gates for each qubit of the circuit.
+
+        :param nqubits: Number of qubits in the circuit
+        :return: List of SparsePauliOp objects representing the observables
         """
         observables = []
         for i in range(nqubits):
@@ -112,16 +149,10 @@ class QuantumLayer(nn.Module):
             observables.append(SparsePauliOp.from_list([("".join(pauli_string), 1.0)]))
         return observables
 
-    def build_circuit(self):
+    def build_circuit(self) -> TorchConnector:
         """
         Define the quantum node, i.e. variational quantum circuit plus device on which the circuit is executed.
-
-        Args:
-            q_input_features: The input features for the circuit.
-            q_weigths_flat: The trainable variational parameters of the circuit.
-
-        Returns:
-            The expectation value of a measurement.
+        :return: The quantum node (QNode) with the defined circuit and parameters
         """
 
         self.circuit = QuantumCircuit(self.n_qubits)
@@ -151,13 +182,16 @@ class QuantumLayer(nn.Module):
         model = TorchConnector(self.qnn)
         return model
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass of the quantum layer.
+        """
         x = torch.tanh(x) * np.pi / 2.0
         return self.model(x)
 
-    def draw(self):
+    def draw(self) -> None:
         """
-        Print the quantum layer/circuit using the qiskit built-in functionality
+        Print the quantum layer/circuit using the qiskit built-in functionality.
         """
         print(self.circuit.draw(output="text"))
 
@@ -166,39 +200,20 @@ class QuantumModel(nn.Module):
     """
     A hybrid quantum-classical neural network model for image classification.
 
-    This model combines classical pre-processing layers (potentially including
-    feature extraction like ResNet) with a quantum layer for classification.
-    It supports different datasets like 'Concrete_Crack' and 'MNIST'.
+    This model combines classical pre-processing layers (potentially including feature extraction like ResNet) with a
+    quantum layer for classification. It supports different datasets like 'Concrete_Crack' and 'MNIST'.
     """
 
-    def __init__(
-        self,
-        quantum_device=None,
-        n_reduced_features=4,
-        circuit_depth=1,
-        dataset_name="Concrete_Crack",
-        n_classes=2,
-    ):
+    def __init__(self, quantum_device: qml.Device = None, n_reduced_features: int = 4, circuit_depth: int = 1,
+                 dataset_name: str = "Concrete_Crack", n_classes: int = 2):
         """
         Initializes the QuantumModel.
 
-        Args:
-            quantum_device (qml.Device, optional): The PennyLane quantum device
-                to run the quantum circuit on. Defaults to "default.qubit" with
-                wires equal to n_reduced_features.
-            n_reduced_features (int): The number of features to reduce the input
-                to before feeding into the quantum layer. This also corresponds
-                to the number of qubits in the quantum circuit. Defaults to 4.
-            circuit_depth (int): The depth of the quantum circuit (number of
-                layers in the QuantumLayer). Defaults to 1.
-            dataset_name (str): The name of the dataset being used ("Concrete_Crack"
-                or "MNIST"). This determines the classical pre-processing architecture.
-                Defaults to "Concrete_Crack".
-            n_classes (int): The number of output classes for the classification task.
-                Defaults to 2.
-
-        Raises:
-            Exception: If an invalid `dataset_name` is provided.
+        :param quantum_device: The PennyLane quantum device to run the quantum circuit on.
+        :param n_reduced_features: The number of features to reduce the input to before feeding into the quantum layer.
+        :param circuit_depth: The depth of the quantum circuit (number of layers in the QuantumLayer).
+        :param dataset_name: The name of the dataset.
+        :param n_classes: The number of classes to classify.
         """
         super(QuantumModel, self).__init__()
 
@@ -223,7 +238,7 @@ class QuantumModel(nn.Module):
             )
 
         # TODO the classical embeddings with resnet for MNIST
-        # should be moved to the ImageData logic as it is done for the Concrete Crack use case
+        #  should be moved to the ImageData logic as it is done for the Concrete Crack use case.
         elif self.dataset_name == "MNIST":
             self.image_features = 28
             # self.resnet18 = models.resnet18(pretrained=True)  # Deprecated
@@ -242,10 +257,9 @@ class QuantumModel(nn.Module):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
-        :return: list of dict with requirements of this module
-        :rtype: list[dict]
+        :return: list of dicts with requirements of this module
         """
         return [
             {"name": "numpy", "version": "1.26.4"},
@@ -254,29 +268,21 @@ class QuantumModel(nn.Module):
             {"name": "qiskit", "version": "1.1.0"},
         ]
 
-    def get_quantum_circuit(self):
+    def get_quantum_circuit(self) -> tuple[qml.QNode, torch.nn.Parameter]:
         """
         Retrieves the underlying quantum circuit and its parameters.
 
-        Returns:
-            tuple: A tuple containing:
-                - qml.QNode: The quantum circuit (QNode).
-                - torch.nn.Parameter: The trainable parameters of the quantum circuit.
+        :return: A tuple containing the quantum circuit (QNode) and the trainable parameters of the quantum circuit.
         """
         return self.quantum_layer.circuit, self.quantum_layer.params
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Defines the forward pass of the model.
 
-        Args:
-            x (torch.Tensor): The input tensor. For 'Concrete_Crack', this is
-                expected to be pre-extracted features. For 'MNIST', this is
-                expected to be the raw image tensor.
-
-        Returns:
-            torch.Tensor: The output tensor containing the model's predictions
-                (logits).
+        :param x: The input tensor. For 'Concrete_Crack', this is expected to be pre-extracted features. For 'MNIST',
+        this is expected to be the raw image tensor.
+        :return: The output tensor containing the model's predictions (logits).
         """
         if self.dataset_name == "MNIST":
             with torch.no_grad():

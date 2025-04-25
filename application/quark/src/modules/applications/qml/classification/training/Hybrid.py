@@ -127,18 +127,14 @@ class Hybrid(Core, Training):
     def get_default_submodule(self, option: str) -> Core:
         raise ValueError("This module has no submodules.")
 
-    def postprocess(self, input_data: dict, config: dict, **kwargs):
+    def postprocess(self, input_data: dict, config: dict, **kwargs) -> tuple[dict, float]:
         """
-        Here, the actual training of the machine learning model is done
+        Here, the actual training of the machine learning model is done.
 
         :param input_data: Collected information of the benchmarking process
-        :type input_data: dict
         :param config: Training settings
-        :type config: dict
         :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :return:
-        :rtype:
+        :return: Training results and computation time of postprocessing
         """
         start = start_time_measurement()
         logging.info("Start training")
@@ -148,7 +144,12 @@ class Hybrid(Core, Training):
         logging.info(f"Training finished in {postprocessing_time / 1000} s.")
         return training_results, postprocessing_time
 
-    def setup_training(self, input_data, config) -> tuple:
+    def setup_training(self, input_data: dict) -> None:
+        """
+        Sets up the training configuration.
+
+        :param input_data: Dictionary with the variables needed to start the training
+        """
         logging.info(f"Running config: [n_qubits={input_data['n_qubits']}]")
 
         self.study_classification = "classification_metrics" in list(input_data.keys())
@@ -157,19 +158,14 @@ class Hybrid(Core, Training):
 
         self.writer = SummaryWriter(input_data["store_dir_iter"])
 
-    def start_training(
-        self,
-        input_data: dict,
-        config: Config,
-        **kwargs: dict,
-    ) -> dict:
+    def start_training(self, input_data: dict, config: Config, **kwargs: dict,) -> dict:
         """
+        This function starts the hybrid training.
 
-        :param input_data: the dataset to be trained on
+        :param input_data: Dataset to be trained on
         :param config: Config specifying the parameters of the training
-        :param kwargs: optional additional settings
+        :param kwargs: Optional additional settings
         :return: Dictionary including the information of previous modules as well as of the training
-        :rtype: dict
         """
         self.model = QuantumModel(
             n_reduced_features=config["n_reduced_features"],
@@ -197,7 +193,7 @@ class Hybrid(Core, Training):
         lr_scheduler_gamma = 0
         lr_scheduler = StepLR(self.optimizer, step_size=lr_scheduler_step, gamma=lr_scheduler_gamma)
 
-        self.setup_training(input_data, config)
+        self.setup_training(input_data)
 
         size = None
         input_data["MPI_size"] = size
@@ -218,6 +214,9 @@ class Hybrid(Core, Training):
             input_data[parameter] = []
 
         best_loss = float("inf")
+        train_loss = float("inf")
+        time_circ = 0
+        time_loss = 0
         self.fig, self.ax = plt.subplots()
 
         for epoch_idx in tqdm(range(n_epochs)):
@@ -287,6 +286,7 @@ class Hybrid(Core, Training):
             input_data["validation_accuracy"].append(float(val_accuracy))
 
             metrics = self.classification_metrics.get_metrics(y_preds, y_trues)
+            train_accuracy = 0
             for metric_name, metric_value in metrics.items():
                 self.writer.add_scalar(f"metrics/{metric_name}/train", metric_value, epoch_idx)
                 if metric_name == "accuracy":
@@ -302,8 +302,8 @@ class Hybrid(Core, Training):
                 f"[Train Accuracy: {train_accuracy:.5f}] "
                 f"[Validation Loss: {val_loss:.5f}] "
                 f"[Validation Accuracy: {val_accuracy:.5f}] "
-                f"[Circuit processing: {(time_circ):.3f} ms] "
-                f"[Loss processing: {(time_loss):.3f} ms]"
+                f"[Circuit processing: {time_circ:.3f} ms] "
+                f"[Loss processing: {time_loss:.3f} ms]"
             )
 
         self.trained = True

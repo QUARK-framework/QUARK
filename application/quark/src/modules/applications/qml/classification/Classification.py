@@ -24,12 +24,12 @@ from utils import end_time_measurement, start_time_measurement
 
 class Classification(QML):
     """
-    Image Classification using Quantum circuits.
+    Image Classification using quantum circuits.
     """
 
     def __init__(self):
         """
-        Constructor method
+        Constructor method.
         """
         super().__init__("Classification")
         self.submodule_options = ["Image Data"]
@@ -38,10 +38,9 @@ class Classification(QML):
     @staticmethod
     def get_requirements() -> list[dict]:
         """
-        Returns requirements of this module
+        Returns requirements of this module.
 
         :return: list of dict with requirements of this module
-        :rtype: list[dict]
         """
         return []
 
@@ -100,30 +99,19 @@ class Classification(QML):
         The number of qubits is chosen for this problem.
 
         :param config:
-        :type config: dict
-        :return: n_qubits
-        :rtype: dict
+        :return: Dictionary with the number of qubits
         """
 
         application_config = {"n_qubits": config["n_qubits"]}
         return application_config
 
-    def preprocess(
-        self,
-        input_data: dict,
-        config: dict,
-        **kwargs: dict,
-    ) -> tuple[dict, float]:
+    def preprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Generate the actual problem instance in the preprocess function.
 
-        :param input_data: Usually not used for this method.
-        :type input_data: dict
-        :param config: config for the problem creation.
-        :param config:
+        :param input_data: Usually not used for this method
+        :param config: Config for the problem creation
         :param kwargs: Optional additional arguments
-        :type kwargs: dict
-        :param kwargs: optional additional arguments.
 
         :return: Tuple containing qubit number and the function's computation time
         """
@@ -132,23 +120,14 @@ class Classification(QML):
         output["store_dir_iter"] = f"{kwargs['store_dir']}/rep_{kwargs['rep_count']}"
         return output, end_time_measurement(start)
 
-    def postprocess(
-        self,
-        input_data: dict,
-        config: dict,
-        **kwargs: dict,
-    ) -> tuple[dict, float]:
+    def postprocess(self, input_data: dict, config: dict, **kwargs: dict) -> tuple[dict, float]:
         """
         Process the solution here, then validate and evaluate it.
 
-        :param input_data: A representation of the quantum machine learning model that will be trained
-        :type input_data: dict
+        :param input_data: Representation of the quantum machine learning model that will be trained
         :param config: Config specifying the parameters of the training
-        :type config: dict
-        :param kwargs: optional keyword arguments
-        :type kwargs: dict
-        :return: tuple with same dictionary like input_data and the time
-        :rtype: (dict, float)
+        :param kwargs: Optional keyword arguments
+        :return: Tuple with same dictionary like input_data and the time
         """
 
         start = start_time_measurement()

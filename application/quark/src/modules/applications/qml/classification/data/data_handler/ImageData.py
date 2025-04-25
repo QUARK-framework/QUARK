@@ -145,51 +145,55 @@ class ImageData(DataHandler):
         Dataset object used by Pytorch.
         """
 
-        def __init__(
-            self,
-            embeddings_file,
-            index_selection: Iterable[int],
-            transform=None,
-            target_transform=None,
-        ):
+        def __init__(self, embeddings_file: str, index_selection: Iterable[int], transform: any = None,
+                     target_transform: any = None):
+            """
+            Constructor method.
+            :param embeddings_file: Path to the CSV file containing the embeddings
+            :param index_selection: Iterable with indeces
+            :param transform: Transformation applied to each image
+            :param target_transform: Target transform applied to each image
+            """
             self.embeddings_df = pd.read_csv(embeddings_file, index_col=0).iloc[index_selection]
             self.transform = transform
             self.target_transform = target_transform
 
-        def __len__(self):
+        def __len__(self) -> int:
+            """
+            Returns length of embedding array.
+            """
             return len(self.embeddings_df)
 
-        def __getitem__(self, idx):
+        def __getitem__(self, idx: str) -> tuple[any, int, str]:
+            """
+            Returns data array, label, and path.
+            """
             data = self.embeddings_df.iloc[idx, 2:].values.astype(np.float32)
             label = self.embeddings_df.iloc[idx, 0]
             path = self.embeddings_df.iloc[idx, 1]
             return data, self.map_label(label), path
 
-        def map_label(self, label):
+        def map_label(self, label: str):
             """
             Converts string labels to integers.
 
-            Args:
-                label: The original label as string.
-
-            Returns:
-                An integer number corresponding to the label.
+            :param label: String label. Can either be "Positive" or "Negative"
+            :return: Integer number corresponding to the label
             """
             if label == "Negative":
                 return 0
             elif label == "Positive":
                 return 1
+            else:
+                raise ValueError("Invalid label")
 
     def data_load(self, gen_mod: dict, config: dict) -> dict:
         """
-        The chosen dataset is loaded and split into a training set.
+        Loads chosen dataset and splits into training and validation sets.
 
         :param gen_mod: Dictionary with collected information of the previous modules
-        :type gen_mod: dict
         :param config: Config specifying the parameters of the data handler
-        :type config: dict
-        :return: Must always return the mapped problem and the time it took to create the mapping
-        :rtype: tuple(any, float)
+        :return: Returns the mapped problem and the time it took to create the mapping
         """
         self.dataset_name = config["data_set"]
         self.n_qubits = gen_mod["n_qubits"]
@@ -233,14 +237,6 @@ class ImageData(DataHandler):
 
         return application_config
 
-    # TODO this method is not creating image embeddings.
-    # The dataloading for the concrete crack images does:
-    # 1. indexing and sampling of the files
-    # 2. embedding of the sampled images using resnet
-    # 3. packaging into a torch dataloader
-    # The dataloading for mnist instead does only steps 1 and 3.
-    # Step two for mnist is done in the training part (Hybrid module).
-    # This lack of consistency needs to be fixed.
     def create_mnist_dataset(self, n_classes: int, n_images_per_class: int):
         transform = transforms.Compose(
             [
@@ -249,7 +245,21 @@ class ImageData(DataHandler):
                 transforms.Lambda(lambda x: x.repeat(3, 1, 1)),
             ]
         )
-
+        """
+        Creates a dataset for MNIST with the specified number of classes and images per class.
+        
+        :param n_classes: Number of classes to include in the classification
+        :param n_images_per_class: Number of images to include for each class
+        :return: Tuple of DataLoader objects for training, validation, and testing
+        """
+        # TODO this method is not creating image embeddings.
+        #  The dataloading for the concrete crack images does:
+        #  1. Indexing and sampling of the files
+        #  2. Embedding of the sampled images using resnet
+        #  3. Packaging into a torch dataloader
+        #  The dataloading for mnist instead does only steps 1 and 3.
+        #  Step 2 for mnist is done in the training part (Hybrid module).
+        #  This lack of consistency should be fixed in the future.
         batch_size = 64
 
         trainset = torchvision.datasets.MNIST(root=self.data_folder, train=True, download=True, transform=transform)
@@ -272,16 +282,13 @@ class ImageData(DataHandler):
         return trainloader, testloader, testloader
 
     @staticmethod
-    def keep_first_k_ones(tensor, k=1000):
+    def keep_first_k_ones(tensor: torch.Tensor, k: int = 1000) -> torch.Tensor:
         """
         Keeps only the first k ones in a 1-D tensor of 0s and 1s and sets the rest to 0.
 
-        Args:
-            tensor (torch.Tensor): A 1-D tensor containing 0s and 1s.
-            k (int): The number of ones to keep.  Defaults to 1000.
-
-        Returns:
-            torch.Tensor: A new tensor with only the first k ones remaining.
+        :param tensor: A 1-D tensor containing 0s and 1s
+        :param k: The number of ones to keep. Defaults to 1000
+        :return: A new tensor with only the first k ones remaining
         """
 
         indices = (tensor == 1).nonzero(as_tuple=False).flatten()  # indices of all 1s
@@ -293,13 +300,14 @@ class ImageData(DataHandler):
         else:
             return tensor.clone()
 
-    def create_torch_dataset(
-        self,
-        tot_train_test_datapoints,
-        embeddings_file,
-    ) -> tuple[DataLoader, DataLoader, DataLoader]:
+    def create_torch_dataset(self, tot_train_test_datapoints: int, embeddings_file: str)\
+            -> tuple[DataLoader, DataLoader, DataLoader]:
         """
-        Creates train, val and test dataloaders.
+        Creates training, validation, and test dataloaders.
+
+        :param tot_train_test_datapoints: Total number of data points to be used for training and testing
+        :param embeddings_file: Path to the CSV file containing the embeddings
+        :return: Tuple of DataLoader objects for training, validation, and testing
         """
         train_indexes = []
         val_indexes = []
@@ -331,12 +339,7 @@ class ImageData(DataHandler):
         """
         Crawls the filenames in the data folder and writes an index in a CSV file.
 
-        Args:
-            data_folder: Path to the folder containing the images.
-            overwrite: Set to True if file needs to be overwritten.
-
-        Raises:
-            FileExistsError: If overwrite is set to False and the index CSV file already exists.
+        :param overwrite: Set to True if file needs to be overwritten
         """
         output_path = os.path.join(self.data_folder, "test_data", "index.csv")
         if os.path.exists(output_path) and not overwrite:
@@ -363,14 +366,11 @@ class ImageData(DataHandler):
 
     def sample_index(self, n_samples_per_class: int, random_state: int = 42) -> pd.DataFrame:
         """
-        Sample images from the index file.
+        Samples images from the index file.
 
-        Args:
-            n_samples_per_class: Number of samples to extract for each class.
-            random_state: Random seed for reproducibility.
-
-        Returns:
-            A pandas DataFrame.
+        :param n_samples_per_class: Number of samples to extract for each class
+        :param random_state: Random seed for reproducibility
+        :return: A pandas DataFrame containing the sampled images
         """
         index_df = pd.read_csv(os.path.join(self.data_folder, "test_data", "index.csv"), index_col=0)
         min_images_per_class = min(index_df.label.value_counts())
@@ -386,15 +386,12 @@ class ImageData(DataHandler):
 
     def add_noise(self, image: np.array, sigma: float, mean: float = 0.0) -> np.array:
         """
-        Add Gaussian noise to the input images with sigma
+        Adds Gaussian noise to the input images with sigma.
 
-        Args:
-            image: Image
-            sigma: Sigma of Gaussian noise
-            mean: Mean of Gaussian noise
-
-        Returns:
-            A numpy array with pixel values between 0 and 1.
+        :param image: Image to add noise to
+        :param sigma: Standard deviation of the Gaussian noise
+        :param mean: Mean of the Gaussian noise
+        :return: Numpy array with pixel values between 0 and 1
         """
         gaussian = np.random.normal(mean, sigma, image.shape)
         noisy_df = image + gaussian
@@ -403,16 +400,12 @@ class ImageData(DataHandler):
 
     def embed_dataset(self, n_images_per_class: int, noise_sigma: float) -> pd.DataFrame:
         """
-        Embed images from the data folder using the pretrained Resnet18 model.
-        Stores the embeddings in a CSV file.
+        Embed images from the data folder using the pretrained Resnet18 model. Stores the embeddings in a CSV file.
         Embeddings are added in an incremental way if an embedding CSV file already exists.
 
-        Args:
-            n_images_per_class: Number of images to embed for each class.
-            noise_sigma: Sigma of Gaussian noise applied to the dataset
-
-        Returns:
-            A pandas DataFrame.
+        :param n_images_per_class: Number of images to embed for each class
+        :param noise_sigma: Sigma of Gaussian noise applied to the dataset
+        :return: Pandas DataFrame with embed data
         """
         resnet18_embedder = self.build_truncated_resnet_model()
         resnet18_embedder.eval()
@@ -464,8 +457,7 @@ class ImageData(DataHandler):
         """
         Remove the last layer from a pretrained Resnet18 model.
 
-        Returns:
-            A Pytorch model.
+        :return: Truncated torch model
         """
         # resnet18 = models.resnet18(pretrained=True)  # Deprecated
         resnet18 = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
@@ -477,11 +469,8 @@ class ImageData(DataHandler):
         """
         Load an image from disk.
 
-        Args:
-            image_path: Path to image.
-
-        Returns:
-            A numpy array with pixel values between 0 and 1.
+        :param image_path: System path to the loadable image
+        :return: Numpy array with pixel values between 0 and 1
         """
         img = Image.open(image_path)
         img_array = np.array(img) / 255

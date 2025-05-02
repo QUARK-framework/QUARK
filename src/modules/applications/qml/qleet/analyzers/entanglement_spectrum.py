@@ -14,6 +14,12 @@
 
 """Module to evaluate the entanglement spectrum of circuits."""
 
+from ..simulators.circuit_simulators import CircuitSimulator
+from ..interface.circuit import CircuitDescriptor
+from ..interface.metas import MetaExplorer
+import scipy as sp
+import numpy as np
+from matplotlib import pyplot as plt
 import typing
 
 from qiskit_aer.noise import NoiseModel as qiskitNoiseModel
@@ -23,13 +29,7 @@ from scipy.spatial.distance import jensenshannon
 
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
-import numpy as np
-import scipy as sp
 
-from ..interface.metas import MetaExplorer
-from ..interface.circuit import CircuitDescriptor
-from ..simulators.circuit_simulators import CircuitSimulator
 
 NOISE_MODELS = {
     "qiskit": qiskitNoiseModel,

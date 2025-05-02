@@ -65,7 +65,7 @@ class ImageData(DataHandler):
             {"name": "pandas", "version": "2.2.3"},
             {"name": "pillow", "version": "11.1.0"},
             {"name": "torch", "version": "2.2.2"},
-            {"name": "torchvision", "version": "0.22.0"},
+            {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
             {"name": "scikit-learn", "version": "1.4.2"}, # Used in MetricsClassifation

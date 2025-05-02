@@ -1,7 +1,7 @@
 {
-  "build_number": 23,
-  "build_date": "02-05-2025 14:05:13",
-  "git_revision_number": "65bad227bb02b1a514157e212d16f6b8a03e7973",
+  "build_number": 22,
+  "build_date": "02-05-2025 14:49:37",
+  "git_revision_number": "83ec17113484ab6dd3e9b6cc1ca8eaa1749bf1c5",
   "modules": [
     {
       "name": "PVC",
@@ -4190,7 +4190,7 @@
             },
             {
               "name": "torchvision",
-              "version": "0.22.0"
+              "version": "0.17.2"
             },
             {
               "name": "tqdm",
@@ -4261,7 +4261,7 @@
         },
         {
           "name": "torchvision",
-          "version": "0.22.0"
+          "version": "0.17.2"
         }
       ]
     }

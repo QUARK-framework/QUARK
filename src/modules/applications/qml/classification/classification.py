@@ -47,7 +47,7 @@ class Classification(QML):
             {"name": "pennylane", "version": "0.39.0"},
             {"name": "qiskit", "version": "1.3.0"},
             {"name": "qiskit-machine-learning", "version": "0.8.2"},
-            {"name": "torchvision", "version": "0.22.0"},
+            {"name": "torchvision", "version": "0.17.2"},
         ]
 
     def get_solution_quality_unit(self) -> str:

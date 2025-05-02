@@ -15,12 +15,11 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
 from matplotlib import pyplot as plt
 from collections import defaultdict
 import logging
-
-import matplotlib
-matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
 
 matplotlib.rcParams['savefig.dpi'] = 300
 sns.set(style="darkgrid")
@@ -97,7 +96,7 @@ class Plotter:
             store_dir, required_application_score_keys
         )
 
-        Plotter.plot_all_metrics(results, store_dir)
+        # Plotter.plot_all_metrics(results, store_dir)  # TODO
 
         logging.info("Finished creating plots.")
 

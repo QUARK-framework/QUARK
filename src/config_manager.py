@@ -12,20 +12,21 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import _get_instance_with_sub_options, checkbox
+from modules.applications.application import Application
+from modules.core import Core
+from typing_extensions import TypedDict, NotRequired, Self
+import yaml
+import numpy as np
+import networkx as nx
+from matplotlib import pyplot as plt
 import itertools
 import logging
 import re
 
 import inquirer
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-import yaml
-from typing_extensions import TypedDict, NotRequired, Self
-
-from modules.core import Core
-from modules.applications.application import Application
-from utils import _get_instance_with_sub_options, checkbox
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
 
 
 class ConfigModule(TypedDict):

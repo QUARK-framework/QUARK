@@ -130,7 +130,7 @@ class BenchmarkManager:
         if store_dir is None:
             store_dir = Path.cwd()
         self.store_dir = f"{store_dir}/benchmark_runs/{tag + '-' if not None else ''}" \
-                         f"{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
+            f"{datetime.today().strftime('%Y-%m-%d-%H-%M-%S')}"
         Path(self.store_dir).mkdir(parents=True, exist_ok=True)
         self._set_logger()
 
@@ -240,11 +240,11 @@ class BenchmarkManager:
                     )
                     self.application.metrics.set_module_config(backlog_item["config"])
                     instruction, problem, preprocessing_time = preprocess(
-                        self.application, 
-                        None, 
+                        self.application,
+                        None,
                         backlog_item["config"],
-                        store_dir=path, 
-                        rep_count=i, 
+                        store_dir=path,
+                        rep_count=i,
                         previous_job_info=job_info,
                     )
                     self.application.metrics.set_preprocessing_time(preprocessing_time)
@@ -379,7 +379,7 @@ class BenchmarkManager:
                 instruction, module_instance.postprocessed_input, postprocessing_time = postprocess(
                     module_instance,
                     module_instance.preprocessed_input,
-                    module["config"], 
+                    module["config"],
                     store_dir=path,
                     rep_count=rep_count,
                     previous_job_info=submodule_job_info

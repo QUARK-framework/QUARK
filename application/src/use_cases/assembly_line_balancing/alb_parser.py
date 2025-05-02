@@ -86,7 +86,7 @@ def split_lines_to_areas(
     token_and_range = zip(
         token_indices.keys(), itertools.pairwise(token_indices.values())
     )
-    return {t: lines[start + 1 : stop] for t, (start, stop) in token_and_range}
+    return {t: lines[start + 1: stop] for t, (start, stop) in token_and_range}
 
 
 def convert_preceding_task_ids_to_tasks(

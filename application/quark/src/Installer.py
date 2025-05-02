@@ -76,7 +76,7 @@ class Installer:
             answer_continue = inquirer.prompt([
                 inquirer.List("continue",
                               message=f"{env_name} found in the list of existing QUARK module environment, are you"
-                                      f" sure you want to overwrite it?",
+                              f" sure you want to overwrite it?",
                               choices=["Yes", "No"], )])["continue"]
 
             if answer_continue.lower() == "no":

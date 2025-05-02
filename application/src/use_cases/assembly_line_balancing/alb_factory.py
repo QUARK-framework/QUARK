@@ -51,5 +51,3 @@ def salbp_1_factory(
         tasks=task_set,
         preceding_tasks=frozenset(precedence_relations),
     )
-
-

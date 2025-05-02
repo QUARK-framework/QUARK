@@ -12,6 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils import start_time_measurement, end_time_measurement
+from modules.Core import Core
+from modules.solvers.Solver import Solver
+from pennylane import numpy as npqml
+import pennylane as qml
+import numpy as np
+from matplotlib import pyplot as plt
 import ast
 import inspect
 import json
@@ -24,14 +31,6 @@ from typing import TypedDict
 
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
-import numpy as np
-import pennylane as qml
-from pennylane import numpy as npqml
-
-from modules.solvers.Solver import Solver
-from modules.Core import Core
-from utils import start_time_measurement, end_time_measurement
 
 
 class PennylaneQAOA(Solver):

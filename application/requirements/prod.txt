@@ -1,2 +1,3 @@
-pydot==1.4.2
-matplotlib==3.7.1
+version https://git-lfs.github.com/spec/v1
+oid sha256:42c8fed115d671283c541777de6cf52bece8795dff449dab48aed77fa74ef9bb
+size 31

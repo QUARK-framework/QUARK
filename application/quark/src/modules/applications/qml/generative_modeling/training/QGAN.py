@@ -12,6 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from modules.applications.qml.MetricsQuantum import MetricsQuantum
+from utils_mpi import is_running_mpi, get_comm
+from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
+from matplotlib import pyplot as plt
 from typing import TypedDict
 import logging
 
@@ -23,11 +27,7 @@ from tensorboardX import SummaryWriter
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
 
-from modules.applications.qml.generative_modeling.training.TrainingGenerative import TrainingGenerative, Core
-from utils_mpi import is_running_mpi, get_comm
-from modules.applications.qml.MetricsQuantum import MetricsQuantum
 
 MPI = is_running_mpi()
 comm = get_comm()
@@ -273,7 +273,7 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
         :return: Dictionary including the solution
         """
 
-        # Get and record quantum metrics 
+        # Get and record quantum metrics
         circuit = input_data["circuit"]
         params = input_data["circuit"].parameters
         quantum_metrics_class = MetricsQuantum()
@@ -284,7 +284,6 @@ class QGAN(TrainingGenerative):  # pylint: disable=R0902
             "expressibility_jsd": quantum_metrics["expressibility_jsd"]
         })
         logging.info('Quantum metrics: %s', quantum_metrics)
-
 
         self.setup_training(input_data, config)
         generator_losses = []

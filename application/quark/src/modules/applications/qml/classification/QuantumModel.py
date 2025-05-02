@@ -16,7 +16,8 @@ class EarlyStopping(object):
     """
     Stops training when a monitored quantity has stopped improving.
     """
-    def __init__(self, mode: str = "min", min_delta: float = 0, patience: int =10, percentage: bool = False):
+
+    def __init__(self, mode: str = "min", min_delta: float = 0, patience: int = 10, percentage: bool = False):
         """
         Constructor method.
 
@@ -89,7 +90,7 @@ class QuantumLayer(nn.Module):
     Torch module implementing a quantum layer.
     """
 
-    def __init__(self, nqubits: int =4, circuit_depth: int =4, quantum_device: Optional[qml.Device] = None) -> None:
+    def __init__(self, nqubits: int = 4, circuit_depth: int = 4, quantum_device: Optional[qml.Device] = None) -> None:
         """
         Constructor method defining the quantum circuit.
 

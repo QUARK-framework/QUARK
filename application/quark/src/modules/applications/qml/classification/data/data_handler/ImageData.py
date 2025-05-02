@@ -70,7 +70,7 @@ class ImageData(DataHandler):
             {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "scikit-learn", "version": "1.4.2"}, # Used in MetricsClassifation
+            {"name": "scikit-learn", "version": "1.4.2"},  # Used in MetricsClassifation
         ]
 
     def get_default_submodule(self, option: str) -> Hybrid:
@@ -256,7 +256,7 @@ class ImageData(DataHandler):
         )
         """
         Creates a dataset for MNIST with the specified number of classes and images per class.
-        
+
         :param n_classes: Number of classes to include in the classification
         :param n_images_per_class: Number of images to include for each class
         :return: Tuple of DataLoader objects for training, validation, and testing
@@ -452,7 +452,7 @@ class ImageData(DataHandler):
         embeddings = []
         batch_size = 16
         for batch_start in tqdm(range(0, len(imgs_array), batch_size)):
-            imgs_tensor = torch.tensor(imgs_array[batch_start : batch_start + batch_size]).float()
+            imgs_tensor = torch.tensor(imgs_array[batch_start: batch_start + batch_size]).float()
             imgs_tensor = normalize(imgs_tensor)
             pred = resnet18_embedder(imgs_tensor)
             embeddings.extend(pred.detach().reshape(-1, 512).tolist())

@@ -14,6 +14,11 @@
 
 """Module to evaluate the expressibility of circuits."""
 
+from ..simulators.circuit_simulators import CircuitSimulator
+from ..interface.circuit import CircuitDescriptor
+from ..interface.metas import MetaExplorer
+import numpy as np
+from matplotlib import pyplot as plt
 import itertools
 # import typing
 from typing import Union, List, Tuple, cast
@@ -25,12 +30,7 @@ from scipy.spatial.distance import jensenshannon
 
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
-import numpy as np
 
-from ..interface.metas import MetaExplorer
-from ..interface.circuit import CircuitDescriptor
-from ..simulators.circuit_simulators import CircuitSimulator
 
 NOISE_MODELS = {
     "qiskit": qiskitNoiseModel,
@@ -169,7 +169,8 @@ class Expressibility(MetaExplorer):
 
         return pqc_expressibility
 
-    def compare_expressibility(self, circuit: Union[CircuitDescriptor, List[CircuitDescriptor]], measure: str = "kld", shots: int = 1024) -> List[float]:
+    def compare_expressibility(
+            self, circuit: Union[CircuitDescriptor, List[CircuitDescriptor]], measure: str = "kld", shots: int = 1024) -> List[float]:
         r"""Compares expressibility against the provided circuit
 
         .. math::
@@ -208,7 +209,7 @@ class Expressibility(MetaExplorer):
                 )
             else:
                 fidelity = np.ones(self.num_samples**2)
-            
+
             fidelities.append(fidelity)
             bin_edges: np.ndarray
             pqc_hist, bin_edges = np.histogram(
@@ -246,7 +247,7 @@ class Expressibility(MetaExplorer):
         plt.xlim((-0.05, 1.05))
         plt.ylim(bottom=0.0, top=max(max(pqc_prob), max(haar_prob)) + 0.01)
         plt.grid(True)
-        plt.title(f"Expressibility: {np.round(expr,5)}")
+        plt.title(f"Expressibility: {np.round(expr, 5)}")
         plt.xlabel("Fidelity")
         plt.ylabel("Probability")
         plt.legend()

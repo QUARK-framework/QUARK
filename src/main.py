@@ -55,6 +55,7 @@ def setup_logging() -> None:
     Sets up the logging.
     """
     logging.root.handlers = []
+    logging.getLogger("qiskit").setLevel(logging.WARNING)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",

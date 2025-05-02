@@ -49,7 +49,10 @@ class Installer:
             {"name": "BP", "class": "BP", "module": "modules.applications.optimization.bp.bp"},
             {"name": "SALBP", "class": "SALBP", "module": "modules.applications.optimization.salbp.salbp"},
             {"name": "GenerativeModeling", "class": "GenerativeModeling",
-             "module": "modules.applications.qml.generative_modeling.generative_modeling"}
+             "module": "modules.applications.qml.generative_modeling.generative_modeling"},
+            {"name": "Classification", "class": "Classification",
+             "module": "modules.applications.qml.classification.classification"}
+
         ]
 
         self.core_requirements = [

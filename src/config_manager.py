@@ -17,7 +17,9 @@ import logging
 import re
 
 import inquirer
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
+from matplotlib import pyplot as plt
 import networkx as nx
 import numpy as np
 import yaml

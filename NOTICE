@@ -1,0 +1,5 @@
+Some parts of the framework, which are derived from, or inspired by https://github.com/aws/amazon-braket-examples (Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.)
+
+PyQubo formulation of the TSP in function _create_pyqubo_model in file applications/TSP/mappings/ISING.py was kindly provided by AWS (Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.)
+
+djs1000.tsp is copied from http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/

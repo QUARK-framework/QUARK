@@ -1,0 +1,33 @@
+application:
+  config:
+    filling_fraction:
+    - 0.4
+    graph_type:
+    - hexagonal
+    - erdosRenyi
+    seed:
+    - 'No'
+    size:
+    - 5
+    spacing:
+    - 0.5
+  name: MIS
+  submodules:
+  - config: {}
+    name: QIRO
+    submodules:
+    - config:
+        QIRO_reps:
+        - 2
+        depth:
+        - 2
+        iterations:
+        - 5
+        shots:
+        - 10
+      name: QrispQIRO
+      submodules:
+      - config: {}
+        name: qrisp_simulator
+        submodules: []
+repetitions: 1

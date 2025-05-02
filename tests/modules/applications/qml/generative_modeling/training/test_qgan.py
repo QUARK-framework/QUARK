@@ -40,7 +40,7 @@ class TestQGAN(unittest.TestCase):
         requirements = self.qgan_instance.get_requirements()
         expected_requirements = [
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "torch", "version": "2.2.2"},
+            {"name": "torch", "version": "2.5.1"},
             {"name": "matplotlib", "version": "3.9.3"},
             {"name": "tensorboard", "version": "2.18.0"},
             {"name": "tensorboardX", "version": "2.6.2.2"}

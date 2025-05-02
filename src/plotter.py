@@ -12,14 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import logging
+from collections import defaultdict
+from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
-from collections import defaultdict
-import logging
 
 matplotlib.rcParams['savefig.dpi'] = 300
 sns.set(style="darkgrid")

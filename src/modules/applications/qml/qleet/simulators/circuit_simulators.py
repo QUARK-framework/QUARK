@@ -26,6 +26,7 @@ from ..interface.circuit import CircuitDescriptor
 from qiskit import transpile
 from qiskit_aer import AerSimulator
 
+
 class CircuitSimulator:
     """The interface for users to execute their CircuitDescriptor objects"""
 
@@ -73,7 +74,7 @@ class CircuitSimulator:
         """
 
         if self.circuit.default_backend == "qiskit":
-            backend = AerSimulator() #.get_backend('aer_simulator_statevector')
+            backend = AerSimulator()  # .get_backend('aer_simulator_statevector')
 
             # Use assign_parameters instead of bind_parameters
             circuit = self.circuit.qiskit_circuit.assign_parameters(param_resolver)
@@ -82,30 +83,35 @@ class CircuitSimulator:
             if self.noise_model is not None:
                 # Add a snapshot for density matrix
                 circuit.save_statevector(label='statevector')
-                
+
                 # Transpile the circuit for the backend
                 new_circuit = transpile(circuit, backend)
 
                 # Execute the circuit with noise model
-                job = backend.run(new_circuit, shots=shots, noise_model=self.noise_model, backend_options={"method": "density_matrix"})
-                
+                job = backend.run(
+                    new_circuit,
+                    shots=shots,
+                    noise_model=self.noise_model,
+                    backend_options={
+                        "method": "density_matrix"})
+
                 # Get the result
                 result = job.result()
-                
+
                 result_data = result.data(0)["statevector"]
             else:
                 # Add a snapshot for statevector
                 circuit.save_statevector(label='statevector')
-                
+
                 # Transpile the circuit for the backend
                 new_circuit = transpile(circuit, backend)
-                
+
                 # Execute the circuit without noise
                 job = backend.run(new_circuit, shots=shots)
-                
+
                 # Get the result
                 result = job.result()
-                
+
                 result_data = result.data(0)["statevector"]
 
         else:

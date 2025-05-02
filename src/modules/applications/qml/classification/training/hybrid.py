@@ -12,26 +12,26 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from utils_mpi import get_comm, is_running_mpi
+from utils import end_time_measurement, start_time_measurement
+from tqdm import tqdm
+from torch.optim.lr_scheduler import StepLR
+from tensorboardX import SummaryWriter
+from modules.core import Core
+from modules.applications.qml.training import Training
+from modules.applications.qml.metrics_quantum import MetricsQuantum
+from modules.applications.qml.classification.quantum_model import QuantumModel
+from matplotlib import axes, figure
+import torch.nn as nn
+import torch
+from matplotlib import pyplot as plt
 import logging
 import time
 from typing import TypedDict
 
 import matplotlib
 matplotlib.use("Agg")  # Use a non-interactive backend for matplotlib
-from matplotlib import pyplot as plt
-import torch
-import torch.nn as nn
-from matplotlib import axes, figure
-from modules.applications.qml.classification.quantum_model import QuantumModel
 
-from modules.applications.qml.metrics_quantum import MetricsQuantum
-from modules.applications.qml.training import Training
-from modules.core import Core
-from tensorboardX import SummaryWriter
-from torch.optim.lr_scheduler import StepLR
-from tqdm import tqdm
-from utils import end_time_measurement, start_time_measurement
-from utils_mpi import get_comm, is_running_mpi
 
 try:
     import cupy as np

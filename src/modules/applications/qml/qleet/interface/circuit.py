@@ -34,8 +34,6 @@ import qiskit
 import qiskit.quantum_info
 
 
-
-
 def convert_to_qiskit(
     circuit: typing.Union[qiskit.QuantumCircuit]
 ) -> qiskit.QuantumCircuit:
@@ -53,7 +51,6 @@ def convert_to_qiskit(
         raise ValueError(
             f"Expected a circuit object in qiskit, got {type(circuit)}"
         )
-
 
 
 class CircuitDescriptor:
@@ -163,7 +160,6 @@ class CircuitDescriptor:
         """
         return convert_to_qiskit(self._circuit)
 
-
     @property
     def num_qubits(self) -> int:
         """Get the number of qubits for a circuit
@@ -175,7 +171,6 @@ class CircuitDescriptor:
             return self._circuit.num_qubits
         else:
             raise ValueError("Unsupported framework of circuit")
-
 
     def __eq__(self, other: typing.Any) -> bool:
         """Checks equality between a CircuitDescriptor and another object"""

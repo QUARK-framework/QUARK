@@ -61,7 +61,7 @@ class EntanglementCapability(MetaExplorer):
                 (
                     circuit.default_backend == "qiskit"
                     and isinstance(noise_model, qiskitNoiseModel)
-                )  
+                )
             ):
                 self.noise_model = noise_model
             else:

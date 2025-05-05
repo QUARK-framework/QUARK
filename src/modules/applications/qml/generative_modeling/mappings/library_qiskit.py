@@ -50,7 +50,8 @@ class LibraryQiskit(LibraryGenerative):
         """
         return [
             {"name": "qiskit", "version": "1.3.0"},
-            {"name": "numpy", "version": "1.26.4"}
+            {"name": "numpy", "version": "1.26.4"},
+            {"name": "qiskit_aer", "version": "0.15.1"}
         ]
 
     def get_parameter_options(self) -> dict:

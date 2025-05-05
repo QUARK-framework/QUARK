@@ -13,9 +13,9 @@
 #  limitations under the License.
 
 from qiskit import QuantumCircuit
-from qleet.interface.circuit import CircuitDescriptor
-from qleet.analyzers.expressibility import Expressibility
-from qleet.analyzers.entanglement import EntanglementCapability
+from modules.applications.qml.qleet.interface.circuit import CircuitDescriptor
+from modules.applications.qml.qleet.analyzers.expressibility import Expressibility
+from modules.applications.qml.qleet.analyzers.entanglement import EntanglementCapability
 import os
 import sys
 from typing import Dict

@@ -1,7 +1,7 @@
 {
   "build_number": 22,
-  "build_date": "02-05-2025 14:49:37",
-  "git_revision_number": "83ec17113484ab6dd3e9b6cc1ca8eaa1749bf1c5",
+  "build_date": "05-05-2025 15:07:28",
+  "git_revision_number": "4bc3e398493a935a3a9c0bb4efdbd95428c31dcd",
   "modules": [
     {
       "name": "PVC",
@@ -2826,6 +2826,10 @@
                         {
                           "name": "numpy",
                           "version": "1.26.4"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.1"
                         }
                       ],
                       "submodules": [
@@ -3171,6 +3175,10 @@
                         {
                           "name": "numpy",
                           "version": "1.26.4"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.1"
                         }
                       ],
                       "submodules": [
@@ -3502,6 +3510,10 @@
                         {
                           "name": "numpy",
                           "version": "1.26.4"
+                        },
+                        {
+                          "name": "qiskit_aer",
+                          "version": "0.15.1"
                         }
                       ],
                       "submodules": [
@@ -3849,6 +3861,10 @@
                     {
                       "name": "numpy",
                       "version": "1.26.4"
+                    },
+                    {
+                      "name": "qiskit_aer",
+                      "version": "0.15.1"
                     }
                   ],
                   "submodules": [
@@ -4203,6 +4219,14 @@
             {
               "name": "scikit-learn",
               "version": "1.4.2"
+            },
+            {
+              "name": "qiskit_aer",
+              "version": "0.15.1"
+            },
+            {
+              "name": "tensorboard",
+              "version": "2.18.0"
             }
           ],
           "submodules": [

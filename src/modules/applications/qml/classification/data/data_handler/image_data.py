@@ -68,7 +68,9 @@ class ImageData(DataHandler):
             {"name": "torchvision", "version": "0.17.2"},
             {"name": "tqdm", "version": "4.67.1"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "scikit-learn", "version": "1.4.2"},  # Used in MetricsClassifation
+            {"name": "scikit-learn", "version": "1.4.2"},  # Used in MetricsClassification
+            {"name": "qiskit_aer", "version": "0.15.1"}, # Used in MetricsClassification/qleet
+            {"name": "tensorboard", "version": "2.18.0"}, # Used in DataHandler
         ]
 
     def get_default_submodule(self, option: str) -> Hybrid:

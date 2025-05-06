@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: [linux/amd64, linux/arm64]
+        platform: [linux/amd64]
+        #  platform: [linux/amd64,linux/arm64]
+        #  ARM builds are (temporarily) removed in release 2.1.5 because pyscipopt 5.0 is unavailable for this platform
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
       contents: read

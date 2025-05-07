@@ -45,8 +45,8 @@ extensions = [
 
 autosummary_generate = True  # Turn on sphinx.ext.autosummary
 autosummary_mock_imports = [
-    'modules.applications.optimization.PVC.createReferenceGraph',
-    'modules.applications.optimization.TSP.createReferenceGraph'
+    'modules.applications.optimization.pvc.createReferenceGraph',
+    'modules.applications.optimization.tsp.createReferenceGraph'
 ]
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).

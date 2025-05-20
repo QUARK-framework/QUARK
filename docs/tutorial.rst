@@ -182,7 +182,7 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
          SCP
          GenerativeModeling
       
-      2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.tsp.tsp
+      2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
       [?] (Option for TSP) How many nodes does you graph need?:
        > [X] 3
          [ ] 4
@@ -200,13 +200,13 @@ Example run (You need to check at least one option with an ``X`` for the checkbo
          [ ] ReverseGreedyClassicalTSP
          [ ] RandomTSP
       
-      2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.greedy_classical_tsp
+      2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
       2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
       2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
       2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
       [?] How many repetitions do you want?: 1P
-      2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.tsp.tsp
-      2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.greedy_classical_tsp
+      2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
+      2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
       2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
       2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
       2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
@@ -267,7 +267,7 @@ After making sure your docker daemon is running, you can run the container:
 
     docker run -it --rm ghcr.io/quark-framework/quark
 
-**Note**: ARM builds are (temporarily) removed in release 2.1.5 because pyscipopt 5.0 is unavailable for this platform at
+**Note**: ARM builds are (temporarily) removed in release 2.1.3 because pyqubo 1.5.0 is unavailable for this platform at
 the moment. This means if you want to run QUARK as a container on a machine with a chip from this
 `list <https://en.wikipedia.org/wiki/List_of_ARM_processors>`_ you might face problems. Please feel free to `open an
 issue <https://github.com/QUARK-framework/QUARK/issues/new>`_, so we can work on a tailored workaround until the latest
@@ -359,12 +359,12 @@ An example for this would be:
     [
       {
         "name": "TSP",
-        "module": "modules.applications.optimization.tsp.tsp",
+        "module": "modules.applications.optimization.TSP.TSP",
         "dir": "src",
         "submodules": [
           {
             "name": "GreedyClassicalTSP",
-            "module": "modules.solvers.greedy_classical_tsp",
+            "module": "modules.solvers.GreedyClassicalTSP",
             "submodules": []
           }
         ]

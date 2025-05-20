@@ -110,7 +110,8 @@ def checkbox(key: str, message: str, choices: list) -> dict:
         answer = inquirer.prompt([inquirer.Checkbox(key, message=message, choices=choices)])
     else:
         if len(choices) == 1:
-            logging.info(f"Skipping asking for submodule since only 1 option ({choices[0]}) is available.")
+            logging.info(f"Skipping asking for submodule"
+                         f"since only 1 option ({choices[0]}) is available.")
         return {key: choices}
 
     if not answer[key]:

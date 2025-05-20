@@ -30,6 +30,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import models, transforms
 from tqdm import tqdm
 from utils import end_time_measurement, start_time_measurement
+import zipfile
 
 
 class ImageData(DataHandler):
@@ -359,6 +360,11 @@ class ImageData(DataHandler):
         index_list = []
         for root, dirs, files in os.walk(os.path.join(self.data_folder, "test_data")):
             for file in files:
+                if file.endswith(".zip") and len(files) == 1:
+                    # Unzip files if still unzipped
+                    logging.info("Unzipping files from " + os.path.join(root, file) + ". This may take a while.")
+                    with zipfile.ZipFile(os.path.join(root, file), "r") as zip_ref:
+                        zip_ref.extractall(os.path.join(root))
                 if file.endswith(".jpg"):
                     label = os.path.basename(root)
                     index_list.append(

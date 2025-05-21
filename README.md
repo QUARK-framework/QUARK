@@ -1,14 +1,18 @@
 # QUARK: A Framework for Quantum Computing Application Benchmarking
 
 Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers. 
-QUARK supports various applications such as the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, robot path optimization in the PVC sealing use case 
+QUARK supports various applications such as the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, robot path optimization in the PVC sealing use case (PVC)
 as well as new additions like the Maximum Independent Set (MIS), Set Cover Problem (SCP) and Auto Carrier Loading (ACL).
-It also features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
+
+It also includes two machine learning modules, namely generative modeling and image classification, which can be benchmarked with various training methods like quantum circuit born machine (QCBM) and quantum generative adversarial networks (QGANs) or a hybrid training method, respectively.
+Several learning data sets were added for convenience.
+
+QUARK features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
 
 ## Publications
 Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028).
-Even though the architecture changes significantly from QUARK 1.0 to the current version, the guiding principles still remain. The most recent publication from [Kiwit et al.](https://arxiv.org/abs/2308.04082) provides an updated overview of the functionalities and quantum machine learning features of QUARK.
+Even though the architecture changes significantly from QUARK 1.0 to the current version, the guiding principles still remain. More recent publications from Kiwit et al. [[1](https://arxiv.org/abs/2308.04082), [2](https://link.springer.com/article/10.1007/s13218-024-00864-7)] provide an updated overview of the functionalities and quantum machine learning features of QUARK.
 
 ## Documentation
 Documentation with a tutorial and developer guidelines can be found here: https://quark-framework.readthedocs.io/en/dev/.
@@ -53,6 +57,19 @@ python src/main.py
 <br>
 
 > __Note:__ It is still possible to only use a subset of QUARK's modules without also using uv. The process is explained in the [documentation](https://quark-framework.readthedocs.io/en/dev/tutorial.html).
+
+### Additional installation steps for macOS 
+On Mac machines with Apple Silicon, JAX must be installed separately. Do this after having installed all the other dependencies with the requirements file generated above. Following the [Apple developer guide](https://developer.apple.com/metal/jax/), you need to install the binaries, e.g., using
+```
+python3 -m venv ~/jax-metal
+source ~/jax-metal/bin/activate
+python -m pip install numpy wheel
+python -m pip install jax-metal
+pip install -U jaxlib jax
+````
+You also need to set an environment variable to run jax-metal with jaxlibs beyond the minimal version
+```ENABLE_PJRT_COMPATIBILITY=1```.
+
 
 ## Git Large File Storage (LFS)
 QUARK stores data and config files using **Git LFS**. If you are contributing to this project or cloning this repository, ensure that you have Git LFS installed and configured to manage large files effectively.
@@ -135,8 +152,9 @@ Example run (you need to check at least one option with an ``X`` for the checkbo
    MIS
    SCP
    GenerativeModeling
+   Classification
 
-2024-10-09 15:05:52,610 [INFO] Import module modules.applications.optimization.TSP.TSP
+2025-05-05 15:05:52,610 [INFO] Import module modules.applications.optimization.tsp.tsp
 [?] (Option for TSP) How many nodes does you graph need?:
  > [X] 3
    [ ] 4
@@ -154,38 +172,38 @@ Example run (you need to check at least one option with an ``X`` for the checkbo
    [ ] ReverseGreedyClassicalTSP
    [ ] RandomTSP
 
-2024-10-09 15:06:20,897 [INFO] Import module modules.solvers.GreedyClassicalTSP
-2024-10-09 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
-2024-10-09 15:06:20,933 [INFO] Import module modules.devices.Local
-2024-10-09 15:06:20,946 [INFO] Submodule configuration finished
+2025-05-05 15:06:20,897 [INFO] Import module modules.solvers.greedy_classical_tsp
+2025-05-05 15:06:20,933 [INFO] Skipping asking for submodule, since only 1 option (Local) is available.
+2025-05-05 15:06:20,933 [INFO] Import module modules.devices.Local
+2025-05-05 15:06:20,946 [INFO] Submodule configuration finished
 [?] How many repetitions do you want?: 1P
-2024-10-09 15:07:11,573 [INFO] Import module modules.applications.optimization.TSP.TSP
-2024-10-09 15:07:11,573 [INFO] Import module modules.solvers.GreedyClassicalTSP
-2024-10-09 15:07:11,574 [INFO] Import module modules.devices.Local
-2024-10-09 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2024-10-09-15-07-11
-2024-10-09 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
-2024-10-09 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
-2024-10-09 15:07:12,386 [INFO] Route found:
+2025-05-05 15:07:11,573 [INFO] Import module modules.applications.optimization.tsp.tsp
+2025-05-05 15:07:11,573 [INFO] Import module modules.solvers.greedy_classical_tsp
+2025-05-05 15:07:11,574 [INFO] Import module modules.devices.Local
+2025-05-05 15:07:12,194 [INFO] [INFO] Created Benchmark run directory /Users/user1/quark/benchmark_runs/tsp-2025-05-05-15-07-11
+2025-05-05 15:07:12,194 [INFO] Codebase is based on revision 1d9d17aad7ddff623ff51f62ca3ec2756621c345 and has no uncommitted changes
+2025-05-05 15:07:12,195 [INFO] Running backlog item 1/1, Iteration 1/1:
+2025-05-05 15:07:12,386 [INFO] Route found:
  Node 0 ->
  Node 2 ->
  Node 1
-2024-10-09 15:07:12,386 [INFO] All 3 nodes got visited
-2024-10-09 15:07:12,386 [INFO] Total distance (without return): 727223.0
-2024-10-09 15:07:12,386 [INFO] Total distance (including return): 1436368.0
-2024-10-09 15:07:12,386 [INFO]
-2024-10-09 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
-2024-10-09 15:07:12,387 [INFO]
-2024-10-09 15:07:12,387 [INFO] =============== Run finished ===============
-2024-10-09 15:07:12,387 [INFO]
-2024-10-09 15:07:12,387 [INFO] ================================================================================
-2024-10-09 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
-2024-10-09 15:07:12,387 [INFO] ================================================================================
-2024-10-09 15:07:12,395 [INFO]
-2024-10-09 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2024-10-09-15-07-11/results.json
-2024-10-09 15:07:12,942 [INFO] Finished creating plots.
-2024-10-09 15:07:12,943 [INFO] ============================================================ 
-2024-10-09 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
-2024-10-09 15:07:12,944 [INFO] ============================================================
+2025-05-05 15:07:12,386 [INFO] All 3 nodes got visited
+2025-05-05 15:07:12,386 [INFO] Total distance (without return): 727223.0
+2025-05-05 15:07:12,386 [INFO] Total distance (including return): 1436368.0
+2025-05-05 15:07:12,386 [INFO]
+2025-05-05 15:07:12,386 [INFO] ==== Run backlog item 1/1 with 1 iterations - FINISHED:1 ====
+2025-05-05 15:07:12,387 [INFO]
+2025-05-05 15:07:12,387 [INFO] =============== Run finished ===============
+2025-05-05 15:07:12,387 [INFO]
+2025-05-05 15:07:12,387 [INFO] ================================================================================
+2025-05-05 15:07:12,387 [INFO] ====== Run 1 backlog items with 1 iterations - FINISHED:1
+2025-05-05 15:07:12,387 [INFO] ================================================================================
+2025-05-05 15:07:12,395 [INFO]
+2025-05-05 15:07:12,400 [INFO] Saving 1 benchmark records to /Users/user1/QUARK/benchmark_runs/tsp-2025-05-05-15-07-11/results.json
+2025-05-05 15:07:12,942 [INFO] Finished creating plots.
+2025-05-05 15:07:12,943 [INFO] ============================================================ 
+2025-05-05 15:07:12,944 [INFO] ====================  QUARK finished!   ====================
+2025-05-05 15:07:12,944 [INFO] ============================================================
 
 ```
 
@@ -194,11 +212,11 @@ All used config files, logs and results are stored in a folder in the ```benchma
 ### Interrupt/resume
 The processing of backlog items may get interrupted in which case you will see something like
 ```
-2024-03-13 10:25:20,201 [INFO] ================================================================================
-2024-03-13 10:25:20,201 [INFO] ====== Run 3 backlog items with 10 iterations - FINISHED:15 INTERRUPTED:15
-2024-03-13 10:25:20,201 [INFO] ====== There are interrupted jobs. You may resume them by running QUARK with
-2024-03-13 10:25:20,201 [INFO] ====== --resume-dir=benchmark_runs\tsp-2024-03-13-10-25-19
-2024-03-13 10:25:20,201 [INFO] ================================================================================
+2025-05-05 15:09:21,001 [INFO] ================================================================================
+2025-05-05 15:09:21,001 [INFO] ====== Run 3 backlog items with 10 iterations - FINISHED:15 INTERRUPTED:15
+2025-05-05 15:09:21,001 [INFO] ====== There are interrupted jobs. You may resume them by running QUARK with
+2025-05-05 15:09:21,001 [INFO] ====== --resume-dir=benchmark_runs\tsp-2025-05-05-15-09-20
+2025-05-05 15:09:21,001 [INFO] ================================================================================
 ```
 This happens if you press CTRL-C or if some QUARK module does its work asynchronously, e.g. by submitting its job to some 
 batch system. Learn more about how to write asynchronous modules in the [developer guide](https://quark-framework.readthedocs.io/en/dev/developer.html).
@@ -215,7 +233,7 @@ After making sure your docker daemon is running, you can run the container:
 docker run -it --rm ghcr.io/quark-framework/quark
 ```
 
-> __Note__: ARM builds are (temporarily) removed in release 2.1.3 because pyqubo 1.5.0 is unavailable for this platform
+> __Note__: ARM builds are (temporarily) removed in release 2.1.5 because pyscipopt 5.0 is unavailable for this platform
 > at the moment. This means if you want to run QUARK as a container on a machine with a chip from this 
 > [list](https://en.wikipedia.org/wiki/List_of_ARM_processors) you might face problems. Please feel free to 
 > [open an issue](https://github.com/QUARK-framework/QUARK/issues/new), so we can work on a tailored workaround until 

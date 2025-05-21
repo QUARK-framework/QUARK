@@ -1,0 +1,37 @@
+application:
+  config:
+    instance_creating_mode:
+    - linear weights without incompatibilities
+    number_of_objects:
+    - 3
+  name: BP
+  submodules:
+  - config: {}
+    name: MIP
+    submodules:
+    - config:
+        mip_gap:
+        - 0
+        solution_method:
+        - -1
+        time_limit:
+        - 7200
+      name: MIPSolver
+      submodules:
+      - config: {}
+        name: Local
+        submodules: []
+  - config:
+      penalty_factor:
+      - 1.0
+    name: QUBO
+    submodules:
+    - config:
+        number_of_reads:
+        - 100
+      name: Annealer
+      submodules:
+      - config: {}
+        name: Simulated Annealer
+        submodules: []
+repetitions: 1

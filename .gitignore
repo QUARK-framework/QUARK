@@ -317,3 +317,5 @@ $RECYCLE.BIN/
 /.settings/envs/
 /configs/
 /docs/_autosummary/
+src/modules/applications/qml/classification/data/Images_2D/test_data/**/*.jpg
+src/modules/applications/qml/classification/data/Images_2D/**/embeddings.csv

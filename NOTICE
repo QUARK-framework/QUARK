@@ -3,3 +3,9 @@ Some parts of the framework, which are derived from, or inspired by https://gith
 PyQubo formulation of the TSP in function _create_pyqubo_model in file applications/TSP/mappings/ISING.py was kindly provided by AWS (Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.)
 
 djs1000.tsp is copied from http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/
+
+The implementation of /applications/qml/qleet is based on the open-source qLEET package https://github.com/QLemma/qleet.
+
+This software is meant for research and benchmarking purposes only. The authors do not take responsibility for any other use.
+
+This project was supported by the Bavarian research program (BayVFP) in the context of the BenchQC project.

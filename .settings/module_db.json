@@ -1,7 +1,7 @@
 {
-  "build_number": 22,
-  "build_date": "05-05-2025 15:07:28",
-  "git_revision_number": "4bc3e398493a935a3a9c0bb4efdbd95428c31dcd",
+  "build_number": 24,
+  "build_date": "24-06-2025 14:26:01",
+  "git_revision_number": "3bdc933cfa5f8230153714f31e5f8e524e6f8a7f",
   "modules": [
     {
       "name": "PVC",
@@ -4286,6 +4286,44 @@
         {
           "name": "torchvision",
           "version": "0.17.2"
+        }
+      ]
+    },
+    {
+      "name": "FreeFermion",
+      "class": "FreeFermion",
+      "module": "modules.applications.simulation.free_fermion.free_fermion",
+      "submodules": [
+        {
+          "name": "AerSimulator",
+          "class": "AerSimulator",
+          "args": {},
+          "module": "src.modules.applications.simulation.backends.aer_simulator",
+          "requirements": [
+            {
+              "name": "qiskit",
+              "version": "1.3.0"
+            }
+          ],
+          "submodules": []
+        }
+      ],
+      "requirements": [
+        {
+          "name": "qiskit",
+          "version": "1.3.0"
+        },
+        {
+          "name": "numpy",
+          "version": "1.26.4"
+        },
+        {
+          "name": "mathplotlib",
+          "version": "3.9.3"
+        },
+        {
+          "name": "qiskit_aer",
+          "version": "0.15.1"
         }
       ]
     }

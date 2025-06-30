@@ -8,5 +8,3 @@ class BackendResult:
     """
     counts: list[dict[str, int]]
     n_shots: int
-
-

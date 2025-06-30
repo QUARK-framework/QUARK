@@ -8,10 +8,6 @@ from src.modules.applications.simulation.backends.backend_result import BackendR
 from src.utils import start_time_measurement, end_time_measurement
 
 
-
-
-
-
 class AerSimulator(Core):
 
     def __init__(self):
@@ -74,11 +70,10 @@ class AerSimulator(Core):
         circuits = input_data
         counts = [backend.run(circuit, shots=config['n_shots']).result().get_counts(circuit) for circuit in circuits]
         results = BackendResult(
-            counts = counts,
-            n_shots = config['n_shots']
+            counts=counts,
+            n_shots=config['n_shots']
         )
         return results, end_time_measurement(start)
-
 
     def validate(self, solution) -> tuple[bool, float]:
         """
@@ -97,6 +92,7 @@ class AerSimulator(Core):
         logging.info(f"Solution valid")
         return True, end_time_measurement(start)
 
+
 def evaluate(self, solution) -> tuple[float, float]:
     """
     Evaluates the solution.
@@ -110,6 +106,7 @@ def evaluate(self, solution) -> tuple[float, float]:
 
     return evaluation_metric, end_time_measurement(start)
 
+
 def save(self, path, iter_count) -> None:
     """
     Saves the application state.
@@ -119,7 +116,6 @@ def save(self, path, iter_count) -> None:
     :returns:None
     """
     save_your_application(self.application, f"{path}/application.txt")
-
 
     def save(self, path: str, iter_count: int) -> None:
         """

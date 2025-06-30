@@ -10,9 +10,11 @@ def createCouplings(Lx, Ly) -> tuple:  # returns a list of couplings and a list 
     # creation of the list of couplings
     E: list = []
     for j in range(
-            L):  # runs through all the lattice sites. j//Lx is the vertical coordinate (<Ly) and j%Lx the horizontal coordinate (<Lx)
+            # runs through all the lattice sites. j//Lx is the vertical coordinate
+            # (<Ly) and j%Lx the horizontal coordinate (<Lx)
+            L):
         for k in [(j // Lx) * Lx + ((j % Lx) + 1) % Lx, (((
-                                                                  j // Lx) + 1) % Ly) * Lx + j % Lx]:  # runs through the two neighbours of j, one with +1 for horizontal coordinate, and one with +1 for vertical coordinate
+                j // Lx) + 1) % Ly) * Lx + j % Lx]:  # runs through the two neighbours of j, one with +1 for horizontal coordinate, and one with +1 for vertical coordinate
             if (j // Lx == k // Lx and (j // Lx) % 2 == j % 2):  # horizontal edge on the left of the ancilla
                 v: int = j // 2  # computes the ancilla number (minus L) that touches the edge (j,k)
                 w: int = 1  # w=1 means horizontal edge and w=0 means vertical edge
@@ -35,9 +37,9 @@ def createCouplings(Lx, Ly) -> tuple:  # returns a list of couplings and a list 
         f1: int = L + f  # ancilla on left
         f2: int = L + (f // (Lx // 2)) * (Lx // 2) + ((f + 1) % (Lx // 2))  # ancilla on right
         f3: int = L + ((f // (Lx // 2) + 1) % Ly) * (Lx // 2) + (
-                    (f + ((f // (Lx // 2)) % 2)) % (Lx // 2))  # ancilla above
+            (f + ((f // (Lx // 2)) % 2)) % (Lx // 2))  # ancilla above
         f4: int = L + ((f // (Lx // 2) - 1) % Ly) * (Lx // 2) + (
-                    (f + ((f // (Lx // 2)) % 2)) % (Lx // 2))  # ancilla below
+            (f + ((f // (Lx // 2)) % 2)) % (Lx // 2))  # ancilla below
         f5: int = (((2 * f) % Lx) + 1 + (((2 * f) // Lx) % 2)) % Lx + ((2 * f) // Lx) * Lx  # site bottom left
         f6: int = (((2 * f) % Lx) + 2 + (((2 * f) // Lx) % 2)) % Lx + ((2 * f) // Lx) * Lx  # site bottom right
         f7: int = (((f5 + Lx) // Lx) % Ly) * Lx + (f5 % Lx)  # site top left
@@ -48,7 +50,9 @@ def createCouplings(Lx, Ly) -> tuple:  # returns a list of couplings and a list 
 
 
 def get_pauli_string(N: int,
-                     lst: list) -> str:  # takes as argument a list of the form [['Z',1]] and returns a Pauli string IZIII compatible with qiskit
+                     # takes as argument a list of the form [['Z',1]] and returns a Pauli
+                     # string IZIII compatible with qiskit
+                     lst: list) -> str:
     s: str = ''
     for j in range(N):
         flag: int = 0
@@ -57,7 +61,8 @@ def get_pauli_string(N: int,
                 s = s + op[0]
                 flag = 1
                 break
-        if flag == 0: s = s + 'I'
+        if flag == 0:
+            s = s + 'I'
     return s
 
 
@@ -67,26 +72,32 @@ def exactTrotter(dt: float, n: int, decalx: float, decaly: float, Lx: int, Ly: i
     # they are the phix/phiy in Eq12.
     # Values from the quantum circuits are (exactTrotter(dt,n,0,0.5)+exactTrotter(dt,n,0.5,0))/2
     L = Lx * Ly
-    coseps = lambda x, y: 1 - 2 * np.sin(dt) ** 2 * (np.cos(x) + np.cos(y)) ** 2 + 4 * np.sin(dt) ** 4 * np.cos(
+    def coseps(x, y): return 1 - 2 * np.sin(dt) ** 2 * (np.cos(x) + np.cos(y)) ** 2 + 4 * np.sin(dt) ** 4 * np.cos(
         x) * np.cos(y) * (1 + np.cos(x + y))  # cos of Eq17 in Appendix
-    sineps = lambda x, y: np.sqrt(1 - coseps(x, y) ** 2)  # sin of Eq17 in Appendix
-    eit = lambda x, y: coseps(x, y) + 1j * sineps(x, y)  # exp(i\eps) with \eps=Eq17 in Appendix
-    alpha1 = lambda x, y: -1j * np.sin(2 * dt) * (np.cos(x) + np.cos(y)) + 2 * 1j * np.sin(2 * dt) * np.sin(
+
+    def sineps(x, y): return np.sqrt(1 - coseps(x, y) ** 2)  # sin of Eq17 in Appendix
+    def eit(x, y): return coseps(x, y) + 1j * sineps(x, y)  # exp(i\eps) with \eps=Eq17 in Appendix
+
+    def alpha1(x, y): return -1j * np.sin(2 * dt) * (np.cos(x) + np.cos(y)) + 2 * 1j * np.sin(2 * dt) * np.sin(
         dt) ** 2 * np.cos(x) * np.cos(y) * (np.cos(x) + np.cos(y))  # alpha in Eq18 in Appendix, for n=1
-    beta1 = lambda x, y: 1j * (1 - 2 * np.sin(dt) ** 2 * np.cos(x) ** 2 - 1j * np.sin(2 * dt) * np.cos(x)) * np.sin(
+
+    def beta1(x, y): return 1j * (1 - 2 * np.sin(dt) ** 2 * np.cos(x) ** 2 - 1j * np.sin(2 * dt) * np.cos(x)) * np.sin(
         dt) ** 2 * np.sin(2 * y) + 1j * (1 - 2 * np.sin(dt) ** 2 * np.cos(y) ** 2 + 1j * np.sin(2 * dt) * np.cos(
-        y)) * np.sin(dt) ** 2 * np.sin(2 * x)  # beta in Eq 18 in Appendix, for n=1
-    aa = lambda x, y: (alpha1(x, y) + 1j * sineps(x, y))
-    bb = lambda x, y: beta1(x, y)
-    alphan = lambda x, y: eit(x, y) ** (-n) + aa(x, y) * np.sum([eit(x, y) ** (n - 1 - 2 * m) for m in range(n)],
-                                                                axis=0)  # alpha in Eq18 in Appendix
-    betan = lambda x, y: bb(x, y) * np.sum([eit(x, y) ** (n - 1 - 2 * m) for m in range(n)],
-                                           axis=0)  # beta in Eq18 in Appendix
-    momentx = lambda x: 2 * np.pi * (x + decalx) / Lx  # momenta in K in Eq12
-    momenty = lambda y: 2 * np.pi * (y + decaly) / Ly
+            y)) * np.sin(dt) ** 2 * np.sin(2 * x)  # beta in Eq 18 in Appendix, for n=1
+
+    def aa(x, y): return (alpha1(x, y) + 1j * sineps(x, y))
+    def bb(x, y): return beta1(x, y)
+
+    def alphan(x, y): return eit(x, y) ** (-n) + aa(x, y) * np.sum([eit(x, y) ** (n - 1 - 2 * m) for m in range(n)],
+                                                                   axis=0)  # alpha in Eq18 in Appendix
+    def betan(x, y): return bb(x, y) * np.sum([eit(x, y) ** (n - 1 - 2 * m) for m in range(n)],
+                                              axis=0)  # beta in Eq18 in Appendix
+
+    def momentx(x): return 2 * np.pi * (x + decalx) / Lx  # momenta in K in Eq12
+    def momenty(y): return 2 * np.pi * (y + decaly) / Ly
 
     f: np.array = np.array([[-1 + 0 * 1j if (i < Ly // 2) else 1 for i in range(Ly)] for j in range(Lx)]) / (
-                L // 2)  # observable in Eq9-10
+        L // 2)  # observable in Eq9-10
 
     x: np.array = np.tensordot(np.array([j for j in range(Lx)]), np.array([1 for j in range(Ly)]), 0)
     y: np.array = np.tensordot(np.array([1 for j in range(Lx)]), np.array([j for j in range(Ly)]), 0)
@@ -170,11 +181,13 @@ def trotter_step(U, dt: float, Lx: int, E: list):
                 if (c[3] == ind2):  # selects horizontal or vertical edges
                     sig: int = 1
                     if (c[3] == 0 and (c[
-                                           0] % 2) == 0):  # implements the -1 in the fermionic encoding that occurs only for even columns
+                            0] % 2) == 0):  # implements the -1 in the fermionic encoding that occurs only for even columns
                         sig *= -1
-                    # the sequence of H's and Sdg's  are conjugating the central ZZZ rotation into some rotations like XXY
+                    # the sequence of H's and Sdg's  are conjugating the central ZZZ rotation
+                    # into some rotations like XXY
                     if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[
-                                                                                   0] // Lx) % 2 == 1 - ind)):  # if c is a column (line), apply Y only when the parity of the column (line) is 1-ind.
+                            # if c is a column (line), apply Y only when the parity of the column (line) is 1-ind.
+                            0] // Lx) % 2 == 1 - ind)):
                         U.sdg(c[0])
                     U.h(c[0])
                     if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // Lx) % 2 == 1 - ind)):  # same
@@ -216,9 +229,9 @@ def exact_values(Ntrot: int, dt: float, Lx: int, Ly: int):
     exactList: list = []
     for u in range(Ntrot):
         exactList.append([u, (
-                    exactTrotter(dt, u, 0, 0., Lx, Ly) + exactTrotter(dt, u, 0.5, 0.5, Lx, Ly) + exactTrotter(dt, u, 0,
-                                                                                                              0.5, Lx,
-                                                                                                              Ly) + exactTrotter(
+            exactTrotter(dt, u, 0, 0., Lx, Ly) + exactTrotter(dt, u, 0.5, 0.5, Lx, Ly) + exactTrotter(dt, u, 0,
+                                                                                                      0.5, Lx,
+                                                                                                      Ly) + exactTrotter(
                 dt, u, 0.5, 0, Lx, Ly)) / 4])
     return exactList
 
@@ -232,7 +245,8 @@ def score_minimal(delta: np.array, L: int) -> float:  # returns the score, given
         if (temp > rewards):
             rewards = temp
             opt = j
-    ff = lambda x: chi2.cdf(delta[opt] ** 2 * x * L, df=1) - 0.997
+
+    def ff(x): return chi2.cdf(delta[opt] ** 2 * x * L, df=1) - 0.997
     x: float = fsolve(ff, n / delta[opt] ** 2 / L)[0]  # looks for x such that chi2.cdf(delta[opt]**2*x*L,df=1)=0.997
     return 6 * x * (opt + 1) * L
 

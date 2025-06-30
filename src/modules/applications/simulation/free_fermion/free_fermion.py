@@ -79,7 +79,6 @@ class FreeFermion(Simulation):
             },
         }
 
-
     class Config(TypedDict):
         """
         A configuration dictionary for the application.
@@ -88,7 +87,6 @@ class FreeFermion(Simulation):
         Ly: int
         trotter_dt: float
         trotter_n_step: int
-
 
     def preprocess(self, input_data: any, conf: Config, **kwargs) -> tuple[list[QuantumCircuit], float]:
         """
@@ -99,7 +97,13 @@ class FreeFermion(Simulation):
         :return: A tuple containing the preprocessed output and the time taken for preprocessing
         """
         start = start_time_measurement()
-        circuits = [create_circuit(conf['Lx'], conf['Ly'], conf['trotter_dt'], n) for n in range(conf['trotter_n_step'])]
+        circuits = [
+            create_circuit(
+                conf['Lx'],
+                conf['Ly'],
+                conf['trotter_dt'],
+                n) for n in range(
+                conf['trotter_n_step'])]
         return circuits, end_time_measurement(start)
 
     def postprocess(self, input_data: BackendResult, conf: Config, **kwargs) -> tuple[any, float]:
@@ -113,7 +117,7 @@ class FreeFermion(Simulation):
 
         start = start_time_measurement()
         counts_per_circuit, n_shots = input_data.counts, input_data.n_shots
-        lx, ly, trotter_dt, trotter_n_step  = conf['Lx'], conf['Ly'], conf['trotter_dt'], conf['trotter_n_step']
+        lx, ly, trotter_dt, trotter_n_step = conf['Lx'], conf['Ly'], conf['trotter_dt'], conf['trotter_n_step']
         l_tot = lx * ly
 
         to_plot: list = []
@@ -140,10 +144,12 @@ class FreeFermion(Simulation):
 
         exact_list_array = np.real(np.array(exact_values(trotter_n_step, trotter_dt, lx, ly)))
         to_plot_array: np.array = np.array(to_plot)
-        score, score_variance = score_minimal_mean(exact_list_array[:, 1] - to_plot_array[:, 1], to_plot_array[:, 2], lx * ly)
-        self.metrics.add_metric_batch({ "application_score_value": score, "application_score_variance": score_variance, "application_score_unit": "score",
+        score, score_variance = score_minimal_mean(
+            exact_list_array[:, 1] - to_plot_array[:, 1], to_plot_array[:, 2], lx * ly)
+        self.metrics.add_metric_batch({"application_score_value": score, "application_score_variance": score_variance, "application_score_unit": "score",
                                        "application_score_type": "float"})
-        plt.plot(np.array(list(range(trotter_n_step))) * trotter_dt, exact_list_array[:, 1], color="black", label="exact")
+        plt.plot(np.array(list(range(trotter_n_step))) * trotter_dt,
+                 exact_list_array[:, 1], color="black", label="exact")
         plt.errorbar(to_plot_array[:, 0], to_plot_array[:, 1], yerr=to_plot_array[:, 2], label="simulated")
         plt.title("score=10^" + str(score) + "gates")
         plt.xlabel("")
@@ -153,7 +159,6 @@ class FreeFermion(Simulation):
         plt.close()
 
         return score, end_time_measurement(start)
-
 
     def save(self, path, iter_count) -> None:
         """

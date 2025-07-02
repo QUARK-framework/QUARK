@@ -1,8 +1,8 @@
 from typing import TypedDict
 
-from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator as QiskitAS
 
+from src.modules.applications.simulation.backends.backend_input import BackendInput
 from src.modules.core import Core
 from src.modules.applications.simulation.backends.backend_result import BackendResult
 from src.utils import start_time_measurement, end_time_measurement
@@ -44,7 +44,7 @@ class AerSimulator(Core):
         """
         return {
             "n_shots": {
-                "values": [100],
+                "values": [100, 200, 400, 800, 1600],
                 "description": "Number of shots?",
                 "allow_ranges": False,
                 "postproc": int
@@ -56,7 +56,7 @@ class AerSimulator(Core):
         """
         n_shots: int
 
-    def postprocess(self, input_data: list[QuantumCircuit], config: AerSimConfig, **kwargs) -> tuple[any, float]:
+    def postprocess(self, input_data: BackendInput, config: AerSimConfig, **kwargs) -> tuple[any, float]:
         """
         Processes data passed to this module from the submodule.
 
@@ -67,7 +67,7 @@ class AerSimulator(Core):
         """
         start = start_time_measurement()
         backend = QiskitAS()
-        circuits = input_data
+        circuits = input_data.circuits
         counts = [backend.run(circuit, shots=config['n_shots']).result().get_counts(circuit) for circuit in circuits]
         results = BackendResult(
             counts=counts,

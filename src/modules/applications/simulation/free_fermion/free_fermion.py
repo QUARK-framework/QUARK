@@ -1,10 +1,10 @@
 from typing import TypedDict, Union
 
-from qiskit import QuantumCircuit
 import matplotlib.pyplot as plt
 import numpy as np
 
 from src.modules.applications.simulation.backends.aer_simulator import AerSimulator
+from src.modules.applications.simulation.backends.backend_input import BackendInput
 from src.modules.applications.simulation.backends.backend_result import BackendResult
 from src.modules.applications.simulation.free_fermion.free_fermion_helpers import create_circuit, exact_values, \
     score_minimal_mean
@@ -53,42 +53,37 @@ class FreeFermion(Simulation):
         Returns the parameter options for the application.
         """
         return {
-            "Lx": {
+            "L": {
                 "values": [2, 4, 6],
-                "description": "What width lattice to use for the compact fermion encoding?",
-                "allow_ranges": False,
-                "postproc": int
-            },
-            "Ly": {
-                "values": [2, 4, 6],
-                "description": "What height lattice to use for the compact fermion encoding?",
+                "description": "What lattice size (L x L) to use for the simulation?",
                 "allow_ranges": False,
                 "postproc": int
             },
             "trotter_dt": {
-                "values": [0.1, 0.5],
+                "values": [0.2, 0.4, 0.6],
                 "description": "Which time step size?",
                 "allow_ranges": False,
                 "postproc": float
             },
             "trotter_n_step": {
-                "values": [20, 30],
-                "description": "Number of time steps?",
+                "values": ["1L", "2L"],
+                "description": "Number of time steps (in multiples of L value)?",
                 "allow_ranges": False,
-                "postproc": int
+                "postproc": str
             },
         }
+
 
     class Config(TypedDict):
         """
         A configuration dictionary for the application.
         """
-        Lx: int
-        Ly: int
+        L: int
         trotter_dt: float
-        trotter_n_step: int
+        trotter_n_step: str
 
-    def preprocess(self, input_data: any, conf: Config, **kwargs) -> tuple[list[QuantumCircuit], float]:
+
+    def preprocess(self, input_data: any, conf: Config, **kwargs) -> tuple[BackendInput, float]:
         """
         Generate data that gets passed to the next submodule.
 
@@ -97,14 +92,10 @@ class FreeFermion(Simulation):
         :return: A tuple containing the preprocessed output and the time taken for preprocessing
         """
         start = start_time_measurement()
-        circuits = [
-            create_circuit(
-                conf['Lx'],
-                conf['Ly'],
-                conf['trotter_dt'],
-                n) for n in range(
-                conf['trotter_n_step'])]
-        return circuits, end_time_measurement(start)
+        lattice_size = conf['L']
+        trotter_n_step = int(conf['trotter_n_step'][:-1])*lattice_size
+        circuits = [create_circuit(lattice_size, lattice_size, conf['trotter_dt'], n) for n in range(trotter_n_step)]
+        return BackendInput(circuits), end_time_measurement(start)
 
     def postprocess(self, input_data: BackendResult, conf: Config, **kwargs) -> tuple[any, float]:
         """
@@ -117,7 +108,8 @@ class FreeFermion(Simulation):
 
         start = start_time_measurement()
         counts_per_circuit, n_shots = input_data.counts, input_data.n_shots
-        lx, ly, trotter_dt, trotter_n_step = conf['Lx'], conf['Ly'], conf['trotter_dt'], conf['trotter_n_step']
+        lx, ly, trotter_dt  = conf['L'], conf['L'], conf['trotter_dt']
+        trotter_n_step = int(conf['trotter_n_step'][:-1])*lx
         l_tot = lx * ly
 
         to_plot: list = []
@@ -140,25 +132,25 @@ class FreeFermion(Simulation):
                 var += a ** 2 * counts[s]
             res = res / n_shots
             var = var / n_shots
-            to_plot.append([trotter_dt * n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)])
+            to_plot.append([n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)])
 
         exact_list_array = np.real(np.array(exact_values(trotter_n_step, trotter_dt, lx, ly)))
         to_plot_array: np.array = np.array(to_plot)
-        score, score_variance = score_minimal_mean(
-            exact_list_array[:, 1] - to_plot_array[:, 1], to_plot_array[:, 2], lx * ly)
-        self.metrics.add_metric_batch({"application_score_value": score, "application_score_variance": score_variance, "application_score_unit": "score",
+        score, score_variance = score_minimal_mean(exact_list_array[:, 1] - to_plot_array[:, 1], to_plot_array[:, 2], lx * ly)
+        self.metrics.add_metric_batch({ "application_score_value": score, "application_score_variance": score_variance, "application_score_unit": "score",
                                        "application_score_type": "float"})
-        plt.plot(np.array(list(range(trotter_n_step))) * trotter_dt,
-                 exact_list_array[:, 1], color="black", label="exact")
+        plt.plot(np.array(list(range(len(exact_list_array[:,1])))), exact_list_array[:, 1], color="black", label="exact")
         plt.errorbar(to_plot_array[:, 0], to_plot_array[:, 1], yerr=to_plot_array[:, 2], label="simulated")
-        plt.title("score=10^" + str(score) + "gates")
-        plt.xlabel("")
+        plt.title("score=10^" + str(score) + " gates")
+        plt.xlabel("Trotter step")
+        plt.ylabel("Imbalance")
         plt.legend()
         store_dir = kwargs["store_dir"]
         plt.savefig(f"{store_dir}/simulation_plot.pdf")
         plt.close()
 
         return score, end_time_measurement(start)
+
 
     def save(self, path, iter_count) -> None:
         """

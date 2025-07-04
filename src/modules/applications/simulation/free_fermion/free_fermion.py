@@ -31,7 +31,7 @@ class FreeFermion(Simulation):
         return [
             {"name": "qiskit", "version": "1.3.0"},
             {"name": "numpy", "version": "1.26.4"},
-            {"name": "mathplotlib", "version": "3.9.3"},
+            {"name": "matplotlib", "version": "3.9.3"},
             {"name": "qiskit_aer", "version": "0.15.1"},
         ]
 

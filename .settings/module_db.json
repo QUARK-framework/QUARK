@@ -4318,7 +4318,7 @@
           "version": "1.26.4"
         },
         {
-          "name": "mathplotlib",
+          "name": "matplotlib",
           "version": "3.9.3"
         },
         {

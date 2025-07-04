@@ -46,4 +46,3 @@ torchvision==0.17.2
 pillow==11.1.0
 tqdm==4.67.1
 scikit-learn==1.4.2
-mathplotlib==3.9.3

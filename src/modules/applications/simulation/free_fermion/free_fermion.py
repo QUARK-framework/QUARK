@@ -153,10 +153,6 @@ class FreeFermion(Simulation):
 
     def save(self, path, iter_count) -> None:
         """
-        Saves the application state.
-
-        :param path: The path where the application state should be saved
-        :param iter_count: The iteration count
-        :returns:None
+        This method is required to implement the application, but should not be used
         """
-        pass
+        raise NotImplementedError("Save functionality is not implemented for FreeFermion")

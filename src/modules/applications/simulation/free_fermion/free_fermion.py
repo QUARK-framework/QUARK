@@ -14,6 +14,7 @@ from src.utils import start_time_measurement, end_time_measurement
 
 logger = logging.getLogger()
 
+
 class FreeFermion(Simulation):
 
     def __init__(self):
@@ -96,7 +97,8 @@ class FreeFermion(Simulation):
         trotter_n_step = int(conf['trotter_n_step'][:-1]) * lattice_size
         trotter_dt = conf['trotter_dt']
         n_qubits = lattice_size * lattice_size * 3 // 2
-        logger.info(f"Starting free fermion simulation benchmark on a {lattice_size}x{lattice_size} lattice ({n_qubits} qubits)")
+        logger.info(
+            f"Starting free fermion simulation benchmark on a {lattice_size}x{lattice_size} lattice ({n_qubits} qubits)")
         logger.info(f"Using a trotter step size of {trotter_dt} and up to {trotter_n_step} trotter steps")
         circuits = [create_circuit(lattice_size, lattice_size, trotter_dt, n) for n in range(trotter_n_step)]
         return BackendInput(circuits), end_time_measurement(start)
@@ -136,7 +138,8 @@ class FreeFermion(Simulation):
     @staticmethod
     def create_and_store_plot(simulation_results, exact_results, score: int, store_dir) -> None:
         plt.plot(np.array(list(range(len(exact_results[:, 1])))), exact_results[:, 1], color="black", label="exact")
-        plt.errorbar(simulation_results[:, 0], simulation_results[:, 1], yerr=simulation_results[:, 2], label="simulated")
+        plt.errorbar(simulation_results[:, 0], simulation_results[:, 1],
+                     yerr=simulation_results[:, 2], label="simulated")
         plt.title("score=10^" + str(score) + " gates")
         plt.xlabel("Trotter step")
         plt.ylabel("Imbalance")

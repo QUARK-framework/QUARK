@@ -7,6 +7,7 @@ from scipy.optimize import fsolve
 
 logger = logging.getLogger()
 
+
 def createCouplings(Lx, Ly) -> tuple:  # returns a list of couplings and a list of faces
     L = Lx * Ly
     # creation of the list of couplings
@@ -236,7 +237,7 @@ def exact_values(Ntrot: int, dt: float, Lx: int, Ly: int) -> list[float]:
             u,
             (exactTrotter(dt, u, 0, 0., Lx, Ly)
              + exactTrotter(dt, u, 0.5, 0.5, Lx, Ly)
-             + exactTrotter(dt, u, 0,0.5, Lx, Ly)
+             + exactTrotter(dt, u, 0, 0.5, Lx, Ly)
              + exactTrotter(dt, u, 0.5, 0, Lx, Ly)) / 4]
         )
     return exactList
@@ -268,6 +269,7 @@ def score_minimal_mean(delta: np.array, var: np.array,
     res = res / 1000
     var2 = np.sqrt(var2 / 1000 - res ** 2)
     return res, var2
+
 
 def extract_simulation_results(
         lx: int, ly: int, n_shots: int,

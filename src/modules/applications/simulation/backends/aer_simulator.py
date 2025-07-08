@@ -10,6 +10,8 @@ from src.modules.applications.simulation.backends.backend_result import BackendR
 from src.utils import start_time_measurement, end_time_measurement
 
 logger = logging.getLogger()
+
+
 class AerSimulator(Core):
 
     def __init__(self):
@@ -83,7 +85,6 @@ class AerSimulator(Core):
         )
         return results, end_time_measurement(start)
 
-
     @staticmethod
     def warn_on_large_circuits(circuits: list[QuantumCircuit]) -> None:
         warning_n_qubits = 30
@@ -91,4 +92,3 @@ class AerSimulator(Core):
         if max_n_qubit > warning_n_qubits:
             logger.warning(f"Simulating circuits with over {warning_n_qubits} qubits. The high memory"
                            f" requirements can lead to memory errors on some systems.")
-

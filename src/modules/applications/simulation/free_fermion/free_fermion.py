@@ -1,4 +1,5 @@
 from typing import TypedDict, Union
+import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,10 +8,11 @@ from src.modules.applications.simulation.backends.aer_simulator import AerSimula
 from src.modules.applications.simulation.backends.backend_input import BackendInput
 from src.modules.applications.simulation.backends.backend_result import BackendResult
 from src.modules.applications.simulation.free_fermion.free_fermion_helpers import create_circuit, exact_values, \
-    score_minimal_mean
+    score_minimal_mean, extract_simulation_results
 from src.modules.applications.simulation.simulation import Simulation
 from src.utils import start_time_measurement, end_time_measurement
 
+logger = logging.getLogger()
 
 class FreeFermion(Simulation):
 
@@ -92,7 +94,11 @@ class FreeFermion(Simulation):
         start = start_time_measurement()
         lattice_size = conf['L']
         trotter_n_step = int(conf['trotter_n_step'][:-1]) * lattice_size
-        circuits = [create_circuit(lattice_size, lattice_size, conf['trotter_dt'], n) for n in range(trotter_n_step)]
+        trotter_dt = conf['trotter_dt']
+        n_qubits = lattice_size * lattice_size * 3 // 2
+        logger.info(f"Starting free fermion simulation benchmark on a {lattice_size}x{lattice_size} lattice ({n_qubits} qubits)")
+        logger.info(f"Using a trotter step size of {trotter_dt} and up to {trotter_n_step} trotter steps")
+        circuits = [create_circuit(lattice_size, lattice_size, trotter_dt, n) for n in range(trotter_n_step)]
         return BackendInput(circuits), end_time_measurement(start)
 
     def postprocess(self, input_data: BackendResult, conf: Config, **kwargs) -> tuple[any, float]:
@@ -108,51 +114,38 @@ class FreeFermion(Simulation):
         counts_per_circuit, n_shots = input_data.counts, input_data.n_shots
         lx, ly, trotter_dt = conf['L'], conf['L'], conf['trotter_dt']
         trotter_n_step = int(conf['trotter_n_step'][:-1]) * lx
-        l_tot = lx * ly
 
-        to_plot: list = []
-        for n in range(trotter_n_step):
-            res: float = 0
-            var: float = 0
-            counts = counts_per_circuit[n]
-            for s in counts:
-                a: float = 0
-                for j in range(l_tot // 2):
-                    if s[l_tot * 3 // 2 - 1 - j] == '1':
-                        a += -1 / l_tot
-                    else:
-                        a += 1 / l_tot
-                    if s[l_tot * 3 // 2 - 1 - j - l_tot // 2] == '1':
-                        a += 1 / l_tot
-                    else:
-                        a += -1 / l_tot
-                res += a * counts[s]
-                var += a ** 2 * counts[s]
-            res = res / n_shots
-            var = var / n_shots
-            to_plot.append([n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)])
-
-        exact_list_array = np.real(np.array(exact_values(trotter_n_step, trotter_dt, lx, ly)))
-        to_plot_array: np.array = np.array(to_plot)
+        simulation_results = np.array(extract_simulation_results(lx, ly, n_shots, counts_per_circuit))
+        exact_results = np.real(np.array(exact_values(trotter_n_step, trotter_dt, lx, ly)))
         score, score_variance = score_minimal_mean(
-            exact_list_array[:, 1] - to_plot_array[:, 1], to_plot_array[:, 2], lx * ly)
-        self.metrics.add_metric_batch({"application_score_value": score, "application_score_variance": score_variance, "application_score_unit": "score",
-                                       "application_score_type": "float"})
-        plt.plot(np.array(list(range(len(exact_list_array[:, 1])))),
-                 exact_list_array[:, 1], color="black", label="exact")
-        plt.errorbar(to_plot_array[:, 0], to_plot_array[:, 1], yerr=to_plot_array[:, 2], label="simulated")
+            exact_results[:, 1] - simulation_results[:, 1],
+            simulation_results[:, 2],
+            lx * ly
+        )
+        logger.info(f"Benchmark score: {score}")
+        logger.info(f"Score variance: {score_variance}")
+        self.metrics.add_metric_batch({
+            "application_score_value": score,
+            "application_score_variance": score_variance,
+            "application_score_unit": "N_gates",
+            "application_score_type": "float"
+        })
+        self.create_and_store_plot(simulation_results, exact_results, score, kwargs["store_dir"])
+        return score, end_time_measurement(start)
+
+    @staticmethod
+    def create_and_store_plot(simulation_results, exact_results, score: int, store_dir) -> None:
+        plt.plot(np.array(list(range(len(exact_results[:, 1])))), exact_results[:, 1], color="black", label="exact")
+        plt.errorbar(simulation_results[:, 0], simulation_results[:, 1], yerr=simulation_results[:, 2], label="simulated")
         plt.title("score=10^" + str(score) + " gates")
         plt.xlabel("Trotter step")
         plt.ylabel("Imbalance")
         plt.legend()
-        store_dir = kwargs["store_dir"]
         plt.savefig(f"{store_dir}/simulation_plot.pdf")
         plt.close()
 
-        return score, end_time_measurement(start)
-
     def save(self, path, iter_count) -> None:
         """
-        This method is required to implement the application, but should not be used
+        This method is required to implement the application, but at the moment it does nothing
         """
-        raise NotImplementedError("Save functionality is not implemented for FreeFermion")
+        pass

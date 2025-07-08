@@ -1,9 +1,11 @@
 import numpy as np
+import logging
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 from scipy.stats import chi2
 from scipy.optimize import fsolve
 
+logger = logging.getLogger()
 
 def createCouplings(Lx, Ly) -> tuple:  # returns a list of couplings and a list of faces
     L = Lx * Ly
@@ -213,6 +215,7 @@ def trotter_step(U, dt: float, Lx: int, E: list):
 
 
 def create_circuit(Lx: int, Ly: int, dt: float, Ntrot: int) -> np.array:
+    logger.info(f"Creating simulation circuit for {Ntrot} trotter steps")
     E, F = createCouplings(Lx, Ly)
     U = QuantumCircuit(Lx * Ly * 3 // 2)
     state_preparation(U, Lx, Ly)
@@ -225,14 +228,17 @@ def create_circuit(Lx: int, Ly: int, dt: float, Ntrot: int) -> np.array:
     return U
 
 
-def exact_values(Ntrot: int, dt: float, Lx: int, Ly: int):
-    exactList: list = []
+def exact_values(Ntrot: int, dt: float, Lx: int, Ly: int) -> list[float]:
+    exactList: list[float] = []
     for u in range(Ntrot):
-        exactList.append([u, (
-            exactTrotter(dt, u, 0, 0., Lx, Ly) + exactTrotter(dt, u, 0.5, 0.5, Lx, Ly) + exactTrotter(dt, u, 0,
-                                                                                                      0.5, Lx,
-                                                                                                      Ly) + exactTrotter(
-                dt, u, 0.5, 0, Lx, Ly)) / 4])
+        logger.info(f"Calculating exact value for {u} trotter steps")
+        exactList.append([
+            u,
+            (exactTrotter(dt, u, 0, 0., Lx, Ly)
+             + exactTrotter(dt, u, 0.5, 0.5, Lx, Ly)
+             + exactTrotter(dt, u, 0,0.5, Lx, Ly)
+             + exactTrotter(dt, u, 0.5, 0, Lx, Ly)) / 4]
+        )
     return exactList
 
 
@@ -262,3 +268,30 @@ def score_minimal_mean(delta: np.array, var: np.array,
     res = res / 1000
     var2 = np.sqrt(var2 / 1000 - res ** 2)
     return res, var2
+
+def extract_simulation_results(
+        lx: int, ly: int, n_shots: int,
+        counts_per_circuit: list[dict[str, int]]
+) -> list[tuple[int, float, float]]:
+    l_tot = lx * ly
+    results = []
+    for n, counts in enumerate(counts_per_circuit):
+        res: float = 0
+        var: float = 0
+        for s in counts:
+            a: float = 0
+            for j in range(l_tot // 2):
+                if s[l_tot * 3 // 2 - 1 - j] == '1':
+                    a += -1 / l_tot
+                else:
+                    a += 1 / l_tot
+                if s[l_tot * 3 // 2 - 1 - j - l_tot // 2] == '1':
+                    a += 1 / l_tot
+                else:
+                    a += -1 / l_tot
+            res += a * counts[s]
+            var += a ** 2 * counts[s]
+        res = res / n_shots
+        var = var / n_shots
+        results.append((n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)))
+    return results

@@ -1,13 +1,15 @@
 from typing import TypedDict
+import logging
 
 from qiskit_aer import AerSimulator as QiskitAS
+from qiskit import QuantumCircuit
 
 from src.modules.applications.simulation.backends.backend_input import BackendInput
 from src.modules.core import Core
 from src.modules.applications.simulation.backends.backend_result import BackendResult
 from src.utils import start_time_measurement, end_time_measurement
 
-
+logger = logging.getLogger()
 class AerSimulator(Core):
 
     def __init__(self):
@@ -68,9 +70,25 @@ class AerSimulator(Core):
         start = start_time_measurement()
         backend = QiskitAS()
         circuits = input_data.circuits
-        counts = [backend.run(circuit, shots=config['n_shots']).result().get_counts(circuit) for circuit in circuits]
+        self.warn_on_large_circuits(circuits)
+
+        counts_per_circuit = []
+        for n, circuit in enumerate(circuits):
+            logger.info(f"Running circuit for {n} Trotter steps on AerSimulator")
+            counts_per_circuit.append(backend.run(circuit, shots=config['n_shots']).result().get_counts(circuit))
+
         results = BackendResult(
-            counts=counts,
+            counts=counts_per_circuit,
             n_shots=config['n_shots']
         )
         return results, end_time_measurement(start)
+
+
+    @staticmethod
+    def warn_on_large_circuits(circuits: list[QuantumCircuit]) -> None:
+        warning_n_qubits = 30
+        max_n_qubit = max([circuit.num_qubits for circuit in circuits])
+        if max_n_qubit > warning_n_qubits:
+            logger.warning(f"Simulating circuits with over {warning_n_qubits} qubits. The high memory"
+                           f" requirements can lead to memory errors on some systems.")
+

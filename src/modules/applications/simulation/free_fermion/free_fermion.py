@@ -7,8 +7,12 @@ import numpy as np
 from src.modules.applications.simulation.backends.aer_simulator import AerSimulator
 from src.modules.applications.simulation.backends.backend_input import BackendInput
 from src.modules.applications.simulation.backends.backend_result import BackendResult
-from src.modules.applications.simulation.free_fermion.free_fermion_helpers import create_circuit, exact_values, \
-    score_minimal_mean, extract_simulation_results
+from src.modules.applications.simulation.free_fermion.free_fermion_helpers import (
+    create_circuit,
+    exact_values_and_variance,
+    computes_score_values,
+    extract_simulation_results
+)
 from src.modules.applications.simulation.simulation import Simulation
 from src.utils import start_time_measurement, end_time_measurement
 
@@ -36,6 +40,7 @@ class FreeFermion(Simulation):
             {"name": "numpy", "version": "1.26.4"},
             {"name": "matplotlib", "version": "3.9.3"},
             {"name": "qiskit_aer", "version": "0.15.1"},
+            {"name": "scipy", "version": "1.12.0"},
         ]
 
     def get_default_submodule(self, option: str) -> Union[AerSimulator]:
@@ -56,23 +61,32 @@ class FreeFermion(Simulation):
         Returns the parameter options for the application.
         """
         return {
-            "L": {
+            "Lx": {
                 "values": [2, 4, 6],
-                "description": "What lattice size (L x L) to use for the simulation?",
+                "description": "What lattice width Lx to use for the simulation? Must be even integer",
+                "custom_input": True,
+                "allow_ranges": False,
+                "postproc": int
+            },
+            "Ly": {
+                "values": [2, 4, 6],
+                "description": "What lattice height Ly to use for the simulation? Must be even integer",
+                "custom_input": True,
                 "allow_ranges": False,
                 "postproc": int
             },
             "trotter_dt": {
-                "values": [0.2, 0.4, 0.6],
+                "values": [0.2],
                 "description": "Which time step size?",
+                "custom_input": True,
                 "allow_ranges": False,
                 "postproc": float
             },
             "trotter_n_step": {
-                "values": ["1L", "2L"],
-                "description": "Number of time steps (in multiples of L value)?",
+                "values": ["2*Ly"],
+                "description": "Number of time steps (default is twice Ly value)? Provide total number of steps as integer if using custom value",
+                "custom_input": True,
                 "allow_ranges": False,
-                "postproc": str
             },
         }
 
@@ -80,9 +94,10 @@ class FreeFermion(Simulation):
         """
         A configuration dictionary for the application.
         """
-        L: int
+        Lx: int
+        Ly: int
         trotter_dt: float
-        trotter_n_step: str
+        trotter_n_step: str | int
 
     def preprocess(self, input_data: any, conf: Config, **kwargs) -> tuple[BackendInput, float]:
         """
@@ -93,14 +108,21 @@ class FreeFermion(Simulation):
         :return: A tuple containing the preprocessed output and the time taken for preprocessing
         """
         start = start_time_measurement()
-        lattice_size = conf['L']
-        trotter_n_step = int(conf['trotter_n_step'][:-1]) * lattice_size
+        lx = conf['Lx']
+        ly = conf['Ly']
+        if lx % 2 == 1:
+            raise ValueError(f"Lx must be even. Provided Lx: {lx}")
+        if ly % 2 == 1:
+            raise ValueError(f"Ly must be even. Provided Ly: {ly}")
+        trotter_n_step = conf['trotter_n_step']
+        if isinstance(trotter_n_step, str):
+            trotter_n_step = 2*ly
         trotter_dt = conf['trotter_dt']
-        n_qubits = lattice_size * lattice_size * 3 // 2
+        n_qubits = ly * lx * 3 // 2
         logger.info(
-            f"Starting free fermion simulation benchmark on a {lattice_size}x{lattice_size} lattice ({n_qubits} qubits)")
+            f"Starting free fermion simulation benchmark on a {lx}x{ly} lattice ({n_qubits} qubits)")
         logger.info(f"Using a trotter step size of {trotter_dt} and up to {trotter_n_step} trotter steps")
-        circuits = [create_circuit(lattice_size, lattice_size, trotter_dt, n) for n in range(trotter_n_step)]
+        circuits = [create_circuit(lx, ly, trotter_dt, n) for n in range(trotter_n_step)]
         return BackendInput(circuits), end_time_measurement(start)
 
     def postprocess(self, input_data: BackendResult, conf: Config, **kwargs) -> tuple[any, float]:
@@ -114,34 +136,36 @@ class FreeFermion(Simulation):
 
         start = start_time_measurement()
         counts_per_circuit, n_shots = input_data.counts, input_data.n_shots
-        lx, ly, trotter_dt = conf['L'], conf['L'], conf['trotter_dt']
-        trotter_n_step = int(conf['trotter_n_step'][:-1]) * lx
+        lx, ly, trotter_dt = conf['Lx'], conf['Ly'], conf['trotter_dt']
+        trotter_n_step = conf['trotter_n_step']
+        if isinstance(trotter_n_step, str):
+            trotter_n_step = 2*ly
 
-        simulation_results = np.array(extract_simulation_results(lx, ly, n_shots, counts_per_circuit))
-        exact_results = np.real(np.array(exact_values(trotter_n_step, trotter_dt, lx, ly)))
-        score, score_variance = score_minimal_mean(
-            exact_results[:, 1] - simulation_results[:, 1],
-            simulation_results[:, 2],
-            lx * ly
-        )
-        logger.info(f"Benchmark score: {score}")
-        logger.info(f"Score variance: {score_variance}")
+        simulation_results = np.array(extract_simulation_results(trotter_dt, lx, ly, n_shots, counts_per_circuit))
+        exact_results = np.real(np.array(exact_values_and_variance(trotter_n_step, trotter_dt, lx, ly)))
+        score_gate, score_shot, score_runtime = computes_score_values(exact_results[:, 1] - simulation_results[:, 1], simulation_results[:, 2],
+                                                      exact_results[:, 2], lx * ly)
+        logger.info(f"Benchmark score (number of gates): {score_gate}")
+        logger.info(f"Benchmark score (number of shots): {score_shot}")
+        logger.info(f"Benchmark score (number of trotter steps): {score_runtime}")
         self.metrics.add_metric_batch({
-            "application_score_value": score,
-            "application_score_variance": score_variance,
+            "application_score_value": score_gate,
+            "application_score_value_gates": score_gate,
+            "application_score_value_shots": score_shot,
+            "application_score_value_trotter_steps": score_runtime,
             "application_score_unit": "N_gates",
-            "application_score_type": "float"
+            "application_score_type": "int"
         })
-        self.create_and_store_plot(simulation_results, exact_results, score, kwargs["store_dir"])
-        return score, end_time_measurement(start)
+        self.create_and_store_plot(trotter_n_step, trotter_dt, simulation_results, exact_results, score_gate, kwargs["store_dir"])
+        return computes_score_values, end_time_measurement(start)
 
     @staticmethod
-    def create_and_store_plot(simulation_results, exact_results, score: int, store_dir) -> None:
-        plt.plot(np.array(list(range(len(exact_results[:, 1])))), exact_results[:, 1], color="black", label="exact")
+    def create_and_store_plot(n_trot: int, dt: float, simulation_results, exact_results, score_gates: int, store_dir) -> None:
+        plt.plot(np.array(list(range(n_trot)))*dt, exact_results[:, 1], color="black", label="exact")
         plt.errorbar(simulation_results[:, 0], simulation_results[:, 1],
                      yerr=simulation_results[:, 2], label="simulated")
-        plt.title("score=10^" + str(score) + " gates")
-        plt.xlabel("Trotter step")
+        plt.title("SCORE = " + str(score_gates) + " gates")
+        plt.xlabel("Time")
         plt.ylabel("Imbalance")
         plt.legend()
         plt.savefig(f"{store_dir}/simulation_plot.pdf")

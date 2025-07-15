@@ -75,8 +75,9 @@ class AerSimulator(Core):
         self.warn_on_large_circuits(circuits)
 
         counts_per_circuit = []
+        logger.info(f"Running circuits on AerSimulator")
         for n, circuit in enumerate(circuits):
-            logger.info(f"Running circuit for {n} Trotter steps on AerSimulator")
+            logger.info(f"Running circuit for {n} Trotter steps")
             counts_per_circuit.append(backend.run(circuit, shots=config['n_shots']).result().get_counts(circuit))
 
         results = BackendResult(

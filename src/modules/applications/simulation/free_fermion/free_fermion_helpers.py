@@ -13,6 +13,7 @@ def coordinates(x: int, y: int, lx: int, ly: int) -> int:
     """Coordinate of site (x, y)"""
     return (x % lx) + (y % ly) * lx
 
+
 def create_couplings(lx, ly) -> tuple[list[list[int]], list[list[int]]]:
     """Create the list of couplings and faces"""
 
@@ -38,9 +39,9 @@ def create_couplings(lx, ly) -> tuple[list[list[int]], list[list[int]]]:
         f1 = l_tot + f  # ancilla on left
         f2 = l_tot + (f // (lx // 2)) * (lx // 2) + ((f + 1) % (lx // 2))  # ancilla on right
         f3 = l_tot + ((f // (lx // 2) + 1) % ly) * (lx // 2) + (
-           (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla above
+            (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla above
         f4 = l_tot + ((f // (lx // 2) - 1) % ly) * (lx // 2) + (
-           (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla below
+            (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla below
         f5 = (((2 * f) % lx) + 1 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom left
         f6 = (((2 * f) % lx) + 2 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom right
         f7 = (((f5 + lx) // lx) % ly) * lx + (f5 % lx)  # site top left
@@ -66,7 +67,6 @@ class FreeFermionSolver:
             if bound_vert == 1 and abs_jk >= lx:
                 self.sig *= -1
 
-
     def dC(self, C: np.array, D: np.array):  # derivative of evolution of C=<c_i^\dagger c_j>
         deriv: np.array = np.zeros((self.N, self.N)) * 1j
         deriv[self.j, :] += 1j * (C[self.k, :] - self.s * D[self.k, :]) * self.sig
@@ -89,12 +89,15 @@ class FreeFermionSolver:
         """Function to pass to solve_ivp"""
         Call: np.array = Cvec.reshape((2 * self.N, self.N))
         return (np.concatenate((self.dC(Call[:self.N], Call[self.N:]),
-             self.dD(Call[:self.N], Call[self.N:])))).reshape(2 * self.N ** 2)
+                                self.dD(Call[:self.N], Call[self.N:])))).reshape(2 * self.N ** 2)
+
 
 def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
     L = lx * ly
     N = 2 * L
-    res: np.array = np.zeros((n_trot, 3))  # index 0: number of steps; index 1: expectation value of imbalance; index 2: expectation value of square of imbalance
+    # index 0: number of steps; index 1: expectation value of imbalance; index
+    # 2: expectation value of square of imbalance
+    res: np.array = np.zeros((n_trot, 3))
 
     for bb in [[0, 0], [0, 1], [1, 0], [1, 1]]:  # loops over the 4 boundary conditions
         boundary_vert = bb[0]
@@ -109,7 +112,8 @@ def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
         res[0, 1] += -1
         res[0, 2] += 1
 
-        order = [[1, 0, 1], [1, 0, -1], [0, 1, 1], [0, 1, -1]]  # applies horzontal XX, horizontal YY, vertical XX, vertical YY
+        # applies horzontal XX, horizontal YY, vertical XX, vertical YY
+        order = [[1, 0, 1], [1, 0, -1], [0, 1, 1], [0, 1, -1]]
         f: list = [1 / L] * (L // 2) + [-1 / L] * (L // 2)  # observable in Eq10-11
         for t in range(n_trot - 1):  # loop over Trotter steps
             for o in order:  # loop over the 4 edges configurations
@@ -135,6 +139,7 @@ def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
     res = res / 4
     res[:, 2] = np.sqrt(res[:, 2] - res[:, 1] ** 2)  # standard deviation per shot
     return res
+
 
 def state_preparation(U, Lx: int, Ly: int):
     L = Lx * Ly
@@ -253,7 +258,7 @@ def extract_simulation_results(
             var += a ** 2 * counts[s]
         res = res / n_shots
         var = var / n_shots
-        results.append((dt*n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)))
+        results.append((dt * n, res, np.sqrt(var - res ** 2) / np.sqrt(n_shots)))
     return results
 
 
@@ -278,10 +283,11 @@ def computes_score_values(delta: np.array, std_exp: np.array, std: np.array, L: 
         if (temp > rewards):
             rewards = temp
             opt = j
-    ff = lambda x: chi2.cdf(delta_corrected[opt] ** 2 * x, df=n - 1) - 0.997
+
+    def ff(x): return chi2.cdf(delta_corrected[opt] ** 2 * x, df=n - 1) - 0.997
     x: float = fsolve(ff, n / delta_corrected[opt] ** 2)[
         0]  # looks for x such that chi2.cdf(delta[opt]**2*x*L,df=1)=0.997
 
     return (6 * int(np.floor(x) + 1) * (opt + 1) * L,
             int(np.floor(x) + 1),
-            int(np.floor(x) + 1) * ( opt + 1))
+            int(np.floor(x) + 1) * (opt + 1))

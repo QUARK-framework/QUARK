@@ -116,7 +116,7 @@ class FreeFermion(Simulation):
             raise ValueError(f"Ly must be even. Provided Ly: {ly}")
         trotter_n_step = conf['trotter_n_step']
         if isinstance(trotter_n_step, str):
-            trotter_n_step = 2*ly
+            trotter_n_step = 2 * ly
         trotter_dt = conf['trotter_dt']
         n_qubits = ly * lx * 3 // 2
         logger.info(
@@ -139,12 +139,12 @@ class FreeFermion(Simulation):
         lx, ly, trotter_dt = conf['Lx'], conf['Ly'], conf['trotter_dt']
         trotter_n_step = conf['trotter_n_step']
         if isinstance(trotter_n_step, str):
-            trotter_n_step = 2*ly
+            trotter_n_step = 2 * ly
 
         simulation_results = np.array(extract_simulation_results(trotter_dt, lx, ly, n_shots, counts_per_circuit))
         exact_results = np.real(np.array(exact_values_and_variance(trotter_n_step, trotter_dt, lx, ly)))
         score_gate, score_shot, score_runtime = computes_score_values(exact_results[:, 1] - simulation_results[:, 1], simulation_results[:, 2],
-                                                      exact_results[:, 2], lx * ly)
+                                                                      exact_results[:, 2], lx * ly)
         logger.info(f"Benchmark score (number of gates): {score_gate}")
         logger.info(f"Benchmark score (number of shots): {score_shot}")
         logger.info(f"Benchmark score (number of trotter steps): {score_runtime}")
@@ -156,12 +156,19 @@ class FreeFermion(Simulation):
             "application_score_unit": "N_gates",
             "application_score_type": "int"
         })
-        self.create_and_store_plot(trotter_n_step, trotter_dt, simulation_results, exact_results, score_gate, kwargs["store_dir"])
+        self.create_and_store_plot(
+            trotter_n_step,
+            trotter_dt,
+            simulation_results,
+            exact_results,
+            score_gate,
+            kwargs["store_dir"])
         return computes_score_values, end_time_measurement(start)
 
     @staticmethod
-    def create_and_store_plot(n_trot: int, dt: float, simulation_results, exact_results, score_gates: int, store_dir) -> None:
-        plt.plot(np.array(list(range(n_trot)))*dt, exact_results[:, 1], color="black", label="exact")
+    def create_and_store_plot(n_trot: int, dt: float, simulation_results,
+                              exact_results, score_gates: int, store_dir) -> None:
+        plt.plot(np.array(list(range(n_trot))) * dt, exact_results[:, 1], color="black", label="exact")
         plt.errorbar(simulation_results[:, 0], simulation_results[:, 1],
                      yerr=simulation_results[:, 2], label="simulated")
         plt.title("SCORE = " + str(score_gates) + " gates")

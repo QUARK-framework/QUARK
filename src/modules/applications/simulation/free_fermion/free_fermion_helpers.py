@@ -14,8 +14,8 @@ def coordinates(x: int, y: int, lx: int, ly: int) -> int:
     return (x % lx) + (y % ly) * lx
 
 
-def create_couplings(lx, ly) -> list[list[int]]: # , list[list[int]]]:
-    """Creates the list of couplings""" # and faces
+def create_couplings(lx, ly) -> list[list[int]]:  # , list[list[int]]]:
+    """Creates the list of couplings"""  # and faces
 
     l_tot = lx * ly
     couplings_e: list[list[int]] = []
@@ -176,10 +176,10 @@ def state_preparation(u, lx: int, ly: int):
 
 
 def trotter_step(u, dt: float, lx: int, e: list):
-    for ind2 in [1,0]:
+    for ind2 in [1, 0]:
         # ind2=0 does vertical edges, and ind2=1 does horizontal edges.
         # Implements the difference horizontal/vertical in Eq7
-        for ind in [0,1]:
+        for ind in [0, 1]:
             # ind=0 implements XX on even rows/columns and YY on odd rows/columns.
             # ind=1 implements the other way around. Implements the difference 1/2 in Eq7
             for c in e:  # loops over all edges
@@ -230,7 +230,7 @@ def create_circuit(lx: int, ly: int, dt: float, n_trot: int) -> np.array:
     return u
 
 
-def extract_simulation_results(dt: float, lx: int, ly: int, n_shots: int,counts_per_circuit: list[dict[str, int]]) \
+def extract_simulation_results(dt: float, lx: int, ly: int, n_shots: int, counts_per_circuit: list[dict[str, int]]) \
         -> list[tuple[float, float, float]]:
     """Returns the simulation results.
 

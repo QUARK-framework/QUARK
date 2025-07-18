@@ -52,7 +52,8 @@ class Installer:
              "module": "modules.applications.qml.generative_modeling.generative_modeling"},
             {"name": "Classification", "class": "Classification",
              "module": "modules.applications.qml.classification.classification"},
-            {"name": "FreeFermion", "class": "FreeFermion", "module": "modules.applications.simulation.free_fermion.free_fermion"},
+            {"name": "FreeFermion", "class": "FreeFermion",
+             "module": "modules.applications.simulation.free_fermion.free_fermion"},
 
         ]
 

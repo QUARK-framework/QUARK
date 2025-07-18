@@ -63,14 +63,14 @@ class FreeFermion(Simulation):
         return {
             "Lx": {
                 "values": [2, 4, 6],
-                "description": "What lattice width Lx to use for the simulation? Must be even integer",
+                "description": "What lattice width Lx to use for the simulation? Must be even integer.",
                 "custom_input": True,
                 "allow_ranges": False,
                 "postproc": int
             },
             "Ly": {
                 "values": [2, 4, 6],
-                "description": "What lattice height Ly to use for the simulation? Must be even integer",
+                "description": "What lattice height Ly to use for the simulation? Must be even integer.",
                 "custom_input": True,
                 "allow_ranges": False,
                 "postproc": int
@@ -84,7 +84,8 @@ class FreeFermion(Simulation):
             },
             "trotter_n_step": {
                 "values": ["2*Ly"],
-                "description": "Number of time steps (default is twice Ly value)? Provide total number of steps as integer if using custom value",
+                "description": "Number of time steps (default is twice Ly value)? Provide total number of steps as "
+                               "integer if using custom value.",
                 "custom_input": True,
                 "allow_ranges": False,
             },
@@ -110,10 +111,10 @@ class FreeFermion(Simulation):
         start = start_time_measurement()
         lx = conf['Lx']
         ly = conf['Ly']
-        if lx % 2 == 1:
-            raise ValueError(f"Lx must be even. Provided Lx: {lx}")
-        if ly % 2 == 1:
-            raise ValueError(f"Ly must be even. Provided Ly: {ly}")
+        if lx % 2 != 0:
+            raise ValueError(f"Lx must be an even integer. Provided Lx: {lx}")
+        if ly % 2 != 0:
+            raise ValueError(f"Ly must be an even integer. Provided Ly: {ly}")
         trotter_n_step = conf['trotter_n_step']
         if isinstance(trotter_n_step, str):
             trotter_n_step = 2 * ly
@@ -143,7 +144,8 @@ class FreeFermion(Simulation):
 
         simulation_results = np.array(extract_simulation_results(trotter_dt, lx, ly, n_shots, counts_per_circuit))
         exact_results = np.real(np.array(exact_values_and_variance(trotter_n_step, trotter_dt, lx, ly)))
-        score_gate, score_shot, score_runtime = computes_score_values(exact_results[:, 1] - simulation_results[:, 1], simulation_results[:, 2],
+        score_gate, score_shot, score_runtime = computes_score_values(exact_results[:, 1] - simulation_results[:, 1],
+                                                                      simulation_results[:, 2],
                                                                       exact_results[:, 2], lx * ly)
         logger.info(f"Benchmark score (number of gates): {score_gate}")
         logger.info(f"Benchmark score (number of shots): {score_shot}")
@@ -180,6 +182,6 @@ class FreeFermion(Simulation):
 
     def save(self, path, iter_count) -> None:
         """
-        This method is required to implement the application, but at the moment it does nothing
+        This method is required to implement the application, but at the moment it does nothing.
         """
         pass

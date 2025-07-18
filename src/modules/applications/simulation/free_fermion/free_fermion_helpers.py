@@ -14,11 +14,11 @@ def coordinates(x: int, y: int, lx: int, ly: int) -> int:
     return (x % lx) + (y % ly) * lx
 
 
-def create_couplings(lx, ly) -> tuple[list[list[int]], list[list[int]]]:
-    """Create the list of couplings and faces"""
+def create_couplings(lx, ly) -> list[list[int]]: # , list[list[int]]]:
+    """Creates the list of couplings""" # and faces
 
     l_tot = lx * ly
-    couplings_E: list[list[int]] = []
+    couplings_e: list[list[int]] = []
     for j in range(l_tot):
         # runs through all the lattice sites. j//Lx is the vertical coordinate
         # (<Ly) and j%Lx the horizontal coordinate (<Lx)
@@ -27,38 +27,38 @@ def create_couplings(lx, ly) -> tuple[list[list[int]], list[list[int]]]:
         k_horizontal = (j // lx) * lx + ((j % lx) + 1) % lx
         v_horizontal = j // 2 if j_test else (j // 2 - lx // 2) % (l_tot // 2)
         w_horizontal = 1
-        couplings_E.append([j, k_horizontal, l_tot + v_horizontal, w_horizontal])
+        couplings_e.append([j, k_horizontal, l_tot + v_horizontal, w_horizontal])
         # k +1 in vertical coordinate
         k_vertical = (((j // lx) + 1) % ly) * lx + j % lx
         v_vertical = j // 2 if j_test else ((j // lx) * lx + ((j % lx) - 1) % lx) // 2
         w_vertical = 0
-        couplings_E.append([j, k_vertical, l_tot + v_vertical, w_vertical])
+        couplings_e.append([j, k_vertical, l_tot + v_vertical, w_vertical])
 
-    faces_F: list[list[int]] = []
-    for f in range(l_tot // 2):  # runs through all the faces of the lattice without ancillas
-        f1 = l_tot + f  # ancilla on left
-        f2 = l_tot + (f // (lx // 2)) * (lx // 2) + ((f + 1) % (lx // 2))  # ancilla on right
-        f3 = l_tot + ((f // (lx // 2) + 1) % ly) * (lx // 2) + (
-            (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla above
-        f4 = l_tot + ((f // (lx // 2) - 1) % ly) * (lx // 2) + (
-            (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla below
-        f5 = (((2 * f) % lx) + 1 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom left
-        f6 = (((2 * f) % lx) + 2 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom right
-        f7 = (((f5 + lx) // lx) % ly) * lx + (f5 % lx)  # site top left
-        f8 = (((f6 + lx) // lx) % ly) * lx + (f6 % lx)  # site top right
-        faces_F.append([f1, f2, f3, f4, f5, f6, f7, f8])
+    # faces_F: list[list[int]] = []
+    # for f in range(l_tot // 2):  # runs through all the faces of the lattice without ancillas
+    #     f1 = l_tot + f  # ancilla on left
+    #     f2 = l_tot + (f // (lx // 2)) * (lx // 2) + ((f + 1) % (lx // 2))  # ancilla on right
+    #     f3 = l_tot + ((f // (lx // 2) + 1) % ly) * (lx // 2) + (
+    #         (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla above
+    #     f4 = l_tot + ((f // (lx // 2) - 1) % ly) * (lx // 2) + (
+    #         (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla below
+    #     f5 = (((2 * f) % lx) + 1 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom left
+    #     f6 = (((2 * f) % lx) + 2 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom right
+    #     f7 = (((f5 + lx) // lx) % ly) * lx + (f5 % lx)  # site top left
+    #     f8 = (((f6 + lx) // lx) % ly) * lx + (f6 % lx)  # site top right
+    #     faces_F.append([f1, f2, f3, f4, f5, f6, f7, f8])
 
-    return couplings_E, faces_F
+    return couplings_e
 
 
 class FreeFermionSolver:
-    def __init__(self, j, k, s, lx, ly, bound_hor, bound_vert, N):
+    def __init__(self, j, k, s, lx, ly, bound_hor, bound_vert, n):
         self.j = j
         self.k = k
         self.s = s
         self.lx = lx
         self.ly = ly
-        self.N = N
+        self.n = n
         self.sig = 1
         if j < k:
             abs_jk = abs(j - k)
@@ -67,34 +67,34 @@ class FreeFermionSolver:
             if bound_vert == 1 and abs_jk >= lx:
                 self.sig *= -1
 
-    def dC(self, C: np.array, D: np.array):  # derivative of evolution of C=<c_i^\dagger c_j>
-        deriv: np.array = np.zeros((self.N, self.N)) * 1j
-        deriv[self.j, :] += 1j * (C[self.k, :] - self.s * D[self.k, :]) * self.sig
-        deriv[self.k, :] += 1j * (C[self.j, :] + self.s * D[self.j, :]) * self.sig
-        deriv[:, self.j] += 1j * (-C[:, self.k] + self.s * np.conj(D[self.k, :])) * self.sig
-        deriv[:, self.k] += 1j * (-C[:, self.j] - self.s * np.conj(D[self.j, :])) * self.sig
+    def dc(self, c: np.array, d: np.array):  # derivative of evolution of c=<c_i^\dagger c_j>
+        deriv: np.array = np.zeros((self.n, self.n)) * 1j
+        deriv[self.j, :] += 1j * (c[self.k, :] - self.s * d[self.k, :]) * self.sig
+        deriv[self.k, :] += 1j * (c[self.j, :] + self.s * d[self.j, :]) * self.sig
+        deriv[:, self.j] += 1j * (-c[:, self.k] + self.s * np.conj(d[self.k, :])) * self.sig
+        deriv[:, self.k] += 1j * (-c[:, self.j] - self.s * np.conj(d[self.j, :])) * self.sig
         return deriv
 
-    def dD(self, C: np.array, D: np.array) -> np.array:  # derivative of evolution of D=<c_i c_j>
-        deriv: np.array = np.zeros((self.N, self.N)) * 1j
-        deriv[self.j, :] += 1j * (-D[self.k, :] + self.s * C[self.k, :]) * self.sig
-        deriv[self.k, :] += 1j * (-D[self.j, :] - self.s * C[self.j, :]) * self.sig
-        deriv[:, self.j] += 1j * (-D[:, self.k] - self.s * C[self.k, :]) * self.sig
+    def dd(self, c: np.array, d: np.array) -> np.array:  # derivative of evolution of D=<c_i c_j>
+        deriv: np.array = np.zeros((self.n, self.n)) * 1j
+        deriv[self.j, :] += 1j * (-d[self.k, :] + self.s * c[self.k, :]) * self.sig
+        deriv[self.k, :] += 1j * (-d[self.j, :] - self.s * c[self.j, :]) * self.sig
+        deriv[:, self.j] += 1j * (-d[:, self.k] - self.s * c[self.k, :]) * self.sig
         deriv[self.k, self.j] += 1j * self.s * self.sig
-        deriv[:, self.k] += 1j * (-D[:, self.j] + self.s * C[self.j, :]) * self.sig
+        deriv[:, self.k] += 1j * (-d[:, self.j] + self.s * c[self.j, :]) * self.sig
         deriv[self.j, self.k] += -1j * self.s * self.sig
         return deriv
 
-    def diff(self, t: float, Cvec: np.array):  # function to call for the differential equation
+    def diff(self, t: float, cvec: np.array):  # function to call for the differential equation
         """Function to pass to solve_ivp"""
-        Call: np.array = Cvec.reshape((2 * self.N, self.N))
-        return (np.concatenate((self.dC(Call[:self.N], Call[self.N:]),
-                                self.dD(Call[:self.N], Call[self.N:])))).reshape(2 * self.N ** 2)
+        call: np.array = cvec.reshape((2 * self.n, self.n))
+        return (np.concatenate((self.dc(call[:self.n], call[self.n:]),
+                                self.dd(call[:self.n], call[self.n:])))).reshape(2 * self.n ** 2)
 
 
 def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
-    L = lx * ly
-    N = 2 * L
+    l = lx * ly
+    n = 2 * l
     # index 0: number of steps; index 1: expectation value of imbalance; index
     # 2: expectation value of square of imbalance
     res: np.array = np.zeros((n_trot, 3))
@@ -103,18 +103,18 @@ def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
         boundary_vert = bb[0]
         boundary_hor = bb[1]
 
-        C: np.array = np.zeros((N, N)) * 1j
-        D: np.array = np.zeros((N, N)) * 1j
+        c: np.array = np.zeros((n, n)) * 1j
+        d: np.array = np.zeros((n, n)) * 1j
 
-        for j in range(L // 2):  # initialize in the product state
-            C[j, j] = 1
+        for j in range(l // 2):  # initialize in the product state
+            c[j, j] = 1
 
         res[0, 1] += -1
         res[0, 2] += 1
 
-        # applies horzontal XX, horizontal YY, vertical XX, vertical YY
+        # applies horizontal XX, horizontal YY, vertical XX, vertical YY
         order = [[1, 0, 1], [1, 0, -1], [0, 1, 1], [0, 1, -1]]
-        f: list = [1 / L] * (L // 2) + [-1 / L] * (L // 2)  # observable in Eq10-11
+        f: list = [1 / l] * (l // 2) + [-1 / l] * (l // 2)  # observable in Eq10-11
         for t in range(n_trot - 1):  # loop over Trotter steps
             for o in order:  # loop over the 4 edges configurations
                 for k in range(ly):  # loop over vertical coordinate
@@ -122,16 +122,16 @@ def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
                         jcur = coordinates(j, k, lx, ly)
                         kcur = coordinates(j + o[0], k + o[1], lx, ly)
                         scur = o[2]
-                        solver = FreeFermionSolver(jcur, kcur, scur, lx, ly, boundary_hor, boundary_vert, N)
-                        Cc: np.array = (solve_ivp(solver.diff, [0, dt / 2], np.concatenate((C, D)).reshape(2 * N ** 2),
-                                                  atol=1e-9, rtol=1e-9).y)[:, -1].reshape((2 * N, N))
-                        C = Cc[:N]
-                        D = Cc[N:]
-            a: float = np.sum([f[j] * (1 - 2 * C[j, j]) for j in range(L)])
-            var: float = 4 * np.sum([f[i] * f[j] * C[i, i] * C[j, j] for i in range(L) for j in range(L)])
-            var += -4 * np.sum([f[i] * f[j] * C[i, j] * C[j, i] for i in range(L) for j in range(L)])
-            var += 4 * np.sum([f[i] ** 2 * C[i, i] for i in range(L)])
-            var += 4 * np.sum([f[i] * f[j] * abs(D[i, j]) ** 2 for i in range(L) for j in range(L)])
+                        solver = FreeFermionSolver(jcur, kcur, scur, lx, ly, boundary_hor, boundary_vert, n)
+                        cc: np.array = (solve_ivp(solver.diff, [0, dt / 2], np.concatenate((c, d)).reshape(2 * n ** 2),
+                                                  atol=1e-9, rtol=1e-9).y)[:, -1].reshape((2 * n, n))
+                        c = cc[:n]
+                        d = cc[n:]
+            a: float = np.sum([f[j] * (1 - 2 * c[j, j]) for j in range(l)])
+            var: float = 4 * np.sum([f[i] * f[j] * c[i, i] * c[j, j] for i in range(l) for j in range(l)])
+            var += -4 * np.sum([f[i] * f[j] * c[i, j] * c[j, i] for i in range(l) for j in range(l)])
+            var += 4 * np.sum([f[i] ** 2 * c[i, i] for i in range(l)])
+            var += 4 * np.sum([f[i] * f[j] * abs(d[i, j]) ** 2 for i in range(l) for j in range(l)])
             res[t + 1, 0] += t + 1
             res[t + 1, 1] += np.real(a)
             res[t + 1, 2] += np.real(var)
@@ -141,102 +141,100 @@ def exact_values_and_variance(n_trot: int, dt: float, lx: int, ly: int):
     return res
 
 
-def state_preparation(U, Lx: int, Ly: int):
-    L = Lx * Ly
+def state_preparation(u, lx: int, ly: int):
+    l = lx * ly
 
-    for j in range(L // 2 - 2 * (Lx // 2)):  # toric code ground state preparation on the ancillas
-        if ((j // (Lx // 2)) % 2 == 0):
-            k = L // 2 - 2 * (Lx // 2) - j - 1
-            f1 = L + (k % (L // 2))
-            f2 = L + ((k // (Lx // 2)) + 1) * Lx // 2 + (k % (Lx // 2))
-            f3 = L + ((k // (Lx // 2)) + 1) * Lx // 2 + (((k % (Lx // 2)) + 1) % (Lx // 2))
-            f4 = L + ((k // (Lx // 2)) + 2) * Lx // 2 + (k % (Lx // 2))
-            U.h(f1)
-            U.cx(f1, f2)
-            U.cx(f1, f3)
-            U.cx(f1, f4)
-    for j in range(Lx // 2 - 1):
-        k = Lx // 2 - 2 - j
-        f1 = L + k
-        f2 = L + ((k // (Lx // 2)) + 1) * Lx // 2 + (k % (Lx // 2))
-        f3 = L + ((k // (Lx // 2)) + 0) * Lx // 2 + (((k % (Lx // 2)) + 1) % (Lx // 2))
-        f4 = L + (((k // (Lx // 2)) - 1) % Ly) * Lx // 2 + (k % (Lx // 2))
-        U.h(f1)
-        U.cx(f1, f2)
-        U.cx(f1, f3)
-        U.cx(f1, f4)
-    for j in range(L // 2):  # change of basis of the toric code
-        if ((j // (Lx // 2)) % 2 == 1):
-            U.sdg(L + j)
-            U.h(L + j)
-        if ((j // (Lx // 2)) % 2 == 0):
-            U.s(L + j)
-            U.h(L + j)
-            U.s(L + j)
+    for j in range(l // 2 - 2 * (lx // 2)):  # toric code ground state preparation on the ancillas
+        if (j // (lx // 2)) % 2 == 0:
+            k = l // 2 - 2 * (lx // 2) - j - 1
+            f1 = l + (k % (l // 2))
+            f2 = l + ((k // (lx // 2)) + 1) * lx // 2 + (k % (lx // 2))
+            f3 = l + ((k // (lx // 2)) + 1) * lx // 2 + (((k % (lx // 2)) + 1) % (lx // 2))
+            f4 = l + ((k // (lx // 2)) + 2) * lx // 2 + (k % (lx // 2))
+            u.h(f1)
+            u.cx(f1, f2)
+            u.cx(f1, f3)
+            u.cx(f1, f4)
+    for j in range(lx // 2 - 1):
+        k = lx // 2 - 2 - j
+        f1 = l + k
+        f2 = l + ((k // (lx // 2)) + 1) * lx // 2 + (k % (lx // 2))
+        f3 = l + ((k // (lx // 2)) + 0) * lx // 2 + (((k % (lx // 2)) + 1) % (lx // 2))
+        f4 = l + (((k // (lx // 2)) - 1) % ly) * lx // 2 + (k % (lx // 2))
+        u.h(f1)
+        u.cx(f1, f2)
+        u.cx(f1, f3)
+        u.cx(f1, f4)
+    for j in range(l // 2):  # change of basis of the toric code
+        if (j // (lx // 2)) % 2 == 1:
+            u.sdg(l + j)
+            u.h(l + j)
+        if (j // (lx // 2)) % 2 == 0:
+            u.s(l + j)
+            u.h(l + j)
+            u.s(l + j)
 
 
-def trotter_step(U, dt: float, Lx: int, E: list):
-    for ind2 in [1,
-                 0]:  # ind2=0 does vertical edges, and ind2=1 does horizontal edges. Implements the difference horizontal/vertical in Eq7
-        for ind in [0,
-                    1]:  # ind=0 implements XX on even rows/columns and YY on odd rows/columns. ind=1 implements the other way around. Implements the difference 1/2 in Eq7
-            for c in E:  # loops over all edges
-                if (c[3] == ind2):  # selects horizontal or vertical edges
+def trotter_step(u, dt: float, lx: int, e: list):
+    for ind2 in [1,0]:
+        # ind2=0 does vertical edges, and ind2=1 does horizontal edges.
+        # Implements the difference horizontal/vertical in Eq7
+        for ind in [0,1]:
+            # ind=0 implements XX on even rows/columns and YY on odd rows/columns.
+            # ind=1 implements the other way around. Implements the difference 1/2 in Eq7
+            for c in e:  # loops over all edges
+                if c[3] == ind2:  # selects horizontal or vertical edges
                     sig: int = 1
-                    if (c[3] == 0 and (c[
-                            0] % 2) == 0):  # implements the -1 in the fermionic encoding that occurs only for even columns
+                    if c[3] == 0 and (c[0] % 2) == 0:
+                        # implements the -1 in the fermionic encoding that occurs only for even columns
                         sig *= -1
                     # the sequence of H's and Sdg's  are conjugating the central ZZZ rotation
                     # into some rotations like XXY
-                    if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[
-                            # if c is a column (line), apply Y only when the parity of the column (line) is 1-ind.
-                            0] // Lx) % 2 == 1 - ind)):
-                        U.sdg(c[0])
-                    U.h(c[0])
-                    if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // Lx) % 2 == 1 - ind)):  # same
-                        U.sdg(c[1])
-                    U.h(c[1])
-                    if (c[3] == 1):  # apply Y on the ancilla only for horizontal edges
-                        U.sdg(c[2])
-                    U.h(c[2])
+                    if (c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and c[0] // lx) % 2 == 1 - ind:
+                        # if c is a column (line), apply Y only when the parity of the column (line) is 1-ind.
+                        u.sdg(c[0])
+                    u.h(c[0])
+                    if (c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // lx) % 2 == 1 - ind):  # same
+                        u.sdg(c[1])
+                    u.h(c[1])
+                    if c[3] == 1:  # apply Y on the ancilla only for horizontal edges
+                        u.sdg(c[2])
+                    u.h(c[2])
 
-                    U.cx(c[0], c[1])  # Pauli gadget that implements a ZZZ rotation on qubits c[0], c[1], c[2]
-                    U.rzz(-2 * dt * sig / 2, c[1], c[2])
-                    U.cx(c[0], c[1])
+                    u.cx(c[0], c[1])  # Pauli gadget that implements a ZZZ rotation on qubits c[0], c[1], c[2]
+                    u.rzz(-2 * dt * sig / 2, c[1], c[2])
+                    u.cx(c[0], c[1])
 
-                    U.h(c[2])
-                    if (c[3] == 1):
-                        U.s(c[2])
-                    U.h(c[1])
-                    if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // Lx) % 2 == 1 - ind)):
-                        U.s(c[1])
-                    U.h(c[0])
-                    if ((c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // Lx) % 2 == 1 - ind)):
-                        U.s(c[0])
+                    u.h(c[2])
+                    if c[3] == 1:
+                        u.s(c[2])
+                    u.h(c[1])
+                    if (c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // lx) % 2 == 1 - ind):
+                        u.s(c[1])
+                    u.h(c[0])
+                    if (c[3] == 0 and c[0] % 2 == 1 - ind) or (c[3] == 1 and (c[0] // lx) % 2 == 1 - ind):
+                        u.s(c[0])
 
 
-def create_circuit(Lx: int, Ly: int, dt: float, Ntrot: int) -> np.array:
-    logger.info(f"Creating simulation circuit for {Ntrot} Trotter steps")
-    E, F = create_couplings(Lx, Ly)
-    U = QuantumCircuit(Lx * Ly * 3 // 2)
-    state_preparation(U, Lx, Ly)
-    for j in range(Lx * Ly // 2):
-        U.x(j)  # applies X where there is a fermion. The state has to satisfy the constraint that
+def create_circuit(lx: int, ly: int, dt: float, n_trot: int) -> np.array:
+    logger.info(f"Creating simulation circuit for {n_trot} Trotter steps")
+    e = create_couplings(lx, ly)
+    u = QuantumCircuit(lx * ly * 3 // 2)
+    state_preparation(u, lx, ly)
+    for j in range(lx * ly // 2):
+        u.x(j)  # applies X where there is a fermion. The state has to satisfy the constraint that
         # there is an even number of fermions per face
-    for t in range(Ntrot):
-        trotter_step(U, dt, Lx, E)
-    U.measure_all()
-    return U
+    for t in range(n_trot):
+        trotter_step(u, dt, lx, e)
+    u.measure_all()
+    return u
 
 
-def extract_simulation_results(
-        dt: float, lx: int, ly: int, n_shots: int,
-        counts_per_circuit: list[dict[str, int]]
-) -> list[tuple[float, float, float]]:
-    """Return the simulation results
+def extract_simulation_results(dt: float, lx: int, ly: int, n_shots: int,counts_per_circuit: list[dict[str, int]]) \
+        -> list[tuple[float, float, float]]:
+    """Returns the simulation results.
 
-    For every time step returns the time, expectation value and standard deviation
-    as a tuple for that step
+    For every time step returns the time, expectation value and standard deviation as a tuple for that step.
     """
     l_tot = lx * ly
     results = []
@@ -262,8 +260,8 @@ def extract_simulation_results(
     return results
 
 
-def computes_score_values(delta: np.array, std_exp: np.array, std: np.array, L: int) -> tuple[int, int, int]:
-    """ Compute score values
+def computes_score_values(delta: np.array, std_exp: np.array, std: np.array, l: int) -> tuple[int, int, int]:
+    """ Computes score values.
 
         Returns the score in terms of
          1.) Number of gates
@@ -273,21 +271,20 @@ def computes_score_values(delta: np.array, std_exp: np.array, std: np.array, L: 
     n: int = len(delta)
     delta_corrected = np.zeros(n)
     for j in range(n):
-        if (std[j] > 0):
-            delta_corrected[j] = max(abs(delta[j]), std_exp[j]) / std[
-                j]  # redefines delta as the maximum between the experimental standard deviation and the measured value, normalized by the theoretical standard deviation
-    rewards: float = delta_corrected[0] ** 2
+        if std[j] > 0:
+            delta_corrected[j] = max(abs(delta[j]), std_exp[j]) / std[j]
+            # redefines delta as the maximum between the experimental standard deviation and the measured value,
+            # normalized by the theoretical standard deviation
+    rewards: float = float(delta_corrected[0]) ** 2
     opt: int = 0
     for j in range(1, n):  # looks for the time point opt with maximal reward
-        temp: float = delta_corrected[j] ** 2 / (j + 1)
-        if (temp > rewards):
+        temp: float = float(delta_corrected[j]) ** 2 / (j + 1)
+        if temp > rewards:
             rewards = temp
             opt = j
 
     def ff(x): return chi2.cdf(delta_corrected[opt] ** 2 * x, df=n - 1) - 0.997
-    x: float = fsolve(ff, n / delta_corrected[opt] ** 2)[
-        0]  # looks for x such that chi2.cdf(delta[opt]**2*x*L,df=1)=0.997
+    x: float = fsolve(ff, n / delta_corrected[opt] ** 2)[0]
+    # looks for x such that chi2.cdf(delta[opt]**2*x*L,df=1)=0.997
 
-    return (6 * int(np.floor(x) + 1) * (opt + 1) * L,
-            int(np.floor(x) + 1),
-            int(np.floor(x) + 1) * (opt + 1))
+    return 6 * int(np.floor(x) + 1) * (opt + 1) * l, int(np.floor(x) + 1), int(np.floor(x) + 1) * (opt + 1)

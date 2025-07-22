@@ -14,8 +14,8 @@ def coordinates(x: int, y: int, lx: int, ly: int) -> int:
     return (x % lx) + (y % ly) * lx
 
 
-def create_couplings(lx, ly) -> list[list[int]]:  # , list[list[int]]]:
-    """Creates the list of couplings"""  # and faces
+def create_couplings(lx, ly) -> list[list[int]]:
+    """Creates the list of couplings."""
 
     l_tot = lx * ly
     couplings_e: list[list[int]] = []
@@ -33,20 +33,6 @@ def create_couplings(lx, ly) -> list[list[int]]:  # , list[list[int]]]:
         v_vertical = j // 2 if j_test else ((j // lx) * lx + ((j % lx) - 1) % lx) // 2
         w_vertical = 0
         couplings_e.append([j, k_vertical, l_tot + v_vertical, w_vertical])
-
-    # faces_F: list[list[int]] = []
-    # for f in range(l_tot // 2):  # runs through all the faces of the lattice without ancillas
-    #     f1 = l_tot + f  # ancilla on left
-    #     f2 = l_tot + (f // (lx // 2)) * (lx // 2) + ((f + 1) % (lx // 2))  # ancilla on right
-    #     f3 = l_tot + ((f // (lx // 2) + 1) % ly) * (lx // 2) + (
-    #         (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla above
-    #     f4 = l_tot + ((f // (lx // 2) - 1) % ly) * (lx // 2) + (
-    #         (f + ((f // (lx // 2)) % 2)) % (lx // 2))  # ancilla below
-    #     f5 = (((2 * f) % lx) + 1 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom left
-    #     f6 = (((2 * f) % lx) + 2 + (((2 * f) // lx) % 2)) % lx + ((2 * f) // lx) * lx  # site bottom right
-    #     f7 = (((f5 + lx) // lx) % ly) * lx + (f5 % lx)  # site top left
-    #     f8 = (((f6 + lx) // lx) % ly) * lx + (f6 % lx)  # site top right
-    #     faces_F.append([f1, f2, f3, f4, f5, f6, f7, f8])
 
     return couplings_e
 

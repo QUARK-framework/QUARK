@@ -1,14 +1,16 @@
 # QUARK: A Framework for Quantum Computing Application Benchmarking
 
-Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry applications on quantum computers. 
+Quantum Computing Application Benchmark (QUARK) is a framework for orchestrating benchmarks of different industry-relevant applications on quantum computers. 
 QUARK supports various applications such as the traveling salesperson problem (TSP), the maximum satisfiability (MaxSAT) problem, robot path optimization in the PVC sealing use case (PVC)
-as well as new additions like the Maximum Independent Set (MIS), Set Cover Problem (SCP) and Auto Carrier Loading (ACL).
+as well as the Maximum Independent Set (MIS), Set Cover Problem (SCP) and Auto Carrier Loading (ACL). In addition, QUARK features a simulation use cases that implements a benchmark for simulating free fermions on a quantum computer to investigate the dynamic properties of electronic systems, particularly in the context of the Hubbard model, which is relevant for describing high-temperature superconductivity.
 
-It also includes two machine learning modules, namely generative modeling and image classification, which can be benchmarked with various training methods like quantum circuit born machine (QCBM) and quantum generative adversarial networks (QGANs) or a hybrid training method, respectively.
-Several learning data sets were added for convenience.
+It also includes two machine learning modules, namely generative modeling and image classification, which can be benchmarked with various training methods like quantum circuit born machine (QCBM) and quantum generative adversarial networks (QGANs) or a hybrid training method, respectively. Several learning data sets were added for convenience.
 
 QUARK features different solvers (e.g., simulated /quantum annealing and the quantum approximate optimization algorithm (QAOA)), quantum devices (e.g., IonQ and Rigetti), and simulators.
 It is designed to be easily extendable in all of its components: applications, mappings, solvers, devices, and any other custom modules.
+
+## QUARK Versions upwards of 3.0
+Based on feedback from the community and due to the continouos growth of the framework, QUARK's architecture and module landscape was significantly changed between versions 2.1 and 3.0. This repo is the legacy code base up to version 2.1.7. Future development will focus on the new version of the QUARK framework. You can find the new core module and its documentation [here](https://github.com/QUARK-framework/QUARK-framework). If you want to work on a plugin yourself, you are free to use the [plugin template](https://github.com/QUARK-framework/QUARK-plugin-template) which facilitates the interfacing to other QUARK plugins and the core module significantly.
 
 ## Publications
 Details about the motivations for the original framework can be found in the [accompanying QUARK paper from Finžgar et al](https://arxiv.org/abs/2202.03028).

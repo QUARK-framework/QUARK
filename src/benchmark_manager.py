@@ -329,7 +329,7 @@ class BenchmarkManager:
             logging.info("====== There are interrupted jobs. You may resume them by running QUARK with")
             logging.info(f"====== --resume-dir={rel_path}")
         logging.info(80 * "=")
-        logging.info("")
+        logging.info("") 
 
     # pylint: disable=R0917
     def traverse_config(self, module: dict, input_data: any, path: str, rep_count: int, previous_job_info:

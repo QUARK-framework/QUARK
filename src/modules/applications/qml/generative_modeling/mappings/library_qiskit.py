@@ -65,7 +65,7 @@ class LibraryQiskit(LibraryGenerative):
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
-                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1",
+                           "aer_simulator_cpu", "qasm_simulator", "fake_sherbrooke_simulator", "ionQ_Harmony", "Amazon_SV1",
                            "simulator_statevector IBM Quantum Platform", "ibm_brisbane IBM Quantum Platform"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator\
                              uses the measurement probability vector, the others are shot based)"
@@ -83,7 +83,7 @@ class LibraryQiskit(LibraryGenerative):
             "backend": {
                 "values": ["aer_statevector_simulator_gpu", "aer_statevector_simulator_cpu",
                            "cusvaer_simulator (only available in cuQuantum appliance)", "aer_simulator_gpu",
-                           "aer_simulator_cpu", "ionQ_Harmony", "Amazon_SV1", "ibm_brisbane IBM Quantum Platform"],
+                           "aer_simulator_cpu", "qasm_simulator", "fake_sherbrooke_simulator", "ionQ_Harmony", "Amazon_SV1", "ibm_brisbane IBM Quantum Platform"],
                 "description": "Which backend do you want to use? (aer_statevector_simulator uses the measurement "
                                "probability vector, the others are shot based)"
             },
@@ -184,7 +184,6 @@ class LibraryQiskit(LibraryGenerative):
                 cusvaer_comm_plugin_type=cusvaer.CommPluginType.MPI_AUTO,
                 cusvaer_comm_plugin_soname="libmpi.so"
             )
-
         elif config == "aer_simulator_gpu":
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
@@ -193,6 +192,14 @@ class LibraryQiskit(LibraryGenerative):
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend("aer_simulator")
             backend.set_options(device="CPU")
+        elif config == "qasm_simulator":
+            from qiskit_aer import Aer
+            backend = Aer.get_backend("qasm_simulator") # qasm_simulator is cpu only, no need to set options
+        elif config == "fake_sherbrooke_simulator":
+            from qiskit_ibm_runtime.fake_provider import FakeSherbrooke
+            from qiskit_aer import AerSimulator
+            fake_backend = FakeSherbrooke()
+            backend = AerSimulator.from_backend(fake_backend)
         elif config == "aer_statevector_simulator_gpu":
             from qiskit_aer import Aer  # pylint: disable=C0415
             backend = Aer.get_backend('statevector_simulator')
@@ -292,7 +299,9 @@ class LibraryQiskit(LibraryGenerative):
         elif config in [
             "cusvaer_simulator (only available in cuQuantum appliance)",
             "aer_simulator_cpu",
-            "aer_simulator_gpu"
+            "aer_simulator_gpu",
+            "qasm_simulator",
+            "fake_sherbrooke_simulator"
         ]:
 
             def execute_circuit(solutions):
